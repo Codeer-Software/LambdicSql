@@ -55,6 +55,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="TestResult.cs" />
     <Compile Include="TestUsingLambda.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
