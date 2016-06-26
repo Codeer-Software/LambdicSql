@@ -2,13 +2,13 @@
 
 namespace LambdicSql.QueryInfo
 {
-    public class ConditionInfoBinary : IConditionInfo
+    public class ConditionInfoExpression : IConditionInfo
     {
         public bool IsNot { get; }
         public ConditionConnection ConditionConnection { get; }
-        public BinaryExpression Expression { get; }
+        public Expression Expression { get; }
 
-        public ConditionInfoBinary(bool isNot, ConditionConnection connection, BinaryExpression expression)
+        public ConditionInfoExpression(bool isNot, ConditionConnection connection, Expression expression)
         {
             IsNot = isNot;
             ConditionConnection = connection;

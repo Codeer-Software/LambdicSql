@@ -24,9 +24,9 @@ namespace LambdicSql.QueryInfo
 
         public WhereInfo() { }
 
-        public WhereInfo(BinaryExpression exp)
+        public WhereInfo(Expression exp)
         {
-            Conditions.Add(new ConditionInfoBinary(false, ConditionConnection.And, exp));
+            Conditions.Add(new ConditionInfoExpression(false, ConditionConnection.And, exp));
         }
 
         public WhereInfo Clone()
@@ -36,11 +36,11 @@ namespace LambdicSql.QueryInfo
             return clone;
         }
 
-        internal void And(BinaryExpression exp)
-            => Conditions.Add(new ConditionInfoBinary(IsNot, ConditionConnection.And, exp));
+        internal void And(Expression exp)
+            => Conditions.Add(new ConditionInfoExpression(IsNot, ConditionConnection.And, exp));
 
-        internal void Or(BinaryExpression exp)
-            =>Conditions.Add(new ConditionInfoBinary(IsNot, ConditionConnection.Or, exp));
+        internal void Or(Expression exp)
+            =>Conditions.Add(new ConditionInfoExpression(IsNot, ConditionConnection.Or, exp));
 
         internal void And()
             => _nextConnection = ConditionConnection.And;

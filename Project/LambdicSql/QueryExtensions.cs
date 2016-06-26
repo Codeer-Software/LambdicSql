@@ -32,12 +32,12 @@ namespace LambdicSql
         public static IWhereQuery<TDB, TSelect> Where<TDB, TSelect>(this IQueryFromEnd<TDB, TSelect> query, Expression<Func<TDB, bool>> condition)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Where = new WhereInfo((BinaryExpression)condition.Body));
+             => query.CustomClone(dst => dst.Where = new WhereInfo(condition.Body));
 
         public static IWhereQuery<TDB, TSelect> Where<TDB, TSelect>(this IQueryFromEnd<TDB, TSelect> query, Expression<Func<TDB, IWhereFuncs, bool>> condition)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Where = new WhereInfo((BinaryExpression)condition.Body));
+             => query.CustomClone(dst => dst.Where = new WhereInfo(condition.Body));
 
         public static IQueryGroupByEnd<TDB, TSelect> GroupBy<TDB, TSelect>(this IQueryWhereEnd<TDB, TSelect> query, params Expression<Func<TDB, object>>[] targets)
             where TDB : class

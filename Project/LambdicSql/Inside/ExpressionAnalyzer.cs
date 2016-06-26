@@ -52,30 +52,60 @@ namespace LambdicSql.Inside
         }
 
         //TODO need to implement
-        internal static string ToSqlString(DbInfo info, Expression exp)
+        internal static string ToString(DbInfo info, Expression exp)
         {
             var member = exp as MemberExpression;
-            if (member != null)
-            {
-                return ToString(info, member);
-            }
+            if (member != null) return ToString(info, member);
+
             var constant = exp as ConstantExpression;
-            if (constant != null)
-            {
-                dynamic func = Expression.Lambda(constant).Compile();
-                return "'" + func().ToString() + "'";
-            }
+            if (constant != null) return ToString(constant);
+
             var binary = exp as BinaryExpression;
-            if (binary != null)
-            {
-                throw new NotImplementedException();
-            }
+            if (binary != null) return ToString(info, binary);
+
             var method = exp as MethodCallExpression;
-            if (method != null)
-            {
-                throw new NotImplementedException();
-            }
+            if (method != null) return ToString(info, method);
+
             throw new NotSupportedException();
+        }
+
+        static string ToString(DbInfo info, MethodCallExpression method)
+        {
+            throw new NotImplementedException();
+        }
+
+        static string ToString(DbInfo info, BinaryExpression binary)
+        {
+            return "(" + ToString(info, binary.Left) + ") " + ToString(binary.NodeType) + " (" + ToString(info, binary.Right) + ")";
+        }
+
+        static string ToString(ExpressionType nodeType)
+        {
+            switch (nodeType)
+            {
+                case ExpressionType.Equal: return "=";
+                case ExpressionType.NotEqual: return "!=";
+                case ExpressionType.LessThan: return "<";
+                case ExpressionType.LessThanOrEqual: return "<=";
+                case ExpressionType.GreaterThan: return ">";
+                case ExpressionType.GreaterThanOrEqual: return ">=";
+                case ExpressionType.Add: return "+";
+                case ExpressionType.Subtract: return "-";
+                case ExpressionType.Multiply: return "*";
+                case ExpressionType.Divide: return "/";
+                case ExpressionType.Modulo: return "%";
+                case ExpressionType.And: return "AND";
+                case ExpressionType.AndAlso: return "AND";
+                case ExpressionType.Or: return "OR";
+                case ExpressionType.OrElse: return "OR";
+            }
+            throw new NotImplementedException();
+        }
+
+        static string ToString(ConstantExpression constant)
+        {
+            dynamic func = Expression.Lambda(constant).Compile();
+            return "'" + func().ToString() + "'";
         }
 
         static string ToString(DbInfo info, MemberExpression member)

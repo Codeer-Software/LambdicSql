@@ -22,22 +22,22 @@ namespace LambdicSql
         public static IWhereQuery<TDB, TSelect> And<TDB, TSelect>(this IWhereQuery<TDB, TSelect> query, Expression<Func<TDB, bool>> condition)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Where.And((BinaryExpression)condition.Body));
+             => query.CustomClone(dst => dst.Where.And(condition.Body));
 
         public static IWhereQuery<TDB, TSelect> And<TDB, TSelect>(this IWhereQueryNot<TDB, TSelect> query, Expression<Func<TDB, bool>> condition)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Where.And((BinaryExpression)condition.Body));
+             => query.CustomClone(dst => dst.Where.And(condition.Body));
 
         public static IWhereQuery<TDB, TSelect> And<TDB, TSelect>(this IWhereQuery<TDB, TSelect> query, Expression<Func<TDB, IWhereFuncs, bool>> condition)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Where.And((BinaryExpression)condition.Body));
+             => query.CustomClone(dst => dst.Where.And(condition.Body));
 
         public static IWhereQuery<TDB, TSelect> And<TDB, TSelect>(this IWhereQueryNot<TDB, TSelect> query, Expression<Func<TDB, IWhereFuncs, bool>> condition)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Where.And((BinaryExpression)condition.Body));
+             => query.CustomClone(dst => dst.Where.And(condition.Body));
 
         public static IWhereQueryConnectable<TDB, TSelect> And<TDB, TSelect>(this IWhereQuery<TDB, TSelect> query)
             where TDB : class
@@ -54,22 +54,22 @@ namespace LambdicSql
         public static IWhereQuery<TDB, TSelect> Or<TDB, TSelect>(this IWhereQuery<TDB, TSelect> query, Expression<Func<TDB, bool>> condition)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Where.Or((BinaryExpression)condition.Body));
+             => query.CustomClone(dst => dst.Where.Or(condition.Body));
 
         public static IWhereQueryNot<TDB, TSelect> Or<TDB, TSelect>(this IWhereQueryNot<TDB, TSelect> query, Expression<Func<TDB, bool>> condition)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Where.Or((BinaryExpression)condition.Body));
+             => query.CustomClone(dst => dst.Where.Or(condition.Body));
 
         public static IWhereQuery<TDB, TSelect> Or<TDB, TSelect>(this IWhereQuery<TDB, TSelect> query, Expression<Func<TDB, IWhereFuncs, bool>> condition)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Where.Or((BinaryExpression)condition.Body));
+             => query.CustomClone(dst => dst.Where.Or(condition.Body));
 
         public static IWhereQueryNot<TDB, TSelect> Or<TDB, TSelect>(this IWhereQueryNot<TDB, TSelect> query, Expression<Func<TDB, IWhereFuncs, bool>> condition)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Where.Or((BinaryExpression)condition.Body));
+             => query.CustomClone(dst => dst.Where.Or(condition.Body));
 
         public static IWhereQueryConnectable<TDB, TSelect> Or<TDB, TSelect>(this IWhereQuery<TDB, TSelect> query)
             where TDB : class

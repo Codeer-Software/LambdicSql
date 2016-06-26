@@ -59,7 +59,7 @@ namespace LambdicSql.Inside
             => ToString(element.Expression) + " AS " + element.Name;
 
         string ToString(Expression exp)
-            => ExpressionAnalyzer.ToSqlString(_db, exp);
+            => ExpressionAnalyzer.ToString(_db, exp);
 
         string MakeSqlArguments(IEnumerable<object> src)
         {
@@ -85,7 +85,7 @@ namespace LambdicSql.Inside
         {
             string text;
             var type = condition.GetType();
-            if (type == typeof(ConditionInfoBinary)) text = ToString((ConditionInfoBinary)condition);
+            if (type == typeof(ConditionInfoExpression)) text = ToString((ConditionInfoExpression)condition);
             if (type == typeof(ConditionInfoIn)) text = ToString((ConditionInfoIn)condition);
             if (type == typeof(ConditionInfoLike)) text = ToString((ConditionInfoLike)condition);
             if (type == typeof(ConditionInfoBetween)) text = ToString((ConditionInfoBetween)condition);
@@ -100,7 +100,7 @@ namespace LambdicSql.Inside
         string ToString(ConditionInfoBetween condition)
             => ToString(condition.Target) + " BETWEEN " + condition.Min + " AND " + condition.Max;//TODO@ think db column order.
 
-        string ToString(ConditionInfoBinary condition)
+        string ToString(ConditionInfoExpression condition)
             => ToString(condition.Expression);
 
         string ToString(ConditionInfoIn condition)
