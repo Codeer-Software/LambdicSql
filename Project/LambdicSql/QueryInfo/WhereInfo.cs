@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System;
 
 namespace LambdicSql.QueryInfo
 {
@@ -55,5 +56,8 @@ namespace LambdicSql.QueryInfo
 
         internal void Like(string target, string serachText)
             => Conditions.Add(new ConditionInfoLike(IsNot, _nextConnection, target, serachText));
+
+        internal void Between<TTarget>(string target, TTarget min, TTarget max)
+            => Conditions.Add(new ConditionInfoBetween(IsNot, _nextConnection, target, min, max));
     }
 }

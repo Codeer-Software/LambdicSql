@@ -82,12 +82,12 @@ namespace LambdicSql
              => query.CustomClone(dst => dst.Where.Or());
         #endregion
 
-        public static IWhereQuery<TDB, TSelect> In<TDB, TSelect, TLeft>(this IWhereQueryConnectable<TDB, TSelect> query, Expression<Func<TDB, TLeft>> target, params TLeft[] inArguments)
+        public static IWhereQuery<TDB, TSelect> In<TDB, TSelect, TTarget>(this IWhereQueryConnectable<TDB, TSelect> query, Expression<Func<TDB, TTarget>> target, params TTarget[] inArguments)
             where TDB : class
             where TSelect : class
              => query.CustomClone(dst => dst.Where.In(target.GetElementName(), inArguments));
 
-        public static IWhereQuery<TDB, TSelect> In<TDB, TSelect, TLeft>(this IWhereQueryConnectableNot<TDB, TSelect> query, Expression<Func<TDB, TLeft>> target, params TLeft[] inArguments)
+        public static IWhereQuery<TDB, TSelect> In<TDB, TSelect, TTarget>(this IWhereQueryConnectableNot<TDB, TSelect> query, Expression<Func<TDB, TTarget>> target, params TTarget[] inArguments)
             where TDB : class
             where TSelect : class
              => query.CustomClone(dst => dst.Where.In(target.GetElementName(), inArguments));
@@ -102,12 +102,10 @@ namespace LambdicSql
             where TSelect : class
              => query.CustomClone(dst => dst.Where.Like(target.GetElementName(), serachText));
 
-        //TODO BETWEEN
-        /*
-        public static IWhereQuery<TDB, TSelect> IsNull<TDB, TSelect, TRight>(this IWhereQueryConnectable<TDB, TSelect> query, Expression<Func<TDB, TRight>> target)
+        public static IWhereQuery<TDB, TSelect> Between<TDB, TSelect, TTarget>(this IWhereQueryConnectable<TDB, TSelect> query, Expression<Func<TDB, TTarget>> target, TTarget min, TTarget max)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Where.IsNull(target.GetElementName()));
-             */
+             => query.CustomClone(dst => dst.Where.Between(target.GetElementName(), min, max));
+             
     }
 }
