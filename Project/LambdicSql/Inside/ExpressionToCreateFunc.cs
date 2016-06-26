@@ -9,15 +9,42 @@ namespace LambdicSql.Inside
 {
     static class ExpressionToCreateFunc
     {
-        internal static Func<IDbResult, T> ToCreateUseDbResult<T>(IReadOnlyDictionary<string, ColumnInfo> lambdaNameAndColumn, NewExpression exp)
+        internal static Func<IDbResult, T> ToCreateUseDbResult<T>(IReadOnlyDictionary<string, ColumnInfo> lambdaNameAndColumn, Expression exp)
         {
+            var newExp = exp as NewExpression;
+            if (newExp == null)
+            {
+                newExp = ((MemberInitExpression)exp).NewExpression;
+            }
             var param = Expression.Parameter(typeof(IDbResult), "dbResult");
             var arguments = new[] { param };
-            return Expression.Lambda<Func<IDbResult, T>>(New(lambdaNameAndColumn, new string[0], exp, param), arguments).Compile();
+            return Expression.Lambda<Func<IDbResult, T>>(New(lambdaNameAndColumn, new string[0], newExp, param), arguments).Compile();
         }
 
-        static NewExpression New(IReadOnlyDictionary<string, ColumnInfo> lambdaNameAndColumn, string[] names, NewExpression exp, ParameterExpression param)
+        static Expression New(IReadOnlyDictionary<string, ColumnInfo> lambdaNameAndColumn, string[] names, NewExpression exp, ParameterExpression param)
         {
+            if (exp.Members == null)
+            {
+                var binding = new List<MemberBinding>();
+                foreach (var p in exp.Type.GetProperties().Where(e => e.DeclaringType == exp.Type))
+                {
+                    var currentNames = names.Concat(new[] { p.Name }).ToArray();
+                    if (SupportedTypeSpec.IsSupported(p.PropertyType))
+                    {
+                        var name = string.Join(".", currentNames);
+                        var sqlName = lambdaNameAndColumn == null ? name : lambdaNameAndColumn[name].SqlFullName;
+                        sqlName = sqlName.Replace(".", "@");//TODO@ special spec.
+                        var propertyNew = Expression.Call(param, typeof(IDbResult).GetMethod("Get" + p.PropertyType.Name), Expression.Constant(sqlName));
+                        binding.Add(Expression.Bind(p, propertyNew));
+                    }
+                    else
+                    {
+                        binding.Add(Expression.Bind(p, New(lambdaNameAndColumn, currentNames, Expression.New(p.PropertyType.GetConstructor(new Type[0])), param)));
+                    }
+
+                }
+                return Expression.MemberInit(Expression.New(exp.Constructor), binding.ToArray());
+            }
             return Expression.New(exp.Constructor, ConvertArguments(lambdaNameAndColumn, names, exp.Arguments.ToArray(), exp.Members.ToArray(), param), exp.Members);
         }
 

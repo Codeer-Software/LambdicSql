@@ -58,6 +58,7 @@
     <Compile Include="TestSqlRead.cs" />
     <Compile Include="TestUsingLambda.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestUsingNormalType.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LambdicSql\LambdicSql.csproj">
