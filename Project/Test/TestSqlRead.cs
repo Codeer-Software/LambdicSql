@@ -101,7 +101,7 @@ namespace Test
         }
 
         [TestMethod]
-        public void WhereAnd()
+        public void WhereAndOr()
         {
             //log for debug.
             Sql.Log = l => Debug.Print(l);
@@ -127,7 +127,7 @@ namespace Test
                 
             Where();
 
-            query = query.And(db => 3000 < db.tbl_remuneration.money).And(db => db.tbl_remuneration.money < 4000);
+            query = query.And(db => 3000 < db.tbl_remuneration.money).And(db => db.tbl_remuneration.money < 4000).Or(db => db.tbl_staff.id == 1);
 
             var datas = query.ToExecutor(TestEnvironment.ConnectionString).Read();
             foreach (var e in datas)
@@ -161,7 +161,7 @@ namespace Test
             From(db => db.tbl_remuneration).
                 Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
                 
-            Where().And().Like(db => db.tbl_staff.name, "%son%");
+            Where().Like(db => db.tbl_staff.name, "%son%");
 
             var datas = query.ToExecutor(TestEnvironment.ConnectionString).Read();
             foreach (var e in datas)
@@ -195,7 +195,7 @@ namespace Test
             From(db => db.tbl_remuneration).
                 Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
 
-            Where().And().In(db => db.tbl_staff.id, 1, 3);
+            Where().In(db => db.tbl_staff.id, 1, 3);
 
             var datas = query.ToExecutor(TestEnvironment.ConnectionString).Read();
             foreach (var e in datas)
@@ -228,9 +228,8 @@ namespace Test
             }).
             From(db => db.tbl_remuneration).
                 Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
-
-            //TODO あー、何にでもLikeとかってかけて、Andがないから駄目よ。とかの方がいいか。
-            Where().And().Between(db => db.tbl_staff.id, 1, 3);
+                
+            Where().Between(db => db.tbl_staff.id, 1, 3);
 
             var datas = query.ToExecutor(TestEnvironment.ConnectionString).Read();
             foreach (var e in datas)

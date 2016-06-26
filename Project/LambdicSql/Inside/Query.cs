@@ -5,7 +5,7 @@ namespace LambdicSql.Inside
 {
     class Query<TDB, TSelect> : IQueryStart<TDB, TSelect>, 
                                 IQueryFrom<TDB, TSelect>,
-                                IWhereQuery<TDB, TSelect>, IWhereQueryNot<TDB, TSelect>, IWhereQueryConnectable<TDB, TSelect>, IWhereQueryConnectableNot<TDB, TSelect>,
+                                IWhereQuery<TDB, TSelect>,
                                 IOrderByQuery<TDB, TSelect>,
                                 IQueryInfo<TSelect>
         where TDB : class
