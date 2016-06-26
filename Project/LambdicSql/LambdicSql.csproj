@@ -44,6 +44,7 @@
     <Compile Include="Inside\DbResult.cs" />
     <Compile Include="Inside\QueryAnalyzer.cs" />
     <Compile Include="Inside\SqlExecutor.cs" />
+    <Compile Include="Inside\TestAdaptor.cs" />
     <Compile Include="IQueryFrom.cs" />
     <Compile Include="Inside\DBDefineAnalyzer.cs" />
     <Compile Include="Inside\QueryInternalExtensions.cs" />
