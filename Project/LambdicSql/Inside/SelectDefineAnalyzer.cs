@@ -27,14 +27,7 @@ namespace LambdicSql.Inside
                 {
                     select.Add(new SelectElementInfo(b.Member.Name, b.Expression));
                 }
-                
-                //+		b.GetType()	{Name = "MemberAssignment" FullName = "System.Linq.Expressions.MemberAssignment"}	System.Type {System.RuntimeType}
-
             }
-
-
-
-
             return select;
         }
     }

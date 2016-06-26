@@ -78,7 +78,7 @@ namespace LambdicSql.Inside
             => "JOIN " + join.JoinTable.SqlFullName + " ON " + ToString(join.Condition);
         
         string ToString(WhereInfo whereInfo)
-            => whereInfo == null ?
+            => (whereInfo == null || whereInfo.Conditions.Count == 0)?
                 string.Empty:
                 string.Join(Environment.NewLine + "\t", new[] { "WHERE" }.Concat(whereInfo.Conditions.Select((e, i) => ToString(e, i)))) + Environment.NewLine;
 
@@ -111,12 +111,12 @@ namespace LambdicSql.Inside
             => ToString(condition.Target) + " LIKE '" + condition.SearchText + "'";//TODO@ think db column order.
 
         string ToString(GroupByInfo groupBy)
-            => groupBy == null ? 
+            => (groupBy == null || groupBy.Elements.Count == 0) ? 
                 string.Empty :
                 "GROUP BY " + Environment.NewLine + "\t" + string.Join("," + Environment.NewLine + "\t", groupBy.Elements.Select(e=>ToString(e))) + Environment.NewLine;
 
         string ToString(OrderByInfo orderBy)
-            => orderBy == null ?
+            => (orderBy == null || orderBy.Elements.Count == 0) ?
                 string.Empty :
                 "ORDER BY " + Environment.NewLine + "\t" + string.Join("," + Environment.NewLine + "\t", orderBy.Elements.Select(e=>ToString(e))) + Environment.NewLine;
 
