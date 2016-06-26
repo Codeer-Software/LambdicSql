@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace LambdicSql.Inside
 {
-    class QueryAnalyzer
+    class QueryToSql
     {
         DbInfo _db;
 
@@ -20,7 +20,7 @@ namespace LambdicSql.Inside
                 ToString(query.Where),
                 ToString(query.GroupBy),
                 ToString(query.OrderBy)
-            });
+            }.Where(e=>!string.IsNullOrEmpty(e)));
         }
 
         SelectInfo Adjust(SelectInfo select)
@@ -53,7 +53,7 @@ namespace LambdicSql.Inside
         }
 
         string ToString(SelectInfo selectInfo)
-            => string.Join(Environment.NewLine + "\t", new[] { "SELECT" }.Concat(selectInfo.Elements.Select(e => ToString(e)))) + Environment.NewLine;
+            => "SELECT " + Environment.NewLine + "\t" + string.Join("," + Environment.NewLine + "\t", selectInfo.Elements.Select(e => ToString(e))) + Environment.NewLine;
 
         string ToString(SelectElementInfo element)
             => ToString(element.Expression) + " AS " + element.Name;
@@ -76,19 +76,21 @@ namespace LambdicSql.Inside
             => string.Join(Environment.NewLine + "\t", new[] { "FROM " + fromInfo.MainTable.SqlFullName }.Concat(fromInfo.Joins.Select(e=>ToString(e)))) + Environment.NewLine;
 
         string ToString(JoinInfo join)
-            => join.JoinTable.SqlFullName + " ON " + ToString(join.Condition);
+            => "JOIN " + join.JoinTable.SqlFullName + " ON " + ToString(join.Condition);
         
         string ToString(WhereInfo whereInfo)
-            => string.Join(Environment.NewLine + "\t", new[] { "WHERE" }.Concat(whereInfo.Conditions.Select((e, i) => ToString(e, i)))) + Environment.NewLine;
+            => whereInfo == null ?
+                string.Empty:
+                string.Join(Environment.NewLine + "\t", new[] { "WHERE" }.Concat(whereInfo.Conditions.Select((e, i) => ToString(e, i)))) + Environment.NewLine;
 
         string ToString(IConditionInfo condition, int index)
         {
             string text;
             var type = condition.GetType();
             if (type == typeof(ConditionInfoExpression)) text = ToString((ConditionInfoExpression)condition);
-            if (type == typeof(ConditionInfoIn)) text = ToString((ConditionInfoIn)condition);
-            if (type == typeof(ConditionInfoLike)) text = ToString((ConditionInfoLike)condition);
-            if (type == typeof(ConditionInfoBetween)) text = ToString((ConditionInfoBetween)condition);
+            else if (type == typeof(ConditionInfoIn)) text = ToString((ConditionInfoIn)condition);
+            else if (type == typeof(ConditionInfoLike)) text = ToString((ConditionInfoLike)condition);
+            else if (type == typeof(ConditionInfoBetween)) text = ToString((ConditionInfoBetween)condition);
             else throw new NotSupportedException();
 
             var connection = index == 0 ? string.Empty :
@@ -110,10 +112,14 @@ namespace LambdicSql.Inside
             => ToString(condition.Target) + " LIKE " + condition.SearchText;//TODO@ think db column order.
 
         string ToString(GroupByInfo groupBy)
-            => string.Join(Environment.NewLine + "\t", new[] { "GROUP BY" }.Concat(groupBy.Elements.Select(e=>ToString(e)))) + Environment.NewLine;
+            => groupBy == null ? 
+                string.Empty :
+                "GROUP BY " + Environment.NewLine + "\t" + string.Join("," + Environment.NewLine + "\t", groupBy.Elements.Select(e=>ToString(e))) + Environment.NewLine;
 
         string ToString(OrderByInfo orderBy)
-            => string.Join(Environment.NewLine + "\t", new[] { "ORDER BY" }.Concat(orderBy.Elements.Select(e=>ToString(e)))) + Environment.NewLine;
+            => orderBy == null ?
+                string.Empty :
+                "ORDER BY " + Environment.NewLine + "\t" + string.Join("," + Environment.NewLine + "\t", orderBy.Elements.Select(e=>ToString(e))) + Environment.NewLine;
 
         private object ToString(OrderByElement element)
             => ToString(element.Target) + " " + element.Order;

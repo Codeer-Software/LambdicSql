@@ -43,7 +43,7 @@
     <Compile Include="FromQueryExtensions.cs" />
     <Compile Include="Inside\DbResult.cs" />
     <Compile Include="Inside\ExpressionToSqlString.cs" />
-    <Compile Include="Inside\QueryAnalyzer.cs" />
+    <Compile Include="Inside\QueryToSql.cs" />
     <Compile Include="Inside\SqlExecutor.cs" />
     <Compile Include="Inside\TestAdaptor.cs" />
     <Compile Include="IQueryFrom.cs" />

@@ -41,6 +41,7 @@
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
+    <Reference Include="System.Data" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -55,8 +56,10 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="TestEnvironment.cs" />
     <Compile Include="TestExpressionToStringcs.cs" />
     <Compile Include="TestResult.cs" />
+    <Compile Include="TestSqlRead.cs" />
     <Compile Include="TestUsingLambda.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -57,7 +57,7 @@ namespace LambdicSql
         public static string ToQueryString<TDB, TSelect>(this IQuery<TDB, TSelect> query, Type dbConnection)
             where TDB : class
             where TSelect : class
-            => new QueryAnalyzer().MakeQueryString((IQueryInfo)query, dbConnection);
+            => new QueryToSql().MakeQueryString((IQueryInfo)query, dbConnection);
 
         static IQueryStart<TDB, TSelect> SelectCore<TDB, TSelect>(this IQueryStart<TDB, TDB> query, LambdaExpression define)
             where TDB : class
