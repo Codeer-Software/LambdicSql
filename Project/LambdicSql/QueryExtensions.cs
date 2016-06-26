@@ -22,7 +22,7 @@ namespace LambdicSql
         public static IQueryFrom<TDB, TSelect> From<TDB, TSelect>(this IQuerySelelectEnd<TDB, TSelect> query, Expression<Func<TDB, object>> table)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.From = new FromInfo(dst.Db.LambdaNameAndTable[table.GetElementName()]));
+             => query.CustomClone(dst => dst.From = new FromInfo(dst.Db.LambdaNameAndTable[ExpressionToSqlString.GetElementName(table)]));
 
         public static IWhereQueryConnectable<TDB, TSelect> Where<TDB, TSelect>(this IQueryFromEnd<TDB, TSelect> query)
             where TDB : class
@@ -65,7 +65,7 @@ namespace LambdicSql
         {
             var src = query as Query<TDB, TDB>;
             var exp = (NewExpression)define.Body;
-            var dst = src.ConvertType(ExpressionAnalyzer.ToCreateUseDbResult<TSelect>(null, exp));
+            var dst = src.ConvertType(ExpressionToCreateFunc.ToCreateUseDbResult<TSelect>(null, exp));
             dst.Select = SelectDefineAnalyzer.MakeSelectInfo(exp);
             return dst;
         }

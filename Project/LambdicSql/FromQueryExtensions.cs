@@ -10,6 +10,6 @@ namespace LambdicSql
         public static IQueryFrom<TDB, TSelect> Join<TDB, TSelect>(this IQueryFrom<TDB, TSelect> query, Expression<Func<TDB, object>> table, Expression<Func<TDB, bool>> condition)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.From.Join(new JoinInfo(dst.Db.LambdaNameAndTable[table.GetElementName()], condition.Body)));
+             => query.CustomClone(dst => dst.From.Join(new JoinInfo(dst.Db.LambdaNameAndTable[ExpressionToSqlString.GetElementName(table)], condition.Body)));
     }
 }

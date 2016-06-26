@@ -59,7 +59,7 @@ namespace LambdicSql.Inside
             => ToString(element.Expression) + " AS " + element.Name;
 
         string ToString(Expression exp)
-            => ExpressionAnalyzer.ToString(_db, exp);
+            => ExpressionToSqlString.ToString(_db, exp);
 
         string MakeSqlArguments(IEnumerable<object> src)
         {

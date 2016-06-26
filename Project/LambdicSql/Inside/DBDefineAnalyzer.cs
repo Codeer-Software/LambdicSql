@@ -17,7 +17,7 @@ namespace LambdicSql.Inside
             {
                 query.Db.Add(column);
             }
-            query.Create = ExpressionAnalyzer.ToCreateUseDbResult<T>(query.Db.LambdaNameAndColumn, (NewExpression)define.Body);
+            query.Create = ExpressionToCreateFunc.ToCreateUseDbResult<T>(query.Db.LambdaNameAndColumn, (NewExpression)define.Body);
             return query;
         }
 

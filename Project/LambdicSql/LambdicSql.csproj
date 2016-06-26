@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="FromQueryExtensions.cs" />
     <Compile Include="Inside\DbResult.cs" />
+    <Compile Include="Inside\ExpressionToSqlString.cs" />
     <Compile Include="Inside\QueryAnalyzer.cs" />
     <Compile Include="Inside\SqlExecutor.cs" />
     <Compile Include="Inside\TestAdaptor.cs" />
@@ -66,7 +67,7 @@
     <Compile Include="QueryInfo\ConditionConnection.cs" />
     <Compile Include="QueryInfo\IConditionInfo.cs" />
     <Compile Include="QueryInfo\DbInfo.cs" />
-    <Compile Include="Inside\ExpressionAnalyzer.cs" />
+    <Compile Include="Inside\ExpressionToCreateFunc.cs" />
     <Compile Include="QueryInfo\FromInfo.cs" />
     <Compile Include="Inside\Query.cs" />
     <Compile Include="QueryInfo\ConditionInfoIn.cs" />
