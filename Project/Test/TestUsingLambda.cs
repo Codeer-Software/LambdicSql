@@ -2,7 +2,6 @@
 using LambdicSql.QueryInfo;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
 
 namespace Test
 {

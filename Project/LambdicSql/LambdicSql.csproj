@@ -75,7 +75,9 @@
     <Compile Include="QueryInfo\OrderByElement.cs" />
     <Compile Include="QueryInfo\OrderByInfo.cs" />
     <Compile Include="QueryInfo\SchemaInfo.cs" />
-    <Compile Include="QueryInfo\SelectElementInfo.cs" />
+    <Compile Include="QueryInfo\ISelectElementInfo.cs" />
+    <Compile Include="QueryInfo\SelectElementInfoDBColumn.cs" />
+    <Compile Include="QueryInfo\SelectElementInfoFunction.cs" />
     <Compile Include="QueryInfo\SelectInfo.cs" />
     <Compile Include="QueryInfo\TableInfo.cs" />
     <Compile Include="QueryInfo\WhereInfo.cs" />

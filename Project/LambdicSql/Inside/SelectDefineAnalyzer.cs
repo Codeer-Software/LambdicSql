@@ -11,8 +11,7 @@ namespace LambdicSql.Inside
     {
         internal static SelectInfo MakeSelectInfo(NewExpression exp, IReadOnlyDictionary<string, ColumnInfo> dbColumns)
         {
-            var select = new SelectInfo(dbColumns);
-            
+            var select = new SelectInfo();
             for (int i = 0; i < exp.Arguments.Count; i++)
             {
                 var propInfo = exp.Members[i] as PropertyInfo;
@@ -25,7 +24,7 @@ namespace LambdicSql.Inside
                 var argMethod = exp.Arguments[i] as MethodCallExpression;
                 if (argMethod != null)
                 {
-                    AnalyzeMethod(select, propInfo, argMethod);
+                    AnalyzeMethod(select, dbColumns, propInfo, argMethod);
                     continue;
                 }
                 throw new NotSupportedException();
@@ -36,44 +35,14 @@ namespace LambdicSql.Inside
         static void AnalyzeNormal(SelectInfo select, PropertyInfo member, MemberExpression argMember)
         {
             select.Add(member.Name,
-                SelectElementInfo.DbColumnElement(argMember.GetElementName()),
-                new ColumnInfo(member.PropertyType, new[] { member.Name }));
+                new SelectElementInfoDBColumn(argMember.GetElementName()));
         }
 
-        static void AnalyzeMethod(SelectInfo select, PropertyInfo propInfo, MethodCallExpression argMethod)
+        static void AnalyzeMethod(SelectInfo select, IReadOnlyDictionary<string, ColumnInfo> dbColumns, PropertyInfo propInfo, MethodCallExpression argMethod)
         {
-            //TODO commonalize！
-            var arguments = new List<object>();
-            foreach (var arg in argMethod.Arguments.Skip(1))
-            {
-                var member = arg as MemberExpression;
-                if (member != null)
-                {
-                    var name = member.GetElementName();
-                    ColumnInfo col;
-                    if (select.DbColumns.TryGetValue(name, out col))
-                    {
-                        arguments.Add(col);
-                    }
-                    else
-                    {
-                        dynamic func = Expression.Lambda(member).Compile();
-                        arguments.Add(func());
-                    }
-                    continue;
-                }
-                var constant = arg as ConstantExpression;
-                if (constant != null)
-                {
-                    dynamic func = Expression.Lambda(constant).Compile();
-                    arguments.Add(func().ToString());
-                    continue;
-                }
-                throw new NotSupportedException();
-            }
+            var arguments = ExpressionAnalyzer.GetArguments(dbColumns, argMethod);
             select.Add(propInfo.Name,
-                SelectElementInfo.FunctionElement(argMethod.Method.Name, arguments),
-                new ColumnInfo(propInfo.PropertyType, new[] { propInfo.Name }));
+                new SelectElementInfoFunction(argMethod.Method.Name, arguments.ToList()));
         }
     }
 }

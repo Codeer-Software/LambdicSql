@@ -16,7 +16,7 @@ namespace LambdicSql.Inside
 
         internal static string GetElementName(this MemberExpression exp)
         {
-            //TODO I'll make best code.
+            //TODO @I'll make best code.
             return string.Join(".", exp.ToString().Split('.').Skip(1));
         }
 
@@ -25,6 +25,39 @@ namespace LambdicSql.Inside
             var param = Expression.Parameter(typeof(IDbResult), "dbResult");
             var arguments = new[] { param };
             return Expression.Lambda<Func<IDbResult, T>>(New(new string[0], exp, param), arguments).Compile();
+        }
+
+        internal static IEnumerable<object> GetArguments(IReadOnlyDictionary<string, ColumnInfo> dbColumns, MethodCallExpression argMethod)
+        {
+            var arguments = new List<object>();
+            foreach (var arg in argMethod.Arguments.Skip(1))
+            {
+                var member = arg as MemberExpression;
+                if (member != null)
+                {
+                    var name = member.GetElementName();
+                    ColumnInfo col;
+                    if (dbColumns.TryGetValue(name, out col))
+                    {
+                        arguments.Add(col);
+                    }
+                    else
+                    {
+                        dynamic func = Expression.Lambda(member).Compile();
+                        arguments.Add(func());
+                    }
+                    continue;
+                }
+                var constant = arg as ConstantExpression;
+                if (constant != null)
+                {
+                    dynamic func = Expression.Lambda(constant).Compile();
+                    arguments.Add(func().ToString());
+                    continue;
+                }
+                throw new NotSupportedException();
+            }
+            return arguments;
         }
 
         static NewExpression New(string[] names, NewExpression exp, ParameterExpression param)

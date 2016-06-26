@@ -26,10 +26,10 @@ namespace LambdicSql.Inside
             {
                 return select;
             }
-            select = new SelectInfo(db.GetAllColumns());
-            foreach (var e in select.DbColumns)
+            select = new SelectInfo();
+            foreach (var e in db.GetAllColumns())
             {
-                select.Add(e.Key, SelectElementInfo.DbColumnElement(e.Key), e.Value);
+                select.Add(e.Key, new SelectElementInfoDBColumn(e.Key));
             }
             return select;
         }
@@ -52,19 +52,22 @@ namespace LambdicSql.Inside
         static string ToString(SelectInfo selectInfo)
             => string.Join(Environment.NewLine + "\t", new[] { "SELECT" }.Concat(selectInfo.AliasElements.Select(e => ToString(e)))) + Environment.NewLine;
 
-        static string ToString(KeyValuePair<string, SelectElementInfo> element)
+        static string ToString(KeyValuePair<string, ISelectElementInfo> element)
             => ToString(element.Value) + " AS " + element.Key;
 
-        static string ToString(SelectElementInfo value)
+        static string ToString(ISelectElementInfo value)
         {
-            if (value.IsDbColumn)
+            var type = value.GetType();
+            if (type == typeof(SelectElementInfoDBColumn)) return ((SelectElementInfoDBColumn)value).DbColumn;
+            if (type == typeof(SelectElementInfoFunction))
             {
-                return value.DbColumn;
+                var func = (SelectElementInfoFunction)value;
+                return func.Function + "(" + MakeSqlArguments(func.Arguments) + ")";
             }
-            return value.Function + "(" + MakeSqlArguments(value.Arguments) + ")";
+            throw new NotSupportedException();
         }
 
-        //TODO check arguments format.
+        //TODO @check arguments format.
         static string MakeSqlArguments(IEnumerable<object> src)
         {
             var result = new List<string>();
@@ -93,9 +96,10 @@ namespace LambdicSql.Inside
         static string ToString(IConditionInfo condition, int index)
         {
             string text;
-            if (condition.GetType() == typeof(ConditionInfoBinary)) text = ToString((ConditionInfoBinary)condition);
-            if (condition.GetType() == typeof(ConditionInfoIn)) text = ToString((ConditionInfoIn)condition);
-            if (condition.GetType() == typeof(ConditionInfoLike)) text = ToString((ConditionInfoLike)condition);
+            var type = condition.GetType();
+            if (type == typeof(ConditionInfoBinary)) text = ToString((ConditionInfoBinary)condition);
+            if (type == typeof(ConditionInfoIn)) text = ToString((ConditionInfoIn)condition);
+            if (type == typeof(ConditionInfoLike)) text = ToString((ConditionInfoLike)condition);
             else throw new NotSupportedException();
 
             var connection = index == 0 ? string.Empty :
