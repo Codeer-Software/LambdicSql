@@ -35,7 +35,7 @@ public void Standard()
     From(db => db.tbl_remuneration).
         Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
     Where(db => 3000 < db.tbl_remuneration.money).
-        OrderBy().ASC(db => db.tbl_staff.name);
+    OrderBy().ASC(db => db.tbl_staff.name);
 
     //execute.
     var datas = query.ToExecutor(TestEnvironment.ConnectionString).Read();
@@ -88,7 +88,7 @@ public void StandardNoramlType()
     From(db => db.tbl_remuneration).
         Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
     Where(db => 3000 < db.tbl_remuneration.money).
-        OrderBy().ASC(db => db.tbl_staff.name);
+    OrderBy().ASC(db => db.tbl_staff.name);
 
     //execute.
     var datas = query.ToExecutor(TestEnvironment.ConnectionString).Read();
