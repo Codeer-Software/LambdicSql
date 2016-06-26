@@ -1,10 +1,12 @@
-﻿namespace LambdicSql.QueryInfo
+﻿using System.Linq.Expressions;
+
+namespace LambdicSql.QueryInfo
 {
     public class OrderByElement
     {
         public Order Order { get; }
-        public string Target { get; }
-        public OrderByElement(Order order, string element)
+        public Expression Target { get; }
+        public OrderByElement(Order order, Expression element)
         {
             Order = order;
             Target = element;

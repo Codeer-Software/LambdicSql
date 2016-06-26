@@ -20,11 +20,11 @@ namespace LambdicSql.Inside
             return string.Join(".", exp.ToString().Split('.').Skip(1));
         }
 
-        internal static Func<IDbResult, T> ToCreateUseDbResult<T>(NewExpression exp)
+        internal static Func<IDbResult, T> ToCreateUseDbResult<T>(IReadOnlyDictionary<string, ColumnInfo> lambdaNameAndColumn, NewExpression exp)
         {
             var param = Expression.Parameter(typeof(IDbResult), "dbResult");
             var arguments = new[] { param };
-            return Expression.Lambda<Func<IDbResult, T>>(New(new string[0], exp, param), arguments).Compile();
+            return Expression.Lambda<Func<IDbResult, T>>(New(lambdaNameAndColumn, new string[0], exp, param), arguments).Compile();
         }
 
         internal static IEnumerable<object> GetArguments(IReadOnlyDictionary<string, ColumnInfo> dbColumns, MethodCallExpression argMethod)
@@ -60,12 +60,12 @@ namespace LambdicSql.Inside
             return arguments;
         }
 
-        static NewExpression New(string[] names, NewExpression exp, ParameterExpression param)
+        static NewExpression New(IReadOnlyDictionary<string, ColumnInfo> lambdaNameAndColumn, string[] names, NewExpression exp, ParameterExpression param)
         {
-            return Expression.New(exp.Constructor, ConvertArguments(names, exp.Arguments.ToArray(), exp.Members.ToArray(), param), exp.Members);
+            return Expression.New(exp.Constructor, ConvertArguments(lambdaNameAndColumn, names, exp.Arguments.ToArray(), exp.Members.ToArray(), param), exp.Members);
         }
 
-        static IEnumerable<Expression> ConvertArguments(string[] names, Expression[] args, MemberInfo[] members, ParameterExpression param)
+        static IEnumerable<Expression> ConvertArguments(IReadOnlyDictionary<string, ColumnInfo> lambdaNameAndColumn, string[] names, Expression[] args, MemberInfo[] members, ParameterExpression param)
         {
             var newArgs = new List<Expression>();
             for (int i = 0; i < args.Length; i++)
@@ -78,11 +78,13 @@ namespace LambdicSql.Inside
                 var newExp = arg as NewExpression;
                 if (newExp == null)
                 {
-                    newArgs.Add(Expression.Call(param, typeof(IDbResult).GetMethod("Get" + member.PropertyType.Name), Expression.Constant(string.Join(".", currentNames))));
+                    var name = string.Join(".", currentNames);
+                    var sqlName = lambdaNameAndColumn == null ? name : lambdaNameAndColumn[name].SqlFullName;
+                    newArgs.Add(Expression.Call(param, typeof(IDbResult).GetMethod("Get" + member.PropertyType.Name), Expression.Constant(sqlName)));
                 }
                 else
                 {
-                    newArgs.Add(New(currentNames.ToArray(), newExp, param));
+                    newArgs.Add(New(lambdaNameAndColumn, currentNames.ToArray(), newExp, param));
                 }
             }
             return newArgs;

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace LambdicSql.QueryInfo
 {
@@ -6,10 +7,10 @@ namespace LambdicSql.QueryInfo
     {
         public bool IsNot { get; }
         public ConditionConnection ConditionConnection { get; }
-        public string Target { get; }
+        public Expression Target { get; }
         public IReadOnlyList<object> Arguments { get; }
-
-        public ConditionInfoIn(bool isNot, ConditionConnection connection, string target, IReadOnlyList<object> arguments)
+        
+        public ConditionInfoIn(bool isNot, ConditionConnection connection, Expression target, IReadOnlyList<object> arguments)
         {
             IsNot = isNot;
             ConditionConnection = connection;

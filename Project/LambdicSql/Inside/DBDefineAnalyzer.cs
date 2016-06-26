@@ -12,38 +12,24 @@ namespace LambdicSql.Inside
            where T : class
         {
             var query = new Query<T, T>();
-            query.Create = ExpressionAnalyzer.ToCreateUseDbResult<T>((NewExpression)define.Body);
             query.Db = new DbInfo();
             foreach (var column in FindColumns(typeof(T), new string[0]))
             {
-                string schema;
-                string table;
-                Analyze(column.FullName, out schema, out table);
-                query.Db.Add(schema).Add(new[] { schema, table }).Add(column);
+                query.Db.Add(column);
             }
+            query.Create = ExpressionAnalyzer.ToCreateUseDbResult<T>(query.Db.LambdaNameAndColumn, (NewExpression)define.Body);
             return query;
-        }
-        
-        static void Analyze(IReadOnlyList<string> columnFullName, out string schema, out string table)
-        {
-            switch (columnFullName.Count)
-            {
-                case 2:
-                    schema = string.Empty;
-                    table = columnFullName[0];
-                    break;
-                case 3:
-                    schema = columnFullName[0];
-                    table = columnFullName[1];
-                    break;
-                default:
-                    throw new NotSupportedException();
-            }
         }
 
         static IEnumerable<ColumnInfo> FindColumns(Type type, IEnumerable<string> names)
         {
-            if (type.IsClass && type != typeof(string))
+            if (SupportedTypeSpec.IsSupported(type))
+            {
+                //TODO@ if exist difference lambda name and sql name, I'll implement the spec. 
+                var name = string.Join(".", names);
+                return new[] { new ColumnInfo(name, name) };
+            }
+            else if (type.IsClass)
             {
                 var list = new List<ColumnInfo>();
                 foreach (var p in type.GetProperties().Where(e => e.DeclaringType == type))
@@ -52,10 +38,7 @@ namespace LambdicSql.Inside
                 }
                 return list;
             }
-            else
-            {
-                return new[] { new ColumnInfo(type, names.ToArray()) };
-            }
+            throw new NotSupportedException();
         }
     }
 }

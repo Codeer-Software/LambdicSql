@@ -9,33 +9,49 @@ namespace Test
     public class TestUsingLambda
     {
         [TestMethod]
-        public void InvalidNoNameTable()
+        public void SupportedType()
         {
-            try
+            var query = Sql.Using(() => new
             {
-                Sql.Using(() =>
-                new
+                table1 = new
                 {
-                    col1 = ""
-                });
-                Assert.Fail();
-            }
-            catch (NotSupportedException) { }
-        }
+                    col1 = default(string),
+                    col2 = default(bool),
+                    col3 = default(byte),
+                    col4 = default(short),
+                    col5 = default(int),
+                    col6 = default(long),
+                    col7 = default(float),
+                    col8 = default(double),
+                    col9 = default(decimal),
+                    col10 = default(DateTime)
+                }
+            });
 
-        [TestMethod]
-        public void InvalidLevel4()
-        {
-            try
-            {
-                Sql.Using(() =>
-                new
-                {
-                    col1 = ""
-                });
-                Assert.Fail();
-            }
-            catch (NotSupportedException) { }
+            var data = new TestResult();
+            data["table1.col1"] = "abc";
+            data["table1.col2"] = true;
+            data["table1.col3"] = (byte)3;
+            data["table1.col4"] = (short)4;
+            data["table1.col5"] = (int)5;
+            data["table1.col6"] = (long)6;
+            data["table1.col7"] = (float)7;
+            data["table1.col8"] = (double)8;
+            data["table1.col9"] = (decimal)9;
+            data["table1.col10"] = new DateTime(1999, 12, 31);
+
+            var obj = data.Create(query);
+
+            obj.table1.col1.Is("abc");
+            obj.table1.col2.Is(true);
+            obj.table1.col3.Is((byte)3);
+            obj.table1.col4.Is((short)4);
+            obj.table1.col5.Is(5);
+            obj.table1.col6.Is(6);
+            obj.table1.col7.Is(7);
+            obj.table1.col8.Is(8);
+            obj.table1.col9.Is(9);
+            obj.table1.col10.Is(new DateTime(1999, 12, 31));
         }
 
         [TestMethod]
@@ -56,25 +72,13 @@ namespace Test
             });
             var info = query as IQueryInfo;
 
-            info.Db.Children.Count.Is(1);
-
-            var schema = info.Db.Children[""];
-            schema.Children.Count.Is(2);
-
-            var table1 = schema.Children["table1"];
-            table1.Children.Count.Is(2);
-            var col1 = table1.Children["col1"];
-            col1.FullName.Is(new[] { "table1", "col1" });
-            col1.FullNameText.Is("table1.col1");
-            col1.Type.Is(typeof(string));
-            var col2 = table1.Children["col2"];
-            col2.FullNameText.Is("table1.col2");
-
-            var table2 = schema.Children["table2"];
-            table2.Children.Count.Is(2);
-            table2.Children["col4"].Type.Is(typeof(int));
+            info.Db.LambdaNameAndColumn.Count.Is(4);
+            info.Db.LambdaNameAndColumn["table1.col1"].LambdaFullName.Is("table1.col1");
+            info.Db.LambdaNameAndColumn["table1.col2"].LambdaFullName.Is("table1.col2");
+            info.Db.LambdaNameAndColumn["table2.col3"].LambdaFullName.Is("table2.col3");
+            info.Db.LambdaNameAndColumn["table2.col4"].LambdaFullName.Is("table2.col4");
         }
-        
+
         [TestMethod]
         public void Schema()
         {
@@ -96,27 +100,13 @@ namespace Test
             });
             var info = query as IQueryInfo;
 
-            info.Db.Children.Count.Is(2);
-
-            var empty = info.Db.Children[""];
-            empty.Children.Count.Is(1);
-
-            var table1 = empty.Children["table1"];
-            table1.Children.Count.Is(2);
-            var col1 = table1.Children["col1"];
-            col1.FullName.Is(new[] { "table1", "col1" });
-            col1.FullNameText.Is("table1.col1");
-            col1.Type.Is(typeof(string));
-            var col2 = table1.Children["col2"];
-            col2.FullNameText.Is("table1.col2");
-
-            var dbo = info.Db.Children["dbo"];
-            dbo.Children.Count.Is(1);
-            var table2 = dbo.Children["table2"];
-            table2.Children.Count.Is(2);
-            table2.Children["col4"].Type.Is(typeof(int));
+            info.Db.LambdaNameAndColumn.Count.Is(4);
+            info.Db.LambdaNameAndColumn["table1.col1"].LambdaFullName.Is("table1.col1");
+            info.Db.LambdaNameAndColumn["table1.col2"].LambdaFullName.Is("table1.col2");
+            info.Db.LambdaNameAndColumn["dbo.table2.col3"].LambdaFullName.Is("dbo.table2.col3");
+            info.Db.LambdaNameAndColumn["dbo.table2.col4"].LambdaFullName.Is("dbo.table2.col4");
         }
-
+        
         [TestMethod]
         public void CreateTableOnly()
         {

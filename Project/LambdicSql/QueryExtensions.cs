@@ -22,7 +22,7 @@ namespace LambdicSql
         public static IQueryFrom<TDB, TSelect> From<TDB, TSelect>(this IQuerySelelectEnd<TDB, TSelect> query, Expression<Func<TDB, object>> table)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.From = new FromInfo(table.GetElementName()));
+             => query.CustomClone(dst => dst.From = new FromInfo(dst.Db.LambdaNameAndTable[table.GetElementName()]));
 
         public static IWhereQueryConnectable<TDB, TSelect> Where<TDB, TSelect>(this IQueryFromEnd<TDB, TSelect> query)
             where TDB : class
@@ -42,7 +42,7 @@ namespace LambdicSql
         public static IQueryGroupByEnd<TDB, TSelect> GroupBy<TDB, TSelect>(this IQueryWhereEnd<TDB, TSelect> query, params Expression<Func<TDB, object>>[] targets)
             where TDB : class
             where TSelect : class
-            => query.CustomClone(dst => dst.GroupBy = new GroupByInfo(targets.Select(e => e.GetElementName()).ToList()));
+            => query.CustomClone(dst => dst.GroupBy = new GroupByInfo(targets.Select(e => e.Body).ToList()));
 
         public static IOrderByQuery<TDB, TSelect> OrderBy<TDB, TSelect>(this IQueryGroupByEnd<TDB, TSelect> query)
             where TDB : class
@@ -65,8 +65,8 @@ namespace LambdicSql
         {
             var src = query as Query<TDB, TDB>;
             var exp = (NewExpression)define.Body;
-            var dst = src.ConvertType(ExpressionAnalyzer.ToCreateUseDbResult<TSelect>(exp));
-            dst.Select = SelectDefineAnalyzer.MakeSelectInfo(exp, src.Db.GetAllColumns());
+            var dst = src.ConvertType(ExpressionAnalyzer.ToCreateUseDbResult<TSelect>(null, exp));
+            dst.Select = SelectDefineAnalyzer.MakeSelectInfo(exp);
             return dst;
         }
     }

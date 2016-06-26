@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace LambdicSql.QueryInfo
 {
     public class GroupByInfo
     {
-        public IReadOnlyList<string> Elements { get; }
+        public IReadOnlyList<Expression> Elements { get; }
 
-        public GroupByInfo(IReadOnlyList<string> elements)
+        public GroupByInfo(IReadOnlyList<Expression> elements)
         {
             Elements = elements;
         }

@@ -51,13 +51,13 @@ namespace LambdicSql.QueryInfo
         internal void Not()
             => _isNot = true;
 
-        internal void In<TLeft>(string target, TLeft[] inArguments)
+        internal void In<TTarget>(Expression target, TTarget[] inArguments)
             => Conditions.Add(new ConditionInfoIn(IsNot, _nextConnection, target, inArguments.Cast<object>().ToList()));
 
-        internal void Like(string target, string serachText)
+        internal void Like(Expression target, string serachText)
             => Conditions.Add(new ConditionInfoLike(IsNot, _nextConnection, target, serachText));
 
-        internal void Between<TTarget>(string target, TTarget min, TTarget max)
+        internal void Between<TTarget>(Expression target, TTarget min, TTarget max)
             => Conditions.Add(new ConditionInfoBetween(IsNot, _nextConnection, target, min, max));
     }
 }

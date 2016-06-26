@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace LambdicSql.QueryInfo
 {
@@ -14,6 +15,6 @@ namespace LambdicSql.QueryInfo
             return clone;
         }
 
-        internal void Add(Order order, string element) => _elements.Add(new OrderByElement(order, element));
+        internal void Add(Order order, Expression element) => _elements.Add(new OrderByElement(order, element));
     }
 }

@@ -85,27 +85,27 @@ namespace LambdicSql
         public static IWhereQuery<TDB, TSelect> In<TDB, TSelect, TTarget>(this IWhereQueryConnectable<TDB, TSelect> query, Expression<Func<TDB, TTarget>> target, params TTarget[] inArguments)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Where.In(target.GetElementName(), inArguments));
+             => query.CustomClone(dst => dst.Where.In(target.Body, inArguments));
 
         public static IWhereQuery<TDB, TSelect> In<TDB, TSelect, TTarget>(this IWhereQueryConnectableNot<TDB, TSelect> query, Expression<Func<TDB, TTarget>> target, params TTarget[] inArguments)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Where.In(target.GetElementName(), inArguments));
+             => query.CustomClone(dst => dst.Where.In(target.Body, inArguments));
 
         public static IWhereQuery<TDB, TSelect> Like<TDB, TSelect>(this IWhereQueryConnectable<TDB, TSelect> query, Expression<Func<TDB, string>> target, string serachText)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Where.Like(target.GetElementName(), serachText));
+             => query.CustomClone(dst => dst.Where.Like(target.Body, serachText));
 
         public static IWhereQuery<TDB, TSelect> Like<TDB, TSelect>(this IWhereQueryConnectableNot<TDB, TSelect> query, Expression<Func<TDB, string>> target, string serachText)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Where.Like(target.GetElementName(), serachText));
+             => query.CustomClone(dst => dst.Where.Like(target.Body, serachText));
 
         public static IWhereQuery<TDB, TSelect> Between<TDB, TSelect, TTarget>(this IWhereQueryConnectable<TDB, TSelect> query, Expression<Func<TDB, TTarget>> target, TTarget min, TTarget max)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Where.Between(target.GetElementName(), min, max));
+             => query.CustomClone(dst => dst.Where.Between(target.Body, min, max));
              
     }
 }

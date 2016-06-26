@@ -15,11 +15,11 @@ namespace LambdicSql
         public static IOrderByQuery<TDB, TSelect> ASC<TDB, TSelect>(this IOrderByQuery<TDB, TSelect> query, Expression<Func<TDB, object>> exp)
             where TDB : class
             where TSelect : class
-            => query.CustomClone(dst => dst.OrderBy.Add(Order.ASC, exp.GetElementName()));
+            => query.CustomClone(dst => dst.OrderBy.Add(Order.ASC, exp.Body));
 
         public static IOrderByQuery<TDB, TSelect> DESC<TDB, TSelect>(this IOrderByQuery<TDB, TSelect> query, Expression<Func<TDB, object>> exp)
             where TDB : class
             where TSelect : class
-            => query.CustomClone(dst => dst.OrderBy.Add(Order.DESC, exp.GetElementName()));
+            => query.CustomClone(dst => dst.OrderBy.Add(Order.DESC, exp.Body));
     }
 }

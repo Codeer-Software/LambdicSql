@@ -4,13 +4,13 @@ namespace LambdicSql.QueryInfo
 {
     public class SelectInfo
     {
-        Dictionary<string, ISelectElementInfo> _aliasElements = new Dictionary<string, ISelectElementInfo>();
+        List<SelectElementInfo> _elements = new List<SelectElementInfo>();
 
-        public IReadOnlyDictionary<string, ISelectElementInfo> AliasElements => _aliasElements;
+        public IReadOnlyList<SelectElementInfo> Elements => _elements;
 
-        internal void Add(string name, ISelectElementInfo selectElementInfo)
+        internal void Add(SelectElementInfo element)
         {
-            _aliasElements.Add(name, selectElementInfo);
+            _elements.Add(element);
         }
     }
 }

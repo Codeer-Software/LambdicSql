@@ -6,10 +6,10 @@ namespace LambdicSql.QueryInfo
     {
         List<JoinInfo> _join = new List<JoinInfo>();
 
-        public string MainTable { get; }
+        public TableInfo MainTable { get; }
         public IReadOnlyList<JoinInfo> Joins => _join;
 
-        public FromInfo(string mainTable)
+        public FromInfo(TableInfo mainTable)
         {
             MainTable = mainTable;
         }

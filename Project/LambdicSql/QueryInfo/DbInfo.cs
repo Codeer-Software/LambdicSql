@@ -1,37 +1,27 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace LambdicSql.QueryInfo
 {
     public class DbInfo
     {
-        Dictionary<string, SchemaInfo> _children = new Dictionary<string, SchemaInfo>();
-        public IReadOnlyDictionary<string, SchemaInfo> Children => _children;
+        Dictionary<string, ColumnInfo> _lambdaNameAndColumn = new Dictionary<string, ColumnInfo>();
+        Dictionary<string, TableInfo> _lambdaNameAndTable = new Dictionary<string, TableInfo>();
+        public IReadOnlyDictionary<string, ColumnInfo> LambdaNameAndColumn => _lambdaNameAndColumn;
+        public IReadOnlyDictionary<string, TableInfo> LambdaNameAndTable => _lambdaNameAndTable;
 
-        public IReadOnlyDictionary<string, ColumnInfo> GetAllColumns()
+        public void Add(ColumnInfo col)
         {
-            var dic = new Dictionary<string, ColumnInfo>();
-            foreach (var schema in Children)
-            {
-                foreach (var table in schema.Value.Children)
-                {
-                    foreach (var column in table.Value.Children)
-                    {
-                        dic.Add(column.Value.FullNameText, column.Value);
-                    }
-                }
-            }
-            return dic;
-        }
+            _lambdaNameAndColumn.Add(col.LambdaFullName, col);
 
-        internal SchemaInfo Add(string name)
-        {
-            SchemaInfo schema;
-            if (!_children.TryGetValue(name, out schema))
+            var sep = col.LambdaFullName.Split('.');
+            var tableLambda = string.Join(".", sep.Take(sep.Length - 1));
+            if (!_lambdaNameAndTable.ContainsKey(tableLambda))
             {
-                schema = new SchemaInfo(name);
-                _children.Add(name, schema);
+                sep = col.SqlFullName.Split('.');
+                var tableSql = string.Join(".", sep.Take(sep.Length - 1));
+                _lambdaNameAndTable.Add(tableLambda, new TableInfo(tableLambda, tableSql));
             }
-            return schema;
         }
     }
 }
