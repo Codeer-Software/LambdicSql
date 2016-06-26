@@ -13,25 +13,27 @@ namespace Test
         [TestMethod]
         public void TestDB()
         {
-            Sql.Using(() => new
+            var text = Sql.Using(() => new
             {
                 table1 = new
                 {
                     col1 = default(string)
                 }
-            }).ToSqlString(db => db.table1).Is("table1");
+            }).ToSqlString(db => db.table1);
+            Assert.AreEqual(text, "table1");
         }
 
         [TestMethod]
         public void TestColumn()
         {
-            Sql.Using(() => new
+            var text = Sql.Using(() => new
             {
                 table1 = new
                 {
                     col1 = default(string)
                 }
-            }).ToSqlString(db => db.table1.col1).Is("table1.col1");
+            }).ToSqlString(db => db.table1.col1);
+            Assert.AreEqual(text, "table1.col1");
         }
 
         [TestMethod]
@@ -44,8 +46,8 @@ namespace Test
                     col1 = default(string)
                 }
             });
-            query.ToSqlString(db => 1).Is("'1'");
-            query.ToSqlString(db => "xxx").Is("'xxx'");
+            Assert.AreEqual(query.ToSqlString(db => 1), "'1'");
+            Assert.AreEqual(query.ToSqlString(db => "xxx"), "'xxx'");
         }
 
         [TestMethod]
@@ -59,19 +61,19 @@ namespace Test
                     col2 = default(bool)
                 }
             });
-            query.ToSqlString(db => db.table1.col1 == 1).Is("(table1.col1) = ('1')");
-            query.ToSqlString(db => db.table1.col1 != 1).Is("(table1.col1) != ('1')");
-            query.ToSqlString(db => db.table1.col1 < 1).Is("(table1.col1) < ('1')");
-            query.ToSqlString(db => db.table1.col1 <= 1).Is("(table1.col1) <= ('1')");
-            query.ToSqlString(db => db.table1.col1 > 1).Is("(table1.col1) > ('1')");
-            query.ToSqlString(db => db.table1.col1 >= 1).Is("(table1.col1) >= ('1')");
-            query.ToSqlString(db => db.table1.col1 + 1).Is("(table1.col1) + ('1')");
-            query.ToSqlString(db => db.table1.col1 - 1).Is("(table1.col1) - ('1')");
-            query.ToSqlString(db => db.table1.col1 * 1).Is("(table1.col1) * ('1')");
-            query.ToSqlString(db => db.table1.col1 / 1).Is("(table1.col1) / ('1')");
-            query.ToSqlString(db => db.table1.col1 % 1).Is("(table1.col1) % ('1')");
-            query.ToSqlString(db => db.table1.col2 && false).Is("(table1.col2) AND ('False')");
-            query.ToSqlString(db => db.table1.col2 || false).Is("(table1.col2) OR ('False')");
+            Assert.AreEqual(query.ToSqlString(db => db.table1.col1 == 1), "(table1.col1) = ('1')");
+            Assert.AreEqual(query.ToSqlString(db => db.table1.col1 != 1), "(table1.col1) != ('1')");
+            Assert.AreEqual(query.ToSqlString(db => db.table1.col1 < 1), "(table1.col1) < ('1')");
+            Assert.AreEqual(query.ToSqlString(db => db.table1.col1 <= 1), "(table1.col1) <= ('1')");
+            Assert.AreEqual(query.ToSqlString(db => db.table1.col1 > 1), "(table1.col1) > ('1')");
+            Assert.AreEqual(query.ToSqlString(db => db.table1.col1 >= 1), "(table1.col1) >= ('1')");
+            Assert.AreEqual(query.ToSqlString(db => db.table1.col1 + 1), "(table1.col1) + ('1')");
+            Assert.AreEqual(query.ToSqlString(db => db.table1.col1 - 1), "(table1.col1) - ('1')");
+            Assert.AreEqual(query.ToSqlString(db => db.table1.col1 * 1), "(table1.col1) * ('1')");
+            Assert.AreEqual(query.ToSqlString(db => db.table1.col1 / 1), "(table1.col1) / ('1')");
+            Assert.AreEqual(query.ToSqlString(db => db.table1.col1 % 1), "(table1.col1) % ('1')");
+            Assert.AreEqual(query.ToSqlString(db => db.table1.col2 && false), "(table1.col2) AND ('False')");
+            Assert.AreEqual(query.ToSqlString(db => db.table1.col2 || false), "(table1.col2) OR ('False')");
         }
 
         [TestMethod]
@@ -84,8 +86,8 @@ namespace Test
                     col1 = default(int)
                 }
             });
-            query.ToSqlString(db => db.table1.col1 == 2 && (db.table1.col1 == 3 || db.table1.col1 == 4)).
-                Is("((table1.col1) = ('2')) AND (((table1.col1) = ('3')) OR ((table1.col1) = ('4')))");
+            Assert.AreEqual(query.ToSqlString(db => db.table1.col1 == 2 && (db.table1.col1 == 3 || db.table1.col1 == 4)),
+                        "((table1.col1) = ('2')) AND (((table1.col1) = ('3')) OR ((table1.col1) = ('4')))");
         }
 
         [TestMethod]
@@ -98,7 +100,7 @@ namespace Test
                     col1 = default(int)
                 }
             });
-            query.ToSqlString((db, func) => func.Sum(1)).Is("Sum('1')");
+            Assert.AreEqual(query.ToSqlString((db, func) => func.Sum(1)), "Sum('1')");
         }
     }
 

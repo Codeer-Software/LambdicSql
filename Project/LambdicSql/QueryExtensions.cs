@@ -3,7 +3,6 @@ using LambdicSql.QueryInfo;
 using System;
 using System.Linq.Expressions;
 using System.Linq;
-using System.Data.Common;
 
 namespace LambdicSql
 {
@@ -24,7 +23,7 @@ namespace LambdicSql
             where TSelect : class
              => query.CustomClone(dst => dst.From = new FromInfo(dst.Db.LambdaNameAndTable[ExpressionToSqlString.GetElementName(table)]));
 
-        public static IWhereQueryConnectable<TDB, TSelect> Where<TDB, TSelect>(this IQueryFromEnd<TDB, TSelect> query)
+        public static IWhereQuery<TDB, TSelect> Where<TDB, TSelect>(this IQueryFromEnd<TDB, TSelect> query)
             where TDB : class
             where TSelect : class
              => query.CustomClone(dst => dst.Where = new WhereInfo());
@@ -38,7 +37,7 @@ namespace LambdicSql
             where TDB : class
             where TSelect : class
              => query.CustomClone(dst => dst.Where = new WhereInfo(condition.Body));
-
+       
         public static IQueryGroupByEnd<TDB, TSelect> GroupBy<TDB, TSelect>(this IQueryWhereEnd<TDB, TSelect> query, params Expression<Func<TDB, object>>[] targets)
             where TDB : class
             where TSelect : class
@@ -49,15 +48,19 @@ namespace LambdicSql
             where TSelect : class
             => query.CustomClone(dst => dst.OrderBy = new OrderByInfo());
 
-        public static ISqlExecutor<TSelect> Connect<TDB, TSelect>(this IQuery<TDB, TSelect> query, DbConnection connection)
+        public static ISqlExecutor<TSelect> ToExecutor<TDB, TSelect>(this IQuery<TDB, TSelect> query, string connectionString)
             where TDB : class
             where TSelect : class
-            => new SqlExecutor<TSelect>(connection, query.ToQueryString(connection.GetType()), ((IQueryInfo<TSelect>)query).Create);
+        {
+            var text = query.ToQueryString();
+            Sql.Log?.Invoke(text);
+            return new SqlExecutor<TSelect>(connectionString, text, ((IQueryInfo<TSelect>)query).Create);
+        }
 
-        public static string ToQueryString<TDB, TSelect>(this IQuery<TDB, TSelect> query, Type dbConnection)
+        public static string ToQueryString<TDB, TSelect>(this IQuery<TDB, TSelect> query)
             where TDB : class
             where TSelect : class
-            => new QueryToSql().MakeQueryString((IQueryInfo)query, dbConnection);
+            => new QueryToSql().MakeQueryString((IQueryInfo)query);
 
         static IQueryStart<TDB, TSelect> SelectCore<TDB, TSelect>(this IQueryStart<TDB, TDB> query, LambdaExpression define)
             where TDB : class

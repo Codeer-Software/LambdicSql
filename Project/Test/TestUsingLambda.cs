@@ -29,29 +29,29 @@ namespace Test
             });
 
             var data = new TestResult();
-            data["table1.col1"] = "abc";
-            data["table1.col2"] = true;
-            data["table1.col3"] = (byte)3;
-            data["table1.col4"] = (short)4;
-            data["table1.col5"] = (int)5;
-            data["table1.col6"] = (long)6;
-            data["table1.col7"] = (float)7;
-            data["table1.col8"] = (double)8;
-            data["table1.col9"] = (decimal)9;
-            data["table1.col10"] = new DateTime(1999, 12, 31);
+            data["table1@col1"] = "abc";
+            data["table1@col2"] = true;
+            data["table1@col3"] = (byte)3;
+            data["table1@col4"] = (short)4;
+            data["table1@col5"] = (int)5;
+            data["table1@col6"] = (long)6;
+            data["table1@col7"] = (float)7;
+            data["table1@col8"] = (double)8;
+            data["table1@col9"] = (decimal)9;
+            data["table1@col10"] = new DateTime(1999, 12, 31);
 
             var obj = data.Create(query);
 
-            obj.table1.col1.Is("abc");
-            obj.table1.col2.Is(true);
-            obj.table1.col3.Is((byte)3);
-            obj.table1.col4.Is((short)4);
-            obj.table1.col5.Is(5);
-            obj.table1.col6.Is(6);
-            obj.table1.col7.Is(7);
-            obj.table1.col8.Is(8);
-            obj.table1.col9.Is(9);
-            obj.table1.col10.Is(new DateTime(1999, 12, 31));
+            Assert.AreEqual(obj.table1.col1, "abc");
+            Assert.AreEqual(obj.table1.col2, true);
+            Assert.AreEqual(obj.table1.col3, (byte)3);
+            Assert.AreEqual(obj.table1.col4, (short)4);
+            Assert.AreEqual(obj.table1.col5, 5);
+            Assert.AreEqual(obj.table1.col6, 6);
+            Assert.AreEqual(obj.table1.col7, 7);
+            Assert.AreEqual(obj.table1.col8, 8);
+            Assert.AreEqual(obj.table1.col9, 9);
+            Assert.AreEqual(obj.table1.col10, new DateTime(1999, 12, 31));
         }
 
         [TestMethod]
@@ -72,11 +72,11 @@ namespace Test
             });
             var info = query as IQueryInfo;
 
-            info.Db.LambdaNameAndColumn.Count.Is(4);
-            info.Db.LambdaNameAndColumn["table1.col1"].LambdaFullName.Is("table1.col1");
-            info.Db.LambdaNameAndColumn["table1.col2"].LambdaFullName.Is("table1.col2");
-            info.Db.LambdaNameAndColumn["table2.col3"].LambdaFullName.Is("table2.col3");
-            info.Db.LambdaNameAndColumn["table2.col4"].LambdaFullName.Is("table2.col4");
+            Assert.AreEqual(info.Db.LambdaNameAndColumn.Count, 4);
+            Assert.AreEqual(info.Db.LambdaNameAndColumn["table1.col1"].LambdaFullName, "table1.col1");
+            Assert.AreEqual(info.Db.LambdaNameAndColumn["table1.col2"].LambdaFullName, "table1.col2");
+            Assert.AreEqual(info.Db.LambdaNameAndColumn["table2.col3"].LambdaFullName, "table2.col3");
+            Assert.AreEqual(info.Db.LambdaNameAndColumn["table2.col4"].LambdaFullName, "table2.col4");
         }
 
         [TestMethod]
@@ -100,11 +100,11 @@ namespace Test
             });
             var info = query as IQueryInfo;
 
-            info.Db.LambdaNameAndColumn.Count.Is(4);
-            info.Db.LambdaNameAndColumn["table1.col1"].LambdaFullName.Is("table1.col1");
-            info.Db.LambdaNameAndColumn["table1.col2"].LambdaFullName.Is("table1.col2");
-            info.Db.LambdaNameAndColumn["dbo.table2.col3"].LambdaFullName.Is("dbo.table2.col3");
-            info.Db.LambdaNameAndColumn["dbo.table2.col4"].LambdaFullName.Is("dbo.table2.col4");
+            Assert.AreEqual(info.Db.LambdaNameAndColumn.Count, 4);
+            Assert.AreEqual(info.Db.LambdaNameAndColumn["table1.col1"].LambdaFullName, "table1.col1");
+            Assert.AreEqual(info.Db.LambdaNameAndColumn["table1.col2"].LambdaFullName, "table1.col2");
+            Assert.AreEqual(info.Db.LambdaNameAndColumn["dbo.table2.col3"].LambdaFullName, "dbo.table2.col3");
+            Assert.AreEqual(info.Db.LambdaNameAndColumn["dbo.table2.col4"].LambdaFullName, "dbo.table2.col4");
         }
         
         [TestMethod]
@@ -125,15 +125,15 @@ namespace Test
             });
 
             var data = new TestResult();
-            data["table1.col1"] = "abc";
-            data["table1.col2"] = 100;
-            data["table2.col3"] = "def";
-            data["table2.col4"] = 200;
+            data["table1@col1"] = "abc";
+            data["table1@col2"] = 100;
+            data["table2@col3"] = "def";
+            data["table2@col4"] = 200;
             var obj = data.Create(query);
-            obj.table1.col1.Is("abc");
-            obj.table1.col2.Is(100);
-            obj.table2.col3.Is("def");
-            obj.table2.col4.Is(200);
+            Assert.AreEqual(obj.table1.col1, "abc");
+            Assert.AreEqual(obj.table1.col2, 100);
+            Assert.AreEqual(obj.table2.col3, "def");
+            Assert.AreEqual(obj.table2.col4, 200);
         }
 
         [TestMethod]
@@ -157,15 +157,15 @@ namespace Test
             });
 
             var data = new TestResult();
-            data["table1.col1"] = "abc";
-            data["table1.col2"] = 100;
-            data["dbo.table2.col3"] = "def";
-            data["dbo.table2.col4"] = 200;
+            data["table1@col1"] = "abc";
+            data["table1@col2"] = 100;
+            data["dbo@table2@col3"] = "def";
+            data["dbo@table2@col4"] = 200;
             var obj = data.Create(query);
-            obj.table1.col1.Is("abc");
-            obj.table1.col2.Is(100);
-            obj.dbo.table2.col3.Is("def");
-            obj.dbo.table2.col4.Is(200);
+            Assert.AreEqual(obj.table1.col1, "abc");
+            Assert.AreEqual(obj.table1.col2, 100);
+            Assert.AreEqual(obj.dbo.table2.col3, "def");
+            Assert.AreEqual(obj.dbo.table2.col4, 200);
         }
     }
 }

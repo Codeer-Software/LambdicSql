@@ -27,8 +27,14 @@ namespace LambdicSql.Inside
             var method = exp as MethodCallExpression;
             if (method != null) return ToString(info, method);
 
+            var unary = exp as UnaryExpression;
+            if (unary != null) return ToString(info, unary);
+
             throw new NotSupportedException();
         }
+
+        static string ToString(DbInfo info, UnaryExpression unary)
+          => ToString(info, unary.Operand);
 
         static string ToString(DbInfo info, MethodCallExpression method)
         {

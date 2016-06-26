@@ -36,6 +36,9 @@ namespace LambdicSql.Inside
                 {
                     var name = string.Join(".", currentNames);
                     var sqlName = lambdaNameAndColumn == null ? name : lambdaNameAndColumn[name].SqlFullName;
+
+                    sqlName = sqlName.Replace(".", "@");//TODO@ special spec.
+
                     newArgs.Add(Expression.Call(param, typeof(IDbResult).GetMethod("Get" + member.PropertyType.Name), Expression.Constant(sqlName)));
                 }
                 else

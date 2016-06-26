@@ -28,7 +28,7 @@ namespace LambdicSql
             where TDB : class
             where TSelect : class
              => query.CustomClone(dst => dst.Where.And(condition.Body));
-
+ 
         public static IWhereQuery<TDB, TSelect> And<TDB, TSelect>(this IWhereQuery<TDB, TSelect> query, Expression<Func<TDB, IWhereFuncs, bool>> condition)
             where TDB : class
             where TSelect : class
@@ -106,6 +106,10 @@ namespace LambdicSql
             where TDB : class
             where TSelect : class
              => query.CustomClone(dst => dst.Where.Between(target.Body, min, max));
-             
+
+        public static IWhereQuery<TDB, TSelect> Between<TDB, TSelect, TTarget>(this IWhereQueryConnectableNot<TDB, TSelect> query, Expression<Func<TDB, TTarget>> target, TTarget min, TTarget max)
+            where TDB : class
+            where TSelect : class
+             => query.CustomClone(dst => dst.Where.Between(target.Body, min, max));
     }
 }

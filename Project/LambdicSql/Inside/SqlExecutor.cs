@@ -1,36 +1,39 @@
 ﻿using LambdicSql.QueryInfo;
 using System;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Data.SqlClient;
 
 namespace LambdicSql.Inside
 {
     class SqlExecutor<TSelect> : ISqlExecutor<TSelect>
     {
-        DbConnection _connection;
+        string _connectionString;
         string _sql;
         Func<IDbResult, TSelect> _create;
 
-        internal SqlExecutor(DbConnection connection, string sql, Func<IDbResult, TSelect> create)
+        internal SqlExecutor(string connectionString, string sql, Func<IDbResult, TSelect> create)
         {
-            _connection = connection;
+            _connectionString = connectionString;
             _sql = sql;
             _create = create;
         }
 
         public IEnumerable<TSelect> Read()
         {
-            using (var com = new SqlCommand(_sql))
-            using (var sdr = com.ExecuteReader())
+            using (var con = new SqlConnection(_connectionString))
             {
-                var reader = new DbResult(sdr);
-                var list = new List<TSelect>();
-                while (sdr.Read())
+                con.Open();
+                using (var com = new SqlCommand(_sql, con))
+                using (var sdr = com.ExecuteReader())
                 {
-                    list.Add(_create(reader));
+                    var reader = new DbResult(sdr);
+                    var list = new List<TSelect>();
+                    while (sdr.Read())
+                    {
+                        list.Add(_create(reader));
+                    }
+                    return list;
                 }
-                return list;
             }
         }
     }

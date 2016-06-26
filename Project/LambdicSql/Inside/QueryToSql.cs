@@ -9,9 +9,8 @@ namespace LambdicSql.Inside
     class QueryToSql
     {
         DbInfo _db;
-
-        //I maybe change sql text by dbConnection type. 
-        internal string MakeQueryString(IQueryInfo query, Type dbConnection)
+        
+        internal string MakeQueryString(IQueryInfo query)
         {
             _db = query.Db;
             return string.Join(Environment.NewLine, new[] {
@@ -32,7 +31,7 @@ namespace LambdicSql.Inside
             select = new SelectInfo();
             foreach (var e in _db.LambdaNameAndColumn)
             {
-                select.Add(new SelectElementInfo(e.Key, null));
+                select.Add(new SelectElementInfo(e.Key + " AS " + e.Key.Replace(".", "@"), null));//TODO@ special spec
             }
             return select;
         }
@@ -56,7 +55,7 @@ namespace LambdicSql.Inside
             => "SELECT " + Environment.NewLine + "\t" + string.Join("," + Environment.NewLine + "\t", selectInfo.Elements.Select(e => ToString(e))) + Environment.NewLine;
 
         string ToString(SelectElementInfo element)
-            => ToString(element.Expression) + " AS " + element.Name;
+            => element.Expression == null ? element.Name : ToString(element.Expression) + " AS " + element.Name;
 
         string ToString(Expression exp)
             => ExpressionToSqlString.ToString(_db, exp);
@@ -100,7 +99,7 @@ namespace LambdicSql.Inside
         }
 
         string ToString(ConditionInfoBetween condition)
-            => ToString(condition.Target) + " BETWEEN " + condition.Min + " AND " + condition.Max;//TODO@ think db column order.
+            => ToString(condition.Target) + " BETWEEN '" + condition.Min + "' AND '" + condition.Max + "'";//TODO@ think db column order.
 
         string ToString(ConditionInfoExpression condition)
             => ToString(condition.Expression);
@@ -109,7 +108,7 @@ namespace LambdicSql.Inside
             => ToString(condition.Target) + " IN(" + MakeSqlArguments(condition.Arguments) + ")";//TODO@ think db column order.
 
         string ToString(ConditionInfoLike condition)
-            => ToString(condition.Target) + " LIKE " + condition.SearchText;//TODO@ think db column order.
+            => ToString(condition.Target) + " LIKE '" + condition.SearchText + "'";//TODO@ think db column order.
 
         string ToString(GroupByInfo groupBy)
             => groupBy == null ? 
