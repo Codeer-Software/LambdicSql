@@ -61,17 +61,6 @@ namespace LambdicSql.Inside
         string ToString(Expression exp)
             => ExpressionToSqlString.ToString(_db, exp);
 
-        string MakeSqlArguments(IEnumerable<object> src)
-        {
-            var result = new List<string>();
-            foreach (var arg in src)
-            {
-                var col = arg as ColumnInfo;
-                result.Add(col == null ? "'" + arg.ToString() + "'" : col.SqlFullName); 
-            }
-            return string.Join(", ", result.ToArray());
-        }
-
         string ToString(FromInfo fromInfo)
             => string.Join(Environment.NewLine + "\t", new[] { "FROM " + fromInfo.MainTable.SqlFullName }.Concat(fromInfo.Joins.Select(e=>ToString(e))).ToArray()) + Environment.NewLine;
 
@@ -108,16 +97,16 @@ namespace LambdicSql.Inside
         }
 
         string ToString(ConditionInfoBetween condition)
-            => ToString(condition.Target) + " BETWEEN '" + condition.Min + "' AND '" + condition.Max + "'";//TODO@ think db column order.
+            => ToString(condition.Target) + " BETWEEN " + ToStringObject(condition.Min) + " AND " + ToStringObject(condition.Max);
 
         string ToString(ConditionInfoExpression condition)
             => ToString(condition.Expression);
 
         string ToString(ConditionInfoIn condition)
-            => ToString(condition.Target) + " IN(" + MakeSqlArguments(condition.Arguments) + ")";//TODO@ think db column order.
+            => ToString(condition.Target) + " IN(" + MakeSqlArguments(condition.Arguments) + ")";
 
         string ToString(ConditionInfoLike condition)
-            => ToString(condition.Target) + " LIKE '" + condition.SearchText + "'";//TODO@ think db column order.
+            => ToString(condition.Target) + " LIKE " + ToStringObject(condition.SearchText);
 
         string ToString(GroupByInfo groupBy)
             => (groupBy == null || groupBy.Elements.Count == 0) ? 
@@ -129,7 +118,25 @@ namespace LambdicSql.Inside
                 string.Empty :
                 "ORDER BY " + Environment.NewLine + "\t" + string.Join("," + Environment.NewLine + "\t", orderBy.Elements.Select(e=>ToString(e)).ToArray()) + Environment.NewLine;
 
-        private string ToString(OrderByElement element)
+        string ToString(OrderByElement element)
             => ToString(element.Target) + " " + element.Order;
+
+        string ToStringObject(object obj)
+        {
+            //TODO@ think db column order.
+            var query = obj as IQuery;
+            return (query != null) ? ExpressionToSqlString.MakeQueryString(query) : "'" + obj + "'";
+        }
+
+        string MakeSqlArguments(IEnumerable<object> src)
+        {
+            var result = new List<string>();
+            foreach (var arg in src)
+            {
+                var col = arg as ColumnInfo;
+                result.Add(col == null ? ToStringObject(arg) : col.SqlFullName);
+            }
+            return string.Join(", ", result.ToArray());
+        }
     }
 }

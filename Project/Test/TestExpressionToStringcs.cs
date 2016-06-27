@@ -124,7 +124,7 @@ namespace Test
             var text = query.Select(db => new
             {
                 col2 = sub.ToSubQuery<string>()
-            }).ToQueryString();
+            }).Where(db=>db.table1.col1 == sub.ToSubQuery<int>()).ToQueryString();
 
             Debug.Print(text);
         }

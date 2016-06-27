@@ -45,7 +45,7 @@ namespace LambdicSql.Inside
                 var call = Expression.Call(null, typeof(ExpressionToSqlString).
                     GetMethod("MakeQueryString", BindingFlags.Static|BindingFlags.NonPublic|BindingFlags.Public), method.Arguments[0]);
                 var func = Expression.Lambda(call).Compile();
-                return "(" + func.DynamicInvoke().ToString() + ")";
+                return func.DynamicInvoke().ToString();
             }
 
             //db function.
@@ -57,11 +57,10 @@ namespace LambdicSql.Inside
             return method.Method.Name + "(" + string.Join(", ", arguments.ToArray()) + ")";
         }
 
-        static string MakeQueryString(IQuery query) //TODO@ think multi db.
-            =>
-            string.Join(" ", new QueryToSql().MakeQueryString((IQueryInfo)query).
+        internal static string MakeQueryString(IQuery query) //TODO@ think multi db.
+            => "(" + string.Join(" ", new QueryToSql().MakeQueryString((IQueryInfo)query).
                         Replace(Environment.NewLine, " ").Replace("\t", " ").
-                        Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries));
+                        Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries)) + ")";
 
         static string ToString(DbInfo info, BinaryExpression binary)
             => "(" + ToString(info, binary.Left) + ") " + ToString(binary.NodeType) + " (" + ToString(info, binary.Right) + ")";
