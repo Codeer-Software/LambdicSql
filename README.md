@@ -48,7 +48,7 @@ public void LambdaOnly()
 }
 
 ```
-```cs  
+```sql
 SELECT 
 	tbl_staff.name AS name,
 	tbl_remuneration.payment_date AS payment_date,
@@ -115,13 +115,25 @@ public void StandardNoramlType()
     }
 }
 ```
+```sql
+SELECT 
+	tbl_staff.name AS name,
+	tbl_remuneration.payment_date AS payment_date,
+	tbl_remuneration.money AS money
+
+FROM tbl_remuneration
+	JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)
+
+WHERE
+	(('3000') < (tbl_remuneration.money)) AND ((tbl_remuneration.money) < ('4000'))
+
+ORDER BY 
+	tbl_staff.name ASC
+```
 Avoid select.
 ```cs  
 public void AvoidSelect()
 {
-    //log for debug.
-    Sql.Log = l => Debug.Print(l);
-
     //make sql.
     var query = Sql.Using(() => new DB()).
     From(db => db.tbl_remuneration).
@@ -138,13 +150,28 @@ public void AvoidSelect()
     }
 }
 ```
+```sql
+SELECT 
+	tbl_staff.id,
+	tbl_staff.name,
+	tbl_remuneration.id,
+	tbl_remuneration.staff_id,
+	tbl_remuneration.payment_date,
+	tbl_remuneration.money
+
+FROM tbl_remuneration
+	JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)
+
+WHERE
+	(('3000') < (tbl_remuneration.money)) AND ((tbl_remuneration.money) < ('4000'))
+
+ORDER BY 
+	tbl_staff.name ASC
+```
 If table count is 1 and want to get all, avoid where.
 ```cs  
 public void AvoidWhere()
 {
-    //log for debug.
-    Sql.Log = l => Debug.Print(l);
-
     //make sql.
     var query = Sql.Using(() => new
     {
@@ -159,6 +186,13 @@ public void AvoidWhere()
         Debug.Print("{0}, {1}", e.tbl_staff.id, e.tbl_staff.name);
     }
 }
+```
+```sql
+SELECT 
+	tbl_staff.id,
+	tbl_staff.name
+
+FROM tbl_staff
 ```
 Group by and Sum.
 ```cs  
@@ -181,6 +215,18 @@ public void GroupBy()
     }
 }
 ```
+```sql
+SELECT 
+	tbl_staff.name AS name,
+	Sum(tbl_remuneration.money) AS total
+
+FROM tbl_remuneration
+	JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)
+
+GROUP BY 
+	tbl_staff.id,
+	tbl_staff.name
+```
 You can write sequencial AND OR.
 ```cs  
 public void WhereAndOr()
@@ -193,6 +239,23 @@ public void WhereAndOr()
     query = query.And(db => 3000 < db.tbl_remuneration.money).And(db => db.tbl_remuneration.money < 4000).Or(db => db.tbl_staff.id == 1);
 }
 ```
+```sql
+SELECT 
+	tbl_staff.id,
+	tbl_staff.name,
+	tbl_remuneration.id,
+	tbl_remuneration.staff_id,
+	tbl_remuneration.payment_date,
+	tbl_remuneration.money
+
+FROM tbl_remuneration
+	JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)
+
+WHERE
+	('3000') < (tbl_remuneration.money)
+	AND (tbl_remuneration.money) < ('4000')
+	OR (tbl_staff.id) = ('1')
+```
 Like, In, Between
 ```cs  
 public void Like()
@@ -202,7 +265,23 @@ public void Like()
         Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
     Where().Like(db => db.tbl_staff.name, "%son%");
 }
+```
+```sql
+SELECT 
+	tbl_staff.id,
+	tbl_staff.name,
+	tbl_remuneration.id,
+	tbl_remuneration.staff_id,
+	tbl_remuneration.payment_date,
+	tbl_remuneration.money
 
+FROM tbl_remuneration
+	JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)
+
+WHERE
+	tbl_staff.name LIKE '%son%'
+```
+```cs
 public void In()
 {
     var query = Sql.Using(() => new DB()).
@@ -210,7 +289,23 @@ public void In()
         Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
     Where().In(db => db.tbl_staff.id, 1, 3);
 }
+```
+```sql
+SELECT 
+	tbl_staff.id,
+	tbl_staff.name,
+	tbl_remuneration.id,
+	tbl_remuneration.staff_id,
+	tbl_remuneration.payment_date,
+	tbl_remuneration.money
 
+FROM tbl_remuneration
+	JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)
+
+WHERE
+	tbl_staff.id IN('1', '3')
+```
+```cs
 public void Between()
 {
     var query = Sql.Using(() => new DB()).
@@ -218,4 +313,20 @@ public void Between()
         Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
     Where().Between(db => db.tbl_staff.id, 1, 3);
 }
+
+```
+```sql
+SELECT 
+	tbl_staff.id,
+	tbl_staff.name,
+	tbl_remuneration.id,
+	tbl_remuneration.staff_id,
+	tbl_remuneration.payment_date,
+	tbl_remuneration.money
+
+FROM tbl_remuneration
+	JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)
+
+WHERE
+	tbl_staff.id BETWEEN '1' AND '3'
 ```
