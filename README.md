@@ -11,7 +11,7 @@ public void LambdaOnly()
     //log for debug.
     Sql.Log = l => Debug.Print(l);
 
-    //make sql by lambda.
+    //make sql.
     var query = Sql.Using(() => new
     {
         tbl_staff = new
@@ -78,7 +78,7 @@ public void StandardNoramlType()
     //log for debug.
     Sql.Log = l => Debug.Print(l);
 
-    //make sql by lambda.
+    //make sql.
     var query = Sql.Using(() => new DB()).
     Select(db => new SelectData()
     {
@@ -107,7 +107,7 @@ public void AvoidSelect()
     //log for debug.
     Sql.Log = l => Debug.Print(l);
 
-    //make sql by lambda.
+    //make sql.
     var query = Sql.Using(() => new DB()).
     From(db => db.tbl_remuneration).
         Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
@@ -130,7 +130,7 @@ public void AvoidWhere()
     //log for debug.
     Sql.Log = l => Debug.Print(l);
 
-    //make sql by lambda.
+    //make sql.
     var query = Sql.Using(() => new
     {
         tbl_staff = new Staff()
