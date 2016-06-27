@@ -52,15 +52,26 @@ namespace LambdicSql.Inside
             for (int i = 0; i < args.Length; i++)
             {
                 var arg = args[i];
-                var member = members[i] as PropertyInfo;
-
-                var currentNames = names.Concat(new[] { member.Name }).ToArray();
-
+                var propInfo = members[i] as PropertyInfo;
+                string[] currentNames = null;
+                Type paramType = null;
+                if (propInfo != null)
+                {
+                    currentNames = names.Concat(new[] { propInfo.Name }).ToArray();
+                    paramType = propInfo.PropertyType;
+                }
+                else
+                {
+                    //.net3.5
+                    var method = members[i] as MethodInfo;
+                    paramType = method.ReturnType;
+                    currentNames = names.Concat(new[] { method.Name }).ToArray();
+                }
                 var newExp = arg as NewExpression;
                 if (newExp == null)
                 {
                     var name = string.Join(".", currentNames);
-                    newArgs.Add(Expression.Call(param, typeof(IDbResult).GetMethod("Get" + member.PropertyType.Name), Expression.Constant(getIndexInSelect(name))));
+                    newArgs.Add(Expression.Call(param, typeof(IDbResult).GetMethod("Get" + paramType.Name), Expression.Constant(getIndexInSelect(name))));
                 }
                 else
                 {

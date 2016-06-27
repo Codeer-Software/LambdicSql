@@ -16,8 +16,20 @@ namespace LambdicSql.Inside
                 for (int i = 0; i < newExp.Arguments.Count; i++)
                 {
                     var propInfo = newExp.Members[i] as PropertyInfo;
+                    string name = null;
+                    if (propInfo != null)
+                    {
+                        name = propInfo.Name;
+                    }
+                    else
+                    {
+                        //.net3.5
+                        var method = newExp.Members[i] as MethodInfo;
+                        name = method.Name;
+                    }
+
                     var argMember = newExp.Arguments[i] as MemberExpression;
-                    select.Add(new SelectElementInfo(propInfo.Name, newExp.Arguments[i]));
+                    select.Add(new SelectElementInfo(name, newExp.Arguments[i]));
                 }
             }
             else
