@@ -81,6 +81,7 @@ namespace Test
             public DateTime payment_date { get; set; }
             public decimal money { get; set; }
         }
+
         [TestMethod]
         public void StandardNoramlType()
         {
@@ -89,6 +90,40 @@ namespace Test
 
             //make sql.
             var query = Sql.Using(() => new DB()).
+            Select(db => new SelectData()
+            {
+                name = db.tbl_staff.name,
+                payment_date = db.tbl_remuneration.payment_date,
+                money = db.tbl_remuneration.money,
+            }).
+            From(db => db.tbl_remuneration).
+                Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
+            Where(db => 3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000).
+                OrderBy().ASC(db => db.tbl_staff.name);
+
+            //execute.
+            var datas = query.ToExecutor(TestEnvironment.ConnectionString).Read();
+
+            foreach (var e in datas)
+            {
+                Debug.Print("{0}, {1}, {2}", e.name, e.payment_date, e.money);
+            }
+
+            Assert.AreEqual(1, datas.Count());
+            var first = datas.First();
+            Assert.AreEqual("Jackson", first.name);
+            Assert.AreEqual(new DateTime(2016, 1, 1), first.payment_date);
+            Assert.AreEqual(3500, first.money);
+        }
+
+        [TestMethod]
+        public void StandardNoramlTypeGeneric()
+        {
+            //log for debug.
+            Sql.Log = l => Debug.Print(l);
+
+            //make sql.
+            var query = Sql.Using<DB>().
             Select(db => new SelectData()
             {
                 name = db.tbl_staff.name,
