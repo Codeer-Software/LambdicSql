@@ -9,6 +9,7 @@ LambdicSql from NuGet
     PM> Install-Package LambdicSql
 https://www.nuget.org/packages/LambdicSql/
 
+## Simple sample
 write only lambda.
 ```cs  
 public void LambdaOnly()
