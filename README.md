@@ -3,6 +3,11 @@ LambdicSql
 
 ## Features ...
 #### Write SQL using lambda.
+## Getting Started
+LambdicSql from NuGet
+
+    PM> Install-Package LambdicSql
+https://www.nuget.org/packages/LambdicSql/
 
 write only lambda.
 ```cs  

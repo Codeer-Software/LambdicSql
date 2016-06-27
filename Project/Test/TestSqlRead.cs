@@ -1,6 +1,7 @@
 ﻿using LambdicSql;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
@@ -70,7 +71,7 @@ namespace Test
             public DateTime payment_date { get; set; }
             public decimal money { get; set; }
         }
-        public class DB
+        public class Data
         {
             public Staff tbl_staff { get; set; }
             public Remuneration tbl_remuneration { get; set; }
@@ -89,7 +90,7 @@ namespace Test
             Sql.Log = l => Debug.Print(l);
 
             //make sql.
-            var query = Sql.Using(() => new DB()).
+            var query = Sql.Using(() => new Data()).
             Select(db => new SelectData()
             {
                 name = db.tbl_staff.name,
@@ -123,7 +124,7 @@ namespace Test
             Sql.Log = l => Debug.Print(l);
 
             //make sql.
-            var query = Sql.Using<DB>().
+            var query = Sql.Using<Data>().
             Select(db => new SelectData()
             {
                 name = db.tbl_staff.name,
@@ -173,7 +174,7 @@ namespace Test
             Sql.Log = l => Debug.Print(l);
 
             //make sql.
-            var query = Sql.Using(() => new DB()).
+            var query = Sql.Using(() => new Data()).
             From(db => db.tbl_remuneration).
                 Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
             Where(db => 3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000).
@@ -227,7 +228,7 @@ namespace Test
             Sql.Log = l => Debug.Print(l);
 
             //make sql.
-            var query = Sql.Using(() => new DB()).
+            var query = Sql.Using(() => new Data()).
             Select((db, function) => new
             {
                 name = db.tbl_staff.name,
@@ -260,7 +261,7 @@ namespace Test
             Sql.Log = l => Debug.Print(l);
 
             //make sql.
-            var query = Sql.Using(() => new DB()).
+            var query = Sql.Using(() => new Data()).
             Select((db, function) => new
             {
                 name = db.tbl_staff.name,
@@ -283,7 +284,7 @@ namespace Test
             //log for debug.
             Sql.Log = l => Debug.Print(l);
 
-            var query = Sql.Using(() => new DB()).
+            var query = Sql.Using(() => new Data()).
                 From(db => db.tbl_remuneration).
                     Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).Where();
 
@@ -347,5 +348,42 @@ namespace Test
                 Debug.Print("{0}", e.tbl_staff.name);
             }
         }
+
+        [TestMethod]
+        public void TestShort()
+        {
+            Sql.Log = l => Debug.Print(l);
+            ReadData1();
+            ReadData2();
+            ReadData3();
+        }
+
+
+        public IEnumerable<SelectData> ReadData1() =>
+            Sql.Using<Data>().//←ここを書かなくてよくなった。
+            Select(db => new SelectData()
+            {
+                name = db.tbl_staff.name,
+                payment_date = db.tbl_remuneration.payment_date,
+                money = db.tbl_remuneration.money,
+            }).
+            From(db => db.tbl_remuneration).
+                Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
+            Where(db => 3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000).
+              OrderBy().ASC(db => db.tbl_staff.name).
+            ToExecutor(TestEnvironment.ConnectionString).Read();
+
+
+        public IEnumerable<Data> ReadData2() =>
+            Sql.Using<Data>().
+            From(db => db.tbl_remuneration).
+                Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
+            Where(db => 3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000).
+            OrderBy().ASC(db => db.tbl_staff.name).
+            ToExecutor(TestEnvironment.ConnectionString).Read();
+        
+        public IEnumerable<Staff> ReadData3() =>
+            Sql.Using(() => new { tbl_staff = new Staff() }).
+            ToExecutor(TestEnvironment.ConnectionString).Read().Select(e=>e.tbl_staff);
     }
 }
