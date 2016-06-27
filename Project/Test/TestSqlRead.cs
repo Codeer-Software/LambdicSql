@@ -409,5 +409,25 @@ namespace Test
                 Debug.Print("{0}, {1}", e.name, e.total);
             }
         }
+
+
+        [TestMethod]
+        public void WhereInSubQuery()
+        {
+            Sql.Log = l => Debug.Print(l);
+            var define = Sql.Using<Data>();
+
+            var sub = define.
+                Select((db, func) => new { total = db.tbl_remuneration.staff_id }).
+                From(db => db.tbl_remuneration);
+
+            var query = define.Select(db=>new { name = db.tbl_staff.name }).From(db => db.tbl_staff).Where().In(db=>db.tbl_staff.id, sub);
+
+            var datas = query.ToExecutor(TestEnvironment.ConnectionString).Read();
+            foreach (var e in datas)
+            {
+                Debug.Print("{0}", e.name);
+            }
+        }
     }
 }

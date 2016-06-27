@@ -365,3 +365,29 @@ FROM tbl_staff
 WHERE
 	tbl_staff.id BETWEEN '1' AND '3'
 ```
+You can use sub query.
+```cs
+public void WhereInSubQuery()
+{
+    var define = Sql.Using<Data>();
+
+    var sub = define.
+        Select((db, func) => new { total = db.tbl_remuneration.staff_id }).
+        From(db => db.tbl_remuneration);
+
+    var datas = define.
+        Select(db=>new { name = db.tbl_staff.name }).
+        From(db => db.tbl_staff).
+        Where().In(db=>db.tbl_staff.id, sub).
+        ToExecutor(TestEnvironment.ConnectionString).Read();
+}
+```
+```sql
+SELECT 
+	tbl_staff.name AS name
+
+FROM tbl_staff
+
+WHERE
+	tbl_staff.id IN((SELECT tbl_remuneration.staff_id AS total FROM tbl_remuneration))
+```
