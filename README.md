@@ -391,3 +391,29 @@ FROM tbl_staff
 WHERE
 	tbl_staff.id IN((SELECT tbl_remuneration.staff_id AS total FROM tbl_remuneration))
 ```
+```cs
+public void SelectSubQuery()
+{
+    var define = Sql.Using<Data>();
+
+    var sub = define.
+        Select((db, func) => new { total = func.Sum(db.tbl_remuneration.money) }).
+        From(db => db.tbl_remuneration);
+
+    var datas = define.
+            Select(db => new
+            {
+                name = db.tbl_staff.name,
+                total = sub.ToSubQuery<decimal>()
+            }).
+            From(db => db.tbl_staff).
+			ToExecutor(TestEnvironment.ConnectionString).Read();
+}
+```
+```sql
+SELECT 
+	tbl_staff.name AS name,
+	(SELECT Sum(tbl_remuneration.money) AS total FROM tbl_remuneration) AS total
+
+FROM tbl_staff
+```

@@ -395,15 +395,14 @@ namespace Test
                 Select((db, func) => new { total = func.Sum(db.tbl_remuneration.money) }).
                 From(db => db.tbl_remuneration);
 
-            var query = define.
+            var datas = define.
                     Select(db => new
                     {
                         name = db.tbl_staff.name,
                         total = sub.ToSubQuery<decimal>()
                     }).
-                    From(db => db.tbl_staff);
-
-            var datas = query.ToExecutor(TestEnvironment.ConnectionString).Read();
+                    From(db => db.tbl_staff).
+                    ToExecutor(TestEnvironment.ConnectionString).Read();
             foreach (var e in datas)
             {
                 Debug.Print("{0}, {1}", e.name, e.total);
@@ -421,9 +420,13 @@ namespace Test
                 Select((db, func) => new { total = db.tbl_remuneration.staff_id }).
                 From(db => db.tbl_remuneration);
 
-            var query = define.Select(db=>new { name = db.tbl_staff.name }).From(db => db.tbl_staff).Where().In(db=>db.tbl_staff.id, sub);
+            var datas = define.
+                Select(db=>new { name = db.tbl_staff.name }).
+                From(db => db.tbl_staff).
+                Where().In(db=>db.tbl_staff.id, sub).
+                ToExecutor(TestEnvironment.ConnectionString).Read();
 
-            var datas = query.ToExecutor(TestEnvironment.ConnectionString).Read();
+
             foreach (var e in datas)
             {
                 Debug.Print("{0}", e.name);
