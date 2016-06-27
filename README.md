@@ -237,6 +237,9 @@ public void WhereAndOr()
 
     //sequencial write!
     query = query.And(db => 3000 < db.tbl_remuneration.money).And(db => db.tbl_remuneration.money < 4000).Or(db => db.tbl_staff.id == 1);
+    
+    var datas = query.ToExecutor(TestEnvironment.ConnectionString).Read();
+
 }
 ```
 ```sql
@@ -260,23 +263,18 @@ Like, In, Between
 ```cs  
 public void Like()
 {
-    var query = Sql.Using(() => new DB()).
-    From(db => db.tbl_remuneration).
-        Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
-    Where().Like(db => db.tbl_staff.name, "%son%");
+    var query = Sql.Using(() => new { tbl_staff = new Staff() }).
+                Where().Like(db => db.tbl_staff.name, "%son%");
+    
+    var datas = query.ToExecutor(TestEnvironment.ConnectionString).Read();
 }
 ```
 ```sql
 SELECT 
 	tbl_staff.id,
-	tbl_staff.name,
-	tbl_remuneration.id,
-	tbl_remuneration.staff_id,
-	tbl_remuneration.payment_date,
-	tbl_remuneration.money
+	tbl_staff.name
 
-FROM tbl_remuneration
-	JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)
+FROM tbl_staff
 
 WHERE
 	tbl_staff.name LIKE '%son%'
@@ -284,23 +282,18 @@ WHERE
 ```cs
 public void In()
 {
-    var query = Sql.Using(() => new DB()).
-    From(db => db.tbl_remuneration).
-        Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
-    Where().In(db => db.tbl_staff.id, 1, 3);
+    var query = Sql.Using(() => new { tbl_staff = new Staff() }).
+                Where().In(db => db.tbl_staff.id, 1, 3);
+
+    var datas = query.ToExecutor(TestEnvironment.ConnectionString).Read();
 }
 ```
 ```sql
 SELECT 
 	tbl_staff.id,
-	tbl_staff.name,
-	tbl_remuneration.id,
-	tbl_remuneration.staff_id,
-	tbl_remuneration.payment_date,
-	tbl_remuneration.money
+	tbl_staff.name
 
-FROM tbl_remuneration
-	JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)
+FROM tbl_staff
 
 WHERE
 	tbl_staff.id IN('1', '3')
@@ -308,24 +301,19 @@ WHERE
 ```cs
 public void Between()
 {
-    var query = Sql.Using(() => new DB()).
-    From(db => db.tbl_remuneration).
-        Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
+    var query = Sql.Using(() => new { tbl_staff = new Staff() }).
     Where().Between(db => db.tbl_staff.id, 1, 3);
+
+    var datas = query.ToExecutor(TestEnvironment.ConnectionString).Read();
 }
 
 ```
 ```sql
 SELECT 
 	tbl_staff.id,
-	tbl_staff.name,
-	tbl_remuneration.id,
-	tbl_remuneration.staff_id,
-	tbl_remuneration.payment_date,
-	tbl_remuneration.money
+	tbl_staff.name
 
-FROM tbl_remuneration
-	JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)
+FROM tbl_staff
 
 WHERE
 	tbl_staff.id BETWEEN '1' AND '3'

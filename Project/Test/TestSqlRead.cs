@@ -15,7 +15,7 @@ namespace Test
             //log for debug.
             Sql.Log = l => Debug.Print(l);
 
-            //make sql by lambda.
+            //make sql.
             var query = Sql.Using(() => new
             {
                 tbl_staff = new
@@ -87,7 +87,7 @@ namespace Test
             //log for debug.
             Sql.Log = l => Debug.Print(l);
 
-            //make sql by lambda.
+            //make sql.
             var query = Sql.Using(() => new DB()).
             Select(db => new SelectData()
             {
@@ -137,7 +137,7 @@ namespace Test
             //log for debug.
             Sql.Log = l => Debug.Print(l);
 
-            //make sql by lambda.
+            //make sql.
             var query = Sql.Using(() => new DB()).
             From(db => db.tbl_remuneration).
                 Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
@@ -165,7 +165,7 @@ namespace Test
             //log for debug.
             Sql.Log = l => Debug.Print(l);
 
-            //make sql by lambda.
+            //make sql.
             var query = Sql.Using(() => new
             {
                 tbl_staff = new Staff()
@@ -185,14 +185,13 @@ namespace Test
             Assert.AreEqual("Emma", first.tbl_staff.name);
         }
 
-
         [TestMethod]
         public void GroupBy()
         {
             //log for debug.
             Sql.Log = l => Debug.Print(l);
 
-            //make sql by lambda.
+            //make sql.
             var query = Sql.Using(() => new DB()).
             Select((db, function) => new
             {
@@ -241,17 +240,14 @@ namespace Test
             //log for debug.
             Sql.Log = l => Debug.Print(l);
 
-            //make sql by lambda.
-            var query = Sql.Using(() => new DB()).
-            From(db => db.tbl_remuneration).
-                Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
-
+            //make sql.
+            var query = Sql.Using(() => new { tbl_staff = new Staff() }).
             Where().Like(db => db.tbl_staff.name, "%son%");
 
             var datas = query.ToExecutor(TestEnvironment.ConnectionString).Read();
             foreach (var e in datas)
             {
-                Debug.Print("{0}, {1}", e.tbl_staff.name, e.tbl_remuneration.money);
+                Debug.Print("{0}", e.tbl_staff.name);
             }
         }
 
@@ -261,17 +257,14 @@ namespace Test
             //log for debug.
             Sql.Log = l => Debug.Print(l);
 
-            //make sql by lambda.
-            var query = Sql.Using(() => new DB()).
-            From(db => db.tbl_remuneration).
-                Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
-
+            //make sql.
+            var query = Sql.Using(() => new { tbl_staff = new Staff() }).
             Where().In(db => db.tbl_staff.id, 1, 3);
 
             var datas = query.ToExecutor(TestEnvironment.ConnectionString).Read();
             foreach (var e in datas)
             {
-                Debug.Print("{0}, {1}", e.tbl_staff.name, e.tbl_remuneration.money);
+                Debug.Print("{0}", e.tbl_staff.name);
             }
         }
 
@@ -281,17 +274,14 @@ namespace Test
             //log for debug.
             Sql.Log = l => Debug.Print(l);
 
-            //make sql by lambda.
-            var query = Sql.Using(() => new DB()).
-            From(db => db.tbl_remuneration).
-                Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
-
+            //make sql.
+            var query = Sql.Using(() => new { tbl_staff = new Staff() }).
             Where().Between(db => db.tbl_staff.id, 1, 3);
 
             var datas = query.ToExecutor(TestEnvironment.ConnectionString).Read();
             foreach (var e in datas)
             {
-                Debug.Print("{0}, {1}", e.tbl_staff.name, e.tbl_remuneration.money);
+                Debug.Print("{0}", e.tbl_staff.name);
             }
         }
     }
