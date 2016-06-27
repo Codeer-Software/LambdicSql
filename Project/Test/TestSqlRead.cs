@@ -159,7 +159,6 @@ namespace Test
             Assert.AreEqual(3500, first.tbl_remuneration.money);
         }
 
-
         [TestMethod]
         public void AvoidWhere()
         {

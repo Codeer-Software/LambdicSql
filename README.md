@@ -48,6 +48,21 @@ public void LambdaOnly()
 }
 
 ```
+```cs  
+SELECT 
+	tbl_staff.name AS name,
+	tbl_remuneration.payment_date AS payment_date,
+	tbl_remuneration.money AS money
+
+FROM tbl_remuneration
+	JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)
+
+WHERE
+	(('3000') < (tbl_remuneration.money)) AND ((tbl_remuneration.money) < ('4000'))
+
+ORDER BY 
+	tbl_staff.name ASC
+```
 use normal class.
 ```cs  
 public class Staff
