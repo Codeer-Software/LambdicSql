@@ -35,7 +35,7 @@ namespace Test
             {
                 name = db.tbl_staff.name,
                 payment_date = db.tbl_remuneration.payment_date,
-                mony = db.tbl_remuneration.money,
+                money = db.tbl_remuneration.money,
             }).
             From(db => db.tbl_remuneration).
                 Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
@@ -47,14 +47,14 @@ namespace Test
 
             foreach (var e in datas)
             {
-                Debug.Print("{0}, {1}, {2}", e.name, e.payment_date, e.mony);
+                Debug.Print("{0}, {1}, {2}", e.name, e.payment_date, e.money);
             }
 
             Assert.AreEqual(1, datas.Count());
             var first = datas.First();
             Assert.AreEqual("Jackson", first.name);
             Assert.AreEqual(new DateTime(2016, 1, 1), first.payment_date);
-            Assert.AreEqual(3500, first.mony);
+            Assert.AreEqual(3500, first.money);
         }
 
         //noraml type.
@@ -79,7 +79,7 @@ namespace Test
         {
             public string name { get; set; }
             public DateTime payment_date { get; set; }
-            public decimal mony { get; set; }
+            public decimal money { get; set; }
         }
         [TestMethod]
         public void StandardNoramlType()
@@ -93,7 +93,7 @@ namespace Test
             {
                 name = db.tbl_staff.name,
                 payment_date = db.tbl_remuneration.payment_date,
-                mony = db.tbl_remuneration.money,
+                money = db.tbl_remuneration.money,
             }).
             From(db => db.tbl_remuneration).
                 Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
@@ -105,14 +105,14 @@ namespace Test
 
             foreach (var e in datas)
             {
-                Debug.Print("{0}, {1}, {2}", e.name, e.payment_date, e.mony);
+                Debug.Print("{0}, {1}, {2}", e.name, e.payment_date, e.money);
             }
 
             Assert.AreEqual(1, datas.Count());
             var first = datas.First();
             Assert.AreEqual("Jackson", first.name);
             Assert.AreEqual(new DateTime(2016, 1, 1), first.payment_date);
-            Assert.AreEqual(3500, first.mony);
+            Assert.AreEqual(3500, first.money);
         }
 
         [TestMethod]
@@ -130,6 +130,62 @@ namespace Test
                 Debug.Print("{0}", e.tbl_staff.name);
             }
         }
+
+        [TestMethod]
+        public void AvoidSelect()
+        {
+            //log for debug.
+            Sql.Log = l => Debug.Print(l);
+
+            //make sql by lambda.
+            var query = Sql.Using(() => new DB()).
+            From(db => db.tbl_remuneration).
+                Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
+            Where(db => 3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000).
+                OrderBy().ASC(db => db.tbl_staff.name);
+
+            //execute.
+            var datas = query.ToExecutor(TestEnvironment.ConnectionString).Read();
+
+            foreach (var e in datas)
+            {
+                Debug.Print("{0}, {1}, {2}", e.tbl_staff.name, e.tbl_remuneration.payment_date, e.tbl_remuneration.money);
+            }
+
+            Assert.AreEqual(1, datas.Count());
+            var first = datas.First();
+            Assert.AreEqual("Jackson", first.tbl_staff.name);
+            Assert.AreEqual(new DateTime(2016, 1, 1), first.tbl_remuneration.payment_date);
+            Assert.AreEqual(3500, first.tbl_remuneration.money);
+        }
+
+
+        [TestMethod]
+        public void AvoidWhere()
+        {
+            //log for debug.
+            Sql.Log = l => Debug.Print(l);
+
+            //make sql by lambda.
+            var query = Sql.Using(() => new
+            {
+                tbl_staff = new Staff()
+            });
+
+            //execute.
+            var datas = query.ToExecutor(TestEnvironment.ConnectionString).Read();
+
+            foreach (var e in datas)
+            {
+                Debug.Print("{0}, {1}", e.tbl_staff.id, e.tbl_staff.name);
+            }
+
+            Assert.AreEqual(4, datas.Count());
+            var first = datas.First();
+            Assert.AreEqual(1, first.tbl_staff.id);
+            Assert.AreEqual("Emma", first.tbl_staff.name);
+        }
+
 
         [TestMethod]
         public void GroupBy()

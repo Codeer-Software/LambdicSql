@@ -31,7 +31,7 @@ public void LambdaOnly()
     {
         name = db.tbl_staff.name,
         payment_date = db.tbl_remuneration.payment_date,
-        mony = db.tbl_remuneration.money,
+        money = db.tbl_remuneration.money,
     }).
     From(db => db.tbl_remuneration).
         Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
@@ -43,7 +43,7 @@ public void LambdaOnly()
 
     foreach (var e in datas)
     {
-        Debug.Print("{0}, {1}, {2}", e.name, e.payment_date, e.mony);
+        Debug.Print("{0}, {1}, {2}", e.name, e.payment_date, e.money);
     }
 }
 
@@ -71,7 +71,7 @@ public class SelectData
 {
     public string name { get; set; }
     public DateTime payment_date { get; set; }
-    public decimal mony { get; set; }
+    public decimal money { get; set; }
 }
 public void StandardNoramlType()
 {
@@ -84,7 +84,7 @@ public void StandardNoramlType()
     {
         name = db.tbl_staff.name,
         payment_date = db.tbl_remuneration.payment_date,
-        mony = db.tbl_remuneration.money,
+        money = db.tbl_remuneration.money,
     }).
     From(db => db.tbl_remuneration).
         Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
@@ -96,7 +96,52 @@ public void StandardNoramlType()
 
     foreach (var e in datas)
     {
-        Debug.Print("{0}, {1}, {2}", e.name, e.payment_date, e.mony);
+        Debug.Print("{0}, {1}, {2}", e.name, e.payment_date, e.money);
+    }
+}
+```
+Avoid select.
+```cs  
+public void AvoidSelect()
+{
+    //log for debug.
+    Sql.Log = l => Debug.Print(l);
+
+    //make sql by lambda.
+    var query = Sql.Using(() => new DB()).
+    From(db => db.tbl_remuneration).
+        Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
+    Where(db => 3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000).
+        OrderBy().ASC(db => db.tbl_staff.name);
+
+    //execute.
+    var datas = query.ToExecutor(TestEnvironment.ConnectionString).Read();
+
+    foreach (var e in datas)
+    {
+        Debug.Print("{0}, {1}, {2}", e.tbl_staff.name, e.tbl_remuneration.payment_date, e.tbl_remuneration.money);
+    }
+}
+```
+If table count is 1, avoid where.
+```cs  
+public void AvoidWhere()
+{
+    //log for debug.
+    Sql.Log = l => Debug.Print(l);
+
+    //make sql by lambda.
+    var query = Sql.Using(() => new
+    {
+        tbl_staff = new Staff()
+    });
+
+    //execute.
+    var datas = query.ToExecutor(TestEnvironment.ConnectionString).Read();
+
+    foreach (var e in datas)
+    {
+        Debug.Print("{0}, {1}", e.tbl_staff.id, e.tbl_staff.name);
     }
 }
 ```
