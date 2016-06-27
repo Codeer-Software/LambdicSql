@@ -235,6 +235,39 @@ GROUP BY
 	tbl_staff.id,
 	tbl_staff.name
 ```
+Having
+```cs  
+public void Having()
+{
+    var query = Sql.Using(() => new DB()).
+    Select((db, function) => new
+    {
+        name = db.tbl_staff.name,
+        total = function.Sum(db.tbl_remuneration.money)
+    }).
+    From(db => db.tbl_remuneration).
+        Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
+    GroupBy(db => db.tbl_staff.id, db => db.tbl_staff.name).
+    Having((db, function) => 10000 < function.Sum(db.tbl_remuneration.money));
+
+    var datas = query.ToExecutor(TestEnvironment.ConnectionString).Read();
+}
+```
+```sql
+SELECT 
+	tbl_staff.name AS name,
+	Sum(tbl_remuneration.money) AS total
+
+FROM tbl_remuneration
+	JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)
+
+GROUP BY 
+	tbl_staff.id,
+	tbl_staff.name
+
+HAVING
+	('10000') < (Sum(tbl_remuneration.money))
+```
 You can write sequencial AND OR.
 ```cs  
 public void WhereAndOr()
