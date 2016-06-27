@@ -88,3 +88,9 @@ namespace LambdicSql
         }
     }
 }
+/*TODO@ clauses
+LIMIT
+Distinct
+Case
+UNION/EXCEPT/EXCEPT 
+*/

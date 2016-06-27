@@ -113,7 +113,7 @@ namespace LambdicSql.Inside
 
         static string GetElementName(MemberExpression exp)
         {
-            //TODO @I'll make best code.
+            //TODO@ I'll make best code.
             return string.Join(".", exp.ToString().Split('.').Skip(1).ToArray());
         }
     }

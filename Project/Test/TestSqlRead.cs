@@ -409,7 +409,6 @@ namespace Test
             }
         }
 
-
         [TestMethod]
         public void WhereInSubQuery()
         {
@@ -425,7 +424,6 @@ namespace Test
                 From(db => db.tbl_staff).
                 Where().In(db=>db.tbl_staff.id, sub).
                 ToExecutor(TestEnvironment.ConnectionString).Read();
-
 
             foreach (var e in datas)
             {
