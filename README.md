@@ -123,7 +123,7 @@ public void AvoidSelect()
     }
 }
 ```
-If table count is 1, avoid where.
+If table count is 1 and want to get all, avoid where.
 ```cs  
 public void AvoidWhere()
 {
@@ -186,7 +186,6 @@ public void Like()
     From(db => db.tbl_remuneration).
         Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
     Where().Like(db => db.tbl_staff.name, "%son%");
-
 }
 
 public void In()
