@@ -4,8 +4,9 @@ LambdicSql
 ## Features ...
 #### Write SQL using lambda.
 
+write only lambda.
 ```cs  
-public void Standard()
+public void LambdaOnly()
 {
     //log for debug.
     Sql.Log = l => Debug.Print(l);
@@ -34,7 +35,7 @@ public void Standard()
     }).
     From(db => db.tbl_remuneration).
         Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
-    Where(db => 3000 < db.tbl_remuneration.money).
+    Where(db => 3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000).
     OrderBy().ASC(db => db.tbl_staff.name);
 
     //execute.
@@ -87,7 +88,7 @@ public void StandardNoramlType()
     }).
     From(db => db.tbl_remuneration).
         Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
-    Where(db => 3000 < db.tbl_remuneration.money).
+    Where(db => 3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000).
     OrderBy().ASC(db => db.tbl_staff.name);
 
     //execute.

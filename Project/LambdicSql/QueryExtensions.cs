@@ -67,8 +67,11 @@ namespace LambdicSql
             where TSelect : class
         {
             var src = query as Query<TDB, TDB>;
-            var dst = src.ConvertType(ExpressionToCreateFunc.ToCreateUseDbResult<TSelect>(null, define.Body));
-            dst.Select = SelectDefineAnalyzer.MakeSelectInfo(define.Body);
+            var select = SelectDefineAnalyzer.MakeSelectInfo(define.Body);
+
+            var indexInSelect = select.Elements.Select(e => e.Name).ToList();
+            var dst = src.ConvertType(ExpressionToCreateFunc.ToCreateUseDbResult<TSelect>(name => indexInSelect.IndexOf(name), define.Body));
+            dst.Select = select;
             return dst;
         }
     }

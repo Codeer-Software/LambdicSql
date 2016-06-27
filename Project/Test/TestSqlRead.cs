@@ -39,7 +39,7 @@ namespace Test
             }).
             From(db => db.tbl_remuneration).
                 Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
-            Where(db => 3000 < db.tbl_remuneration.money).
+            Where(db => 3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000).
                 OrderBy().ASC(db => db.tbl_staff.name);
 
             //execute.
@@ -50,7 +50,7 @@ namespace Test
                 Debug.Print("{0}, {1}, {2}", e.name, e.payment_date, e.mony);
             }
 
-            Assert.AreEqual(3, datas.Count());
+            Assert.AreEqual(1, datas.Count());
             var first = datas.First();
             Assert.AreEqual("Jackson", first.name);
             Assert.AreEqual(new DateTime(2016, 1, 1), first.payment_date);
@@ -97,7 +97,7 @@ namespace Test
             }).
             From(db => db.tbl_remuneration).
                 Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
-            Where(db => 3000 < db.tbl_remuneration.money).
+            Where(db => 3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000).
                 OrderBy().ASC(db => db.tbl_staff.name);
 
             //execute.
@@ -108,11 +108,27 @@ namespace Test
                 Debug.Print("{0}, {1}, {2}", e.name, e.payment_date, e.mony);
             }
 
-            Assert.AreEqual(3, datas.Count());
+            Assert.AreEqual(1, datas.Count());
             var first = datas.First();
             Assert.AreEqual("Jackson", first.name);
             Assert.AreEqual(new DateTime(2016, 1, 1), first.payment_date);
             Assert.AreEqual(3500, first.mony);
+        }
+
+        [TestMethod]
+        public void TestTableOne()
+        {
+            Sql.Log = l => Debug.Print(l);
+            var query = Sql.Using(() => new
+            {
+                tbl_staff = new Staff()
+            });
+            var datas = query.ToExecutor(TestEnvironment.ConnectionString).Read();
+
+            foreach (var e in datas)
+            {
+                Debug.Print("{0}", e.tbl_staff.name);
+            }
         }
 
         [TestMethod]

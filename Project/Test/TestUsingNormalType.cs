@@ -1,8 +1,6 @@
 ﻿using LambdicSql;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using System.Diagnostics;
-using System.Linq;
 
 namespace Test
 {
@@ -28,6 +26,8 @@ namespace Test
         [TestMethod]
         public void TestNoramlAndLambda()
         {
+            Sql.Log = l => Debug.Print(l);
+
             var query = Sql.Using(() => new
             {
                 table1 = new Tbl1(),
@@ -45,7 +45,17 @@ namespace Test
             Assert.AreEqual(obj.table2.col4, 200);
         }
         
+        [TestMethod]
+        public void TestTableOne()
+        {
+            Sql.Log = l => Debug.Print(l);
 
+            var query = Sql.Using(() => new
+            {
+                table1 = new Tbl1()
+            });
+            Debug.Print(query.ToQueryString());
+        }
 
         public class Tbl1
         {

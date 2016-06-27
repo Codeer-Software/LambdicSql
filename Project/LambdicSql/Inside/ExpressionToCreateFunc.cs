@@ -9,7 +9,7 @@ namespace LambdicSql.Inside
 {
     static class ExpressionToCreateFunc
     {
-        internal static Func<IDbResult, T> ToCreateUseDbResult<T>(IReadOnlyDictionary<string, ColumnInfo> lambdaNameAndColumn, Expression exp)
+        internal static Func<IDbResult, T> ToCreateUseDbResult<T>(Func<string, int> getIndexInSelect, Expression exp)
         {
             var newExp = exp as NewExpression;
             if (newExp == null)
@@ -18,10 +18,10 @@ namespace LambdicSql.Inside
             }
             var param = Expression.Parameter(typeof(IDbResult), "dbResult");
             var arguments = new[] { param };
-            return Expression.Lambda<Func<IDbResult, T>>(New(lambdaNameAndColumn, new string[0], newExp, param), arguments).Compile();
+            return Expression.Lambda<Func<IDbResult, T>>(New(getIndexInSelect, new string[0], newExp, param), arguments).Compile();
         }
 
-        static Expression New(IReadOnlyDictionary<string, ColumnInfo> lambdaNameAndColumn, string[] names, NewExpression exp, ParameterExpression param)
+        static Expression New(Func<string, int> getIndexInSelect, string[] names, NewExpression exp, ParameterExpression param)
         {
             if (exp.Members == null)
             {
@@ -32,23 +32,21 @@ namespace LambdicSql.Inside
                     if (SupportedTypeSpec.IsSupported(p.PropertyType))
                     {
                         var name = string.Join(".", currentNames);
-                        var sqlName = lambdaNameAndColumn == null ? name : lambdaNameAndColumn[name].SqlFullName;
-                        sqlName = sqlName.Replace(".", "@");//TODO@ special spec.
-                        var propertyNew = Expression.Call(param, typeof(IDbResult).GetMethod("Get" + p.PropertyType.Name), Expression.Constant(sqlName));
-                        binding.Add(Expression.Bind(p, propertyNew));
+                        binding.Add(Expression.Bind(p,
+                            Expression.Call(param, typeof(IDbResult).GetMethod("Get" + p.PropertyType.Name), Expression.Constant(getIndexInSelect(name)))));
                     }
                     else
                     {
-                        binding.Add(Expression.Bind(p, New(lambdaNameAndColumn, currentNames, Expression.New(p.PropertyType.GetConstructor(new Type[0])), param)));
+                        binding.Add(Expression.Bind(p, New(getIndexInSelect, currentNames, Expression.New(p.PropertyType.GetConstructor(new Type[0])), param)));
                     }
 
                 }
                 return Expression.MemberInit(Expression.New(exp.Constructor), binding.ToArray());
             }
-            return Expression.New(exp.Constructor, ConvertArguments(lambdaNameAndColumn, names, exp.Arguments.ToArray(), exp.Members.ToArray(), param), exp.Members);
+            return Expression.New(exp.Constructor, ConvertArguments(getIndexInSelect, names, exp.Arguments.ToArray(), exp.Members.ToArray(), param), exp.Members);
         }
 
-        static IEnumerable<Expression> ConvertArguments(IReadOnlyDictionary<string, ColumnInfo> lambdaNameAndColumn, string[] names, Expression[] args, MemberInfo[] members, ParameterExpression param)
+        static IEnumerable<Expression> ConvertArguments(Func<string, int> getIndexInSelect, string[] names, Expression[] args, MemberInfo[] members, ParameterExpression param)
         {
             var newArgs = new List<Expression>();
             for (int i = 0; i < args.Length; i++)
@@ -62,15 +60,11 @@ namespace LambdicSql.Inside
                 if (newExp == null)
                 {
                     var name = string.Join(".", currentNames);
-                    var sqlName = lambdaNameAndColumn == null ? name : lambdaNameAndColumn[name].SqlFullName;
-
-                    sqlName = sqlName.Replace(".", "@");//TODO@ special spec.
-
-                    newArgs.Add(Expression.Call(param, typeof(IDbResult).GetMethod("Get" + member.PropertyType.Name), Expression.Constant(sqlName)));
+                    newArgs.Add(Expression.Call(param, typeof(IDbResult).GetMethod("Get" + member.PropertyType.Name), Expression.Constant(getIndexInSelect(name))));
                 }
                 else
                 {
-                    newArgs.Add(New(lambdaNameAndColumn, currentNames.ToArray(), newExp, param));
+                    newArgs.Add(New(getIndexInSelect, currentNames.ToArray(), newExp, param));
                 }
             }
             return newArgs;

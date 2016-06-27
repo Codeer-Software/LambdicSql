@@ -31,7 +31,7 @@ namespace LambdicSql.Inside
             select = new SelectInfo();
             foreach (var e in _db.LambdaNameAndColumn)
             {
-                select.Add(new SelectElementInfo(e.Key + " AS " + e.Key.Replace(".", "@"), null));//TODO@ special spec
+                select.Add(new SelectElementInfo(e.Key, null));
             }
             return select;
         }

@@ -4,15 +4,15 @@ namespace LambdicSql.QueryInfo
 {
     public interface IDbResult
     {
-        string GetString(string name);
-        bool GetBoolean(string name);
-        byte GetByte(string name);
-        short GetInt16(string name);
-        int GetInt32(string name);
-        long GetInt64(string name);
-        float GetSingle(string name);
-        double GetDouble(string name);
-        decimal GetDecimal(string name);
-        DateTime GetDateTime(string name);
+        string GetString(int index);
+        bool GetBoolean(int index);
+        byte GetByte(int index);
+        short GetInt16(int index);
+        int GetInt32(int index);
+        long GetInt64(int index);
+        float GetSingle(int index);
+        double GetDouble(int index);
+        decimal GetDecimal(int index);
+        DateTime GetDateTime(int index);
     }
 }

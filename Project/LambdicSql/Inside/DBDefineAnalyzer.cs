@@ -17,7 +17,8 @@ namespace LambdicSql.Inside
             {
                 query.Db.Add(column);
             }
-            query.Create = ExpressionToCreateFunc.ToCreateUseDbResult<T>(query.Db.LambdaNameAndColumn, define.Body);
+            var indexInSelect = query.Db.LambdaNameAndColumn.Keys.ToList();
+            query.Create = ExpressionToCreateFunc.ToCreateUseDbResult<T>(name => indexInSelect.IndexOf(name), define.Body);
             return query;
         }
 
