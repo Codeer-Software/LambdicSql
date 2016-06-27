@@ -58,6 +58,8 @@ namespace LambdicSql
             where TSelect : class
             => query.CustomClone(dst => dst.OrderBy = new OrderByInfo());
 
+        public static T ToSubQuery<T>(this IQuery query) => default(T);
+
         public static ISqlExecutor<TSelect> ToExecutor<TDB, TSelect>(this IQuery<TDB, TSelect> query, string connectionString)
             where TDB : class
             where TSelect : class

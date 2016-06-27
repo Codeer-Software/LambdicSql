@@ -3,6 +3,7 @@ using LambdicSql.Inside;
 using LambdicSql.QueryInfo;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Diagnostics;
 using System.Linq.Expressions;
 
 namespace Test
@@ -101,6 +102,31 @@ namespace Test
                 }
             });
             Assert.AreEqual(query.ToSqlString((db, func) => func.Sum(1)), "Sum('1')");
+        }
+
+        [TestMethod]
+        public void TestSubQuery()
+        {
+            var query = Sql.Using(() => new
+            {
+                table1 = new
+                {
+                    col1 = default(int),
+                    col2 = default(string)
+                }
+            });
+
+            var sub = query.Select(db => new
+            {
+                col1 = db.table1.col1
+            });
+
+            var text = query.Select(db => new
+            {
+                col2 = sub.ToSubQuery<string>()
+            }).ToQueryString();
+
+            Debug.Print(text);
         }
     }
 

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace LambdicSql.Inside
 {
@@ -38,13 +39,29 @@ namespace LambdicSql.Inside
 
         static string ToString(DbInfo info, MethodCallExpression method)
         {
+            //sub query.
+            if (0 < method.Arguments.Count && typeof(IQuery).IsAssignableFrom(method.Arguments[0].Type))
+            {
+                var call = Expression.Call(null, typeof(ExpressionToSqlString).
+                    GetMethod("MakeQueryString", BindingFlags.Static|BindingFlags.NonPublic|BindingFlags.Public), method.Arguments[0]);
+                var func = Expression.Lambda(call).Compile();
+                return "(" + func.DynamicInvoke().ToString() + ")";
+            }
+
+            //db function.
             var arguments = new List<string>();
-            foreach (var arg in method.Arguments.Skip(1))
+            foreach (var arg in method.Arguments.Skip(1)) //skip this.
             {
                 arguments.Add(ToString(info, arg));
             }
             return method.Method.Name + "(" + string.Join(", ", arguments.ToArray()) + ")";
         }
+
+        static string MakeQueryString(IQuery query) //TODO@ think multi db.
+            =>
+            string.Join(" ", new QueryToSql().MakeQueryString((IQueryInfo)query).
+                        Replace(Environment.NewLine, " ").Replace("\t", " ").
+                        Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries));
 
         static string ToString(DbInfo info, BinaryExpression binary)
             => "(" + ToString(info, binary.Left) + ") " + ToString(binary.NodeType) + " (" + ToString(info, binary.Right) + ")";
