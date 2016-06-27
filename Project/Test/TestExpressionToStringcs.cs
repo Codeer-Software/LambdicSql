@@ -107,7 +107,7 @@ namespace Test
         [TestMethod]
         public void TestSubQuery()
         {
-            var query = Sql.Using(() => new
+            var define = Sql.Using(() => new
             {
                 table1 = new
                 {
@@ -116,15 +116,68 @@ namespace Test
                 }
             });
 
-            var sub = query.Select(db => new
+            var sub = define.Select(db => new
             {
                 col1 = db.table1.col1
             });
 
-            var text = query.Select(db => new
+            var text = define.Select(db => new
             {
                 col2 = sub.ToSubQuery<string>()
             }).Where(db=>db.table1.col1 == sub.ToSubQuery<int>()).ToQueryString();
+
+            Debug.Print(text);
+        }
+
+        [TestMethod]
+        public void TestSubQueryInLambda()
+        {
+            var define = Sql.Using(() => new
+            {
+                table1 = new
+                {
+                    col1 = default(int),
+                    col2 = default(string)
+                }
+            });
+
+            var text = define.Select(db => new
+            {
+                col2 = define.Select(db2 => new
+                {
+                    col1 = db2.table1.col1
+                }).ToSubQuery<string>()
+            }).ToQueryString();
+
+            Debug.Print(text);
+        }
+
+
+        [TestMethod]
+        public void TestWhereSubQuery()
+        {
+            var define = Sql.Using(() => new
+            {
+                table1 = new
+                {
+                    col1 = default(int),
+                    col2 = default(string)
+                }
+            });
+
+            var sub = define.Select(db => new
+            {
+                col1 = db.table1.col1
+            });
+
+            var text = define.Select(db => new
+            {
+                col2 = sub.ToSubQuery<string>()
+            }).
+            Where().
+            Like(db => db.table1.col2, sub).And().
+            In(db => db.table1.col2, sub).Or().Between(db => db.table1.col1, sub, sub).
+            ToQueryString();
 
             Debug.Print(text);
         }

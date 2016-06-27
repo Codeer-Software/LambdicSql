@@ -358,9 +358,8 @@ namespace Test
             ReadData3();
         }
 
-
         public IEnumerable<SelectData> ReadData1() =>
-            Sql.Using<Data>().//←ここを書かなくてよくなった。
+            Sql.Using<Data>().
             Select(db => new SelectData()
             {
                 name = db.tbl_staff.name,
@@ -385,5 +384,30 @@ namespace Test
         public IEnumerable<Staff> ReadData3() =>
             Sql.Using(() => new { tbl_staff = new Staff() }).
             ToExecutor(TestEnvironment.ConnectionString).Read().Select(e=>e.tbl_staff);
+
+        [TestMethod]
+        public void SelectSubQuery()
+        {
+            Sql.Log = l => Debug.Print(l);
+            var define = Sql.Using<Data>();
+
+            var sub = define.
+                Select((db, func) => new { total = func.Sum(db.tbl_remuneration.money) }).
+                From(db => db.tbl_remuneration);
+
+            var query = define.
+                    Select(db => new
+                    {
+                        name = db.tbl_staff.name,
+                        total = sub.ToSubQuery<decimal>()
+                    }).
+                    From(db => db.tbl_staff);
+
+            var datas = query.ToExecutor(TestEnvironment.ConnectionString).Read();
+            foreach (var e in datas)
+            {
+                Debug.Print("{0}, {1}", e.name, e.total);
+            }
+        }
     }
 }
