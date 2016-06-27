@@ -5,9 +5,9 @@ namespace LambdicSql.QueryInfo
 {
     public class GroupByInfo
     {
-        public IReadOnlyList<Expression> Elements { get; }
+        public List<Expression> Elements { get; }
 
-        public GroupByInfo(IReadOnlyList<Expression> elements)
+        public GroupByInfo(List<Expression> elements)
         {
             Elements = elements;
         }

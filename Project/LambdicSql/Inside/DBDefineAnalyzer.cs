@@ -27,7 +27,7 @@ namespace LambdicSql.Inside
             if (SupportedTypeSpec.IsSupported(type))
             {
                 //TODO@ if exist difference lambda name and sql name, I'll implement the spec. 
-                var name = string.Join(".", names);
+                var name = string.Join(".", names.ToArray());
                 return new[] { new ColumnInfo(name, name) };
             }
             else if (type.IsClass)
@@ -35,7 +35,7 @@ namespace LambdicSql.Inside
                 var list = new List<ColumnInfo>();
                 foreach (var p in type.GetProperties().Where(e => e.DeclaringType == type))
                 {
-                    list.AddRange(FindColumns(p.PropertyType, names.Concat(new[] { p.Name })));
+                    list.AddRange(FindColumns(p.PropertyType, names.Concat(new[] { p.Name }).ToArray()));
                 }
                 return list;
             }

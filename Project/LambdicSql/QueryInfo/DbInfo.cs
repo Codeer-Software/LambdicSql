@@ -7,19 +7,19 @@ namespace LambdicSql.QueryInfo
     {
         Dictionary<string, ColumnInfo> _lambdaNameAndColumn = new Dictionary<string, ColumnInfo>();
         Dictionary<string, TableInfo> _lambdaNameAndTable = new Dictionary<string, TableInfo>();
-        public IReadOnlyDictionary<string, ColumnInfo> LambdaNameAndColumn => _lambdaNameAndColumn;
-        public IReadOnlyDictionary<string, TableInfo> LambdaNameAndTable => _lambdaNameAndTable;
+        public Dictionary<string, ColumnInfo> LambdaNameAndColumn => _lambdaNameAndColumn;
+        public Dictionary<string, TableInfo> LambdaNameAndTable => _lambdaNameAndTable;
 
         public void Add(ColumnInfo col)
         {
             _lambdaNameAndColumn.Add(col.LambdaFullName, col);
 
             var sep = col.LambdaFullName.Split('.');
-            var tableLambda = string.Join(".", sep.Take(sep.Length - 1));
+            var tableLambda = string.Join(".", sep.Take(sep.Length - 1).ToArray());
             if (!_lambdaNameAndTable.ContainsKey(tableLambda))
             {
                 sep = col.SqlFullName.Split('.');
-                var tableSql = string.Join(".", sep.Take(sep.Length - 1));
+                var tableSql = string.Join(".", sep.Take(sep.Length - 1).ToArray());
                 _lambdaNameAndTable.Add(tableLambda, new TableInfo(tableLambda, tableSql));
             }
         }

@@ -20,7 +20,7 @@ namespace LambdicSql.Inside
                 ToString(query.GroupBy),
                 ToString(query.Having, "HAVING"),
                 ToString(query.OrderBy)
-            }.Where(e=>!string.IsNullOrEmpty(e)));
+            }.Where(e=>!string.IsNullOrEmpty(e)).ToArray());
         }
 
         SelectInfo Adjust(SelectInfo select)
@@ -53,7 +53,7 @@ namespace LambdicSql.Inside
         }
 
         string ToString(SelectInfo selectInfo)
-            => "SELECT " + Environment.NewLine + "\t" + string.Join("," + Environment.NewLine + "\t", selectInfo.Elements.Select(e => ToString(e))) + Environment.NewLine;
+            => "SELECT " + Environment.NewLine + "\t" + string.Join("," + Environment.NewLine + "\t", selectInfo.Elements.Select(e => ToString(e)).ToArray()) + Environment.NewLine;
 
         string ToString(SelectElementInfo element)
             => element.Expression == null ? element.Name : ToString(element.Expression) + " AS " + element.Name;
@@ -69,11 +69,11 @@ namespace LambdicSql.Inside
                 var col = arg as ColumnInfo;
                 result.Add(col == null ? "'" + arg.ToString() + "'" : col.SqlFullName); 
             }
-            return string.Join(", ", result);
+            return string.Join(", ", result.ToArray());
         }
 
         string ToString(FromInfo fromInfo)
-            => string.Join(Environment.NewLine + "\t", new[] { "FROM " + fromInfo.MainTable.SqlFullName }.Concat(fromInfo.Joins.Select(e=>ToString(e)))) + Environment.NewLine;
+            => string.Join(Environment.NewLine + "\t", new[] { "FROM " + fromInfo.MainTable.SqlFullName }.Concat(fromInfo.Joins.Select(e=>ToString(e))).ToArray()) + Environment.NewLine;
 
         string ToString(JoinInfo join)
             => "JOIN " + join.JoinTable.SqlFullName + " ON " + ToString(join.Condition);
@@ -81,7 +81,7 @@ namespace LambdicSql.Inside
         string ToString(ConditionClauseInfo whereInfo, string clause)
             => (whereInfo == null || whereInfo.Conditions.Count == 0)?
                 string.Empty:
-                string.Join(Environment.NewLine + "\t", new[] { clause }.Concat(whereInfo.Conditions.Select((e, i) => ToString(e, i)))) + Environment.NewLine;
+                string.Join(Environment.NewLine + "\t", new[] { clause }.Concat(whereInfo.Conditions.Select((e, i) => ToString(e, i))).ToArray()) + Environment.NewLine;
 
         string ToString(IConditionInfo condition, int index)
         {
@@ -122,14 +122,14 @@ namespace LambdicSql.Inside
         string ToString(GroupByInfo groupBy)
             => (groupBy == null || groupBy.Elements.Count == 0) ? 
                 string.Empty :
-                "GROUP BY " + Environment.NewLine + "\t" + string.Join("," + Environment.NewLine + "\t", groupBy.Elements.Select(e=>ToString(e))) + Environment.NewLine;
+                "GROUP BY " + Environment.NewLine + "\t" + string.Join("," + Environment.NewLine + "\t", groupBy.Elements.Select(e=>ToString(e)).ToArray()) + Environment.NewLine;
 
         string ToString(OrderByInfo orderBy)
             => (orderBy == null || orderBy.Elements.Count == 0) ?
                 string.Empty :
-                "ORDER BY " + Environment.NewLine + "\t" + string.Join("," + Environment.NewLine + "\t", orderBy.Elements.Select(e=>ToString(e))) + Environment.NewLine;
+                "ORDER BY " + Environment.NewLine + "\t" + string.Join("," + Environment.NewLine + "\t", orderBy.Elements.Select(e=>ToString(e)).ToArray()) + Environment.NewLine;
 
-        private object ToString(OrderByElement element)
+        private string ToString(OrderByElement element)
             => ToString(element.Target) + " " + element.Order;
     }
 }

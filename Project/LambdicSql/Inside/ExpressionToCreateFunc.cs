@@ -54,7 +54,7 @@ namespace LambdicSql.Inside
                 var arg = args[i];
                 var member = members[i] as PropertyInfo;
 
-                var currentNames = names.Concat(new[] { member.Name });
+                var currentNames = names.Concat(new[] { member.Name }).ToArray();
 
                 var newExp = arg as NewExpression;
                 if (newExp == null)

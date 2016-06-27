@@ -8,9 +8,9 @@ namespace LambdicSql.QueryInfo
         public bool IsNot { get; }
         public ConditionConnection ConditionConnection { get; }
         public Expression Target { get; }
-        public IReadOnlyList<object> Arguments { get; }
+        public List<object> Arguments { get; }
         
-        public ConditionInfoIn(bool isNot, ConditionConnection connection, Expression target, IReadOnlyList<object> arguments)
+        public ConditionInfoIn(bool isNot, ConditionConnection connection, Expression target, List<object> arguments)
         {
             IsNot = isNot;
             ConditionConnection = connection;

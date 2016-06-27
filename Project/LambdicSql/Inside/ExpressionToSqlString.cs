@@ -43,7 +43,7 @@ namespace LambdicSql.Inside
             {
                 arguments.Add(ToString(info, arg));
             }
-            return method.Method.Name + "(" + string.Join(", ", arguments) + ")";
+            return method.Method.Name + "(" + string.Join(", ", arguments.ToArray()) + ")";
         }
 
         static string ToString(DbInfo info, BinaryExpression binary)
@@ -74,8 +74,8 @@ namespace LambdicSql.Inside
 
         static string ToString(ConstantExpression constant)
         {
-            dynamic func = Expression.Lambda(constant).Compile();
-            return "'" + func().ToString() + "'";
+            var func = Expression.Lambda(constant).Compile();
+            return "'" + func.DynamicInvoke().ToString() + "'";
         }
 
         static string ToString(DbInfo info, MemberExpression member)
@@ -91,14 +91,14 @@ namespace LambdicSql.Inside
             {
                 return col.SqlFullName;
             }
-            dynamic func = Expression.Lambda(member).Compile();
-            return "'" + func().ToString() + "'";
+            var func = Expression.Lambda(member).Compile();
+            return "'" + func.DynamicInvoke().ToString() + "'";
         }
 
         static string GetElementName(MemberExpression exp)
         {
             //TODO @I'll make best code.
-            return string.Join(".", exp.ToString().Split('.').Skip(1));
+            return string.Join(".", exp.ToString().Split('.').Skip(1).ToArray());
         }
     }
 }
