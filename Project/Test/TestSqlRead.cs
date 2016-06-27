@@ -196,7 +196,11 @@ namespace Test
             Select((db, function) => new
             {
                 name = db.tbl_staff.name,
-                total = function.Sum(db.tbl_remuneration.money)
+                count = function.Count(db.tbl_remuneration.money),
+                total = function.Sum(db.tbl_remuneration.money),
+                average = function.Avg(db.tbl_remuneration.money),
+                minimum = function.Min(db.tbl_remuneration.money),
+                maximum = function.Max(db.tbl_remuneration.money),
             }).
             From(db => db.tbl_remuneration).
                 Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
@@ -205,7 +209,7 @@ namespace Test
             var datas = query.ToExecutor(TestEnvironment.ConnectionString).Read();
             foreach (var e in datas)
             {
-                Debug.Print("{0}, {1}", e.name, e.total);
+                Debug.Print("{0}, {1}, {2}, {3}, {4}, {5}", e.name, e.count, e.total, e.average, e.minimum, e.maximum);
             }
 
             Assert.AreEqual(4, datas.Count());

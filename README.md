@@ -194,7 +194,7 @@ SELECT
 
 FROM tbl_staff
 ```
-Group by and Sum.
+Group by.
 ```cs  
 public void GroupBy()
 {
@@ -202,23 +202,31 @@ public void GroupBy()
     Select((db, function) => new
     {
         name = db.tbl_staff.name,
-        total = function.Sum(db.tbl_remuneration.money)
+        count = function.Count(db.tbl_remuneration.money),
+        total = function.Sum(db.tbl_remuneration.money),
+        average = function.Avg(db.tbl_remuneration.money),
+        minimum = function.Min(db.tbl_remuneration.money),
+        maximum = function.Max(db.tbl_remuneration.money),
     }).
     From(db => db.tbl_remuneration).
         Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
     GroupBy(db => db.tbl_staff.id, db => db.tbl_staff.name);
-            
+
     var datas = query.ToExecutor(TestEnvironment.ConnectionString).Read();
     foreach (var e in datas)
     {
-        Debug.Print("{0}, {1}", e.name, e.total);
+        Debug.Print("{0}, {1}, {2}, {3}, {4}, {5}", e.name, e.count, e.total, e.average, e.minimum, e.maximum);
     }
 }
 ```
 ```sql
 SELECT 
 	tbl_staff.name AS name,
-	Sum(tbl_remuneration.money) AS total
+	Count(tbl_remuneration.money) AS count,
+	Sum(tbl_remuneration.money) AS total,
+	Avg(tbl_remuneration.money) AS average,
+	Min(tbl_remuneration.money) AS minimum,
+	Max(tbl_remuneration.money) AS maximum
 
 FROM tbl_remuneration
 	JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)
