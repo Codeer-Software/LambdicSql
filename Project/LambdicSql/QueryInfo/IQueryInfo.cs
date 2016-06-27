@@ -7,8 +7,9 @@ namespace LambdicSql.QueryInfo
         DbInfo Db { get; }
         SelectInfo Select { get; }
         FromInfo From { get; }
-        WhereInfo Where { get; }
+        ConditionClauseInfo Where { get; }
         GroupByInfo GroupBy { get; }
+        ConditionClauseInfo Having { get; }
         OrderByInfo OrderBy { get; }
     }
 

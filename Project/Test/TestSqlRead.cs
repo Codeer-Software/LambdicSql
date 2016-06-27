@@ -219,6 +219,30 @@ namespace Test
         }
 
         [TestMethod]
+        public void Having()
+        {
+            //log for debug.
+            Sql.Log = l => Debug.Print(l);
+
+            //make sql.
+            var query = Sql.Using(() => new DB()).
+            Select((db, function) => new
+            {
+                name = db.tbl_staff.name,
+                total = function.Sum(db.tbl_remuneration.money)
+            }).
+            From(db => db.tbl_remuneration).
+                Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
+            GroupBy(db => db.tbl_staff.id, db => db.tbl_staff.name).Having((db, function) => 10000 < function.Sum(db.tbl_remuneration.money));
+
+            var datas = query.ToExecutor(TestEnvironment.ConnectionString).Read();
+            foreach (var e in datas)
+            {
+                Debug.Print("{0}, {1}, {2}, {3}, {4}, {5}", e.name, e.total);
+            }
+        }
+
+        [TestMethod]
         public void WhereAndOr()
         {
             //log for debug.

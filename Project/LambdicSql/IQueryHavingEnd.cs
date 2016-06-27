@@ -1,6 +1,6 @@
 ﻿namespace LambdicSql
 {
-    public interface IQueryWhere<TDB, TSelect> : IQueryWhereEnd<TDB, TSelect>
+    public interface IQueryHavingEnd<TDB, TSelect> : IQueryOrderByEnd<TDB, TSelect>
         where TDB : class
         where TSelect : class
     { }

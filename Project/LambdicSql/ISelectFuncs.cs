@@ -1,4 +1,4 @@
 ﻿namespace LambdicSql
 {
-    public interface ISelectFuncs { }
+    public interface ISelectFuncs : IHavingFuncs { }
 }

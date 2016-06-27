@@ -23,27 +23,37 @@ namespace LambdicSql
             where TSelect : class
              => query.CustomClone(dst => dst.From = new FromInfo(dst.Db.LambdaNameAndTable[ExpressionToSqlString.GetElementName(table)]));
 
-        public static IWhereQuery<TDB, TSelect> Where<TDB, TSelect>(this IQueryFromEnd<TDB, TSelect> query)
+        public static IQueryWhere<TDB, TSelect> Where<TDB, TSelect>(this IQueryFromEnd<TDB, TSelect> query)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Where = new WhereInfo());
+             => query.CustomClone(dst => dst.Where = new ConditionClauseInfo());
 
-        public static IWhereQuery<TDB, TSelect> Where<TDB, TSelect>(this IQueryFromEnd<TDB, TSelect> query, Expression<Func<TDB, bool>> condition)
+        public static IQueryWhere<TDB, TSelect> Where<TDB, TSelect>(this IQueryFromEnd<TDB, TSelect> query, Expression<Func<TDB, bool>> condition)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Where = new WhereInfo(condition.Body));
+             => query.CustomClone(dst => dst.Where = new ConditionClauseInfo(condition.Body));
 
-        public static IWhereQuery<TDB, TSelect> Where<TDB, TSelect>(this IQueryFromEnd<TDB, TSelect> query, Expression<Func<TDB, IWhereFuncs, bool>> condition)
+        public static IQueryWhere<TDB, TSelect> Where<TDB, TSelect>(this IQueryFromEnd<TDB, TSelect> query, Expression<Func<TDB, IWhereFuncs, bool>> condition)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Where = new WhereInfo(condition.Body));
-       
+             => query.CustomClone(dst => dst.Where = new ConditionClauseInfo(condition.Body));
+
+        public static IQueryHaving<TDB, TSelect> Having<TDB, TSelect>(this IQueryGroupByEnd<TDB, TSelect> query)
+            where TDB : class
+            where TSelect : class
+             => query.CustomClone(dst => dst.Having = new ConditionClauseInfo());
+        
+        public static IQueryHaving<TDB, TSelect> Having<TDB, TSelect>(this IQueryGroupByEnd<TDB, TSelect> query, Expression<Func<TDB, IHavingFuncs, bool>> condition)
+            where TDB : class
+            where TSelect : class
+             => query.CustomClone(dst => dst.Having = new ConditionClauseInfo(condition.Body));
+
         public static IQueryGroupByEnd<TDB, TSelect> GroupBy<TDB, TSelect>(this IQueryWhereEnd<TDB, TSelect> query, params Expression<Func<TDB, object>>[] targets)
             where TDB : class
             where TSelect : class
             => query.CustomClone(dst => dst.GroupBy = new GroupByInfo(targets.Select(e => e.Body).ToList()));
 
-        public static IOrderByQuery<TDB, TSelect> OrderBy<TDB, TSelect>(this IQueryGroupByEnd<TDB, TSelect> query)
+        public static IQueryOrderBy<TDB, TSelect> OrderBy<TDB, TSelect>(this IQueryGroupByEnd<TDB, TSelect> query)
             where TDB : class
             where TSelect : class
             => query.CustomClone(dst => dst.OrderBy = new OrderByInfo());

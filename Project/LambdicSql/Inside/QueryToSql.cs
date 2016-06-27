@@ -16,8 +16,9 @@ namespace LambdicSql.Inside
             return string.Join(Environment.NewLine, new[] {
                 ToString(Adjust(query.Select)),
                 ToString(Adjust(query.From)),
-                ToString(query.Where),
+                ToString(query.Where, "WHERE"),
                 ToString(query.GroupBy),
+                ToString(query.Having, "HAVING"),
                 ToString(query.OrderBy)
             }.Where(e=>!string.IsNullOrEmpty(e)));
         }
@@ -77,10 +78,10 @@ namespace LambdicSql.Inside
         string ToString(JoinInfo join)
             => "JOIN " + join.JoinTable.SqlFullName + " ON " + ToString(join.Condition);
         
-        string ToString(WhereInfo whereInfo)
+        string ToString(ConditionClauseInfo whereInfo, string clause)
             => (whereInfo == null || whereInfo.Conditions.Count == 0)?
                 string.Empty:
-                string.Join(Environment.NewLine + "\t", new[] { "WHERE" }.Concat(whereInfo.Conditions.Select((e, i) => ToString(e, i)))) + Environment.NewLine;
+                string.Join(Environment.NewLine + "\t", new[] { clause }.Concat(whereInfo.Conditions.Select((e, i) => ToString(e, i)))) + Environment.NewLine;
 
         string ToString(IConditionInfo condition, int index)
         {
@@ -92,8 +93,16 @@ namespace LambdicSql.Inside
             else if (type == typeof(ConditionInfoBetween)) text = ToString((ConditionInfoBetween)condition);
             else throw new NotSupportedException();
 
-            var connection = index == 0 ? string.Empty :
-                             condition.ConditionConnection == ConditionConnection.And ? "AND " : "OR ";
+            var connection = string.Empty;
+            if (index != 0)
+            {
+                switch (condition.ConditionConnection)
+                {
+                    case ConditionConnection.And: connection = "AND "; break;
+                    case ConditionConnection.Or: connection = "OR "; break;
+                    default: throw new NotSupportedException();
+                }
+            }
             var not = condition.IsNot ? "NOT " : string.Empty;
             return connection + not + text;
         }

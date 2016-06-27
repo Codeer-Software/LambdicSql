@@ -2,6 +2,7 @@
 {
     public enum ConditionConnection
     {
+        Non,
         And,
         Or
     }
