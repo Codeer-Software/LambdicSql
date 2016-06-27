@@ -1,6 +1,7 @@
 ﻿using LambdicSql.Inside;
 using System;
 using System.Linq.Expressions;
+using System.Linq;
 
 namespace LambdicSql
 {
@@ -44,7 +45,7 @@ namespace LambdicSql
         public static IQueryWhere<TDB, TSelect> In<TDB, TSelect, TTarget>(this IQueryWhere<TDB, TSelect> query, Expression<Func<TDB, TTarget>> target, params TTarget[] inArguments)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Where.In(target.Body, inArguments));
+             => query.CustomClone(dst => dst.Where.In(target.Body, inArguments.Cast<object>().ToArray()));
 
         public static IQueryWhere<TDB, TSelect> In<TDB, TSelect, TTarget>(this IQueryWhere<TDB, TSelect> query, Expression<Func<TDB, TTarget>> target, IQuery inArgument)
             where TDB : class
