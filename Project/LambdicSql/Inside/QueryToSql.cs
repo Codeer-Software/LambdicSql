@@ -53,7 +53,7 @@ namespace LambdicSql.Inside
         }
 
         string ToString(SelectInfo selectInfo)
-            => "SELECT " + Environment.NewLine + "\t" + string.Join("," + Environment.NewLine + "\t", selectInfo.Elements.Select(e => ToString(e)).ToArray()) + Environment.NewLine;
+            => "SELECT " + Environment.NewLine + "\t" + string.Join("," + Environment.NewLine + "\t", selectInfo.GetElements().Select(e => ToString(e)).ToArray()) + Environment.NewLine;
 
         string ToString(SelectElementInfo element)
             => element.Expression == null ? element.Name : ToString(element.Expression) + " AS " + element.Name;
@@ -114,9 +114,9 @@ namespace LambdicSql.Inside
                 "GROUP BY " + Environment.NewLine + "\t" + string.Join("," + Environment.NewLine + "\t", groupBy.GetElements().Select(e=>ToString(e)).ToArray()) + Environment.NewLine;
 
         string ToString(OrderByInfo orderBy)
-            => (orderBy == null || orderBy.Elements.Count == 0) ?
+            => (orderBy == null || orderBy.GetElements().Length == 0) ?
                 string.Empty :
-                "ORDER BY " + Environment.NewLine + "\t" + string.Join("," + Environment.NewLine + "\t", orderBy.Elements.Select(e=>ToString(e)).ToArray()) + Environment.NewLine;
+                "ORDER BY " + Environment.NewLine + "\t" + string.Join("," + Environment.NewLine + "\t", orderBy.GetElements().Select(e=>ToString(e)).ToArray()) + Environment.NewLine;
 
         string ToString(OrderByElement element)
             => ToString(element.Target) + " " + element.Order;

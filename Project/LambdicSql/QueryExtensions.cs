@@ -81,7 +81,7 @@ namespace LambdicSql
             var src = query as Query<TDB, TDB>;
             var select = SelectDefineAnalyzer.MakeSelectInfo(define.Body);
 
-            var indexInSelect = select.Elements.Select(e => e.Name).ToList();
+            var indexInSelect = select.GetElements().Select(e => e.Name).ToList();
             var dst = src.ConvertType(ExpressionToCreateFunc.ToCreateUseDbResult<TSelect>(name => indexInSelect.IndexOf(name), define.Body));
             dst.Select = select;
             return dst;

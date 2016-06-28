@@ -6,7 +6,7 @@ namespace LambdicSql.QueryInfo
     public class OrderByInfo
     {
         List<OrderByElement> _elements = new List<OrderByElement>();
-        public List<OrderByElement> Elements => _elements;
+        public OrderByElement[] GetElements() => _elements.ToArray();
 
         public OrderByInfo Clone()
         {

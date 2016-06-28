@@ -6,7 +6,7 @@ namespace LambdicSql.QueryInfo
     {
         List<SelectElementInfo> _elements = new List<SelectElementInfo>();
 
-        public List<SelectElementInfo> Elements => _elements;
+        public SelectElementInfo[] GetElements() => _elements.ToArray();
 
         internal void Add(SelectElementInfo element)
         {
