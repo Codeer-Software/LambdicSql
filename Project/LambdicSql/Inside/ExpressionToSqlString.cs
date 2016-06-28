@@ -57,7 +57,7 @@ namespace LambdicSql.Inside
             return method.Method.Name + "(" + string.Join(", ", arguments.ToArray()) + ")";
         }
 
-        internal static string MakeQueryString(IQuery query) //TODO@ think multi db.
+        static string MakeQueryString(IQuery query) //TODO@ think multi db.
             => "(" + string.Join(" ", new QueryToSql().MakeQueryString((IQueryInfo)query).
                         Replace(Environment.NewLine, " ").Replace("\t", " ").
                         Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries)) + ")";

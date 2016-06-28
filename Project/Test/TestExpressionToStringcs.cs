@@ -175,8 +175,8 @@ namespace Test
                 col2 = sub.ToSubQuery<string>()
             }).
             Where().
-            Like(db => db.table1.col2, sub).And().
-            In(db => db.table1.col2, sub).Or().Between(db => db.table1.col1, sub, sub).
+            Like(db => db.table1.col2, db=>sub.ToSubQuery<string>()).And().
+            In(db => db.table1.col2, db=>sub.ToSubQuery<string>()).Or().Between(db => db.table1.col1, db=>sub.ToSubQuery<int>(), db=>sub.ToSubQuery<int>()).
             ToQueryString();
 
             Debug.Print(text);

@@ -123,9 +123,8 @@ namespace LambdicSql.Inside
 
         string ToStringObject(object obj)
         {
-            //TODO@ think db column order.
-            var query = obj as IQuery;
-            return (query != null) ? ExpressionToSqlString.MakeQueryString(query) : "'" + obj + "'";
+            var exp = obj as Expression;
+            return (exp != null) ? ExpressionToSqlString.ToString(_db, exp) : "'" + obj + "'";
         }
 
         string MakeSqlArguments(IEnumerable<object> src)
