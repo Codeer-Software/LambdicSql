@@ -30,7 +30,7 @@ namespace LambdicSql.Inside
                 return select;
             }
             select = new SelectInfo();
-            foreach (var e in _db.LambdaNameAndColumn)
+            foreach (var e in _db.GetLambdaNameAndColumn())
             {
                 select.Add(new SelectElementInfo(e.Key, null));
             }
@@ -45,11 +45,11 @@ namespace LambdicSql.Inside
             }
 
             //table count must be 1.
-            if (_db.LambdaNameAndTable.Count != 1)
+            if (_db.GetLambdaNameAndTable().Count != 1)
             {
                 throw new NotSupportedException();
             }
-            return new FromInfo(_db.LambdaNameAndTable.First().Value);
+            return new FromInfo(_db.GetLambdaNameAndTable().First().Value);
         }
 
         string ToString(SelectInfo selectInfo)
@@ -62,7 +62,7 @@ namespace LambdicSql.Inside
             => ExpressionToSqlString.ToString(_db, exp);
 
         string ToString(FromInfo fromInfo)
-            => string.Join(Environment.NewLine + "\t", new[] { "FROM " + fromInfo.MainTable.SqlFullName }.Concat(fromInfo.Joins.Select(e=>ToString(e))).ToArray()) + Environment.NewLine;
+            => string.Join(Environment.NewLine + "\t", new[] { "FROM " + fromInfo.MainTable.SqlFullName }.Concat(fromInfo.GetJoins().Select(e=>ToString(e))).ToArray()) + Environment.NewLine;
 
         string ToString(JoinInfo join)
             => "JOIN " + join.JoinTable.SqlFullName + " ON " + ToString(join.Condition);
@@ -109,9 +109,9 @@ namespace LambdicSql.Inside
             => ToString(condition.Target) + " LIKE " + ToStringObject(condition.SearchText);
 
         string ToString(GroupByInfo groupBy)
-            => (groupBy == null || groupBy.Elements.Count == 0) ? 
+            => (groupBy == null || groupBy.GetElements().Length == 0) ? 
                 string.Empty :
-                "GROUP BY " + Environment.NewLine + "\t" + string.Join("," + Environment.NewLine + "\t", groupBy.Elements.Select(e=>ToString(e)).ToArray()) + Environment.NewLine;
+                "GROUP BY " + Environment.NewLine + "\t" + string.Join("," + Environment.NewLine + "\t", groupBy.GetElements().Select(e=>ToString(e)).ToArray()) + Environment.NewLine;
 
         string ToString(OrderByInfo orderBy)
             => (orderBy == null || orderBy.Elements.Count == 0) ?

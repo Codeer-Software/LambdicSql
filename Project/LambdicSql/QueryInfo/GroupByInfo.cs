@@ -1,15 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
+using System.Linq;
 
 namespace LambdicSql.QueryInfo
 {
     public class GroupByInfo
     {
-        public List<Expression> Elements { get; }
+        Expression[] _elements;
+        public Expression[] GetElements() => _elements.ToArray();
 
-        public GroupByInfo(List<Expression> elements)
+        public GroupByInfo(Expression[] elements)
         {
-            Elements = elements;
+            _elements = elements;
         }
     }
 }

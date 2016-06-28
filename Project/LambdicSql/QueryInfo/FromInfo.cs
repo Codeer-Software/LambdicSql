@@ -7,7 +7,7 @@ namespace LambdicSql.QueryInfo
         List<JoinInfo> _join = new List<JoinInfo>();
 
         public TableInfo MainTable { get; }
-        public List<JoinInfo> Joins => _join;
+        public JoinInfo[] GetJoins() => _join.ToArray();
 
         public FromInfo(TableInfo mainTable)
         {
@@ -17,7 +17,7 @@ namespace LambdicSql.QueryInfo
         public FromInfo Clone()
         {
             var clone = new FromInfo(MainTable);
-            clone._join.AddRange(Joins);
+            clone._join.AddRange(_join);
             return clone;
         }
 

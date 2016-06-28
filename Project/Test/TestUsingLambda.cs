@@ -72,11 +72,11 @@ namespace Test
             });
             var info = query as IQueryInfo;
 
-            Assert.AreEqual(info.Db.LambdaNameAndColumn.Count, 4);
-            Assert.AreEqual(info.Db.LambdaNameAndColumn["table1.col1"].LambdaFullName, "table1.col1");
-            Assert.AreEqual(info.Db.LambdaNameAndColumn["table1.col2"].LambdaFullName, "table1.col2");
-            Assert.AreEqual(info.Db.LambdaNameAndColumn["table2.col3"].LambdaFullName, "table2.col3");
-            Assert.AreEqual(info.Db.LambdaNameAndColumn["table2.col4"].LambdaFullName, "table2.col4");
+            Assert.AreEqual(info.Db.GetLambdaNameAndColumn().Count, 4);
+            Assert.AreEqual(info.Db.GetLambdaNameAndColumn()["table1.col1"].LambdaFullName, "table1.col1");
+            Assert.AreEqual(info.Db.GetLambdaNameAndColumn()["table1.col2"].LambdaFullName, "table1.col2");
+            Assert.AreEqual(info.Db.GetLambdaNameAndColumn()["table2.col3"].LambdaFullName, "table2.col3");
+            Assert.AreEqual(info.Db.GetLambdaNameAndColumn()["table2.col4"].LambdaFullName, "table2.col4");
         }
 
         [TestMethod]
@@ -100,11 +100,11 @@ namespace Test
             });
             var info = query as IQueryInfo;
 
-            Assert.AreEqual(info.Db.LambdaNameAndColumn.Count, 4);
-            Assert.AreEqual(info.Db.LambdaNameAndColumn["table1.col1"].LambdaFullName, "table1.col1");
-            Assert.AreEqual(info.Db.LambdaNameAndColumn["table1.col2"].LambdaFullName, "table1.col2");
-            Assert.AreEqual(info.Db.LambdaNameAndColumn["dbo.table2.col3"].LambdaFullName, "dbo.table2.col3");
-            Assert.AreEqual(info.Db.LambdaNameAndColumn["dbo.table2.col4"].LambdaFullName, "dbo.table2.col4");
+            Assert.AreEqual(info.Db.GetLambdaNameAndColumn().Count, 4);
+            Assert.AreEqual(info.Db.GetLambdaNameAndColumn()["table1.col1"].LambdaFullName, "table1.col1");
+            Assert.AreEqual(info.Db.GetLambdaNameAndColumn()["table1.col2"].LambdaFullName, "table1.col2");
+            Assert.AreEqual(info.Db.GetLambdaNameAndColumn()["dbo.table2.col3"].LambdaFullName, "dbo.table2.col3");
+            Assert.AreEqual(info.Db.GetLambdaNameAndColumn()["dbo.table2.col4"].LambdaFullName, "dbo.table2.col4");
         }
         
         [TestMethod]

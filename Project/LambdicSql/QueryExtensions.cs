@@ -21,7 +21,7 @@ namespace LambdicSql
         public static IQueryFrom<TDB, TSelect> From<TDB, TSelect>(this IQuery<TDB, TSelect> query, Expression<Func<TDB, object>> table)//@@@
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.From = new FromInfo(dst.Db.LambdaNameAndTable[ExpressionToSqlString.GetElementName(table)]));
+             => query.CustomClone(dst => dst.From = new FromInfo(dst.Db.GetLambdaNameAndTable()[ExpressionToSqlString.GetElementName(table)]));
 
         public static IQueryWhere<TDB, TSelect> Where<TDB, TSelect>(this IQuery<TDB, TSelect> query)
             where TDB : class
@@ -51,7 +51,7 @@ namespace LambdicSql
         public static IQueryGroupBy<TDB, TSelect> GroupBy<TDB, TSelect>(this IQuery<TDB, TSelect> query, params Expression<Func<TDB, object>>[] targets)
             where TDB : class
             where TSelect : class
-            => query.CustomClone(dst => dst.GroupBy = new GroupByInfo(targets.Select(e => e.Body).ToList()));
+            => query.CustomClone(dst => dst.GroupBy = new GroupByInfo(targets.Select(e => e.Body).ToArray()));
 
         public static IQueryOrderBy<TDB, TSelect> OrderBy<TDB, TSelect>(this IQuery<TDB, TSelect> query)
             where TDB : class

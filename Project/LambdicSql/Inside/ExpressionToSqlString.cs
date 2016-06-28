@@ -98,12 +98,12 @@ namespace LambdicSql.Inside
         {
             var name = GetElementName(member);
             TableInfo table;
-            if (info.LambdaNameAndTable.TryGetValue(name, out table))
+            if (info.GetLambdaNameAndTable().TryGetValue(name, out table))
             {
                 return table.SqlFullName;
             }
             ColumnInfo col;
-            if (info.LambdaNameAndColumn.TryGetValue(name, out col))
+            if (info.GetLambdaNameAndColumn().TryGetValue(name, out col))
             {
                 return col.SqlFullName;
             }

@@ -7,8 +7,8 @@ namespace LambdicSql.QueryInfo
     {
         Dictionary<string, ColumnInfo> _lambdaNameAndColumn = new Dictionary<string, ColumnInfo>();
         Dictionary<string, TableInfo> _lambdaNameAndTable = new Dictionary<string, TableInfo>();
-        public Dictionary<string, ColumnInfo> LambdaNameAndColumn => _lambdaNameAndColumn;
-        public Dictionary<string, TableInfo> LambdaNameAndTable => _lambdaNameAndTable;
+        public Dictionary<string, ColumnInfo> GetLambdaNameAndColumn() => _lambdaNameAndColumn.ToDictionary(e=>e.Key, e=>e.Value);
+        public Dictionary<string, TableInfo> GetLambdaNameAndTable() => _lambdaNameAndTable.ToDictionary(e => e.Key, e => e.Value);
 
         public void Add(ColumnInfo col)
         {
