@@ -378,7 +378,7 @@ public void WhereInSubQuery()
     var datas = define.
         Select(db=>new { name = db.tbl_staff.name }).
         From(db => db.tbl_staff).
-        Where().In(db=>db.tbl_staff.id, sub).
+        Where().In(db=>db.tbl_staff.id, db=>sub.ToSubQuery<int>()).
         ToExecutor(TestEnvironment.ConnectionString).Read();
 }
 ```

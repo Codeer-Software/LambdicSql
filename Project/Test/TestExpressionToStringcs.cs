@@ -63,7 +63,7 @@ namespace Test
                 }
             });
             Assert.AreEqual(query.ToSqlString(db => db.table1.col1 == 1), "(table1.col1) = ('1')");
-            Assert.AreEqual(query.ToSqlString(db => db.table1.col1 != 1), "(table1.col1) != ('1')");
+            Assert.AreEqual(query.ToSqlString(db => db.table1.col1 != 1), "(table1.col1) <> ('1')");
             Assert.AreEqual(query.ToSqlString(db => db.table1.col1 < 1), "(table1.col1) < ('1')");
             Assert.AreEqual(query.ToSqlString(db => db.table1.col1 <= 1), "(table1.col1) <= ('1')");
             Assert.AreEqual(query.ToSqlString(db => db.table1.col1 > 1), "(table1.col1) > ('1')");

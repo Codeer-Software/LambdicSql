@@ -68,9 +68,9 @@ namespace LambdicSql.Inside
             => "JOIN " + join.JoinTable.SqlFullName + " ON " + ToString(join.Condition);
         
         string ToString(ConditionClauseInfo whereInfo, string clause)
-            => (whereInfo == null || whereInfo.Conditions.Count == 0)?
+            => (whereInfo == null || whereInfo.ConditionCount == 0)?
                 string.Empty:
-                string.Join(Environment.NewLine + "\t", new[] { clause }.Concat(whereInfo.Conditions.Select((e, i) => ToString(e, i))).ToArray()) + Environment.NewLine;
+                string.Join(Environment.NewLine + "\t", new[] { clause }.Concat(whereInfo.GetConditions().Select((e, i) => ToString(e, i))).ToArray()) + Environment.NewLine;
 
         string ToString(IConditionInfo condition, int index)
         {
@@ -103,7 +103,7 @@ namespace LambdicSql.Inside
             => ToString(condition.Expression);
 
         string ToString(ConditionInfoIn condition)
-            => ToString(condition.Target) + " IN(" + MakeSqlArguments(condition.Arguments) + ")";
+            => ToString(condition.Target) + " IN(" + MakeSqlArguments(condition.GetArguments()) + ")";
 
         string ToString(ConditionInfoLike condition)
             => ToString(condition.Target) + " LIKE " + ToStringObject(condition.SearchText);

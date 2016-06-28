@@ -70,7 +70,7 @@ namespace LambdicSql.Inside
             switch (nodeType)
             {
                 case ExpressionType.Equal: return "=";
-                case ExpressionType.NotEqual: return "!=";
+                case ExpressionType.NotEqual: return "<>";
                 case ExpressionType.LessThan: return "<";
                 case ExpressionType.LessThanOrEqual: return "<=";
                 case ExpressionType.GreaterThan: return ">";

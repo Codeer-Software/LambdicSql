@@ -8,8 +8,9 @@ namespace LambdicSql.QueryInfo
     {
         bool _isNotCore;
         ConditionConnection _nextConnectionCore;
+        List<IConditionInfo> _conditions = new List<IConditionInfo>();
 
-        protected bool IsNot
+        bool IsNot
         {
             get
             {
@@ -19,7 +20,7 @@ namespace LambdicSql.QueryInfo
             }
         }
 
-        protected ConditionConnection NextConnection
+        ConditionConnection NextConnection
         {
             get
             {
@@ -29,29 +30,30 @@ namespace LambdicSql.QueryInfo
             }
         }
 
-        public List<IConditionInfo> Conditions { get; } = new List<IConditionInfo>();
+        public int ConditionCount => _conditions.Count;
+        public IConditionInfo[] GetConditions() => _conditions.ToArray();
 
         public ConditionClauseInfo() { }
 
         public ConditionClauseInfo(Expression exp)
         {
-            Conditions.Add(new ConditionInfoExpression(false, ConditionConnection.And, exp));
+            _conditions.Add(new ConditionInfoExpression(false, ConditionConnection.And, exp));
         }
 
         public ConditionClauseInfo Clone()
         {
             var dst = new ConditionClauseInfo();
-            dst.Conditions.AddRange(Conditions);
+            dst._conditions.AddRange(_conditions);
             dst._isNotCore = _isNotCore;
             dst._nextConnectionCore = _nextConnectionCore;
             return dst;
         }
 
         internal void And(Expression exp)
-            => Conditions.Add(new ConditionInfoExpression(IsNot, ConditionConnection.And, exp));
+            => _conditions.Add(new ConditionInfoExpression(IsNot, ConditionConnection.And, exp));
 
         internal void Or(Expression exp)
-            => Conditions.Add(new ConditionInfoExpression(IsNot, ConditionConnection.Or, exp));
+            => _conditions.Add(new ConditionInfoExpression(IsNot, ConditionConnection.Or, exp));
 
         internal void And()
             => _nextConnectionCore = ConditionConnection.And;
@@ -63,12 +65,12 @@ namespace LambdicSql.QueryInfo
             => _isNotCore = true;
 
         internal void In(Expression target, params object[] inArguments)
-            => Conditions.Add(new ConditionInfoIn(IsNot, NextConnection, target, inArguments.ToList()));
+            => _conditions.Add(new ConditionInfoIn(IsNot, NextConnection, target, inArguments));
 
         internal void Like(Expression target, object serachText)
-            => Conditions.Add(new ConditionInfoLike(IsNot, NextConnection, target, serachText));
+            => _conditions.Add(new ConditionInfoLike(IsNot, NextConnection, target, serachText));
 
         internal void Between(Expression target, object min, object max)
-            => Conditions.Add(new ConditionInfoBetween(IsNot, NextConnection, target, min, max));
+            => _conditions.Add(new ConditionInfoBetween(IsNot, NextConnection, target, min, max));
     }
 }
