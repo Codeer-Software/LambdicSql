@@ -192,14 +192,14 @@ namespace Test
 
     static class ExpressionTestExtensions
     {
-        internal static string ToSqlString<T, TRet>(this IQueryStart<T, T> query, Expression<Func<T, TRet>> exp)
+        internal static string ToSqlString<T, TRet>(this IQuery<T, T> query, Expression<Func<T, TRet>> exp)
             where T : class
         {
             var info = query as IQueryInfo;
             return TestAdaptor.ToSqlString(info.Db, exp.Body);
         }
 
-        internal static string ToSqlString<T, TRet>(this IQueryStart<T, T> query, Expression<Func<T, IFuncs, TRet>> exp)
+        internal static string ToSqlString<T, TRet>(this IQuery<T, T> query, Expression<Func<T, IFuncs, TRet>> exp)
             where T : class
         {
             var info = query as IQueryInfo;

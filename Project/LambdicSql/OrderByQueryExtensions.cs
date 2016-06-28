@@ -7,17 +7,12 @@ namespace LambdicSql
 {
     public static class OrderByQueryExtensions
     {
-        public static IQueryOrderBy<TDB, TSelect> OrderBy<TDB, TSelect>(this IQueryStart<TDB, TSelect> query)
-            where TDB : class
-            where TSelect : class
-            => query.CustomClone(dst => dst.OrderBy = new OrderByInfo());
-
-        public static IQueryOrderBy<TDB, TSelect> ASC<TDB, TSelect>(this IQueryOrderBy<TDB, TSelect> query, Expression<Func<TDB, object>> exp)
+        public static IQueryOrderBy<TDB, TSelect> ASC<TDB, TSelect, T>(this IQueryOrderBy<TDB, TSelect> query, Expression<Func<TDB, T>> exp)
             where TDB : class
             where TSelect : class
             => query.CustomClone(dst => dst.OrderBy.Add(Order.ASC, exp.Body));
 
-        public static IQueryOrderBy<TDB, TSelect> DESC<TDB, TSelect>(this IQueryOrderBy<TDB, TSelect> query, Expression<Func<TDB, object>> exp)
+        public static IQueryOrderBy<TDB, TSelect> DESC<TDB, TSelect, T>(this IQueryOrderBy<TDB, TSelect> query, Expression<Func<TDB, T>> exp)
             where TDB : class
             where TSelect : class
             => query.CustomClone(dst => dst.OrderBy.Add(Order.DESC, exp.Body));

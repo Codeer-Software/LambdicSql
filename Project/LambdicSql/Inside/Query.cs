@@ -3,10 +3,10 @@ using System;
 
 namespace LambdicSql.Inside
 {
-    class Query<TDB, TSelect> : IQueryStart<TDB, TSelect>, 
-                                IQueryFrom<TDB, TSelect>,
+    class Query<TDB, TSelect> : IQueryFrom<TDB, TSelect>,
                                 IQueryWhere<TDB, TSelect>,
                                 IQueryHaving<TDB, TSelect>,
+                                IQueryGroupBy<TDB, TSelect>,
                                 IQueryOrderBy<TDB, TSelect>,
                                 IQueryInfo<TSelect>
         where TDB : class

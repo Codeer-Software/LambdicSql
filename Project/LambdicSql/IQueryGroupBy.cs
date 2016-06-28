@@ -1,6 +1,6 @@
 ﻿namespace LambdicSql
 {
-    public interface IQuerySelelectEnd<TDB, TSelect> : IQueryFromEnd<TDB, TSelect>
+    public interface IQueryGroupBy<TDB, TSelect> : IQuery<TDB, TSelect>
         where TDB : class
         where TSelect : class
     { }
