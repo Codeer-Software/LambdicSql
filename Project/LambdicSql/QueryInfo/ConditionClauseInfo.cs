@@ -1,9 +1,10 @@
-﻿using System.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace LambdicSql.QueryInfo
 {
+    //TODO()
+
     public class ConditionClauseInfo
     {
         bool _isNotCore;

@@ -20,7 +20,7 @@ namespace LambdicSql.Inside
             if (member != null) return ToString(info, member);
 
             var constant = exp as ConstantExpression;
-            if (constant != null) return ToString(constant);
+            if (constant != null) return ToString(info, constant);
 
             var binary = exp as BinaryExpression;
             if (binary != null) return ToString(info, binary);
@@ -50,15 +50,15 @@ namespace LambdicSql.Inside
 
             //db function.
             var arguments = new List<string>();
-            foreach (var arg in method.Arguments.Skip(1)) //skip this.
+            foreach (var arg in method.Arguments.Skip(1)) //skip this. TODO@ 両方使えるようにするか。IDBFuncsだったら。IDBFuncsを継承させる
             {
                 arguments.Add(ToString(info, arg));
             }
             return method.Method.Name + "(" + string.Join(", ", arguments.ToArray()) + ")";
         }
 
-        static string MakeQueryString(IQuery query) //TODO@ think multi db.
-            => "(" + string.Join(" ", new QueryToSql().MakeQueryString((IQueryInfo)query).
+        static string MakeQueryString(IQuery query) //TODO@@
+            => "(" + string.Join(" ", new QueryToSql().MakeQueryStringCore((IQueryInfo)query).
                         Replace(Environment.NewLine, " ").Replace("\t", " ").
                         Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries)) + ")";
 
@@ -75,7 +75,7 @@ namespace LambdicSql.Inside
                 case ExpressionType.LessThanOrEqual: return "<=";
                 case ExpressionType.GreaterThan: return ">";
                 case ExpressionType.GreaterThanOrEqual: return ">=";
-                case ExpressionType.Add: return "+";
+                case ExpressionType.Add: return "+";//TODO@@
                 case ExpressionType.Subtract: return "-";
                 case ExpressionType.Multiply: return "*";
                 case ExpressionType.Divide: return "/";
@@ -84,14 +84,15 @@ namespace LambdicSql.Inside
                 case ExpressionType.AndAlso: return "AND";
                 case ExpressionType.Or: return "OR";
                 case ExpressionType.OrElse: return "OR";
+                //TODO@@
             }
             throw new NotImplementedException();
         }
 
-        static string ToString(ConstantExpression constant)
+        static string ToString(DbInfo info, ConstantExpression constant)
         {
             var func = Expression.Lambda(constant).Compile();
-            return "'" + func.DynamicInvoke().ToString() + "'";
+            return ToStringObject(info, func.DynamicInvoke());
         }
 
         static string ToString(DbInfo info, MemberExpression member)
@@ -108,13 +109,39 @@ namespace LambdicSql.Inside
                 return col.SqlFullName;
             }
             var func = Expression.Lambda(member).Compile();
-            return "'" + func.DynamicInvoke().ToString() + "'";
+            return ToStringObject(info, func.DynamicInvoke().ToString());
         }
 
         static string GetElementName(MemberExpression exp)
         {
-            //TODO@ I'll make best code.
+            //TODO I'll make best code.
             return string.Join(".", exp.ToString().Split('.').Skip(1).ToArray());
+        }
+
+        internal static string ToStringObject(DbInfo info, object obj)
+        {
+            var exp = obj as Expression;
+            if (exp != null)
+            {
+                return ToString(info, exp);
+            }
+            Type type = obj.GetType();
+            if (type == typeof(string) || type == typeof(DateTime))
+            {
+                return "'" + obj + "'";
+            }
+            return obj.ToString();
+        }
+
+        internal static string MakeSqlArguments(DbInfo info, IEnumerable<object> src)
+        {
+            var result = new List<string>();
+            foreach (var arg in src)
+            {
+                var col = arg as ColumnInfo;
+                result.Add(col == null ? ToStringObject(info, arg) : col.SqlFullName);
+            }
+            return string.Join(", ", result.ToArray());
         }
     }
 }

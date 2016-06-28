@@ -9,8 +9,13 @@ namespace LambdicSql.Inside
     class QueryToSql
     {
         DbInfo _db;
-        
+
         internal string MakeQueryString(IQueryInfo query)
+        {
+            return MakeQueryStringCore(query) + ";";
+        }
+
+        internal string MakeQueryStringCore(IQueryInfo query)
         {
             _db = query.Db;
             return string.Join(Environment.NewLine, new[] {
@@ -20,7 +25,7 @@ namespace LambdicSql.Inside
                 ToString(query.GroupBy),
                 ToString(query.Having, "HAVING"),
                 ToString(query.OrderBy)
-            }.Where(e=>!string.IsNullOrEmpty(e)).ToArray());
+            }.Where(e => !string.IsNullOrEmpty(e)).ToArray());
         }
 
         SelectInfo Adjust(SelectInfo select)
@@ -53,16 +58,16 @@ namespace LambdicSql.Inside
         }
 
         string ToString(SelectInfo selectInfo)
-            => "SELECT " + Environment.NewLine + "\t" + string.Join("," + Environment.NewLine + "\t", selectInfo.GetElements().Select(e => ToString(e)).ToArray()) + Environment.NewLine;
+            => "SELECT" + Environment.NewLine + "\t" + string.Join("," + Environment.NewLine + "\t", selectInfo.GetElements().Select(e => ToString(e)).ToArray());
 
         string ToString(SelectElementInfo element)
-            => element.Expression == null ? element.Name : ToString(element.Expression) + " AS " + element.Name;
+            => element.Expression == null ? element.Name : ToString(element.Expression) + " AS \"" + element.Name + "\"";
 
         string ToString(Expression exp)
             => ExpressionToSqlString.ToString(_db, exp);
 
         string ToString(FromInfo fromInfo)
-            => string.Join(Environment.NewLine + "\t", new[] { "FROM " + fromInfo.MainTable.SqlFullName }.Concat(fromInfo.GetJoins().Select(e=>ToString(e))).ToArray()) + Environment.NewLine;
+            => "FROM" + Environment.NewLine + "\t" + string.Join(Environment.NewLine + "\t", new[] { fromInfo.MainTable.SqlFullName }.Concat(fromInfo.GetJoins().Select(e=>ToString(e))).ToArray());
 
         string ToString(JoinInfo join)
             => "JOIN " + join.JoinTable.SqlFullName + " ON " + ToString(join.Condition);
@@ -70,7 +75,7 @@ namespace LambdicSql.Inside
         string ToString(ConditionClauseInfo whereInfo, string clause)
             => (whereInfo == null || whereInfo.ConditionCount == 0)?
                 string.Empty:
-                string.Join(Environment.NewLine + "\t", new[] { clause }.Concat(whereInfo.GetConditions().Select((e, i) => ToString(e, i))).ToArray()) + Environment.NewLine;
+                string.Join(Environment.NewLine + "\t", new[] { clause }.Concat(whereInfo.GetConditions().Select((e, i) => ToString(e, i))).ToArray());
 
         string ToString(IConditionInfo condition, int index)
         {
@@ -97,45 +102,28 @@ namespace LambdicSql.Inside
         }
 
         string ToString(ConditionInfoBetween condition)
-            => ToString(condition.Target) + " BETWEEN " + ToStringObject(condition.Min) + " AND " + ToStringObject(condition.Max);
+            => ToString(condition.Target) + " BETWEEN " + ExpressionToSqlString.ToStringObject(_db, condition.Min) + " AND " + ExpressionToSqlString.ToStringObject(_db, condition.Max);
 
         string ToString(ConditionInfoExpression condition)
             => ToString(condition.Expression);
 
         string ToString(ConditionInfoIn condition)
-            => ToString(condition.Target) + " IN(" + MakeSqlArguments(condition.GetArguments()) + ")";
+            => ToString(condition.Target) + " IN(" + ExpressionToSqlString.MakeSqlArguments(_db, condition.GetArguments()) + ")";
 
         string ToString(ConditionInfoLike condition)
-            => ToString(condition.Target) + " LIKE " + ToStringObject(condition.SearchText);
+            => ToString(condition.Target) + " LIKE " + ExpressionToSqlString.ToStringObject(_db, condition.SearchText);
 
         string ToString(GroupByInfo groupBy)
             => (groupBy == null || groupBy.GetElements().Length == 0) ? 
                 string.Empty :
-                "GROUP BY " + Environment.NewLine + "\t" + string.Join("," + Environment.NewLine + "\t", groupBy.GetElements().Select(e=>ToString(e)).ToArray()) + Environment.NewLine;
+                "GROUP BY " + Environment.NewLine + "\t" + string.Join("," + Environment.NewLine + "\t", groupBy.GetElements().Select(e=>ToString(e)).ToArray());
 
         string ToString(OrderByInfo orderBy)
             => (orderBy == null || orderBy.GetElements().Length == 0) ?
                 string.Empty :
-                "ORDER BY " + Environment.NewLine + "\t" + string.Join("," + Environment.NewLine + "\t", orderBy.GetElements().Select(e=>ToString(e)).ToArray()) + Environment.NewLine;
+                "ORDER BY " + Environment.NewLine + "\t" + string.Join("," + Environment.NewLine + "\t", orderBy.GetElements().Select(e=>ToString(e)).ToArray());
 
         string ToString(OrderByElement element)
             => ToString(element.Target) + " " + element.Order;
-
-        string ToStringObject(object obj)
-        {
-            var exp = obj as Expression;
-            return (exp != null) ? ExpressionToSqlString.ToString(_db, exp) : "'" + obj + "'";
-        }
-
-        string MakeSqlArguments(IEnumerable<object> src)
-        {
-            var result = new List<string>();
-            foreach (var arg in src)
-            {
-                var col = arg as ColumnInfo;
-                result.Add(col == null ? ToStringObject(arg) : col.SqlFullName);
-            }
-            return string.Join(", ", result.ToArray());
-        }
     }
 }

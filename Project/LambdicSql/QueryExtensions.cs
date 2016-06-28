@@ -60,6 +60,11 @@ namespace LambdicSql
 
         public static T ToSubQuery<T>(this IQuery query) => default(T);
 
+        public static TSelect ToSubQuery<TDB, TSelect>(this IQuery<TDB, TSelect> query)
+            where TDB : class
+            where TSelect : class 
+            => default(TSelect);
+
         public static ISqlExecutor<TSelect> ToExecutor<TDB, TSelect>(this IQuery<TDB, TSelect> query, string connectionString)
             where TDB : class
             where TSelect : class
@@ -88,9 +93,15 @@ namespace LambdicSql
         }
     }
 }
-/*TODO@ clauses
-LIMIT
+
+//TODO sub query in From clauses
+
+/*TODO clauses
 Distinct
+		new Distinct()
+		new Distinct<int>(obj)
+
 Case
-UNION/EXCEPT/EXCEPT 
+UNION/EXCEPT/EXCEPT
+Join many version. 
 */
