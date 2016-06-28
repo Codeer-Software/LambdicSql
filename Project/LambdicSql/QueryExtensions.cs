@@ -65,6 +65,7 @@ namespace LambdicSql
             where TSelect : class 
             => default(TSelect);
 
+        //TODO@@
         public static ISqlExecutor<TSelect> ToExecutor<TDB, TSelect>(this IQuery<TDB, TSelect> query, string connectionString)
             where TDB : class
             where TSelect : class
@@ -104,4 +105,8 @@ Distinct
 Case
 UNION/EXCEPT/EXCEPT
 Join many version. 
+    INNER JOIN  → JOIN
+    LEFT OUTER JOIN → LEFT JOIN
+    RIGHT OUTER JOIN → RIGHT JOIN
+    CROSS JOIN
 */
