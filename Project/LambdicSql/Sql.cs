@@ -4,7 +4,6 @@ using System.Linq.Expressions;
 
 namespace LambdicSql
 {
-
     //TODO No! using is keyword.→Reference?
     public static class Sql
     {

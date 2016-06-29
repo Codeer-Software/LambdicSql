@@ -1,6 +1,7 @@
 ﻿using LambdicSql;
 using LambdicSql.Inside;
 using LambdicSql.QueryInfo;
+using LambdicSql.SqlServer;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Diagnostics;
@@ -89,6 +90,9 @@ namespace Test
             });
             Assert.AreEqual(query.ToSqlString(db => db.table1.col1 == 2 && (db.table1.col1 == 3 || db.table1.col1 == 4)),
                         "((table1.col1) = (2)) AND (((table1.col1) = (3)) OR ((table1.col1) = (4)))");
+
+            var x = 1;
+            query.ToSqlString(db => x);
         }
 
         [TestMethod]
@@ -192,6 +196,11 @@ namespace Test
 
     static class ExpressionTestExtensions
     {
+        public static string ToQueryString<TDB, TSelect>(this IQuery<TDB, TSelect> query)
+            where TDB : class
+            where TSelect : class
+            => new SqlServerAdapter().CreateParser().ToString(query as IQueryInfo);
+
         internal static string ToSqlString<T, TRet>(this IQuery<T, T> query, Expression<Func<T, TRet>> exp)
             where T : class
         {

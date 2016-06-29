@@ -2,8 +2,9 @@
 
 namespace LambdicSql
 {
-    public interface ISqlExecutor<TSelect>
+    public interface IDBExecutor<TSelect>
     {
+        string CommandText { get; }
         IEnumerable<TSelect> Read();
     }
 }

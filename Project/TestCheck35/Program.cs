@@ -1,4 +1,5 @@
 ﻿using LambdicSql;
+using LambdicSql.SqlServer;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -43,7 +44,7 @@ namespace TestCheck35
                 OrderBy().ASC(db => db.tbl_staff.name);
 
             //execute.
-            var datas = q4.ToExecutor("Data Source=DESKTOP-IBN02LQ;Initial Catalog=LambdicSqlTest;User ID=sa;Password=codeer;").Read();
+            var datas = q4.ToExecutor(new SqlServerAdapter("Data Source=DESKTOP-IBN02LQ;Initial Catalog=LambdicSqlTest;User ID=sa;Password=codeer;")).Read();
 
             foreach (var e in datas)
             {

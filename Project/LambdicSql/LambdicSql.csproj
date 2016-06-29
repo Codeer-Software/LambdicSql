@@ -37,10 +37,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FromQueryExtensions.cs" />
+    <Compile Include="IDbAdapter.cs" />
     <Compile Include="IHavingFuncs.cs" />
     <Compile Include="Inside\DbResult.cs" />
-    <Compile Include="Inside\ExpressionToSqlString.cs" />
-    <Compile Include="Inside\QueryToSql.cs" />
+    <Compile Include="Inside\ExpressionParser.cs" />
     <Compile Include="Inside\SqlExecutor.cs" />
     <Compile Include="Inside\TestAdaptor.cs" />
     <Compile Include="IQueryGroupBy.cs" />
@@ -49,7 +49,7 @@
     <Compile Include="Inside\QueryInternalExtensions.cs" />
     <Compile Include="IQueryHaving.cs" />
     <Compile Include="IQueryOrderBy.cs" />
-    <Compile Include="ISqlExecutor.cs" />
+    <Compile Include="IDBExecutor.cs" />
     <Compile Include="OrderByQueryExtensions.cs" />
     <Compile Include="QueryInfo\ConditionInfoBetween.cs" />
     <Compile Include="QueryInfo\ConditionInfoExpression.cs" />
@@ -82,7 +82,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryExtensions.cs" />
     <Compile Include="HavingFuncsExtensions.cs" />
+    <Compile Include="QueryParser.cs" />
     <Compile Include="Sql.cs" />
+    <Compile Include="SqlServer\SqlServerAdapter.cs" />
+    <Compile Include="SqlServer\SqlServerQueryParser.cs" />
     <Compile Include="WhereFuncsExtensions.cs" />
     <Compile Include="HavingQueryExtensions.cs" />
     <Compile Include="WhereQueryExtensions.cs" />

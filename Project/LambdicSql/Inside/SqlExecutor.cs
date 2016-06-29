@@ -1,38 +1,43 @@
 ﻿using LambdicSql.QueryInfo;
-using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 
 namespace LambdicSql.Inside
 {
-    class SqlExecutor<TSelect> : ISqlExecutor<TSelect>
+    class SqlExecutor<TSelect> : IDBExecutor<TSelect>
     {
-        string _connectionString;
-        string _sql;
-        Func<IDbResult, TSelect> _create;
+        IDbAdapter _adaptor;
+        IQueryInfo<TSelect> _info;
 
-        internal SqlExecutor(string connectionString, string sql, Func<IDbResult, TSelect> create)
+        public string CommandText => _adaptor.CreateParser().ToString(_info);
+
+        internal SqlExecutor(IDbAdapter adaptor, IQueryInfo<TSelect> info)
         {
-            _connectionString = connectionString;
-            _sql = sql;
-            _create = create;
+            _adaptor = adaptor;
+            _info = info;
         }
 
         public IEnumerable<TSelect> Read()
         {
-            using (var con = new SqlConnection(_connectionString))
+            using (var con = _adaptor.CreateConnection())
             {
                 con.Open();
-                using (var com = new SqlCommand(_sql, con))
-                using (var sdr = com.ExecuteReader())
+                using (var com = _adaptor.CreateCommand())
                 {
-                    var reader = new DbResult(sdr);
-                    var list = new List<TSelect>();
-                    while (sdr.Read())
+                    var text = CommandText;
+                    Sql.Log?.Invoke(text);
+                    com.CommandText = text;
+                    com.Connection = con;
+                    using (var sdr = com.ExecuteReader())
                     {
-                        list.Add(_create(reader));
+                        var reader = new DbResult(sdr);
+                        var list = new List<TSelect>();
+                        while (sdr.Read())
+                        {
+                            list.Add(_info.Create(reader));
+                        }
+                        return list;
                     }
-                    return list;
+
                 }
             }
         }

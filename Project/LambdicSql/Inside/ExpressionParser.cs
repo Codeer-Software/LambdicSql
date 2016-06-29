@@ -7,65 +7,75 @@ using System.Reflection;
 
 namespace LambdicSql.Inside
 {
-    static class ExpressionToSqlString
+    class ExpressionParser
     {
+        QueryParser _queryParser;
+        DbInfo _dbInfo;
+
+        internal ExpressionParser(DbInfo dbInfo, QueryParser queryParser)
+        {
+            _dbInfo = dbInfo;
+            _queryParser = queryParser;
+        }
+
         internal static string GetElementName<TDB, T>(Expression<Func<TDB, T>> exp) where TDB : class
         {
             return GetElementName(exp.Body as MemberExpression);
         }
 
-        internal static string ToString(DbInfo info, Expression exp)
+        internal string ToString(Expression exp)
         {
             var member = exp as MemberExpression;
-            if (member != null) return ToString(info, member);
+            if (member != null) return ToString(member);
 
             var constant = exp as ConstantExpression;
-            if (constant != null) return ToString(info, constant);
+            if (constant != null) return ToString(constant);
 
             var binary = exp as BinaryExpression;
-            if (binary != null) return ToString(info, binary);
+            if (binary != null) return ToString(binary);
 
             var method = exp as MethodCallExpression;
-            if (method != null) return ToString(info, method);
+            if (method != null) return ToString(method);
 
             var unary = exp as UnaryExpression;
-            if (unary != null) return ToString(info, unary);
+            if (unary != null) return ToString(unary);
 
             throw new NotSupportedException();
         }
 
-        static string ToString(DbInfo info, UnaryExpression unary)
-          => ToString(info, unary.Operand);
+        string ToString(UnaryExpression unary)
+          => ToString(unary.Operand);
 
-        static string ToString(DbInfo info, MethodCallExpression method)
+        string ToString(MethodCallExpression method)
         {
             //sub query.
             if (0 < method.Arguments.Count && typeof(IQuery).IsAssignableFrom(method.Arguments[0].Type))
             {
-                var call = Expression.Call(null, typeof(ExpressionToSqlString).
-                    GetMethod("MakeQueryString", BindingFlags.Static|BindingFlags.NonPublic|BindingFlags.Public), method.Arguments[0]);
-                var func = Expression.Lambda(call).Compile();
-                return func.DynamicInvoke().ToString();
+                var param = Expression.Parameter(typeof(QueryParser), "parser");
+                var call = Expression.Call(null, GetType().
+                    GetMethod("MakeQueryString", BindingFlags.Static|BindingFlags.NonPublic|BindingFlags.Public), new[] { method.Arguments[0], param });
+                var func = Expression.Lambda(call, new[] { param }).Compile();
+                return func.DynamicInvoke(_queryParser).ToString();
             }
 
             //db function.
             var arguments = new List<string>();
             foreach (var arg in method.Arguments.Skip(1)) //skip this. TODO@ 両方使えるようにするか。IDBFuncsだったら。IDBFuncsを継承させる
             {
-                arguments.Add(ToString(info, arg));
+                arguments.Add(ToString(arg));
             }
             return method.Method.Name + "(" + string.Join(", ", arguments.ToArray()) + ")";
         }
 
-        static string MakeQueryString(IQuery query) //TODO@@
-            => "(" + string.Join(" ", new QueryToSql().MakeQueryStringCore((IQueryInfo)query).
+        static string MakeQueryString(IQuery query, QueryParser queryParser)
+            => "(" + string.Join(" ", queryParser.ToStringCore((IQueryInfo)query).
                         Replace(Environment.NewLine, " ").Replace("\t", " ").
                         Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries)) + ")";
 
-        static string ToString(DbInfo info, BinaryExpression binary)
-            => "(" + ToString(info, binary.Left) + ") " + ToString(binary.NodeType) + " (" + ToString(info, binary.Right) + ")";
+        string ToString(BinaryExpression binary)
+            => "(" + ToString(binary.Left) + ") " + ToString(binary.NodeType) + " (" + ToString(binary.Right) + ")";
 
-        static string ToString(ExpressionType nodeType)
+        string ToString(ExpressionType nodeType)
         {
             switch (nodeType)
             {
@@ -84,32 +94,32 @@ namespace LambdicSql.Inside
                 case ExpressionType.AndAlso: return "AND";
                 case ExpressionType.Or: return "OR";
                 case ExpressionType.OrElse: return "OR";
-                //TODO@@
+                //TODO NOT
             }
             throw new NotImplementedException();
         }
 
-        static string ToString(DbInfo info, ConstantExpression constant)
+        string ToString(ConstantExpression constant)
         {
             var func = Expression.Lambda(constant).Compile();
-            return ToStringObject(info, func.DynamicInvoke());
+            return ToStringObject(func.DynamicInvoke());
         }
 
-        static string ToString(DbInfo info, MemberExpression member)
+        string ToString(MemberExpression member)
         {
             var name = GetElementName(member);
             TableInfo table;
-            if (info.GetLambdaNameAndTable().TryGetValue(name, out table))
+            if (_dbInfo.GetLambdaNameAndTable().TryGetValue(name, out table))
             {
                 return table.SqlFullName;
             }
             ColumnInfo col;
-            if (info.GetLambdaNameAndColumn().TryGetValue(name, out col))
+            if (_dbInfo.GetLambdaNameAndColumn().TryGetValue(name, out col))
             {
                 return col.SqlFullName;
             }
             var func = Expression.Lambda(member).Compile();
-            return ToStringObject(info, func.DynamicInvoke().ToString());
+            return ToStringObject(func.DynamicInvoke().ToString());
         }
 
         static string GetElementName(MemberExpression exp)
@@ -118,12 +128,12 @@ namespace LambdicSql.Inside
             return string.Join(".", exp.ToString().Split('.').Skip(1).ToArray());
         }
 
-        internal static string ToStringObject(DbInfo info, object obj)
+        internal string ToStringObject(object obj)
         {
             var exp = obj as Expression;
             if (exp != null)
             {
-                return ToString(info, exp);
+                return ToString(exp);
             }
             Type type = obj.GetType();
             if (type == typeof(string) || type == typeof(DateTime))
@@ -133,13 +143,13 @@ namespace LambdicSql.Inside
             return obj.ToString();
         }
 
-        internal static string MakeSqlArguments(DbInfo info, IEnumerable<object> src)
+        internal string MakeSqlArguments(IEnumerable<object> src)
         {
             var result = new List<string>();
             foreach (var arg in src)
             {
                 var col = arg as ColumnInfo;
-                result.Add(col == null ? ToStringObject(info, arg) : col.SqlFullName);
+                result.Add(col == null ? ToStringObject(arg) : col.SqlFullName);
             }
             return string.Join(", ", result.ToArray());
         }
