@@ -63,6 +63,7 @@ namespace Test
                     col2 = default(bool)
                 }
             });
+
             Assert.AreEqual(query.ToSqlString(db => db.table1.col1 == 1), "(table1.col1) = (1)");
             Assert.AreEqual(query.ToSqlString(db => db.table1.col1 != 1), "(table1.col1) <> (1)");
             Assert.AreEqual(query.ToSqlString(db => db.table1.col1 < 1), "(table1.col1) < (1)");
@@ -74,6 +75,7 @@ namespace Test
             Assert.AreEqual(query.ToSqlString(db => db.table1.col1 * 1), "(table1.col1) * (1)");
             Assert.AreEqual(query.ToSqlString(db => db.table1.col1 / 1), "(table1.col1) / (1)");
             Assert.AreEqual(query.ToSqlString(db => db.table1.col1 % 1), "(table1.col1) % (1)");
+            Assert.AreEqual(query.ToSqlString(db => !db.table1.col2), "NOT (table1.col2)");
             Assert.AreEqual(query.ToSqlString(db => db.table1.col2 && false), "(table1.col2) AND (False)");
             Assert.AreEqual(query.ToSqlString(db => db.table1.col2 || false), "(table1.col2) OR (False)");
         }
@@ -90,9 +92,6 @@ namespace Test
             });
             Assert.AreEqual(query.ToSqlString(db => db.table1.col1 == 2 && (db.table1.col1 == 3 || db.table1.col1 == 4)),
                         "((table1.col1) = (2)) AND (((table1.col1) = (3)) OR ((table1.col1) = (4)))");
-
-            var x = 1;
-            query.ToSqlString(db => x);
         }
 
         [TestMethod]

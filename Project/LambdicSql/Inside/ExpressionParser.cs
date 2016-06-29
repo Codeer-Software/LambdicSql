@@ -44,7 +44,16 @@ namespace LambdicSql.Inside
         }
 
         string ToString(UnaryExpression unary)
-          => ToString(unary.Operand);
+        {
+            if (unary.NodeType == ExpressionType.Not)
+            {
+                return "NOT (" + ToString(unary.Operand) + ")";
+            }
+            else
+            {
+                return ToString(unary.Operand);
+            }
+        }
 
         string ToString(MethodCallExpression method)
         {
@@ -94,7 +103,6 @@ namespace LambdicSql.Inside
                 case ExpressionType.AndAlso: return "AND";
                 case ExpressionType.Or: return "OR";
                 case ExpressionType.OrElse: return "OR";
-                //TODO NOT
             }
             throw new NotImplementedException();
         }
