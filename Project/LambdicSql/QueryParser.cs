@@ -16,8 +16,12 @@ namespace LambdicSql
             return ToStringCore(query) + ";";
         }
 
+        public virtual string CustomOperator(Type type1, string @operator, Type type2) => @operator;
+
         internal string ToStringCore(IQueryInfo query)
         {
+            //TODO@@ init query info.
+
             _db = query.Db;
             _parser = new ExpressionParser(_db, this);
             return string.Join(Environment.NewLine, new[] {
@@ -66,7 +70,7 @@ namespace LambdicSql
             => element.Expression == null ? element.Name : ToString(element.Expression) + " AS \"" + element.Name + "\"";
 
         string ToString(Expression exp)
-            => _parser.ToString(exp);
+            => _parser.ToString(exp).Text;
 
         string ToString(FromInfo fromInfo)
             => "FROM" + Environment.NewLine + "\t" + string.Join(Environment.NewLine + "\t", new[] { fromInfo.MainTable.SqlFullName }.Concat(fromInfo.GetJoins().Select(e => ToString(e))).ToArray());

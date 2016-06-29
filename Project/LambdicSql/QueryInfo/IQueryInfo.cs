@@ -2,6 +2,7 @@
 
 namespace LambdicSql.QueryInfo
 {
+    //@@@ info to List<object>
     public interface IQueryInfo
     {
         DbInfo Db { get; }

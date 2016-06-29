@@ -7,6 +7,7 @@ using System.Reflection;
 
 namespace LambdicSql.Inside
 {
+    //@@@ to public.
     class ExpressionParser
     {
         QueryParser _queryParser;
@@ -18,12 +19,11 @@ namespace LambdicSql.Inside
             _queryParser = queryParser;
         }
 
-        internal static string GetElementName<TDB, T>(Expression<Func<TDB, T>> exp) where TDB : class
-        {
-            return GetElementName(exp.Body as MemberExpression);
-        }
+        internal static string GetElementName<TDB, T>(Expression<Func<TDB, T>> exp)
+            where TDB : class
+            => GetElementName(exp.Body as MemberExpression);
 
-        internal string ToString(Expression exp)
+        internal TypeAndText ToString(Expression exp)
         {
             var member = exp as MemberExpression;
             if (member != null) return ToString(member);
@@ -43,19 +43,11 @@ namespace LambdicSql.Inside
             throw new NotSupportedException();
         }
 
-        string ToString(UnaryExpression unary)
-        {
-            if (unary.NodeType == ExpressionType.Not)
-            {
-                return "NOT (" + ToString(unary.Operand) + ")";
-            }
-            else
-            {
-                return ToString(unary.Operand);
-            }
-        }
+        TypeAndText ToString(UnaryExpression unary)
+            => unary.NodeType == ExpressionType.Not ?
+                new TypeAndText(typeof(bool), "NOT (" + ToString(unary.Operand) + ")") : ToString(unary.Operand);
 
-        string ToString(MethodCallExpression method)
+        TypeAndText ToString(MethodCallExpression method)
         {
             //sub query.
             if (0 < method.Arguments.Count && typeof(IQuery).IsAssignableFrom(method.Arguments[0].Type))
@@ -64,16 +56,17 @@ namespace LambdicSql.Inside
                 var call = Expression.Call(null, GetType().
                     GetMethod("MakeQueryString", BindingFlags.Static|BindingFlags.NonPublic|BindingFlags.Public), new[] { method.Arguments[0], param });
                 var func = Expression.Lambda(call, new[] { param }).Compile();
-                return func.DynamicInvoke(_queryParser).ToString();
+                return new TypeAndText(func.Method.ReturnType, func.DynamicInvoke(_queryParser).ToString());
             }
 
             //db function.
+            //TODO allow static function 
             var arguments = new List<string>();
-            foreach (var arg in method.Arguments.Skip(1)) //skip this. TODO@ 両方使えるようにするか。IDBFuncsだったら。IDBFuncsを継承させる
+            foreach (var arg in method.Arguments.Skip(1)) //skip this. 
             {
-                arguments.Add(ToString(arg));
+                arguments.Add(ToString(arg).Text);
             }
-            return method.Method.Name + "(" + string.Join(", ", arguments.ToArray()) + ")";
+            return new TypeAndText(method.Method.ReturnType, method.Method.Name + "(" + string.Join(", ", arguments.ToArray()) + ")");
         }
 
         static string MakeQueryString(IQuery query, QueryParser queryParser)
@@ -81,53 +74,59 @@ namespace LambdicSql.Inside
                         Replace(Environment.NewLine, " ").Replace("\t", " ").
                         Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries)) + ")";
 
-        string ToString(BinaryExpression binary)
-            => "(" + ToString(binary.Left) + ") " + ToString(binary.NodeType) + " (" + ToString(binary.Right) + ")";
-
-        string ToString(ExpressionType nodeType)
+        TypeAndText ToString(BinaryExpression binary)
         {
+            var left = ToString(binary.Left);
+            var right = ToString(binary.Right);
+            var nodeType = ToString(left, binary.NodeType, right);
+            return new TypeAndText(nodeType.Type, "(" + left.Text + ") " + nodeType.Text + " (" + right.Text + ")");
+        }
+
+        TypeAndText ToString(TypeAndText left, ExpressionType nodeType, TypeAndText right)
+        {
+            Func<string, string> custom = @operator => _queryParser.CustomOperator(left.Type, @operator, right.Type);
             switch (nodeType)
             {
-                case ExpressionType.Equal: return "=";
-                case ExpressionType.NotEqual: return "<>";
-                case ExpressionType.LessThan: return "<";
-                case ExpressionType.LessThanOrEqual: return "<=";
-                case ExpressionType.GreaterThan: return ">";
-                case ExpressionType.GreaterThanOrEqual: return ">=";
-                case ExpressionType.Add: return "+";//TODO@@
-                case ExpressionType.Subtract: return "-";
-                case ExpressionType.Multiply: return "*";
-                case ExpressionType.Divide: return "/";
-                case ExpressionType.Modulo: return "%";
-                case ExpressionType.And: return "AND";
-                case ExpressionType.AndAlso: return "AND";
-                case ExpressionType.Or: return "OR";
-                case ExpressionType.OrElse: return "OR";
+                case ExpressionType.Equal: return new TypeAndText(typeof(bool), custom("="));
+                case ExpressionType.NotEqual: return new TypeAndText(typeof(bool), custom("<>"));
+                case ExpressionType.LessThan: return new TypeAndText(typeof(bool), custom("<"));
+                case ExpressionType.LessThanOrEqual: return new TypeAndText(typeof(bool), custom("<="));
+                case ExpressionType.GreaterThan: return new TypeAndText(typeof(bool), custom(">"));
+                case ExpressionType.GreaterThanOrEqual: return new TypeAndText(typeof(bool), custom(">="));
+                case ExpressionType.Add: return new TypeAndText(left.Type, custom("+"));
+                case ExpressionType.Subtract: return new TypeAndText(left.Type, custom("-"));
+                case ExpressionType.Multiply: return new TypeAndText(left.Type, custom("*"));
+                case ExpressionType.Divide: return new TypeAndText(left.Type, custom("/"));
+                case ExpressionType.Modulo: return new TypeAndText(left.Type, custom("%"));
+                case ExpressionType.And: return new TypeAndText(typeof(bool), custom("AND"));
+                case ExpressionType.AndAlso: return new TypeAndText(typeof(bool), custom("AND"));
+                case ExpressionType.Or: return new TypeAndText(typeof(bool), custom("OR"));
+                case ExpressionType.OrElse: return new TypeAndText(typeof(bool), custom("OR"));
             }
             throw new NotImplementedException();
         }
 
-        string ToString(ConstantExpression constant)
+        TypeAndText ToString(ConstantExpression constant)
         {
             var func = Expression.Lambda(constant).Compile();
-            return ToStringObject(func.DynamicInvoke());
+            return new TypeAndText(func.Method.ReturnType, ToStringObject(func.DynamicInvoke()));
         }
 
-        string ToString(MemberExpression member)
+        TypeAndText ToString(MemberExpression member)
         {
             var name = GetElementName(member);
             TableInfo table;
             if (_dbInfo.GetLambdaNameAndTable().TryGetValue(name, out table))
             {
-                return table.SqlFullName;
+                return new TypeAndText(null, table.SqlFullName);
             }
             ColumnInfo col;
             if (_dbInfo.GetLambdaNameAndColumn().TryGetValue(name, out col))
             {
-                return col.SqlFullName;
+                return new TypeAndText(col.Type, col.SqlFullName);
             }
             var func = Expression.Lambda(member).Compile();
-            return ToStringObject(func.DynamicInvoke().ToString());
+            return new TypeAndText(func.Method.ReturnType, ToStringObject(func.DynamicInvoke().ToString()));
         }
 
         static string GetElementName(MemberExpression exp)
@@ -141,7 +140,7 @@ namespace LambdicSql.Inside
             var exp = obj as Expression;
             if (exp != null)
             {
-                return ToString(exp);
+                return ToString(exp).Text;
             }
             Type type = obj.GetType();
             if (type == typeof(string) || type == typeof(DateTime))

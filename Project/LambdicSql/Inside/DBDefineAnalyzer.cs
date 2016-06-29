@@ -28,7 +28,7 @@ namespace LambdicSql.Inside
             {
                 //TODO@ if exist difference lambda name and sql name, I'll implement the spec. 
                 var name = string.Join(".", names.ToArray());
-                return new[] { new ColumnInfo(name, name) };
+                return new[] { new ColumnInfo(type, name, name) };
             }
             else if (type.IsClass)
             {

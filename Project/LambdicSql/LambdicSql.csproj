@@ -43,6 +43,7 @@
     <Compile Include="Inside\ExpressionParser.cs" />
     <Compile Include="Inside\SqlExecutor.cs" />
     <Compile Include="Inside\TestAdaptor.cs" />
+    <Compile Include="Inside\TypeAndText.cs" />
     <Compile Include="IQueryGroupBy.cs" />
     <Compile Include="IQueryFrom.cs" />
     <Compile Include="Inside\DBDefineAnalyzer.cs" />
