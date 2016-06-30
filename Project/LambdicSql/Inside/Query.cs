@@ -16,9 +16,9 @@ namespace LambdicSql.Inside
         public DbInfo Db { get; set; }
         public SelectClause Select { get; set; }
         public FromClause From { get; set; }
-        public ConditionClause Where { get; set; }
+        public WhereClause Where { get; set; }
         public GroupByClause GroupBy { get; set; }
-        public ConditionClause Having { get; set; }
+        public HavingClause Having { get; set; }
         public OrderByClause OrderBy { get; set; }
 
         internal Query() { }
@@ -30,11 +30,11 @@ namespace LambdicSql.Inside
                 Create = Create,
                 Db = Db,
                 Select = Select,
-                From = From == null ? null : From.Clone(),
-                Where = Where == null ? null : Where.Clone(),
+                From = From == null ? null : (FromClause)From.Clone(),
+                Where = Where == null ? null : (WhereClause)Where.Clone(),
                 GroupBy = GroupBy,
-                Having = Having == null ? null : Having.Clone(),
-                OrderBy = OrderBy == null ? null : OrderBy.Clone()
+                Having = Having == null ? null : (HavingClause)Having.Clone(),
+                OrderBy = OrderBy == null ? null : (OrderByClause)OrderBy.Clone()
             };
         }
 
@@ -46,11 +46,11 @@ namespace LambdicSql.Inside
                 Create = define,
                 Db = Db,
                 Select = Select,
-                From = From == null ? null : From.Clone(),
-                Where = Where == null ? null : Where.Clone(),
+                From = From == null ? null : (FromClause)From.Clone(),
+                Where = Where == null ? null : (WhereClause)Where.Clone(),
                 GroupBy = GroupBy,
-                Having = Having == null ? null : Having.Clone(),
-                OrderBy = OrderBy == null ? null : OrderBy.Clone()
+                Having = Having == null ? null : (HavingClause)Having.Clone(),
+                OrderBy = OrderBy == null ? null : (OrderByClause)OrderBy.Clone()
             };
         }
     }

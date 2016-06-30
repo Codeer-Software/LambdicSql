@@ -14,5 +14,8 @@ namespace LambdicSql.QueryInfo
             ConditionConnection = connection;
             Expression = expression;
         }
+
+        public string ToString(IExpressionDecoder decoder)
+           => decoder.ToString(Expression);
     }
 }

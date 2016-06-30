@@ -38,6 +38,7 @@
   <ItemGroup>
     <Compile Include="FromQueryExtensions.cs" />
     <Compile Include="IDbAdapter.cs" />
+    <Compile Include="IExpressionDecoder.cs" />
     <Compile Include="IHavingFuncs.cs" />
     <Compile Include="Inside\DbResult.cs" />
     <Compile Include="Inside\ExpressionDecoder.cs" />
@@ -55,12 +56,14 @@
     <Compile Include="QueryInfo\ConditionBetween.cs" />
     <Compile Include="QueryInfo\ConditionExpression.cs" />
     <Compile Include="QueryInfo\GroupByClause.cs" />
+    <Compile Include="IClause.cs" />
+    <Compile Include="QueryInfo\HavingClause.cs" />
     <Compile Include="QueryInfo\IDbResult.cs" />
     <Compile Include="Inside\SelectDefineAnalyzer.cs" />
-    <Compile Include="QueryInfo\ColumnInfo.cs" />
+    <Compile Include="ColumnInfo.cs" />
     <Compile Include="QueryInfo\ConditionConnection.cs" />
     <Compile Include="QueryInfo\ICondition.cs" />
-    <Compile Include="QueryInfo\DbInfo.cs" />
+    <Compile Include="DbInfo.cs" />
     <Compile Include="Inside\ExpressionToCreateFunc.cs" />
     <Compile Include="QueryInfo\FromClause.cs" />
     <Compile Include="Inside\Query.cs" />
@@ -74,7 +77,8 @@
     <Compile Include="QueryInfo\SelectElement.cs" />
     <Compile Include="QueryInfo\SelectClause.cs" />
     <Compile Include="Inside\SupportedTypeSpec.cs" />
-    <Compile Include="QueryInfo\TableInfo.cs" />
+    <Compile Include="QueryInfo\WhereClause.cs" />
+    <Compile Include="TableInfo.cs" />
     <Compile Include="QueryInfo\ConditionClause.cs" />
     <Compile Include="IQuery.cs" />
     <Compile Include="ISelectFuncs.cs" />

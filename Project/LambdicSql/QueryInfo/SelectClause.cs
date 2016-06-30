@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace LambdicSql.QueryInfo
 {
-    public class SelectClause
+    public class SelectClause : IClause
     {
         List<SelectElement> _elements = new List<SelectElement>();
 
@@ -12,5 +14,14 @@ namespace LambdicSql.QueryInfo
         {
             _elements.Add(element);
         }
+
+        public IClause Clone() => this;
+
+        public string ToString(IExpressionDecoder decoder)
+            => "SELECT" + Environment.NewLine + "\t" + 
+            string.Join("," + Environment.NewLine + "\t", _elements.Select(e => ToString(decoder, e)).ToArray());
+
+        string ToString(IExpressionDecoder decoder, SelectElement element)
+            => element.Expression == null ? element.Name : decoder.ToString(element.Expression) + " AS \"" + element.Name + "\"";
     }
 }

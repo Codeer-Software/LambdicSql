@@ -8,9 +8,9 @@ namespace LambdicSql.QueryInfo
         DbInfo Db { get; }
         SelectClause Select { get; }
         FromClause From { get; }
-        ConditionClause Where { get; }
+        WhereClause Where { get; }
         GroupByClause GroupBy { get; }
-        ConditionClause Having { get; }
+        HavingClause Having { get; }
         OrderByClause OrderBy { get; }
     }
 

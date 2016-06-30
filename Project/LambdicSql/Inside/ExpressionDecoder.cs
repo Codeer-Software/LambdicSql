@@ -7,18 +7,21 @@ using System.Reflection;
 
 namespace LambdicSql.Inside
 {
-    class ExpressionDecoder
+    class ExpressionDecoder : IExpressionDecoder
     {
         QueryDecoder _queryParser;
         DbInfo _dbInfo;
+
+        public DbInfo DbInfo => _dbInfo;
 
         internal ExpressionDecoder(DbInfo dbInfo, QueryDecoder queryParser)
         {
             _dbInfo = dbInfo;
             _queryParser = queryParser;
         }
+        public string ToString(Expression exp) => ToStringCore(exp).Text;
 
-        internal TypeAndText ToString(Expression exp)
+        internal TypeAndText ToStringCore(Expression exp)
         {
             var member = exp as MemberExpression;
             if (member != null) return ToString(member);
@@ -40,7 +43,7 @@ namespace LambdicSql.Inside
 
         TypeAndText ToString(UnaryExpression unary)
             => unary.NodeType == ExpressionType.Not ?
-                new TypeAndText(typeof(bool), "NOT (" + ToString(unary.Operand) + ")") : ToString(unary.Operand);
+                new TypeAndText(typeof(bool), "NOT (" + ToStringCore(unary.Operand) + ")") : ToStringCore(unary.Operand);
 
         TypeAndText ToString(MethodCallExpression method)
         {
@@ -59,7 +62,7 @@ namespace LambdicSql.Inside
             var arguments = new List<string>();
             foreach (var arg in method.Arguments.Skip(1)) //skip this. 
             {
-                arguments.Add(ToString(arg).Text);
+                arguments.Add(ToStringCore(arg).Text);
             }
             return new TypeAndText(method.Method.ReturnType, method.Method.Name + "(" + string.Join(", ", arguments.ToArray()) + ")");
         }
@@ -71,8 +74,8 @@ namespace LambdicSql.Inside
 
         TypeAndText ToString(BinaryExpression binary)
         {
-            var left = ToString(binary.Left);
-            var right = ToString(binary.Right);
+            var left = ToStringCore(binary.Left);
+            var right = ToStringCore(binary.Right);
             var nodeType = ToString(left, binary.NodeType, right);
             return new TypeAndText(nodeType.Type, "(" + left.Text + ") " + nodeType.Text + " (" + right.Text + ")");
         }
@@ -126,12 +129,12 @@ namespace LambdicSql.Inside
             return new TypeAndText(func.Method.ReturnType, ToStringObject(func.DynamicInvoke().ToString()));
         }
         
-        internal string ToStringObject(object obj)
+        public string ToStringObject(object obj)
         {
             var exp = obj as Expression;
             if (exp != null)
             {
-                return ToString(exp).Text;
+                return ToStringCore(exp).Text;
             }
             Type type = obj.GetType();
             if (type == typeof(string) || type == typeof(DateTime))
@@ -141,7 +144,7 @@ namespace LambdicSql.Inside
             return obj.ToString();
         }
 
-        internal string MakeSqlArguments(IEnumerable<object> src)
+        public string MakeSqlArguments(IEnumerable<object> src)
         {
             var result = new List<string>();
             foreach (var arg in src)

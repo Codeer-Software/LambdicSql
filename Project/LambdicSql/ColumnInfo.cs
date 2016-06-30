@@ -1,11 +1,14 @@
-﻿namespace LambdicSql.QueryInfo
+﻿using System;
+
+namespace LambdicSql
 {
-    public class TableInfo
+    public class ColumnInfo
     {
+        public Type Type { get; }
         public string LambdaFullName { get; }
         public string SqlFullName { get; }
 
-        public TableInfo(string lambdaFullName, string sqlFullName)
+        public ColumnInfo(Type type, string lambdaFullName, string sqlFullName)
         {
             LambdaFullName = lambdaFullName;
             SqlFullName = sqlFullName;

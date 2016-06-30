@@ -26,27 +26,27 @@ namespace LambdicSql
         public static IQueryWhere<TDB, TSelect> Where<TDB, TSelect>(this IQuery<TDB, TSelect> query)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Where = new ConditionClause());
+             => query.CustomClone(dst => dst.Where = new WhereClause());
 
         public static IQueryWhere<TDB, TSelect> Where<TDB, TSelect>(this IQuery<TDB, TSelect> query, Expression<Func<TDB, bool>> condition)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Where = new ConditionClause(condition.Body));
+             => query.CustomClone(dst => dst.Where = new WhereClause(condition.Body));
 
         public static IQueryWhere<TDB, TSelect> Where<TDB, TSelect>(this IQuery<TDB, TSelect> query, Expression<Func<TDB, IWhereFuncs, bool>> condition)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Where = new ConditionClause(condition.Body));
+             => query.CustomClone(dst => dst.Where = new WhereClause(condition.Body));
 
         public static IQueryHaving<TDB, TSelect> Having<TDB, TSelect>(this IQuery<TDB, TSelect> query)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Having = new ConditionClause());
+             => query.CustomClone(dst => dst.Having = new HavingClause());
         
         public static IQueryHaving<TDB, TSelect> Having<TDB, TSelect>(this IQuery<TDB, TSelect> query, Expression<Func<TDB, IHavingFuncs, bool>> condition)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Having = new ConditionClause(condition.Body));
+             => query.CustomClone(dst => dst.Having = new HavingClause(condition.Body));
 
         public static IQueryGroupBy<TDB, TSelect> GroupBy<TDB, TSelect>(this IQuery<TDB, TSelect> query, params Expression<Func<TDB, object>>[] targets)
             where TDB : class

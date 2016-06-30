@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace LambdicSql.QueryInfo
 {
-    //TODO()
-
     public class ConditionClause
     {
         bool _isNotCore;
@@ -34,16 +34,15 @@ namespace LambdicSql.QueryInfo
         public int ConditionCount => _conditions.Count;
         public ICondition[] GetConditions() => _conditions.ToArray();
 
-        public ConditionClause() { }
+        protected ConditionClause() { }
 
-        public ConditionClause(Expression exp)
+        protected ConditionClause(Expression exp)
         {
             _conditions.Add(new ConditionExpression(false, ConditionConnection.And, exp));
         }
 
-        public ConditionClause Clone()
+        protected ConditionClause Copy(ConditionClause dst)
         {
-            var dst = new ConditionClause();
             dst._conditions.AddRange(_conditions);
             dst._isNotCore = _isNotCore;
             dst._nextConnectionCore = _nextConnectionCore;
@@ -73,5 +72,26 @@ namespace LambdicSql.QueryInfo
 
         internal void Between(Expression target, object min, object max)
             => _conditions.Add(new ConditionBetween(IsNot, NextConnection, target, min, max));
+
+        protected string ToString(IExpressionDecoder decoder, string clause)
+            => ConditionCount == 0 ?
+                string.Empty :
+                string.Join(Environment.NewLine + "\t", new[] { clause }.Concat(GetConditions().Select((e, i) => ToString(decoder, e, i))).ToArray());
+
+        string ToString(IExpressionDecoder decoder, ICondition condition, int index)
+        {
+            var connection = string.Empty;
+            if (index != 0)
+            {
+                switch (condition.ConditionConnection)
+                {
+                    case ConditionConnection.And: connection = "AND "; break;
+                    case ConditionConnection.Or: connection = "OR "; break;
+                    default: throw new NotSupportedException();
+                }
+            }
+            var not = condition.IsNot ? "NOT " : string.Empty;
+            return connection + not + condition.ToString(decoder);
+        }
     }
 }

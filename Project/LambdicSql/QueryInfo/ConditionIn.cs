@@ -18,5 +18,8 @@ namespace LambdicSql.QueryInfo
             Target = target;
             _arguments = arguments;
         }
+
+        public string ToString(IExpressionDecoder decoder)
+            => decoder.ToString(Target) + " IN(" + decoder.MakeSqlArguments(GetArguments()) + ")";
     }
 }

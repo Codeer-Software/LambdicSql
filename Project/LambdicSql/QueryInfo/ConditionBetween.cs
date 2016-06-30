@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System;
+using System.Linq.Expressions;
 
 namespace LambdicSql.QueryInfo
 {
@@ -18,5 +19,8 @@ namespace LambdicSql.QueryInfo
             Min = min;
             Max = max;
         }
+
+        public string ToString(IExpressionDecoder decoder)
+            => decoder.ToString(Target) + " BETWEEN " + decoder.ToStringObject(Min) + " AND " + decoder.ToStringObject(Max);
     }
 }

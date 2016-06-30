@@ -16,5 +16,8 @@ namespace LambdicSql.QueryInfo
             Target = target;
             SearchText = searchText;
         }
+        
+        public string ToString(IExpressionDecoder decoder)
+            => decoder.ToString(Target) + " LIKE " + decoder.ToStringObject(SearchText);
     }
 }

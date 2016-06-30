@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace LambdicSql.QueryInfo
+namespace LambdicSql
 {
     //@@ add db type info.
     public class DbInfo
