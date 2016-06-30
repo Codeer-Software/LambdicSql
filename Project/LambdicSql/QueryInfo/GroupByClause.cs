@@ -3,12 +3,12 @@ using System.Linq;
 
 namespace LambdicSql.QueryInfo
 {
-    public class GroupByInfo
+    public class GroupByClause
     {
         Expression[] _elements;
         public Expression[] GetElements() => _elements.ToArray();
 
-        public GroupByInfo(Expression[] elements)
+        public GroupByClause(Expression[] elements)
         {
             _elements = elements;
         }

@@ -6,12 +6,12 @@ namespace LambdicSql.QueryInfo
     public interface IQueryInfo
     {
         DbInfo Db { get; }
-        SelectInfo Select { get; }
-        FromInfo From { get; }
-        ConditionClauseInfo Where { get; }
-        GroupByInfo GroupBy { get; }
-        ConditionClauseInfo Having { get; }
-        OrderByInfo OrderBy { get; }
+        SelectClause Select { get; }
+        FromClause From { get; }
+        ConditionClause Where { get; }
+        GroupByClause GroupBy { get; }
+        ConditionClause Having { get; }
+        OrderByClause OrderBy { get; }
     }
 
     public interface IQueryInfo<TSelect> : IQueryInfo

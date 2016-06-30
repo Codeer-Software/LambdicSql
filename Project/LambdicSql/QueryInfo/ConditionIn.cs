@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace LambdicSql.QueryInfo
 {
-    public class ConditionInfoIn : IConditionInfo
+    public class ConditionIn : ICondition
     {
         object[] _arguments { get; }
         public bool IsNot { get; }
@@ -11,7 +11,7 @@ namespace LambdicSql.QueryInfo
         public Expression Target { get; }
         public object[] GetArguments() => _arguments.ToArray();
 
-        public ConditionInfoIn(bool isNot, ConditionConnection connection, Expression target, object[] arguments)
+        public ConditionIn(bool isNot, ConditionConnection connection, Expression target, object[] arguments)
         {
             IsNot = isNot;
             ConditionConnection = connection;

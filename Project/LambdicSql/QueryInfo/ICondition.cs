@@ -1,6 +1,6 @@
 ﻿namespace LambdicSql.QueryInfo
 {
-    public interface IConditionInfo
+    public interface ICondition
     {
         bool IsNot { get; }
         ConditionConnection ConditionConnection { get; }

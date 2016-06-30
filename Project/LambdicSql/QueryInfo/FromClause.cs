@@ -3,31 +3,31 @@ using System.Linq.Expressions;
 
 namespace LambdicSql.QueryInfo
 {
-    public class FromInfo
+    public class FromClause
     {
-        List<JoinInfo> _join = new List<JoinInfo>();
+        List<JoinClause> _join = new List<JoinClause>();
 
         public string MainTableSqlFullName { get; }
         public Expression MainTable { get; }
-        public JoinInfo[] GetJoins() => _join.ToArray();
+        public JoinClause[] GetJoins() => _join.ToArray();
 
-        public FromInfo(string mainTableSqlFullName)
+        public FromClause(string mainTableSqlFullName)
         {
             MainTableSqlFullName = mainTableSqlFullName;
         }
 
-        public FromInfo(Expression mainTable)
+        public FromClause(Expression mainTable)
         {
             MainTable = mainTable;
         }
 
-        public FromInfo Clone()
+        public FromClause Clone()
         {
-            var clone = new FromInfo(MainTable);
+            var clone = new FromClause(MainTable);
             clone._join.AddRange(_join);
             return clone;
         }
 
-        internal void Join(JoinInfo join) => _join.Add(join);
+        internal void Join(JoinClause join) => _join.Add(join);
     }
 }

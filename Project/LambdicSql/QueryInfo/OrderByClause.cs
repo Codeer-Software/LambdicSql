@@ -3,14 +3,14 @@ using System.Linq.Expressions;
 
 namespace LambdicSql.QueryInfo
 {
-    public class OrderByInfo
+    public class OrderByClause
     {
         List<OrderByElement> _elements = new List<OrderByElement>();
         public OrderByElement[] GetElements() => _elements.ToArray();
 
-        public OrderByInfo Clone()
+        public OrderByClause Clone()
         {
-            var clone = new OrderByInfo();
+            var clone = new OrderByClause();
             clone._elements.AddRange(_elements);
             return clone;
         }

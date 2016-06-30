@@ -1,10 +1,11 @@
-﻿using System;
+﻿using LambdicSql.QueryInfo;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace LambdicSql.QueryInfo
+namespace LambdicSql.Inside
 {
-    public static class SupportedTypeSpec
+    static class SupportedTypeSpec
     {
         static List<Type> _supported = new List<Type>();
 
@@ -13,7 +14,7 @@ namespace LambdicSql.QueryInfo
             _supported.AddRange(typeof(IDbResult).GetMethods().Where(e=>e.DeclaringType == typeof(IDbResult)).Select(e=>e.ReturnType));
         }
 
-        public static bool IsSupported(Type type)
+        internal static bool IsSupported(Type type)
         {
             lock (_supported)
             {

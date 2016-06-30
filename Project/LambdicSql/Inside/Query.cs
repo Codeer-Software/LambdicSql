@@ -14,12 +14,12 @@ namespace LambdicSql.Inside
     {
         public Func<IDbResult, TSelect> Create { get; set; }
         public DbInfo Db { get; set; }
-        public SelectInfo Select { get; set; }
-        public FromInfo From { get; set; }
-        public ConditionClauseInfo Where { get; set; }
-        public GroupByInfo GroupBy { get; set; }
-        public ConditionClauseInfo Having { get; set; }
-        public OrderByInfo OrderBy { get; set; }
+        public SelectClause Select { get; set; }
+        public FromClause From { get; set; }
+        public ConditionClause Where { get; set; }
+        public GroupByClause GroupBy { get; set; }
+        public ConditionClause Having { get; set; }
+        public OrderByClause OrderBy { get; set; }
 
         internal Query() { }
 

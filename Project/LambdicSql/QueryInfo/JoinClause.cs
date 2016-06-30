@@ -2,12 +2,12 @@
 
 namespace LambdicSql.QueryInfo
 {
-    public class JoinInfo
+    public class JoinClause
     {
         public Expression JoinTable { get; }
         public Expression Condition { get; }
 
-        public JoinInfo(Expression joinTable, Expression condition)
+        public JoinClause(Expression joinTable, Expression condition)
         {
             JoinTable = joinTable;
             Condition = condition;

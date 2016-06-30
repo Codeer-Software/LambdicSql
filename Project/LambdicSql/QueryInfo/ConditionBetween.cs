@@ -2,19 +2,21 @@
 
 namespace LambdicSql.QueryInfo
 {
-    public class ConditionInfoLike : IConditionInfo
+    public class ConditionBetween : ICondition
     {
         public bool IsNot { get; }
         public ConditionConnection ConditionConnection { get; }
         public Expression Target { get; }
-        public object SearchText { get; }
+        public object Min { get; }
+        public object Max { get; }
         
-        public ConditionInfoLike(bool isNot, ConditionConnection connection, Expression target, object searchText)
+        public ConditionBetween(bool isNot, ConditionConnection connection, Expression target, object min, object max)
         {
             IsNot = isNot;
             ConditionConnection = connection;
             Target = target;
-            SearchText = searchText;
+            Min = min;
+            Max = max;
         }
     }
 }

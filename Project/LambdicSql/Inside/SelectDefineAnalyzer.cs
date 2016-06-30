@@ -7,9 +7,9 @@ namespace LambdicSql.Inside
 {
     static class SelectDefineAnalyzer
     {
-        internal static SelectInfo MakeSelectInfo(Expression exp)
+        internal static SelectClause MakeSelectInfo(Expression exp)
         {
-            var select = new SelectInfo();
+            var select = new SelectClause();
             var newExp = exp as NewExpression;
             if (newExp != null)
             {
@@ -29,7 +29,7 @@ namespace LambdicSql.Inside
                     }
 
                     var argMember = newExp.Arguments[i] as MemberExpression;
-                    select.Add(new SelectElementInfo(name, newExp.Arguments[i]));
+                    select.Add(new SelectElement(name, newExp.Arguments[i]));
                 }
             }
             else
@@ -37,7 +37,7 @@ namespace LambdicSql.Inside
                 var initExp = (MemberInitExpression)exp;
                 foreach (var b in initExp.Bindings.Cast<MemberAssignment>())
                 {
-                    select.Add(new SelectElementInfo(b.Member.Name, b.Expression));
+                    select.Add(new SelectElement(b.Member.Name, b.Expression));
                 }
             }
             return select;

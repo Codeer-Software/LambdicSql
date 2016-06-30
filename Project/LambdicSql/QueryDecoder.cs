@@ -6,6 +6,8 @@ using System.Linq.Expressions;
 
 namespace LambdicSql
 {
+    //@@@各句Infoに文字列化の能力を分散するかなー。
+    //→じゃあInfoではなく句っていう名前になるかなー。
     public class QueryDecoder
     {
         DbInfo _db;
@@ -17,6 +19,9 @@ namespace LambdicSql
         }
 
         public virtual string CustomOperator(Type type1, string @operator, Type type2) => @operator;
+
+        //@@@ Custom句Info?→いやーいらんか。　★じゃあ、これを継承じゃなくてもよくなってきたなー。IQueryDecodeCustomerとかにするか？
+        //★もっといい感じになるやろ。
 
         protected string ExpressionToString(Expression exp) => _parser.ToString(exp).Text;
 
@@ -36,21 +41,21 @@ namespace LambdicSql
             }.Where(e => !string.IsNullOrEmpty(e)).ToArray());
         }
 
-        SelectInfo Adjust(SelectInfo select)
+        SelectClause Adjust(SelectClause select)
         {
             if (select != null)
             {
                 return select;
             }
-            select = new SelectInfo();
+            select = new SelectClause();
             foreach (var e in _db.GetLambdaNameAndColumn())
             {
-                select.Add(new SelectElementInfo(e.Key, null));
+                select.Add(new SelectElement(e.Key, null));
             }
             return select;
         }
 
-        FromInfo Adjust(FromInfo from)
+        FromClause Adjust(FromClause from)
         {
             if (from != null)
             {
@@ -62,25 +67,25 @@ namespace LambdicSql
             {
                 throw new NotSupportedException();
             }
-            return new FromInfo(_db.GetLambdaNameAndTable().First().Value.SqlFullName);
+            return new FromClause(_db.GetLambdaNameAndTable().First().Value.SqlFullName);
         }
 
-        string ToString(SelectInfo selectInfo)
+        string ToString(SelectClause selectInfo)
             => "SELECT" + Environment.NewLine + "\t" + string.Join("," + Environment.NewLine + "\t", selectInfo.GetElements().Select(e => ToString(e)).ToArray());
 
-        string ToString(SelectElementInfo element)
+        string ToString(SelectElement element)
             => element.Expression == null ? element.Name : ExpressionToString(element.Expression) + " AS \"" + element.Name + "\"";
         
-        string ToString(FromInfo fromInfo)
+        string ToString(FromClause fromInfo)
         {
             string mainTable = string.IsNullOrEmpty(fromInfo.MainTableSqlFullName) ? ExpressionToTableName(fromInfo.MainTable) : fromInfo.MainTableSqlFullName;
             return "FROM" + Environment.NewLine + "\t" + string.Join(Environment.NewLine + "\t", new[] { mainTable }.Concat(fromInfo.GetJoins().Select(e => ToString(e))).ToArray());
         }
 
-        string ToString(JoinInfo join)
+        string ToString(JoinClause join)
             => "JOIN " + ExpressionToTableName(join.JoinTable) + " ON " + ExpressionToString(join.Condition);
 
-        string ToString(ConditionClauseInfo whereInfo, string clause)
+        string ToString(ConditionClause whereInfo, string clause)
             => (whereInfo == null || whereInfo.ConditionCount == 0) ?
                 string.Empty :
                 string.Join(Environment.NewLine + "\t", new[] { clause }.Concat(whereInfo.GetConditions().Select((e, i) => ToString(e, i))).ToArray());
@@ -88,14 +93,14 @@ namespace LambdicSql
         string ExpressionToTableName(Expression exp)
             => _db.GetLambdaNameAndTable()[ExpressionToString(exp)].SqlFullName;
 
-        string ToString(IConditionInfo condition, int index)
+        string ToString(ICondition condition, int index)
         {
             string text;
             var type = condition.GetType();
-            if (type == typeof(ConditionInfoExpression)) text = ToString((ConditionInfoExpression)condition);
-            else if (type == typeof(ConditionInfoIn)) text = ToString((ConditionInfoIn)condition);
-            else if (type == typeof(ConditionInfoLike)) text = ToString((ConditionInfoLike)condition);
-            else if (type == typeof(ConditionInfoBetween)) text = ToString((ConditionInfoBetween)condition);
+            if (type == typeof(ConditionExpression)) text = ToString((ConditionExpression)condition);
+            else if (type == typeof(ConditionIn)) text = ToString((ConditionIn)condition);
+            else if (type == typeof(ConditionLike)) text = ToString((ConditionLike)condition);
+            else if (type == typeof(ConditionBetween)) text = ToString((ConditionBetween)condition);
             else throw new NotSupportedException();
 
             var connection = string.Empty;
@@ -112,24 +117,24 @@ namespace LambdicSql
             return connection + not + text;
         }
 
-        string ToString(ConditionInfoBetween condition)
+        string ToString(ConditionBetween condition)
             => ExpressionToString(condition.Target) + " BETWEEN " + _parser.ToStringObject(condition.Min) + " AND " + _parser.ToStringObject(condition.Max);
 
-        string ToString(ConditionInfoExpression condition)
+        string ToString(ConditionExpression condition)
             => ExpressionToString(condition.Expression);
 
-        string ToString(ConditionInfoIn condition)
+        string ToString(ConditionIn condition)
             => ExpressionToString(condition.Target) + " IN(" + _parser.MakeSqlArguments(condition.GetArguments()) + ")";
 
-        string ToString(ConditionInfoLike condition)
+        string ToString(ConditionLike condition)
             => ExpressionToString(condition.Target) + " LIKE " + _parser.ToStringObject(condition.SearchText);
 
-        string ToString(GroupByInfo groupBy)
+        string ToString(GroupByClause groupBy)
             => (groupBy == null || groupBy.GetElements().Length == 0) ?
                 string.Empty :
                 "GROUP BY " + Environment.NewLine + "\t" + string.Join("," + Environment.NewLine + "\t", groupBy.GetElements().Select(e => ExpressionToString(e)).ToArray());
 
-        string ToString(OrderByInfo orderBy)
+        string ToString(OrderByClause orderBy)
             => (orderBy == null || orderBy.GetElements().Length == 0) ?
                 string.Empty :
                 "ORDER BY " + Environment.NewLine + "\t" + string.Join("," + Environment.NewLine + "\t", orderBy.GetElements().Select(e => ToString(e)).ToArray());
