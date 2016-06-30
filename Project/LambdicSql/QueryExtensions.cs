@@ -21,7 +21,7 @@ namespace LambdicSql
         public static IQueryFrom<TDB, TSelect> From<TDB, TSelect, T>(this IQuery<TDB, TSelect> query, Expression<Func<TDB, T>> table)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.From = new FromInfo(dst.Db.GetLambdaNameAndTable()[ExpressionParser.GetElementName(table)]));
+             => query.CustomClone(dst => dst.From = new FromInfo(table.Body));
 
         public static IQueryWhere<TDB, TSelect> Where<TDB, TSelect>(this IQuery<TDB, TSelect> query)
             where TDB : class

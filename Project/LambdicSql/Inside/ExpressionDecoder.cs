@@ -7,21 +7,16 @@ using System.Reflection;
 
 namespace LambdicSql.Inside
 {
-    //@@@ to public.
-    class ExpressionParser
+    class ExpressionDecoder
     {
-        QueryParser _queryParser;
+        QueryDecoder _queryParser;
         DbInfo _dbInfo;
 
-        internal ExpressionParser(DbInfo dbInfo, QueryParser queryParser)
+        internal ExpressionDecoder(DbInfo dbInfo, QueryDecoder queryParser)
         {
             _dbInfo = dbInfo;
             _queryParser = queryParser;
         }
-
-        internal static string GetElementName<TDB, T>(Expression<Func<TDB, T>> exp)
-            where TDB : class
-            => GetElementName(exp.Body as MemberExpression);
 
         internal TypeAndText ToString(Expression exp)
         {
@@ -52,7 +47,7 @@ namespace LambdicSql.Inside
             //sub query.
             if (0 < method.Arguments.Count && typeof(IQuery).IsAssignableFrom(method.Arguments[0].Type))
             {
-                var param = Expression.Parameter(typeof(QueryParser), "parser");
+                var param = Expression.Parameter(typeof(QueryDecoder), "parser");
                 var call = Expression.Call(null, GetType().
                     GetMethod("MakeQueryString", BindingFlags.Static|BindingFlags.NonPublic|BindingFlags.Public), new[] { method.Arguments[0], param });
                 var func = Expression.Lambda(call, new[] { param }).Compile();
@@ -69,7 +64,7 @@ namespace LambdicSql.Inside
             return new TypeAndText(method.Method.ReturnType, method.Method.Name + "(" + string.Join(", ", arguments.ToArray()) + ")");
         }
 
-        static string MakeQueryString(IQuery query, QueryParser queryParser)
+        static string MakeQueryString(IQuery query, QueryDecoder queryParser)
             => "(" + string.Join(" ", queryParser.ToStringCore((IQueryInfo)query).
                         Replace(Environment.NewLine, " ").Replace("\t", " ").
                         Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries)) + ")";
@@ -114,7 +109,9 @@ namespace LambdicSql.Inside
 
         TypeAndText ToString(MemberExpression member)
         {
-            var name = GetElementName(member);
+            //TODO I'll make best code.
+            var name = string.Join(".", member.ToString().Split('.').Skip(1).ToArray());
+
             TableInfo table;
             if (_dbInfo.GetLambdaNameAndTable().TryGetValue(name, out table))
             {
@@ -128,13 +125,7 @@ namespace LambdicSql.Inside
             var func = Expression.Lambda(member).Compile();
             return new TypeAndText(func.Method.ReturnType, ToStringObject(func.DynamicInvoke().ToString()));
         }
-
-        static string GetElementName(MemberExpression exp)
-        {
-            //TODO I'll make best code.
-            return string.Join(".", exp.ToString().Split('.').Skip(1).ToArray());
-        }
-
+        
         internal string ToStringObject(object obj)
         {
             var exp = obj as Expression;

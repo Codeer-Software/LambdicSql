@@ -6,10 +6,10 @@ using System.Linq.Expressions;
 
 namespace LambdicSql
 {
-    public class QueryParser
+    public class QueryDecoder
     {
         DbInfo _db;
-        ExpressionParser _parser;
+        ExpressionDecoder _parser;
 
         public string ToString(IQueryInfo query)
         {
@@ -18,12 +18,14 @@ namespace LambdicSql
 
         public virtual string CustomOperator(Type type1, string @operator, Type type2) => @operator;
 
+        protected string ExpressionToString(Expression exp) => _parser.ToString(exp).Text;
+
         internal string ToStringCore(IQueryInfo query)
         {
             //TODO@@ init query info.
 
             _db = query.Db;
-            _parser = new ExpressionParser(_db, this);
+            _parser = new ExpressionDecoder(_db, this);
             return string.Join(Environment.NewLine, new[] {
                 ToString(Adjust(query.Select)),
                 ToString(Adjust(query.From)),
@@ -60,28 +62,31 @@ namespace LambdicSql
             {
                 throw new NotSupportedException();
             }
-            return new FromInfo(_db.GetLambdaNameAndTable().First().Value);
+            return new FromInfo(_db.GetLambdaNameAndTable().First().Value.SqlFullName);
         }
 
         string ToString(SelectInfo selectInfo)
             => "SELECT" + Environment.NewLine + "\t" + string.Join("," + Environment.NewLine + "\t", selectInfo.GetElements().Select(e => ToString(e)).ToArray());
 
         string ToString(SelectElementInfo element)
-            => element.Expression == null ? element.Name : ToString(element.Expression) + " AS \"" + element.Name + "\"";
-
-        string ToString(Expression exp)
-            => _parser.ToString(exp).Text;
-
+            => element.Expression == null ? element.Name : ExpressionToString(element.Expression) + " AS \"" + element.Name + "\"";
+        
         string ToString(FromInfo fromInfo)
-            => "FROM" + Environment.NewLine + "\t" + string.Join(Environment.NewLine + "\t", new[] { fromInfo.MainTable.SqlFullName }.Concat(fromInfo.GetJoins().Select(e => ToString(e))).ToArray());
+        {
+            string mainTable = string.IsNullOrEmpty(fromInfo.MainTableSqlFullName) ? ExpressionToTableName(fromInfo.MainTable) : fromInfo.MainTableSqlFullName;
+            return "FROM" + Environment.NewLine + "\t" + string.Join(Environment.NewLine + "\t", new[] { mainTable }.Concat(fromInfo.GetJoins().Select(e => ToString(e))).ToArray());
+        }
 
         string ToString(JoinInfo join)
-            => "JOIN " + join.JoinTable.SqlFullName + " ON " + ToString(join.Condition);
+            => "JOIN " + ExpressionToTableName(join.JoinTable) + " ON " + ExpressionToString(join.Condition);
 
         string ToString(ConditionClauseInfo whereInfo, string clause)
             => (whereInfo == null || whereInfo.ConditionCount == 0) ?
                 string.Empty :
                 string.Join(Environment.NewLine + "\t", new[] { clause }.Concat(whereInfo.GetConditions().Select((e, i) => ToString(e, i))).ToArray());
+
+        string ExpressionToTableName(Expression exp)
+            => _db.GetLambdaNameAndTable()[ExpressionToString(exp)].SqlFullName;
 
         string ToString(IConditionInfo condition, int index)
         {
@@ -108,21 +113,21 @@ namespace LambdicSql
         }
 
         string ToString(ConditionInfoBetween condition)
-            => ToString(condition.Target) + " BETWEEN " + _parser.ToStringObject(condition.Min) + " AND " + _parser.ToStringObject(condition.Max);
+            => ExpressionToString(condition.Target) + " BETWEEN " + _parser.ToStringObject(condition.Min) + " AND " + _parser.ToStringObject(condition.Max);
 
         string ToString(ConditionInfoExpression condition)
-            => ToString(condition.Expression);
+            => ExpressionToString(condition.Expression);
 
         string ToString(ConditionInfoIn condition)
-            => ToString(condition.Target) + " IN(" + _parser.MakeSqlArguments(condition.GetArguments()) + ")";
+            => ExpressionToString(condition.Target) + " IN(" + _parser.MakeSqlArguments(condition.GetArguments()) + ")";
 
         string ToString(ConditionInfoLike condition)
-            => ToString(condition.Target) + " LIKE " + _parser.ToStringObject(condition.SearchText);
+            => ExpressionToString(condition.Target) + " LIKE " + _parser.ToStringObject(condition.SearchText);
 
         string ToString(GroupByInfo groupBy)
             => (groupBy == null || groupBy.GetElements().Length == 0) ?
                 string.Empty :
-                "GROUP BY " + Environment.NewLine + "\t" + string.Join("," + Environment.NewLine + "\t", groupBy.GetElements().Select(e => ToString(e)).ToArray());
+                "GROUP BY " + Environment.NewLine + "\t" + string.Join("," + Environment.NewLine + "\t", groupBy.GetElements().Select(e => ExpressionToString(e)).ToArray());
 
         string ToString(OrderByInfo orderBy)
             => (orderBy == null || orderBy.GetElements().Length == 0) ?
@@ -130,6 +135,6 @@ namespace LambdicSql
                 "ORDER BY " + Environment.NewLine + "\t" + string.Join("," + Environment.NewLine + "\t", orderBy.GetElements().Select(e => ToString(e)).ToArray());
 
         string ToString(OrderByElement element)
-            => ToString(element.Target) + " " + element.Order;
+            => ExpressionToString(element.Target) + " " + element.Order;
     }
 }

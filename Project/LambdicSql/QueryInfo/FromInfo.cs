@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace LambdicSql.QueryInfo
 {
@@ -6,14 +7,20 @@ namespace LambdicSql.QueryInfo
     {
         List<JoinInfo> _join = new List<JoinInfo>();
 
-        public TableInfo MainTable { get; }
+        public string MainTableSqlFullName { get; }
+        public Expression MainTable { get; }
         public JoinInfo[] GetJoins() => _join.ToArray();
 
-        public FromInfo(TableInfo mainTable)
+        public FromInfo(string mainTableSqlFullName)
+        {
+            MainTableSqlFullName = mainTableSqlFullName;
+        }
+
+        public FromInfo(Expression mainTable)
         {
             MainTable = mainTable;
         }
-        
+
         public FromInfo Clone()
         {
             var clone = new FromInfo(MainTable);

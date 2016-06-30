@@ -40,7 +40,7 @@
     <Compile Include="IDbAdapter.cs" />
     <Compile Include="IHavingFuncs.cs" />
     <Compile Include="Inside\DbResult.cs" />
-    <Compile Include="Inside\ExpressionParser.cs" />
+    <Compile Include="Inside\ExpressionDecoder.cs" />
     <Compile Include="Inside\SqlExecutor.cs" />
     <Compile Include="Inside\TestAdaptor.cs" />
     <Compile Include="Inside\TypeAndText.cs" />
@@ -83,7 +83,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryExtensions.cs" />
     <Compile Include="HavingFuncsExtensions.cs" />
-    <Compile Include="QueryParser.cs" />
+    <Compile Include="QueryDecoder.cs" />
     <Compile Include="Sql.cs" />
     <Compile Include="SqlServer\SqlServerAdapter.cs" />
     <Compile Include="SqlServer\SqlServerQueryParser.cs" />

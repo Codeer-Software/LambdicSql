@@ -5,7 +5,7 @@ namespace LambdicSql
 {
     public interface IDbAdapter
     {
-        QueryParser CreateParser();
+        QueryDecoder CreateParser();
         DbCommand CreateCommand();
         DbConnection CreateConnection();
     }
