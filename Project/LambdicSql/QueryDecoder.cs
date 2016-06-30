@@ -1,5 +1,4 @@
 ﻿using LambdicSql.Inside;
-using LambdicSql.QueryInfo;
 using System;
 using System.Linq;
 

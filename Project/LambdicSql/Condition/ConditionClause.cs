@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace LambdicSql.QueryInfo
+namespace LambdicSql.Condition
 {
     public class ConditionClause
     {

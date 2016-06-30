@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LambdicSql.QueryInfo
+namespace LambdicSql
 {
     //@@@ info to List<object>
     public interface IQueryInfo

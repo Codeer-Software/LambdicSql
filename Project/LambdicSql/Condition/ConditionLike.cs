@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace LambdicSql.QueryInfo
+namespace LambdicSql.Condition
 {
     public class ConditionLike : ICondition
     {

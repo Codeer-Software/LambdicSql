@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LambdicSql.QueryInfo
+namespace LambdicSql
 {
     public interface IDbResult
     {

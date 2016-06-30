@@ -1,6 +1,5 @@
 ﻿using LambdicSql;
 using LambdicSql.Inside;
-using LambdicSql.QueryInfo;
 using LambdicSql.SqlServer;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;

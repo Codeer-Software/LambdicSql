@@ -1,9 +1,10 @@
-﻿using System;
+﻿using LambdicSql.Inside;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace LambdicSql.QueryInfo
+namespace LambdicSql
 {
     public class FromClause : IClause
     {
@@ -31,7 +32,7 @@ namespace LambdicSql.QueryInfo
         }
 
         internal void Join(JoinClause join) => _join.Add(join);
-        
+
         public string ToString(IExpressionDecoder decoder)
         {
             string mainTable = string.IsNullOrEmpty(MainTableSqlFullName) ? ExpressionToTableName(decoder, MainTable) : MainTableSqlFullName;
@@ -44,4 +45,34 @@ namespace LambdicSql.QueryInfo
         string ExpressionToTableName(IExpressionDecoder decoder, Expression exp)
             => decoder.DbInfo.GetLambdaNameAndTable()[decoder.ToString(exp)].SqlFullName;
     }
+
+    public class JoinClause
+    {
+        public Expression JoinTable { get; }
+        public Expression Condition { get; }
+
+        public JoinClause(Expression joinTable, Expression condition)
+        {
+            JoinTable = joinTable;
+            Condition = condition;
+        }
+    }
+
+    public static class FromQueryExtensions
+    {
+        public static IQueryFrom<TDB, TSelect> From<TDB, TSelect, T>(this IQuery<TDB, TSelect> query, Expression<Func<TDB, T>> table)
+            where TDB : class
+            where TSelect : class
+             => query.CustomClone(dst => dst.From = new FromClause(table.Body));
+
+        public static IQueryFrom<TDB, TSelect> Join<TDB, TSelect>(this IQueryFrom<TDB, TSelect> query, Expression<Func<TDB, object>> table, Expression<Func<TDB, bool>> condition)
+            where TDB : class
+            where TSelect : class
+             => query.CustomClone(dst => dst.From.Join(new JoinClause(table.Body, condition.Body)));
+    }
+
+    public interface IQueryFrom<TDB, TSelect> : IQuery<TDB, TSelect>
+        where TDB : class
+        where TSelect : class
+    { }
 }

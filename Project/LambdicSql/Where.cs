@@ -1,12 +1,40 @@
-﻿using LambdicSql.Inside;
+﻿using LambdicSql.Condition;
+using LambdicSql.Inside;
 using System;
-using System.Linq.Expressions;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace LambdicSql
 {
+    public class WhereClause : ConditionClause, IClause
+    {
+        public WhereClause() { }
+        public WhereClause(Expression exp) : base(exp) { }
+
+        public IClause Clone() => (WhereClause)Copy(new WhereClause());
+        public string ToString(IExpressionDecoder decoder) => ToString(decoder, "WHERE");
+    }
+    public interface IQueryWhere<TDB, TSelect> : IQuery<TDB, TSelect>
+        where TDB : class
+        where TSelect : class
+    { }
     public static class WhereQueryExtensions
     {
+        public static IQueryWhere<TDB, TSelect> Where<TDB, TSelect>(this IQuery<TDB, TSelect> query)
+            where TDB : class
+            where TSelect : class
+             => query.CustomClone(dst => dst.Where = new WhereClause());
+
+        public static IQueryWhere<TDB, TSelect> Where<TDB, TSelect>(this IQuery<TDB, TSelect> query, Expression<Func<TDB, bool>> condition)
+            where TDB : class
+            where TSelect : class
+             => query.CustomClone(dst => dst.Where = new WhereClause(condition.Body));
+
+        public static IQueryWhere<TDB, TSelect> Where<TDB, TSelect>(this IQuery<TDB, TSelect> query, Expression<Func<TDB, IWhereFuncs, bool>> condition)
+            where TDB : class
+            where TSelect : class
+             => query.CustomClone(dst => dst.Where = new WhereClause(condition.Body));
+
         public static IQueryWhere<TDB, TSelect> Not<TDB, TSelect>(this IQueryWhere<TDB, TSelect> query)
             where TDB : class
             where TSelect : class

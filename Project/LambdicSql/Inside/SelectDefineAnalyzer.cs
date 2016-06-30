@@ -1,5 +1,4 @@
-﻿using LambdicSql.QueryInfo;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using System.Reflection;
 using System.Linq;
 

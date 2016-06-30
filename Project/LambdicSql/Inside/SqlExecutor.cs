@@ -1,5 +1,4 @@
-﻿using LambdicSql.QueryInfo;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace LambdicSql.Inside
 {

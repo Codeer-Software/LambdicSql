@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using System.Linq;
 
-namespace LambdicSql.QueryInfo
+namespace LambdicSql.Condition
 {
     public class ConditionIn : ICondition
     {

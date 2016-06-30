@@ -1,4 +1,4 @@
-﻿namespace LambdicSql.QueryInfo
+﻿namespace LambdicSql.Condition
 {
     public interface ICondition
     {
