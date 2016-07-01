@@ -58,5 +58,9 @@ namespace LambdicSql.Inside
                 OrderBy = OrderBy == null ? null : (OrderByClause)OrderBy.Clone()
             };
         }
+
+
+        //@@@
+        public IClause[] GetClausesClone() => null;
     }
 }
