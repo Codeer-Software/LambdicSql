@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 using System.Linq;
+using LambdicSql.Clause.Select;
 
 namespace LambdicSql.Inside
 {

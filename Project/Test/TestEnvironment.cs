@@ -1,4 +1,5 @@
 ﻿using LambdicSql;
+using LambdicSql.QueryBase;
 using LambdicSql.SqlServer;
 using System;
 using System.IO;

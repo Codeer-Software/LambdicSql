@@ -1,4 +1,5 @@
 ﻿using LambdicSql;
+using LambdicSql.QueryBase;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 

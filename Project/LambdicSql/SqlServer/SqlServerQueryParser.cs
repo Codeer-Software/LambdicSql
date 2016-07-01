@@ -1,4 +1,6 @@
-﻿namespace LambdicSql.SqlServer
+﻿using LambdicSql.QueryBase;
+
+namespace LambdicSql.SqlServer
 {
     public class SqlServerQueryParser : QueryDecoder { }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LambdicSql.QueryBase;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 

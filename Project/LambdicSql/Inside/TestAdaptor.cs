@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using LambdicSql.QueryBase;
+using System.Linq.Expressions;
 
 namespace LambdicSql.Inside
 {

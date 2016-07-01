@@ -1,4 +1,5 @@
-﻿using System.Data.Common;
+﻿using LambdicSql.QueryBase;
+using System.Data.Common;
 using System.Data.SqlClient;
 
 namespace LambdicSql.SqlServer

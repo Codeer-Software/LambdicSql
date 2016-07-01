@@ -1,11 +1,17 @@
-﻿using System;
+﻿using LambdicSql.QueryBase;
+using LambdicSql.Clause.From;
+using System;
+using LambdicSql.Clause.GroupBy;
+using LambdicSql.Clause.Having;
+using LambdicSql.Clause.OrderBy;
+using LambdicSql.Clause.Select;
+using LambdicSql.Clause.Where;
 
 namespace LambdicSql.Inside
 {
     class Query<TDB, TSelect> : IQueryFrom<TDB, TSelect>,
                                 IQueryWhere<TDB, TSelect>,
                                 IQueryHaving<TDB, TSelect>,
-                                IQueryGroupBy<TDB, TSelect>,
                                 IQueryOrderBy<TDB, TSelect>,
                                 IQueryInfo<TSelect>
         where TDB : class

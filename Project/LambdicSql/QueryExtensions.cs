@@ -1,4 +1,5 @@
 ﻿using LambdicSql.Inside;
+using LambdicSql.QueryBase;
 
 namespace LambdicSql
 {
