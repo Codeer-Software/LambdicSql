@@ -9,7 +9,7 @@ namespace LambdicSql.Inside
         IDbAdapter _adaptor;
         IQuery<TSelect> _info;
 
-        public string CommandText => ExpressionDecoder.ToString(_info, _adaptor.CreateQueryCustomizer());
+        public string CommandText => SqlStringConverter.ToString(_info, _adaptor.CreateQueryCustomizer());
 
         internal DbExecutor(IDbAdapter adaptor, IQuery<TSelect> info)
         {

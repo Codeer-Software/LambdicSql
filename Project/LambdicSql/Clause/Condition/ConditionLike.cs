@@ -18,7 +18,7 @@ namespace LambdicSql.Clause.Condition
             SearchText = searchText;
         }
         
-        public string ToString(IExpressionDecoder decoder)
-            => decoder.ToString(Target) + " LIKE " + decoder.ToStringObject(SearchText);
+        public string ToString(ISqlStringConverter decoder)
+            => decoder.ToString(Target) + " LIKE " + decoder.ToString(SearchText);
     }
 }

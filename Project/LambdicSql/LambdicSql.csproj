@@ -57,9 +57,9 @@
     <Compile Include="QueryBase\IQueryCustomizer.cs" />
     <Compile Include="QueryBase\Query.cs" />
     <Compile Include="QueryBase\IDbAdapter.cs" />
-    <Compile Include="QueryBase\IExpressionDecoder.cs" />
+    <Compile Include="QueryBase\ISqlStringConverter.cs" />
     <Compile Include="Inside\DbResult.cs" />
-    <Compile Include="Inside\ExpressionDecoder.cs" />
+    <Compile Include="Inside\SqlStringConverter.cs" />
     <Compile Include="Inside\DbExecutor.cs" />
     <Compile Include="Inside\TestAdaptor.cs" />
     <Compile Include="QueryBase\DecodedInfo.cs" />

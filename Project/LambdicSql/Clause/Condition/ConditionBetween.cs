@@ -20,7 +20,7 @@ namespace LambdicSql.Clause.Condition
             Max = max;
         }
 
-        public string ToString(IExpressionDecoder decoder)
-            => decoder.ToString(Target) + " BETWEEN " + decoder.ToStringObject(Min) + " AND " + decoder.ToStringObject(Max);
+        public string ToString(ISqlStringConverter decoder)
+            => decoder.ToString(Target) + " BETWEEN " + decoder.ToString(Min) + " AND " + decoder.ToString(Max);
     }
 }

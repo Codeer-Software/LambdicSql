@@ -6,6 +6,6 @@ namespace LambdicSql.Clause.Condition
     {
         bool IsNot { get; }
         ConditionConnection ConditionConnection { get; }
-        string ToString(IExpressionDecoder decoder);
+        string ToString(ISqlStringConverter decoder);
     }
 }

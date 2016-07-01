@@ -10,6 +10,6 @@ namespace LambdicSql.Clause.Where
         public WhereClause(Expression exp) : base(exp) { }
 
         public IClause Clone() => (WhereClause)Copy(new WhereClause());
-        public string ToString(IExpressionDecoder decoder) => ToString(decoder, "WHERE");
+        public string ToString(ISqlStringConverter decoder) => ToString(decoder, "WHERE");
     }
 }

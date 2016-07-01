@@ -7,8 +7,8 @@ namespace LambdicSql.Inside
     public static class TestAdaptor
     {
         public static string ToSqlString(DbInfo info, Expression exp)
-            => new ExpressionDecoder(info, null).ToStringCore(exp).Text;
+            => new SqlStringConverter(info, null).ToString(exp);
         public static string ToSqlString(IQuery query)
-            => ExpressionDecoder.ToString(query, null);
+            => SqlStringConverter.ToString(query, null);
     }
 }

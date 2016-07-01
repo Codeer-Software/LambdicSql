@@ -20,7 +20,7 @@ namespace LambdicSql.Clause.Condition
             _arguments = arguments;
         }
 
-        public string ToString(IExpressionDecoder decoder)
-            => decoder.ToString(Target) + " IN(" + decoder.MakeSqlArguments(GetArguments()) + ")";
+        public string ToString(ISqlStringConverter decoder)
+            => decoder.ToString(Target) + " IN(" + string.Join(", ", GetArguments().Select(e=>decoder.ToString(e)).ToArray()) + ")";
     }
 }

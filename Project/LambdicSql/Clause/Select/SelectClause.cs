@@ -18,11 +18,11 @@ namespace LambdicSql.Clause.Select
 
         public IClause Clone() => this;
 
-        public string ToString(IExpressionDecoder decoder)
+        public string ToString(ISqlStringConverter decoder)
             => "SELECT" + Environment.NewLine + "\t" +
             string.Join("," + Environment.NewLine + "\t", _elements.Select(e => ToString(decoder, e)).ToArray());
 
-        string ToString(IExpressionDecoder decoder, SelectElement element)
+        string ToString(ISqlStringConverter decoder, SelectElement element)
             => element.Expression == null ? element.Name : decoder.ToString(element.Expression) + " AS \"" + element.Name + "\"";
     }
 }

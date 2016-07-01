@@ -74,12 +74,12 @@ namespace LambdicSql.Clause.Condition
         internal void Between(Expression target, object min, object max)
             => _conditions.Add(new ConditionBetween(IsNot, NextConnection, target, min, max));
 
-        protected string ToString(IExpressionDecoder decoder, string clause)
+        protected string ToString(ISqlStringConverter decoder, string clause)
             => ConditionCount == 0 ?
                 string.Empty :
                 string.Join(Environment.NewLine + "\t", new[] { clause }.Concat(GetConditions().Select((e, i) => ToString(decoder, e, i))).ToArray());
 
-        string ToString(IExpressionDecoder decoder, ICondition condition, int index)
+        string ToString(ISqlStringConverter decoder, ICondition condition, int index)
         {
             var connection = string.Empty;
             if (index != 0)

@@ -16,7 +16,7 @@ namespace LambdicSql.Clause.Condition
             Expression = expression;
         }
 
-        public string ToString(IExpressionDecoder decoder)
+        public string ToString(ISqlStringConverter decoder)
            => decoder.ToString(Expression);
     }
 }

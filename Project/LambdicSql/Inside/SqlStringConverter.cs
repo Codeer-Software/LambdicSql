@@ -1,20 +1,19 @@
 ﻿using LambdicSql.QueryBase;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
 namespace LambdicSql.Inside
 {
-    class ExpressionDecoder : IExpressionDecoder
+    class SqlStringConverter : ISqlStringConverter
     {
         DbInfo _dbInfo;
         IQueryCustomizer _queryCustomizer;
 
         public DbInfo DbInfo => _dbInfo;
 
-        internal ExpressionDecoder(DbInfo dbInfo, IQueryCustomizer queryCustomizer)
+        internal SqlStringConverter(DbInfo dbInfo, IQueryCustomizer queryCustomizer)
         {
             _dbInfo = dbInfo;
             _queryCustomizer = queryCustomizer;
@@ -23,10 +22,10 @@ namespace LambdicSql.Inside
         internal static string ToString(IQuery query, IQueryCustomizer queryCustomizer)
             => ToStringCore(query, queryCustomizer) + ";";
 
-        internal static string ToStringCore(IQuery query, IQueryCustomizer queryCustomizer)
-           => new ExpressionDecoder(query.Db, queryCustomizer).ToString(query);
+        static string ToStringCore(IQuery query, IQueryCustomizer queryCustomizer)
+           => new SqlStringConverter(query.Db, queryCustomizer).ToString(query);
         
-        internal string ToString(IQuery query)
+        string ToString(IQuery query)
         {
             var clauses = query.GetClausesClone();
             if (_queryCustomizer != null)
@@ -36,9 +35,22 @@ namespace LambdicSql.Inside
             return string.Join(Environment.NewLine, clauses.Select(e => e.ToString(this)).ToArray());
         }
 
-        public string ToString(Expression exp) => ToStringCore(exp).Text;
-
-        internal DecodedInfo ToStringCore(Expression exp)
+        public string ToString(object obj)
+        {
+            var exp = obj as Expression;
+            if (exp != null)
+            {
+                return ToString(exp).Text;
+            }
+            Type type = obj.GetType();
+            if (type == typeof(string) || type == typeof(DateTime))
+            {
+                return "'" + obj + "'";
+            }
+            return obj.ToString();
+        }
+        
+        DecodedInfo ToString(Expression exp)
         {
             var member = exp as MemberExpression;
             if (member != null) return ToString(member);
@@ -60,7 +72,7 @@ namespace LambdicSql.Inside
 
         DecodedInfo ToString(UnaryExpression unary)
             => unary.NodeType == ExpressionType.Not ?
-                new DecodedInfo(typeof(bool), "NOT (" + ToStringCore(unary.Operand) + ")") : ToStringCore(unary.Operand);
+                new DecodedInfo(typeof(bool), "NOT (" + ToString(unary.Operand) + ")") : ToString(unary.Operand);
 
         DecodedInfo ToString(MethodCallExpression method)
         {
@@ -78,14 +90,14 @@ namespace LambdicSql.Inside
             if (method.Arguments.Count == 0 || !typeof(IDBFuncs).IsAssignableFrom(method.Arguments[0].Type))
             {
                 var func = Expression.Lambda(method).Compile();
-                return new DecodedInfo(func.Method.ReturnType, ToStringObject(func.DynamicInvoke()));
+                return new DecodedInfo(func.Method.ReturnType, ToString(func.DynamicInvoke()));
             }
                 
             //db function.IDBFuncs
             var argumentsSrc = method.Arguments.Skip(1).ToArray();//skip this. 
 
             //custom
-            var arguments = argumentsSrc.Select(e => ToStringCore(e)).ToArray();
+            var arguments = argumentsSrc.Select(e => ToString(e)).ToArray();
             if (_queryCustomizer != null)
             {
                 var customed = _queryCustomizer.CustomFunction(method.Method.ReturnType, method.Method.Name, arguments);
@@ -104,8 +116,8 @@ namespace LambdicSql.Inside
 
         DecodedInfo ToString(BinaryExpression binary)
         {
-            var left = ToStringCore(binary.Left);
-            var right = ToStringCore(binary.Right);
+            var left = ToString(binary.Left);
+            var right = ToString(binary.Right);
             var nodeType = ToString(left, binary.NodeType, right);
             return new DecodedInfo(nodeType.Type, "(" + left.Text + ") " + nodeType.Text + " (" + right.Text + ")");
         }
@@ -137,7 +149,7 @@ namespace LambdicSql.Inside
         DecodedInfo ToString(ConstantExpression constant)
         {
             var func = Expression.Lambda(constant).Compile();
-            return new DecodedInfo(func.Method.ReturnType, ToStringObject(func.DynamicInvoke()));
+            return new DecodedInfo(func.Method.ReturnType, ToString(func.DynamicInvoke()));
         }
 
         DecodedInfo ToString(MemberExpression member)
@@ -156,33 +168,7 @@ namespace LambdicSql.Inside
                 return new DecodedInfo(col.Type, col.SqlFullName);
             }
             var func = Expression.Lambda(member).Compile();
-            return new DecodedInfo(func.Method.ReturnType, ToStringObject(func.DynamicInvoke().ToString()));
-        }
-        
-        public string ToStringObject(object obj)
-        {
-            var exp = obj as Expression;
-            if (exp != null)
-            {
-                return ToStringCore(exp).Text;
-            }
-            Type type = obj.GetType();
-            if (type == typeof(string) || type == typeof(DateTime))
-            {
-                return "'" + obj + "'";
-            }
-            return obj.ToString();
-        }
-
-        public string MakeSqlArguments(IEnumerable<object> src)
-        {
-            var result = new List<string>();
-            foreach (var arg in src)
-            {
-                var col = arg as ColumnInfo;
-                result.Add(col == null ? ToStringObject(arg) : col.SqlFullName);
-            }
-            return string.Join(", ", result.ToArray());
+            return new DecodedInfo(func.Method.ReturnType, ToString(func.DynamicInvoke().ToString()));
         }
     }
 }

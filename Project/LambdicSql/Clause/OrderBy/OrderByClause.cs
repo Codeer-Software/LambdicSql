@@ -20,12 +20,12 @@ namespace LambdicSql.Clause.OrderBy
             return clone;
         }
 
-        public string ToString(IExpressionDecoder decoder)
+        public string ToString(ISqlStringConverter decoder)
             => GetElements().Length == 0 ?
                 string.Empty :
                 "ORDER BY " + Environment.NewLine + "\t" + string.Join("," + Environment.NewLine + "\t", GetElements().Select(e => ToString(decoder, e)).ToArray());
 
-        string ToString(IExpressionDecoder decoder, OrderByElement element)
+        string ToString(ISqlStringConverter decoder, OrderByElement element)
             => decoder.ToString(element.Target) + " " + element.Order;
     }
 }

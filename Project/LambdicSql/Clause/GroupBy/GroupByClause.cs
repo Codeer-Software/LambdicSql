@@ -15,7 +15,7 @@ namespace LambdicSql.Clause.GroupBy
             _elements = elements;
         }
 
-        public string ToString(IExpressionDecoder decoder)
+        public string ToString(ISqlStringConverter decoder)
             => GetElements().Length == 0 ?
                 string.Empty :
                 "GROUP BY " + Environment.NewLine + "\t" + string.Join("," + Environment.NewLine + "\t", GetElements().Select(e => decoder.ToString(e)).ToArray());

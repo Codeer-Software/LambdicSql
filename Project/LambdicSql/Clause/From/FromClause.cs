@@ -32,7 +32,7 @@ namespace LambdicSql.Clause.From
             return clone;
         }
 
-        public string ToString(IExpressionDecoder decoder)
+        public string ToString(ISqlStringConverter decoder)
         {
             string mainTable = string.IsNullOrEmpty(MainTableSqlFullName) ? ExpressionToTableName(decoder, MainTable) : MainTableSqlFullName;
             return "FROM" + Environment.NewLine + "\t" + string.Join(Environment.NewLine + "\t", new[] { mainTable }.Concat(GetJoins().Select(e => ToString(decoder, e))).ToArray());
@@ -40,10 +40,10 @@ namespace LambdicSql.Clause.From
 
         internal void Join(JoinElement join) => _join.Add(join);
 
-        string ToString(IExpressionDecoder decoder, JoinElement join)
+        string ToString(ISqlStringConverter decoder, JoinElement join)
             => "JOIN " + ExpressionToTableName(decoder, join.JoinTable) + " ON " + decoder.ToString(join.Condition);
 
-        string ExpressionToTableName(IExpressionDecoder decoder, Expression exp)
+        string ExpressionToTableName(ISqlStringConverter decoder, Expression exp)
             => decoder.DbInfo.GetLambdaNameAndTable()[decoder.ToString(exp)].SqlFullName;
     }
 
