@@ -9,14 +9,9 @@ namespace LambdicSql
 {
     public static class SelectClauseExtensions
     {
-        public static IQuery<TDB, TSelect, SelectClause> Select<TDB, TSelect>(this IQuery<TDB, TDB> query, Expression<Func<TDB, TSelect>> define)
-            where TDB : class
-            where TSelect : class
-            => SelectCore<TDB, TSelect>(query, define);
-
         public static IQuery<TDB, TDB, SelectClause> Select<TDB>(this IQuery<TDB, TDB> query)
             where TDB : class
-        { 
+        {
             var select = new SelectClause();
             foreach (var e in query.Db.GetLambdaNameAndColumn())
             {
@@ -24,7 +19,12 @@ namespace LambdicSql
             }
             return new ClauseMakingQuery<TDB, TDB, SelectClause>(query, select);
         }
-        
+
+        public static IQuery<TDB, TSelect, SelectClause> Select<TDB, TSelect>(this IQuery<TDB, TDB> query, Expression<Func<TDB, TSelect>> define)
+            where TDB : class
+            where TSelect : class
+            => SelectCore<TDB, TSelect>(query, define);
+
         public static IQuery<TDB, TSelect, SelectClause> Select<TDB, TSelect>(this IQuery<TDB, TDB> query, Expression<Func<TDB, ISelectFuncs, TSelect>> define)
             where TDB : class
             where TSelect : class
@@ -34,11 +34,8 @@ namespace LambdicSql
             where TDB : class
             where TSelect : class
         {
-            var src = query as Query<TDB, TDB>;
             var select = SelectDefineAnalyzer.MakeSelectInfo(define.Body);
-
             var indexInSelect = select.GetElements().Select(e => e.Name).ToList();
-
             return new ClauseMakingQuery<TDB, TSelect, SelectClause>(query.Db,
                 ExpressionToCreateFunc.ToCreateUseDbResult<TSelect>(name => indexInSelect.IndexOf(name), define.Body),
                 query.GetClausesClone().Concat(new IClause[] { select }).ToArray());

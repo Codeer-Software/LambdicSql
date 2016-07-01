@@ -8,7 +8,6 @@ namespace LambdicSql.Clause.Having
     {
         public HavingClause() { }
         public HavingClause(Expression exp) : base(exp) { }
-
         public IClause Clone() => (HavingClause)Copy(new HavingClause());
         public string ToString(IExpressionDecoder decoder) => ToString(decoder, "HAVING");
     }

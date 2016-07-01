@@ -19,6 +19,7 @@ namespace LambdicSql.Inside
             _dbInfo = dbInfo;
             _queryParser = queryParser;
         }
+
         public string ToString(Expression exp) => ToStringCore(exp).Text;
 
         internal TypeAndText ToStringCore(Expression exp)

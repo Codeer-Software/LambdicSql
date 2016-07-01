@@ -18,6 +18,7 @@ namespace LambdicSql.Inside
             var data = _reader[index];
             return data == null ? default(string) : data.ToString();
         }
+
         public bool GetBoolean(int index)
         {
             var data = _reader[index];
@@ -25,6 +26,7 @@ namespace LambdicSql.Inside
                    data is bool ? (bool)data :
                    bool.Parse(data.ToString());
         }
+
         public byte GetByte(int index)
         {
             var data = _reader[index];
@@ -32,6 +34,7 @@ namespace LambdicSql.Inside
                    data is byte ? (byte)data :
                    byte.Parse(data.ToString());
         }
+
         public short GetInt16(int index)
         {
             var data = _reader[index];
@@ -39,6 +42,7 @@ namespace LambdicSql.Inside
                    data is short ? (short)data :
                    short.Parse(data.ToString());
         }
+
         public int GetInt32(int index)
         {
             var data = _reader[index];
@@ -46,6 +50,7 @@ namespace LambdicSql.Inside
                    data is int ? (int)data :
                    int.Parse(data.ToString());
         }
+
         public long GetInt64(int index)
         {
             var data = _reader[index];
@@ -53,6 +58,7 @@ namespace LambdicSql.Inside
                    data is long ? (long)data :
                    long.Parse(data.ToString());
         }
+
         public float GetSingle(int index)
         {
             var data = _reader[index];
@@ -60,6 +66,7 @@ namespace LambdicSql.Inside
                    data is float ? (float)data :
                    float.Parse(data.ToString());
         }
+
         public double GetDouble(int index)
         {
             var data = _reader[index];
@@ -67,6 +74,7 @@ namespace LambdicSql.Inside
                    data is double ? (double)data :
                    double.Parse(data.ToString());
         }
+
         public decimal GetDecimal(int index)
         {
             var data = _reader[index];

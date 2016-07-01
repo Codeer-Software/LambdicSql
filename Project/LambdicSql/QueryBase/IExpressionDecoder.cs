@@ -7,7 +7,9 @@ namespace LambdicSql.QueryBase
     {
         DbInfo DbInfo { get; }
         string ToString(Expression exp);
+
+        //TODO check.
         string ToStringObject(object obj);
-        string MakeSqlArguments(IEnumerable<object> v);
+        string MakeSqlArguments(IEnumerable<object> args);
     }
 }

@@ -1,12 +1,10 @@
 ﻿using LambdicSql.Inside;
-using LambdicSql.Clause.From;
 using System;
 using System.Linq;
-using LambdicSql.Clause.Select;
 
 namespace LambdicSql.QueryBase
 {
-    //TODO rename
+    //TODO rename internal
     public class QueryDecoder
     {
         DbInfo _db;
@@ -27,7 +25,5 @@ namespace LambdicSql.QueryBase
             _parser = new ExpressionDecoder(_db, this);
             return string.Join(Environment.NewLine, query.GetClausesClone().Select(e=>e.ToString(_parser)).ToArray());
         }
-
-        
     }
 }

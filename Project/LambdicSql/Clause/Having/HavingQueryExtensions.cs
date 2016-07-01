@@ -1,5 +1,4 @@
 ﻿using LambdicSql.Clause.Having;
-using LambdicSql.Inside;
 using LambdicSql.QueryBase;
 using System;
 using System.Linq.Expressions;

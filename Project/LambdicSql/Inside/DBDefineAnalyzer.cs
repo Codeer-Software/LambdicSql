@@ -8,7 +8,7 @@ namespace LambdicSql.Inside
 {
     static class DBDefineAnalyzer
     {
-        internal static Query<T, T> CreateQuery<T>(Expression<Func<T>> define)
+        internal static IQuery<T, T> CreateQuery<T>(Expression<Func<T>> define)
            where T : class
         {
             var db = new DbInfo();
@@ -18,7 +18,7 @@ namespace LambdicSql.Inside
             }
             var indexInSelect = db.GetLambdaNameAndColumn().Keys.ToList();
             var create = ExpressionToCreateFunc.ToCreateUseDbResult<T>(name => indexInSelect.IndexOf(name), define.Body);
-            return new Query<T, T>(db, create);
+            return new ClauseMakingQuery<T, T, IClause>(db, create, new IClause[0]);
         }
 
         static IEnumerable<ColumnInfo> FindColumns(Type type, IEnumerable<string> names)

@@ -17,8 +17,7 @@ namespace LambdicSql.QueryBase
     public interface IQuery<TDB, TSelect> : IQuery<TSelect>
         where TDB : class
         where TSelect : class
-    {
-    }
+    { }
 
     public interface IQuery<TDB, TSelect, TClause> : IQuery<TDB, TSelect>
         where TDB : class

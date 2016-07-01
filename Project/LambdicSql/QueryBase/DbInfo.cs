@@ -3,7 +3,6 @@ using System.Linq;
 
 namespace LambdicSql.QueryBase
 {
-    //@@ add db type info.
     public class DbInfo
     {
         Dictionary<string, ColumnInfo> _lambdaNameAndColumn = new Dictionary<string, ColumnInfo>();
