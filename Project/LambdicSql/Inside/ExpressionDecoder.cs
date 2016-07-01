@@ -9,15 +9,27 @@ namespace LambdicSql.Inside
 {
     class ExpressionDecoder : IExpressionDecoder
     {
-        QueryDecoder _queryParser;
         DbInfo _dbInfo;
+        IQueryCustomizer _queryCustomizer;
 
         public DbInfo DbInfo => _dbInfo;
 
-        internal ExpressionDecoder(DbInfo dbInfo, QueryDecoder queryParser)
+        internal ExpressionDecoder(DbInfo dbInfo, IQueryCustomizer queryCustomizer)
         {
             _dbInfo = dbInfo;
-            _queryParser = queryParser;
+            _queryCustomizer = queryCustomizer;
+        }
+
+        internal static string ToString(IQuery query, IQueryCustomizer queryCustomizer)
+            => ToStringCore(query, queryCustomizer) + ";";
+
+        internal static string ToStringCore(IQuery query, IQueryCustomizer queryCustomizer)
+           => new ExpressionDecoder(query.Db, queryCustomizer).ToString(query);
+        
+        internal string ToString(IQuery query)
+        {
+            //TODO@@ init query info.
+            return string.Join(Environment.NewLine, query.GetClausesClone().Select(e => e.ToString(this)).ToArray());
         }
 
         public string ToString(Expression exp) => ToStringCore(exp).Text;
@@ -51,11 +63,11 @@ namespace LambdicSql.Inside
             //sub query.
             if (0 < method.Arguments.Count && typeof(IQuery).IsAssignableFrom(method.Arguments[0].Type))
             {
-                var param = Expression.Parameter(typeof(QueryDecoder), "parser");
+                var param = Expression.Parameter(typeof(IQueryCustomizer), "queryCustomizer");
                 var call = Expression.Call(null, GetType().
                     GetMethod("MakeQueryString", BindingFlags.Static|BindingFlags.NonPublic|BindingFlags.Public), new[] { method.Arguments[0], param });
                 var func = Expression.Lambda(call, new[] { param }).Compile();
-                return new TypeAndText(func.Method.ReturnType, func.DynamicInvoke(_queryParser).ToString());
+                return new TypeAndText(func.Method.ReturnType, func.DynamicInvoke(_queryCustomizer).ToString());
             }
 
             //db function.
@@ -65,11 +77,13 @@ namespace LambdicSql.Inside
             {
                 arguments.Add(ToStringCore(arg).Text);
             }
+
+            //TODO@@ custom function.
             return new TypeAndText(method.Method.ReturnType, method.Method.Name + "(" + string.Join(", ", arguments.ToArray()) + ")");
         }
 
-        static string MakeQueryString(IQuery query, QueryDecoder queryParser)
-            => "(" + string.Join(" ", queryParser.ToStringCore((IQuery)query).
+        static string MakeQueryString(IQuery query, IQueryCustomizer queryCustomizer)
+            => "(" + string.Join(" ", ToStringCore(query, queryCustomizer).
                         Replace(Environment.NewLine, " ").Replace("\t", " ").
                         Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries)) + ")";
 
@@ -83,7 +97,7 @@ namespace LambdicSql.Inside
 
         TypeAndText ToString(TypeAndText left, ExpressionType nodeType, TypeAndText right)
         {
-            Func<string, string> custom = @operator => _queryParser.CustomOperator(left.Type, @operator, right.Type);
+            Func<string, string> custom = @operator => _queryCustomizer == null ? @operator : _queryCustomizer.CustomOperator(left.Type, @operator, right.Type);
             switch (nodeType)
             {
                 case ExpressionType.Equal: return new TypeAndText(typeof(bool), custom("="));

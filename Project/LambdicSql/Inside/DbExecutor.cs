@@ -3,15 +3,15 @@ using System.Collections.Generic;
 
 namespace LambdicSql.Inside
 {
-    class SqlExecutor<TSelect> : IDBExecutor<TSelect>
+    class DbExecutor<TSelect> : IDbExecutor<TSelect>
         where TSelect : class
     {
         IDbAdapter _adaptor;
         IQuery<TSelect> _info;
 
-        public string CommandText => new QueryDecoder().ToString(_info);
+        public string CommandText => ExpressionDecoder.ToString(_info, _adaptor.CreateQueryCustomizer());
 
-        internal SqlExecutor(IDbAdapter adaptor, IQuery<TSelect> info)
+        internal DbExecutor(IDbAdapter adaptor, IQuery<TSelect> info)
         {
             _adaptor = adaptor;
             _info = info;
@@ -38,7 +38,6 @@ namespace LambdicSql.Inside
                         }
                         return list;
                     }
-
                 }
             }
         }

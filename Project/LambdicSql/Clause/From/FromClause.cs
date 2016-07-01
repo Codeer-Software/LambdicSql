@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 
 namespace LambdicSql.Clause.From
 {
+    //TODO sub query in From clauses
     public class FromClause : IClause
     {
         List<JoinElement> _join = new List<JoinElement>();

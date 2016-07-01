@@ -27,4 +27,3 @@ namespace LambdicSql.QueryBase
         IQuery<TDB, TSelect, TClause> CustomClone(Action<TClause> custom);
     }
 }
-

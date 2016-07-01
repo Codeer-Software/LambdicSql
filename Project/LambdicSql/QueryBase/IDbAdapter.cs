@@ -8,6 +8,4 @@ namespace LambdicSql.QueryBase
         DbCommand CreateCommand();
         DbConnection CreateConnection();
     }
-
-    public interface IQueryCustomizer { }
 }

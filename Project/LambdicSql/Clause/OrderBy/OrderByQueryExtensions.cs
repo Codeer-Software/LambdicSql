@@ -12,8 +12,6 @@ namespace LambdicSql
             where TSelect : class
             => new ClauseMakingQuery<TDB, TSelect, OrderByClause>(query, new OrderByClause());
 
-        public static T ToSubQuery<T>(this IQuery query) => default(T);
-
         public static IQuery<TDB, TSelect, OrderByClause> ASC<TDB, TSelect, T>(this IQuery<TDB, TSelect, OrderByClause> query, Expression<Func<TDB, T>> exp)
             where TDB : class
             where TSelect : class

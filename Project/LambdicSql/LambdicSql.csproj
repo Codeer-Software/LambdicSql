@@ -53,16 +53,17 @@
     <Compile Include="Clause\Where\IWhereFuncs.cs" />
     <Compile Include="Clause\Where\WhereClause.cs" />
     <Compile Include="Clause\Where\WhereFuncsExtensions.cs" />
+    <Compile Include="QueryBase\IQueryCustomizer.cs" />
     <Compile Include="QueryBase\Query.cs" />
     <Compile Include="QueryBase\IDbAdapter.cs" />
     <Compile Include="QueryBase\IExpressionDecoder.cs" />
     <Compile Include="Inside\DbResult.cs" />
     <Compile Include="Inside\ExpressionDecoder.cs" />
-    <Compile Include="Inside\SqlExecutor.cs" />
+    <Compile Include="Inside\DbExecutor.cs" />
     <Compile Include="Inside\TestAdaptor.cs" />
     <Compile Include="Inside\TypeAndText.cs" />
     <Compile Include="Inside\DBDefineAnalyzer.cs" />
-    <Compile Include="QueryBase\IDBExecutor.cs" />
+    <Compile Include="QueryBase\IDbExecutor.cs" />
     <Compile Include="Clause\Condition\ConditionBetween.cs" />
     <Compile Include="Clause\Condition\ConditionExpression.cs" />
     <Compile Include="Clause\GroupBy\GroupByExtensions.cs" />
@@ -84,7 +85,6 @@
     <Compile Include="QueryBase\IQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryExtensions.cs" />
-    <Compile Include="Inside\QueryDecoder.cs" />
     <Compile Include="Sql.cs" />
     <Compile Include="SqlServer\SqlServerAdapter.cs" />
     <Compile Include="Clause\Where\WhereQueryExtensions.cs" />
