@@ -80,7 +80,6 @@
     <Compile Include="Inside\ExpressionToCreateFunc.cs" />
     <Compile Include="Inside\Query.cs" />
     <Compile Include="Clause\Condition\ConditionIn.cs" />
-    <Compile Include="QueryBase\IQueryInfo.cs" />
     <Compile Include="Clause\Condition\ConditionLike.cs" />
     <Compile Include="Clause\OrderBy\OrderByQueryExtensions.cs" />
     <Compile Include="Inside\SupportedTypeSpec.cs" />

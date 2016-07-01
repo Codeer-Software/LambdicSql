@@ -198,19 +198,19 @@ namespace Test
         public static string ToQueryString<TDB, TSelect>(this IQuery<TDB, TSelect> query)
             where TDB : class
             where TSelect : class
-            => new SqlServerAdapter().CreateParser().ToString(query as IQueryInfo);
+            => new SqlServerAdapter().CreateParser().ToString(query as IQuery);
 
         internal static string ToSqlString<T, TRet>(this IQuery<T, T> query, Expression<Func<T, TRet>> exp)
             where T : class
         {
-            var info = query as IQueryInfo;
+            var info = query as IQuery;
             return TestAdaptor.ToSqlString(info.Db, exp.Body);
         }
 
         internal static string ToSqlString<T, TRet>(this IQuery<T, T> query, Expression<Func<T, IFuncs, TRet>> exp)
             where T : class
         {
-            var info = query as IQueryInfo;
+            var info = query as IQuery;
             return TestAdaptor.ToSqlString(info.Db, exp.Body);
         }
     }

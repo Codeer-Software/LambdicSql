@@ -4,13 +4,14 @@ using System.Collections.Generic;
 namespace LambdicSql.Inside
 {
     class SqlExecutor<TSelect> : IDBExecutor<TSelect>
+        where TSelect : class
     {
         IDbAdapter _adaptor;
-        IQueryInfo<TSelect> _info;
+        IQuery<TSelect> _info;
 
         public string CommandText => _adaptor.CreateParser().ToString(_info);
 
-        internal SqlExecutor(IDbAdapter adaptor, IQueryInfo<TSelect> info)
+        internal SqlExecutor(IDbAdapter adaptor, IQuery<TSelect> info)
         {
             _adaptor = adaptor;
             _info = info;

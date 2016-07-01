@@ -13,7 +13,7 @@ namespace LambdicSql.Inside
                                 IQueryWhere<TDB, TSelect>,
                                 IQueryHaving<TDB, TSelect>,
                                 IQueryOrderBy<TDB, TSelect>,
-                                IQueryInfo<TSelect>
+                                IQuery<TSelect>
         where TDB : class
         where TSelect : class
     {

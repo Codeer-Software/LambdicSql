@@ -68,7 +68,7 @@ namespace LambdicSql.Inside
         }
 
         static string MakeQueryString(IQuery query, QueryDecoder queryParser)
-            => "(" + string.Join(" ", queryParser.ToStringCore((IQueryInfo)query).
+            => "(" + string.Join(" ", queryParser.ToStringCore((IQuery)query).
                         Replace(Environment.NewLine, " ").Replace("\t", " ").
                         Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries)) + ")";
 

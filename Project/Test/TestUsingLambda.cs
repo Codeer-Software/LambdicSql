@@ -70,7 +70,7 @@ namespace Test
                     col4 = 0
                 }
             });
-            var info = query as IQueryInfo;
+            var info = query as IQuery;
 
             Assert.AreEqual(info.Db.GetLambdaNameAndColumn().Count, 4);
             Assert.AreEqual(info.Db.GetLambdaNameAndColumn()["table1.col1"].LambdaFullName, "table1.col1");
@@ -98,7 +98,7 @@ namespace Test
                     }
                 }
             });
-            var info = query as IQueryInfo;
+            var info = query as IQuery;
 
             Assert.AreEqual(info.Db.GetLambdaNameAndColumn().Count, 4);
             Assert.AreEqual(info.Db.GetLambdaNameAndColumn()["table1.col1"].LambdaFullName, "table1.col1");

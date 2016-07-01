@@ -12,14 +12,14 @@ namespace LambdicSql.QueryBase
         DbInfo _db;
         ExpressionDecoder _parser;
 
-        public string ToString(IQueryInfo query)
+        public string ToString(IQuery query)
         {
             return ToStringCore(query) + ";";
         }
 
         public virtual string CustomOperator(Type type1, string @operator, Type type2) => @operator;
 
-        internal string ToStringCore(IQueryInfo query)
+        internal string ToStringCore(IQuery query)
         {
             //TODO@@ init query info.
 

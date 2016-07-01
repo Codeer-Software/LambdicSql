@@ -25,7 +25,7 @@ namespace Test
         internal T Create<T>(IQuery<T, T> query)
             where T : class
         {
-            var info = query as IQueryInfo<T>;
+            var info = query as IQuery<T>;
             return info.Create(this);
         }
     }
