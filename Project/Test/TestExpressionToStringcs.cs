@@ -105,6 +105,9 @@ namespace Test
                 }
             });
             Assert.AreEqual(query.ToSqlString((db, func) => func.Sum(1)), "Sum(1)");
+
+            int x = 100;
+            Assert.AreEqual(query.ToSqlString((db, func) => (x + 10).ToString()), "'110'");
         }
 
         [TestMethod]
@@ -186,7 +189,7 @@ namespace Test
         }
     }
 
-    interface IFuncs { }
+    interface IFuncs : IDBFuncs{ }
 
     static class FuncsExtensions
     { 

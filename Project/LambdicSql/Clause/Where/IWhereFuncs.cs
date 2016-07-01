@@ -1,4 +1,6 @@
-﻿namespace LambdicSql.Clause.Where
+﻿using LambdicSql.QueryBase;
+
+namespace LambdicSql.Clause.Where
 {
-    public interface IWhereFuncs { }
+    public interface IWhereFuncs : IDBFuncs { }
 }
