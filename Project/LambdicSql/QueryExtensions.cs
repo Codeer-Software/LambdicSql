@@ -14,7 +14,7 @@ namespace LambdicSql
              where TDB : class
              where TSelect : class
         {
-            return new SqlExecutor<TSelect>(adaptor, query as Query<TDB, TSelect>);
+            return new SqlExecutor<TSelect>(adaptor, query as IQuery<TDB, TSelect>);
         }
     }
 }

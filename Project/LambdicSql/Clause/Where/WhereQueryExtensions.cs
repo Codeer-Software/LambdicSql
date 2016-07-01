@@ -9,84 +9,84 @@ namespace LambdicSql
 {
     public static class WhereQueryExtensions
     {
-        public static IQueryWhere<TDB, TSelect> Where<TDB, TSelect>(this IQuery<TDB, TSelect> query)
+        public static IQuery<TDB, TSelect, WhereClause> Where<TDB, TSelect>(this IQuery<TDB, TSelect> query)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Where = new WhereClause());
+             => new ClauseMakingQuery<TDB, TSelect, WhereClause>(query, new WhereClause());
 
-        public static IQueryWhere<TDB, TSelect> Where<TDB, TSelect>(this IQuery<TDB, TSelect> query, Expression<Func<TDB, bool>> condition)
+        public static IQuery<TDB, TSelect, WhereClause> Where<TDB, TSelect>(this IQuery<TDB, TSelect> query, Expression<Func<TDB, bool>> condition)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Where = new WhereClause(condition.Body));
+             => new ClauseMakingQuery<TDB, TSelect, WhereClause>(query, new WhereClause(condition.Body));
 
-        public static IQueryWhere<TDB, TSelect> Where<TDB, TSelect>(this IQuery<TDB, TSelect> query, Expression<Func<TDB, IWhereFuncs, bool>> condition)
+        public static IQuery<TDB, TSelect, WhereClause> Where<TDB, TSelect>(this IQuery<TDB, TSelect> query, Expression<Func<TDB, IWhereFuncs, bool>> condition)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Where = new WhereClause(condition.Body));
+             => new ClauseMakingQuery<TDB, TSelect, WhereClause>(query, new WhereClause(condition.Body));
 
-        public static IQueryWhere<TDB, TSelect> Not<TDB, TSelect>(this IQueryWhere<TDB, TSelect> query)
+        public static IQuery<TDB, TSelect, WhereClause> Not<TDB, TSelect>(this IQuery<TDB, TSelect, WhereClause> query)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Where.Not());
+             => query.CustomClone(e => e.Not());
 
-        public static IQueryWhere<TDB, TSelect> And<TDB, TSelect>(this IQueryWhere<TDB, TSelect> query, Expression<Func<TDB, bool>> condition)
+        public static IQuery<TDB, TSelect, WhereClause> And<TDB, TSelect>(this IQuery<TDB, TSelect, WhereClause> query, Expression<Func<TDB, bool>> condition)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Where.And(condition.Body));
+             => query.CustomClone(e => e.And(condition.Body));
 
-        public static IQueryWhere<TDB, TSelect> And<TDB, TSelect>(this IQueryWhere<TDB, TSelect> query, Expression<Func<TDB, IWhereFuncs, bool>> condition)
+        public static IQuery<TDB, TSelect, WhereClause> And<TDB, TSelect>(this IQuery<TDB, TSelect, WhereClause> query, Expression<Func<TDB, IWhereFuncs, bool>> condition)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Where.And(condition.Body));
+             => query.CustomClone(e => e.And(condition.Body));
 
-        public static IQueryWhere<TDB, TSelect> And<TDB, TSelect>(this IQueryWhere<TDB, TSelect> query)
+        public static IQuery<TDB, TSelect, WhereClause> And<TDB, TSelect>(this IQuery<TDB, TSelect, WhereClause> query)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Where.And());
+             => query.CustomClone(e => e.And());
 
-        public static IQueryWhere<TDB, TSelect> Or<TDB, TSelect>(this IQueryWhere<TDB, TSelect> query, Expression<Func<TDB, bool>> condition)
+        public static IQuery<TDB, TSelect, WhereClause> Or<TDB, TSelect>(this IQuery<TDB, TSelect, WhereClause> query, Expression<Func<TDB, bool>> condition)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Where.Or(condition.Body));
+             => query.CustomClone(e => e.Or(condition.Body));
 
-        public static IQueryWhere<TDB, TSelect> Or<TDB, TSelect>(this IQueryWhere<TDB, TSelect> query, Expression<Func<TDB, IWhereFuncs, bool>> condition)
+        public static IQuery<TDB, TSelect, WhereClause> Or<TDB, TSelect>(this IQuery<TDB, TSelect, WhereClause> query, Expression<Func<TDB, IWhereFuncs, bool>> condition)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Where.Or(condition.Body));
+             => query.CustomClone(e => e.Or(condition.Body));
 
-        public static IQueryWhere<TDB, TSelect> Or<TDB, TSelect>(this IQueryWhere<TDB, TSelect> query)
+        public static IQuery<TDB, TSelect, WhereClause> Or<TDB, TSelect>(this IQuery<TDB, TSelect, WhereClause> query)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Where.Or());
+             => query.CustomClone(e => e.Or());
 
-        public static IQueryWhere<TDB, TSelect> In<TDB, TSelect, TTarget>(this IQueryWhere<TDB, TSelect> query, Expression<Func<TDB, TTarget>> target, params TTarget[] inArguments)
+        public static IQuery<TDB, TSelect, WhereClause> In<TDB, TSelect, TTarget>(this IQuery<TDB, TSelect, WhereClause> query, Expression<Func<TDB, TTarget>> target, params TTarget[] inArguments)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Where.In(target.Body, inArguments.Cast<object>().ToArray()));
+             => query.CustomClone(e => e.In(target.Body, inArguments.Cast<object>().ToArray()));
 
-        public static IQueryWhere<TDB, TSelect> In<TDB, TSelect, TTarget>(this IQueryWhere<TDB, TSelect> query, Expression<Func<TDB, TTarget>> target, Expression<Func<TDB, TTarget>> inArgument)
+        public static IQuery<TDB, TSelect, WhereClause> In<TDB, TSelect, TTarget>(this IQuery<TDB, TSelect, WhereClause> query, Expression<Func<TDB, TTarget>> target, Expression<Func<TDB, TTarget>> inArgument)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Where.In(target.Body, inArgument.Body));
+             => query.CustomClone(e => e.In(target.Body, inArgument.Body));
 
-        public static IQueryWhere<TDB, TSelect> Like<TDB, TSelect>(this IQueryWhere<TDB, TSelect> query, Expression<Func<TDB, string>> target, string serachText)
+        public static IQuery<TDB, TSelect, WhereClause> Like<TDB, TSelect>(this IQuery<TDB, TSelect, WhereClause> query, Expression<Func<TDB, string>> target, string serachText)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Where.Like(target.Body, serachText));
+             => query.CustomClone(e => e.Like(target.Body, serachText));
 
-        public static IQueryWhere<TDB, TSelect> Like<TDB, TSelect>(this IQueryWhere<TDB, TSelect> query, Expression<Func<TDB, string>> target, Expression<Func<TDB, string>> serachText)
+        public static IQuery<TDB, TSelect, WhereClause> Like<TDB, TSelect>(this IQuery<TDB, TSelect, WhereClause> query, Expression<Func<TDB, string>> target, Expression<Func<TDB, string>> serachText)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Where.Like(target.Body, serachText.Body));
+             => query.CustomClone(e => e.Like(target.Body, serachText.Body));
 
-        public static IQueryWhere<TDB, TSelect> Between<TDB, TSelect, TTarget>(this IQueryWhere<TDB, TSelect> query, Expression<Func<TDB, TTarget>> target, TTarget min, TTarget max)
+        public static IQuery<TDB, TSelect, WhereClause> Between<TDB, TSelect, TTarget>(this IQuery<TDB, TSelect, WhereClause> query, Expression<Func<TDB, TTarget>> target, TTarget min, TTarget max)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Where.Between(target.Body, min, max));
+             => query.CustomClone(e => e.Between(target.Body, min, max));
 
-        public static IQueryWhere<TDB, TSelect> Between<TDB, TSelect, TTarget>(this IQueryWhere<TDB, TSelect> query, Expression<Func<TDB, TTarget>> target, Expression<Func<TDB, TTarget>> min, Expression<Func<TDB, TTarget>> max)
+        public static IQuery<TDB, TSelect, WhereClause> Between<TDB, TSelect, TTarget>(this IQuery<TDB, TSelect, WhereClause> query, Expression<Func<TDB, TTarget>> target, Expression<Func<TDB, TTarget>> min, Expression<Func<TDB, TTarget>> max)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Where.Between(target.Body, min.Body, max.Body));
+             => query.CustomClone(e => e.Between(target.Body, min.Body, max.Body));
     }
 }

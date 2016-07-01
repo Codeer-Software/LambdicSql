@@ -8,54 +8,54 @@ namespace LambdicSql
 {
     public static class HavingQueryExtensions
     {
-        public static IQueryHaving<TDB, TSelect> Having<TDB, TSelect>(this IQuery<TDB, TSelect> query)
+        public static IQuery<TDB, TSelect, HavingClause> Having<TDB, TSelect>(this IQuery<TDB, TSelect> query)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Having = new HavingClause());
+            => new ClauseMakingQuery<TDB, TSelect, HavingClause>(query, new HavingClause());
 
-        public static IQueryHaving<TDB, TSelect> Having<TDB, TSelect>(this IQuery<TDB, TSelect> query, Expression<Func<TDB, IHavingFuncs, bool>> condition)
+        public static IQuery<TDB, TSelect, HavingClause> Having<TDB, TSelect>(this IQuery<TDB, TSelect> query, Expression<Func<TDB, IHavingFuncs, bool>> condition)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Having = new HavingClause(condition.Body));
+            => new ClauseMakingQuery<TDB, TSelect, HavingClause>(query, new HavingClause(condition.Body));
 
-        public static IQueryHaving<TDB, TSelect> Not<TDB, TSelect>(this IQueryHaving<TDB, TSelect> query)
+        public static IQuery<TDB, TSelect, HavingClause> Not<TDB, TSelect>(this IQuery<TDB, TSelect, HavingClause> query)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Having.Not());
+             => query.CustomClone(e => e.Not());
 
-        public static IQueryHaving<TDB, TSelect> And<TDB, TSelect>(this IQueryHaving<TDB, TSelect> query, Expression<Func<TDB, IHavingFuncs, bool>> condition)
+        public static IQuery<TDB, TSelect, HavingClause> And<TDB, TSelect>(this IQuery<TDB, TSelect, HavingClause> query, Expression<Func<TDB, IHavingFuncs, bool>> condition)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Having.And(condition.Body));
+             => query.CustomClone(e => e.And(condition.Body));
 
-        public static IQueryHaving<TDB, TSelect> And<TDB, TSelect>(this IQueryHaving<TDB, TSelect> query)
+        public static IQuery<TDB, TSelect, HavingClause> And<TDB, TSelect>(this IQuery<TDB, TSelect, HavingClause> query)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Having.And());
+             => query.CustomClone(e => e.And());
 
-        public static IQueryHaving<TDB, TSelect> Or<TDB, TSelect>(this IQueryHaving<TDB, TSelect> query, Expression<Func<TDB, IHavingFuncs, bool>> condition)
+        public static IQuery<TDB, TSelect, HavingClause> Or<TDB, TSelect>(this IQuery<TDB, TSelect, HavingClause> query, Expression<Func<TDB, IHavingFuncs, bool>> condition)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Having.Or(condition.Body));
+             => query.CustomClone(e => e.Or(condition.Body));
 
-        public static IQueryHaving<TDB, TSelect> Or<TDB, TSelect>(this IQueryHaving<TDB, TSelect> query)
+        public static IQuery<TDB, TSelect, HavingClause> Or<TDB, TSelect>(this IQuery<TDB, TSelect, HavingClause> query)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Having.Or());
+             => query.CustomClone(e => e.Or());
 
-        public static IQueryHaving<TDB, TSelect> In<TDB, TSelect, TTarget>(this IQueryHaving<TDB, TSelect> query, Expression<Func<TDB, IHavingFuncs, TTarget>> target, params TTarget[] inArguments)
+        public static IQuery<TDB, TSelect, HavingClause> In<TDB, TSelect, TTarget>(this IQuery<TDB, TSelect, HavingClause> query, Expression<Func<TDB, IHavingFuncs, TTarget>> target, params TTarget[] inArguments)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Having.In(target.Body, inArguments));
+             => query.CustomClone(e => e.In(target.Body, inArguments));
 
-        public static IQueryHaving<TDB, TSelect> Like<TDB, TSelect>(this IQueryHaving<TDB, TSelect> query, Expression<Func<TDB, IHavingFuncs, string>> target, string serachText)
+        public static IQuery<TDB, TSelect, HavingClause> Like<TDB, TSelect>(this IQuery<TDB, TSelect, HavingClause> query, Expression<Func<TDB, IHavingFuncs, string>> target, string serachText)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Having.Like(target.Body, serachText));
+             => query.CustomClone(e => e.Like(target.Body, serachText));
 
-        public static IQueryHaving<TDB, TSelect> Between<TDB, TSelect, TTarget>(this IQueryHaving<TDB, TSelect> query, Expression<Func<TDB, IHavingFuncs, TTarget>> target, TTarget min, TTarget max)
+        public static IQuery<TDB, TSelect, HavingClause> Between<TDB, TSelect, TTarget>(this IQuery<TDB, TSelect, HavingClause> query, Expression<Func<TDB, IHavingFuncs, TTarget>> target, TTarget min, TTarget max)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.Having.Between(target.Body, min, max));
+             => query.CustomClone(e => e.Between(target.Body, min, max));
     }
 }

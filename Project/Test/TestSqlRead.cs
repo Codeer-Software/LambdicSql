@@ -175,6 +175,7 @@ namespace Test
 
             //make sql.
             var query = Sql.Using(() => new Data()).
+            Select().
             From(db => db.tbl_remuneration).
                 Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
             Where(db => 3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000).
@@ -208,7 +209,7 @@ namespace Test
             });
 
             //execute.
-            var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
+            var datas = query.Select().From().ToExecutor(TestEnvironment.Adapter).Read();
 
             foreach (var e in datas)
             {
@@ -285,6 +286,7 @@ namespace Test
             Sql.Log = l => Debug.Print(l);
 
             var query = Sql.Using(() => new Data()).
+                Select().
                 From(db => db.tbl_remuneration).
                     Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).Where();
 
@@ -306,6 +308,8 @@ namespace Test
 
             //make sql.
             var query = Sql.Using(() => new { tbl_staff = new Staff() }).
+            Select().
+            From().
             Where().Like(db => db.tbl_staff.name, "%son%");
 
             var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
@@ -323,6 +327,8 @@ namespace Test
 
             //make sql.
             var query = Sql.Using(() => new { tbl_staff = new Staff() }).
+            Select().
+            From().
             Where().In(db => db.tbl_staff.id, 1, 3);
 
             var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
@@ -340,6 +346,8 @@ namespace Test
 
             //make sql.
             var query = Sql.Using(() => new { tbl_staff = new Staff() }).
+            Select().
+            From().
             Where().Between(db => db.tbl_staff.id, 1, 3);
 
             var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
@@ -375,6 +383,7 @@ namespace Test
 
         public IEnumerable<Data> ReadData2() =>
             Sql.Using<Data>().
+            Select().
             From(db => db.tbl_remuneration).
                 Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
             Where(db => 3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000).
@@ -383,6 +392,8 @@ namespace Test
         
         public IEnumerable<Staff> ReadData3() =>
             Sql.Using(() => new { tbl_staff = new Staff() }).
+            Select().
+            From().
             ToExecutor(TestEnvironment.Adapter).Read().Select(e=>e.tbl_staff);
 
         [TestMethod]

@@ -1,21 +1,33 @@
-﻿using LambdicSql.Inside;
-using LambdicSql.QueryBase;
+﻿using LambdicSql.QueryBase;
 using LambdicSql.Clause.From;
 using System;
 using System.Linq.Expressions;
+using System.Linq;
 
 namespace LambdicSql
 {
     public static class FromExtensions
     {
-        public static IQueryFrom<TDB, TSelect> From<TDB, TSelect, T>(this IQuery<TDB, TSelect> query, Expression<Func<TDB, T>> table)
+        public static IQuery<TDB, TSelect, FromClause> From<TDB, TSelect, T>(this IQuery<TDB, TSelect> query, Expression<Func<TDB, T>> table)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.From = new FromClause(table.Body));
+             => new ClauseMakingQuery<TDB, TSelect, FromClause>(query, new FromClause(table.Body));
 
-        public static IQueryFrom<TDB, TSelect> Join<TDB, TSelect>(this IQueryFrom<TDB, TSelect> query, Expression<Func<TDB, object>> table, Expression<Func<TDB, bool>> condition)
+        public static IQuery<TDB, TSelect, FromClause> Join<TDB, TSelect>(this IQuery<TDB, TSelect, FromClause> query, Expression<Func<TDB, object>> table, Expression<Func<TDB, bool>> condition)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(dst => dst.From.Join(new JoinElement(table.Body, condition.Body)));
+             => query.CustomClone(e=>e.Join(new JoinElement(table.Body, condition.Body)));
+
+        public static IQuery<TDB, TSelect, FromClause> From<TDB, TSelect>(this IQuery<TDB, TSelect> query)
+            where TDB : class
+            where TSelect : class
+        { 
+            //table count must be 1.
+            if (query.Db.GetLambdaNameAndTable().Count != 1)
+            {
+                throw new NotSupportedException();
+            }
+            return new ClauseMakingQuery<TDB, TSelect, FromClause>(query, new FromClause(query.Db.GetLambdaNameAndTable().First().Value.SqlFullName));
+        }
     }
 }

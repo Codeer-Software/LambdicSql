@@ -9,17 +9,28 @@ namespace LambdicSql
 {
     public static class SelectClauseExtensions
     {
-        public static IQuery<TDB, TSelect> Select<TDB, TSelect>(this IQuery<TDB, TDB> query, Expression<Func<TDB, TSelect>> define)
+        public static IQuery<TDB, TSelect, SelectClause> Select<TDB, TSelect>(this IQuery<TDB, TDB> query, Expression<Func<TDB, TSelect>> define)
             where TDB : class
             where TSelect : class
             => SelectCore<TDB, TSelect>(query, define);
 
-        public static IQuery<TDB, TSelect> Select<TDB, TSelect>(this IQuery<TDB, TDB> query, Expression<Func<TDB, ISelectFuncs, TSelect>> define)
+        public static IQuery<TDB, TDB, SelectClause> Select<TDB>(this IQuery<TDB, TDB> query)
+            where TDB : class
+        { 
+            var select = new SelectClause();
+            foreach (var e in query.Db.GetLambdaNameAndColumn())
+            {
+                select.Add(new SelectElement(e.Key, null));
+            }
+            return new ClauseMakingQuery<TDB, TDB, SelectClause>(query, select);
+        }
+        
+        public static IQuery<TDB, TSelect, SelectClause> Select<TDB, TSelect>(this IQuery<TDB, TDB> query, Expression<Func<TDB, ISelectFuncs, TSelect>> define)
             where TDB : class
             where TSelect : class
             => SelectCore<TDB, TSelect>(query, define);
 
-        static IQuery<TDB, TSelect> SelectCore<TDB, TSelect>(this IQuery<TDB, TDB> query, LambdaExpression define)
+        static IQuery<TDB, TSelect, SelectClause> SelectCore<TDB, TSelect>(this IQuery<TDB, TDB> query, LambdaExpression define)
             where TDB : class
             where TSelect : class
         {
@@ -27,9 +38,10 @@ namespace LambdicSql
             var select = SelectDefineAnalyzer.MakeSelectInfo(define.Body);
 
             var indexInSelect = select.GetElements().Select(e => e.Name).ToList();
-            var dst = src.ConvertType(ExpressionToCreateFunc.ToCreateUseDbResult<TSelect>(name => indexInSelect.IndexOf(name), define.Body));
-            dst.Select = select;
-            return dst;
+
+            return new ClauseMakingQuery<TDB, TSelect, SelectClause>(query.Db,
+                ExpressionToCreateFunc.ToCreateUseDbResult<TSelect>(name => indexInSelect.IndexOf(name), define.Body),
+                query.GetClausesClone().Concat(new IClause[] { select }).ToArray());
         }
     }
 }

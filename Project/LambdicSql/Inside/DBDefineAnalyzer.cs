@@ -11,15 +11,14 @@ namespace LambdicSql.Inside
         internal static Query<T, T> CreateQuery<T>(Expression<Func<T>> define)
            where T : class
         {
-            var query = new Query<T, T>();
-            query.Db = new DbInfo();
+            var db = new DbInfo();
             foreach (var column in FindColumns(typeof(T), new string[0]))
             {
-                query.Db.Add(column);
+                db.Add(column);
             }
-            var indexInSelect = query.Db.GetLambdaNameAndColumn().Keys.ToList();
-            query.Create = ExpressionToCreateFunc.ToCreateUseDbResult<T>(name => indexInSelect.IndexOf(name), define.Body);
-            return query;
+            var indexInSelect = db.GetLambdaNameAndColumn().Keys.ToList();
+            var create = ExpressionToCreateFunc.ToCreateUseDbResult<T>(name => indexInSelect.IndexOf(name), define.Body);
+            return new Query<T, T>(db, create);
         }
 
         static IEnumerable<ColumnInfo> FindColumns(Type type, IEnumerable<string> names)

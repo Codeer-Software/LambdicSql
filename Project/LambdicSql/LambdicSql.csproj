@@ -57,6 +57,7 @@
     <Compile Include="Clause\Where\IWhereFuncs.cs" />
     <Compile Include="Clause\Where\WhereClause.cs" />
     <Compile Include="Clause\Where\WhereFuncsExtensions.cs" />
+    <Compile Include="QueryBase\ClauseMakingQuery.cs" />
     <Compile Include="QueryBase\IDbAdapter.cs" />
     <Compile Include="QueryBase\IExpressionDecoder.cs" />
     <Compile Include="Inside\DbResult.cs" />
@@ -78,7 +79,7 @@
     <Compile Include="Clause\Condition\ICondition.cs" />
     <Compile Include="QueryBase\DbInfo.cs" />
     <Compile Include="Inside\ExpressionToCreateFunc.cs" />
-    <Compile Include="Inside\Query.cs" />
+    <Compile Include="QueryBase\Query.cs" />
     <Compile Include="Clause\Condition\ConditionIn.cs" />
     <Compile Include="Clause\Condition\ConditionLike.cs" />
     <Compile Include="Clause\OrderBy\OrderByQueryExtensions.cs" />

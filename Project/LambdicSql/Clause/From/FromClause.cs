@@ -26,7 +26,7 @@ namespace LambdicSql.Clause.From
 
         public IClause Clone()
         {
-            var clone = new FromClause(MainTable);
+            var clone = string.IsNullOrEmpty(MainTableSqlFullName) ? new FromClause(MainTable) : new FromClause(MainTableSqlFullName);
             clone._join.AddRange(_join);
             return clone;
         }
