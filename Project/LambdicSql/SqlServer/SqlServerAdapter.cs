@@ -17,6 +17,6 @@ namespace LambdicSql.SqlServer
 
         public DbCommand CreateCommand() => new SqlCommand();
         public DbConnection CreateConnection()=> new SqlConnection(ConnectionString);
-        public QueryDecoder CreateParser()=> new SqlServerQueryParser();
+        public IQueryCustomizer CreateQueryCustomizer()=> null;
     }
 }

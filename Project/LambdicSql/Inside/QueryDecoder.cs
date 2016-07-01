@@ -1,16 +1,16 @@
-﻿using LambdicSql.Inside;
+﻿using LambdicSql.QueryBase;
 using System;
 using System.Linq;
 
-namespace LambdicSql.QueryBase
+namespace LambdicSql.Inside
 {
     //TODO rename internal
-    public class QueryDecoder
+    class QueryDecoder
     {
         DbInfo _db;
         ExpressionDecoder _parser;
 
-        public string ToString(IQuery query)
+        internal string ToString(IQuery query)
         {
             return ToStringCore(query) + ";";
         }

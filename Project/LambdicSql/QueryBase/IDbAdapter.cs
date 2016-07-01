@@ -4,8 +4,10 @@ namespace LambdicSql.QueryBase
 {
     public interface IDbAdapter
     {
-        QueryDecoder CreateParser();//TODO change type.
+        IQueryCustomizer CreateQueryCustomizer();
         DbCommand CreateCommand();
         DbConnection CreateConnection();
     }
+
+    public interface IQueryCustomizer { }
 }

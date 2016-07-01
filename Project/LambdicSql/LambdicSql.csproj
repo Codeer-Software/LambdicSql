@@ -84,10 +84,9 @@
     <Compile Include="QueryBase\IQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryExtensions.cs" />
-    <Compile Include="QueryBase\QueryDecoder.cs" />
+    <Compile Include="Inside\QueryDecoder.cs" />
     <Compile Include="Sql.cs" />
     <Compile Include="SqlServer\SqlServerAdapter.cs" />
-    <Compile Include="SqlServer\SqlServerQueryParser.cs" />
     <Compile Include="Clause\Where\WhereQueryExtensions.cs" />
   </ItemGroup>
   <ItemGroup />
