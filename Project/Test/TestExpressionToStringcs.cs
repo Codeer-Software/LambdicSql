@@ -108,7 +108,12 @@ namespace Test
 
             int x = 100;
             Assert.AreEqual(query.ToSqlString((db, func) => (x + 10).ToString()), "'110'");
+
+
+            Assert.AreEqual(query.ToSqlString((db, func) => IntValue), "10");
         }
+
+        public int IntValue => 10;
 
         [TestMethod]
         public void TestSubQuery()

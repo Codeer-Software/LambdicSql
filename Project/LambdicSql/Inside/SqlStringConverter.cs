@@ -1,5 +1,6 @@
 ﻿using LambdicSql.QueryBase;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -154,8 +155,7 @@ namespace LambdicSql.Inside
 
         DecodedInfo ToString(MemberExpression member)
         {
-            //TODO I'll make best code.
-            var name = string.Join(".", member.ToString().Split('.').Skip(1).ToArray());
+            string name = GetMemberCheckName(member);
 
             TableInfo table;
             if (_dbInfo.GetLambdaNameAndTable().TryGetValue(name, out table))
@@ -168,7 +168,20 @@ namespace LambdicSql.Inside
                 return new DecodedInfo(col.Type, col.SqlFullName);
             }
             var func = Expression.Lambda(member).Compile();
-            return new DecodedInfo(func.Method.ReturnType, ToString(func.DynamicInvoke().ToString()));
+            return new DecodedInfo(func.Method.ReturnType, ToString(func.DynamicInvoke()));
+        }
+
+        static string GetMemberCheckName(MemberExpression member)
+        {
+            var names = new List<string>();
+            var checkName = member;
+            while (checkName != null)
+            {
+                names.Insert(0, checkName.Member.Name);
+                checkName = checkName.Expression as MemberExpression;
+            }
+            var name = string.Join(".", names.ToArray());
+            return name;
         }
     }
 }
