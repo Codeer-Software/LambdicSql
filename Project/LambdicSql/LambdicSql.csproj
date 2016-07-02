@@ -54,6 +54,7 @@
     <Compile Include="Clause\Where\WhereClause.cs" />
     <Compile Include="Clause\Where\WhereFuncsExtensions.cs" />
     <Compile Include="QueryBase\IDBFuncs.cs" />
+    <Compile Include="QueryBase\InvalidDbItemException.cs" />
     <Compile Include="QueryBase\IQueryCustomizer.cs" />
     <Compile Include="QueryBase\Query.cs" />
     <Compile Include="QueryBase\IDbAdapter.cs" />

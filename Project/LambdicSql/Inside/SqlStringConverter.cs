@@ -9,22 +9,43 @@ namespace LambdicSql.Inside
 {
     class SqlStringConverter : ISqlStringConverter
     {
+        enum SpecialElementType
+        {
+            Table,
+            Column,
+            SubQuery
+        }
+
+        class SqlStringConvertingEventArgs : EventArgs
+        {
+            internal SpecialElementType SpecialElementType { get; set; }
+            internal string Detail { get; set; }
+            internal SqlStringConvertingEventArgs(SpecialElementType type, string detail)
+            {
+                SpecialElementType = type;
+                Detail = detail;
+            }
+        }
+
         DbInfo _dbInfo;
         IQueryCustomizer _queryCustomizer;
+        EventHandler<SqlStringConvertingEventArgs> SpecialElementConverting = (_, __)=> { };
+        bool _isTopLevelQuery;
 
         public DbInfo DbInfo => _dbInfo;
 
-        internal SqlStringConverter(DbInfo dbInfo, IQueryCustomizer queryCustomizer)
+        internal SqlStringConverter(DbInfo dbInfo, IQueryCustomizer queryCustomizer, bool isTopLevelQuery)
         {
             _dbInfo = dbInfo;
             _queryCustomizer = queryCustomizer;
+            _isTopLevelQuery = isTopLevelQuery;
         }
 
         internal static string ToString(IQuery query, IQueryCustomizer queryCustomizer)
-            => ToStringCore(query, queryCustomizer) + ";";
+            => ToStringCore(query, queryCustomizer, true);
 
-        static string ToStringCore(IQuery query, IQueryCustomizer queryCustomizer)
-           => new SqlStringConverter(query.Db, queryCustomizer).ToString(query);
+        static string ToStringCore(IQuery query, IQueryCustomizer queryCustomizer, bool isTopLevelQuery)
+           => new SqlStringConverter(query.Db, queryCustomizer, isTopLevelQuery).ToString(query);
         
         string ToString(IQuery query)
         {
@@ -33,7 +54,17 @@ namespace LambdicSql.Inside
             {
                 clauses = _queryCustomizer.CustomClauses(clauses);
             }
-            return string.Join(Environment.NewLine, clauses.Select(e => e.ToString(this)).ToArray());
+            var convertor = new SqlStringConverter(_dbInfo, _queryCustomizer, false);
+            var text = string.Join(Environment.NewLine, clauses.Select(e => e.ToString(this)).ToArray());
+            if (_isTopLevelQuery)
+            {
+                return text + ";";
+            }
+            else
+            {
+                return "(" + string.Join(" ", text.Replace(Environment.NewLine, " ").Replace("\t", " ").
+                       Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries)) + ")";
+            }
         }
 
         public string ToString(object obj)
@@ -43,6 +74,13 @@ namespace LambdicSql.Inside
             {
                 return ToString(exp).Text;
             }
+
+            var query = obj as IQuery;
+            if (query != null)
+            {
+                return ToString(query);
+            }
+
             Type type = obj.GetType();
             if (type == typeof(string) || type == typeof(DateTime))
             {
@@ -78,8 +116,14 @@ namespace LambdicSql.Inside
         DecodedInfo ToString(MethodCallExpression method)
         {
             //sub query.
-            if (0 < method.Arguments.Count && typeof(IQuery).IsAssignableFrom(method.Arguments[0].Type))
+            if (method.Arguments.Count == 1 &&
+                typeof(IQuery).IsAssignableFrom(method.Arguments[0].Type) &&
+                method.Method.DeclaringType == typeof(QueryExtensions) &&
+                method.Method.Name == "Cast")
             {
+                //notify converting info.
+                SpecialElementConverting(this, new SqlStringConvertingEventArgs(SpecialElementType.SubQuery, string.Empty));
+
                 var param = Expression.Parameter(typeof(IQueryCustomizer), "queryCustomizer");
                 var call = Expression.Call(null, GetType().
                     GetMethod("MakeQueryString", BindingFlags.Static|BindingFlags.NonPublic|BindingFlags.Public), new[] { method.Arguments[0], param });
@@ -90,10 +134,14 @@ namespace LambdicSql.Inside
             //normal func.
             if (method.Arguments.Count == 0 || !typeof(IDBFuncs).IsAssignableFrom(method.Arguments[0].Type))
             {
+                //check
+                CheckNormalFuncArguments(method);
+
+                //invoke
                 var func = Expression.Lambda(method).Compile();
                 return new DecodedInfo(func.Method.ReturnType, ToString(func.DynamicInvoke()));
             }
-                
+
             //db function.IDBFuncs
             var argumentsSrc = method.Arguments.Skip(1).ToArray();//skip this. 
 
@@ -110,10 +158,49 @@ namespace LambdicSql.Inside
             return new DecodedInfo(method.Method.ReturnType, method.Method.Name + "(" + string.Join(", ", arguments.Select(e=>e.Text).ToArray()) + ")");
         }
 
+        void CheckNormalFuncArguments(MethodCallExpression method)
+        {
+            EventHandler<SqlStringConvertingEventArgs> check = (s, e) =>
+            {
+                string message = string.Empty;
+                switch (e.SpecialElementType)
+                {
+                    case SpecialElementType.Table:
+                        message = string.Format("can't use table({0}) in {1}", e.Detail, method.Method.Name);
+                        break;
+                    case SpecialElementType.Column:
+                        message = string.Format("can't use column({0}) in {1}", e.Detail, method.Method.Name);
+                        break;
+                    case SpecialElementType.SubQuery:
+                        message = string.Format("can't use sub query in {0}", method.Method.Name);
+                        break;
+                }
+                throw new InvalidDbItemException(message);
+            };
+            SpecialElementConverting += check;
+            try
+            {
+                method.Arguments.ToList().ForEach(e =>
+                {
+                    try
+                    {
+                        ToString(e);
+                    }
+                    catch (InvalidDbItemException exception)
+                    {
+                        throw exception;
+                    }
+                    catch (Exception) { }//ignore other exception, because it will be checked at invokeing.
+                });
+            }
+            finally
+            {
+                SpecialElementConverting -= check;
+            }
+        }
+
         static string MakeQueryString(IQuery query, IQueryCustomizer queryCustomizer)
-            => "(" + string.Join(" ", ToStringCore(query, queryCustomizer).
-                        Replace(Environment.NewLine, " ").Replace("\t", " ").
-                        Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries)) + ")";
+            => ToStringCore(query, queryCustomizer, false);
 
         DecodedInfo ToString(BinaryExpression binary)
         {
@@ -160,11 +247,15 @@ namespace LambdicSql.Inside
             TableInfo table;
             if (_dbInfo.GetLambdaNameAndTable().TryGetValue(name, out table))
             {
+                //notify converting info.
+                SpecialElementConverting(this, new SqlStringConvertingEventArgs(SpecialElementType.Table, name));
                 return new DecodedInfo(null, table.SqlFullName);
             }
             ColumnInfo col;
             if (_dbInfo.GetLambdaNameAndColumn().TryGetValue(name, out col))
             {
+                //notify converting info.
+                SpecialElementConverting(this, new SqlStringConvertingEventArgs(SpecialElementType.Column, name));
                 return new DecodedInfo(col.Type, col.SqlFullName);
             }
             var func = Expression.Lambda(member).Compile();

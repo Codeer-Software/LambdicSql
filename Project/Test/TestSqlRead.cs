@@ -410,7 +410,7 @@ namespace Test
                     Select(db => new
                     {
                         name = db.tbl_staff.name,
-                        total = sub.ToSubQuery<decimal>()
+                        total = sub.Cast<decimal>()
                     }).
                     From(db => db.tbl_staff).
                     ToExecutor(TestEnvironment.Adapter).Read();
@@ -433,7 +433,7 @@ namespace Test
             var datas = define.
                 Select(db=>new { name = db.tbl_staff.name }).
                 From(db => db.tbl_staff).
-                Where().In(db=>db.tbl_staff.id, db=>sub.ToSubQuery<int>()).
+                Where().In(db=>db.tbl_staff.id, db=>sub.Cast<int>()).
                 ToExecutor(TestEnvironment.Adapter).Read();
 
             foreach (var e in datas)

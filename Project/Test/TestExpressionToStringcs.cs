@@ -95,7 +95,7 @@ namespace Test
         }
 
         [TestMethod]
-        public void TestMethod()
+        public void TestDbFuncs()
         {
             var query = Sql.Using(() => new
             {
@@ -105,15 +105,53 @@ namespace Test
                 }
             });
             Assert.AreEqual(query.ToSqlString((db, func) => func.Sum(1)), "Sum(1)");
+        }
 
-            int x = 100;
-            Assert.AreEqual(query.ToSqlString((db, func) => (x + 10).ToString()), "'110'");
+        [TestMethod]
+        public void TestNormalFuncs()
+        {
+            var query = Sql.Using(() => new
+            {
+                table1 = new
+                {
+                    col1 = default(int)
+                }
+            });
 
+            try
+            {
+                query.ToSqlString((db, func) => MySum(db.table1.col1, 1));
+                Assert.Fail();
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual(e.Message, "can't use column(table1.col1) in MySum");
+            }
 
-            Assert.AreEqual(query.ToSqlString((db, func) => IntValue), "10");
+            try
+            {
+                query.ToSqlString((db, func) => MySum(MyDbToInt(db.table1), 1));
+                Assert.Fail();
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual(e.Message, "can't use table(table1) in MySum");
+            }
+
+            try
+            {
+                query.ToSqlString((db, func) => MySum(query.Cast<int>(), 1));
+                Assert.Fail();
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual(e.Message, "can't use sub query in MySum");
+            }
         }
 
         public int IntValue => 10;
+        public int MySum(int a, int b) => a + b;
+        public int MyDbToInt(object o) => 0;
 
         [TestMethod]
         public void TestSubQuery()
@@ -134,10 +172,21 @@ namespace Test
 
             var text = define.Select(db => new
             {
-                col2 = sub.ToSubQuery<string>()
-            }).Where(db=>db.table1.col1 == sub.ToSubQuery<int>()).ToQueryString();
+                col2 = sub.Cast<string>()
+            }).Where(db=>db.table1.col1 == sub.Cast<int>()).ToQueryString();
 
             Debug.Print(text);
+
+
+            var query = Sql.Using(() => new
+            {
+                table1 = new
+                {
+                    col1 = default(int)
+                }
+            });
+            Assert.AreEqual("SELECT\r\n\ttable1.col1 AS \"x\";", query.ToSqlString((db, func) => query.Select(db2 => new { x = db2.table1.col1 })));
+            Assert.AreEqual("(SELECT table1.col1 AS \"x\")", query.ToSqlString((db, func) => query.Select(db2 => new { x = db2.table1.col1 }).Cast()));
         }
 
         [TestMethod]
@@ -157,7 +206,7 @@ namespace Test
                 col2 = define.Select(db2 => new
                 {
                     col1 = db2.table1.col1
-                }).ToSubQuery<string>()
+                }).Cast<string>()
             }).ToQueryString();
 
             Debug.Print(text);
@@ -183,11 +232,11 @@ namespace Test
 
             var text = define.Select(db => new
             {
-                col2 = sub.ToSubQuery<string>()
+                col2 = sub.Cast<string>()
             }).
             Where().
-            Like(db => db.table1.col2, db=>sub.ToSubQuery<string>()).And().
-            In(db => db.table1.col2, db=>sub.ToSubQuery<string>()).Or().Between(db => db.table1.col1, db=>sub.ToSubQuery<int>(), db=>sub.ToSubQuery<int>()).
+            Like(db => db.table1.col2, db=>sub.Cast<string>()).And().
+            In(db => db.table1.col2, db=>sub.Cast<string>()).Or().Between(db => db.table1.col1, db=>sub.Cast<int>(), db=>sub.Cast<int>()).
             ToQueryString();
 
             Debug.Print(text);

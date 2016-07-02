@@ -5,9 +5,9 @@ namespace LambdicSql
 {
     public static class QueryExtensions
     {
-        public static T ToSubQuery<T>(this IQuery query) => default(T);
+        public static T Cast<T>(this IQuery query) => default(T);
 
-        public static TSelect ToSubQuery<TDB, TSelect>(this IQuery<TDB, TSelect> query)
+        public static TSelect Cast<TDB, TSelect>(this IQuery<TDB, TSelect> query)
             where TDB : class
             where TSelect : class 
             => default(TSelect);
