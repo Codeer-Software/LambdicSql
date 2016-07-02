@@ -39,6 +39,7 @@
     <Compile Include="Clause\From\FromClause.cs" />
     <Compile Include="Clause\From\FromExtensions.cs" />
     <Compile Include="Clause\From\JoinElement.cs" />
+    <Compile Include="Clause\From\JoinType.cs" />
     <Compile Include="Clause\GroupBy\GroupByClause.cs" />
     <Compile Include="Clause\Having\HavingClause.cs" />
     <Compile Include="Clause\Having\HavingFuncsExtensions.cs" />

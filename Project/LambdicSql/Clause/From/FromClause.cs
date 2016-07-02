@@ -41,10 +41,32 @@ namespace LambdicSql.Clause.From
         internal void Join(JoinElement join) => _join.Add(join);
 
         string ToString(ISqlStringConverter decoder, JoinElement join)
-            => "JOIN " + ExpressionToTableName(decoder, join.JoinTable) + " ON " + decoder.ToString(join.Condition);
+        {
+            var clause = string.Empty;
+            switch (join.JoinType)
+            {
+                case JoinType.Join: clause = "JOIN"; break;
+                case JoinType.LeftJoin: clause = "LEFT JOIN"; break;
+                case JoinType.RightJoin: clause = "RIGHT JOIN"; break;
+                case JoinType.CrossJoin:
+                    return "CROSS JOIN " + ExpressionToTableName(decoder, join.JoinTable);
+            }
+            return clause + " " + ExpressionToTableName(decoder, join.JoinTable) + " ON " + decoder.ToString(join.Condition);
+        }
 
         string ExpressionToTableName(ISqlStringConverter decoder, Expression exp)
             => decoder.DbInfo.GetLambdaNameAndTable()[decoder.ToString(exp)].SqlFullName;
-    }
 
+        string GetJoinName(JoinType type)
+        {
+            switch (type)
+            {
+                case JoinType.Join: return "JOIN";
+                case JoinType.LeftJoin: return "LEFT JOIN";
+                case JoinType.RightJoin: return "RIGHT JOIN";
+                case JoinType.CrossJoin: return "CROSS JOIN";
+            }
+            throw new NotSupportedException();
+        }
+    }
 }

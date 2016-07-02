@@ -4,11 +4,13 @@ namespace LambdicSql.Clause.From
 {
     public class JoinElement
     {
+        public JoinType JoinType { get; }
         public Expression JoinTable { get; }
         public Expression Condition { get; }
 
-        public JoinElement(Expression joinTable, Expression condition)
+        public JoinElement(JoinType joinType, Expression joinTable, Expression condition)
         {
+            JoinType = joinType;
             JoinTable = joinTable;
             Condition = condition;
         }

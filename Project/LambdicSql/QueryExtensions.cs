@@ -31,12 +31,6 @@ namespace LambdicSql
 Distinct
 		new Distinct()
 		new Distinct<int>(obj)
-
 Case
 UNION/EXCEPT/EXCEPT
-Join many version. 
-    INNER JOIN  → JOIN
-    LEFT OUTER JOIN → LEFT JOIN
-    RIGHT OUTER JOIN → RIGHT JOIN
-    CROSS JOIN
 */

@@ -152,6 +152,50 @@ namespace Test
         }
 
         [TestMethod]
+        public void Join()
+        {
+            //log for debug.
+            Sql.Log = l => Debug.Print(l);
+
+            //make sql.
+            var query = Sql.Using<Data>().
+            Select(db => new SelectData()
+            {
+                name = db.tbl_staff.name,
+                payment_date = db.tbl_remuneration.payment_date,
+                money = db.tbl_remuneration.money,
+            }).
+            From(db => db.tbl_remuneration);
+
+            var queryJoin = query.Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id);
+            var queryLeftJoin = query.LeftJoin(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id);
+            var queryRightJoin = query.RightJoin(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id);
+            var queryCorssJoin = query.CrossJoin(db => db.tbl_staff);
+
+            //execute.
+            var datas = queryJoin.ToExecutor(TestEnvironment.Adapter).Read();
+            foreach (var e in datas)
+            {
+                Debug.Print("{0}, {1}, {2}", e.name, e.payment_date, e.money);
+            }
+            datas = queryLeftJoin.ToExecutor(TestEnvironment.Adapter).Read();
+            foreach (var e in datas)
+            {
+                Debug.Print("{0}, {1}, {2}", e.name, e.payment_date, e.money);
+            }
+            datas = queryRightJoin.ToExecutor(TestEnvironment.Adapter).Read();
+            foreach (var e in datas)
+            {
+                Debug.Print("{0}, {1}, {2}", e.name, e.payment_date, e.money);
+            }
+            datas = queryCorssJoin.ToExecutor(TestEnvironment.Adapter).Read();
+            foreach (var e in datas)
+            {
+                Debug.Print("{0}, {1}, {2}", e.name, e.payment_date, e.money);
+            }
+        }
+
+        [TestMethod]
         public void TestTableOne()
         {
             Sql.Log = l => Debug.Print(l);
