@@ -302,6 +302,23 @@ namespace Test
         }
 
         [TestMethod]
+        public void TestFree()
+        {            
+            //log for debug.
+            Sql.Log = l => Debug.Print(l);
+
+            //make sql.
+            var query = Sql.Query(()=>new { tbl_staff = new Staff() }).
+            Free("/* comment */").
+            Select().
+            From();
+
+            //execute.
+            query.ToExecutor(TestEnvironment.Adapter).Read();
+
+        }
+
+        [TestMethod]
         public void TestTableOne()
         {
             Sql.Log = l => Debug.Print(l);

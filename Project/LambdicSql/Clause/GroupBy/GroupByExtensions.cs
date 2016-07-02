@@ -8,7 +8,7 @@ namespace LambdicSql
 {
     public static class GroupByExtensions
     {
-        public static IQuery<TDB, TSelect> GroupBy<TDB, TSelect>(this IQuery<TDB, TSelect> query, params Expression<Func<TDB, object>>[] targets)
+        public static IQuery<TDB, TSelect, GroupByClause> GroupBy<TDB, TSelect>(this IQuery<TDB, TSelect> query, params Expression<Func<TDB, object>>[] targets)
             where TDB : class
             where TSelect : class
             => new ClauseMakingQuery<TDB, TSelect, GroupByClause>(query, new GroupByClause(targets.Select(e => e.Body).ToArray()));

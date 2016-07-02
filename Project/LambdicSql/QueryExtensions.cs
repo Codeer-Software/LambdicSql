@@ -28,9 +28,6 @@ namespace LambdicSql
 }
 
 /*TODO clauses
-Distinct
-		new Distinct()
-		new Distinct<int>(obj)
 Case
 UNION/EXCEPT/EXCEPT
 */
