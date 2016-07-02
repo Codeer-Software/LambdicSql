@@ -41,5 +41,21 @@ namespace LambdicSql.Inside
                 }
             }
         }
+
+        public int Write()
+        {
+            using (var con = _adaptor.CreateConnection())
+            {
+                con.Open();
+                using (var com = _adaptor.CreateCommand())
+                {
+                    var text = CommandText;
+                    Sql.Log?.Invoke(text);
+                    com.CommandText = text;
+                    com.Connection = con;
+                    return com.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }

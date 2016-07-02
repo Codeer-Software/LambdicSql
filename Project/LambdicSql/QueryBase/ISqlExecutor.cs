@@ -6,5 +6,6 @@ namespace LambdicSql.QueryBase
     {
         string CommandText { get; }
         IEnumerable<TSelect> Read();
+        int Write();
     }
 }

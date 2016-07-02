@@ -608,5 +608,86 @@ namespace Test
                 Debug.Print("{0}", e.name);
             }
         }
+
+        public class tbl_data
+        {
+            public int id { get; set; }
+            public int val1 { get; set; }
+            public string val2 { get; set; }
+        }
+
+        public class DataChangeTest
+        {
+            public Staff tbl_staff { get; set; }
+            public Remuneration tbl_remuneration { get; set; }
+            public tbl_data tbl_data { get; set; }
+        }
+
+        [TestMethod]
+        public void Delete()
+        {
+            Sql.Log = l => Debug.Print(l);
+
+
+            var count = Sql.Query<DataChangeTest>().
+                Delete().
+                From(db => db.tbl_data).
+                ToExecutor(TestEnvironment.Adapter).Write();
+
+        }
+
+        [TestMethod]
+        public void DeleteWhere()
+        {
+            Sql.Log = l => Debug.Print(l);
+
+
+            var count = Sql.Query<DataChangeTest>().
+                Delete().
+                From(db => db.tbl_data).
+                Where(db=>db.tbl_data.id == 3).
+                ToExecutor(TestEnvironment.Adapter).Write();
+
+        }
+
+
+        [TestMethod]
+        public void Insert()
+        {
+            /*
+            Sql.Log = l => Debug.Print(l);
+
+            tbl_data[] datas = null;
+            
+            var count1 = Sql.Query<DataChangeTest>().
+                InsertInto(db => db.tbl_data).
+                Values(datas).
+                ToExecutor(TestEnvironment.Adapter).Write();
+
+            //ダサい
+            var count2 = Sql.Query<DataChangeTest>().
+                InsertInto(db => db.tbl_data, tbl => tbl.id, tbl => tbl.val1).
+                Values(datas).
+                ToExecutor(TestEnvironment.Adapter).Write();
+            
+            /*
+            var count3 = Sql.Query(()=>new
+                {
+                    tbl_data = new
+                    {
+                        id = "",
+                        val1 = 0,
+                        val2 = "",
+                    }
+                }).
+                InsertInto(db => db.tbl_data).
+                Values(datas, (src, dst)=> 
+                {
+                    
+                }).
+                ToExecutor(TestEnvironment.Adapter).Write();
+            */
+        }
+
     }
 }
