@@ -11,7 +11,7 @@ namespace LambdicSql.QueryBase
     public interface IQuery<TSelect> : IQuery
         where TSelect : class
     {
-        Func<IDbResult, TSelect> Create { get; }
+        Func<ISqlResult, TSelect> Create { get; }
     }
 
     public interface IQuery<TDB, TSelect> : IQuery<TSelect>

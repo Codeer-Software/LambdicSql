@@ -4,11 +4,11 @@ using System.Data.Common;
 
 namespace LambdicSql.Inside
 {
-    class DbResult : IDbResult
+    class SqlResult : ISqlResult
     {
         DbDataReader _reader;
 
-        public DbResult(DbDataReader reader)
+        public SqlResult(DbDataReader reader)
         {
             _reader = reader;
         }

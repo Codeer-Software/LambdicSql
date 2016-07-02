@@ -11,7 +11,7 @@ namespace LambdicSql.Inside
 
         static SupportedTypeSpec()
         {
-            _supported.AddRange(typeof(IDbResult).GetMethods().Where(e=>e.DeclaringType == typeof(IDbResult)).Select(e=>e.ReturnType));
+            _supported.AddRange(typeof(ISqlResult).GetMethods().Where(e=>e.DeclaringType == typeof(ISqlResult)).Select(e=>e.ReturnType));
         }
 
         internal static bool IsSupported(Type type)

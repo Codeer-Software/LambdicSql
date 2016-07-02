@@ -2,7 +2,7 @@
 
 namespace LambdicSql.QueryBase
 {
-    public interface IDbExecutor<TSelect>
+    public interface ISqlExecutor<TSelect>
     {
         string CommandText { get; }
         IEnumerable<TSelect> Read();

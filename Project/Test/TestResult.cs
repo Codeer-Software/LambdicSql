@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Test
 {
-    class TestResult : IDbResult
+    class TestResult : ISqlResult
     {
         public Dictionary<string, object> Data { get; } = new Dictionary<string, object>();
         public object this[string key] { get { return Data[key]; } set { Data[key] = value; } }

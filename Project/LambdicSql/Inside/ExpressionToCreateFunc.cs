@@ -9,16 +9,16 @@ namespace LambdicSql.Inside
 {
     static class ExpressionToCreateFunc
     {
-        internal static Func<IDbResult, T> ToCreateUseDbResult<T>(Func<string, int> getIndexInSelect, Expression exp)
+        internal static Func<ISqlResult, T> ToCreateUseDbResult<T>(Func<string, int> getIndexInSelect, Expression exp)
         {
             var newExp = exp as NewExpression;
             if (newExp == null)
             {
                 newExp = ((MemberInitExpression)exp).NewExpression;
             }
-            var param = Expression.Parameter(typeof(IDbResult), "dbResult");
+            var param = Expression.Parameter(typeof(ISqlResult), "dbResult");
             var arguments = new[] { param };
-            return Expression.Lambda<Func<IDbResult, T>>(New(getIndexInSelect, new string[0], newExp, param), arguments).Compile();
+            return Expression.Lambda<Func<ISqlResult, T>>(New(getIndexInSelect, new string[0], newExp, param), arguments).Compile();
         }
 
         static Expression New(Func<string, int> getIndexInSelect, string[] names, NewExpression exp, ParameterExpression param)
@@ -33,7 +33,7 @@ namespace LambdicSql.Inside
                     {
                         var name = string.Join(".", currentNames);
                         binding.Add(Expression.Bind(p,
-                            Expression.Call(param, typeof(IDbResult).GetMethod("Get" + p.PropertyType.Name), Expression.Constant(getIndexInSelect(name)))));
+                            Expression.Call(param, typeof(ISqlResult).GetMethod("Get" + p.PropertyType.Name), Expression.Constant(getIndexInSelect(name)))));
                     }
                     else
                     {
@@ -73,7 +73,7 @@ namespace LambdicSql.Inside
                     if (SupportedTypeSpec.IsSupported(paramType))
                     {
                         var name = string.Join(".", currentNames);
-                        newArgs.Add(Expression.Call(param, typeof(IDbResult).GetMethod("Get" + paramType.Name), Expression.Constant(getIndexInSelect(name))));
+                        newArgs.Add(Expression.Call(param, typeof(ISqlResult).GetMethod("Get" + paramType.Name), Expression.Constant(getIndexInSelect(name))));
                     }
                     else
                     {

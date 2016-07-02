@@ -131,8 +131,25 @@ namespace LambdicSql.Inside
                 return new DecodedInfo(func.Method.ReturnType, func.DynamicInvoke(_queryCustomizer).ToString());
             }
 
+            if (0 < method.Arguments.Count && typeof(ISqlFunc).IsAssignableFrom(method.Arguments[0].Type))
+            {
+                //sql function.
+                var argumentsSrc = method.Arguments.Skip(1).ToArray();//skip this. 
+
+                //custom
+                var arguments = argumentsSrc.Select(e => ToString(e)).ToArray();
+                if (_queryCustomizer != null)
+                {
+                    var customed = _queryCustomizer.CustomFunction(method.Method.ReturnType, method.Method.Name, arguments);
+                    if (!string.IsNullOrEmpty(customed))
+                    {
+                        return new DecodedInfo(method.Method.ReturnType, customed);
+                    }
+                }
+                return new DecodedInfo(method.Method.ReturnType, method.Method.Name + "(" + string.Join(", ", arguments.Select(e => e.Text).ToArray()) + ")");
+            }
+
             //normal func.
-            if (method.Arguments.Count == 0 || !typeof(ISqlFunc).IsAssignableFrom(method.Arguments[0].Type))
             {
                 //check
                 CheckNormalFuncArguments(method);
@@ -141,21 +158,6 @@ namespace LambdicSql.Inside
                 var func = Expression.Lambda(method).Compile();
                 return new DecodedInfo(func.Method.ReturnType, ToString(func.DynamicInvoke()));
             }
-
-            //db function.IDBFuncs
-            var argumentsSrc = method.Arguments.Skip(1).ToArray();//skip this. 
-
-            //custom
-            var arguments = argumentsSrc.Select(e => ToString(e)).ToArray();
-            if (_queryCustomizer != null)
-            {
-                var customed = _queryCustomizer.CustomFunction(method.Method.ReturnType, method.Method.Name, arguments);
-                if (!string.IsNullOrEmpty(customed))
-                {
-                    return new DecodedInfo(method.Method.ReturnType, customed);
-                }
-            }
-            return new DecodedInfo(method.Method.ReturnType, method.Method.Name + "(" + string.Join(", ", arguments.Select(e=>e.Text).ToArray()) + ")");
         }
 
         void CheckNormalFuncArguments(MethodCallExpression method)

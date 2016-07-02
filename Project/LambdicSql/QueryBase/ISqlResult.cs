@@ -2,7 +2,7 @@
 
 namespace LambdicSql.QueryBase
 {
-    public interface IDbResult
+    public interface ISqlResult
     {
         string GetString(int index);
         bool GetBoolean(int index);

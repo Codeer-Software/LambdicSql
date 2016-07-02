@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace LambdicSql.Inside
 {
-    class DbExecutor<TSelect> : IDbExecutor<TSelect>
+    class DbExecutor<TSelect> : ISqlExecutor<TSelect>
         where TSelect : class
     {
         IDbAdapter _adaptor;
@@ -30,7 +30,7 @@ namespace LambdicSql.Inside
                     com.Connection = con;
                     using (var sdr = com.ExecuteReader())
                     {
-                        var reader = new DbResult(sdr);
+                        var reader = new SqlResult(sdr);
                         var list = new List<TSelect>();
                         while (sdr.Read())
                         {
