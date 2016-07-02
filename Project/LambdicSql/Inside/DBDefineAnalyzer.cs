@@ -110,11 +110,7 @@ namespace LambdicSql.Inside
         static void GetSubQueryFromMethod(string[] currentNames, Expression arg, Dictionary<string, Expression> lambdaNameAndSubQuery)
         {
             var methodCall = arg as MethodCallExpression;
-            if (methodCall != null &&
-                methodCall.Arguments.Count == 1 &&
-                typeof(IQuery).IsAssignableFrom(methodCall.Arguments[0].Type) &&
-                methodCall.Method.DeclaringType == typeof(QueryExtensions) &&
-                methodCall.Method.Name == "Cast")
+            if (methodCall != null && SqlStringConverter.IsSubQuery(methodCall))
             {
                 var name = string.Join(".", currentNames);
                 lambdaNameAndSubQuery[name] = methodCall;

@@ -280,6 +280,28 @@ namespace Test
         }
 
         [TestMethod]
+        public void Distinct()
+        {
+            //log for debug.
+            Sql.Log = l => Debug.Print(l);
+
+            //make sql.
+            var query = Sql.Query<Data>().
+            Select(db => new
+            {
+                id = Sql.Word.Distinct(db.tbl_remuneration.staff_id)
+            }).
+            From(db => db.tbl_remuneration);
+
+            //execute.
+            var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
+            foreach (var e in datas)
+            {
+                Debug.Print("{0}", e.id);
+            }
+        }
+
+        [TestMethod]
         public void TestTableOne()
         {
             Sql.Log = l => Debug.Print(l);

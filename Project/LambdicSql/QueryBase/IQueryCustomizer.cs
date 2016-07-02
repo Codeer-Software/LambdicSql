@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq.Expressions;
 
 namespace LambdicSql.QueryBase
 {
@@ -7,6 +6,6 @@ namespace LambdicSql.QueryBase
     {
         string CustomOperator(Type type1, string @operator, Type type2);
         IClause[] CustomClauses(IClause[] clauses);
-        string CustomFunction(Type returnType, string name, DecodedInfo[] argSrc);
+        string CusotmInvoke(CustomTargetType invokeType, Type returnType, string name, DecodedInfo[] argSrc);
     }
 }

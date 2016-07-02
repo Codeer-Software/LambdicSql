@@ -41,6 +41,12 @@ namespace LambdicSql.Inside
             _isTopLevelQuery = isTopLevelQuery;
         }
 
+        internal static bool IsSubQuery(MethodCallExpression method)
+            => method.Arguments.Count == 1 &&
+                    typeof(IQuery).IsAssignableFrom(method.Arguments[0].Type) &&
+                    method.Method.DeclaringType == typeof(QueryExtensions) &&
+                    method.Method.Name == nameof(QueryExtensions.Cast);
+
         internal static string ToString(IQuery query, IQueryCustomizer queryCustomizer)
             => ToStringCore(query, queryCustomizer, true);
 
@@ -116,48 +122,68 @@ namespace LambdicSql.Inside
         DecodedInfo ToString(MethodCallExpression method)
         {
             //sub query.
-            if (method.Arguments.Count == 1 &&
-                typeof(IQuery).IsAssignableFrom(method.Arguments[0].Type) &&
-                method.Method.DeclaringType == typeof(QueryExtensions) &&
-                method.Method.Name == "Cast")
+            if (IsSubQuery(method))
             {
                 //notify converting info.
                 SpecialElementConverting(this, new SqlStringConvertingEventArgs(SpecialElementType.SubQuery, string.Empty));
 
                 var param = Expression.Parameter(typeof(IQueryCustomizer), "queryCustomizer");
                 var call = Expression.Call(null, GetType().
-                    GetMethod("MakeQueryString", BindingFlags.Static|BindingFlags.NonPublic|BindingFlags.Public), new[] { method.Arguments[0], param });
-                var func = Expression.Lambda(call, new[] { param }).Compile();
-                return new DecodedInfo(func.Method.ReturnType, func.DynamicInvoke(_queryCustomizer).ToString());
+                    GetMethod(nameof(MakeQueryString), BindingFlags.Static|BindingFlags.NonPublic|BindingFlags.Public), new[] { method.Arguments[0], param });
+                var funcSubQuery = Expression.Lambda(call, new[] { param }).Compile();
+                return new DecodedInfo(funcSubQuery.Method.ReturnType, funcSubQuery.DynamicInvoke(_queryCustomizer).ToString());
             }
 
+            //word
+            if (0 < method.Arguments.Count && typeof(ISqlWord).IsAssignableFrom(method.Arguments[0].Type))
+            {
+                return CusotmInvoke(method, CustomTargetType.Word);
+            }
+
+            //func
             if (0 < method.Arguments.Count && typeof(ISqlFunc).IsAssignableFrom(method.Arguments[0].Type))
             {
-                //sql function.
-                var argumentsSrc = method.Arguments.Skip(1).ToArray();//skip this. 
-
-                //custom
-                var arguments = argumentsSrc.Select(e => ToString(e)).ToArray();
-                if (_queryCustomizer != null)
-                {
-                    var customed = _queryCustomizer.CustomFunction(method.Method.ReturnType, method.Method.Name, arguments);
-                    if (!string.IsNullOrEmpty(customed))
-                    {
-                        return new DecodedInfo(method.Method.ReturnType, customed);
-                    }
-                }
-                return new DecodedInfo(method.Method.ReturnType, method.Method.Name + "(" + string.Join(", ", arguments.Select(e => e.Text).ToArray()) + ")");
+                return CusotmInvoke(method, CustomTargetType.Func);
             }
 
-            //normal func.
+            //normal
+            //check
+            CheckNormalFuncArguments(method);
+
+            //invoke
+            var funcNormal = Expression.Lambda(method).Compile();
+            return new DecodedInfo(funcNormal.Method.ReturnType, ToString(funcNormal.DynamicInvoke()));
+        }
+
+        DecodedInfo CusotmInvoke(MethodCallExpression method, CustomTargetType invokeType)
+        {
+            //sql function.
+            var argumentsSrc = method.Arguments.Skip(1).ToArray();//skip this. 
+
+            //custom by user.
+            var arguments = argumentsSrc.Select(e => ToString(e)).ToArray();
+            if (_queryCustomizer != null)
             {
-                //check
-                CheckNormalFuncArguments(method);
-
-                //invoke
-                var func = Expression.Lambda(method).Compile();
-                return new DecodedInfo(func.Method.ReturnType, ToString(func.DynamicInvoke()));
+                var customed = _queryCustomizer.CusotmInvoke(invokeType, method.Method.ReturnType, method.Method.Name, arguments);
+                if (!string.IsNullOrEmpty(customed))
+                {
+                    return new DecodedInfo(method.Method.ReturnType, customed);
+                }
             }
+
+            //custom by defined class.
+            var custom = method.Method.DeclaringType.GetMethod(nameof(_queryCustomizer.CusotmInvoke));
+            if (custom != null)
+            {
+                var customed = (string)custom.Invoke(null, new object[] { method.Method.ReturnType, method.Method.Name, arguments });
+                if (!string.IsNullOrEmpty(customed))
+                {
+                    return new DecodedInfo(method.Method.ReturnType, customed);
+                }
+            }
+
+            //normal format.
+            return new DecodedInfo(method.Method.ReturnType, method.Method.Name + "(" + string.Join(", ", arguments.Select(e => e.Text).ToArray()) + ")");
         }
 
         void CheckNormalFuncArguments(MethodCallExpression method)
