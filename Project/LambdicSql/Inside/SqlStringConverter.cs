@@ -132,7 +132,7 @@ namespace LambdicSql.Inside
             }
 
             //normal func.
-            if (method.Arguments.Count == 0 || !typeof(IDBFuncs).IsAssignableFrom(method.Arguments[0].Type))
+            if (method.Arguments.Count == 0 || !typeof(ISqlFunc).IsAssignableFrom(method.Arguments[0].Type))
             {
                 //check
                 CheckNormalFuncArguments(method);

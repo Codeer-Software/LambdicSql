@@ -11,7 +11,7 @@ namespace Test
         [TestMethod]
         public void SupportedType()
         {
-            var query = Sql.Using(() => new
+            var query = Sql.Query(() => new
             {
                 table1 = new
                 {
@@ -57,7 +57,7 @@ namespace Test
         [TestMethod]
         public void TableOnly()
         {
-            var query = Sql.Using(() => new
+            var query = Sql.Query(() => new
             {
                 table1 = new
                 {
@@ -82,7 +82,7 @@ namespace Test
         [TestMethod]
         public void Schema()
         {
-            var query = Sql.Using(() => new
+            var query = Sql.Query(() => new
             {
                 table1 = new
                 {
@@ -110,7 +110,7 @@ namespace Test
         [TestMethod]
         public void CreateTableOnly()
         {
-            var query = Sql.Using(() => new
+            var query = Sql.Query(() => new
             {
                 table1 = new
                 {
@@ -139,7 +139,7 @@ namespace Test
         [TestMethod]
         public void CreateSchema()
         {
-            var query = Sql.Using(() => new
+            var query = Sql.Query(() => new
             {
                 table1 = new
                 {

@@ -10,7 +10,7 @@ namespace Test
         [TestMethod]
         public void TestNoramlClass()
         {
-            var query = Sql.Using(() => new Db1());
+            var query = Sql.Query(() => new Db1());
             var data = new TestResult();
             data["table1@col1"] = "abc";
             data["table1@col2"] = 100;
@@ -28,7 +28,7 @@ namespace Test
         {
             Sql.Log = l => Debug.Print(l);
 
-            var query = Sql.Using(() => new
+            var query = Sql.Query(() => new
             {
                 table1 = new Tbl1(),
                 table2 = new Tbl2()
@@ -50,7 +50,7 @@ namespace Test
         {
             Sql.Log = l => Debug.Print(l);
 
-            var query = Sql.Using(() => new
+            var query = Sql.Query(() => new
             {
                 table1 = new Tbl1()
             });

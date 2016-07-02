@@ -17,7 +17,7 @@ namespace Test
             Sql.Log = l => Debug.Print(l);
 
             //make sql.
-            var query = Sql.Using(() => new
+            var query = Sql.Query(() => new
             {
                 tbl_staff = new
                 {
@@ -86,7 +86,7 @@ namespace Test
         [TestMethod]
         public void StandardNoramlTypeInit()
         {
-            Sql.Using(() => new Data()
+            Sql.Query(() => new Data()
             {
                 tbl_staff = new Staff()
                 {
@@ -99,7 +99,7 @@ namespace Test
         [TestMethod]
         public void SubQueryUsing()
         {
-            var query = Sql.Using(() => new Data()).
+            var query = Sql.Query(() => new Data()).
                 Select(db => new SelectData()
                 {
                     name = db.tbl_staff.name,
@@ -111,7 +111,7 @@ namespace Test
                 Where(db => 3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000).
                     OrderBy().ASC(db => db.tbl_staff.name);
 
-            Sql.Using(() => new
+            Sql.Query(() => new
             {
                 tbl_staff = new Staff(),
                 tbl_sub = query.Cast()
@@ -129,7 +129,7 @@ namespace Test
         {
             Sql.Log = l => Debug.Print(l);
 
-            var subQuery = Sql.Using(() => new Data()).
+            var subQuery = Sql.Query(() => new Data()).
                 Select(db => new SelectData()
                 {
                     name = db.tbl_staff.name,
@@ -140,7 +140,7 @@ namespace Test
                     Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
                 Where(db => 3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000);
 
-            var query1 = Sql.Using(() => new Data2
+            var query1 = Sql.Query(() => new Data2
             {
                 tbl_staff = new Staff(),
                 tbl_sub = subQuery.Cast()
@@ -153,7 +153,7 @@ namespace Test
 
             query1.ToExecutor(TestEnvironment.Adapter).Read();
 
-            var query2 = Sql.Using(() => new Data2
+            var query2 = Sql.Query(() => new Data2
             {
                 tbl_staff = new Staff(),
                 tbl_sub = subQuery.Cast()
@@ -174,7 +174,7 @@ namespace Test
             Sql.Log = l => Debug.Print(l);
 
             //make sql.
-            var query = Sql.Using(() => new Data()).
+            var query = Sql.Query(() => new Data()).
             Select(db => new SelectData()
             {
                 name = db.tbl_staff.name,
@@ -208,7 +208,7 @@ namespace Test
             Sql.Log = l => Debug.Print(l);
 
             //make sql.
-            var query = Sql.Using<Data>().
+            var query = Sql.Query<Data>().
             Select(db => new SelectData()
             {
                 name = db.tbl_staff.name,
@@ -242,7 +242,7 @@ namespace Test
             Sql.Log = l => Debug.Print(l);
 
             //make sql.
-            var query = Sql.Using<Data>().
+            var query = Sql.Query<Data>().
             Select(db => new SelectData()
             {
                 name = db.tbl_staff.name,
@@ -283,7 +283,7 @@ namespace Test
         public void TestTableOne()
         {
             Sql.Log = l => Debug.Print(l);
-            var query = Sql.Using(() => new
+            var query = Sql.Query(() => new
             {
                 tbl_staff = new Staff()
             });
@@ -302,7 +302,7 @@ namespace Test
             Sql.Log = l => Debug.Print(l);
 
             //make sql.
-            var query = Sql.Using(() => new Data()).
+            var query = Sql.Query(() => new Data()).
             Select().
             From(db => db.tbl_remuneration).
                 Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
@@ -331,7 +331,7 @@ namespace Test
             Sql.Log = l => Debug.Print(l);
 
             //make sql.
-            var query = Sql.Using(() => new
+            var query = Sql.Query(() => new
             {
                 tbl_staff = new Staff()
             });
@@ -357,15 +357,15 @@ namespace Test
             Sql.Log = l => Debug.Print(l);
 
             //make sql.
-            var query = Sql.Using(() => new Data()).
-            Select((db, function) => new
+            var query = Sql.Query(() => new Data()).
+            Select(db => new
             {
                 name = db.tbl_staff.name,
-                count = function.Count(db.tbl_remuneration.money),
-                total = function.Sum(db.tbl_remuneration.money),
-                average = function.Avg(db.tbl_remuneration.money),
-                minimum = function.Min(db.tbl_remuneration.money),
-                maximum = function.Max(db.tbl_remuneration.money),
+                count = Sql.Func.Count(db.tbl_remuneration.money),
+                total = Sql.Func.Sum(db.tbl_remuneration.money),
+                average = Sql.Func.Avg(db.tbl_remuneration.money),
+                minimum = Sql.Func.Min(db.tbl_remuneration.money),
+                maximum = Sql.Func.Max(db.tbl_remuneration.money),
             }).
             From(db => db.tbl_remuneration).
                 Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
@@ -390,15 +390,15 @@ namespace Test
             Sql.Log = l => Debug.Print(l);
 
             //make sql.
-            var query = Sql.Using(() => new Data()).
-            Select((db, function) => new
+            var query = Sql.Query(() => new Data()).
+            Select(db => new
             {
                 name = db.tbl_staff.name,
-                total = function.Sum(db.tbl_remuneration.money)
+                total = Sql.Func.Sum(db.tbl_remuneration.money)
             }).
             From(db => db.tbl_remuneration).
                 Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
-            GroupBy(db => db.tbl_staff.id, db => db.tbl_staff.name).Having((db, function) => 10000 < function.Sum(db.tbl_remuneration.money));
+            GroupBy(db => db.tbl_staff.id, db => db.tbl_staff.name).Having(db => 10000 < Sql.Func.Sum(db.tbl_remuneration.money));
 
             var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
             foreach (var e in datas)
@@ -413,7 +413,7 @@ namespace Test
             //log for debug.
             Sql.Log = l => Debug.Print(l);
 
-            var query = Sql.Using(() => new Data()).
+            var query = Sql.Query(() => new Data()).
                 Select().
                 From(db => db.tbl_remuneration).
                     Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).Where();
@@ -435,7 +435,7 @@ namespace Test
             Sql.Log = l => Debug.Print(l);
 
             //make sql.
-            var query = Sql.Using(() => new { tbl_staff = new Staff() }).
+            var query = Sql.Query(() => new { tbl_staff = new Staff() }).
             Select().
             From().
             Where().Like(db => db.tbl_staff.name, "%son%");
@@ -454,7 +454,7 @@ namespace Test
             Sql.Log = l => Debug.Print(l);
 
             //make sql.
-            var query = Sql.Using(() => new { tbl_staff = new Staff() }).
+            var query = Sql.Query(() => new { tbl_staff = new Staff() }).
             Select().
             From().
             Where().In(db => db.tbl_staff.id, 1, 3);
@@ -473,7 +473,7 @@ namespace Test
             Sql.Log = l => Debug.Print(l);
 
             //make sql.
-            var query = Sql.Using(() => new { tbl_staff = new Staff() }).
+            var query = Sql.Query(() => new { tbl_staff = new Staff() }).
             Select().
             From().
             Where().Between(db => db.tbl_staff.id, 1, 3);
@@ -495,7 +495,7 @@ namespace Test
         }
 
         public IEnumerable<SelectData> ReadData1() =>
-            Sql.Using<Data>().
+            Sql.Query<Data>().
             Select(db => new SelectData()
             {
                 name = db.tbl_staff.name,
@@ -510,7 +510,7 @@ namespace Test
 
 
         public IEnumerable<Data> ReadData2() =>
-            Sql.Using<Data>().
+            Sql.Query<Data>().
             Select().
             From(db => db.tbl_remuneration).
                 Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
@@ -519,7 +519,7 @@ namespace Test
             ToExecutor(TestEnvironment.Adapter).Read();
         
         public IEnumerable<Staff> ReadData3() =>
-            Sql.Using(() => new { tbl_staff = new Staff() }).
+            Sql.Query(() => new { tbl_staff = new Staff() }).
             Select().
             From().
             ToExecutor(TestEnvironment.Adapter).Read().Select(e=>e.tbl_staff);
@@ -528,10 +528,10 @@ namespace Test
         public void SelectSubQuery()
         {
             Sql.Log = l => Debug.Print(l);
-            var define = Sql.Using<Data>();
+            var define = Sql.Query<Data>();
 
             var sub = define.
-                Select((db, func) => new { total = func.Sum(db.tbl_remuneration.money) }).
+                Select(db => new { total = Sql.Func.Sum(db.tbl_remuneration.money) }).
                 From(db => db.tbl_remuneration);
 
             var datas = define.
@@ -552,10 +552,10 @@ namespace Test
         public void WhereInSubQuery()
         {
             Sql.Log = l => Debug.Print(l);
-            var define = Sql.Using<Data>();
+            var define = Sql.Query<Data>();
 
             var sub = define.
-                Select((db, func) => new { total = db.tbl_remuneration.staff_id }).
+                Select(db => new { total = db.tbl_remuneration.staff_id }).
                 From(db => db.tbl_remuneration);
 
             var datas = define.

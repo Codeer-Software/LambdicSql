@@ -16,7 +16,7 @@ namespace TestCheck35
             Sql.Log = l => Debug.Print(l);
 
             //make sql.
-            var q1 = Sql.Using(() => new
+            var q1 = Sql.Query(() => new
             {
                 tbl_staff = new
                 {

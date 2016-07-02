@@ -24,12 +24,7 @@ namespace LambdicSql
             where TDB : class
             where TSelect : class
             => SelectCore<TDB, TSelect>(query, define);
-
-        public static IQuery<TDB, TSelect, SelectClause> Select<TDB, TSelect>(this IQuery<TDB, TDB> query, Expression<Func<TDB, ISelectFuncs, TSelect>> define)
-            where TDB : class
-            where TSelect : class
-            => SelectCore<TDB, TSelect>(query, define);
-
+        
         static IQuery<TDB, TSelect, SelectClause> SelectCore<TDB, TSelect>(this IQuery<TDB, TDB> query, LambdaExpression define)
             where TDB : class
             where TSelect : class

@@ -17,12 +17,7 @@ namespace LambdicSql
             where TDB : class
             where TSelect : class
              => new ClauseMakingQuery<TDB, TSelect, WhereClause>(query, new WhereClause(condition.Body));
-
-        public static IQuery<TDB, TSelect, WhereClause> Where<TDB, TSelect>(this IQuery<TDB, TSelect> query, Expression<Func<TDB, IWhereFuncs, bool>> condition)
-            where TDB : class
-            where TSelect : class
-             => new ClauseMakingQuery<TDB, TSelect, WhereClause>(query, new WhereClause(condition.Body));
-
+        
         public static IQuery<TDB, TSelect, WhereClause> Not<TDB, TSelect>(this IQuery<TDB, TSelect, WhereClause> query)
             where TDB : class
             where TSelect : class
@@ -33,22 +28,12 @@ namespace LambdicSql
             where TSelect : class
              => query.CustomClone(e => e.And(condition.Body));
 
-        public static IQuery<TDB, TSelect, WhereClause> And<TDB, TSelect>(this IQuery<TDB, TSelect, WhereClause> query, Expression<Func<TDB, IWhereFuncs, bool>> condition)
-            where TDB : class
-            where TSelect : class
-             => query.CustomClone(e => e.And(condition.Body));
-
         public static IQuery<TDB, TSelect, WhereClause> And<TDB, TSelect>(this IQuery<TDB, TSelect, WhereClause> query)
             where TDB : class
             where TSelect : class
              => query.CustomClone(e => e.And());
 
         public static IQuery<TDB, TSelect, WhereClause> Or<TDB, TSelect>(this IQuery<TDB, TSelect, WhereClause> query, Expression<Func<TDB, bool>> condition)
-            where TDB : class
-            where TSelect : class
-             => query.CustomClone(e => e.Or(condition.Body));
-
-        public static IQuery<TDB, TSelect, WhereClause> Or<TDB, TSelect>(this IQuery<TDB, TSelect, WhereClause> query, Expression<Func<TDB, IWhereFuncs, bool>> condition)
             where TDB : class
             where TSelect : class
              => query.CustomClone(e => e.Or(condition.Body));

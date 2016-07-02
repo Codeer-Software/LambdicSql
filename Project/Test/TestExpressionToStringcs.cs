@@ -15,7 +15,7 @@ namespace Test
         [TestMethod]
         public void TestDB()
         {
-            var text = Sql.Using(() => new
+            var text = Sql.Query(() => new
             {
                 table1 = new
                 {
@@ -28,7 +28,7 @@ namespace Test
         [TestMethod]
         public void TestColumn()
         {
-            var text = Sql.Using(() => new
+            var text = Sql.Query(() => new
             {
                 table1 = new
                 {
@@ -41,7 +41,7 @@ namespace Test
         [TestMethod]
         public void TestConstant()
         {
-            var query = Sql.Using(() => new
+            var query = Sql.Query(() => new
             {
                 table1 = new
                 {
@@ -55,7 +55,7 @@ namespace Test
         [TestMethod]
         public void TestNodeType()
         {
-            var query = Sql.Using(() => new
+            var query = Sql.Query(() => new
             {
                 table1 = new
                 {
@@ -83,7 +83,7 @@ namespace Test
         [TestMethod]
         public void TestBinary()
         {
-            var query = Sql.Using(() => new
+            var query = Sql.Query(() => new
             {
                 table1 = new
                 {
@@ -97,7 +97,7 @@ namespace Test
         [TestMethod]
         public void TestDbFuncs()
         {
-            var query = Sql.Using(() => new
+            var query = Sql.Query(() => new
             {
                 table1 = new
                 {
@@ -110,7 +110,7 @@ namespace Test
         [TestMethod]
         public void TestNormalFuncs()
         {
-            var query = Sql.Using(() => new
+            var query = Sql.Query(() => new
             {
                 table1 = new
                 {
@@ -156,7 +156,7 @@ namespace Test
         [TestMethod]
         public void TestSubQuery()
         {
-            var define = Sql.Using(() => new
+            var define = Sql.Query(() => new
             {
                 table1 = new
                 {
@@ -178,7 +178,7 @@ namespace Test
             Debug.Print(text);
 
 
-            var query = Sql.Using(() => new
+            var query = Sql.Query(() => new
             {
                 table1 = new
                 {
@@ -192,7 +192,7 @@ namespace Test
         [TestMethod]
         public void TestSubQueryInLambda()
         {
-            var define = Sql.Using(() => new
+            var define = Sql.Query(() => new
             {
                 table1 = new
                 {
@@ -216,7 +216,7 @@ namespace Test
         [TestMethod]
         public void TestWhereSubQuery()
         {
-            var define = Sql.Using(() => new
+            var define = Sql.Query(() => new
             {
                 table1 = new
                 {
@@ -243,7 +243,7 @@ namespace Test
         }
     }
 
-    interface IFuncs : IDBFuncs{ }
+    interface IFuncs : ISqlFunc{ }
 
     static class FuncsExtensions
     { 
