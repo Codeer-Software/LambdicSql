@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace LambdicSql.QueryBase
 {
@@ -10,7 +12,7 @@ namespace LambdicSql.QueryBase
         public Dictionary<string, ColumnInfo> GetLambdaNameAndColumn() => _lambdaNameAndColumn.ToDictionary(e=>e.Key, e=>e.Value);
         public Dictionary<string, TableInfo> GetLambdaNameAndTable() => _lambdaNameAndTable.ToDictionary(e => e.Key, e => e.Value);
 
-        public void Add(ColumnInfo col)
+        internal void Add(ColumnInfo col)
         {
             _lambdaNameAndColumn.Add(col.LambdaFullName, col);
 
@@ -20,7 +22,20 @@ namespace LambdicSql.QueryBase
             {
                 sep = col.SqlFullName.Split('.');
                 var tableSql = string.Join(".", sep.Take(sep.Length - 1).ToArray());
-                _lambdaNameAndTable.Add(tableLambda, new TableInfo(tableLambda, tableSql));
+                _lambdaNameAndTable.Add(tableLambda, new TableInfo(tableLambda, tableSql, null));
+            }
+        }
+
+        internal void AddSubQueryTableInfo(Dictionary<string, Expression> lambdaNameAndSubQuery)
+        {
+            foreach (var e in lambdaNameAndSubQuery)
+            {
+                TableInfo table;
+                if (!_lambdaNameAndTable.TryGetValue(e.Key, out table))
+                {
+                    throw new NotSupportedException("can use sub query table only at Sql.Using.");
+                }
+                _lambdaNameAndTable[e.Key] = new TableInfo(table.LambdaFullName, table.SqlFullName, e.Value);
             }
         }
     }

@@ -6,14 +6,14 @@ using System.Linq.Expressions;
 
 namespace LambdicSql.Clause.From
 {
-    //TODO sub query in From clauses
     public class FromClause : IClause
     {
-        List<JoinElement> _join = new List<JoinElement>();
+        List<JoinElement> _joins = new List<JoinElement>();
+        bool _isUseSubQueryAs { get; } = true;
 
         public string MainTableSqlFullName { get; }
         public Expression MainTable { get; }
-        public JoinElement[] GetJoins() => _join.ToArray();
+        public JoinElement[] GetJoins() => _joins.ToArray();
 
         public FromClause(string mainTableSqlFullName)
         {
@@ -25,10 +25,17 @@ namespace LambdicSql.Clause.From
             MainTable = mainTable;
         }
 
+        public FromClause(string mainTableSqlFullName, Expression mainTable, JoinElement[] joins)
+        {
+            MainTableSqlFullName = mainTableSqlFullName;
+            MainTable = mainTable;
+            _joins = joins.ToList();
+        }
+
         public IClause Clone()
         {
             var clone = string.IsNullOrEmpty(MainTableSqlFullName) ? new FromClause(MainTable) : new FromClause(MainTableSqlFullName);
-            clone._join.AddRange(_join);
+            clone._joins.AddRange(_joins);
             return clone;
         }
 
@@ -38,7 +45,7 @@ namespace LambdicSql.Clause.From
             return "FROM" + Environment.NewLine + "\t" + string.Join(Environment.NewLine + "\t", new[] { mainTable }.Concat(GetJoins().Select(e => ToString(decoder, e))).ToArray());
         }
 
-        internal void Join(JoinElement join) => _join.Add(join);
+        internal void Join(JoinElement join) => _joins.Add(join);
 
         string ToString(ISqlStringConverter decoder, JoinElement join)
         {
@@ -55,7 +62,15 @@ namespace LambdicSql.Clause.From
         }
 
         string ExpressionToTableName(ISqlStringConverter decoder, Expression exp)
-            => decoder.DbInfo.GetLambdaNameAndTable()[decoder.ToString(exp)].SqlFullName;
+        {
+            var table = decoder.DbInfo.GetLambdaNameAndTable()[decoder.ToString(exp)];
+            if (table.SubQuery == null)
+            {
+                return table.SqlFullName;
+            }
+            var nameSeparator = _isUseSubQueryAs ? " AS " : " ";
+            return decoder.ToString(table.SubQuery) + nameSeparator + table.SqlFullName;
+        }
 
         string GetJoinName(JoinType type)
         {

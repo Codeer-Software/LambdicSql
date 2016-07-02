@@ -70,8 +70,15 @@ namespace LambdicSql.Inside
                 var newExp = arg as NewExpression;
                 if (newExp == null)
                 {
-                    var name = string.Join(".", currentNames);
-                    newArgs.Add(Expression.Call(param, typeof(IDbResult).GetMethod("Get" + paramType.Name), Expression.Constant(getIndexInSelect(name))));
+                    if (SupportedTypeSpec.IsSupported(paramType))
+                    {
+                        var name = string.Join(".", currentNames);
+                        newArgs.Add(Expression.Call(param, typeof(IDbResult).GetMethod("Get" + paramType.Name), Expression.Constant(getIndexInSelect(name))));
+                    }
+                    else
+                    {
+                        newArgs.Add(New(getIndexInSelect, currentNames.ToArray(), Expression.New(paramType.GetConstructor(new Type[0])), param));
+                    }
                 }
                 else
                 {

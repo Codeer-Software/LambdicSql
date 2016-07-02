@@ -27,8 +27,6 @@ namespace LambdicSql.Inside
                         var method = newExp.Members[i] as MethodInfo;
                         name = method.Name;
                     }
-
-                    var argMember = newExp.Arguments[i] as MemberExpression;
                     select.Add(new SelectElement(name, newExp.Arguments[i]));
                 }
             }

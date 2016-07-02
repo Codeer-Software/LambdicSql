@@ -84,6 +84,90 @@ namespace Test
         }
 
         [TestMethod]
+        public void StandardNoramlTypeInit()
+        {
+            Sql.Using(() => new Data()
+            {
+                tbl_staff = new Staff()
+                {
+                    id = 10
+                }
+            });
+        }
+
+
+        [TestMethod]
+        public void SubQueryUsing()
+        {
+            var query = Sql.Using(() => new Data()).
+                Select(db => new SelectData()
+                {
+                    name = db.tbl_staff.name,
+                    payment_date = db.tbl_remuneration.payment_date,
+                    money = db.tbl_remuneration.money,
+                }).
+                From(db => db.tbl_remuneration).
+                    Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
+                Where(db => 3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000).
+                    OrderBy().ASC(db => db.tbl_staff.name);
+
+            Sql.Using(() => new
+            {
+                tbl_staff = new Staff(),
+                tbl_sub = query.Cast()
+            });
+        }
+
+        class Data2
+        {
+            public Staff tbl_staff { get; set; }
+            public SelectData tbl_sub { get; set; }
+        }
+
+        [TestMethod]
+        public void SubQueryUsingType()
+        {
+            Sql.Log = l => Debug.Print(l);
+
+            var subQuery = Sql.Using(() => new Data()).
+                Select(db => new SelectData()
+                {
+                    name = db.tbl_staff.name,
+                    payment_date = db.tbl_remuneration.payment_date,
+                    money = db.tbl_remuneration.money,
+                }).
+                From(db => db.tbl_remuneration).
+                    Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
+                Where(db => 3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000);
+
+            var query1 = Sql.Using(() => new Data2
+            {
+                tbl_staff = new Staff(),
+                tbl_sub = subQuery.Cast()
+            }).
+            Select(db=>new
+            {
+                name = db.tbl_sub.name
+            }).
+            From(db=>db.tbl_sub);
+
+            query1.ToExecutor(TestEnvironment.Adapter).Read();
+
+            var query2 = Sql.Using(() => new Data2
+            {
+                tbl_staff = new Staff(),
+                tbl_sub = subQuery.Cast()
+            }).
+            Select(db => new
+            {
+                name = db.tbl_sub.name
+            }).
+            From(db => db.tbl_staff).Join(db => db.tbl_sub, db => db.tbl_sub.name == db.tbl_staff.name);
+
+            query2.ToExecutor(TestEnvironment.Adapter).Read();
+        }
+
+        [TestMethod]
         public void StandardNoramlType()
         {
             //log for debug.
