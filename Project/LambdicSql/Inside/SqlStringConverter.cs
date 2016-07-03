@@ -286,8 +286,25 @@ namespace LambdicSql.Inside
                 SpecialElementConverting(this, new SqlStringConvertingEventArgs(SpecialElementType.Column, name));
                 return new DecodedInfo(col.Type, col.SqlFullName);
             }
+            if (HasParameter(member))
+            {
+                return new DecodedInfo(null, name);
+            }
             var func = Expression.Lambda(member).Compile();
             return new DecodedInfo(func.Method.ReturnType, ToString(func.DynamicInvoke()));
+        }
+
+        static bool HasParameter(MemberExpression member)
+        {
+            while (member != null)
+            {
+                if (member.Expression is ParameterExpression)
+                {
+                    return true;
+                }
+                member = member.Expression as MemberExpression;
+            }
+            return false;
         }
 
         static string GetMemberCheckName(MemberExpression member)

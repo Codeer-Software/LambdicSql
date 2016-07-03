@@ -1,4 +1,5 @@
 ﻿using LambdicSql.QueryBase;
+using System;
 using System.Collections.Generic;
 
 namespace LambdicSql.Inside
@@ -19,6 +20,10 @@ namespace LambdicSql.Inside
 
         public IEnumerable<TSelect> Read()
         {
+            if (_info.Create == null)
+            {
+                throw new NotSupportedException("selected type is not able to be created.");
+            }
             using (var con = _adaptor.CreateConnection())
             {
                 con.Open();

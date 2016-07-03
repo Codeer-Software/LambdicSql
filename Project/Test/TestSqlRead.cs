@@ -647,47 +647,46 @@ namespace Test
                 From(db => db.tbl_data).
                 Where(db=>db.tbl_data.id == 3).
                 ToExecutor(TestEnvironment.Adapter).Write();
-
         }
 
 
         [TestMethod]
         public void Insert()
         {
-            /*
             Sql.Log = l => Debug.Print(l);
 
-            tbl_data[] datas = null;
-            
+            tbl_data[] datas = new[]
+            {
+                new tbl_data() { id = 1, val1 = 10, val2 = "a" },
+                new tbl_data() { id = 2, val1 = 20, val2 = "b" }
+            };
+
+            Delete();
             var count1 = Sql.Query<DataChangeTest>().
                 InsertInto(db => db.tbl_data).
                 Values(datas).
                 ToExecutor(TestEnvironment.Adapter).Write();
-
-            //ダサい
+            
+            Delete();
             var count2 = Sql.Query<DataChangeTest>().
                 InsertInto(db => db.tbl_data, tbl => tbl.id, tbl => tbl.val1).
                 Values(datas).
                 ToExecutor(TestEnvironment.Adapter).Write();
-            
-            /*
-            var count3 = Sql.Query(()=>new
-                {
-                    tbl_data = new
-                    {
-                        id = "",
-                        val1 = 0,
-                        val2 = "",
-                    }
-                }).
-                InsertInto(db => db.tbl_data).
-                Values(datas, (src, dst)=> 
-                {
-                    
-                }).
-                ToExecutor(TestEnvironment.Adapter).Write();
-            */
+             
+            Delete();
+            var datasX = datas.Select(e => new
+            {
+                id = e.id,
+                val1 = e.val1,
+                val2 = e.val2
+            }).ToArray();
+            var count3 = Sql.Query(() => new
+            {
+                tbl_data = datasX.FirstOrDefault()
+            }).
+            InsertInto(db=>db.tbl_data).
+            Values(datasX).
+            ToExecutor(TestEnvironment.Adapter).Write();
         }
-
     }
 }

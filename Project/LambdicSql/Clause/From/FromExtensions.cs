@@ -25,24 +25,28 @@ namespace LambdicSql
             return new ClauseMakingQuery<TDB, TSelect, FromClause>(query, new FromClause(query.Db.GetLambdaNameAndTable().First().Value.SqlFullName));
         }
 
-        public static IQuery<TDB, TSelect, FromClause> Join<TDB, TSelect>(this IQuery<TDB, TSelect, FromClause> query, Expression<Func<TDB, object>> table, Expression<Func<TDB, bool>> condition)
+        public static IQuery<TDB, TSelect, FromClause> Join<TDB, TSelect, T>(this IQuery<TDB, TSelect, FromClause> query, Expression<Func<TDB, T>> table, Expression<Func<TDB, bool>> condition)
             where TDB : class
             where TSelect : class
+            where T : class
              => query.CustomClone(e => e.Join(new JoinElement(JoinType.Join, table.Body, condition.Body)));
 
-        public static IQuery<TDB, TSelect, FromClause> LeftJoin<TDB, TSelect>(this IQuery<TDB, TSelect, FromClause> query, Expression<Func<TDB, object>> table, Expression<Func<TDB, bool>> condition)
+        public static IQuery<TDB, TSelect, FromClause> LeftJoin<TDB, TSelect, T>(this IQuery<TDB, TSelect, FromClause> query, Expression<Func<TDB, T>> table, Expression<Func<TDB, bool>> condition)
             where TDB : class
             where TSelect : class
+            where T : class
              => query.CustomClone(e => e.Join(new JoinElement(JoinType.LeftJoin, table.Body, condition.Body)));
 
-        public static IQuery<TDB, TSelect, FromClause> RightJoin<TDB, TSelect>(this IQuery<TDB, TSelect, FromClause> query, Expression<Func<TDB, object>> table, Expression<Func<TDB, bool>> condition)
+        public static IQuery<TDB, TSelect, FromClause> RightJoin<TDB, TSelect, T>(this IQuery<TDB, TSelect, FromClause> query, Expression<Func<TDB, T>> table, Expression<Func<TDB, bool>> condition)
             where TDB : class
             where TSelect : class
+            where T : class
              => query.CustomClone(e => e.Join(new JoinElement(JoinType.RightJoin, table.Body, condition.Body)));
 
-        public static IQuery<TDB, TSelect, FromClause> CrossJoin<TDB, TSelect>(this IQuery<TDB, TSelect, FromClause> query, Expression<Func<TDB, object>> table)
+        public static IQuery<TDB, TSelect, FromClause> CrossJoin<TDB, TSelect, T>(this IQuery<TDB, TSelect, FromClause> query, Expression<Func<TDB, T>> table)
             where TDB : class
             where TSelect : class
+            where T : class
              => query.CustomClone(e => e.Join(new JoinElement(JoinType.CrossJoin, table.Body, null)));
     }
 }

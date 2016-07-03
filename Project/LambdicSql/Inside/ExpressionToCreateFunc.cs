@@ -18,7 +18,14 @@ namespace LambdicSql.Inside
             }
             var param = Expression.Parameter(typeof(ISqlResult), "dbResult");
             var arguments = new[] { param };
-            return Expression.Lambda<Func<ISqlResult, T>>(New(getIndexInSelect, new string[0], newExp, param), arguments).Compile();
+            try
+            {
+                return Expression.Lambda<Func<ISqlResult, T>>(New(getIndexInSelect, new string[0], newExp, param), arguments).Compile();
+            }
+            catch (CanNotCreateException)
+            {
+                return null;
+            }
         }
 
         static Expression New(Func<string, int> getIndexInSelect, string[] names, NewExpression exp, ParameterExpression param)
@@ -37,7 +44,12 @@ namespace LambdicSql.Inside
                     }
                     else
                     {
-                        binding.Add(Expression.Bind(p, New(getIndexInSelect, currentNames, Expression.New(p.PropertyType.GetConstructor(new Type[0])), param)));
+                        var constructor = p.PropertyType.GetConstructor(new Type[0]);
+                        if (constructor == null)
+                        {
+                            throw new CanNotCreateException();
+                        }
+                        binding.Add(Expression.Bind(p, New(getIndexInSelect, currentNames, Expression.New(constructor), param)));
                     }
 
                 }
@@ -73,10 +85,16 @@ namespace LambdicSql.Inside
                     if (SupportedTypeSpec.IsSupported(paramType))
                     {
                         var name = string.Join(".", currentNames);
-                        newArgs.Add(Expression.Call(param, typeof(ISqlResult).GetMethod("Get" + paramType.Name), Expression.Constant(getIndexInSelect(name))));
+                        newArgs.Add(Expression.Call(param, typeof(ISqlResult).GetMethod("Get" + paramType.Name), 
+                            Expression.Constant(getIndexInSelect(name))));
                     }
                     else
                     {
+                        var constructor = paramType.GetConstructor(new Type[0]);
+                        if (constructor == null)
+                        {
+                            throw new CanNotCreateException();
+                        }
                         newArgs.Add(New(getIndexInSelect, currentNames.ToArray(), Expression.New(paramType.GetConstructor(new Type[0])), param));
                     }
                 }

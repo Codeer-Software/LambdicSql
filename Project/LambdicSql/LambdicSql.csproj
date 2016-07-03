@@ -46,6 +46,10 @@
     <Compile Include="Clause\From\JoinType.cs" />
     <Compile Include="Clause\GroupBy\GroupByClause.cs" />
     <Compile Include="Clause\Having\HavingClause.cs" />
+    <Compile Include="Clause\InsertInto\IInsertIntoQuery.cs" />
+    <Compile Include="Clause\InsertInto\InsertIntoClause.cs" />
+    <Compile Include="Clause\InsertInto\InsertIntoClauseMakingQuery.cs" />
+    <Compile Include="Clause\InsertInto\InsertIntoExtensions.cs" />
     <Compile Include="Clause\Select\SelectClauseExtensions.cs" />
     <Compile Include="Func\FuncsExtensions.cs" />
     <Compile Include="Clause\Having\HavingQueryExtensions.cs" />
@@ -55,6 +59,8 @@
     <Compile Include="Clause\Select\SelectClause.cs" />
     <Compile Include="Clause\Select\SelectElement.cs" />
     <Compile Include="Clause\Where\WhereClause.cs" />
+    <Compile Include="Inside\CanNotCreateException.cs" />
+    <Compile Include="Inside\SqlResultDefault.cs" />
     <Compile Include="QueryBase\Class1.cs" />
     <Compile Include="QueryBase\ISqlFunc.cs" />
     <Compile Include="QueryBase\InvalidDbItemException.cs" />
