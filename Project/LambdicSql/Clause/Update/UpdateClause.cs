@@ -6,6 +6,7 @@ using System.Collections.Generic;
 
 namespace LambdicSql.Clause.Update
 {
+    //TODO refactoring.
     public class UpdateClause : IClause
     {
         List<SetElement> Elements { get; set; } = new List<SetElement>();

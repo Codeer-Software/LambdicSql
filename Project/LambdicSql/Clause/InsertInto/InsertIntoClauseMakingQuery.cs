@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace LambdicSql.Clause.InsertInto
 {
+    //TODO refactoring.
     public class InsertIntoClauseMakingQuery<TDB, TTable> : IInsertIntoQuery<TDB, TTable>
     where TDB : class
     where TTable : class
