@@ -1,4 +1,4 @@
-LambdicSql
+LambdicSql_ƒ¿
 ======================
 
 ## Features ...
