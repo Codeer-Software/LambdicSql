@@ -9,24 +9,24 @@ LambdicSql from NuGet
     PM> Install-Package LambdicSql
 https://www.nuget.org/packages/LambdicSql/
 ## Implemented Keywords.
--SELECT
--FROM
--WHERE
-	-JOIN
-	-LEFT JOIN
-	-RIGHT JOIN
-	-CROSS JOIN
--ORDER BY
-	-ASC
-	-DESC
--GROUP BY
--HAVING
--DISTINCT
--UPDATE
-	-SET
--DELETE
--INSERT INTO
-	-VALUES
+- SELECT
+- FROM
+- WHERE
+	- JOIN
+	- LEFT JOIN
+	- RIGHT JOIN
+	- CROSS JOIN
+- ORDER BY
+	- ASC
+	- DESC
+- GROUP BY
+- HAVING
+- DISTINCT
+- UPDATE
+	- SET
+- DELETE
+- INSERT INTO
+	- VALUES
 
 Look for how to use from the samples.
 ## Simple sample
