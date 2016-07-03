@@ -688,5 +688,24 @@ namespace Test
             Values(datasX).
             ToExecutor(TestEnvironment.Adapter).Write();
         }
+
+        [TestMethod]
+        public void Update()
+        {
+            Sql.Log = l => Debug.Print(l);
+
+            var count1 = Sql.Query<DataChangeTest>().
+                Update(db => db.tbl_data).
+                Set(tbl => tbl.val1, 100).
+                Set(tbl => tbl.val2, "200").
+                Where(db=>db.tbl_data.id == 1).
+                ToExecutor(TestEnvironment.Adapter).Write();
+
+            var count2 = Sql.Query<DataChangeTest>().
+                Update(db => db.tbl_data).
+                Set(tbl => tbl.val1, tbl => tbl.val1 * 2).
+                Where(db => db.tbl_data.id == 1).
+                ToExecutor(TestEnvironment.Adapter).Write();
+        }
     }
 }

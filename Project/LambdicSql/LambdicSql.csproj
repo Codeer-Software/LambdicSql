@@ -51,6 +51,8 @@
     <Compile Include="Clause\InsertInto\InsertIntoClauseMakingQuery.cs" />
     <Compile Include="Clause\InsertInto\InsertIntoExtensions.cs" />
     <Compile Include="Clause\Select\SelectClauseExtensions.cs" />
+    <Compile Include="Clause\Update\UpdateClause.cs" />
+    <Compile Include="Clause\Update\UpdateExtensions.cs" />
     <Compile Include="Func\FuncsExtensions.cs" />
     <Compile Include="Clause\Having\HavingQueryExtensions.cs" />
     <Compile Include="Clause\OrderBy\Order.cs" />
