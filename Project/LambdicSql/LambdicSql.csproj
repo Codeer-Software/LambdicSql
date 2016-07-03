@@ -61,12 +61,12 @@
     <Compile Include="Clause\Where\WhereClause.cs" />
     <Compile Include="Inside\CanNotCreateException.cs" />
     <Compile Include="Inside\SqlResultDefault.cs" />
-    <Compile Include="QueryBase\Class1.cs" />
+    <Compile Include="QueryBase\CustomTargetType.cs" />
     <Compile Include="QueryBase\ISqlFunc.cs" />
     <Compile Include="QueryBase\InvalidDbItemException.cs" />
     <Compile Include="QueryBase\IQueryCustomizer.cs" />
     <Compile Include="QueryBase\ISqlWord.cs" />
-    <Compile Include="QueryBase\Query.cs" />
+    <Compile Include="QueryBase\ClauseMakingQuery.cs" />
     <Compile Include="QueryBase\IDbAdapter.cs" />
     <Compile Include="QueryBase\ISqlStringConverter.cs" />
     <Compile Include="Inside\SqlResult.cs" />
