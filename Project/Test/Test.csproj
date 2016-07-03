@@ -52,6 +52,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Samples.cs" />
     <Compile Include="TestEnvironment.cs" />
     <Compile Include="TestExpressionToStringcs.cs" />
     <Compile Include="TestResult.cs" />

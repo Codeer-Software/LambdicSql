@@ -13,18 +13,6 @@ namespace LambdicSql
             where TSelect : class
              => new ClauseMakingQuery<TDB, TSelect, FromClause>(query, new FromClause(table.Body));
 
-        public static IQuery<TDB, TSelect, FromClause> From<TDB, TSelect>(this IQuery<TDB, TSelect> query)
-            where TDB : class
-            where TSelect : class
-        { 
-            //table count must be 1.
-            if (query.Db.GetLambdaNameAndTable().Count != 1)
-            {
-                throw new NotSupportedException();
-            }
-            return new ClauseMakingQuery<TDB, TSelect, FromClause>(query, new FromClause(query.Db.GetLambdaNameAndTable().First().Value.SqlFullName));
-        }
-
         public static IQuery<TDB, TSelect, FromClause> Join<TDB, TSelect, T>(this IQuery<TDB, TSelect, FromClause> query, Expression<Func<TDB, T>> table, Expression<Func<TDB, bool>> condition)
             where TDB : class
             where TSelect : class

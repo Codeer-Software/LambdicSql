@@ -311,7 +311,7 @@ namespace Test
             var query = Sql.Query(()=>new { tbl_staff = new Staff() }).
             Free("/* comment */").
             Select().
-            From();
+            From(db=>db.tbl_staff);
 
             //execute.
             query.ToExecutor(TestEnvironment.Adapter).Read();
@@ -376,7 +376,7 @@ namespace Test
             });
 
             //execute.
-            var datas = query.Select().From().ToExecutor(TestEnvironment.Adapter).Read();
+            var datas = query.Select().From(db => db.tbl_staff).ToExecutor(TestEnvironment.Adapter).Read();
 
             foreach (var e in datas)
             {
@@ -476,7 +476,7 @@ namespace Test
             //make sql.
             var query = Sql.Query(() => new { tbl_staff = new Staff() }).
             Select().
-            From().
+            From(db => db.tbl_staff).
             Where().Like(db => db.tbl_staff.name, "%son%");
 
             var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
@@ -495,7 +495,7 @@ namespace Test
             //make sql.
             var query = Sql.Query(() => new { tbl_staff = new Staff() }).
             Select().
-            From().
+            From(db => db.tbl_staff).
             Where().In(db => db.tbl_staff.id, 1, 3);
 
             var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
@@ -514,7 +514,7 @@ namespace Test
             //make sql.
             var query = Sql.Query(() => new { tbl_staff = new Staff() }).
             Select().
-            From().
+            From(db => db.tbl_staff).
             Where().Between(db => db.tbl_staff.id, 1, 3);
 
             var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
@@ -560,7 +560,7 @@ namespace Test
         public IEnumerable<Staff> ReadData3() =>
             Sql.Query(() => new { tbl_staff = new Staff() }).
             Select().
-            From().
+            From(db => db.tbl_staff).
             ToExecutor(TestEnvironment.Adapter).Read().Select(e=>e.tbl_staff);
 
         [TestMethod]

@@ -8,17 +8,38 @@ LambdicSql from NuGet
 
     PM> Install-Package LambdicSql
 https://www.nuget.org/packages/LambdicSql/
+## Implemented Keywords.
+-SELECT
+-FROM
+-WHERE
+	-JOIN
+	-LEFT JOIN
+	-RIGHT JOIN
+	-CROSS JOIN
+-ORDER BY
+	-ASC
+	-DESC
+-GROUP BY
+-HAVING
+-DISTINCT
+-UPDATE
+	-SET
+-DELETE
+-INSERT INTO
+	-VALUES
 
+Look for how to use from the samples.
 ## Simple sample
 write only lambda.
-```cs  
+```cs
+[TestMethod]
 public void LambdaOnly()
 {
     //log for debug.
     Sql.Log = l => Debug.Print(l);
 
     //make sql.
-    var query = Sql.Using(() => new
+    var query = Sql.Query(() => new
     {
         tbl_staff = new
         {
@@ -45,32 +66,29 @@ public void LambdaOnly()
     OrderBy().ASC(db => db.tbl_staff.name);
 
     //execute.
-    var datas = query.ToExecutor(TestEnvironment.ConnectionString).Read();
+    var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
 
     foreach (var e in datas)
     {
         Debug.Print("{0}, {1}, {2}", e.name, e.payment_date, e.money);
     }
 }
-
 ```
 ```sql
-SELECT 
-	tbl_staff.name AS name,
-	tbl_remuneration.payment_date AS payment_date,
-	tbl_remuneration.money AS money
-
-FROM tbl_remuneration
+SELECT
+	tbl_staff.name AS "name",
+	tbl_remuneration.payment_date AS "payment_date",
+	tbl_remuneration.money AS "money"
+FROM
+	tbl_remuneration
 	JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)
-
 WHERE
-	(('3000') < (tbl_remuneration.money)) AND ((tbl_remuneration.money) < ('4000'))
-
+	((3000) < (tbl_remuneration.money)) AND ((tbl_remuneration.money) < (4000))
 ORDER BY 
-	tbl_staff.name ASC
+	tbl_staff.name ASC;
 ```
-use normal class.
-```cs  
+Using normal type.
+```cs
 public class Staff
 {
     public int id { get; set; }
@@ -94,13 +112,15 @@ public class SelectData
     public DateTime payment_date { get; set; }
     public decimal money { get; set; }
 }
+
+[TestMethod]
 public void StandardNoramlType()
 {
     //log for debug.
     Sql.Log = l => Debug.Print(l);
 
     //make sql.
-    var query = Sql.Using(() => new DB()).
+    var query = Sql.Query(() => new DB()).
     Select(db => new SelectData()
     {
         name = db.tbl_staff.name,
@@ -113,7 +133,7 @@ public void StandardNoramlType()
     OrderBy().ASC(db => db.tbl_staff.name);
 
     //execute.
-    var datas = query.ToExecutor(TestEnvironment.ConnectionString).Read();
+    var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
 
     foreach (var e in datas)
     {
@@ -122,33 +142,33 @@ public void StandardNoramlType()
 }
 ```
 ```sql
-SELECT 
-	tbl_staff.name AS name,
-	tbl_remuneration.payment_date AS payment_date,
-	tbl_remuneration.money AS money
-
-FROM tbl_remuneration
+SELECT
+	tbl_staff.name AS "name",
+	tbl_remuneration.payment_date AS "payment_date",
+	tbl_remuneration.money AS "money"
+FROM
+	tbl_remuneration
 	JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)
-
 WHERE
-	(('3000') < (tbl_remuneration.money)) AND ((tbl_remuneration.money) < ('4000'))
-
+	((3000) < (tbl_remuneration.money)) AND ((tbl_remuneration.money) < (4000))
 ORDER BY 
-	tbl_staff.name ASC
+	tbl_staff.name ASC;
 ```
-Avoid select.
-```cs  
-public void AvoidSelect()
+Select all.
+```cs
+[TestMethod]
+public void SelectAll()
 {
     //make sql.
-    var query = Sql.Using(() => new DB()).
+    var query = Sql.Query(() => new DB()).
+    Select().
     From(db => db.tbl_remuneration).
         Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
     Where(db => 3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000).
         OrderBy().ASC(db => db.tbl_staff.name);
 
     //execute.
-    var datas = query.ToExecutor(TestEnvironment.ConnectionString).Read();
+    var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
 
     foreach (var e in datas)
     {
@@ -157,68 +177,41 @@ public void AvoidSelect()
 }
 ```
 ```sql
-SELECT 
+SELECT
 	tbl_staff.id,
 	tbl_staff.name,
 	tbl_remuneration.id,
 	tbl_remuneration.staff_id,
 	tbl_remuneration.payment_date,
 	tbl_remuneration.money
-
-FROM tbl_remuneration
+FROM
+	tbl_remuneration
 	JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)
-
 WHERE
-	(('3000') < (tbl_remuneration.money)) AND ((tbl_remuneration.money) < ('4000'))
-
+	((3000) < (tbl_remuneration.money)) AND ((tbl_remuneration.money) < (4000))
 ORDER BY 
-	tbl_staff.name ASC
-```
-If table count is 1 and want to get all, avoid where.
-```cs  
-public void AvoidWhere()
-{
-    //make sql.
-    var query = Sql.Using(() => new
-    {
-        tbl_staff = new Staff()
-    });
-
-    //execute.
-    var datas = query.ToExecutor(TestEnvironment.ConnectionString).Read();
-
-    foreach (var e in datas)
-    {
-        Debug.Print("{0}, {1}", e.tbl_staff.id, e.tbl_staff.name);
-    }
-}
-```
-```sql
-SELECT 
-	tbl_staff.id,
-	tbl_staff.name
-
-FROM tbl_staff
+	tbl_staff.name ASC;
 ```
 Group by.
-```cs  
+```cs
+[TestMethod]
 public void GroupBy()
 {
-    var query = Sql.Using(() => new DB()).
-    Select((db, function) => new
+    var query = Sql.Query(() => new DB()).
+    Select(db => new
     {
         name = db.tbl_staff.name,
-        count = function.Count(db.tbl_remuneration.money),
-        total = function.Sum(db.tbl_remuneration.money),
-        average = function.Avg(db.tbl_remuneration.money),
-        minimum = function.Min(db.tbl_remuneration.money),
-        maximum = function.Max(db.tbl_remuneration.money),
+        count = Sql.Func.Count(db.tbl_remuneration.money),
+        total = Sql.Func.Sum(db.tbl_remuneration.money),
+        average = Sql.Func.Avg(db.tbl_remuneration.money),
+        minimum = Sql.Func.Min(db.tbl_remuneration.money),
+        maximum = Sql.Func.Max(db.tbl_remuneration.money),
     }).
     From(db => db.tbl_remuneration).
         Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
     GroupBy(db => db.tbl_staff.id, db => db.tbl_staff.name);
 
-    var datas = query.ToExecutor(TestEnvironment.ConnectionString).Read();
+    var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
     foreach (var e in datas)
     {
         Debug.Print("{0}, {1}, {2}, {3}, {4}, {5}", e.name, e.count, e.total, e.average, e.minimum, e.maximum);
@@ -226,194 +219,236 @@ public void GroupBy()
 }
 ```
 ```sql
-SELECT 
-	tbl_staff.name AS name,
-	Count(tbl_remuneration.money) AS count,
-	Sum(tbl_remuneration.money) AS total,
-	Avg(tbl_remuneration.money) AS average,
-	Min(tbl_remuneration.money) AS minimum,
-	Max(tbl_remuneration.money) AS maximum
-
-FROM tbl_remuneration
+SELECT
+	tbl_staff.name AS "name",
+	Count(tbl_remuneration.money) AS "count",
+	Sum(tbl_remuneration.money) AS "total",
+	Avg(tbl_remuneration.money) AS "average",
+	Min(tbl_remuneration.money) AS "minimum",
+	Max(tbl_remuneration.money) AS "maximum"
+FROM
+	tbl_remuneration
 	JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)
-
 GROUP BY 
 	tbl_staff.id,
-	tbl_staff.name
+	tbl_staff.name;
 ```
-Having
-```cs  
+Having.
+```cs
+[TestMethod]
 public void Having()
 {
-    var query = Sql.Using(() => new DB()).
-    Select((db, function) => new
+    var query = Sql.Query(() => new DB()).
+    Select(db => new
     {
         name = db.tbl_staff.name,
-        total = function.Sum(db.tbl_remuneration.money)
+        total = Sql.Func.Sum(db.tbl_remuneration.money)
     }).
     From(db => db.tbl_remuneration).
         Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
     GroupBy(db => db.tbl_staff.id, db => db.tbl_staff.name).
-    Having((db, function) => 10000 < function.Sum(db.tbl_remuneration.money));
+    Having(db => 10000 < Sql.Func.Sum(db.tbl_remuneration.money));
 
-    var datas = query.ToExecutor(TestEnvironment.ConnectionString).Read();
+    var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
 }
 ```
 ```sql
-SELECT 
-	tbl_staff.name AS name,
-	Sum(tbl_remuneration.money) AS total
-
-FROM tbl_remuneration
+SELECT
+	tbl_staff.name AS "name",
+	Sum(tbl_remuneration.money) AS "total"
+FROM
+	tbl_remuneration
 	JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)
-
 GROUP BY 
 	tbl_staff.id,
 	tbl_staff.name
-
 HAVING
-	('10000') < (Sum(tbl_remuneration.money))
+	(10000) < (Sum(tbl_remuneration.money));
 ```
 You can write sequencial AND OR.
-```cs  
+```cs
+[TestMethod]
 public void WhereAndOr()
 {
-    var query = Sql.Using(() => new DB()).
+    var query = Sql.Query(() => new DB()).
+        Select().
         From(db => db.tbl_remuneration).
             Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).Where();
 
     //sequencial write!
     query = query.And(db => 3000 < db.tbl_remuneration.money).And(db => db.tbl_remuneration.money < 4000).Or(db => db.tbl_staff.id == 1);
-    
-    var datas = query.ToExecutor(TestEnvironment.ConnectionString).Read();
+
+    var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
 
 }
 ```
 ```sql
-SELECT 
+SELECT
 	tbl_staff.id,
 	tbl_staff.name,
 	tbl_remuneration.id,
 	tbl_remuneration.staff_id,
 	tbl_remuneration.payment_date,
 	tbl_remuneration.money
-
-FROM tbl_remuneration
+FROM
+	tbl_remuneration
 	JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)
-
 WHERE
-	('3000') < (tbl_remuneration.money)
-	AND (tbl_remuneration.money) < ('4000')
-	OR (tbl_staff.id) = ('1')
+	(3000) < (tbl_remuneration.money)
+	AND (tbl_remuneration.money) < (4000)
+	OR (tbl_staff.id) = (1);
 ```
 Like, In, Between
-```cs  
+```cs
+[TestMethod]
 public void Like()
 {
-    var query = Sql.Using(() => new { tbl_staff = new Staff() }).
-                Where().Like(db => db.tbl_staff.name, "%son%");
-    
-    var datas = query.ToExecutor(TestEnvironment.ConnectionString).Read();
+    var query =
+        Sql.Query(() => new { tbl_staff = new Staff() }).
+        Select().
+        From(db=>db.tbl_staff).
+        Where().Like(db => db.tbl_staff.name, "%son%");
+
+    var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
 }
 ```
 ```sql
-SELECT 
+SELECT
 	tbl_staff.id,
 	tbl_staff.name
-
-FROM tbl_staff
-
+FROM
+	tbl_staff
 WHERE
-	tbl_staff.name LIKE '%son%'
+	tbl_staff.name LIKE '%son%';
 ```
 ```cs
+[TestMethod]
 public void In()
 {
-    var query = Sql.Using(() => new { tbl_staff = new Staff() }).
-                Where().In(db => db.tbl_staff.id, 1, 3);
+    var query = Sql.Query(() => new { tbl_staff = new Staff() }).
+        Select().
+        From(db => db.tbl_staff).
+        Where().In(db => db.tbl_staff.id, 1, 3);
 
-    var datas = query.ToExecutor(TestEnvironment.ConnectionString).Read();
+    var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
 }
 ```
 ```sql
-SELECT 
+SELECT
 	tbl_staff.id,
 	tbl_staff.name
-
-FROM tbl_staff
-
+FROM
+	tbl_staff
 WHERE
-	tbl_staff.id IN('1', '3')
+	tbl_staff.id IN(1, 3);
 ```
 ```cs
+[TestMethod]
 public void Between()
 {
-    var query = Sql.Using(() => new { tbl_staff = new Staff() }).
-    Where().Between(db => db.tbl_staff.id, 1, 3);
+    var query =
+        Sql.Query(() => new { tbl_staff = new Staff() }).
+        Select().
+        From(db => db.tbl_staff).
+        Where().Between(db => db.tbl_staff.id, 1, 3);
 
-    var datas = query.ToExecutor(TestEnvironment.ConnectionString).Read();
+    var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
 }
-
 ```
 ```sql
-SELECT 
+SELECT
 	tbl_staff.id,
 	tbl_staff.name
-
-FROM tbl_staff
-
+FROM
+	tbl_staff
 WHERE
-	tbl_staff.id BETWEEN '1' AND '3'
+	tbl_staff.id BETWEEN 1 AND 3;
 ```
 You can use sub query.
 ```cs
+[TestMethod]
 public void WhereInSubQuery()
 {
-    var define = Sql.Using<Data>();
+    var define = Sql.Query<DB>();
 
     var sub = define.
-        Select((db, func) => new { total = db.tbl_remuneration.staff_id }).
+        Select(db => new { total = db.tbl_remuneration.staff_id }).
         From(db => db.tbl_remuneration);
 
     var datas = define.
-        Select(db=>new { name = db.tbl_staff.name }).
+        Select(db => new { name = db.tbl_staff.name }).
         From(db => db.tbl_staff).
-        Where().In(db=>db.tbl_staff.id, db=>sub.ToSubQuery<int>()).
-        ToExecutor(TestEnvironment.ConnectionString).Read();
+        Where().In(db => db.tbl_staff.id, db => sub.Cast<int>()).//sub query.
+        ToExecutor(TestEnvironment.Adapter).Read();
 }
 ```
 ```sql
-SELECT 
-	tbl_staff.name AS name
-
-FROM tbl_staff
-
+SELECT
+	tbl_staff.name AS "name"
+FROM
+	tbl_staff
 WHERE
-	tbl_staff.id IN((SELECT tbl_remuneration.staff_id AS total FROM tbl_remuneration))
+	tbl_staff.id IN((SELECT tbl_remuneration.staff_id AS "total" FROM tbl_remuneration));
 ```
 ```cs
+[TestMethod]
 public void SelectSubQuery()
 {
-    var define = Sql.Using<Data>();
+    var define = Sql.Query<DB>();
 
     var sub = define.
-        Select((db, func) => new { total = func.Sum(db.tbl_remuneration.money) }).
+        Select(db => new { total = Sql.Func.Sum(db.tbl_remuneration.money) }).
         From(db => db.tbl_remuneration);
 
     var datas = define.
-            Select(db => new
-            {
-                name = db.tbl_staff.name,
-                total = sub.ToSubQuery<decimal>()
-            }).
-            From(db => db.tbl_staff).
-			ToExecutor(TestEnvironment.ConnectionString).Read();
+        Select(db => new
+        {
+            name = db.tbl_staff.name,
+            total = sub.Cast<decimal>()//sub query.
+        }).
+        From(db => db.tbl_staff).
+        ToExecutor(TestEnvironment.Adapter).Read();
 }
 ```
 ```sql
-SELECT 
-	tbl_staff.name AS name,
-	(SELECT Sum(tbl_remuneration.money) AS total FROM tbl_remuneration) AS total
+SELECT
+	tbl_staff.name AS "name",
+	(SELECT Sum(tbl_remuneration.money) AS "total" FROM tbl_remuneration) AS "total"
+FROM
+	tbl_staff;
+```
+```cs
+[TestMethod]
+public void FromSubQuery()
+{
+    var subQuery = Sql.Query(() => new DB()).
+        Select(db => new SelectData()
+        {
+            name = db.tbl_staff.name,
+            payment_date = db.tbl_remuneration.payment_date,
+            money = db.tbl_remuneration.money,
+        }).
+        From(db => db.tbl_remuneration).
+            Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
+        Where(db => 3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000);
 
-FROM tbl_staff
+    var query = Sql.Query(() => new
+    {
+        tbl_staff = new Staff(),
+        tbl_sub = subQuery.Cast() //sub query.
+    }).
+    Select(db => new
+    {
+        name = db.tbl_sub.name
+    }).
+    From(db => db.tbl_sub);
+
+    var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
+}
+```
+```sql
+SELECT
+	tbl_sub.name AS "name"
+FROM
+	(SELECT tbl_staff.name AS "name", tbl_remuneration.payment_date AS "payment_date", tbl_remuneration.money AS "money" FROM tbl_remuneration JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id) WHERE ((3000) < (tbl_remuneration.money)) AND ((tbl_remuneration.money) < (4000))) AS tbl_sub;
 ```
