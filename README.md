@@ -27,7 +27,7 @@ https://www.nuget.org/packages/LambdicSql/
 - DELETE
 - INSERT INTO
 	- VALUES
-
+- DISTINCT
 Look for how to use from the samples.
 ## Simple sample
 write only lambda.
