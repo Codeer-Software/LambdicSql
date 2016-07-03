@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Diagnostics;
+using System.Linq;
 
 namespace Test
 {
@@ -13,6 +14,8 @@ namespace Test
         [TestInitialize]
         public void TestInitialize()
         {
+            Sql.Log = null;
+            Delete();
             Sql.Log = l =>
             {
                 Debug.Print("");
@@ -296,6 +299,146 @@ namespace Test
             From(db => db.tbl_sub);
 
             var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
+        }
+
+        //Distinct
+        //```cs
+        [TestMethod]
+        public void Distinct()
+        {
+            var datas = Sql.Query<DB>().
+                Select(db => new
+                {
+                    id = Sql.Word.Distinct(db.tbl_remuneration.staff_id)
+                }).
+                From(db => db.tbl_remuneration).
+                ToExecutor(TestEnvironment.Adapter).Read();
+        }
+        //```
+
+        //Delete all.
+        //```cs
+        [TestMethod]
+        public void Delete()
+        {
+            var count = Sql.Query<DBData>().
+                Delete().
+                From(db => db.tbl_data).
+                ToExecutor(TestEnvironment.Adapter).Write();
+        }
+        //```
+
+        //Delete condition matching row. 
+        //```cs
+        [TestMethod]
+        public void DeleteWhere()
+        {
+            var count = Sql.Query<DBData>().
+                Delete().
+                From(db => db.tbl_data).
+                Where(db => db.tbl_data.id == 3).
+                ToExecutor(TestEnvironment.Adapter).Write();
+        }
+        //```
+
+        //Insert.
+        //```cs
+        [TestMethod]
+        public void Insert()
+        {
+            Data[] datas = new[]
+            {
+                new Data() { id = 1, val1 = 10, val2 = "a" },
+                new Data() { id = 2, val1 = 20, val2 = "b" }
+            };
+            
+            var count = 
+                Sql.Query<DBData>().
+                InsertInto(db => db.tbl_data).
+                Values(datas).
+                ToExecutor(TestEnvironment.Adapter).Write();
+        }
+        //```
+
+        //Insert selected data.
+        //```cs
+        [TestMethod]
+        public void InsertSelectedData()
+        {
+            Data[] datas = new[]
+            {
+                new Data() { id = 1, val1 = 10, val2 = "a" },
+                new Data() { id = 2, val1 = 20, val2 = "b" }
+            };
+            
+            var count = 
+                Sql.Query<DBData>().
+                InsertInto(db => db.tbl_data, tbl => tbl.id, tbl => tbl.val1).
+                Values(datas).
+                ToExecutor(TestEnvironment.Adapter).Write();
+        }
+        //```
+
+        //Insert using anonymous type.
+        //```cs
+        [TestMethod]
+        public void InsertUsingAnonymousType()
+        {
+            var datas = Enumerable.Range(1, 5).Select(x => new
+            {
+                id = x,
+                val1 = x,
+                val2 = x.ToString()
+            }).ToArray();
+
+            var count =
+                Sql.Query(() => new
+                {
+                    tbl_data = datas.FirstOrDefault()
+                }).
+                InsertInto(db => db.tbl_data).
+                Values(datas).
+                ToExecutor(TestEnvironment.Adapter).Write();
+        }
+        //```
+
+        //Update
+        //```cs
+        [TestMethod]
+        public void Update()
+        {
+            var count = Sql.Query<DBData>().
+                Update(db => db.tbl_data).
+                Set(tbl => tbl.val1, 100).
+                Set(tbl => tbl.val2, "200").
+                Where(db => db.tbl_data.id == 1).
+                ToExecutor(TestEnvironment.Adapter).Write();
+        }
+        //```
+
+        //Update using table value.
+        //```cs
+        [TestMethod]
+        public void UpdateUsingTableValue()
+        {
+            var count = Sql.Query<DBData>().
+                Update(db => db.tbl_data).
+                Set(tbl => tbl.val1, tbl => tbl.val1 * 2).
+                Where(db => db.tbl_data.id == 1).
+                ToExecutor(TestEnvironment.Adapter).Write();
+        }
+        //```
+        
+        public class Data
+        {
+            public int id { get; set; }
+            public int val1 { get; set; }
+            public string val2 { get; set; }
+        }
+
+        public class DBData
+        {
+            public Data tbl_data { get; set; }
         }
     }
 }
