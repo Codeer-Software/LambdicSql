@@ -12,14 +12,20 @@ namespace LambdicSql
             where TTable : class
             => new UpdateClauseMakingQuery<TDB, TTable>(query, new UpdateClause(getTable.Body));
 
-        public static IUpdateQuery<TDB, TTable> Set<TDB, TTable, TVal>(this IUpdateQuery<TDB, TTable> query, Expression<Func<TTable, object>> selectData, TVal value)
-            where TDB : class
-            where TTable : class
-            => (IUpdateQuery<TDB, TTable>)query.CustomClone(e => e.Set(selectData.Body, value));
 
-        public static IUpdateQuery<TDB, TTable> Set<TDB, TTable>(this IUpdateQuery<TDB, TTable> query, Expression<Func<TTable, object>> selectData, Expression<Func<TTable, object>> value)
+        public static ISetQuery<TDB, TTable> Set<TDB, TTable>(this IUpdateQuery<TDB, TTable> query)
             where TDB : class
             where TTable : class
-            => (IUpdateQuery<TDB, TTable>)query.CustomClone(e => e.Set(selectData.Body, value.Body));
+            => (ISetQuery<TDB, TTable>)query;
+
+        public static ISetQuery<TDB, TTable> Assign<TDB, TTable, TVal>(this ISetQuery<TDB, TTable> query, Expression<Func<TTable, object>> selectData, TVal value)
+            where TDB : class
+            where TTable : class
+            => (ISetQuery<TDB, TTable>)query.CustomClone(e => e.Set(selectData.Body, value));
+
+        public static ISetQuery<TDB, TTable> Assign<TDB, TTable>(this ISetQuery<TDB, TTable> query, Expression<Func<TTable, object>> selectData, Expression<Func<TTable, object>> value)
+            where TDB : class
+            where TTable : class
+            => (ISetQuery<TDB, TTable>)query.CustomClone(e => e.Set(selectData.Body, value.Body));
     }
 }

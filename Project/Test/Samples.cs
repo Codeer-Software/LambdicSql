@@ -409,8 +409,9 @@ namespace Test
         {
             var count = Sql.Query<DBData>().
                 Update(db => db.tbl_data).
-                Set(tbl => tbl.val1, 100).
-                Set(tbl => tbl.val2, "200").
+                Set().
+                Assign(tbl => tbl.val1, 100).
+                Assign(tbl => tbl.val2, "200").
                 Where(db => db.tbl_data.id == 1).
                 ToExecutor(TestEnvironment.Adapter).Write();
         }
@@ -423,7 +424,8 @@ namespace Test
         {
             var count = Sql.Query<DBData>().
                 Update(db => db.tbl_data).
-                Set(tbl => tbl.val1, tbl => tbl.val1 * 2).
+                Set().
+                Assign(tbl => tbl.val1, tbl => tbl.val1 * 2).
                 Where(db => db.tbl_data.id == 1).
                 ToExecutor(TestEnvironment.Adapter).Write();
         }

@@ -39,13 +39,18 @@ namespace LambdicSql.Clause.Update
             Value = value;
         }
     }
-    
+
     public interface IUpdateQuery<TDB, TTable> : IQuery<TDB, TDB, UpdateClause>
             where TDB : class
             where TTable : class
     { }
 
-    public class UpdateClauseMakingQuery<TDB, TTable> : IUpdateQuery<TDB, TTable>
+    public interface ISetQuery<TDB, TTable> : IQuery<TDB, TDB, UpdateClause>
+            where TDB : class
+            where TTable : class
+    { }
+
+    public class UpdateClauseMakingQuery<TDB, TTable> : IUpdateQuery<TDB, TTable>, ISetQuery<TDB, TTable>
     where TDB : class
     where TTable : class
     {
