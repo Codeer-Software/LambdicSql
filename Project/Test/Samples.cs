@@ -100,7 +100,7 @@ namespace Test
             Sql.Log = l => Debug.Print(l);
 
             //make sql.
-            var query = Sql.Query(() => new DB()).
+            var query = Sql.Query<DB>().
             Select(db => new SelectData()
             {
                 name = db.tbl_staff.name,
