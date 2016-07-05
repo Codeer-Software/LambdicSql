@@ -212,7 +212,6 @@ namespace Test
             Debug.Print(text);
         }
 
-
         [TestMethod]
         public void TestWhereSubQuery()
         {
@@ -241,6 +240,23 @@ namespace Test
 
             Debug.Print(text);
         }
+
+        [TestMethod]
+        public void TestBlock()
+        {
+            var define = Sql.Query(() => new
+            {
+                table1 = new
+                {
+                    col1 = default(int),
+                    col2 = default(string)
+                }
+            });
+
+            var text = define.Where(db => db.table1.col1 == 3).Or().BlockStart().And(db => db.table1.col1 == 1).And(db => db.table1.col1 == 2).BlockEnd().ToQueryString();
+            Debug.Print(text);
+        }
+
     }
 
     interface IFuncs : ISqlFunc{ }

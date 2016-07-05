@@ -198,7 +198,6 @@ namespace Test
             query = query.And(db => 3000 < db.tbl_remuneration.money).And(db => db.tbl_remuneration.money < 4000).Or(db => db.tbl_staff.id == 1);
 
             var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
-
         }
 
         //Like, In, Between

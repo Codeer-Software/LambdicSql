@@ -72,5 +72,15 @@ namespace LambdicSql
             where TDB : class
             where TSelect : class
              => query.CustomClone(e => e.Between(target.Body, min.Body, max.Body));
+
+        public static IQuery<TDB, TSelect, WhereClause> BlockStart<TDB, TSelect>(this IQuery<TDB, TSelect, WhereClause> query)
+            where TDB : class
+            where TSelect : class
+             => query.CustomClone(e => e.BlockStart());
+
+        public static IQuery<TDB, TSelect, WhereClause> BlockEnd<TDB, TSelect>(this IQuery<TDB, TSelect, WhereClause> query)
+            where TDB : class
+            where TSelect : class
+             => query.CustomClone(e => e.BlockEnd());
     }
 }
