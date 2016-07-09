@@ -48,8 +48,25 @@ namespace Test
                     col1 = default(string)
                 }
             });
-            Assert.AreEqual(query.ToSqlString(db => 1), "1");
-            Assert.AreEqual(query.ToSqlString(db => "xxx"), "'xxx'");
+            Assert.AreEqual(query.ToSqlString(db => 1), "@p_0");
+            Assert.AreEqual(query.ToSqlString(db => "xxx"), "@p_0");
+        }
+
+        string classMember = "1";
+
+        [TestMethod]
+        public void TestVar()
+        {
+            var query = Sql.Query(() => new
+            {
+                table1 = new
+                {
+                    col1 = default(string)
+                }
+            });
+            var x = "1";
+            Assert.AreEqual(query.ToSqlString(db => x), "@p_0");
+            Assert.AreEqual(query.ToSqlString(db => classMember), "@p_0");
         }
 
         [TestMethod]
@@ -64,20 +81,20 @@ namespace Test
                 }
             });
 
-            Assert.AreEqual(query.ToSqlString(db => db.table1.col1 == 1), "(table1.col1) = (1)");
-            Assert.AreEqual(query.ToSqlString(db => db.table1.col1 != 1), "(table1.col1) <> (1)");
-            Assert.AreEqual(query.ToSqlString(db => db.table1.col1 < 1), "(table1.col1) < (1)");
-            Assert.AreEqual(query.ToSqlString(db => db.table1.col1 <= 1), "(table1.col1) <= (1)");
-            Assert.AreEqual(query.ToSqlString(db => db.table1.col1 > 1), "(table1.col1) > (1)");
-            Assert.AreEqual(query.ToSqlString(db => db.table1.col1 >= 1), "(table1.col1) >= (1)");
-            Assert.AreEqual(query.ToSqlString(db => db.table1.col1 + 1), "(table1.col1) + (1)");
-            Assert.AreEqual(query.ToSqlString(db => db.table1.col1 - 1), "(table1.col1) - (1)");
-            Assert.AreEqual(query.ToSqlString(db => db.table1.col1 * 1), "(table1.col1) * (1)");
-            Assert.AreEqual(query.ToSqlString(db => db.table1.col1 / 1), "(table1.col1) / (1)");
-            Assert.AreEqual(query.ToSqlString(db => db.table1.col1 % 1), "(table1.col1) % (1)");
+            Assert.AreEqual(query.ToSqlString(db => db.table1.col1 == 1), "(table1.col1) = (@p_0)");
+            Assert.AreEqual(query.ToSqlString(db => db.table1.col1 != 1), "(table1.col1) <> (@p_0)");
+            Assert.AreEqual(query.ToSqlString(db => db.table1.col1 < 1), "(table1.col1) < (@p_0)");
+            Assert.AreEqual(query.ToSqlString(db => db.table1.col1 <= 1), "(table1.col1) <= (@p_0)");
+            Assert.AreEqual(query.ToSqlString(db => db.table1.col1 > 1), "(table1.col1) > (@p_0)");
+            Assert.AreEqual(query.ToSqlString(db => db.table1.col1 >= 1), "(table1.col1) >= (@p_0)");
+            Assert.AreEqual(query.ToSqlString(db => db.table1.col1 + 1), "(table1.col1) + (@p_0)");
+            Assert.AreEqual(query.ToSqlString(db => db.table1.col1 - 1), "(table1.col1) - (@p_0)");
+            Assert.AreEqual(query.ToSqlString(db => db.table1.col1 * 1), "(table1.col1) * (@p_0)");
+            Assert.AreEqual(query.ToSqlString(db => db.table1.col1 / 1), "(table1.col1) / (@p_0)");
+            Assert.AreEqual(query.ToSqlString(db => db.table1.col1 % 1), "(table1.col1) % (@p_0)");
             Assert.AreEqual(query.ToSqlString(db => !db.table1.col2), "NOT (table1.col2)");
-            Assert.AreEqual(query.ToSqlString(db => db.table1.col2 && false), "(table1.col2) AND (False)");
-            Assert.AreEqual(query.ToSqlString(db => db.table1.col2 || false), "(table1.col2) OR (False)");
+            Assert.AreEqual(query.ToSqlString(db => db.table1.col2 && false), "(table1.col2) AND (@p_0)");
+            Assert.AreEqual(query.ToSqlString(db => db.table1.col2 || false), "(table1.col2) OR (@p_0)");
         }
 
         [TestMethod]
@@ -91,7 +108,7 @@ namespace Test
                 }
             });
             Assert.AreEqual(query.ToSqlString(db => db.table1.col1 == 2 && (db.table1.col1 == 3 || db.table1.col1 == 4)),
-                        "((table1.col1) = (2)) AND (((table1.col1) = (3)) OR ((table1.col1) = (4)))");
+                        "((table1.col1) = (@p_0)) AND (((table1.col1) = (@p_1)) OR ((table1.col1) = (@p_2)))");
         }
 
         [TestMethod]
@@ -104,7 +121,7 @@ namespace Test
                     col1 = default(int)
                 }
             });
-            Assert.AreEqual(query.ToSqlString((db, func) => func.Sum(1)), "Sum(1)");
+            Assert.AreEqual(query.ToSqlString((db, func) => func.Sum(1)), "Sum(@p_0)");
         }
 
         [TestMethod]

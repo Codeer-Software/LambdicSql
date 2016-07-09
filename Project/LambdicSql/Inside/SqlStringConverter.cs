@@ -7,6 +7,21 @@ using System.Reflection;
 
 namespace LambdicSql.Inside
 {
+    public class PrepareParameters
+    {
+        Dictionary<string, object> _parameters = new Dictionary<string, object>();
+
+        public string Push(object param)
+        {
+            var name = "@p_" + _parameters.Count;
+            _parameters.Add(name, param);
+            return name;
+        }
+
+        public Dictionary<string, object> GetParameters()
+            => _parameters.ToDictionary(e => e.Key, e => e.Value);
+    }
+
     class SqlStringConverter : ISqlStringConverter
     {
         enum SpecialElementType
@@ -29,14 +44,16 @@ namespace LambdicSql.Inside
 
         DbInfo _dbInfo;
         IQueryCustomizer _queryCustomizer;
+        PrepareParameters _parameters;
         EventHandler<SqlStringConvertingEventArgs> SpecialElementConverting = (_, __)=> { };
         bool _isTopLevelQuery;
 
         public DbInfo DbInfo => _dbInfo;
 
-        internal SqlStringConverter(DbInfo dbInfo, IQueryCustomizer queryCustomizer, bool isTopLevelQuery)
+        internal SqlStringConverter(DbInfo dbInfo, PrepareParameters parameters, IQueryCustomizer queryCustomizer, bool isTopLevelQuery)
         {
             _dbInfo = dbInfo;
+            _parameters = parameters;
             _queryCustomizer = queryCustomizer;
             _isTopLevelQuery = isTopLevelQuery;
         }
@@ -47,11 +64,11 @@ namespace LambdicSql.Inside
                     method.Method.DeclaringType == typeof(QueryExtensions) &&
                     method.Method.Name == nameof(QueryExtensions.Cast);
 
-        internal static string ToString(IQuery query, IQueryCustomizer queryCustomizer)
-            => ToStringCore(query, queryCustomizer, true);
+        internal static string ToString(IQuery query, PrepareParameters parameters, IQueryCustomizer queryCustomizer)
+            => ToStringCore(query, parameters, queryCustomizer, true);
 
-        static string ToStringCore(IQuery query, IQueryCustomizer queryCustomizer, bool isTopLevelQuery)
-           => new SqlStringConverter(query.Db, queryCustomizer, isTopLevelQuery).ToString(query);
+        static string ToStringCore(IQuery query, PrepareParameters parameters, IQueryCustomizer queryCustomizer, bool isTopLevelQuery)
+           => new SqlStringConverter(query.Db, parameters, queryCustomizer, isTopLevelQuery).ToString(query);
         
         string ToString(IQuery query)
         {
@@ -60,7 +77,7 @@ namespace LambdicSql.Inside
             {
                 clauses = _queryCustomizer.CustomClauses(clauses);
             }
-            var convertor = new SqlStringConverter(_dbInfo, _queryCustomizer, false);
+            var convertor = new SqlStringConverter(_dbInfo, _parameters, _queryCustomizer, false);
             var text = string.Join(Environment.NewLine, clauses.Select(e => e.ToString(this)).ToArray());
             if (_isTopLevelQuery)
             {
@@ -86,13 +103,7 @@ namespace LambdicSql.Inside
             {
                 return ToString(query);
             }
-
-            Type type = obj.GetType();
-            if (type == typeof(string) || type == typeof(DateTime))
-            {
-                return "'" + obj + "'";
-            }
-            return obj.ToString();
+            return _parameters.Push(obj);
         }
         
         DecodedInfo ToString(Expression exp)
@@ -127,11 +138,12 @@ namespace LambdicSql.Inside
                 //notify converting info.
                 SpecialElementConverting(this, new SqlStringConvertingEventArgs(SpecialElementType.SubQuery, string.Empty));
 
-                var param = Expression.Parameter(typeof(IQueryCustomizer), "queryCustomizer");
+                var paramQueryCustomizer = Expression.Parameter(typeof(IQueryCustomizer), "queryCustomizer");
+                var paramPrepare = Expression.Parameter(typeof(PrepareParameters), "prepareParameters");
                 var call = Expression.Call(null, GetType().
-                    GetMethod(nameof(MakeQueryString), BindingFlags.Static|BindingFlags.NonPublic|BindingFlags.Public), new[] { method.Arguments[0], param });
-                var funcSubQuery = Expression.Lambda(call, new[] { param }).Compile();
-                return new DecodedInfo(funcSubQuery.Method.ReturnType, funcSubQuery.DynamicInvoke(_queryCustomizer).ToString());
+                    GetMethod(nameof(MakeQueryString), BindingFlags.Static|BindingFlags.NonPublic|BindingFlags.Public), new[] { method.Arguments[0], paramQueryCustomizer, paramPrepare });
+                var funcSubQuery = Expression.Lambda(call, new[] { paramQueryCustomizer, paramPrepare }).Compile();
+                return new DecodedInfo(funcSubQuery.Method.ReturnType, funcSubQuery.DynamicInvoke(_queryCustomizer, _parameters).ToString());
             }
 
             //word
@@ -227,8 +239,8 @@ namespace LambdicSql.Inside
             }
         }
 
-        static string MakeQueryString(IQuery query, IQueryCustomizer queryCustomizer)
-            => ToStringCore(query, queryCustomizer, false);
+        static string MakeQueryString(IQuery query, IQueryCustomizer queryCustomizer, PrepareParameters parameters)
+            => ToStringCore(query, parameters, queryCustomizer, false);
 
         DecodedInfo ToString(BinaryExpression binary)
         {
@@ -265,7 +277,7 @@ namespace LambdicSql.Inside
         DecodedInfo ToString(ConstantExpression constant)
         {
             var func = Expression.Lambda(constant).Compile();
-            return new DecodedInfo(func.Method.ReturnType, ToString(func.DynamicInvoke()));
+            return new DecodedInfo(func.Method.ReturnType, _parameters.Push(func.DynamicInvoke()));
         }
 
         DecodedInfo ToString(MemberExpression member)
@@ -291,7 +303,7 @@ namespace LambdicSql.Inside
                 return new DecodedInfo(null, name);
             }
             var func = Expression.Lambda(member).Compile();
-            return new DecodedInfo(func.Method.ReturnType, ToString(func.DynamicInvoke()));
+            return new DecodedInfo(func.Method.ReturnType, _parameters.Push(func.DynamicInvoke()));
         }
 
         static bool HasParameter(MemberExpression member)

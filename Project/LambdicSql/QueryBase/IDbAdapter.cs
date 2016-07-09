@@ -7,5 +7,6 @@ namespace LambdicSql.QueryBase
         IQueryCustomizer CreateQueryCustomizer();
         DbCommand CreateCommand();
         DbConnection CreateConnection();
+        DbParameter CreateParameter(string parameterName, object value);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using LambdicSql.QueryBase;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace LambdicSql.Inside
 {
@@ -9,8 +10,6 @@ namespace LambdicSql.Inside
     {
         IDbAdapter _adaptor;
         IQuery<TSelect> _info;
-
-        public string CommandText => SqlStringConverter.ToString(_info, _adaptor.CreateQueryCustomizer());
 
         internal DbExecutor(IDbAdapter adaptor, IQuery<TSelect> info)
         {
@@ -29,10 +28,12 @@ namespace LambdicSql.Inside
                 con.Open();
                 using (var com = _adaptor.CreateCommand())
                 {
-                    var text = CommandText;
+                    var parameters = new PrepareParameters();
+                    var text = GetCommandText(parameters);
                     Sql.Log?.Invoke(text);
                     com.CommandText = text;
                     com.Connection = con;
+                    com.Parameters.AddRange(parameters.GetParameters().Select(e => _adaptor.CreateParameter(e.Key, e.Value)).ToArray());
                     using (var sdr = com.ExecuteReader())
                     {
                         var reader = new SqlResult(sdr);
@@ -54,13 +55,18 @@ namespace LambdicSql.Inside
                 con.Open();
                 using (var com = _adaptor.CreateCommand())
                 {
-                    var text = CommandText;
+                    var parameters = new PrepareParameters();
+                    var text = GetCommandText(parameters);
                     Sql.Log?.Invoke(text);
                     com.CommandText = text;
                     com.Connection = con;
+                    com.Parameters.AddRange(parameters.GetParameters().Select(e => _adaptor.CreateParameter(e.Key, e.Value)).ToArray());
                     return com.ExecuteNonQuery();
                 }
             }
         }
+
+        string GetCommandText(PrepareParameters parameters) =>
+            SqlStringConverter.ToString(_info, parameters, _adaptor.CreateQueryCustomizer());
     }
 }
