@@ -253,7 +253,7 @@ namespace Test
                 }
             });
 
-            var text = define.Where(db => db.table1.col1 == 3).Or().BlockStart().And(db => db.table1.col1 == 1).And(db => db.table1.col1 == 2).BlockEnd().ToQueryString();
+            var text = define.Where().BlockStart().And(db => db.table1.col1 == 3).Or().BlockStart().And(db => db.table1.col1 == 1).And(db => db.table1.col1 == 2).BlockEnd().BlockEnd().ToQueryString();
             Debug.Print(text);
         }
 
