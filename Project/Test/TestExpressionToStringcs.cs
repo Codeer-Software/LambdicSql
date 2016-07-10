@@ -52,7 +52,9 @@ namespace Test
             Assert.AreEqual(query.ToSqlString(db => "xxx"), "@p_0");
         }
 
-        string classMember = "1";
+        string classField = "1";
+        string ClassProperty => "1";
+        string ClassMethod() => "1";
 
         [TestMethod]
         public void TestVar()
@@ -66,7 +68,29 @@ namespace Test
             });
             var x = "1";
             Assert.AreEqual(query.ToSqlString(db => x), "@p_0");
-            Assert.AreEqual(query.ToSqlString(db => classMember), "@p_0");
+            Assert.AreEqual(query.ToSqlString(db => classField), "@p_0");
+            Assert.AreEqual(query.ToSqlString(db => ClassProperty), "@p_0");
+            Assert.AreEqual(query.ToSqlString(db => ClassMethod()), "@p_0");
+        }
+
+
+        [TestMethod]
+        public void TestNull()
+        {
+            var query = Sql.Query(() => new
+            {
+                table1 = new
+                {
+                    col1 = default(string),
+                    col2 = 0
+                }
+            });
+            Assert.AreEqual(query.ToSqlString(db => db.table1.col1 == null), "(table1.col1) IS NULL");
+            Assert.AreEqual(query.ToSqlString(db => db.table1.col1 != null), "(table1.col1) IS NOT NULL");
+
+            int? val = null;
+            Assert.AreEqual(query.ToSqlString(db => db.table1.col2 == val), "(table1.col2) IS NULL");
+            Assert.AreEqual(query.ToSqlString(db => db.table1.col2 != val), "(table1.col2) IS NOT NULL");
         }
 
         [TestMethod]

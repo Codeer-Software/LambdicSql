@@ -9,17 +9,24 @@ namespace LambdicSql.Inside
 {
     public class PrepareParameters
     {
+        int _count;
         Dictionary<string, object> _parameters = new Dictionary<string, object>();
 
         public string Push(object param)
         {
-            var name = "@p_" + _parameters.Count;
+            var name = "@p_" + _count++;
             _parameters.Add(name, param);
             return name;
         }
 
         public Dictionary<string, object> GetParameters()
             => _parameters.ToDictionary(e => e.Key, e => e.Value);
+
+        public bool TryGetParam(string name, out object leftObj)
+            => _parameters.TryGetValue(name, out leftObj);
+
+        public void Remove(string name)
+            => _parameters.Remove(name);
     }
 
     class SqlStringConverter : ISqlStringConverter
@@ -247,7 +254,55 @@ namespace LambdicSql.Inside
             var left = ToString(binary.Left);
             var right = ToString(binary.Right);
             var nodeType = ToString(left, binary.NodeType, right);
+
+            //for null
+            var nullCheck = NullCheck(left, binary.NodeType, right);
+            if (nullCheck != null)
+            {
+                return nullCheck;
+            }
             return new DecodedInfo(nodeType.Type, "(" + left.Text + ") " + nodeType.Text + " (" + right.Text + ")");
+        }
+
+        DecodedInfo NullCheck(DecodedInfo left, ExpressionType nodeType, DecodedInfo right)
+        {
+            string ope;
+            switch (nodeType)
+            {
+                case ExpressionType.Equal: ope = " IS NULL"; break;
+                case ExpressionType.NotEqual: ope = " IS NOT NULL"; break;
+                default: return null;
+            }
+
+            object leftObj, rightObj;
+            var leftIsParam = _parameters.TryGetParam(left.Text, out leftObj);
+            var rightIsParam = _parameters.TryGetParam(right.Text, out rightObj);
+            if (leftIsParam && rightIsParam)
+            {
+                return null;
+            }
+            var isParams = new[] { leftIsParam, rightIsParam };
+            var objs = new[] { leftObj, rightObj};
+            var names = new[] { left.Text, right.Text };
+            var targetTexts = new[] { right.Text, left.Text };
+            for (int i = 0; i < isParams.Length; i++)
+            {
+                var obj = objs[i];
+                if (isParams[i])
+                {
+                    var nullObj = obj == null;
+                    if (!nullObj)
+                    {
+                        if (obj.GetType() != typeof(Nullable<>) || (bool)typeof(Nullable<>).GetProperty("HasValue").GetValue(obj, new object[0]))
+                        {
+                            return null;
+                        }
+                    }
+                    _parameters.Remove(names[i]);
+                    return new DecodedInfo(null, "(" + targetTexts[i] + ")" + ope);
+                }
+            }
+            return null;
         }
 
         DecodedInfo ToString(DecodedInfo left, ExpressionType nodeType, DecodedInfo right)
@@ -277,7 +332,7 @@ namespace LambdicSql.Inside
         DecodedInfo ToString(ConstantExpression constant)
         {
             var func = Expression.Lambda(constant).Compile();
-            return new DecodedInfo(func.Method.ReturnType, _parameters.Push(func.DynamicInvoke()));
+            return new DecodedInfo(func.Method.ReturnType, ToString(func.DynamicInvoke()));
         }
 
         DecodedInfo ToString(MemberExpression member)
@@ -303,7 +358,7 @@ namespace LambdicSql.Inside
                 return new DecodedInfo(null, name);
             }
             var func = Expression.Lambda(member).Compile();
-            return new DecodedInfo(func.Method.ReturnType, _parameters.Push(func.DynamicInvoke()));
+            return new DecodedInfo(func.Method.ReturnType, ToString(func.DynamicInvoke()));
         }
 
         static bool HasParameter(MemberExpression member)

@@ -441,5 +441,31 @@ namespace Test
         {
             public Data tbl_data { get; set; }
         }
+
+        [TestMethod]
+        public void IsNull()
+        {
+            decimal? val = null;
+            var query = Sql.Query<DB>().
+                Select().
+                From(db => db.tbl_remuneration).
+                    Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
+               Where(db => db.tbl_staff.name == null || db.tbl_remuneration.money == val);
+
+            var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
+        }
+
+        [TestMethod]
+        public void IsNotNull()
+        {
+            decimal? val = null;
+            var query = Sql.Query<DB>().
+                Select().
+                From(db => db.tbl_remuneration).
+                    Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
+               Where(db => db.tbl_staff.name != null || db.tbl_remuneration.money != val);
+
+            var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
+        }
     }
 }
