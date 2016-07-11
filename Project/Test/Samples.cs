@@ -141,7 +141,19 @@ namespace Test
                 Debug.Print("{0}, {1}, {2}", e.tbl_staff.name, e.tbl_remuneration.payment_date, e.tbl_remuneration.money);
             }
         }
-        
+
+        //Select one table.
+        [TestMethod]
+        public void SelectFrom()
+        {
+            //make sql.
+            var query = Sql.Query(() => new DB()).
+            SelectFrom(db => db.tbl_staff);
+
+            //execute.
+            var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
+        }
+
         //Group by.
         [TestMethod]
         public void GroupBy()

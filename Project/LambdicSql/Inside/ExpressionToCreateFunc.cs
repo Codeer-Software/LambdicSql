@@ -14,7 +14,17 @@ namespace LambdicSql.Inside
             var newExp = exp as NewExpression;
             if (newExp == null)
             {
-                newExp = ((MemberInitExpression)exp).NewExpression;
+                var init = exp as MemberInitExpression;
+                if (init != null)
+                {
+                    newExp = init.NewExpression;
+                }
+                else
+                {
+                    var member = exp as MemberExpression;
+                    var type = ((PropertyInfo)member.Member).PropertyType;
+                    newExp = Expression.New(type.GetConstructor(new Type[0]));
+                }
             }
             var param = Expression.Parameter(typeof(ISqlResult), "dbResult");
             var arguments = new[] { param };

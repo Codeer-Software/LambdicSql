@@ -3,11 +3,12 @@ using LambdicSql.SqlServer;
 using System;
 using System.IO;
 
-namespace Test
+namespace Performance
 {
     static class TestEnvironment
     {
-        internal static IDbAdapter Adapter => new SqlServerAdapter(File.ReadAllText(FindNearFile("db.txt")).Trim());
+        internal static string ConnectionString => File.ReadAllText(FindNearFile("db.txt")).Trim();
+        internal static IDbAdapter Adapter => new SqlServerAdapter(ConnectionString);
 
         static string FindNearFile(string fileName)
         {

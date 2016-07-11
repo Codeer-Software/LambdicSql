@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Linq;
 using LambdicSql.Clause.Select;
+using System;
 
 namespace LambdicSql.Inside
 {
@@ -29,16 +30,28 @@ namespace LambdicSql.Inside
                     }
                     select.Add(new SelectElement(name, newExp.Arguments[i]));
                 }
+                return select;
             }
-            else
+            var initExp = exp as MemberInitExpression;
+            if (initExp != null)
             {
-                var initExp = (MemberInitExpression)exp;
                 foreach (var b in initExp.Bindings.Cast<MemberAssignment>())
                 {
                     select.Add(new SelectElement(b.Member.Name, b.Expression));
                 }
+                return select;
             }
-            return select;
+            var member = exp as MemberExpression;
+            if (member != null)
+            {
+                var type = ((PropertyInfo)member.Member).PropertyType;
+                foreach (var p in type.GetProperties().Where(e => e.DeclaringType == type))
+                {
+                    select.Add(new SelectElement(p.Name, null));
+                }
+                return select;
+            }
+            throw new NotSupportedException();
         }
     }
 }
