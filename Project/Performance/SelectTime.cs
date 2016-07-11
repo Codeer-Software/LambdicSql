@@ -30,14 +30,14 @@ namespace Performance
         [TestMethod]
         public void CheckLambdicSql()
         {
-            var executor = Sql.Query<DB>().SelectFrom(db => db.TableValues).ToExecutor(new SqlServerAdapter(TestEnvironment.ConnectionString));
+            var adaptor = new SqlServerAdapter(TestEnvironment.ConnectionString);
 
             var times = new List<long>();
             for (int i = 0; i < 10; i++)
             {
                 Stopwatch watch = new Stopwatch();
                 watch.Start();
-                var datas = executor.Read().ToList();
+                var datas = Sql.Query<DB>().SelectFrom(db => db.TableValues).ToExecutor(adaptor).Read().ToList();
                 watch.Stop();
                 times.Add(watch.ElapsedMilliseconds);
             }
