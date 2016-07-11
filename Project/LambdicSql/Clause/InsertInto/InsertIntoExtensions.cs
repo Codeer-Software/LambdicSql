@@ -24,19 +24,5 @@ namespace LambdicSql
             where TDB : class
             where TTable : class
              => query.CustomClone(e => e.Values(src));
-
-        public static IQuery<TDB, TDB> Values<TDB, TInput, Table>(this IInsertIntoQuery<TDB, Table> query, IEnumerable<TInput> src, Action<TInput, Table> convertor)
-            where TDB : class
-            where Table : class
-        {
-            var defaultValue = new SqlResultDefault();
-            return query.CustomClone(clause => clause.Values(src.Select(e =>
-            {
-                var db = query.Create(defaultValue);
-                var tbl = query.GetTable(db);
-                convertor(e, tbl);
-                return tbl;
-            })));
-        }
     }
 }

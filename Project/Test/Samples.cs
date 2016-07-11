@@ -447,7 +447,12 @@ namespace Test
         {
             decimal? val = null;
             var query = Sql.Query<DB>().
-                Select().
+                Select(db => new SelectData()
+                {
+                    name = db.tbl_staff.name,
+                    payment_date = db.tbl_remuneration.payment_date,
+                    money = db.tbl_remuneration.money,
+                }).
                 From(db => db.tbl_remuneration).
                     Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
                Where(db => db.tbl_staff.name == null || db.tbl_remuneration.money == val);
@@ -460,10 +465,54 @@ namespace Test
         {
             decimal? val = null;
             var query = Sql.Query<DB>().
-                Select().
+                Select(db => new SelectData()
+                {
+                    name = db.tbl_staff.name,
+                    payment_date = db.tbl_remuneration.payment_date,
+                    money = db.tbl_remuneration.money,
+                }).
                 From(db => db.tbl_remuneration).
                     Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
                Where(db => db.tbl_staff.name != null || db.tbl_remuneration.money != val);
+
+            var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
+        }
+
+
+        
+        public class RemunerationNullable
+        {
+            public int id { get; set; }
+            public int? staff_id { get; set; }
+            public DateTime? payment_date { get; set; }
+            public decimal? money { get; set; }
+        }
+        public class DBNullable
+        {
+            public Staff tbl_staff { get; set; }
+            public RemunerationNullable tbl_remuneration { get; set; }
+        }
+
+        public class SelectDataNullable
+        {
+            public string name { get; set; }
+            public DateTime? payment_date { get; set; }
+            public decimal? money { get; set; }
+        }
+
+        [TestMethod]
+        public void Nullable()
+        {
+            var query = Sql.Query<DBNullable>().
+                Select(db => new SelectDataNullable()
+                {
+                    name = db.tbl_staff.name,
+                    payment_date = db.tbl_remuneration.payment_date,
+                    money = db.tbl_remuneration.money,
+                }).
+                From(db => db.tbl_remuneration).
+                    Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
+                    Where(db=>db.tbl_remuneration.money != null);
 
             var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
         }

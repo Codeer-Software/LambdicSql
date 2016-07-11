@@ -21,5 +21,14 @@ namespace LambdicSql.Inside
                 return _supported.Contains(type);
             }
         }
+
+        internal static string GetFuncName(Type type)
+        {
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+            {
+                return "Get" + type.GetGenericArguments()[0].Name + "Nullable";
+            }
+            return "Get" + type.Name;
+        }
     }
 }

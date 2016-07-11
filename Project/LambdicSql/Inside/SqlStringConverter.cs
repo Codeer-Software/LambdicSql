@@ -7,28 +7,6 @@ using System.Reflection;
 
 namespace LambdicSql.Inside
 {
-    public class PrepareParameters
-    {
-        int _count;
-        Dictionary<string, object> _parameters = new Dictionary<string, object>();
-
-        public string Push(object param)
-        {
-            var name = "@p_" + _count++;
-            _parameters.Add(name, param);
-            return name;
-        }
-
-        public Dictionary<string, object> GetParameters()
-            => _parameters.ToDictionary(e => e.Key, e => e.Value);
-
-        public bool TryGetParam(string name, out object leftObj)
-            => _parameters.TryGetValue(name, out leftObj);
-
-        public void Remove(string name)
-            => _parameters.Remove(name);
-    }
-
     class SqlStringConverter : ISqlStringConverter
     {
         enum SpecialElementType
@@ -293,10 +271,7 @@ namespace LambdicSql.Inside
                     var nullObj = obj == null;
                     if (!nullObj)
                     {
-                        if (obj.GetType() != typeof(Nullable<>) || (bool)typeof(Nullable<>).GetProperty("HasValue").GetValue(obj, new object[0]))
-                        {
-                            return null;
-                        }
+                        return null;
                     }
                     _parameters.Remove(names[i]);
                     return new DecodedInfo(null, "(" + targetTexts[i] + ")" + ope);

@@ -38,9 +38,10 @@ namespace LambdicSql.Inside
                     var currentNames = names.Concat(new[] { p.Name }).ToArray();
                     if (SupportedTypeSpec.IsSupported(p.PropertyType))
                     {
+                        var funcName = SupportedTypeSpec.GetFuncName(p.PropertyType);
                         var name = string.Join(".", currentNames);
                         binding.Add(Expression.Bind(p,
-                            Expression.Call(param, typeof(ISqlResult).GetMethod("Get" + p.PropertyType.Name), Expression.Constant(getIndexInSelect(name)))));
+                            Expression.Call(param, typeof(ISqlResult).GetMethod(funcName), Expression.Constant(getIndexInSelect(name)))));
                     }
                     else
                     {

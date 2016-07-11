@@ -62,7 +62,6 @@
     <Compile Include="Clause\Select\SelectElement.cs" />
     <Compile Include="Clause\Where\WhereClause.cs" />
     <Compile Include="Inside\CanNotCreateException.cs" />
-    <Compile Include="Inside\SqlResultDefault.cs" />
     <Compile Include="QueryBase\CustomTargetType.cs" />
     <Compile Include="QueryBase\ISqlFunc.cs" />
     <Compile Include="QueryBase\InvalidDbItemException.cs" />
@@ -93,6 +92,7 @@
     <Compile Include="Clause\Condition\ConditionLike.cs" />
     <Compile Include="Clause\OrderBy\OrderByQueryExtensions.cs" />
     <Compile Include="Inside\SupportedTypeSpec.cs" />
+    <Compile Include="QueryBase\PrepareParameters.cs" />
     <Compile Include="QueryBase\TableInfo.cs" />
     <Compile Include="Clause\Condition\ConditionClause.cs" />
     <Compile Include="QueryBase\IQuery.cs" />
