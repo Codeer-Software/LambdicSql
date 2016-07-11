@@ -214,7 +214,7 @@ namespace Test
             var text = define.Select(db => new
             {
                 col2 = sub.Cast<string>()
-            }).Where(db=>db.table1.col1 == sub.Cast<int>()).ToQueryString();
+            }).Where(db => db.table1.col1 == sub.Cast<int>()).ToQueryString();
 
             Debug.Print(text);
 
@@ -275,8 +275,8 @@ namespace Test
                 col2 = sub.Cast<string>()
             }).
             Where().
-            Like(db => db.table1.col2, db=>sub.Cast<string>()).And().
-            In(db => db.table1.col2, db=>sub.Cast<string>()).Or().Between(db => db.table1.col1, db=>sub.Cast<int>(), db=>sub.Cast<int>()).
+            Like(db => db.table1.col2, db => sub.Cast<string>()).And().
+            In(db => db.table1.col2, db => sub.Cast<string>()).Or().Between(db => db.table1.col1, db => sub.Cast<int>(), db => sub.Cast<int>()).
             ToQueryString();
 
             Debug.Print(text);
@@ -298,6 +298,21 @@ namespace Test
             Debug.Print(text);
         }
 
+        [TestMethod]
+        public void TestParameters()
+        {
+            var define = Sql.Query(() => new
+            {
+                table1 = new
+                {
+                    col1 = default(int),
+                    col2 = default(string)
+                }
+            });
+
+            var text = define.Where((db, p) => db.table1.col1 == p._1, new Parameters() { _1 = 3 }).ToQueryString();
+            Debug.Print(text);
+        }
     }
 
     interface IFuncs : ISqlFunc{ }

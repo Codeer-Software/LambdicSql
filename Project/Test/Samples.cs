@@ -569,6 +569,7 @@ namespace Test
 
             using (var connection = new SqlConnection(TestEnvironment.ConnectionString))
             {
+                connection.Open();
                 var datas = query.ToExecutor(connection).Read();
 
                 foreach (var e in datas)
@@ -577,5 +578,49 @@ namespace Test
                 }
             }
         }
+    }
+
+    [TestClass]
+    public class TestX
+    {
+
+
+        public class Staff
+        {
+            public int id { get; set; }
+            public string name { get; set; }
+        }
+        public class Remuneration
+        {
+            public int id { get; set; }
+            public int staff_id { get; set; }
+            public DateTime payment_date { get; set; }
+            public decimal money { get; set; }
+        }
+        public class DB
+        {
+            public Staff tbl_staff { get; set; }
+            public Remuneration tbl_remuneration { get; set; }
+        }
+        public class SelectData
+        {
+            public string name { get; set; }
+            public DateTime payment_date { get; set; }
+            public decimal money { get; set; }
+        }
+
+        [TestMethod]
+        public void WhereParameters()
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                var query = Sql.Query(() => new DB()).
+                    SelectFrom(db=>db.tbl_remuneration).
+                    Where((db, p) => db.tbl_remuneration.id == p._0, new Parameters() { _0 = 1 });
+
+                var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
+            }
+        }
+
     }
 }

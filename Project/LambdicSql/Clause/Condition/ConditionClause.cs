@@ -78,6 +78,11 @@ namespace LambdicSql.Clause.Condition
             _conditions.Add(new ConditionExpression(false, ConditionConnection.And, exp));
         }
 
+        protected ConditionClause(Expression exp, Parameters parameters)
+        {
+            _conditions.Add(new ConditionExpression(false, ConditionConnection.And, exp, parameters));
+        }
+        
         protected ConditionClause Copy(ConditionClause dst)
         {
             dst._conditions.AddRange(_conditions);

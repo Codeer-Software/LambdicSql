@@ -17,7 +17,12 @@ namespace LambdicSql
             where TDB : class
             where TSelect : class
              => new ClauseMakingQuery<TDB, TSelect, WhereClause>(query, new WhereClause(condition.Body));
-        
+
+        public static IQuery<TDB, TSelect, WhereClause> Where<TDB, TSelect>(this IQuery<TDB, TSelect> query, Expression<Func<TDB, Parameters, bool>> condition, Parameters parameters)
+            where TDB : class
+            where TSelect : class
+             => new ClauseMakingQuery<TDB, TSelect, WhereClause>(query, new WhereClause(condition.Body, parameters));
+
         public static IQuery<TDB, TSelect, WhereClause> Not<TDB, TSelect>(this IQuery<TDB, TSelect, WhereClause> query)
             where TDB : class
             where TSelect : class

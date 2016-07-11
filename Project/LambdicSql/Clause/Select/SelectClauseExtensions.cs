@@ -40,7 +40,7 @@ namespace LambdicSql
             var select = SelectDefineAnalyzer.MakeSelectInfo(define.Body);
             var indexInSelect = select.GetElements().Select(e => e.Name).ToList();
             return new ClauseMakingQuery<TDB, TSelect, SelectClause>(query.Db,
-                ExpressionToCreateFunc.ToCreateUseDbResult<TSelect>(name => indexInSelect.IndexOf(name), define.Body),
+                ExpressionToCreateFunc.ToCreateUseDbResult<TSelect>(indexInSelect, define.Body),
                 query.GetClausesClone().Concat(new IClause[] { select }).ToArray());
         }
     }

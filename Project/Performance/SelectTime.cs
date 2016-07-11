@@ -1,6 +1,5 @@
 ﻿using Dapper;
 using LambdicSql;
-using LambdicSql.SqlServer;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -27,19 +26,22 @@ namespace Performance
     [TestClass]
     public class SelectTime
     {
+        //1万件取得
         [TestMethod]
         public void CheckLambdicSql()
         {
-            var adaptor = new SqlServerAdapter(TestEnvironment.ConnectionString);
-
-            var times = new List<long>();
-            for (int i = 0; i < 10; i++)
+            var times = new List<double>();
+            using (var connection = new SqlConnection(TestEnvironment.ConnectionString))
             {
-                Stopwatch watch = new Stopwatch();
-                watch.Start();
-                var datas = Sql.Query<DB>().SelectFrom(db => db.TableValues).ToExecutor(adaptor).Read().ToList();
-                watch.Stop();
-                times.Add(watch.ElapsedMilliseconds);
+                connection.Open();
+                for (int i = 0; i < 10; i++)
+                {
+                    var watch = new Stopwatch();
+                    watch.Start();
+                    var datas = Sql.Query<DB>().SelectFrom(db => db.TableValues).ToExecutor(connection).Read().ToList();
+                    watch.Stop();
+                    times.Add(watch.Elapsed.TotalMilliseconds);
+                }
             }
             ShowTime(times);
         }
@@ -47,34 +49,38 @@ namespace Performance
         [TestMethod]
         public void CheckDapper()
         {
+            var times = new List<double>();
             using (var connection = new SqlConnection(TestEnvironment.ConnectionString))
             {
-                var times = new List<long>();
+                connection.Open();
                 for (int i = 0; i < 10; i++)
                 {
-                    Stopwatch watch = new Stopwatch();
+                    var watch = new Stopwatch();
                     watch.Start();
                     var datas = connection.Query<TableValues>("select IntVal, FloatVal, DoubleVal, DecimalVal, StringVal from TableValues;").ToList();
                     watch.Stop();
-                    times.Add(watch.ElapsedMilliseconds);
+                    times.Add(watch.Elapsed.TotalMilliseconds);
                 }
-                ShowTime(times);
             }
+            ShowTime(times);
         }
 
+        //以下はwhereで1件に絞ったもの
         [TestMethod]
         public void CheckLambdicSqlCondition()
         {
-            var adaptor = new SqlServerAdapter(TestEnvironment.ConnectionString);
-
-            var times = new List<long>();
-            for (int i = 0; i < 10; i++)
+            var times = new List<double>();
+            using (var connection = new SqlConnection(TestEnvironment.ConnectionString))
             {
-                Stopwatch watch = new Stopwatch();
-                watch.Start();
-                var datas = Sql.Query<DB>().SelectFrom(db => db.TableValues).Where(db=>db.TableValues.IntVal != -1 && db.TableValues.DoubleVal != -1).ToExecutor(adaptor).Read().ToList();
-                watch.Stop();
-                times.Add(watch.ElapsedMilliseconds);
+                connection.Open();
+                for (int i = 0; i < 10 * 3; i++)
+                {
+                    var watch = new Stopwatch();
+                    watch.Start();
+                    var datas = Sql.Query<DB>().SelectFrom(db => db.TableValues).Where((db, p) => db.TableValues.IntVal == p._0, new Parameters() { _0 = 1 }).ToExecutor(connection).Read().ToList();
+                    watch.Stop();
+                    times.Add(watch.Elapsed.TotalMilliseconds);
+                }
             }
             ShowTime(times);
         }
@@ -82,28 +88,26 @@ namespace Performance
         [TestMethod]
         public void CheckDapperCondition()
         {
+            var times = new List<double>();
             using (var connection = new SqlConnection(TestEnvironment.ConnectionString))
             {
-                var times = new List<long>();
-                for (int i = 0; i < 10; i++)
+                connection.Open();
+                for (int i = 0; i < 10 * 3; i++)
                 {
-                    Stopwatch watch = new Stopwatch();
+                    var watch = new Stopwatch();
                     watch.Start();
-                    var datas = connection.Query<TableValues>("select IntVal, FloatVal, DoubleVal, DecimalVal, StringVal from TableValues where IntVal <> -1 and DoubleVal <> -1;").ToList();
+                    var datas = connection.Query<TableValues>("select IntVal, FloatVal, DoubleVal, DecimalVal, StringVal from TableValues  where IntVal = @Id;", new { Id = 1 }).ToList();
                     watch.Stop();
-                    times.Add(watch.ElapsedMilliseconds);
+                    times.Add(watch.Elapsed.TotalMilliseconds);
                 }
-                ShowTime(times);
             }
+            ShowTime(times);
         }
 
-        static void ShowTime(List<long> times)
+        static void ShowTime(List<double> times)
         {
             MessageBox.Show(string.Join(Environment.NewLine, times.Select(e => e.ToString())) +
-                Environment.NewLine + times.Average().ToString() +
-                Environment.NewLine + times.Skip(1).Average().ToString());
+                Environment.NewLine + times.Average().ToString());
         }
     }
 }
-
-//不具合を直して→全ラムダでSelectFromを使ったらNG

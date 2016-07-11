@@ -16,6 +16,7 @@
     <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
     <IsCodedUITest>False</IsCodedUITest>
     <TestProjectType>UnitTest</TestProjectType>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -25,6 +26,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,14 +35,15 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Dapper, Version=1.50.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\Dapper.1.50.0\lib\net40\Dapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="LambdicSql, Version=0.0.15.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\LambdicSql.0.0.15\lib\net35\LambdicSql.dll</HintPath>
+    <Reference Include="LambdicSql, Version=0.0.17.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\LambdicSql.0.0.17\lib\net35\LambdicSql.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />

@@ -9,7 +9,28 @@ namespace LambdicSql.Inside
 {
     static class ExpressionToCreateFunc
     {
-        internal static Func<ISqlResult, T> ToCreateUseDbResult<T>(Func<string, int> getIndexInSelect, Expression exp)
+        static Dictionary<string, object> _createMap = new Dictionary<string, object>();
+
+        internal static Func<ISqlResult, T> ToCreateUseDbResult<T>(List<string> getIndexInSelect, Expression exp)
+        {
+            var name = typeof(T).FullName + "@" + string.Join("@", getIndexInSelect.ToArray());
+            lock (_createMap)
+            {
+                object obj;
+                if (_createMap.TryGetValue(name, out obj))
+                {
+                    return (Func<ISqlResult, T>)obj;
+                }
+            }
+            var func = ToCreateUseDbResultCore<T>(x=>getIndexInSelect.IndexOf(x), exp);
+            lock (_createMap)
+            {
+                _createMap.Add(name, func);
+            }
+            return func;
+        }
+
+        static Func<ISqlResult, T> ToCreateUseDbResultCore<T>(Func<string, int> getIndexInSelect, Expression exp)
         {
             var newExp = exp as NewExpression;
             if (newExp == null)
