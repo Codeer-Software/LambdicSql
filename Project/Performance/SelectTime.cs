@@ -2,9 +2,12 @@
 using LambdicSql;
 using LambdicSql.SqlServer;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace Performance
 {
@@ -27,20 +30,18 @@ namespace Performance
         [TestMethod]
         public void CheckLambdicSql()
         {
-            var executor = Sql.Query<DB>().Select(db => new TableValues()
+            var executor = Sql.Query<DB>().SelectFrom(db => db.TableValues).ToExecutor(new SqlServerAdapter(TestEnvironment.ConnectionString));
+
+            var times = new List<long>();
+            for (int i = 0; i < 10; i++)
             {
-                IntVal = db.TableValues.IntVal,
-                FloatVal = db.TableValues.FloatVal,
-                DoubleVal = db.TableValues.DoubleVal,
-                DecimalVal = db.TableValues.DecimalVal,
-                StringVal = db.TableValues.StringVal
-
-            }).From(db => db.TableValues).ToExecutor(new SqlServerAdapter(TestEnvironment.ConnectionString));
-
-            Stopwatch watch = new Stopwatch();
-            watch.Start();
-            var datas = executor.Read();
-            watch.Stop();
+                Stopwatch watch = new Stopwatch();
+                watch.Start();
+                var datas = executor.Read().ToList();
+                watch.Stop();
+                times.Add(watch.ElapsedMilliseconds);
+            }
+            MessageBox.Show(string.Join(Environment.NewLine, times.Select(e=>e.ToString())) + Environment.NewLine + times.Average().ToString());
         }
 
         [TestMethod]
@@ -48,10 +49,16 @@ namespace Performance
         {
             using (var connection = new SqlConnection(TestEnvironment.ConnectionString))
             {
-                Stopwatch watch = new Stopwatch();
-                watch.Start();
-                var datas = connection.Query<TableValues>("select IntVal, FloatVal, DoubleVal, DecimalVal, StringVal from TableValues;").ToList();
-                watch.Stop();
+                var times = new List<long>();
+                for (int i = 0; i < 10; i++)
+                {
+                    Stopwatch watch = new Stopwatch();
+                    watch.Start();
+                    var datas = connection.Query<TableValues>("select IntVal, FloatVal, DoubleVal, DecimalVal, StringVal from TableValues;").ToList();
+                    watch.Stop();
+                    times.Add(watch.ElapsedMilliseconds);
+                }
+                MessageBox.Show(string.Join(Environment.NewLine, times.Select(e => e.ToString())) + Environment.NewLine + times.Average().ToString());
             }
         }
     }
