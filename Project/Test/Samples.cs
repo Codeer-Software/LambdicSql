@@ -583,8 +583,6 @@ namespace Test
     [TestClass]
     public class TestX
     {
-
-
         public class Staff
         {
             public int id { get; set; }

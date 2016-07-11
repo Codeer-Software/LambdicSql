@@ -73,7 +73,7 @@ namespace Performance
             using (var connection = new SqlConnection(TestEnvironment.ConnectionString))
             {
                 connection.Open();
-                for (int i = 0; i < 10 * 3; i++)
+                for (int i = 0; i < 10; i++)
                 {
                     var watch = new Stopwatch();
                     watch.Start();
@@ -92,7 +92,7 @@ namespace Performance
             using (var connection = new SqlConnection(TestEnvironment.ConnectionString))
             {
                 connection.Open();
-                for (int i = 0; i < 10 * 3; i++)
+                for (int i = 0; i < 10; i++)
                 {
                     var watch = new Stopwatch();
                     watch.Start();
