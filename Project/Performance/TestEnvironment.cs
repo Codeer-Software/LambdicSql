@@ -8,6 +8,7 @@ namespace Performance
     static class TestEnvironment
     {
         internal static string ConnectionString => File.ReadAllText(FindNearFile("db.txt")).Trim();
+        internal static string ConnectionString2 => File.ReadAllText(FindNearFile("db2.txt")).Trim();
         internal static IDbAdapter Adapter => new SqlServerAdapter(ConnectionString);
 
         static string FindNearFile(string fileName)

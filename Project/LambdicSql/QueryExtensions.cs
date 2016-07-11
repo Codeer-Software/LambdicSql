@@ -1,6 +1,7 @@
 ﻿using LambdicSql.Inside;
 using LambdicSql.QueryBase;
 using System;
+using System.Data.Common;
 
 namespace LambdicSql
 {
@@ -24,6 +25,14 @@ namespace LambdicSql
         {
             return new DbExecutor<TSelect>(adaptor, query as IQuery<TDB, TSelect>);
         }
+
+        public static ISqlExecutor<TSelect> ToExecutor<TDB, TSelect>(this IQuery<TDB, TSelect> query, DbConnection connection)
+             where TDB : class
+             where TSelect : class
+        {
+            //TODO
+            return new DbExecutor2<TSelect>(connection, query as IQuery<TDB, TSelect>);
+        }
     }
 }
 
@@ -31,3 +40,5 @@ namespace LambdicSql
 Case
 UNION/EXCEPT/EXCEPT
 */
+
+    //@@@クエリとサブクエリとExpressionに分けて考えるか。

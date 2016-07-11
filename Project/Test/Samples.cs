@@ -1,6 +1,7 @@
 ﻿using LambdicSql;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 
@@ -527,6 +528,54 @@ namespace Test
                     Where(db=>db.tbl_remuneration.money != null);
 
             var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
+        }
+
+        /*@@@ TODO
+        [TestMethod]
+        public void LambdaOnlySelectFrom()
+        {
+            var data = Sql.Query(() => new
+            {
+                tbl_staff = new
+                {
+                    id = 0,
+                    name = ""
+                },
+                tbl_remuneration = new
+                {
+                    id = 0,
+                    staff_id = 0,
+                    payment_date = default(DateTime),
+                    money = default(decimal)
+                }
+            }).SelectFrom(db => db.tbl_staff).ToExecutor(TestEnvironment.Adapter).Read();
+        }*/
+
+
+        [TestMethod]
+        public void Connection()
+        {
+            var query = Sql.Query<DB>().
+            Select(db => new SelectData()
+            {
+                name = db.tbl_staff.name,
+                payment_date = db.tbl_remuneration.payment_date,
+                money = db.tbl_remuneration.money,
+            }).
+            From(db => db.tbl_remuneration).
+                Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
+            Where(db => 3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000).
+            OrderBy().ASC(db => db.tbl_staff.name);
+
+            using (var connection = new SqlConnection(TestEnvironment.ConnectionString))
+            {
+                var datas = query.ToExecutor(connection).Read();
+
+                foreach (var e in datas)
+                {
+                    Debug.Print("{0}, {1}, {2}", e.name, e.payment_date, e.money);
+                }
+            }
         }
     }
 }

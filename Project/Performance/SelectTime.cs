@@ -41,7 +41,7 @@ namespace Performance
                 watch.Stop();
                 times.Add(watch.ElapsedMilliseconds);
             }
-            MessageBox.Show(string.Join(Environment.NewLine, times.Select(e=>e.ToString())) + Environment.NewLine + times.Average().ToString());
+            ShowTime(times);
         }
 
         [TestMethod]
@@ -58,8 +58,52 @@ namespace Performance
                     watch.Stop();
                     times.Add(watch.ElapsedMilliseconds);
                 }
-                MessageBox.Show(string.Join(Environment.NewLine, times.Select(e => e.ToString())) + Environment.NewLine + times.Average().ToString());
+                ShowTime(times);
             }
+        }
+
+        [TestMethod]
+        public void CheckLambdicSqlCondition()
+        {
+            var adaptor = new SqlServerAdapter(TestEnvironment.ConnectionString);
+
+            var times = new List<long>();
+            for (int i = 0; i < 10; i++)
+            {
+                Stopwatch watch = new Stopwatch();
+                watch.Start();
+                var datas = Sql.Query<DB>().SelectFrom(db => db.TableValues).Where(db=>db.TableValues.IntVal != -1 && db.TableValues.DoubleVal != -1).ToExecutor(adaptor).Read().ToList();
+                watch.Stop();
+                times.Add(watch.ElapsedMilliseconds);
+            }
+            ShowTime(times);
+        }
+
+        [TestMethod]
+        public void CheckDapperCondition()
+        {
+            using (var connection = new SqlConnection(TestEnvironment.ConnectionString))
+            {
+                var times = new List<long>();
+                for (int i = 0; i < 10; i++)
+                {
+                    Stopwatch watch = new Stopwatch();
+                    watch.Start();
+                    var datas = connection.Query<TableValues>("select IntVal, FloatVal, DoubleVal, DecimalVal, StringVal from TableValues where IntVal <> -1 and DoubleVal <> -1;").ToList();
+                    watch.Stop();
+                    times.Add(watch.ElapsedMilliseconds);
+                }
+                ShowTime(times);
+            }
+        }
+
+        static void ShowTime(List<long> times)
+        {
+            MessageBox.Show(string.Join(Environment.NewLine, times.Select(e => e.ToString())) +
+                Environment.NewLine + times.Average().ToString() +
+                Environment.NewLine + times.Skip(1).Average().ToString());
         }
     }
 }
+
+//不具合を直して→全ラムダでSelectFromを使ったらNG

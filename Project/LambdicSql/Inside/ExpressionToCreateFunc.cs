@@ -23,7 +23,13 @@ namespace LambdicSql.Inside
                 {
                     var member = exp as MemberExpression;
                     var type = ((PropertyInfo)member.Member).PropertyType;
-                    newExp = Expression.New(type.GetConstructor(new Type[0]));
+                    var constructor = type.GetConstructor(new Type[0]);
+                    if (constructor == null)
+                    {
+                        //TODO
+                        throw new NotSupportedException("TODO Can't use　Anonymous type at SelectFrom.");
+                    }
+                    newExp = Expression.New(constructor);
                 }
             }
             var param = Expression.Parameter(typeof(ISqlResult), "dbResult");
