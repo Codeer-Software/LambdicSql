@@ -4,6 +4,6 @@
     {
         DbInfo DbInfo { get; }
         string ToString(object obj);
-        string ToString(object obj, Parameters parameters);
+        string ToString(object obj, object parameters);
     }
 }

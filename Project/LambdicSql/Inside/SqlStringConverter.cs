@@ -30,7 +30,7 @@ namespace LambdicSql.Inside
         DbInfo _dbInfo;
         IQueryCustomizer _queryCustomizer;
         PrepareParameters _prepare;
-        Parameters _parameters;
+        object _parameters;
 
         EventHandler<SqlStringConvertingEventArgs> SpecialElementConverting = (_, __)=> { };
         bool _isTopLevelQuery;
@@ -82,7 +82,7 @@ namespace LambdicSql.Inside
             return ToString(obj, null);
         }
 
-        public string ToString(object obj, Parameters parameters)
+        public string ToString(object obj, object parameters)
         {
             var src = _parameters;
             _parameters = parameters;
@@ -349,9 +349,9 @@ namespace LambdicSql.Inside
                 SpecialElementConverting(this, new SqlStringConvertingEventArgs(SpecialElementType.Column, name));
                 return new DecodedInfo(col.Type, col.SqlFullName);
             }
-            if (member.Type == typeof(Parameter))
+            if (_parameters != null && member.Member.DeclaringType == _parameters.GetType())
             {
-                return new DecodedInfo(null, _prepare.Push(_parameters[name]));
+                return new DecodedInfo(null, _prepare.Push(member.Member.DeclaringType.GetProperty(name).GetValue(_parameters, new object[0])));
             }
 
             if (HasParameter(member))

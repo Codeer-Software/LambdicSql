@@ -8,7 +8,7 @@ namespace LambdicSql.Clause.Condition
         public bool IsNot { get; }
         public ConditionConnection ConditionConnection { get; }
         public Expression Expression { get; }
-        public Parameters Parameters { get; }
+        public object Parameters { get; }
 
         public ConditionExpression(bool isNot, ConditionConnection connection, Expression expression)
         {
@@ -17,7 +17,7 @@ namespace LambdicSql.Clause.Condition
             Expression = expression;
         }
 
-        public ConditionExpression(bool isNot, ConditionConnection connection, Expression expression, Parameters parameters)
+        public ConditionExpression(bool isNot, ConditionConnection connection, Expression expression, object parameters)
         {
             IsNot = isNot;
             ConditionConnection = connection;

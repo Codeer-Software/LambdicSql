@@ -62,7 +62,6 @@
     <Compile Include="Clause\Select\SelectElement.cs" />
     <Compile Include="Clause\Where\WhereClause.cs" />
     <Compile Include="Inside\CanNotCreateException.cs" />
-    <Compile Include="Parameters.cs" />
     <Compile Include="QueryBase\CustomTargetType.cs" />
     <Compile Include="QueryBase\ISqlFunc.cs" />
     <Compile Include="QueryBase\InvalidDbItemException.cs" />

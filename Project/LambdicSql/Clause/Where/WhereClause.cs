@@ -8,7 +8,7 @@ namespace LambdicSql.Clause.Where
     {
         public WhereClause() { }
         public WhereClause(Expression exp) : base(exp) { }
-        public WhereClause(Expression exp, Parameters parameters) : base(exp, parameters) { }
+        public WhereClause(Expression exp, object parameters) : base(exp, parameters) { }
 
         public IClause Clone() => (WhereClause)Copy(new WhereClause());
         public string ToString(ISqlStringConverter decoder) => ToString(decoder, "WHERE");

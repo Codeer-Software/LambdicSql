@@ -610,11 +610,13 @@ namespace Test
         [TestMethod]
         public void WhereParameters()
         {
+            Sql.Log = l => Debug.Print(l);
+
             for (int i = 0; i < 2; i++)
             {
                 var query = Sql.Query(() => new DB()).
                     SelectFrom(db=>db.tbl_remuneration).
-                    Where((db, p) => db.tbl_remuneration.id == p._0, new Parameters() { _0 = 1 });
+                    Where((db, p) => db.tbl_remuneration.id == p._0, new { _0 = 1 });
 
                 var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
             }

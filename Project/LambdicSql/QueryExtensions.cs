@@ -40,5 +40,3 @@ namespace LambdicSql
 Case
 UNION/EXCEPT/EXCEPT
 */
-
-    //@@@クエリとサブクエリとExpressionに分けて考えるか。

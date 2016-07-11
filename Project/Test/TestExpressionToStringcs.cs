@@ -310,7 +310,7 @@ namespace Test
                 }
             });
 
-            var text = define.Where((db, p) => db.table1.col1 == p._1, new Parameters() { _1 = 3 }).ToQueryString();
+            var text = define.Where((db, p) => db.table1.col1 == p._1, new { _1 = 3 }).ToQueryString();
             Debug.Print(text);
         }
     }
