@@ -23,91 +23,58 @@ namespace Performance
     
     static class SelectTime
     {
-        static int _count = 100;
-
-        internal static void CheckLambdicSql()
+        static void CheckTimeCore(Action<SqlConnection> action)
         {
-            Console.WriteLine(nameof(CheckLambdicSql));
             var times = new List<double>();
             using (var connection = new SqlConnection(TestEnvironment.ConnectionString))
             {
                 connection.Open();
-                for (int i = 0; i < _count; i++)
+                for (int i = 0; i < 1000; i++)
                 {
-                    var watch = new Stopwatch();
-                    watch.Start();
-                    var datas = Sql.Query<DB>().SelectFrom(db => db.TableValues).ToExecutor(connection).Read().ToList();
-                    watch.Stop();
-                    times.Add(watch.Elapsed.TotalMilliseconds);
+               //     var watch = new Stopwatch();
+               //     watch.Start();
+                    action(connection);
+                //    watch.Stop();
+                //    times.Add(watch.Elapsed.TotalMilliseconds);
                 }
             }
-            ShowTime(times);
+       //     times = times.Skip(1).ToList();
+       //     times.Select(e => e.ToString()).ToList().ForEach(e => Console.WriteLine(e));
+       //     Console.WriteLine(times.Average().ToString());
+        }
+
+        internal static void CheckLambdicSql()
+        {
+            CheckTimeCore(connection =>
+            {
+                var datas = Sql.Query<DB>().SelectFrom(db => db.TableValues).ToExecutor(connection).Read().ToList();
+            });
         }
 
         internal static void CheckDapper()
         {
-            Console.WriteLine(nameof(CheckDapper));
-            var times = new List<double>();
-            using (var connection = new SqlConnection(TestEnvironment.ConnectionString))
+            CheckTimeCore(connection =>
             {
-                connection.Open();
-                for (int i = 0; i < _count; i++)
-                {
-                    var watch = new Stopwatch();
-                    watch.Start();
-                    var datas = connection.Query<TableValues>("select IntVal, FloatVal, DoubleVal, DecimalVal, StringVal from TableValues;").ToList();
-                    watch.Stop();
-                    times.Add(watch.Elapsed.TotalMilliseconds);
-                }
-            }
-            ShowTime(times);
+                var datas = connection.Query<TableValues>("select IntVal, FloatVal, DoubleVal, DecimalVal, StringVal from TableValues;").ToList();
+            });
         }
 
         internal static void CheckLambdicSqlCondition()
         {
-            Console.WriteLine(nameof(CheckLambdicSqlCondition));
-            int x = 1;
-            var times = new List<double>();
-            using (var connection = new SqlConnection(TestEnvironment.ConnectionString))
+            CheckTimeCore(connection =>
             {
-                connection.Open();
-                for (int i = 0; i < _count; i++)
-                {
-                    var watch = new Stopwatch();
-                    watch.Start();
-                    var datas = Sql.Query<DB>().SelectFrom(db => db.TableValues).
+                int x = 1;
+                var datas = Sql.Query<DB>().SelectFrom(db => db.TableValues).
                        Where(db => db.TableValues.IntVal == x).ToExecutor(connection).Read().ToList();
-                    watch.Stop();
-                    times.Add(watch.Elapsed.TotalMilliseconds);
-                }
-            }
-            ShowTime(times);
+            });
         }
 
         internal static void CheckDapperCondition()
         {
-            Console.WriteLine(nameof(CheckDapperCondition));
-            var times = new List<double>();
-            using (var connection = new SqlConnection(TestEnvironment.ConnectionString))
+            CheckTimeCore(connection =>
             {
-                connection.Open();
-                for (int i = 0; i < _count; i++)
-                {
-                    var watch = new Stopwatch();
-                    watch.Start();
-                    var datas = connection.Query<TableValues>("select IntVal, FloatVal, DoubleVal, DecimalVal, StringVal from TableValues  where IntVal = @Id;", new { Id = 1 }).ToList();
-                    watch.Stop();
-                    times.Add(watch.Elapsed.TotalMilliseconds);
-                }
-            }
-            ShowTime(times);
-        }
-
-        static void ShowTime(IEnumerable<double> times)
-        {
-            times = times.Skip(1);
-            times.Select(e => e.ToString()).ToList().ForEach(e => Console.WriteLine(e));
-            Console.WriteLine(times.Average().ToString());
+                var datas = connection.Query<TableValues>("select IntVal, FloatVal, DoubleVal, DecimalVal, StringVal from TableValues  where IntVal = @Id;", new { Id = 1 }).ToList();
+            });
         }
     }
 }

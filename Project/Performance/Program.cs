@@ -6,8 +6,9 @@ namespace Performance
     {
         static void Main(string[] args)
         {
-            SelectTime.CheckDapperCondition();
+            Console.ReadLine();
             SelectTime.CheckLambdicSqlCondition();
+            Console.WriteLine("Finish");
             Console.ReadLine();
         }
     }
