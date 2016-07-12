@@ -8,43 +8,47 @@ namespace LambdicSql.Inside
     {
         static Dictionary<string, Delegate> _memberGet = new Dictionary<string, Delegate>();
 
-        internal static bool GetMemberObject(MemberExpression member, out object obj)
+        internal static bool GetMemberObject(MemberExpression exp, out object obj)
         {
             obj = null;
-            var m = member;
-            var ns = new List<string>();
+            var member = exp;
+            var names = new List<string>();
             ConstantExpression constant = null;
-            while (m != null)
+            while (member != null)
             {
-                ns.Add(m.Member.Name);
-                constant = m.Expression as ConstantExpression;
+                names.Add(member.Member.Name);
+                constant = member.Expression as ConstantExpression;
                 if (constant != null)
                 {
                     break;
                 }
-                m = m.Expression as MemberExpression;
+                member = member.Expression as MemberExpression;
             }
             if (constant == null)
             {
                 return false;
             }
 
-            var getterName = constant.Type.FullName + "@" + string.Join("@", ns.ToArray());
+            var getterName = constant.Type.FullName + "@" + string.Join("@", names.ToArray());
             Delegate getFunc;
-            if (!_memberGet.TryGetValue(getterName, out getFunc))
+            lock (_memberGet)
             {
-                ns.Reverse();
-
-                var param = Expression.Parameter(constant.Type, "param");
-                Expression p = param;
-                for (int i = 0; i < ns.Count; i++)
+                if (_memberGet.TryGetValue(getterName, out getFunc))
                 {
-                    p = Expression.PropertyOrField(p, ns[i]);
+                    obj = getFunc.DynamicInvoke(constant.Value);
+                    return true;
                 }
+            }
 
-                var f = Expression.Lambda(Expression.Convert(p, typeof(object)), new[] { param }).Compile();
-                _memberGet.Add(getterName, f);
-                getFunc = f;
+            var param = Expression.Parameter(constant.Type, "param");
+            Expression target = param;
+            names.Reverse();
+            names.ForEach(e => target = Expression.PropertyOrField(target, e));
+
+            getFunc = Expression.Lambda(Expression.Convert(target, typeof(object)), new[] { param }).Compile();
+            lock (_memberGet)
+            {
+                _memberGet.Add(getterName, getFunc);
             }
             obj = getFunc.DynamicInvoke(constant.Value);
             return true;

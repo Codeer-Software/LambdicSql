@@ -69,6 +69,7 @@ namespace Performance
         [TestMethod]
         public void CheckLambdicSqlCondition()
         {
+            int x = 1;
             var times = new List<double>();
             using (var connection = new SqlConnection(TestEnvironment.ConnectionString))
             {
@@ -77,7 +78,6 @@ namespace Performance
                 {
                     var watch = new Stopwatch();
                     watch.Start();
-                    int x = 1;
                     var datas = Sql.Query<DB>().SelectFrom(db => db.TableValues).
                        Where(db => db.TableValues.IntVal == x).ToExecutor(connection).Read().ToList();
                     watch.Stop();
