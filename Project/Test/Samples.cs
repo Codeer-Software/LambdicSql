@@ -202,13 +202,28 @@ namespace Test
         [TestMethod]
         public void WhereAndOr()
         {
+            WhereAndOr(new ValueY() { Value = new ValueX() { Value = 3000 } });
+            WhereAndOr(new ValueY() { Value = new ValueX() { Value = 3000 } });
+        }
+
+        public class ValueX
+        {
+            public Decimal Value { get; set; }
+        }
+        public class ValueY
+        {
+            public ValueX Value { get; set; }
+        }
+        public void WhereAndOr(ValueY x)
+        {
             var query = Sql.Query(() => new DB()).
                 Select().
                 From(db => db.tbl_remuneration).
                     Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).Where();
 
+            
             //sequencial write!
-            query = query.And(db => 3000 < db.tbl_remuneration.money).And(db => db.tbl_remuneration.money < 4000).Or(db => db.tbl_staff.id == 1);
+            query = query.And(db => x.Value.Value < db.tbl_remuneration.money).And(db => db.tbl_remuneration.money < 4000).Or(db => db.tbl_staff.id == 1);
 
             var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
         }
@@ -614,9 +629,11 @@ namespace Test
 
             for (int i = 0; i < 2; i++)
             {
+                int x = 0;
                 var query = Sql.Query(() => new DB()).
                     SelectFrom(db=>db.tbl_remuneration).
-                    Where((db, p) => db.tbl_remuneration.id == p._0, new { _0 = 1 });
+                //    Where((db, p) => db.tbl_remuneration.id == p._0, new { _0 = 1 });
+                   Where(db => db.tbl_remuneration.id == x);
 
                 var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
             }

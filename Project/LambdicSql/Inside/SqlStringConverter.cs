@@ -30,7 +30,6 @@ namespace LambdicSql.Inside
         DbInfo _dbInfo;
         IQueryCustomizer _queryCustomizer;
         PrepareParameters _prepare;
-        object _parameters;
 
         EventHandler<SqlStringConvertingEventArgs> SpecialElementConverting = (_, __)=> { };
         bool _isTopLevelQuery;
@@ -79,25 +78,6 @@ namespace LambdicSql.Inside
 
         public string ToString(object obj)
         {
-            return ToString(obj, null);
-        }
-
-        public string ToString(object obj, object parameters)
-        {
-            var src = _parameters;
-            _parameters = parameters;
-            try
-            {
-                return ToStringCore(obj);
-            }
-            finally
-            {
-                _parameters = src;
-            }
-        }
-
-        public string ToStringCore(object obj)
-        {
             var exp = obj as Expression;
             if (exp != null)
             {
@@ -143,13 +123,21 @@ namespace LambdicSql.Inside
             {
                 //notify converting info.
                 SpecialElementConverting(this, new SqlStringConvertingEventArgs(SpecialElementType.SubQuery, string.Empty));
-
-                var paramQueryCustomizer = Expression.Parameter(typeof(IQueryCustomizer), "queryCustomizer");
-                var paramPrepare = Expression.Parameter(typeof(PrepareParameters), "prepareParameters");
-                var call = Expression.Call(null, GetType().
-                    GetMethod(nameof(MakeQueryString), BindingFlags.Static|BindingFlags.NonPublic|BindingFlags.Public), new[] { method.Arguments[0], paramQueryCustomizer, paramPrepare });
-                var funcSubQuery = Expression.Lambda(call, new[] { paramQueryCustomizer, paramPrepare }).Compile();
-                return new DecodedInfo(funcSubQuery.Method.ReturnType, funcSubQuery.DynamicInvoke(_queryCustomizer, _prepare).ToString());
+                object obj;
+                if (ExpressionToObject.GetMemberObject(method.Arguments[0] as MemberExpression, out obj))
+                {
+                    return new DecodedInfo(method.Method.ReturnType, MakeQueryString(obj as IQuery, _queryCustomizer, _prepare));
+                }
+                else
+                {
+                    var paramQueryCustomizer = Expression.Parameter(typeof(IQueryCustomizer), "queryCustomizer");
+                    var paramPrepare = Expression.Parameter(typeof(PrepareParameters), "prepareParameters");
+                    var call = Expression.Call(null, GetType().
+                        GetMethod(nameof(MakeQueryString), BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public), new[] { method.Arguments[0], paramQueryCustomizer, paramPrepare });
+                    var funcSubQuery = Expression.Lambda(call, new[] { paramQueryCustomizer, paramPrepare }).Compile();
+                    return new DecodedInfo(funcSubQuery.Method.ReturnType,
+                        funcSubQuery.DynamicInvoke(_queryCustomizer, _prepare).ToString());
+                }
             }
 
             //word
@@ -170,7 +158,7 @@ namespace LambdicSql.Inside
 
             //invoke
             var funcNormal = Expression.Lambda(method).Compile();
-            return new DecodedInfo(funcNormal.Method.ReturnType, ToStringCore(funcNormal.DynamicInvoke()));
+            return new DecodedInfo(funcNormal.Method.ReturnType, ToString(funcNormal.DynamicInvoke()));
         }
 
         DecodedInfo CusotmInvoke(MethodCallExpression method, CustomTargetType invokeType)
@@ -327,8 +315,15 @@ namespace LambdicSql.Inside
 
         DecodedInfo ToString(ConstantExpression constant)
         {
-            var func = Expression.Lambda(constant).Compile();
-            return new DecodedInfo(func.Method.ReturnType, ToStringCore(func.DynamicInvoke()));
+            if (constant.Value == null)
+            {
+                return new DecodedInfo(null, ToString((object)null));
+            }
+            if (SupportedTypeSpec.IsSupported(constant.Value.GetType()))
+            {
+                return new DecodedInfo(constant.Value.GetType(), ToString(constant.Value));
+            }
+            throw new NotSupportedException();
         }
 
         DecodedInfo ToString(MemberExpression member)
@@ -349,17 +344,36 @@ namespace LambdicSql.Inside
                 SpecialElementConverting(this, new SqlStringConvertingEventArgs(SpecialElementType.Column, name));
                 return new DecodedInfo(col.Type, col.SqlFullName);
             }
-            if (_parameters != null && member.Member.DeclaringType == _parameters.GetType())
-            {
-                return new DecodedInfo(null, _prepare.Push(member.Member.DeclaringType.GetProperty(name).GetValue(_parameters, new object[0])));
-            }
 
             if (HasParameter(member))
             {
                 return new DecodedInfo(null, name);
             }
-            var func = Expression.Lambda(member).Compile();
-            return new DecodedInfo(func.Method.ReturnType, ToStringCore(func.DynamicInvoke()));
+
+            var decoded = MemberToStringByLambda(member);
+            if (decoded != null)
+            {
+                return decoded;
+            }
+            throw new NotSupportedException();
+        }
+
+        DecodedInfo MemberToStringByLambda(MemberExpression member)
+        {
+            object obj;
+            if (!ExpressionToObject.GetMemberObject(member, out obj))
+            {
+                return null;
+            }
+            if (obj == null)
+            {
+                return new DecodedInfo(null, ToString((object)null));
+            }
+            if (SupportedTypeSpec.IsSupported(obj.GetType()))
+            {
+                return new DecodedInfo(obj.GetType(), ToString(obj));
+            }
+            return null;
         }
 
         static bool HasParameter(MemberExpression member)

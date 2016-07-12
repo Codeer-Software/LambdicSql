@@ -77,7 +77,9 @@ namespace Performance
                 {
                     var watch = new Stopwatch();
                     watch.Start();
-                    var datas = Sql.Query<DB>().SelectFrom(db => db.TableValues).Where((db, p) => db.TableValues.IntVal == p._0, new { _0 = 1 }).ToExecutor(connection).Read().ToList();
+                    int x = 1;
+                    var datas = Sql.Query<DB>().SelectFrom(db => db.TableValues).
+                       Where(db => db.TableValues.IntVal == x).ToExecutor(connection).Read().ToList();
                     watch.Stop();
                     times.Add(watch.Elapsed.TotalMilliseconds);
                 }
