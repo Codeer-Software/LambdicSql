@@ -6,7 +6,7 @@ namespace LambdicSql.Inside
 {
     static class ExpressionToObject
     {
-        static Dictionary<string, Delegate> _memberGet = new Dictionary<string, Delegate>();
+        static Dictionary<string, IGetter> _memberGet = new Dictionary<string, IGetter>();
 
         internal static bool GetMemberObject(MemberExpression exp, out object obj)
         {
@@ -30,12 +30,12 @@ namespace LambdicSql.Inside
             }
 
             var getterName = constant.Type.FullName + "@" + string.Join("@", names.ToArray());
-            Delegate getFunc;
+            IGetter getter;
             lock (_memberGet)
             {
-                if (_memberGet.TryGetValue(getterName, out getFunc))
+                if (_memberGet.TryGetValue(getterName, out getter))
                 {
-                    obj = getFunc.DynamicInvoke(constant.Value);
+                    obj = getter.GetMemberObject(constant.Value);
                     return true;
                 }
             }
@@ -44,14 +44,32 @@ namespace LambdicSql.Inside
             Expression target = param;
             names.Reverse();
             names.ForEach(e => target = Expression.PropertyOrField(target, e));
-
-            getFunc = Expression.Lambda(Expression.Convert(target, typeof(object)), new[] { param }).Compile();
+            getter = Activator.CreateInstance(typeof(GetterCore<>).MakeGenericType(constant.Type), true) as IGetter;
+            getter.Init(Expression.Convert(target, typeof(object)), param);
             lock (_memberGet)
             {
-                _memberGet.Add(getterName, getFunc);
+                _memberGet.Add(getterName, getter);
             }
-            obj = getFunc.DynamicInvoke(constant.Value);
+            obj = getter.GetMemberObject(constant.Value);
             return true;
+        }
+
+        interface IGetter
+        {
+            void Init(Expression exp, ParameterExpression param);
+            object GetMemberObject(object target);
+        }
+
+        class GetterCore<T> : IGetter
+        {
+            Func<T, object> _func;
+
+            public void Init(Expression exp, ParameterExpression param)
+            {
+                _func = Expression.Lambda<Func<T, object>>(exp, new[] { param }).Compile();
+            }
+
+            public object GetMemberObject(object target) => _func((T)target);
         }
     }
 }
