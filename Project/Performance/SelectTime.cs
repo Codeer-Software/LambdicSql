@@ -1,12 +1,10 @@
 ﻿using Dapper;
 using LambdicSql;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
-using System.Windows.Forms;
 
 namespace Performance
 {
@@ -22,19 +20,19 @@ namespace Performance
     {
         public TableValues TableValues { get; set; }
     }
-
-    [TestClass]
-    public class SelectTime
+    
+    static class SelectTime
     {
-        //1万件取得
-        [TestMethod]
-        public void CheckLambdicSql()
+        static int _count = 100;
+
+        internal static void CheckLambdicSql()
         {
+            Console.WriteLine(nameof(CheckLambdicSql));
             var times = new List<double>();
             using (var connection = new SqlConnection(TestEnvironment.ConnectionString))
             {
                 connection.Open();
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < _count; i++)
                 {
                     var watch = new Stopwatch();
                     watch.Start();
@@ -46,14 +44,14 @@ namespace Performance
             ShowTime(times);
         }
 
-        [TestMethod]
-        public void CheckDapper()
+        internal static void CheckDapper()
         {
+            Console.WriteLine(nameof(CheckDapper));
             var times = new List<double>();
             using (var connection = new SqlConnection(TestEnvironment.ConnectionString))
             {
                 connection.Open();
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < _count; i++)
                 {
                     var watch = new Stopwatch();
                     watch.Start();
@@ -65,16 +63,15 @@ namespace Performance
             ShowTime(times);
         }
 
-        //以下はwhereで1件に絞ったもの
-        [TestMethod]
-        public void CheckLambdicSqlCondition()
+        internal static void CheckLambdicSqlCondition()
         {
+            Console.WriteLine(nameof(CheckLambdicSqlCondition));
             int x = 1;
             var times = new List<double>();
             using (var connection = new SqlConnection(TestEnvironment.ConnectionString))
             {
                 connection.Open();
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < _count; i++)
                 {
                     var watch = new Stopwatch();
                     watch.Start();
@@ -87,14 +84,14 @@ namespace Performance
             ShowTime(times);
         }
 
-        [TestMethod]
-        public void CheckDapperCondition()
+        internal static void CheckDapperCondition()
         {
+            Console.WriteLine(nameof(CheckDapperCondition));
             var times = new List<double>();
             using (var connection = new SqlConnection(TestEnvironment.ConnectionString))
             {
                 connection.Open();
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < _count; i++)
                 {
                     var watch = new Stopwatch();
                     watch.Start();
@@ -106,10 +103,11 @@ namespace Performance
             ShowTime(times);
         }
 
-        static void ShowTime(List<double> times)
+        static void ShowTime(IEnumerable<double> times)
         {
-            MessageBox.Show(string.Join(Environment.NewLine, times.Select(e => e.ToString())) +
-                Environment.NewLine + times.Average().ToString());
+            times = times.Skip(1);
+            times.Select(e => e.ToString()).ToList().ForEach(e => Console.WriteLine(e));
+            Console.WriteLine(times.Average().ToString());
         }
     }
 }

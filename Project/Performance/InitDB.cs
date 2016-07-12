@@ -1,14 +1,11 @@
 ﻿using LambdicSql;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 
 namespace Performance
 {
-   // [TestClass]
-    public class InitDB
+    static class InitDB
     {
-        [TestMethod]
-        public void Init()
+        internal static void Init()
         {
             Sql.Query<DB>().Delete().From(db => db.TableValues).ToExecutor(TestEnvironment.Adapter).Write();
 
