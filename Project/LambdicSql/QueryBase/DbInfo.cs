@@ -26,6 +26,14 @@ namespace LambdicSql.QueryBase
             }
         }
 
+        internal DbInfo Clone()
+        {
+            var clone = new DbInfo();
+            clone._lambdaNameAndColumn = GetLambdaNameAndColumn();
+            clone._lambdaNameAndTable = GetLambdaNameAndTable();
+            return clone;
+        }
+
         internal void AddSubQueryTableInfo(Dictionary<string, Expression> lambdaNameAndSubQuery)
         {
             foreach (var e in lambdaNameAndSubQuery)

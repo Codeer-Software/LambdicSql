@@ -23,29 +23,49 @@ namespace Performance
     
     static class SelectTime
     {
-        static void CheckTimeCore(Action<SqlConnection> action)
+        internal static bool IsProfile { get; set; } = false;
+
+        static void TestCore(Action<SqlConnection> action)
         {
+            if (IsProfile) Profile(action);
+            else CheckTime(action);
+        }
+
+        static void Profile(Action<SqlConnection> action)
+        {
+            using (var connection = new SqlConnection(TestEnvironment.ConnectionString))
+            {
+                connection.Open();
+                for (int i = 0; i < 10000; i++)
+                {
+                    action(connection);
+                }
+            }
+        }
+
+        static void CheckTime(Action<SqlConnection> action)
+        { 
             var times = new List<double>();
             using (var connection = new SqlConnection(TestEnvironment.ConnectionString))
             {
                 connection.Open();
-                for (int i = 0; i < 1000; i++)
+                for (int i = 0; i < 500; i++)
                 {
-               //     var watch = new Stopwatch();
-               //     watch.Start();
+                    var watch = new Stopwatch();
+                    watch.Start();
                     action(connection);
-                //    watch.Stop();
-                //    times.Add(watch.Elapsed.TotalMilliseconds);
+                    watch.Stop();
+                    times.Add(watch.Elapsed.TotalMilliseconds);
                 }
             }
-       //     times = times.Skip(1).ToList();
-       //     times.Select(e => e.ToString()).ToList().ForEach(e => Console.WriteLine(e));
-       //     Console.WriteLine(times.Average().ToString());
+            times = times.Skip(1).ToList();
+            times.Select(e => e.ToString()).ToList().ForEach(e => Console.WriteLine(e));
+            Console.WriteLine(times.Average().ToString());
         }
 
         internal static void CheckLambdicSql()
         {
-            CheckTimeCore(connection =>
+            TestCore(connection =>
             {
                 var datas = Sql.Query<DB>().SelectFrom(db => db.TableValues).ToExecutor(connection).Read().ToList();
             });
@@ -53,7 +73,7 @@ namespace Performance
 
         internal static void CheckDapper()
         {
-            CheckTimeCore(connection =>
+            TestCore(connection =>
             {
                 var datas = connection.Query<TableValues>("select IntVal, FloatVal, DoubleVal, DecimalVal, StringVal from TableValues;").ToList();
             });
@@ -61,7 +81,7 @@ namespace Performance
 
         internal static void CheckLambdicSqlCondition()
         {
-            CheckTimeCore(connection =>
+            TestCore(connection =>
             {
                 int x = 1;
                 var datas = Sql.Query<DB>().SelectFrom(db => db.TableValues).
@@ -71,7 +91,7 @@ namespace Performance
 
         internal static void CheckDapperCondition()
         {
-            CheckTimeCore(connection =>
+            TestCore(connection =>
             {
                 var datas = connection.Query<TableValues>("select IntVal, FloatVal, DoubleVal, DecimalVal, StringVal from TableValues  where IntVal = @Id;", new { Id = 1 }).ToList();
             });

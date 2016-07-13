@@ -9,10 +9,29 @@ namespace LambdicSql.Inside
 {
     static class DBDefineAnalyzer
     {
+        static Dictionary<Type, DbInfo> _dbInfos = new Dictionary<Type, DbInfo>();
+
         internal static IQuery<T, T> CreateQuery<T>(Expression<Func<T>> define)
            where T : class
         {
-            var db = new DbInfo();
+            var db = GetDbInfo(define);
+            var indexInSelect = db.GetLambdaNameAndColumn().Keys.ToList();
+            var create = ExpressionToCreateFunc.ToCreateUseDbResult<T>(indexInSelect, define.Body);
+            return new ClauseMakingQuery<T, T, IClause>(db, create, new IClause[0]);
+        }
+
+        static DbInfo GetDbInfo<T>(Expression<Func<T>> define) where T : class
+        {
+            DbInfo db;
+            lock (_dbInfos)
+            {
+                if (_dbInfos.TryGetValue(typeof(T), out db))
+                {
+                    return db.Clone();
+                }
+            }
+
+            db = new DbInfo();
             foreach (var column in FindColumns(typeof(T), new string[0]))
             {
                 db.Add(column);
@@ -20,12 +39,16 @@ namespace LambdicSql.Inside
             var lambdaNameAndSubQuery = new Dictionary<string, Expression>();
             GetSubQuery(new string[0], define.Body, lambdaNameAndSubQuery);
             db.AddSubQueryTableInfo(lambdaNameAndSubQuery);
-
-            var indexInSelect = db.GetLambdaNameAndColumn().Keys.ToList();
-            var create = ExpressionToCreateFunc.ToCreateUseDbResult<T>(indexInSelect, define.Body);
-            return new ClauseMakingQuery<T, T, IClause>(db, create, new IClause[0]);
+            lock (_dbInfos)
+            {
+                if (!_dbInfos.ContainsKey(typeof(T)))
+                {
+                    _dbInfos.Add(typeof(T), db);
+                }
+            }
+            return db;
         }
-        
+
         static IEnumerable<ColumnInfo> FindColumns(Type type, IEnumerable<string> names)
         {
             if (SupportedTypeSpec.IsSupported(type))

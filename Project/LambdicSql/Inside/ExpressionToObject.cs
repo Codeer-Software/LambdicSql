@@ -48,7 +48,10 @@ namespace LambdicSql.Inside
             getter.Init(Expression.Convert(target, typeof(object)), param);
             lock (_memberGet)
             {
-                _memberGet.Add(getterName, getter);
+                if (!_memberGet.ContainsKey(getterName))
+                {
+                    _memberGet.Add(getterName, getter);
+                }
             }
             obj = getter.GetMemberObject(constant.Value);
             return true;
