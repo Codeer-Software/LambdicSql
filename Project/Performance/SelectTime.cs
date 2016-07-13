@@ -2,8 +2,11 @@
 using LambdicSql;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.SqlClient;
+using System.Data.SQLite;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 
 namespace Performance
@@ -24,16 +27,18 @@ namespace Performance
     static class SelectTime
     {
         internal static bool IsProfile { get; set; } = false;
+        internal static string db_file { get; set; } = Path.GetDirectoryName(Path.GetDirectoryName(typeof(Program).Assembly.Location)) + "\\OneData.db";
 
-        static void TestCore(Action<SqlConnection> action)
+        static void TestCore(Action<DbConnection> action)
         {
             if (IsProfile) Profile(action);
             else CheckTime(action);
         }
 
-        static void Profile(Action<SqlConnection> action)
+        static void Profile(Action<DbConnection> action)
         {
-            using (var connection = new SqlConnection(TestEnvironment.ConnectionString))
+            //using (var connection = new SqlConnection(TestEnvironment.ConnectionString))
+            using (var connection = new SQLiteConnection("Data Source=" + db_file))
             {
                 connection.Open();
                 for (int i = 0; i < 10000; i++)
@@ -43,10 +48,11 @@ namespace Performance
             }
         }
 
-        static void CheckTime(Action<SqlConnection> action)
+        static void CheckTime(Action<DbConnection> action)
         { 
             var times = new List<double>();
-            using (var connection = new SqlConnection(TestEnvironment.ConnectionString))
+            // using (var connection = new SqlConnection(TestEnvironment.ConnectionString))
+            using (var connection = new SQLiteConnection("Data Source=" + db_file))
             {
                 connection.Open();
                 for (int i = 0; i < 500; i++)
@@ -83,7 +89,7 @@ namespace Performance
         {
             TestCore(connection =>
             {
-                int x = 1;
+                int x = 0;
                 var datas = Sql.Query<DB>().SelectFrom(db => db.TableValues).
                        Where(db => db.TableValues.IntVal == x).ToExecutor(connection).Read().ToList();
             });
@@ -93,7 +99,7 @@ namespace Performance
         {
             TestCore(connection =>
             {
-                var datas = connection.Query<TableValues>("select IntVal, FloatVal, DoubleVal, DecimalVal, StringVal from TableValues  where IntVal = @Id;", new { Id = 1 }).ToList();
+                var datas = connection.Query<TableValues>("select IntVal, FloatVal, DoubleVal, DecimalVal, StringVal from TableValues  where IntVal = @Id;", new { Id = 0 }).ToList();
             });
         }
     }

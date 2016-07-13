@@ -6,7 +6,7 @@ namespace Performance
     {
         static void Main(string[] args)
         {
-            Profile();
+            Compare();
         }
 
         static void Profile()
