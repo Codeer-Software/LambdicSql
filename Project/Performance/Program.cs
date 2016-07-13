@@ -6,7 +6,7 @@ namespace Performance
     {
         static void Main(string[] args)
         {
-            Compare();
+            CompareOne();
         }
 
         static void Profile()
@@ -16,7 +16,7 @@ namespace Performance
             SelectTime.CheckLambdicSqlCondition();
         }
 
-        static void Compare()
+        static void CompareOne()
         {
             SelectTime.IsProfile = false;
             Console.ReadLine();
