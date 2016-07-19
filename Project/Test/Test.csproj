@@ -52,7 +52,10 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Samples.cs" />
+    <Compile Include="..\TestCheck35\Samples.cs">
+      <Link>Samples.cs</Link>
+    </Compile>
+    <Compile Include="SamplesWrap.cs" />
     <Compile Include="TestEnvironment.cs" />
     <Compile Include="TestExpressionToStringcs.cs" />
     <Compile Include="TestResult.cs" />

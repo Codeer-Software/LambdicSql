@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Common;
 using System.Linq;
 
 namespace LambdicSql.Inside
@@ -76,10 +75,10 @@ namespace LambdicSql.Inside
     class DbExecutor2<TSelect> : ISqlExecutor<TSelect>
         where TSelect : class
     {
-        DbConnection _connection;
+        IDbConnection _connection;
         IQuery<TSelect> _info;
 
-        internal DbExecutor2(DbConnection connection, IQuery<TSelect> info)
+        internal DbExecutor2(IDbConnection connection, IQuery<TSelect> info)
         {
             _connection = connection;
             _info = info;
@@ -106,7 +105,10 @@ namespace LambdicSql.Inside
                     Sql.Log?.Invoke(text);
                     com.CommandText = text;
                     com.Connection = _connection;
-                    com.Parameters.AddRange(parameters.GetParameters().Select(e => CreateParameter(com, e.Key, e.Value)).ToArray());
+                    foreach (var obj in parameters.GetParameters().Select(e => CreateParameter(com, e.Key, e.Value)))
+                    {
+                        com.Parameters.Add(obj);
+                    }
                     using (var sdr = com.ExecuteReader())
                     {
                         var reader = new SqlResult(sdr);
@@ -146,7 +148,10 @@ namespace LambdicSql.Inside
                     Sql.Log?.Invoke(text);
                     com.CommandText = text;
                     com.Connection = _connection;
-                    com.Parameters.AddRange(parameters.GetParameters().Select(e => CreateParameter(com, e.Key, e.Value)).ToArray());
+                    foreach (var obj in parameters.GetParameters().Select(e => CreateParameter(com, e.Key, e.Value)))
+                    {
+                        com.Parameters.Add(obj);
+                    }
                     return com.ExecuteNonQuery();
                 }
             }
@@ -159,7 +164,7 @@ namespace LambdicSql.Inside
             }
         }
 
-        static DbParameter CreateParameter(DbCommand com, string name, object obj)
+        static IDbDataParameter CreateParameter(IDbCommand com, string name, object obj)
         {
             var param = com.CreateParameter();
             param.ParameterName = name;

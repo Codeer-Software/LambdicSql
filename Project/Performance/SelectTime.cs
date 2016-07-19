@@ -89,7 +89,6 @@ namespace Performance
         {
             TestCore(connection =>
             {
-                Sql.Log = l => Console.Write(l);
                 int x = 0;
                 var datas = Sql.Query<DB>().SelectFrom(db => db.TableValues).
                        Where(db => db.TableValues.IntVal == x).ToExecutor(connection).Read().ToList();

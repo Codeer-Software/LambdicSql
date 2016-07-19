@@ -1,14 +1,15 @@
 ﻿using LambdicSql.QueryBase;
 using System;
+using System.Data;
 using System.Data.Common;
 
 namespace LambdicSql.Inside
 {
     class SqlResult : ISqlResult
     {
-        DbDataReader _reader;
+        IDataReader _reader;
 
-        public SqlResult(DbDataReader reader)
+        public SqlResult(IDataReader reader)
         {
             _reader = reader;
         }

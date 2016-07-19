@@ -1,6 +1,7 @@
 ﻿using LambdicSql.Inside;
 using LambdicSql.QueryBase;
 using System;
+using System.Data;
 using System.Data.Common;
 
 namespace LambdicSql
@@ -26,7 +27,7 @@ namespace LambdicSql
             return new DbExecutor<TSelect>(adaptor, query as IQuery<TDB, TSelect>);
         }
 
-        public static ISqlExecutor<TSelect> ToExecutor<TDB, TSelect>(this IQuery<TDB, TSelect> query, DbConnection connection)
+        public static ISqlExecutor<TSelect> ToExecutor<TDB, TSelect>(this IQuery<TDB, TSelect> query, IDbConnection connection)
              where TDB : class
              where TSelect : class
         {

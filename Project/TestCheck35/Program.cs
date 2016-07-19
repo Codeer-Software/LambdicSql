@@ -1,8 +1,7 @@
-﻿using LambdicSql;
-using LambdicSql.SqlServer;
-using System;
-using System.Diagnostics;
+﻿using TestCore;
 using System.Linq;
+using System;
+using System.Data.SqlClient;
 
 namespace TestCheck35
 {
@@ -10,47 +9,29 @@ namespace TestCheck35
     {
         static void Main(string[] args)
         {
-            var max = 4000;
-
-            //log for debug.
-            Sql.Log = l => Debug.Print(l);
-
-            //make sql.
-            var q1 = Sql.Query(() => new
+            var samples = new Samples();
+            foreach (var m in samples.GetType().GetMethods().
+                Where(e => e.DeclaringType == samples.GetType()).
+                Where(e => e.GetParameters().Length == 0))
             {
-                tbl_staff = new
+                try
                 {
-                    id = 0,
-                    name = ""
-                },
-                tbl_remuneration = new
-                {
-                    id = 0,
-                    staff_id = 0,
-                    payment_date = default(DateTime),
-                    money = default(decimal)
+                    using (var con = new SqlConnection(TestEnvironment.ConnectionString))
+                    {
+                        con.Open();
+                        samples.TestInitialize(m.Name, con);
+                        m.Invoke(samples, new object[0]);
+                        Console.WriteLine("OK - " + m.Name);
+                    }
                 }
-            });
-            var q2 = q1.Select(db => new
-            {
-                name = db.tbl_staff.name,
-                payment_date = db.tbl_remuneration.payment_date,
-                money = db.tbl_remuneration.money,
-            });
-            var q3 = q2.From(db => db.tbl_remuneration).
-                Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id);
-
-            var q4 = q3.Where(db => 3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < max).
-                OrderBy().ASC(db => db.tbl_staff.name);
-
-            //execute.
-            var datas = q4.ToExecutor(new SqlServerAdapter("Data Source=DESKTOP-IBN02LQ;Initial Catalog=LambdicSqlTest;User ID=sa;Password=codeer;")).Read();
-
-            foreach (var e in datas)
-            {
-                Debug.Print("{0}, {1}, {2}", e.name, e.payment_date, e.money);
+                catch
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("NG - " + m.Name);
+                    Console.ResetColor();
+                }
             }
-
+            Console.ReadKey();
         }
     }
 }

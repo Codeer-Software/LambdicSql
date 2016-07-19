@@ -1,33 +1,31 @@
 ﻿using LambdicSql;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Data.SqlClient;
+using System.Data;
 using System.Diagnostics;
 using System.Linq;
 
-namespace Test
+namespace TestCore
 {
-    [TestClass]
     public class Samples
     {
-        public TestContext TestContext { get; set; }
+        public IDbConnection _connection;
 
-        [TestInitialize]
-        public void TestInitialize()
+        public void TestInitialize(string testName, IDbConnection connection)
         {
+            _connection = connection;
+
             Sql.Log = null;
             Delete();
             Sql.Log = l =>
             {
                 Debug.Print("");
-                Debug.Print(TestContext.TestName);
+                Debug.Print(testName);
                 Debug.Print("```sql");
                 Debug.Print(l);
                 Debug.Print("```");
             };
         }
-        
-        [TestMethod]
+
         public void LambdaOnly()
         {
             //log for debug.
@@ -61,14 +59,13 @@ namespace Test
             OrderBy().ASC(db => db.tbl_staff.name);
 
             //execute.
-            var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
+            var datas = query.ToExecutor(_connection).Read();
 
             foreach (var e in datas)
             {
                 Debug.Print("{0}, {1}, {2}", e.name, e.payment_date, e.money);
             }
         }
-
 
         public class Staff
         {
@@ -93,8 +90,7 @@ namespace Test
             public DateTime payment_date { get; set; }
             public decimal money { get; set; }
         }
-
-        [TestMethod]
+        
         public void StandardNoramlType()
         {
             //log for debug.
@@ -114,7 +110,7 @@ namespace Test
             OrderBy().ASC(db => db.tbl_staff.name);
 
             //execute.
-            var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
+            var datas = query.ToExecutor(_connection).Read();
 
             foreach (var e in datas)
             {
@@ -123,7 +119,6 @@ namespace Test
         }
 
         //Select all.
-        [TestMethod]
         public void SelectAll()
         {
             //make sql.
@@ -135,7 +130,7 @@ namespace Test
                 OrderBy().ASC(db => db.tbl_staff.name);
 
             //execute.
-            var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
+            var datas = query.ToExecutor(_connection).Read();
 
             foreach (var e in datas)
             {
@@ -144,7 +139,6 @@ namespace Test
         }
 
         //Select one table.
-        [TestMethod]
         public void SelectFrom()
         {
             //make sql.
@@ -152,11 +146,10 @@ namespace Test
             SelectFrom(db => db.tbl_staff);
 
             //execute.
-            var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
+            var datas = query.ToExecutor(_connection).Read();
         }
 
         //Group by.
-        [TestMethod]
         public void GroupBy()
         {
             var query = Sql.Query(() => new DB()).
@@ -173,7 +166,7 @@ namespace Test
                 Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
             GroupBy(db => db.tbl_staff.id, db => db.tbl_staff.name);
 
-            var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
+            var datas = query.ToExecutor(_connection).Read();
             foreach (var e in datas)
             {
                 Debug.Print("{0}, {1}, {2}, {3}, {4}, {5}", e.name, e.count, e.total, e.average, e.minimum, e.maximum);
@@ -181,7 +174,6 @@ namespace Test
         }
 
         //Having
-        [TestMethod]
         public void Having()
         {
             var query = Sql.Query(() => new DB()).
@@ -195,11 +187,10 @@ namespace Test
             GroupBy(db => db.tbl_staff.id, db => db.tbl_staff.name).
             Having(db => 10000 < Sql.Func.Sum(db.tbl_remuneration.money));
 
-            var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
+            var datas = query.ToExecutor(_connection).Read();
         }
 
         //You can write sequencial AND OR.
-        [TestMethod]
         public void WhereAndOr()
         {
             WhereAndOr(new ValueY() { Value = new ValueX() { Value = 3000 } });
@@ -225,11 +216,10 @@ namespace Test
             //sequencial write!
             query = query.And(db => x.Value.Value < db.tbl_remuneration.money).And(db => db.tbl_remuneration.money < 4000).Or(db => db.tbl_staff.id == 1);
 
-            var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
+            var datas = query.ToExecutor(_connection).Read();
         }
 
         //Like, In, Between
-        [TestMethod]
         public void Like()
         {
             var query =
@@ -238,10 +228,9 @@ namespace Test
                 From(db=>db.tbl_staff).
                 Where().Like(db => db.tbl_staff.name, "%son%");
 
-            var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
+            var datas = query.ToExecutor(_connection).Read();
         }
-
-        [TestMethod]
+        
         public void In()
         {
             var query = Sql.Query(() => new { tbl_staff = new Staff() }).
@@ -249,10 +238,9 @@ namespace Test
                 From(db => db.tbl_staff).
                 Where().In(db => db.tbl_staff.id, 1, 3);
 
-            var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
+            var datas = query.ToExecutor(_connection).Read();
         }
-
-        [TestMethod]
+        
         public void Between()
         {
             var query =
@@ -261,11 +249,10 @@ namespace Test
                 From(db => db.tbl_staff).
                 Where().Between(db => db.tbl_staff.id, 1, 3);
 
-            var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
+            var datas = query.ToExecutor(_connection).Read();
         }
         
         //You can use sub query.
-        [TestMethod]
         public void WhereInSubQuery()
         {
             var define = Sql.Query<DB>();
@@ -278,10 +265,9 @@ namespace Test
                 Select(db => new { name = db.tbl_staff.name }).
                 From(db => db.tbl_staff).
                 Where().In(db => db.tbl_staff.id, db => sub.Cast<int>()).//sub query.
-                ToExecutor(TestEnvironment.Adapter).Read();
+                ToExecutor(_connection).Read();
         }
 
-        [TestMethod]
         public void SelectSubQuery()
         {
             var define = Sql.Query<DB>();
@@ -297,10 +283,9 @@ namespace Test
                     total = sub.Cast<decimal>()//sub query.
                 }).
                 From(db => db.tbl_staff).
-                ToExecutor(TestEnvironment.Adapter).Read();
+                ToExecutor(_connection).Read();
         }
         
-        [TestMethod]
         public void FromSubQuery()
         {
             var subQuery = Sql.Query(() => new DB()).
@@ -325,12 +310,11 @@ namespace Test
             }).
             From(db => db.tbl_sub);
 
-            var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
+            var datas = query.ToExecutor(_connection).Read();
         }
 
         //Distinct
         //```cs
-        [TestMethod]
         public void Distinct()
         {
             var datas = Sql.Query<DB>().
@@ -339,38 +323,35 @@ namespace Test
                     id = Sql.Word.Distinct(db.tbl_remuneration.staff_id)
                 }).
                 From(db => db.tbl_remuneration).
-                ToExecutor(TestEnvironment.Adapter).Read();
+                ToExecutor(_connection).Read();
         }
         //```
 
         //Delete all.
         //```cs
-        [TestMethod]
         public void Delete()
         {
             var count = Sql.Query<DBData>().
                 Delete().
                 From(db => db.tbl_data).
-                ToExecutor(TestEnvironment.Adapter).Write();
+                ToExecutor(_connection).Write();
         }
         //```
 
         //Delete condition matching row. 
         //```cs
-        [TestMethod]
         public void DeleteWhere()
         {
             var count = Sql.Query<DBData>().
                 Delete().
                 From(db => db.tbl_data).
                 Where(db => db.tbl_data.id == 3).
-                ToExecutor(TestEnvironment.Adapter).Write();
+                ToExecutor(_connection).Write();
         }
         //```
 
         //Insert.
         //```cs
-        [TestMethod]
         public void Insert()
         {
             Data[] datas = new[]
@@ -383,13 +364,12 @@ namespace Test
                 Sql.Query<DBData>().
                 InsertInto(db => db.tbl_data).
                 Values(datas).
-                ToExecutor(TestEnvironment.Adapter).Write();
+                ToExecutor(_connection).Write();
         }
         //```
 
         //Insert selected data.
         //```cs
-        [TestMethod]
         public void InsertSelectedData()
         {
             Data[] datas = new[]
@@ -402,13 +382,12 @@ namespace Test
                 Sql.Query<DBData>().
                 InsertInto(db => db.tbl_data, tbl => tbl.id, tbl => tbl.val1).
                 Values(datas).
-                ToExecutor(TestEnvironment.Adapter).Write();
+                ToExecutor(_connection).Write();
         }
         //```
 
         //Insert using anonymous type.
         //```cs
-        [TestMethod]
         public void InsertUsingAnonymousType()
         {
             var datas = Enumerable.Range(1, 5).Select(x => new
@@ -425,13 +404,12 @@ namespace Test
                 }).
                 InsertInto(db => db.tbl_data).
                 Values(datas).
-                ToExecutor(TestEnvironment.Adapter).Write();
+                ToExecutor(_connection).Write();
         }
         //```
 
         //Update
         //```cs
-        [TestMethod]
         public void Update()
         {
             var count = Sql.Query<DBData>().
@@ -440,13 +418,12 @@ namespace Test
                 Assign(tbl => tbl.val1, 100).
                 Assign(tbl => tbl.val2, "200").
                 Where(db => db.tbl_data.id == 1).
-                ToExecutor(TestEnvironment.Adapter).Write();
+                ToExecutor(_connection).Write();
         }
         //```
 
         //Update using table value.
         //```cs
-        [TestMethod]
         public void UpdateUsingTableValue()
         {
             var count = Sql.Query<DBData>().
@@ -454,7 +431,7 @@ namespace Test
                 Set().
                 Assign(tbl => tbl.val1, tbl => tbl.val1 * 2).
                 Where(db => db.tbl_data.id == 1).
-                ToExecutor(TestEnvironment.Adapter).Write();
+                ToExecutor(_connection).Write();
         }
         //```
         
@@ -469,8 +446,7 @@ namespace Test
         {
             public Data tbl_data { get; set; }
         }
-
-        [TestMethod]
+        
         public void IsNull()
         {
             decimal? val = null;
@@ -485,10 +461,9 @@ namespace Test
                     Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
                Where(db => db.tbl_staff.name == null || db.tbl_remuneration.money == val);
 
-            var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
+            var datas = query.ToExecutor(_connection).Read();
         }
-
-        [TestMethod]
+        
         public void IsNotNull()
         {
             decimal? val = null;
@@ -503,11 +478,9 @@ namespace Test
                     Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
                Where(db => db.tbl_staff.name != null || db.tbl_remuneration.money != val);
 
-            var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
+            var datas = query.ToExecutor(_connection).Read();
         }
 
-
-        
         public class RemunerationNullable
         {
             public int id { get; set; }
@@ -527,8 +500,7 @@ namespace Test
             public DateTime? payment_date { get; set; }
             public decimal? money { get; set; }
         }
-
-        [TestMethod]
+        
         public void Nullable()
         {
             var query = Sql.Query<DBNullable>().
@@ -542,7 +514,7 @@ namespace Test
                     Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
                     Where(db=>db.tbl_remuneration.money != null);
 
-            var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
+            var datas = query.ToExecutor(_connection).Read();
         }
 
         /*@@@ TODO
@@ -563,81 +535,8 @@ namespace Test
                     payment_date = default(DateTime),
                     money = default(decimal)
                 }
-            }).SelectFrom(db => db.tbl_staff).ToExecutor(TestEnvironment.Adapter).Read();
+            }).SelectFrom(db => db.tbl_staff).ToExecutor(_connection).Read();
         }*/
-
-
-        [TestMethod]
-        public void Connection()
-        {
-            var query = Sql.Query<DB>().
-            Select(db => new SelectData()
-            {
-                name = db.tbl_staff.name,
-                payment_date = db.tbl_remuneration.payment_date,
-                money = db.tbl_remuneration.money,
-            }).
-            From(db => db.tbl_remuneration).
-                Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
-            Where(db => 3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000).
-            OrderBy().ASC(db => db.tbl_staff.name);
-
-            using (var connection = new SqlConnection(TestEnvironment.ConnectionString))
-            {
-                connection.Open();
-                var datas = query.ToExecutor(connection).Read();
-
-                foreach (var e in datas)
-                {
-                    Debug.Print("{0}, {1}, {2}", e.name, e.payment_date, e.money);
-                }
-            }
-        }
-    }
-
-    [TestClass]
-    public class TestX
-    {
-        public class Staff
-        {
-            public int id { get; set; }
-            public string name { get; set; }
-        }
-        public class Remuneration
-        {
-            public int id { get; set; }
-            public int staff_id { get; set; }
-            public DateTime payment_date { get; set; }
-            public decimal money { get; set; }
-        }
-        public class DB
-        {
-            public Staff tbl_staff { get; set; }
-            public Remuneration tbl_remuneration { get; set; }
-        }
-        public class SelectData
-        {
-            public string name { get; set; }
-            public DateTime payment_date { get; set; }
-            public decimal money { get; set; }
-        }
-
-        [TestMethod]
-        public void WhereParameters()
-        {
-            Sql.Log = l => Debug.Print(l);
-
-            for (int i = 0; i < 2; i++)
-            {
-                int x = 0;
-                var query = Sql.Query(() => new DB()).
-                    SelectFrom(db=>db.tbl_remuneration).
-                //    Where((db, p) => db.tbl_remuneration.id == p._0, new { _0 = 1 });
-                   Where(db => db.tbl_remuneration.id == x);
-
-                var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
-            }
-        }
 
     }
 }
