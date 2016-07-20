@@ -24,6 +24,22 @@ namespace Test
         }
 
         [TestMethod]
+        public void TestNoramlClassGeneric()
+        {
+            var query = Sql.Query<Db1>();
+            var data = new TestResult();
+            data["table1@col1"] = "abc";
+            data["table1@col2"] = 100;
+            data["table2@col3"] = "def";
+            data["table2@col4"] = 200;
+            var obj = data.Create(query);
+            Assert.AreEqual(obj.table1.col1, "abc");
+            Assert.AreEqual(obj.table1.col2, 100);
+            Assert.AreEqual(obj.table2.col3, "def");
+            Assert.AreEqual(obj.table2.col4, 200);
+        }
+
+        [TestMethod]
         public void TestNoramlAndLambda()
         {
             Sql.Log = l => Debug.Print(l);
@@ -45,18 +61,6 @@ namespace Test
             Assert.AreEqual(obj.table2.col4, 200);
         }
         
-        [TestMethod]
-        public void TestTableOne()
-        {
-            Sql.Log = l => Debug.Print(l);
-
-            var query = Sql.Query(() => new
-            {
-                table1 = new Tbl1()
-            });
-            Debug.Print(query.ToQueryString());
-        }
-
         public class Tbl1
         {
             public string col1 { get; set; }

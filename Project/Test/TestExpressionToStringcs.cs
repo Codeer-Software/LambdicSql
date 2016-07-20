@@ -1,7 +1,6 @@
 ﻿using LambdicSql;
 using LambdicSql.Inside;
 using LambdicSql.QueryBase;
-using LambdicSql.SqlServer;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Diagnostics;
@@ -9,6 +8,7 @@ using System.Linq.Expressions;
 
 namespace Test
 {
+    //TODO refactor to product forthis testing.
     [TestClass]
     public class TestExpressionToStringcs
     {

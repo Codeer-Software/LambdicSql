@@ -7,9 +7,32 @@ using System.Linq;
 
 namespace Test
 {
+    //TODO must to be detail testing.
     [TestClass]
     public class TestSqlRead
     {
+
+        /*@@@ TODO
+        [TestMethod]
+        public void LambdaOnlySelectFrom()
+        {
+            var data = Sql.Query(() => new
+            {
+                tbl_staff = new
+                {
+                    id = 0,
+                    name = ""
+                },
+                tbl_remuneration = new
+                {
+                    id = 0,
+                    staff_id = 0,
+                    payment_date = default(DateTime),
+                    money = default(decimal)
+                }
+            }).SelectFrom(db => db.tbl_staff).ToExecutor(_connection).Read();
+        }*/
+
         [TestMethod]
         public void Standard()
         {

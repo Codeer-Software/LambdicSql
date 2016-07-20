@@ -516,27 +516,5 @@ namespace TestCore
 
             var datas = query.ToExecutor(_connection).Read();
         }
-
-        /*@@@ TODO
-        [TestMethod]
-        public void LambdaOnlySelectFrom()
-        {
-            var data = Sql.Query(() => new
-            {
-                tbl_staff = new
-                {
-                    id = 0,
-                    name = ""
-                },
-                tbl_remuneration = new
-                {
-                    id = 0,
-                    staff_id = 0,
-                    payment_date = default(DateTime),
-                    money = default(decimal)
-                }
-            }).SelectFrom(db => db.tbl_staff).ToExecutor(_connection).Read();
-        }*/
-
     }
 }

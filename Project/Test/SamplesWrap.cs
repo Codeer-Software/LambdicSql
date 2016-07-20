@@ -96,9 +96,5 @@ namespace Test
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void Nullable() => _core.Nullable();
-
-        /*@@@ TODO
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void LambdaOnlySelectFrom() => _core.LambdaOnlySelectFrom();*/
     }
 }
