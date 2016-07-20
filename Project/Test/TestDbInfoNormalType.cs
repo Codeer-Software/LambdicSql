@@ -5,7 +5,7 @@ using System.Diagnostics;
 namespace Test
 {
     [TestClass]
-    public class TestUsingNormalType
+    public class TestDbInfoNormalType
     {
         [TestMethod]
         public void TestNoramlClass()

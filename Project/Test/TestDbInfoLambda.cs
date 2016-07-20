@@ -6,7 +6,7 @@ using System;
 namespace Test
 {
     [TestClass]
-    public class TestUsingLambda
+    public class TestDbInfoLambda
     {
         [TestMethod]
         public void SupportedType()

@@ -2,6 +2,7 @@
 using System.Data;
 using System.Data.SqlClient;
 using TestCore;
+using static Test.Helper.DBProviderInfo;
 
 namespace Test
 {
@@ -22,85 +23,82 @@ namespace Test
         }
 
         [TestCleanup]
-        public void TestCleanup()
-        {
-            _connection.Dispose();
-        }
+        public void TestCleanup() => _connection.Dispose();
 
-        [TestMethod]
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void LambdaOnly() => _core.LambdaOnly();
 
-        [TestMethod]
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void StandardNoramlType() => _core.StandardNoramlType();
         
-        [TestMethod]
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void SelectAll() => _core.SelectAll();
         
-        [TestMethod]
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void SelectFrom() => _core.SelectFrom();
         
-        [TestMethod]
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void GroupBy() => _core.GroupBy();
         
-        [TestMethod]
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void Having() => _core.Having();
         
-        [TestMethod]
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void WhereAndOr() => _core.WhereAndOr();
         
-        [TestMethod]
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void Like() => _core.Like();
 
-        [TestMethod]
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void In() => _core.In();
 
-        [TestMethod]
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void Between() => _core.Between();
         
-        [TestMethod]
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void WhereInSubQuery() => _core.WhereInSubQuery();
 
-        [TestMethod]
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void SelectSubQuery() => _core.SelectSubQuery();
 
-        [TestMethod]
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void FromSubQuery() => _core.FromSubQuery();
         
-        [TestMethod]
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void Distinct() => _core.Distinct();
 
-        [TestMethod]
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void Delete() => _core.Delete();
 
-        [TestMethod]
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void DeleteWhere() => _core.DeleteWhere();
 
-        [TestMethod]
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void Insert() => _core.Insert();
 
-        [TestMethod]
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void InsertSelectedData() => _core.InsertSelectedData();
 
-        [TestMethod]
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void InsertUsingAnonymousType() => _core.InsertUsingAnonymousType();
 
-        [TestMethod]
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void Update() => _core.Update();
 
-        [TestMethod]
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void UpdateUsingTableValue() => _core.UpdateUsingTableValue();
 
-        [TestMethod]
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void IsNull() => _core.IsNull();
 
-        [TestMethod]
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void IsNotNull() => _core.IsNotNull();
 
-        [TestMethod]
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void Nullable() => _core.Nullable();
 
         /*@@@ TODO
-        [TestMethod]
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void LambdaOnlySelectFrom() => _core.LambdaOnlySelectFrom();*/
     }
 }
