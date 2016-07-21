@@ -1,0 +1,6 @@
+CREATE TABLE tbl_data (
+	id INTEGER,
+	val1 INTEGER,
+	val2 VARCHAR(50),
+	PRIMARY KEY (id)
+)

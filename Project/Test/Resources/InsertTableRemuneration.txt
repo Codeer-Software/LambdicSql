@@ -1,0 +1,1 @@
+INSERT INTO tbl_remuneration (id, staff_id, payment_date, money) VALUES({0}, {1}, {2}, {3})

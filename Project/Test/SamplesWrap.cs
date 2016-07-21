@@ -1,6 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Data;
-using System.Data.SqlClient;
 using TestCore;
 using static Test.Helper.DBProviderInfo;
 
@@ -16,7 +15,7 @@ namespace Test
         [TestInitialize]
         public void TestInitialize()
         {
-            _connection = new SqlConnection(TestEnvironment.ConnectionString);
+            _connection = TestEnvironment.CreateConnection(TestContext.DataRow[0]);
             _connection.Open();
             _core = new Samples();
             _core.TestInitialize(TestContext.TestName, _connection);

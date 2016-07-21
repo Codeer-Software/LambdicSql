@@ -1,0 +1,5 @@
+CREATE TABLE tbl_staff (
+	id INTEGER,
+	name VARCHAR(50),
+	PRIMARY KEY (id)
+)

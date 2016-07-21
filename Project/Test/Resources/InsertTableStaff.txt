@@ -1,0 +1,1 @@
+INSERT INTO tbl_staff (id, name) VALUES({0}, {1})
