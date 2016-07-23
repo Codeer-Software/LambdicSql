@@ -11,11 +11,15 @@ namespace LambdicSql.Inside
     {
         IDbConnection _connection;
         IQuery<TSelect> _info;
+        string _sql;
+        PrepareParameters _parameters = new PrepareParameters();
 
         internal DbExecutor(IDbConnection connection, IQuery<TSelect> info)
         {
             _connection = connection;
             _info = info;
+            _sql = GetCommandText(_parameters);
+            Sql.Log?.Invoke(_sql);
         }
 
         public IEnumerable<TSelect> Read()
@@ -34,12 +38,9 @@ namespace LambdicSql.Inside
             {
                 using (var com = _connection.CreateCommand())
                 {
-                    var parameters = new PrepareParameters();
-                    var text = GetCommandText(parameters);
-                    Sql.Log?.Invoke(text);
-                    com.CommandText = text;
+                    com.CommandText = _sql;
                     com.Connection = _connection;
-                    foreach (var obj in parameters.GetParameters().Select(e => CreateParameter(com, e.Key, e.Value)))
+                    foreach (var obj in _parameters.GetParameters().Select(e => CreateParameter(com, e.Key, e.Value)))
                     {
                         com.Parameters.Add(obj);
                     }
@@ -77,12 +78,9 @@ namespace LambdicSql.Inside
             {
                 using (var com = _connection.CreateCommand())
                 {
-                    var parameters = new PrepareParameters();
-                    var text = GetCommandText(parameters);
-                    Sql.Log?.Invoke(text);
-                    com.CommandText = text;
+                    com.CommandText = _sql;
                     com.Connection = _connection;
-                    foreach (var obj in parameters.GetParameters().Select(e => CreateParameter(com, e.Key, e.Value)))
+                    foreach (var obj in _parameters.GetParameters().Select(e => CreateParameter(com, e.Key, e.Value)))
                     {
                         com.Parameters.Add(obj);
                     }
@@ -110,10 +108,20 @@ namespace LambdicSql.Inside
             SqlStringConverter.ToString(_info, parameters, CreateCustomizer());
 
         IQueryCustomizer CreateCustomizer()
+            => QueryCustomizeResolver.CreateCustomizer(_connection.GetType().FullName);
+    }
+
+    public static class QueryCustomizeResolver
+    {
+        public static IQueryCustomizer CreateCustomizer(string connectionTypeFullName)
         {
-            if (_connection.GetType().FullName == "Npgsql.NpgsqlConnection")
+            if (connectionTypeFullName == "Npgsql.NpgsqlConnection")
             {
                 return new PostgresCustomizer();
+            }
+            if (connectionTypeFullName == "System.Data.SQLite.SQLiteConnection")
+            {
+                return new SQLiteCustomizer();
             }
             return null;
         }
