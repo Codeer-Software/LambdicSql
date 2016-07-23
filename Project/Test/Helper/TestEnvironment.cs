@@ -1,6 +1,4 @@
-﻿using LambdicSql.QueryBase;
-using LambdicSql.SqlServer;
-using System;
+﻿using System;
 using System.IO;
 using System.Data;
 using System.Data.SqlClient;
@@ -8,13 +6,11 @@ using System.Data.SQLite;
 using Test.Properties;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Npgsql;
-using System.Text;
 
 namespace Test
 {
     static class TestEnvironment
     {
-        internal static IDbAdapter Adapter => new SqlServerAdapter(File.ReadAllText(FindNearFile("db.txt")).Trim());
         internal static string SqlServerConnectionString => File.ReadAllText(FindNearFile("db.txt")).Trim();
         internal static string PostgresConnectionStringForDBCreate => File.ReadAllText(FindNearFile("postgres.txt")).Trim();
         internal static string PostgresConnectionString => PostgresConnectionStringForDBCreate + "Database=lambdicsqltest1;";

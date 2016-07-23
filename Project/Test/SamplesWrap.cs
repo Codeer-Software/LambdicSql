@@ -95,5 +95,8 @@ namespace Test
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void Nullable() => _core.Nullable();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void StringCalc() => _core.StringCalc();
     }
 }

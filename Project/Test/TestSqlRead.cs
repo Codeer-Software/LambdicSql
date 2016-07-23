@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.Linq;
 
@@ -11,6 +12,17 @@ namespace Test
     [TestClass]
     public class TestSqlRead
     {
+        public IDbConnection _connection;
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            _connection = TestEnvironment.CreateConnection("SQLServer");
+            _connection.Open();
+        }
+
+        [TestCleanup]
+        public void TestCleanup() => _connection.Dispose();
 
         /*@@@ TODO
         [TestMethod]
@@ -67,7 +79,7 @@ namespace Test
                 OrderBy().ASC(db => db.tbl_staff.name);
 
             //execute.
-            var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
+            var datas = query.ToExecutor(_connection).Read();
 
             foreach (var e in datas)
             {
@@ -174,7 +186,7 @@ namespace Test
             }).
             From(db=>db.tbl_sub);
 
-            query1.ToExecutor(TestEnvironment.Adapter).Read();
+            query1.ToExecutor(_connection).Read();
 
             var query2 = Sql.Query(() => new Data2
             {
@@ -187,7 +199,7 @@ namespace Test
             }).
             From(db => db.tbl_staff).Join(db => db.tbl_sub, db => db.tbl_sub.name == db.tbl_staff.name);
 
-            query2.ToExecutor(TestEnvironment.Adapter).Read();
+            query2.ToExecutor(_connection).Read();
         }
 
         [TestMethod]
@@ -210,7 +222,7 @@ namespace Test
                 OrderBy().ASC(db => db.tbl_staff.name);
 
             //execute.
-            var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
+            var datas = query.ToExecutor(_connection).Read();
 
             foreach (var e in datas)
             {
@@ -244,7 +256,7 @@ namespace Test
                 OrderBy().ASC(db => db.tbl_staff.name);
 
             //execute.
-            var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
+            var datas = query.ToExecutor(_connection).Read();
 
             foreach (var e in datas)
             {
@@ -280,22 +292,22 @@ namespace Test
             var queryCorssJoin = query.CrossJoin(db => db.tbl_staff);
 
             //execute.
-            var datas = queryJoin.ToExecutor(TestEnvironment.Adapter).Read();
+            var datas = queryJoin.ToExecutor(_connection).Read();
             foreach (var e in datas)
             {
                 Debug.Print("{0}, {1}, {2}", e.name, e.payment_date, e.money);
             }
-            datas = queryLeftJoin.ToExecutor(TestEnvironment.Adapter).Read();
+            datas = queryLeftJoin.ToExecutor(_connection).Read();
             foreach (var e in datas)
             {
                 Debug.Print("{0}, {1}, {2}", e.name, e.payment_date, e.money);
             }
-            datas = queryRightJoin.ToExecutor(TestEnvironment.Adapter).Read();
+            datas = queryRightJoin.ToExecutor(_connection).Read();
             foreach (var e in datas)
             {
                 Debug.Print("{0}, {1}, {2}", e.name, e.payment_date, e.money);
             }
-            datas = queryCorssJoin.ToExecutor(TestEnvironment.Adapter).Read();
+            datas = queryCorssJoin.ToExecutor(_connection).Read();
             foreach (var e in datas)
             {
                 Debug.Print("{0}, {1}, {2}", e.name, e.payment_date, e.money);
@@ -317,7 +329,7 @@ namespace Test
             From(db => db.tbl_remuneration);
 
             //execute.
-            var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
+            var datas = query.ToExecutor(_connection).Read();
             foreach (var e in datas)
             {
                 Debug.Print("{0}", e.id);
@@ -337,7 +349,7 @@ namespace Test
             From(db=>db.tbl_staff);
 
             //execute.
-            query.ToExecutor(TestEnvironment.Adapter).Read();
+            query.ToExecutor(_connection).Read();
 
         }
 
@@ -349,7 +361,7 @@ namespace Test
             {
                 tbl_staff = new Staff()
             });
-            var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
+            var datas = query.ToExecutor(_connection).Read();
 
             foreach (var e in datas)
             {
@@ -372,7 +384,7 @@ namespace Test
                 OrderBy().ASC(db => db.tbl_staff.name);
 
             //execute.
-            var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
+            var datas = query.ToExecutor(_connection).Read();
 
             foreach (var e in datas)
             {
@@ -399,7 +411,7 @@ namespace Test
             });
 
             //execute.
-            var datas = query.Select().From(db => db.tbl_staff).ToExecutor(TestEnvironment.Adapter).Read();
+            var datas = query.Select().From(db => db.tbl_staff).ToExecutor(_connection).Read();
 
             foreach (var e in datas)
             {
@@ -433,7 +445,7 @@ namespace Test
                 Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
             GroupBy(db => db.tbl_staff.id, db => db.tbl_staff.name);
 
-            var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
+            var datas = query.ToExecutor(_connection).Read();
             foreach (var e in datas)
             {
                 Debug.Print("{0}, {1}, {2}, {3}, {4}, {5}", e.name, e.count, e.total, e.average, e.minimum, e.maximum);
@@ -462,7 +474,7 @@ namespace Test
                 Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
             GroupBy(db => db.tbl_staff.id, db => db.tbl_staff.name).Having(db => 10000 < Sql.Func.Sum(db.tbl_remuneration.money));
 
-            var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
+            var datas = query.ToExecutor(_connection).Read();
             foreach (var e in datas)
             {
                 Debug.Print("{0}, {1}, {2}, {3}, {4}, {5}", e.name, e.total);
@@ -483,7 +495,7 @@ namespace Test
             //sequencial write!
             query = query.And(db => 3000 < db.tbl_remuneration.money).And(db => db.tbl_remuneration.money < 4000).Or(db => db.tbl_staff.id == 1);
 
-            var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
+            var datas = query.ToExecutor(_connection).Read();
             foreach (var e in datas)
             {
                 Debug.Print("{0}, {1}", e.tbl_staff.name, e.tbl_remuneration.money);
@@ -502,7 +514,7 @@ namespace Test
             From(db => db.tbl_staff).
             Where().Like(db => db.tbl_staff.name, "%son%");
 
-            var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
+            var datas = query.ToExecutor(_connection).Read();
             foreach (var e in datas)
             {
                 Debug.Print("{0}", e.tbl_staff.name);
@@ -521,7 +533,7 @@ namespace Test
             From(db => db.tbl_staff).
             Where().In(db => db.tbl_staff.id, 1, 3);
 
-            var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
+            var datas = query.ToExecutor(_connection).Read();
             foreach (var e in datas)
             {
                 Debug.Print("{0}", e.tbl_staff.name);
@@ -540,7 +552,7 @@ namespace Test
             From(db => db.tbl_staff).
             Where().Between(db => db.tbl_staff.id, 1, 3);
 
-            var datas = query.ToExecutor(TestEnvironment.Adapter).Read();
+            var datas = query.ToExecutor(_connection).Read();
             foreach (var e in datas)
             {
                 Debug.Print("{0}", e.tbl_staff.name);
@@ -568,7 +580,7 @@ namespace Test
                 Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
             Where(db => 3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000).
               OrderBy().ASC(db => db.tbl_staff.name).
-            ToExecutor(TestEnvironment.Adapter).Read();
+            ToExecutor(_connection).Read();
 
 
         public IEnumerable<Data> ReadData2() =>
@@ -578,13 +590,13 @@ namespace Test
                 Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
             Where(db => 3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000).
             OrderBy().ASC(db => db.tbl_staff.name).
-            ToExecutor(TestEnvironment.Adapter).Read();
+            ToExecutor(_connection).Read();
         
         public IEnumerable<Staff> ReadData3() =>
             Sql.Query(() => new { tbl_staff = new Staff() }).
             Select().
             From(db => db.tbl_staff).
-            ToExecutor(TestEnvironment.Adapter).Read().Select(e=>e.tbl_staff);
+            ToExecutor(_connection).Read().Select(e=>e.tbl_staff);
 
         [TestMethod]
         public void SelectSubQuery()
@@ -603,7 +615,7 @@ namespace Test
                         total = sub.Cast<decimal>()
                     }).
                     From(db => db.tbl_staff).
-                    ToExecutor(TestEnvironment.Adapter).Read();
+                    ToExecutor(_connection).Read();
             foreach (var e in datas)
             {
                 Debug.Print("{0}, {1}", e.name, e.total);
@@ -624,7 +636,7 @@ namespace Test
                 Select(db=>new { name = db.tbl_staff.name }).
                 From(db => db.tbl_staff).
                 Where().In(db=>db.tbl_staff.id, db=>sub.Cast<int>()).
-                ToExecutor(TestEnvironment.Adapter).Read();
+                ToExecutor(_connection).Read();
 
             foreach (var e in datas)
             {
@@ -655,7 +667,7 @@ namespace Test
             var count = Sql.Query<DataChangeTest>().
                 Delete().
                 From(db => db.tbl_data).
-                ToExecutor(TestEnvironment.Adapter).Write();
+                ToExecutor(_connection).Write();
 
         }
 
@@ -669,7 +681,7 @@ namespace Test
                 Delete().
                 From(db => db.tbl_data).
                 Where(db=>db.tbl_data.id == 3).
-                ToExecutor(TestEnvironment.Adapter).Write();
+                ToExecutor(_connection).Write();
         }
 
         [TestMethod]
@@ -683,13 +695,13 @@ namespace Test
             var count1 = Sql.Query<DataChangeTest>().
                 InsertInto(db => db.tbl_data).
                 Values(data).
-                ToExecutor(TestEnvironment.Adapter).Write();
+                ToExecutor(_connection).Write();
             
             Delete();
             var count2 = Sql.Query<DataChangeTest>().
                 InsertInto(db => db.tbl_data, tbl => tbl.id, tbl => tbl.val1).
                 Values(data).
-                ToExecutor(TestEnvironment.Adapter).Write();
+                ToExecutor(_connection).Write();
         }
 
         [TestMethod]
@@ -703,14 +715,14 @@ namespace Test
                 Assign(tbl => tbl.val1, 100).
                 Assign(tbl => tbl.val2, "200").
                 Where(db=>db.tbl_data.id == 1).
-                ToExecutor(TestEnvironment.Adapter).Write();
+                ToExecutor(_connection).Write();
 
             var count2 = Sql.Query<DataChangeTest>().
                 Update(db => db.tbl_data).
                 Set().
                 Assign(tbl => tbl.val1, tbl => tbl.val1 * 2).
                 Where(db => db.tbl_data.id == 1).
-                ToExecutor(TestEnvironment.Adapter).Write();
+                ToExecutor(_connection).Write();
         }
     }
 }

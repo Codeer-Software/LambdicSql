@@ -504,5 +504,18 @@ namespace TestCore
 
             var datas = query.ToExecutor(_connection).Read();
         }
+        
+        public void StringCalc()
+        {
+            var query = Sql.Query<DB>().
+            Select(db => new SelectData()
+            {
+                name = db.tbl_staff.name + "x"
+            }).
+            From(db => db.tbl_staff);
+
+            //execute.
+            var datas = query.ToExecutor(_connection).Read();
+        }
     }
 }

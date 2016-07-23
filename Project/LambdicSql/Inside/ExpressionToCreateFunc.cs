@@ -22,7 +22,7 @@ namespace LambdicSql.Inside
                     return (Func<ISqlResult, T>)obj;
                 }
             }
-            var func = ToCreateUseDbResultCore<T>(x=>getIndexInSelect.IndexOf(x), exp);
+            var func = ToCreateUseDbResultCore<T>(x => getIndexInSelect.IndexOf(x), exp);
             lock (_createMap)
             {
                 if (!_createMap.ContainsKey(name))

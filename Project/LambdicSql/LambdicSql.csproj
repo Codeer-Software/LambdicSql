@@ -63,6 +63,7 @@
     <Compile Include="Clause\Where\WhereClause.cs" />
     <Compile Include="Inside\CanNotCreateException.cs" />
     <Compile Include="Inside\ExpressionToObject.cs" />
+    <Compile Include="Inside\PostgresCustomizer.cs" />
     <Compile Include="QueryBase\CustomTargetType.cs" />
     <Compile Include="QueryBase\ISqlFunc.cs" />
     <Compile Include="QueryBase\InvalidDbItemException.cs" />
@@ -100,7 +101,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryExtensions.cs" />
     <Compile Include="Sql.cs" />
-    <Compile Include="SqlServer\SqlServerAdapter.cs" />
     <Compile Include="Clause\Where\WhereQueryExtensions.cs" />
     <Compile Include="Word\DistinctExtensions.cs" />
   </ItemGroup>

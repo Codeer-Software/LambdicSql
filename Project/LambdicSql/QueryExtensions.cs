@@ -20,19 +20,11 @@ namespace LambdicSql
             throw new NotSupportedException("do not call cast except in expression.");
         }
 
-        public static ISqlExecutor<TSelect> ToExecutor<TDB, TSelect>(this IQuery<TDB, TSelect> query, IDbAdapter adaptor)
-             where TDB : class
-             where TSelect : class
-        {
-            return new DbExecutor<TSelect>(adaptor, query as IQuery<TDB, TSelect>);
-        }
-
         public static ISqlExecutor<TSelect> ToExecutor<TDB, TSelect>(this IQuery<TDB, TSelect> query, IDbConnection connection)
              where TDB : class
              where TSelect : class
         {
-            //TODO
-            return new DbExecutor2<TSelect>(connection, query as IQuery<TDB, TSelect>);
+            return new DbExecutor<TSelect>(connection, query as IQuery<TDB, TSelect>);
         }
     }
 }
