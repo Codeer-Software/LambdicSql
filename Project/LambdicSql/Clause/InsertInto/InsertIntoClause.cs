@@ -77,6 +77,7 @@ namespace LambdicSql.Clause.InsertInto
             return string.Join(Environment.NewLine, query.ToArray());
         }
 
+        //TODO can't use enumerable.
         internal void Values(IEnumerable<TTable> values) => _values = values;
     }
 }

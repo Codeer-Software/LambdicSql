@@ -15,14 +15,9 @@ namespace LambdicSql
             where TTable: class
             => new InsertIntoClauseMakingQuery<TDB, TTable>(query, new InsertIntoClause<TDB, TTable>(getTable, getElements));
 
-        public static IQuery<TDB, TDB> Values<TDB, TTable>(this IInsertIntoQuery<TDB, TTable> query, params TTable[] src)
+        public static IQuery<TDB, TDB> Values<TDB, TTable>(this IInsertIntoQuery<TDB, TTable> query, TTable src)
             where TDB : class
             where TTable : class
-            => Values(query, (IEnumerable<TTable>)src);
-
-        public static IQuery<TDB, TDB> Values<TDB, TTable>(this IInsertIntoQuery<TDB, TTable> query, IEnumerable<TTable> src)
-            where TDB : class
-            where TTable : class
-             => query.CustomClone(e => e.Values(src));
+            => query.CustomClone(e => e.Values(new TTable[] { src }));
     }
 }

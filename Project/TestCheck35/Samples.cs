@@ -354,16 +354,10 @@ namespace TestCore
         //```cs
         public void Insert()
         {
-            Data[] datas = new[]
-            {
-                new Data() { id = 1, val1 = 10, val2 = "a" },
-                new Data() { id = 2, val1 = 20, val2 = "b" }
-            };
-            
             var count = 
                 Sql.Query<DBData>().
                 InsertInto(db => db.tbl_data).
-                Values(datas).
+                Values(new Data() { id = 1, val1 = 10, val2 = "a" }).
                 ToExecutor(_connection).Write();
         }
         //```
@@ -372,16 +366,10 @@ namespace TestCore
         //```cs
         public void InsertSelectedData()
         {
-            Data[] datas = new[]
-            {
-                new Data() { id = 1, val1 = 10, val2 = "a" },
-                new Data() { id = 2, val1 = 20, val2 = "b" }
-            };
-            
             var count = 
                 Sql.Query<DBData>().
                 InsertInto(db => db.tbl_data, tbl => tbl.id, tbl => tbl.val1).
-                Values(datas).
+                Values(new Data() { id = 1, val1 = 10 }).
                 ToExecutor(_connection).Write();
         }
         //```
@@ -390,20 +378,20 @@ namespace TestCore
         //```cs
         public void InsertUsingAnonymousType()
         {
-            var datas = Enumerable.Range(1, 5).Select(x => new
+            var data = new
             {
-                id = x,
-                val1 = x,
-                val2 = x.ToString()
-            }).ToArray();
+                id = 1,
+                val1 = 1,
+                val2 = 1.ToString()
+            };
 
             var count =
                 Sql.Query(() => new
                 {
-                    tbl_data = datas.FirstOrDefault()
+                    tbl_data = data
                 }).
                 InsertInto(db => db.tbl_data).
-                Values(datas).
+                Values(data).
                 ToExecutor(_connection).Write();
         }
         //```

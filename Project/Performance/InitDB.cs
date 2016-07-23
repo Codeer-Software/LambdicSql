@@ -3,6 +3,8 @@ using System.Linq;
 
 namespace Performance
 {
+    //TODO
+    /*
     static class InitDB
     {
         internal static void Init()
@@ -22,5 +24,5 @@ namespace Performance
                 Sql.Query<DB>().InsertInto(db => db.TableValues).Values(values).ToExecutor(TestEnvironment.Adapter).Write();
             }
         }
-    }
+    }*/
 }
