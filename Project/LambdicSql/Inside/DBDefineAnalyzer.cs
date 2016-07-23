@@ -119,7 +119,15 @@ namespace LambdicSql.Inside
                     //.net3.5
                     var method = members[i] as MethodInfo;
                     paramType = method.ReturnType;
-                    currentNames = names.Concat(new[] { method.Name }).ToArray();
+
+                    //TODO refactoring.
+                    var name = method.Name;
+                    if (name.IndexOf("get_") == 0)
+                    {
+                        name = name.Substring(4);
+                    }
+
+                    currentNames = names.Concat(new[] { name }).ToArray();
                 }
                 var newExp = arg as NewExpression;
                 if (newExp != null)

@@ -27,6 +27,10 @@ namespace LambdicSql.Inside
                         //.net3.5
                         var method = newExp.Members[i] as MethodInfo;
                         name = method.Name;
+                        if (name.IndexOf("get_") == 0)
+                        {
+                            name = name.Substring(4);
+                        }
                     }
                     select.Add(new SelectElement(name, newExp.Arguments[i]));
                 }

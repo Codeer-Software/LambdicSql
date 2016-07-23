@@ -9,6 +9,31 @@ namespace TestCheck35
     {
         static void Main(string[] args)
         {
+            Test35();
+        }
+
+        static void Errors()
+        {
+            var samples = new Samples();
+            using (var con = new SqlConnection(TestEnvironment.ConnectionString))
+            {
+                con.Open();
+                samples.TestInitialize(nameof(samples.Like), con);
+                samples.Like();
+
+                samples.TestInitialize(nameof(samples.In), con);
+                samples.In();
+
+                samples.TestInitialize(nameof(samples.Between), con);
+                samples.Between();
+
+                samples.TestInitialize(nameof(samples.FromSubQuery), con);
+                samples.FromSubQuery();
+            }
+        }
+
+        static void Test35()
+        { 
             var samples = new Samples();
             foreach (var m in samples.GetType().GetMethods().
                 Where(e => e.DeclaringType == samples.GetType()).
@@ -24,7 +49,7 @@ namespace TestCheck35
                         Console.WriteLine("OK - " + m.Name);
                     }
                 }
-                catch
+                catch(Exception e)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("NG - " + m.Name);
