@@ -7,13 +7,17 @@ using System.Data.SqlClient;
 using System.Data.SQLite;
 using Test.Properties;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Npgsql;
+using System.Text;
 
 namespace Test
 {
     static class TestEnvironment
     {
         internal static IDbAdapter Adapter => new SqlServerAdapter(File.ReadAllText(FindNearFile("db.txt")).Trim());
-        internal static string ConnectionString => File.ReadAllText(FindNearFile("db.txt")).Trim();
+        internal static string SqlServerConnectionString => File.ReadAllText(FindNearFile("db.txt")).Trim();
+        internal static string PostgresConnectionStringForDBCreate => File.ReadAllText(FindNearFile("postgres.txt")).Trim();
+        internal static string PostgresConnectionString => PostgresConnectionStringForDBCreate + "Database=lambdicsqltest1;";
         internal static string SQLiteTest1Path => Path.GetFullPath("../../../SQLiteTest1.db");
 
         static string FindNearFile(string fileName)
@@ -35,14 +39,15 @@ namespace Test
         {
             switch (db.ToString())
             {
-                case "SQLServer": return new SqlConnection(ConnectionString);
+                case "SQLServer": return new SqlConnection(SqlServerConnectionString);
                 case "SQLite": return new SQLiteConnection("Data Source=" + SQLiteTest1Path);
+                case "Postgres": return new NpgsqlConnection(PostgresConnectionString);
             }
             throw new NotSupportedException();
         }
     }
 
-   // [TestClass]
+    //[TestClass]
     public class Initializer
     {
         [TestMethod]
@@ -50,7 +55,33 @@ namespace Test
         {
             var path = TestEnvironment.SQLiteTest1Path;
             File.Delete(path);
-            using (var connection = new SQLiteConnection("Data Source=" + path))
+            CreateTable(new SQLiteConnection("Data Source=" + path));
+        }
+
+        [TestMethod]
+        public void CreatePostgresTable()
+        {
+            using (var connection = new NpgsqlConnection(TestEnvironment.PostgresConnectionStringForDBCreate))
+            {
+                connection.Open();
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = "DROP DATABASE lambdicsqltest1;";
+                    command.ExecuteNonQuery();
+                }
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = "CREATE DATABASE lambdicsqltest1;";
+                    command.ExecuteNonQuery();
+                }
+            }
+            
+            CreateTable(new NpgsqlConnection(TestEnvironment.PostgresConnectionString));
+        }
+
+        void CreateTable(IDbConnection connection)
+        { 
+            using (connection)
             {
                 connection.Open();
                 using (var command = connection.CreateCommand())
@@ -81,14 +112,14 @@ namespace Test
 
                         var remuneration = new object[][]
                         {
-                            new object[] {1, 1, "2016/1/1",  3000.0000},
-                            new object[] {2, 1, "2016/2/1",  3000.0000},
-                            new object[] {3, 2, "2016/1/1",  2000.0000},
-                            new object[] {4, 2, "2016/2/1",  2500.0000},
-                            new object[] {5, 3, "2016/1/1",  4000.0000},
-                            new object[] {6, 3, "2016/2/1",  4000.0000},
-                            new object[] {7, 4, "2016/1/1",  3500.0000},
-                            new object[] {8, 5, "2016/2/1",  3500.0000}
+                            new object[] {1, 1, "'2016/1/1'", (decimal)3000.0000},
+                            new object[] {2, 1, "'2016/2/1'", (decimal)3000.0000 },
+                            new object[] {3, 2, "'2016/1/1'", (decimal)2000.0000 },
+                            new object[] {4, 2, "'2016/2/1'", (decimal)2500.0000 },
+                            new object[] {5, 3, "'2016/1/1'", (decimal)4000.0000 },
+                            new object[] {6, 3, "'2016/2/1'", (decimal)4000.0000 },
+                            new object[] {7, 4, "'2016/1/1'", (decimal)3500.0000 },
+                            new object[] {8, 5, "'2016/2/1'", (decimal)3500.0000 }
                         };
                         foreach (var e in remuneration)
                         {
