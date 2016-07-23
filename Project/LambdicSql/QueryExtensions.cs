@@ -2,7 +2,6 @@
 using LambdicSql.QueryBase;
 using System;
 using System.Data;
-using System.Data.Common;
 
 namespace LambdicSql
 {
@@ -18,6 +17,12 @@ namespace LambdicSql
             where TSelect : class
         {
             throw new NotSupportedException("do not call cast except in expression.");
+        }
+
+        public static string ToSqlString<T>(this IQuery query)
+             where T : IDbConnection
+        {
+            return SqlStringConverter.ToString(query, new PrepareParameters(), QueryCustomizeResolver.CreateCustomizer(typeof(T).FullName));
         }
 
         public static ISqlExecutor<TSelect> ToExecutor<TDB, TSelect>(this IQuery<TDB, TSelect> query, IDbConnection connection)

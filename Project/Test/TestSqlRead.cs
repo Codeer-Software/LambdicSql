@@ -1,8 +1,11 @@
 ﻿using LambdicSql;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
+using System.Data.SQLite;
 using System.Diagnostics;
 using System.Linq;
 
@@ -723,6 +726,35 @@ namespace Test
                 Assign(tbl => tbl.val1, tbl => tbl.val1 * 2).
                 Where(db => db.tbl_data.id == 1).
                 ToExecutor(_connection).Write();
+        }
+        
+        public class DB
+        {
+            public Staff tbl_staff { get; set; }
+            public Remuneration tbl_remuneration { get; set; }
+        }
+
+        [TestMethod]
+        public void MultiDB()
+        {
+            var query = Sql.Query<DB>().
+            Select(db => new SelectData()
+            {
+                name = db.tbl_staff.name,
+                payment_date = db.tbl_remuneration.payment_date,
+                money = db.tbl_remuneration.money,
+            }).
+            From(db => db.tbl_remuneration).
+                Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id);
+
+            //SQLサーバー.
+            var data1 = query.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Read();
+
+            //ポスグレ
+            var data2 = query.ToExecutor(new NpgsqlConnection(TestEnvironment.PostgresConnectionString)).Read();
+
+            //SQLite
+            var data3 = query.ToExecutor(new SQLiteConnection("Data Source=" + TestEnvironment.SQLiteTest1Path)).Read();
         }
     }
 }

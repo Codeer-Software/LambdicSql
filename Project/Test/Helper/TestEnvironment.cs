@@ -43,7 +43,7 @@ namespace Test
         }
     }
 
-  //  [TestClass]
+    [TestClass]
     public class Initializer
     {
         [TestMethod]
