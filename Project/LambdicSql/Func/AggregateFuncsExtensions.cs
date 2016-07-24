@@ -5,13 +5,13 @@ namespace LambdicSql
 {
     public static class AggregateFuncsExtensions
     {
-        public static T Sum<T>(this ISqlFunc func, T item) { return default(T); }
-        public static T Sum<T>(this ISqlFunc func, AggregatePredicate aggregatePredicate, T item) { return default(T); }
-        public static T Count<T>(this ISqlFunc func, T item) { return default(T); }
-        public static T Count<T>(this ISqlFunc func, AggregatePredicate aggregatePredicate, T item) { return default(T); }
-        public static T Avg<T>(this ISqlFunc func, T item) { return default(T); }
-        public static T Min<T>(this ISqlFunc func, T item) { return default(T); }
-        public static T Max<T>(this ISqlFunc func, T item) { return default(T); }
+        public static T Sum<T>(this ISqlFuncs func, T item) { return default(T); }
+        public static T Sum<T>(this ISqlFuncs func, AggregatePredicate aggregatePredicate, T item) { return default(T); }
+        public static T Count<T>(this ISqlFuncs func, T item) { return default(T); }
+        public static T Count<T>(this ISqlFuncs func, AggregatePredicate aggregatePredicate, T item) { return default(T); }
+        public static T Avg<T>(this ISqlFuncs func, T item) { return default(T); }
+        public static T Min<T>(this ISqlFuncs func, T item) { return default(T); }
+        public static T Max<T>(this ISqlFuncs func, T item) { return default(T); }
 
         public static string CusotmInvoke(Type returnType, string name, DecodedInfo[] argSrc)
         {

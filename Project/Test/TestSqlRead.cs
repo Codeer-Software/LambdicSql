@@ -438,11 +438,11 @@ namespace Test
             Select(db => new
             {
                 name = db.tbl_staff.name,
-                count = Sql.Func.Count(db.tbl_remuneration.money),
-                total = Sql.Func.Sum(db.tbl_remuneration.money),
-                average = Sql.Func.Avg(db.tbl_remuneration.money),
-                minimum = Sql.Func.Min(db.tbl_remuneration.money),
-                maximum = Sql.Func.Max(db.tbl_remuneration.money),
+                count = Sql.Funcs.Count(db.tbl_remuneration.money),
+                total = Sql.Funcs.Sum(db.tbl_remuneration.money),
+                average = Sql.Funcs.Avg(db.tbl_remuneration.money),
+                minimum = Sql.Funcs.Min(db.tbl_remuneration.money),
+                maximum = Sql.Funcs.Max(db.tbl_remuneration.money),
             }).
             From(db => db.tbl_remuneration).
                 Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
@@ -471,11 +471,11 @@ namespace Test
             Select(db => new
             {
                 name = db.tbl_staff.name,
-                total = Sql.Func.Sum(db.tbl_remuneration.money)
+                total = Sql.Funcs.Sum(db.tbl_remuneration.money)
             }).
             From(db => db.tbl_remuneration).
                 Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
-            GroupBy(db => db.tbl_staff.id, db => db.tbl_staff.name).Having(db => 10000 < Sql.Func.Sum(db.tbl_remuneration.money));
+            GroupBy(db => db.tbl_staff.id, db => db.tbl_staff.name).Having(db => 10000 < Sql.Funcs.Sum(db.tbl_remuneration.money));
 
             var datas = query.ToExecutor(_connection).Read();
             foreach (var e in datas)
@@ -608,7 +608,7 @@ namespace Test
             var define = Sql.Query<Data>();
 
             var sub = define.
-                Select(db => new { total = Sql.Func.Sum(db.tbl_remuneration.money) }).
+                Select(db => new { total = Sql.Funcs.Sum(db.tbl_remuneration.money) }).
                 From(db => db.tbl_remuneration);
 
             var datas = define.
@@ -761,7 +761,7 @@ namespace Test
             var datas = Sql.Query<DB>().
                 Select(db => new
                 {
-                    id = Sql.Func.Count(AggregatePredicate.Distinct, db.tbl_remuneration.staff_id)
+                    id = Sql.Funcs.Count(AggregatePredicate.Distinct, db.tbl_remuneration.staff_id)
                 }).
                 From(db => db.tbl_remuneration).GroupBy(db => db.tbl_remuneration.id).
                 ToExecutor(_connection).Read();

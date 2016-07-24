@@ -315,7 +315,7 @@ namespace Test
         }
     }
 
-    interface IFuncs : ISqlFunc{ }
+    interface IFuncs : ISqlFuncs{ }
 
     static class FuncsExtensions
     { 

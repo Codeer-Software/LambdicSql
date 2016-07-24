@@ -67,7 +67,7 @@
     <Compile Include="Inside\PostgresCustomizer.cs" />
     <Compile Include="Inside\SQLiteCustomizer.cs" />
     <Compile Include="QueryBase\CustomTargetType.cs" />
-    <Compile Include="QueryBase\ISqlFunc.cs" />
+    <Compile Include="QueryBase\ISqlFuncs.cs" />
     <Compile Include="QueryBase\InvalidDbItemException.cs" />
     <Compile Include="QueryBase\IQueryCustomizer.cs" />
     <Compile Include="QueryBase\ClauseMakingQuery.cs" />

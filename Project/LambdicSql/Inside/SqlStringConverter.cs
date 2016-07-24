@@ -141,7 +141,7 @@ namespace LambdicSql.Inside
             }
 
             //func
-            if (0 < method.Arguments.Count && typeof(ISqlFunc).IsAssignableFrom(method.Arguments[0].Type))
+            if (0 < method.Arguments.Count && typeof(ISqlFuncs).IsAssignableFrom(method.Arguments[0].Type))
             {
                 return CusotmInvoke(method, CustomTargetType.Func);
             }
