@@ -9,7 +9,6 @@ namespace LambdicSql
     {
         public static Action<string> Log { get; set; }
         public static ISqlFunc Func { get; set; }
-        public static ISqlWord Word { get; set; }
 
         public static IQuery<T, T> Query<T>(Expression<Func<T>> define) where T : class
             => DBDefineAnalyzer.CreateQuery(define);

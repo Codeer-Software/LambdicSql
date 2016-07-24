@@ -173,6 +173,40 @@ namespace TestCore
             }
         }
 
+        //Group by using Distinct.
+        public void GroupByPredicateDistinct()
+        {
+            var query = Sql.Query(() => new DB()).
+            Select(db => new
+            {
+                name = db.tbl_staff.name,
+                count = Sql.Func.Count(AggregatePredicate.Distinct, db.tbl_remuneration.money),
+                total = Sql.Func.Sum(AggregatePredicate.Distinct, db.tbl_remuneration.money)
+            }).
+            From(db => db.tbl_remuneration).
+                Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
+            GroupBy(db => db.tbl_staff.id, db => db.tbl_staff.name);
+
+            var datas = query.ToExecutor(_connection).Read();
+        }
+
+        //Group by using All.
+        public void GroupByPredicateAll()
+        {
+            var query = Sql.Query(() => new DB()).
+            Select(db => new
+            {
+                name = db.tbl_staff.name,
+                count = Sql.Func.Count(AggregatePredicate.All, db.tbl_remuneration.money),
+                total = Sql.Func.Sum(AggregatePredicate.All, db.tbl_remuneration.money)
+            }).
+            From(db => db.tbl_remuneration).
+                Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
+            GroupBy(db => db.tbl_staff.id, db => db.tbl_staff.name);
+
+            var datas = query.ToExecutor(_connection).Read();
+        }
+
         //Having
         public void Having()
         {
@@ -315,12 +349,26 @@ namespace TestCore
 
         //Distinct
         //```cs
-        public void Distinct()
+        public void SelectPredicateDistinct()
         {
             var datas = Sql.Query<DB>().
-                Select(db => new
+                Select(AggregatePredicate.Distinct, db => new
                 {
-                    id = Sql.Word.Distinct(db.tbl_remuneration.staff_id)
+                    id = db.tbl_remuneration.staff_id
+                }).
+                From(db => db.tbl_remuneration).
+                ToExecutor(_connection).Read();
+        }
+        //```
+
+        //All
+        //```cs
+        public void SelectPredicateAll()
+        {
+            var datas = Sql.Query<DB>().
+                Select(AggregatePredicate.All, db => new
+                {
+                    id = db.tbl_remuneration.staff_id
                 }).
                 From(db => db.tbl_remuneration).
                 ToExecutor(_connection).Read();

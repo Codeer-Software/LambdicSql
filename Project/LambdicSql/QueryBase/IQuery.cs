@@ -8,13 +8,17 @@ namespace LambdicSql.QueryBase
         IClause[] GetClausesClone();
     }
 
-    public interface IQuery<TSelect> : IQuery
+    public interface ISelectedQuery<TSelect> : IQuery
         where TSelect : class
     {
         Func<ISqlResult, TSelect> Create { get; }
     }
 
-    public interface IQuery<TDB, TSelect> : IQuery<TSelect>
+    public interface IQuery<TDB>
+        where TDB : class
+    { }
+
+    public interface IQuery<TDB, TSelect> : IQuery<TDB>, ISelectedQuery<TSelect>
         where TDB : class
         where TSelect : class
     { }

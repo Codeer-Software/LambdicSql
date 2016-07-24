@@ -140,12 +140,6 @@ namespace LambdicSql.Inside
                 }
             }
 
-            //word
-            if (0 < method.Arguments.Count && typeof(ISqlWord).IsAssignableFrom(method.Arguments[0].Type))
-            {
-                return CusotmInvoke(method, CustomTargetType.Word);
-            }
-
             //func
             if (0 < method.Arguments.Count && typeof(ISqlFunc).IsAssignableFrom(method.Arguments[0].Type))
             {
@@ -319,9 +313,14 @@ namespace LambdicSql.Inside
             {
                 return new DecodedInfo(null, ToString((object)null));
             }
-            if (SupportedTypeSpec.IsSupported(constant.Value.GetType()))
+            var type = constant.Value.GetType();
+            if (SupportedTypeSpec.IsSupported(type))
             {
-                return new DecodedInfo(constant.Value.GetType(), ToString(constant.Value));
+                return new DecodedInfo(type, ToString(constant.Value));
+            }
+            if (type.IsEnum)
+            {
+                return new DecodedInfo(type, constant.Value.ToString());
             }
             throw new NotSupportedException();
         }

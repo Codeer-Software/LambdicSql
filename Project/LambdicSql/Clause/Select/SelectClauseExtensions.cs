@@ -23,21 +23,27 @@ namespace LambdicSql
         public static IQuery<TDB, TSelect, SelectClause> Select<TDB, TSelect>(this IQuery<TDB, TDB> query, Expression<Func<TDB, TSelect>> define)
             where TDB : class
             where TSelect : class
-            => SelectCore<TDB, TSelect>(query, define);
+            => SelectCore<TDB, TSelect>(query, null, define);
+
+        public static IQuery<TDB, TSelect, SelectClause> Select<TDB, TSelect>(this IQuery<TDB, TDB> query, AggregatePredicate aggregatePredicate, Expression<Func<TDB, TSelect>> define)
+            where TDB : class
+            where TSelect : class
+            => SelectCore<TDB, TSelect>(query, aggregatePredicate, define);
 
         public static IQuery<TDB, TSelect, Clause.From.FromClause> SelectFrom<TDB, TSelect>(this IQuery<TDB, TDB> query, Expression<Func<TDB, TSelect>> selectTable)
             where TDB : class
             where TSelect : class
         {
-            var select = SelectCore<TDB, TSelect>(query, selectTable);
+            var select = SelectCore<TDB, TSelect>(query, null, selectTable);
             return select.From(selectTable);
         }
 
-        static IQuery<TDB, TSelect, SelectClause> SelectCore<TDB, TSelect>(this IQuery<TDB, TDB> query, LambdaExpression define)
+        static IQuery<TDB, TSelect, SelectClause> SelectCore<TDB, TSelect>(IQuery<TDB, TDB> query, AggregatePredicate? aggregatePredicate, LambdaExpression define)
             where TDB : class
             where TSelect : class
         {
             var select = SelectDefineAnalyzer.MakeSelectInfo(define.Body);
+            select.SetPredicate(aggregatePredicate);
             var indexInSelect = select.GetElements().Select(e => e.Name).ToList();
             return new ClauseMakingQuery<TDB, TSelect, SelectClause>(query.Db,
                 ExpressionToCreateFunc.ToCreateUseDbResult<TSelect>(indexInSelect, define.Body),

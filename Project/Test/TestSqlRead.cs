@@ -325,9 +325,9 @@ namespace Test
 
             //make sql.
             var query = Sql.Query<Data>().
-            Select(db => new
+            Select(AggregatePredicate.Distinct, db => new
             {
-                id = Sql.Word.Distinct(db.tbl_remuneration.staff_id)
+                id = db.tbl_remuneration.staff_id
             }).
             From(db => db.tbl_remuneration);
 
@@ -746,15 +746,25 @@ namespace Test
             }).
             From(db => db.tbl_remuneration).
                 Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id);
-
-            //SQLサーバー.
+            
             var data1 = query.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Read();
-
-            //ポスグレ
             var data2 = query.ToExecutor(new NpgsqlConnection(TestEnvironment.PostgresConnectionString)).Read();
-
-            //SQLite
             var data3 = query.ToExecutor(new SQLiteConnection("Data Source=" + TestEnvironment.SQLiteTest1Path)).Read();
+        }
+
+        //Distinct
+        //```cs
+        [TestMethod]
+        public void DistinctCount()
+        {
+            Sql.Log = l => Debug.Print(l);
+            var datas = Sql.Query<DB>().
+                Select(db => new
+                {
+                    id = Sql.Func.Count(AggregatePredicate.Distinct, db.tbl_remuneration.staff_id)
+                }).
+                From(db => db.tbl_remuneration).GroupBy(db => db.tbl_remuneration.id).
+                ToExecutor(_connection).Read();
         }
     }
 }

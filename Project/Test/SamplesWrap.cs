@@ -35,10 +35,16 @@ namespace Test
         
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void SelectFrom() => _core.SelectFrom();
-        
+
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void GroupBy() => _core.GroupBy();
-        
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void GroupByPredicateDistinct() => _core.GroupByPredicateDistinct();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void GroupByPredicateAll() => _core.GroupByPredicateAll();
+
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void Having() => _core.Having();
         
@@ -62,9 +68,12 @@ namespace Test
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void FromSubQuery() => _core.FromSubQuery();
-        
+
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void Distinct() => _core.Distinct();
+        public void SelectPredicateDistinct() => _core.SelectPredicateDistinct();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void SelectPredicateAll() => _core.SelectPredicateAll();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void Delete() => _core.Delete();

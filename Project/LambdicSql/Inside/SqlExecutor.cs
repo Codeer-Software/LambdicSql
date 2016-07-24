@@ -10,11 +10,11 @@ namespace LambdicSql.Inside
         where TSelect : class
     {
         IDbConnection _connection;
-        IQuery<TSelect> _info;
+        ISelectedQuery<TSelect> _info;
         string _sql;
         PrepareParameters _parameters = new PrepareParameters();
 
-        internal DbExecutor(IDbConnection connection, IQuery<TSelect> info)
+        internal DbExecutor(IDbConnection connection, ISelectedQuery<TSelect> info)
         {
             _connection = connection;
             _info = info;
