@@ -14,11 +14,11 @@ namespace LambdicSql.QueryBase
         public Func<ISqlResult, TSelect> Create { get; }
         public IClause[] GetClausesClone() => _clauses.Select(e => e.Clone()).ToArray();
 
-        public ClauseMakingQuery(IQuery<TDB, TSelect> src, TClause newClause)
+        public ClauseMakingQuery(IQuery<TDB, TSelect> src, params TClause[] newClause)
         {
             Db = src.Db;
             Create = src.Create;
-            _clauses = src.GetClausesClone().Concat(new IClause[] { newClause }).ToArray();
+            _clauses = src.GetClausesClone().Concat(newClause.Select(e=>(IClause)e)).ToArray();
         }
 
         public IQuery<TDB, TSelect, TClause> CustomClone(Action<TClause> custom)

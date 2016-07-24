@@ -21,16 +21,17 @@ namespace LambdicSql
 
         public static string ToSqlString<T>(this IQuery query)
              where T : IDbConnection
-        {
-            return SqlStringConverter.ToString(query, new PrepareParameters(), QueryCustomizeResolver.CreateCustomizer(typeof(T).FullName));
-        }
+            => SqlStringConverter.ToString(query, new PrepareParameters(), QueryCustomizeResolver.CreateCustomizer(typeof(T).FullName));
 
         public static ISqlExecutor<TSelect> ToExecutor<TDB, TSelect>(this IQuery<TDB, TSelect> query, IDbConnection connection)
              where TDB : class
              where TSelect : class
-        {
-            return new DbExecutor<TSelect>(connection, query as IQuery<TDB, TSelect>);
-        }
+            => new DbExecutor<TSelect>(connection, query as IQuery<TDB, TSelect>);
+
+        public static IQuery<TDB, TSelect> AddQuery<TDB, TSelect>(this IQuery<TDB, TSelect> query, IQuery<TDB> addQuery)
+            where TDB : class
+            where TSelect : class
+            => new ClauseMakingQuery<TDB, TSelect, IClause>(query, addQuery.GetClausesClone());
     }
 }
 

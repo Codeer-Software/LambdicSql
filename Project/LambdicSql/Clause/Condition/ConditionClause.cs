@@ -120,6 +120,12 @@ namespace LambdicSql.Clause.Condition
             else _currentBlock.Or();
         }
 
+        internal void Skip()
+        {
+            if (_currentBlock == null) _nextConnectionCore = ConditionConnection.Skip;
+            else _currentBlock.Skip();
+        }
+
         internal void Not()
         {
             if (_currentBlock == null) _isNotCore = true;
@@ -128,19 +134,25 @@ namespace LambdicSql.Clause.Condition
 
         internal void In(Expression target, params object[] inArguments)
         {
-            if (_currentBlock == null) _conditions.Add(new ConditionIn(IsNot, NextConnection, target, inArguments));
+            var connection = NextConnection;
+            if (connection == ConditionConnection.Skip) { }
+            else if (_currentBlock == null) _conditions.Add(new ConditionIn(IsNot, connection, target, inArguments));
             else _currentBlock.In(target, inArguments);
         }
 
         internal void Like(Expression target, object serachText)
         {
-            if (_currentBlock == null) _conditions.Add(new ConditionLike(IsNot, NextConnection, target, serachText));
+            var connection = NextConnection;
+            if (connection == ConditionConnection.Skip) { }
+            else if (_currentBlock == null) _conditions.Add(new ConditionLike(IsNot, connection, target, serachText));
             else _currentBlock.Like(target, serachText);
         }
 
         internal void Between(Expression target, object min, object max)
         {
-            if (_currentBlock == null) _conditions.Add(new ConditionBetween(IsNot, NextConnection, target, min, max));
+            var connection = NextConnection;
+            if (connection == ConditionConnection.Skip) { }
+            else if (_currentBlock == null) _conditions.Add(new ConditionBetween(IsNot, connection, target, min, max));
             else _currentBlock.Between(target, min, max);
         }
 
@@ -170,7 +182,11 @@ namespace LambdicSql.Clause.Condition
                 }
                 else
                 {
-                    _conditions.Add(new MultiCondition(_currentBlock._conditions) { IsNot = IsNot, ConditionConnection = NextConnection });
+                    var connection = NextConnection;
+                    if (connection != ConditionConnection.Skip)
+                    {
+                        _conditions.Add(new MultiCondition(_currentBlock._conditions) { IsNot = IsNot, ConditionConnection = connection });
+                    }
                     _currentBlock = null;
                 }
             }

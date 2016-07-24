@@ -107,5 +107,8 @@ namespace Test
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void StringCalc() => _core.StringCalc();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void WhereEx() => _core.WhereEx();
     }
 }

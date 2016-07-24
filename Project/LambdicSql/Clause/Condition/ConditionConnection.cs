@@ -4,6 +4,7 @@
     {
         Non,
         And,
-        Or
+        Or,
+        Skip
     }
 }

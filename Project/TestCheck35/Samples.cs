@@ -564,5 +564,22 @@ namespace TestCore
             //execute.
             var datas = query.ToExecutor(_connection).Read();
         }
+
+        public void WhereEx()
+        {
+            WhereEx(true, true);
+            WhereEx(true, false);
+            WhereEx(false, true);
+            WhereEx(false, false);
+        }
+
+        public void WhereEx(bool minCondition, bool maxCondition)
+        {
+            var datas =
+                Sql.Query<DB>().SelectFrom(db=>db.tbl_remuneration).Where().
+                And(minCondition, db => 3000 < db.tbl_remuneration.money).
+                And(maxCondition, db => db.tbl_remuneration.money < 4000).
+                ToExecutor(_connection).Read();
+        }
     }
 }
