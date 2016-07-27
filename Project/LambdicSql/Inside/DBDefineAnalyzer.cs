@@ -16,8 +16,7 @@ namespace LambdicSql.Inside
         {
             var db = GetDbInfo(define);
             var indexInSelect = db.GetLambdaNameAndColumn().Keys.ToList();
-            var create = ExpressionToCreateFunc.ToCreateUseDbResult<T>(indexInSelect, define.Body);
-            return new ClauseMakingQuery<T, T, IClause>(db, create, new IClause[0]);
+            return new ClauseMakingQuery<T, T, IClause>(db, ()=> ExpressionToCreateFunc.ToCreateUseDbResult<T>(indexInSelect, define.Body), new IClause[0]);
         }
 
         static DbInfo GetDbInfo<T>(Expression<Func<T>> define) where T : class

@@ -46,7 +46,7 @@ namespace LambdicSql
             select.SetPredicate(aggregatePredicate);
             var indexInSelect = select.GetElements().Select(e => e.Name).ToList();
             return new ClauseMakingQuery<TDB, TSelect, SelectClause>(query.Db,
-                ExpressionToCreateFunc.ToCreateUseDbResult<TSelect>(indexInSelect, define.Body),
+                ()=>ExpressionToCreateFunc.ToCreateUseDbResult<TSelect>(indexInSelect, define.Body),
                 query.GetClausesClone().Concat(new IClause[] { select }).ToArray());
         }
     }

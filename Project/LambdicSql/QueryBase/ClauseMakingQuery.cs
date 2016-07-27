@@ -11,7 +11,7 @@ namespace LambdicSql.QueryBase
         IClause[] _clauses;
 
         public DbInfo Db { get; }
-        public Func<ISqlResult, TSelect> Create { get; }
+        public Func<Func<ISqlResult, TSelect>> Create { get; }
         public IClause[] GetClausesClone() => _clauses.Select(e => e.Clone()).ToArray();
 
         public ClauseMakingQuery(IQuery<TDB, TSelect> src, params TClause[] newClause)
@@ -19,6 +19,13 @@ namespace LambdicSql.QueryBase
             Db = src.Db;
             Create = src.Create;
             _clauses = src.GetClausesClone().Concat(newClause.Select(e=>(IClause)e)).ToArray();
+        }
+
+        public ClauseMakingQuery(DbInfo db, Func<Func<ISqlResult, TSelect>> create, IClause[] clauses)
+        {
+            Db = db;
+            Create = create;
+            _clauses = clauses;
         }
 
         public IQuery<TDB, TSelect, TClause> CustomClone(Action<TClause> custom)
@@ -30,13 +37,6 @@ namespace LambdicSql.QueryBase
                 custom(clone);
             }
             return new ClauseMakingQuery<TDB, TSelect, TClause>(Db, Create, clauses);
-        }
-
-        public ClauseMakingQuery(DbInfo db, Func<ISqlResult, TSelect> create, IClause[] clauses)
-        {
-            Db = db;
-            Create = create;
-            _clauses = clauses;
         }
     }
 }

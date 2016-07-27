@@ -35,7 +35,7 @@ namespace Test
             where T : class
         {
             var info = query as ISelectedQuery<T>;
-            return info.Create(this);
+            return info.Create()(this);
         }
     }
 }

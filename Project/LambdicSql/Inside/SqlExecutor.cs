@@ -36,6 +36,7 @@ namespace LambdicSql.Inside
             }
             try
             {
+                var create = _info.Create();
                 using (var com = _connection.CreateCommand())
                 {
                     com.CommandText = _sql;
@@ -50,7 +51,7 @@ namespace LambdicSql.Inside
                         var list = new List<TSelect>();
                         while (sdr.Read())
                         {
-                            list.Add(_info.Create(reader));
+                            list.Add(create(reader));
                         }
                         return list;
                     }

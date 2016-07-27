@@ -11,7 +11,7 @@ namespace LambdicSql.Clause.Update
         IClause[] _clauses;
 
         public DbInfo Db { get; }
-        public Func<ISqlResult, TDB> Create { get; }
+        public Func<Func<ISqlResult, TDB>> Create { get; }
         public IClause[] GetClausesClone() => _clauses.Select(e => e.Clone()).ToArray();
 
         public UpdateClauseMakingQuery(IQuery<TDB, TDB> src, UpdateClause newClause)
@@ -32,7 +32,7 @@ namespace LambdicSql.Clause.Update
             return new UpdateClauseMakingQuery<TDB, TTable>(Db, Create, clauses);
         }
 
-        public UpdateClauseMakingQuery(DbInfo db, Func<ISqlResult, TDB> create, IClause[] clauses)
+        public UpdateClauseMakingQuery(DbInfo db, Func<Func<ISqlResult, TDB>> create, IClause[] clauses)
         {
             Db = db;
             Create = create;

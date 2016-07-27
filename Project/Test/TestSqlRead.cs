@@ -26,9 +26,8 @@ namespace Test
 
         [TestCleanup]
         public void TestCleanup() => _connection.Dispose();
-
-        /*@@@ TODO LambdaOnlySelectFrom
-        [TestMethod]
+        
+ //       [TestMethod]
         public void LambdaOnlySelectFrom()
         {
             var data = Sql.Query(() => new
@@ -46,7 +45,7 @@ namespace Test
                     money = default(decimal)
                 }
             }).SelectFrom(db => db.tbl_staff).ToExecutor(_connection).Read();
-        }*/
+        }
 
         [TestMethod]
         public void Standard()

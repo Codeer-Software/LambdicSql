@@ -11,7 +11,7 @@ namespace LambdicSql.Clause.InsertInto
         IClause[] _clauses;
 
         public DbInfo Db { get; }
-        public Func<ISqlResult, TDB> Create { get; }
+        public Func<Func<ISqlResult, TDB>> Create { get; }
         public IClause[] GetClausesClone() => _clauses.Select(e => e.Clone()).ToArray();
 
         public TTable GetTable(TDB db)
@@ -35,7 +35,7 @@ namespace LambdicSql.Clause.InsertInto
             return new InsertIntoClauseMakingQuery<TDB, TTable>(Db, Create, clauses);
         }
 
-        public InsertIntoClauseMakingQuery(DbInfo db, Func<ISqlResult, TDB> create, IClause[] clauses)
+        public InsertIntoClauseMakingQuery(DbInfo db, Func<Func<ISqlResult, TDB>> create, IClause[] clauses)
         {
             Db = db;
             Create = create;

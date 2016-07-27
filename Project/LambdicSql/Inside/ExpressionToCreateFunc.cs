@@ -58,14 +58,7 @@ namespace LambdicSql.Inside
             }
             var param = Expression.Parameter(typeof(ISqlResult), "dbResult");
             var arguments = new[] { param };
-            try
-            {
-                return Expression.Lambda<Func<ISqlResult, T>>(New(getIndexInSelect, new string[0], newExp, param), arguments).Compile();
-            }
-            catch (CanNotCreateException)
-            {
-                return null;
-            }
+            return Expression.Lambda<Func<ISqlResult, T>>(New(getIndexInSelect, new string[0], newExp, param), arguments).Compile();
         }
 
         static Expression New(Func<string, int> getIndexInSelect, string[] names, NewExpression exp, ParameterExpression param)
