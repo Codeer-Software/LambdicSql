@@ -22,7 +22,7 @@ namespace LambdicSql.Inside
                     return (Func<ISqlResult, T>)obj;
                 }
             }
-            var func = ToCreateUseDbResultCore<T>(x => getIndexInSelect.IndexOf(x), exp);
+            var func = ToCreateUseDbResultCore<T>(getIndexInSelect, exp);
             lock (_createMap)
             {
                 if (!_createMap.ContainsKey(name))
@@ -33,7 +33,7 @@ namespace LambdicSql.Inside
             return func;
         }
 
-        static Func<ISqlResult, T> ToCreateUseDbResultCore<T>(Func<string, int> getIndexInSelect, Expression exp)
+        static Func<ISqlResult, T> ToCreateUseDbResultCore<T>(List<string> getIndexInSelect, Expression exp)
         {
             var newExp = exp as NewExpression;
             if (newExp == null)
@@ -48,11 +48,6 @@ namespace LambdicSql.Inside
                     var member = exp as MemberExpression;
                     var type = ((PropertyInfo)member.Member).PropertyType;
                     var constructor = type.GetConstructor(new Type[0]);
-                    if (constructor == null)
-                    {
-                        //TODO LambdaOnlySelectFrom
-                        throw new NotSupportedException("TODO Can't use　Anonymous type at SelectFrom.");
-                    }
                     newExp = Expression.New(constructor);
                 }
             }
@@ -61,8 +56,9 @@ namespace LambdicSql.Inside
             return Expression.Lambda<Func<ISqlResult, T>>(New(getIndexInSelect, new string[0], newExp, param), arguments).Compile();
         }
 
-        static Expression New(Func<string, int> getIndexInSelect, string[] names, NewExpression exp, ParameterExpression param)
+        static Expression New(List<string> getIndexInSelect, string[] names, NewExpression exp, ParameterExpression param)
         {
+            //normal type new.
             if (exp.Members == null)
             {
                 var binding = new List<MemberBinding>();
@@ -74,7 +70,7 @@ namespace LambdicSql.Inside
                         var funcName = SupportedTypeSpec.GetFuncName(p.PropertyType);
                         var name = string.Join(".", currentNames);
                         binding.Add(Expression.Bind(p,
-                            Expression.Call(param, typeof(ISqlResult).GetMethod(funcName), Expression.Constant(getIndexInSelect(name)))));
+                            Expression.Call(param, typeof(ISqlResult).GetMethod(funcName), Expression.Constant(getIndexInSelect.IndexOf(name)))));
                     }
                     else
                     {
@@ -89,10 +85,24 @@ namespace LambdicSql.Inside
                 }
                 return Expression.MemberInit(Expression.New(exp.Constructor), binding.ToArray());
             }
-            return Expression.New(exp.Constructor, ConvertArguments(getIndexInSelect, names, exp.Arguments.ToArray(), exp.Members.ToArray(), param), exp.Members);
+
+            //anonymous type new.
+            var newExpression = Expression.New(exp.Constructor, ConvertArguments(getIndexInSelect, names, exp.Arguments.ToArray(), exp.Members.ToArray(), param), exp.Members);
+            CacheLambdaChildCreate(getIndexInSelect, names, param, newExpression);
+            return newExpression;
         }
 
-        static IEnumerable<Expression> ConvertArguments(Func<string, int> getIndexInSelect, string[] names, Expression[] args, MemberInfo[] members, ParameterExpression param)
+        static void CacheLambdaChildCreate(List<string> getIndexInSelect, string[] names, ParameterExpression param, NewExpression newExpression)
+        {
+            var targetTablePrefix = string.Join(".", names) + ".";
+            var nameX = newExpression.Type.FullName + "@" + string.Join("@", getIndexInSelect.Where(e => e.IndexOf(targetTablePrefix) == 0).Select(e => e.Substring(targetTablePrefix.Length)).ToArray());
+            lock (_createMap)
+            {
+                _createMap[nameX] = Expression.Lambda(newExpression, new[] { param }).Compile(); ;
+            }
+        }
+
+        static IEnumerable<Expression> ConvertArguments(List<string> getIndexInSelect, string[] names, Expression[] args, MemberInfo[] members, ParameterExpression param)
         {
             var newArgs = new List<Expression>();
             for (int i = 0; i < args.Length; i++)
@@ -120,7 +130,7 @@ namespace LambdicSql.Inside
                     {
                         var name = string.Join(".", currentNames);
                         newArgs.Add(Expression.Call(param, typeof(ISqlResult).GetMethod("Get" + paramType.Name), 
-                            Expression.Constant(getIndexInSelect(name))));
+                            Expression.Constant(getIndexInSelect.IndexOf(name))));
                     }
                     else
                     {
