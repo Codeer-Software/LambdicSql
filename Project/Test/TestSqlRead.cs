@@ -27,7 +27,7 @@ namespace Test
         [TestCleanup]
         public void TestCleanup() => _connection.Dispose();
         
- //       [TestMethod]
+        [TestMethod]
         public void LambdaOnlySelectFrom()
         {
             var data = Sql.Query(() => new
