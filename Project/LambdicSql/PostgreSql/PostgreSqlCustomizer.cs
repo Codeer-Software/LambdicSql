@@ -1,9 +1,9 @@
 ﻿using LambdicSql.QueryBase;
 using System;
 
-namespace LambdicSql.Inside
+namespace LambdicSql.PostgreSql
 {
-    class SQLiteCustomizer : IQueryCustomizer
+    public class PostgreSqlCustomizer : IQueryCustomizer
     {
         public string CustomOperator(Type type1, string @operator, Type type2)
         {

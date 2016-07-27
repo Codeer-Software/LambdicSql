@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace LambdicSql.Inside
 {
-    class DbExecutor<TSelect> : ISqlExecutor<TSelect>
+    class SqlExecutor<TSelect> : ISqlExecutor<TSelect>
         where TSelect : class
     {
         IDbConnection _connection;
@@ -14,7 +14,7 @@ namespace LambdicSql.Inside
         string _sql;
         PrepareParameters _parameters = new PrepareParameters();
 
-        internal DbExecutor(IDbConnection connection, ISelectedQuery<TSelect> info)
+        internal SqlExecutor(IDbConnection connection, ISelectedQuery<TSelect> info)
         {
             _connection = connection;
             _info = info;
@@ -109,21 +109,5 @@ namespace LambdicSql.Inside
 
         IQueryCustomizer CreateCustomizer()
             => QueryCustomizeResolver.CreateCustomizer(_connection.GetType().FullName);
-    }
-
-    public static class QueryCustomizeResolver
-    {
-        public static IQueryCustomizer CreateCustomizer(string connectionTypeFullName)
-        {
-            if (connectionTypeFullName == "Npgsql.NpgsqlConnection")
-            {
-                return new PostgresCustomizer();
-            }
-            if (connectionTypeFullName == "System.Data.SQLite.SQLiteConnection")
-            {
-                return new SQLiteCustomizer();
-            }
-            return null;
-        }
     }
 }
