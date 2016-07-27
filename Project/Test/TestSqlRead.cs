@@ -27,7 +27,7 @@ namespace Test
         [TestCleanup]
         public void TestCleanup() => _connection.Dispose();
 
-        /*@@@ TODO
+        /*@@@ TODO LambdaOnlySelectFrom
         [TestMethod]
         public void LambdaOnlySelectFrom()
         {

@@ -34,8 +34,3 @@ namespace LambdicSql
             => new ClauseMakingQuery<TDB, TSelect, IClause>(query, addQuery.GetClausesClone());
     }
 }
-
-/*TODO clauses
-Case
-UNION/EXCEPT/EXCEPT
-*/

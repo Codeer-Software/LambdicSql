@@ -50,7 +50,7 @@ namespace LambdicSql.Inside
                     var constructor = type.GetConstructor(new Type[0]);
                     if (constructor == null)
                     {
-                        //TODO
+                        //TODO LambdaOnlySelectFrom
                         throw new NotSupportedException("TODO Can't use　Anonymous type at SelectFrom.");
                     }
                     newExp = Expression.New(constructor);
