@@ -1,9 +1,6 @@
 ﻿using LambdicSql.Clause.InsertInto;
-using LambdicSql.Inside;
 using LambdicSql.QueryBase;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 
 namespace LambdicSql
@@ -18,6 +15,6 @@ namespace LambdicSql
         public static IQuery<TDB, TDB> Values<TDB, TTable>(this IInsertIntoQuery<TDB, TTable> query, TTable src)
             where TDB : class
             where TTable : class
-            => query.CustomClone(e => e.Values(new TTable[] { src }));
+            => query.CustomClone(e => e.Values(src));
     }
 }

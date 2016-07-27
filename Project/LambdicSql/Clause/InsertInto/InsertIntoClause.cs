@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Linq;
 using LambdicSql.QueryBase;
-using LambdicSql.Inside;
 
 namespace LambdicSql.Clause.InsertInto
 {
@@ -11,10 +10,11 @@ namespace LambdicSql.Clause.InsertInto
             where TDB : class
             where TTable : class
     {
-        public Func<TDB, TTable> GetTableFunc { get; }
         Expression<Func<TDB, TTable>> _getTable;
         Expression<Func<TTable, object>>[] _getElements;
-        IEnumerable<TTable> _values;
+        TTable _value;
+
+        public Func<TDB, TTable> GetTableFunc { get; }
 
         class NameAndGetValue
         {
@@ -32,13 +32,13 @@ namespace LambdicSql.Clause.InsertInto
         public IClause Clone()
         {
             var clone = new InsertIntoClause<TDB, TTable>(_getTable, _getElements);
-            clone._values = _values;
+            clone._value = _value;
             return clone;
         }
 
         public string ToString(ISqlStringConverter decoder)
         {
-            if (_values == null)
+            if (_value == null)
             {
                 return string.Empty;
             }
@@ -68,16 +68,12 @@ namespace LambdicSql.Clause.InsertInto
             var db = decoder.ToString(_getTable.Body);
             var query = new List<string>();
             var insert = "INSERT INTO " + db + " (" + string.Join(", ", cols.Select(e => e.Name).ToArray()) + ")";
-            foreach (var val in _values)
-            {
-                var values = "VALUES(" + string.Join(", ", cols.Select(col=> decoder.ToString(col.GetValue(val))).ToArray()) + ")";
-                query.Add(insert);
-                query.Add(values);
-            }
+            var values = "VALUES(" + string.Join(", ", cols.Select(col => decoder.ToString(col.GetValue(_value))).ToArray()) + ")";
+            query.Add(insert);
+            query.Add(values);
             return string.Join(Environment.NewLine, query.ToArray());
         }
 
-        //TODO can't use enumerable.
-        internal void Values(IEnumerable<TTable> values) => _values = values;
+        internal void Values(TTable value) => _value = value;
     }
 }

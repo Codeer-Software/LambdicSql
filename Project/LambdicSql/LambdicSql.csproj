@@ -36,6 +36,7 @@
     <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Clause\Condition\MultiCondition.cs" />
     <Compile Include="Clause\Delete\DeleteClause.cs" />
     <Compile Include="Clause\Delete\DeleteExtensions.cs" />
     <Compile Include="Clause\Free\FreeClause.cs" />
@@ -52,7 +53,11 @@
     <Compile Include="Clause\InsertInto\InsertIntoExtensions.cs" />
     <Compile Include="Clause\Select\AggregatePredicate.cs" />
     <Compile Include="Clause\Select\SelectClauseExtensions.cs" />
+    <Compile Include="Clause\Update\ISetQuery.cs" />
+    <Compile Include="Clause\Update\IUpdateQuery.cs" />
+    <Compile Include="Clause\Update\SetElement.cs" />
     <Compile Include="Clause\Update\UpdateClause.cs" />
+    <Compile Include="Clause\Update\UpdateClauseMakingQuery.cs" />
     <Compile Include="Clause\Update\UpdateExtensions.cs" />
     <Compile Include="Func\AggregateFuncsExtensions.cs" />
     <Compile Include="Clause\Having\HavingQueryExtensions.cs" />
@@ -65,13 +70,13 @@
     <Compile Include="Inside\CanNotCreateException.cs" />
     <Compile Include="Inside\ExpressionToObject.cs" />
     <Compile Include="Inside\PostgresCustomizer.cs" />
+    <Compile Include="Inside\RefrectionHelpercs.cs" />
     <Compile Include="Inside\SQLiteCustomizer.cs" />
     <Compile Include="QueryBase\CustomTargetType.cs" />
     <Compile Include="QueryBase\ISqlFuncs.cs" />
     <Compile Include="QueryBase\InvalidDbItemException.cs" />
     <Compile Include="QueryBase\IQueryCustomizer.cs" />
     <Compile Include="QueryBase\ClauseMakingQuery.cs" />
-    <Compile Include="QueryBase\IDbAdapter.cs" />
     <Compile Include="QueryBase\ISqlStringConverter.cs" />
     <Compile Include="Inside\SqlResult.cs" />
     <Compile Include="Inside\SqlStringConverter.cs" />

@@ -6,38 +6,6 @@ using System.Linq.Expressions;
 
 namespace LambdicSql.Clause.Condition
 {
-    public class MultiCondition : ICondition
-    {
-        List<ICondition> _conditions;
-
-        public MultiCondition(List<ICondition> conditions)
-        {
-            _conditions = conditions;
-        }
-
-        public bool IsNot { get; set; }
-        public ConditionConnection ConditionConnection { get; set; }
-        public string ToString(ISqlStringConverter decoder)
-            => string.Join(" ", _conditions.Select((e, i) => ToString(decoder, e, i)).ToArray());
-
-        //TODO refactoring.
-        static string ToString(ISqlStringConverter decoder, ICondition condition, int index)
-        {
-            var connection = string.Empty;
-            if (index != 0)
-            {
-                switch (condition.ConditionConnection)
-                {
-                    case ConditionConnection.And: connection = "AND "; break;
-                    case ConditionConnection.Or: connection = "OR "; break;
-                    default: throw new NotSupportedException();
-                }
-            }
-            var not = condition.IsNot ? "NOT " : string.Empty;
-            return connection + not + "(" + condition.ToString(decoder) + ")";
-        }
-    }
-
     public class ConditionClause
     {
         bool _isNotCore;
@@ -196,9 +164,8 @@ namespace LambdicSql.Clause.Condition
             => ConditionCount == 0 ?
                 string.Empty :
                 string.Join(Environment.NewLine + "\t", new[] { clause }.Concat(GetConditions().Select((e, i) => ToString(decoder, e, i))).ToArray());
-
-        //TODO refactoring.
-        string ToString(ISqlStringConverter decoder, ICondition condition, int index)
+        
+        internal static string ToString(ISqlStringConverter decoder, ICondition condition, int index)
         {
             var connection = string.Empty;
             if (index != 0)

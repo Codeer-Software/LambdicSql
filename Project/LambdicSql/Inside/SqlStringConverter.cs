@@ -71,6 +71,8 @@ namespace LambdicSql.Inside
             }
             else
             {
+                //TODO case not ()
+
                 return "(" + string.Join(" ", text.Replace(Environment.NewLine, " ").Replace("\t", " ").
                        Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries)) + ")";
             }

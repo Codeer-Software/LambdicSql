@@ -8,7 +8,7 @@ using System.Linq.Expressions;
 
 namespace Test
 {
-    //TODO refactor to product forthis testing.
+    //TODO refactor to product for this testing.
     [TestClass]
     public class TestExpressionToStringcs
     {
