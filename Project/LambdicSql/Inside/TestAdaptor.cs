@@ -8,6 +8,7 @@ namespace LambdicSql.Inside
     {
         public static string ToSqlString(DbInfo info, Expression exp)
             => new SqlStringConverter(info, new PrepareParameters(), null, true).ToString(exp);
+
         public static string ToSqlString(IQuery query)
             => SqlStringConverter.ToString(query, new PrepareParameters(), null);
     }

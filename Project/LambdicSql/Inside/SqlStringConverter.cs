@@ -30,11 +30,22 @@ namespace LambdicSql.Inside
         DbInfo _dbInfo;
         IQueryCustomizer _queryCustomizer;
         PrepareParameters _prepare;
-
-        EventHandler<SqlStringConvertingEventArgs> SpecialElementConverting = (_, __)=> { };
         bool _isTopLevelQuery;
 
+        EventHandler<SqlStringConvertingEventArgs> SpecialElementConverting = (_, __)=> { };
+
         public DbInfo DbInfo => _dbInfo;
+
+        public string ToString(object obj)
+        {
+            var exp = obj as Expression;
+            if (exp != null) return ToString(exp).Text;
+
+            var query = obj as IQuery;
+            if (query != null) return ToString(query);
+
+            return _prepare.Push(obj);
+        }
 
         internal SqlStringConverter(DbInfo dbInfo, PrepareParameters parameters, IQueryCustomizer queryCustomizer, bool isTopLevelQuery)
         {
@@ -55,45 +66,21 @@ namespace LambdicSql.Inside
 
         static string ToStringCore(IQuery query, PrepareParameters parameters, IQueryCustomizer queryCustomizer, bool isTopLevelQuery)
            => new SqlStringConverter(query.Db, parameters, queryCustomizer, isTopLevelQuery).ToString(query);
-        
+
         string ToString(IQuery query)
         {
             var clauses = query.GetClausesClone();
-            if (_queryCustomizer != null)
-            {
-                clauses = _queryCustomizer.CustomClauses(clauses);
-            }
+            if (_queryCustomizer != null) clauses = _queryCustomizer.CustomClauses(clauses);
             var convertor = new SqlStringConverter(_dbInfo, _prepare, _queryCustomizer, false);
             var text = string.Join(Environment.NewLine, clauses.Select(e => e.ToString(this)).ToArray());
-            if (_isTopLevelQuery)
-            {
-                return text + ";";
-            }
-            else
-            {
-                //TODO case not ()
 
-                return "(" + string.Join(" ", text.Replace(Environment.NewLine, " ").Replace("\t", " ").
+            if (_isTopLevelQuery) return text + ";";
+
+            //TODO case not ()
+            return "(" + string.Join(" ", text.Replace(Environment.NewLine, " ").Replace("\t", " ").
                        Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries)) + ")";
-            }
         }
 
-        public string ToString(object obj)
-        {
-            var exp = obj as Expression;
-            if (exp != null)
-            {
-                return ToString(exp).Text;
-            }
-
-            var query = obj as IQuery;
-            if (query != null)
-            {
-                return ToString(query);
-            }
-            return _prepare.Push(obj);
-        }
-        
         DecodedInfo ToString(Expression exp)
         {
             var member = exp as MemberExpression;
@@ -240,10 +227,8 @@ namespace LambdicSql.Inside
 
             //for null
             var nullCheck = NullCheck(left, binary.NodeType, right);
-            if (nullCheck != null)
-            {
-                return nullCheck;
-            }
+            if (nullCheck != null) return nullCheck;
+
             return new DecodedInfo(nodeType.Type, "(" + left.Text + ") " + nodeType.Text + " (" + right.Text + ")");
         }
 
@@ -260,10 +245,8 @@ namespace LambdicSql.Inside
             object leftObj, rightObj;
             var leftIsParam = _prepare.TryGetParam(left.Text, out leftObj);
             var rightIsParam = _prepare.TryGetParam(right.Text, out rightObj);
-            if (leftIsParam && rightIsParam)
-            {
-                return null;
-            }
+            if (leftIsParam && rightIsParam) return null;
+
             var isParams = new[] { leftIsParam, rightIsParam };
             var objs = new[] { leftObj, rightObj};
             var names = new[] { left.Text, right.Text };
@@ -274,10 +257,7 @@ namespace LambdicSql.Inside
                 if (isParams[i])
                 {
                     var nullObj = obj == null;
-                    if (!nullObj)
-                    {
-                        return null;
-                    }
+                    if (!nullObj) return null;
                     _prepare.Remove(names[i]);
                     return new DecodedInfo(null, "(" + targetTexts[i] + ")" + ope);
                 }
@@ -311,19 +291,12 @@ namespace LambdicSql.Inside
 
         DecodedInfo ToString(ConstantExpression constant)
         {
-            if (constant.Value == null)
-            {
-                return new DecodedInfo(null, ToString((object)null));
-            }
+            if (constant.Value == null) return new DecodedInfo(null, ToString((object)null));
+
             var type = constant.Value.GetType();
-            if (SupportedTypeSpec.IsSupported(type))
-            {
-                return new DecodedInfo(type, ToString(constant.Value));
-            }
-            if (type.IsEnum)
-            {
-                return new DecodedInfo(type, constant.Value.ToString());
-            }
+            if (SupportedTypeSpec.IsSupported(type)) return new DecodedInfo(type, ToString(constant.Value));
+            if (type.IsEnum) return new DecodedInfo(type, constant.Value.ToString());
+
             throw new NotSupportedException();
         }
 
@@ -346,34 +319,20 @@ namespace LambdicSql.Inside
                 return new DecodedInfo(col.Type, col.SqlFullName);
             }
 
-            if (HasParameter(member))
-            {
-                return new DecodedInfo(null, name);
-            }
+            if (HasParameter(member)) return new DecodedInfo(null, name);
 
             var decoded = MemberToStringByLambda(member);
-            if (decoded != null)
-            {
-                return decoded;
-            }
+            if (decoded != null) return decoded;
+
             throw new NotSupportedException();
         }
 
         DecodedInfo MemberToStringByLambda(MemberExpression member)
         {
             object obj;
-            if (!ExpressionToObject.GetMemberObject(member, out obj))
-            {
-                return null;
-            }
-            if (obj == null)
-            {
-                return new DecodedInfo(null, ToString((object)null));
-            }
-            if (SupportedTypeSpec.IsSupported(obj.GetType()))
-            {
-                return new DecodedInfo(obj.GetType(), ToString(obj));
-            }
+            if (!ExpressionToObject.GetMemberObject(member, out obj)) return null;
+            if (obj == null) return new DecodedInfo(null, ToString((object)null));
+            if (SupportedTypeSpec.IsSupported(obj.GetType())) return new DecodedInfo(obj.GetType(), ToString(obj));
             return null;
         }
 
@@ -381,10 +340,7 @@ namespace LambdicSql.Inside
         {
             while (member != null)
             {
-                if (member.Expression is ParameterExpression)
-                {
-                    return true;
-                }
+                if (member.Expression is ParameterExpression) return true;
                 member = member.Expression as MemberExpression;
             }
             return false;
