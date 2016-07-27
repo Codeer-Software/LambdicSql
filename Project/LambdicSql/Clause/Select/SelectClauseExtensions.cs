@@ -34,6 +34,7 @@ namespace LambdicSql
             where TDB : class
             where TSelect : class
         {
+            query.Create();
             var select = SelectCore<TDB, TSelect>(query, null, selectTable);
             return select.From(selectTable);
         }
