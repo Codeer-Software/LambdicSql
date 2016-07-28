@@ -514,7 +514,7 @@ namespace Test
             var query = Sql.Query(() => new { tbl_staff = new Staff() }).
             Select().
             From(db => db.tbl_staff).
-            Where().Like(db => db.tbl_staff.name, "%son%");
+            Where(db => Sql.Words.Like(db.tbl_staff.name, "%son%"));
 
             var datas = query.ToExecutor(_connection).Read();
             foreach (var e in datas)
@@ -533,7 +533,7 @@ namespace Test
             var query = Sql.Query(() => new { tbl_staff = new Staff() }).
             Select().
             From(db => db.tbl_staff).
-            Where().In(db => db.tbl_staff.id, 1, 3);
+            Where(db => Sql.Words.In(db.tbl_staff.id, 1, 3));
 
             var datas = query.ToExecutor(_connection).Read();
             foreach (var e in datas)
@@ -552,7 +552,7 @@ namespace Test
             var query = Sql.Query(() => new { tbl_staff = new Staff() }).
             Select().
             From(db => db.tbl_staff).
-            Where().Between(db => db.tbl_staff.id, 1, 3);
+            Where(db => Sql.Words.Between(db.tbl_staff.id, 1, 3));
 
             var datas = query.ToExecutor(_connection).Read();
             foreach (var e in datas)
@@ -637,7 +637,7 @@ namespace Test
             var datas = define.
                 Select(db=>new { name = db.tbl_staff.name }).
                 From(db => db.tbl_staff).
-                Where().In(db=>db.tbl_staff.id, db=>sub.Cast<int>()).
+                Where(db => Sql.Words.In(db.tbl_staff.id, sub.Cast<int>())).
                 ToExecutor(_connection).Read();
 
             foreach (var e in datas)

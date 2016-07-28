@@ -38,40 +38,6 @@ namespace LambdicSql
             where TSelect : class
              => isEnabled ? query.CustomClone(e => e.And(condition.Body)) : query;
 
-        public static IQuery<TDB, TSelect, WhereClause> Or<TDB, TSelect>(this IQuery<TDB, TSelect, WhereClause> query, Expression<Func<TDB, bool>> condition)
-            where TDB : class
-            where TSelect : class
-             => query.CustomClone(e => e.Or(condition.Body));
-
-        public static IQuery<TDB, TSelect, WhereClause> Or<TDB, TSelect>(this IQuery<TDB, TSelect, WhereClause> query, bool isEnabled, Expression<Func<TDB, bool>> condition)
-            where TDB : class
-            where TSelect : class
-             => isEnabled ? query.CustomClone(e => e.Or(condition.Body)) : query;
-
-
-        public static IQuery<TDB, TSelect, WhereClause> BlockStart<TDB, TSelect>(this IQuery<TDB, TSelect, WhereClause> query)
-            where TDB : class
-            where TSelect : class
-             => query.CustomClone(e => e.BlockStart());
-
-        public static IQuery<TDB, TSelect, WhereClause> BlockEnd<TDB, TSelect>(this IQuery<TDB, TSelect, WhereClause> query)
-            where TDB : class
-            where TSelect : class
-             => query.CustomClone(e => e.BlockEnd());
-
-
-
-
-
-
-
-
-
-
-
-
-
-        //TODO delete Spec.
         public static IQuery<TDB, TSelect, WhereClause> And<TDB, TSelect>(this IQuery<TDB, TSelect, WhereClause> query)
             where TDB : class
             where TSelect : class
@@ -82,6 +48,16 @@ namespace LambdicSql
             where TSelect : class
              => isEnabled ? query.CustomClone(e => e.And()) : query.CustomClone(e => e.Skip());
 
+        public static IQuery<TDB, TSelect, WhereClause> Or<TDB, TSelect>(this IQuery<TDB, TSelect, WhereClause> query, Expression<Func<TDB, bool>> condition)
+            where TDB : class
+            where TSelect : class
+             => query.CustomClone(e => e.Or(condition.Body));
+
+        public static IQuery<TDB, TSelect, WhereClause> Or<TDB, TSelect>(this IQuery<TDB, TSelect, WhereClause> query, bool isEnabled, Expression<Func<TDB, bool>> condition)
+            where TDB : class
+            where TSelect : class
+             => isEnabled ? query.CustomClone(e => e.Or(condition.Body)) : query;
+        
         public static IQuery<TDB, TSelect, WhereClause> Or<TDB, TSelect>(this IQuery<TDB, TSelect, WhereClause> query)
             where TDB : class
             where TSelect : class
@@ -92,34 +68,14 @@ namespace LambdicSql
             where TSelect : class
              => isEnabled ? query.CustomClone(e => e.Or()) : query.CustomClone(e => e.Skip());
 
-        public static IQuery<TDB, TSelect, WhereClause> In<TDB, TSelect, TTarget>(this IQuery<TDB, TSelect, WhereClause> query, Expression<Func<TDB, TTarget>> target, params TTarget[] inArguments)
+        public static IQuery<TDB, TSelect, WhereClause> BlockStart<TDB, TSelect>(this IQuery<TDB, TSelect, WhereClause> query)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(e => e.In(target.Body, inArguments.Cast<object>().ToArray()));
+             => query.CustomClone(e => e.BlockStart());
 
-        public static IQuery<TDB, TSelect, WhereClause> In<TDB, TSelect, TTarget>(this IQuery<TDB, TSelect, WhereClause> query, Expression<Func<TDB, TTarget>> target, Expression<Func<TDB, TTarget>> inArgument)
+        public static IQuery<TDB, TSelect, WhereClause> BlockEnd<TDB, TSelect>(this IQuery<TDB, TSelect, WhereClause> query)
             where TDB : class
             where TSelect : class
-             => query.CustomClone(e => e.In(target.Body, inArgument.Body));
-
-        public static IQuery<TDB, TSelect, WhereClause> Like<TDB, TSelect>(this IQuery<TDB, TSelect, WhereClause> query, Expression<Func<TDB, string>> target, string serachText)
-            where TDB : class
-            where TSelect : class
-             => query.CustomClone(e => e.Like(target.Body, serachText));
-
-        public static IQuery<TDB, TSelect, WhereClause> Like<TDB, TSelect>(this IQuery<TDB, TSelect, WhereClause> query, Expression<Func<TDB, string>> target, Expression<Func<TDB, string>> serachText)
-            where TDB : class
-            where TSelect : class
-             => query.CustomClone(e => e.Like(target.Body, serachText.Body));
-
-        public static IQuery<TDB, TSelect, WhereClause> Between<TDB, TSelect, TTarget>(this IQuery<TDB, TSelect, WhereClause> query, Expression<Func<TDB, TTarget>> target, TTarget min, TTarget max)
-            where TDB : class
-            where TSelect : class
-             => query.CustomClone(e => e.Between(target.Body, min, max));
-
-        public static IQuery<TDB, TSelect, WhereClause> Between<TDB, TSelect, TTarget>(this IQuery<TDB, TSelect, WhereClause> query, Expression<Func<TDB, TTarget>> target, Expression<Func<TDB, TTarget>> min, Expression<Func<TDB, TTarget>> max)
-            where TDB : class
-            where TSelect : class
-             => query.CustomClone(e => e.Between(target.Body, min.Body, max.Body));
+             => query.CustomClone(e => e.BlockEnd());
     }
 }

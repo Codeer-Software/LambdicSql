@@ -274,9 +274,9 @@ namespace Test
             {
                 col2 = sub.Cast<string>()
             }).
-            Where().
-            Like(db => db.table1.col2, db => sub.Cast<string>()).And().
-            In(db => db.table1.col2, db => sub.Cast<string>()).Or().Between(db => db.table1.col1, db => sub.Cast<int>(), db => sub.Cast<int>()).
+            Where(db=>Sql.Words.Like(db.table1.col2, sub.Cast<string>())).
+            And(db=>Sql.Words.In(db.table1.col2, sub.Cast<string>())).
+            Or(db=>Sql.Words.Between(db.table1.col1, sub.Cast<int>(), sub.Cast<int>())).
             ToQueryString();
 
             Debug.Print(text);
