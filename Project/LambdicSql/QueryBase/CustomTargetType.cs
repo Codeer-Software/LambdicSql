@@ -2,7 +2,7 @@
 {
     public enum CustomTargetType
     {
-        Word,
-        Func
+        Words,
+        Funcs
     }
 }

@@ -36,6 +36,8 @@
     <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Clause\Case\CaseClause.cs" />
+    <Compile Include="Clause\Case\CaseExtensions.cs" />
     <Compile Include="Clause\Condition\MultiCondition.cs" />
     <Compile Include="Clause\Delete\DeleteClause.cs" />
     <Compile Include="Clause\Delete\DeleteExtensions.cs" />
@@ -59,7 +61,7 @@
     <Compile Include="Clause\Update\UpdateClause.cs" />
     <Compile Include="Clause\Update\UpdateClauseMakingQuery.cs" />
     <Compile Include="Clause\Update\UpdateExtensions.cs" />
-    <Compile Include="Func\AggregateFuncsExtensions.cs" />
+    <Compile Include="Funcs\AggregateFuncsExtensions.cs" />
     <Compile Include="Clause\Having\HavingQueryExtensions.cs" />
     <Compile Include="Clause\OrderBy\Order.cs" />
     <Compile Include="Clause\OrderBy\OrderByClause.cs" />
@@ -71,6 +73,7 @@
     <Compile Include="Inside\ExpressionToObject.cs" />
     <Compile Include="PostgreSql\PostgreSqlCustomizer.cs" />
     <Compile Include="Inside\RefrectionHelpercs.cs" />
+    <Compile Include="QueryBase\ISqlWords.cs" />
     <Compile Include="SQLite\SQLiteCustomizer.cs" />
     <Compile Include="QueryBase\CustomTargetType.cs" />
     <Compile Include="QueryBase\ISqlFuncs.cs" />
@@ -109,6 +112,7 @@
     <Compile Include="QueryExtensions.cs" />
     <Compile Include="Sql.cs" />
     <Compile Include="Clause\Where\WhereQueryExtensions.cs" />
+    <Compile Include="Words\WordsExtensions.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -98,7 +98,17 @@ namespace LambdicSql.Inside
             var unary = exp as UnaryExpression;
             if (unary != null) return ToString(unary);
 
+            var array = exp as NewArrayExpression;
+            if (array != null) return ToString(array);
+
             throw new NotSupportedException();
+        }
+
+        DecodedInfo ToString(NewArrayExpression array)
+        {
+            if (array.Expressions.Count == 0) return new DecodedInfo(null, string.Empty);
+            var infos = array.Expressions.Select(e => ToString(e)).ToArray();
+            return new DecodedInfo(infos[0].Type, string.Join(", ", infos.Select(e => e.Text).ToArray()));
         }
 
         DecodedInfo ToString(UnaryExpression unary)
@@ -129,10 +139,16 @@ namespace LambdicSql.Inside
                 }
             }
 
-            //func
+            //funcs
             if (0 < method.Arguments.Count && typeof(ISqlFuncs).IsAssignableFrom(method.Arguments[0].Type))
             {
-                return CusotmInvoke(method, CustomTargetType.Func);
+                return CusotmInvoke(method, CustomTargetType.Funcs);
+            }
+
+            //words
+            if (0 < method.Arguments.Count && typeof(ISqlWords).IsAssignableFrom(method.Arguments[0].Type))
+            {
+                return CusotmInvoke(method, CustomTargetType.Funcs);
             }
 
             //normal
