@@ -581,5 +581,37 @@ namespace TestCore
                 And(maxCondition, db => db.tbl_remuneration.money < 4000).
                 ToExecutor(_connection).Read();
         }
+        
+        public void Case1()
+        {
+            var caseQuery = Sql.Query<DB>().Case().
+                WhenThen(db => db.tbl_staff.id == 3, "x").
+                WhenThen(db => db.tbl_staff.id == 4, "y").
+                Else("z");
+
+            var datas = Sql.Query<DB>().
+                Select(db => new
+                {
+                    a = caseQuery.Cast<string>()
+                }).
+                From(db => db.tbl_staff).
+                ToExecutor(_connection).Read();
+        }
+        
+        public void Case2()
+        {
+            var caseQuery = Sql.Query<DB>().Case(db => db.tbl_staff.id).
+                WhenThen(3, "x").
+                WhenThen(4, "y").
+                Else("z");
+
+            var datas = Sql.Query<DB>().
+                Select(db => new
+                {
+                    a = caseQuery.Cast<string>()
+                }).
+                From(db => db.tbl_staff).
+                ToExecutor(_connection).Read();
+        }
     }
 }

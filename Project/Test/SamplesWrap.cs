@@ -110,5 +110,11 @@ namespace Test
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void WhereEx() => _core.WhereEx();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Case1() => _core.Case1();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Case2() => _core.Case2();
     }
 }
