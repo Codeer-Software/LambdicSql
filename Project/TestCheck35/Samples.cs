@@ -592,7 +592,7 @@ namespace TestCore
             var datas = Sql.Query<DB>().
                 Select(db => new
                 {
-                    a = caseQuery.Cast<string>()
+                    type = caseQuery.Cast<string>()
                 }).
                 From(db => db.tbl_staff).
                 ToExecutor(_connection).Read();
@@ -608,7 +608,7 @@ namespace TestCore
             var datas = Sql.Query<DB>().
                 Select(db => new
                 {
-                    a = caseQuery.Cast<string>()
+                    type = caseQuery.Cast<string>()
                 }).
                 From(db => db.tbl_staff).
                 ToExecutor(_connection).Read();
