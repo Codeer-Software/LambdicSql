@@ -30,7 +30,7 @@ namespace LambdicSql.Inside
         DbInfo _dbInfo;
         IQueryCustomizer _queryCustomizer;
         PrepareParameters _prepare;
-        bool _isTopLevelQuery;
+        int _nestLevel;
 
         EventHandler<SqlStringConvertingEventArgs> SpecialElementConverting = (_, __)=> { };
 
@@ -47,12 +47,12 @@ namespace LambdicSql.Inside
             return _prepare.Push(obj);
         }
 
-        internal SqlStringConverter(DbInfo dbInfo, PrepareParameters parameters, IQueryCustomizer queryCustomizer, bool isTopLevelQuery)
+        internal SqlStringConverter(DbInfo dbInfo, PrepareParameters parameters, IQueryCustomizer queryCustomizer, int nestLevel)
         {
             _dbInfo = dbInfo;
             _prepare = parameters;
             _queryCustomizer = queryCustomizer;
-            _isTopLevelQuery = isTopLevelQuery;
+            _nestLevel = nestLevel;
         }
 
         internal static bool IsSubQuery(MethodCallExpression method)
@@ -62,26 +62,31 @@ namespace LambdicSql.Inside
                     method.Method.Name == nameof(QueryExtensions.Cast);
 
         internal static string ToString(IQuery query, PrepareParameters parameters, IQueryCustomizer queryCustomizer)
-            => ToStringCore(query, parameters, queryCustomizer, true);
+            => ToStringCore(query, parameters, queryCustomizer, 0);
 
-        static string ToStringCore(IQuery query, PrepareParameters parameters, IQueryCustomizer queryCustomizer, bool isTopLevelQuery)
-           => new SqlStringConverter(query.Db, parameters, queryCustomizer, isTopLevelQuery).ToString(query);
+        static string ToStringCore(IQuery query, PrepareParameters parameters, IQueryCustomizer queryCustomizer, int nestLevel)
+           => new SqlStringConverter(query.Db, parameters, queryCustomizer, nestLevel).ToString(query);
 
         string ToString(IQuery query)
         {
             var clauses = query.GetClausesClone();
             if (_queryCustomizer != null) clauses = _queryCustomizer.CustomClauses(clauses);
-            var convertor = new SqlStringConverter(_dbInfo, _prepare, _queryCustomizer, false);
             var text = string.Join(Environment.NewLine, clauses.Select(e => e.ToString(this)).ToArray());
 
-            if (_isTopLevelQuery) return text + ";";
-
-            text = string.Join(" ", text.Replace(Environment.NewLine, " ").Replace("\t", " ").
-                       Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries));
-            
+            if (_nestLevel == 0)
+            {
+                return string.Join(Environment.NewLine,
+                        text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).
+                        Where(e=>!string.IsNullOrEmpty(e.Trim())).ToArray()) + ";";
+            }
             var isExpressionClause = 0 < clauses.Length && clauses[0] is IExpressionClause;
-            if (isExpressionClause) return text;
-            return "(" + text + ")";
+            if (!isExpressionClause) text = "(" + text + ")";
+
+            var t = string.Empty;
+            Enumerable.Range(0, _nestLevel).ToList().ForEach(e => t += "\t");
+            return Environment.NewLine + string.Join(Environment.NewLine, 
+                text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).
+                Select(e=>t + e).ToArray());
         }
 
         DecodedInfo ToString(Expression exp)
@@ -128,17 +133,19 @@ namespace LambdicSql.Inside
                 object obj;
                 if (ExpressionToObject.GetMemberObject(method.Arguments[0] as MemberExpression, out obj))
                 {
-                    return new DecodedInfo(method.Method.ReturnType, MakeQueryString(obj as IQuery, _queryCustomizer, _prepare));
+                    return new DecodedInfo(method.Method.ReturnType, MakeQueryString(obj as IQuery, _queryCustomizer, _prepare, _nestLevel));
                 }
                 else
                 {
                     var paramQueryCustomizer = Expression.Parameter(typeof(IQueryCustomizer), "queryCustomizer");
                     var paramPrepare = Expression.Parameter(typeof(PrepareParameters), "prepareParameters");
+                    var nestLevel = Expression.Parameter(typeof(int), "nestLevel");
                     var call = Expression.Call(null, GetType().
-                        GetMethod(nameof(MakeQueryString), BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public), new[] { method.Arguments[0], paramQueryCustomizer, paramPrepare });
-                    var funcSubQuery = Expression.Lambda(call, new[] { paramQueryCustomizer, paramPrepare }).Compile();
+                        GetMethod(nameof(MakeQueryString), BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public), 
+                                new[] { method.Arguments[0], paramQueryCustomizer, paramPrepare, nestLevel });
+                    var funcSubQuery = Expression.Lambda(call, new[] { paramQueryCustomizer, paramPrepare, nestLevel }).Compile();
                     return new DecodedInfo(funcSubQuery.Method.ReturnType,
-                        funcSubQuery.DynamicInvoke(_queryCustomizer, _prepare).ToString());
+                        funcSubQuery.DynamicInvoke(_queryCustomizer, _prepare, _nestLevel).ToString());
                 }
             }
 
@@ -235,8 +242,8 @@ namespace LambdicSql.Inside
             }
         }
 
-        static string MakeQueryString(IQuery query, IQueryCustomizer queryCustomizer, PrepareParameters parameters)
-            => ToStringCore(query, parameters, queryCustomizer, false);
+        static string MakeQueryString(IQuery query, IQueryCustomizer queryCustomizer, PrepareParameters parameters, int nestLevel)
+            => ToStringCore(query, parameters, queryCustomizer, nestLevel + 1);
 
         DecodedInfo ToString(BinaryExpression binary)
         {

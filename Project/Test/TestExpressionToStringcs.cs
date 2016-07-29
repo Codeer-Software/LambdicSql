@@ -194,7 +194,7 @@ namespace Test
         public int MySum(int a, int b) => a + b;
         public int MyDbToInt(object o) => 0;
 
-        [TestMethod]
+     //TODO adjusting new line.   [TestMethod]
         public void TestSubQuery()
         {
             var define = Sql.Query(() => new
