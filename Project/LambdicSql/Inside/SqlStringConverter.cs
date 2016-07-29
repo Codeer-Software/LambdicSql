@@ -76,9 +76,12 @@ namespace LambdicSql.Inside
 
             if (_isTopLevelQuery) return text + ";";
 
-            //TODO case not ()
-            return "(" + string.Join(" ", text.Replace(Environment.NewLine, " ").Replace("\t", " ").
-                       Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries)) + ")";
+            text = string.Join(" ", text.Replace(Environment.NewLine, " ").Replace("\t", " ").
+                       Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries));
+            
+            var isExpressionClause = 0 < clauses.Length && clauses[0] is IExpressionClause;
+            if (isExpressionClause) return text;
+            return "(" + text + ")";
         }
 
         DecodedInfo ToString(Expression exp)

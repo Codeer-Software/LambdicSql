@@ -38,6 +38,7 @@
   <ItemGroup>
     <Compile Include="Clause\Case\CaseClause.cs" />
     <Compile Include="Clause\Case\CaseExtensions.cs" />
+    <Compile Include="Clause\Case\WhenThenElement.cs" />
     <Compile Include="Clause\Condition\MultiCondition.cs" />
     <Compile Include="Clause\Delete\DeleteClause.cs" />
     <Compile Include="Clause\Delete\DeleteExtensions.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="Inside\ExpressionToObject.cs" />
     <Compile Include="PostgreSql\PostgreSqlCustomizer.cs" />
     <Compile Include="Inside\RefrectionHelpercs.cs" />
+    <Compile Include="QueryBase\IExpressionClause.cs" />
     <Compile Include="QueryBase\ISqlWords.cs" />
     <Compile Include="SQLite\SQLiteCustomizer.cs" />
     <Compile Include="QueryBase\CustomTargetType.cs" />
