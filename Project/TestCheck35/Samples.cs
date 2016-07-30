@@ -223,7 +223,7 @@ namespace TestCore
 
             var datas = query.ToExecutor(_connection).Read();
         }
-
+        
         //You can write sequencial AND OR.
         public void WhereAndOr()
         {
@@ -241,14 +241,18 @@ namespace TestCore
         }
         public void WhereAndOr(ValueY x)
         {
+            var exp = Sql.Query<DB>().
+                ConditionBuilder().
+                Continue((db, p) => x.Value.Value < db.tbl_remuneration.money).
+                Continue((db, p) => p && db.tbl_remuneration.money < 4000).
+                Continue((db, p) => p || db.tbl_staff.id == 1);
+
             var query = Sql.Query(() => new DB()).
                 Select().
                 From(db => db.tbl_remuneration).
-                    Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).Where();
+                    Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
+                Where(db=>exp.Cast<bool>());
         
-            //sequencial write!
-            query = query.And(db => x.Value.Value < db.tbl_remuneration.money).And(db => db.tbl_remuneration.money < 4000).Or(db => db.tbl_staff.id == 1);
-
             var datas = query.ToExecutor(_connection).Read();
         }
 
@@ -564,7 +568,7 @@ namespace TestCore
             //execute.
             var datas = query.ToExecutor(_connection).Read();
         }
-
+        
         public void WhereEx()
         {
             WhereEx(true, true);
@@ -575,10 +579,13 @@ namespace TestCore
 
         public void WhereEx(bool minCondition, bool maxCondition)
         {
+            var exp = Sql.Query<DB>().
+                ConditionBuilder().
+                Continue(minCondition, (db, p) => p && 3000 < db.tbl_remuneration.money).
+                Continue(maxCondition, (db, p) => p && db.tbl_remuneration.money < 4000);
+
             var datas =
-                Sql.Query<DB>().SelectFrom(db=>db.tbl_remuneration).Where().
-                And(minCondition, db => 3000 < db.tbl_remuneration.money).
-                And(maxCondition, db => db.tbl_remuneration.money < 4000).
+                Sql.Query<DB>().SelectFrom(db => db.tbl_remuneration).Where(db => exp.Cast<bool>()).
                 ToExecutor(_connection).Read();
         }
         

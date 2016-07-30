@@ -56,9 +56,10 @@
     <Compile Include="Clause\InsertInto\InsertIntoExtensions.cs" />
     <Compile Include="Clause\Select\AggregatePredicate.cs" />
     <Compile Include="Clause\Select\SelectClauseExtensions.cs" />
-    <Compile Include="QueryBase\ConnectionSqlExpression.cs" />
+    <Compile Include="ConditionBuilderExtensions.cs" />
     <Compile Include="QueryBase\IConnectionSqlExpression.cs" />
     <Compile Include="QueryBase\ISqlExpression.cs" />
+    <Compile Include="QueryBase\PreviousCondition.cs" />
     <Compile Include="QueryBase\SqlExpressionCore.cs" />
     <Compile Include="QueryBase\SqlInfo.cs" />
     <Compile Include="SqlExpressionExtensions.cs" />

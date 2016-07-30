@@ -164,7 +164,7 @@ namespace LambdicSql.Clause.Condition
         {
             if (ConditionCount == 0) return string.Empty;
             var conditions = GetConditions().Select((e, i) => ToString(decoder, e, i)).ToArray();
-            if (conditions.Length == 0 && string.IsNullOrEmpty(conditions[0].Trim())) return string.Empty;
+            if (conditions.Length == 1 && string.IsNullOrEmpty(conditions[0].Replace("(", string.Empty).Replace(")", string.Empty).Trim())) return string.Empty;
             return string.Join(Environment.NewLine + "\t", new[] { clause }.Concat(conditions).ToArray());
         }
         

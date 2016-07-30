@@ -7,4 +7,5 @@
     }
 
     public interface ISqlExpression<TDB> : ISqlExpression { }
+    public interface ISqlExpression<TDB, TResult> : ISqlExpression { }
 }

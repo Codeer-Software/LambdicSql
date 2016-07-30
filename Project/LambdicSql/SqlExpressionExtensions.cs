@@ -8,7 +8,12 @@ namespace LambdicSql
 {
     public static class SqlExpressionExtensions
     {
-        public static T Cast<T>(this ISqlExpression query)
+        public static DB Cast<DB>(this ISqlExpression query)
+        {
+            throw new NotSupportedException("do not call cast except in expression.");
+        }
+
+        public static DB Cast<DB, TResult>(this ISqlExpression<DB, TResult> query)
         {
             throw new NotSupportedException("do not call cast except in expression.");
         }
@@ -21,28 +26,8 @@ namespace LambdicSql
             return new SqlInfo(exp.ToString(converter), parameters.GetParameters());
         }
 
-        public static ISqlExpression<TDB> Expression<TDB>(this IQuery<TDB> query)
+        public static ISqlExpression<TDB, TResult> Expression<TDB, TResult>(this IQuery<TDB> query, Expression<Func<TDB, TResult>> exp)
             where TDB : class
-            => new SqlExpressionCore<TDB>(query);
-
-        public static ISqlExpression<TDB> Expression<TDB, T>(this IQuery<TDB> query, Expression<Func<TDB, T>> exp)
-            where TDB : class
-            => new SqlExpressionCore<TDB>(query, exp.Body);
-
-        public static ISqlExpression<TDB> Continue<TDB>(this ISqlExpression<TDB> expSrc, Expression<Func<TDB, ConnectionSqlExpression<bool>, bool>> exp)
-            where TDB : class
-            => new SqlExpressionCore<TDB>((SqlExpressionCore<TDB>)expSrc, exp.Body);
-
-        public static ISqlExpression<TDB> Continue<TDB>(this ISqlExpression<TDB> expSrc, bool isEnable, Expression<Func<TDB, ConnectionSqlExpression<bool>, bool>> exp)
-            where TDB : class
-            => isEnable ? new SqlExpressionCore<TDB>((SqlExpressionCore<TDB>)expSrc, exp.Body) : expSrc;
-
-        public static ISqlExpression<TDB> ContinuEx<TDB, TValue>(this ISqlExpression<TDB> expSrc, Expression<Func<TDB, IConnectionSqlExpression, TValue>> exp)
-            where TDB : class
-            => new SqlExpressionCore<TDB>((SqlExpressionCore<TDB>)expSrc, exp.Body);
-
-        public static ISqlExpression<TDB> ContinuEx<TDB, TValue>(this ISqlExpression<TDB> expSrc, bool isEnable, Expression<Func<TDB, IConnectionSqlExpression, TValue>> exp)
-            where TDB : class
-            => isEnable ? new SqlExpressionCore<TDB>((SqlExpressionCore<TDB>)expSrc, exp.Body) : expSrc;
+            => new SqlExpressionCore<TDB, TResult>(query, exp.Body);
     }
 }

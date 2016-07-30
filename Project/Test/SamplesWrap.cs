@@ -47,10 +47,10 @@ namespace Test
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void Having() => _core.Having();
-        
+
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void WhereAndOr() => _core.WhereAndOr();
-        
+
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void Like() => _core.Like();
 
@@ -107,7 +107,7 @@ namespace Test
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void StringCalc() => _core.StringCalc();
-
+        
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void WhereEx() => _core.WhereEx();
 

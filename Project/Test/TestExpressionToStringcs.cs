@@ -252,36 +252,8 @@ namespace Test
 
             Debug.Print(text);
         }
-
-        [TestMethod]
-        public void TestWhereSubQuery()
-        {
-            var define = Sql.Query(() => new
-            {
-                table1 = new
-                {
-                    col1 = default(int),
-                    col2 = default(string)
-                }
-            });
-
-            var sub = define.Select(db => new
-            {
-                col1 = db.table1.col1
-            });
-
-            var text = define.Select(db => new
-            {
-                col2 = sub.Cast<string>()
-            }).
-            Where(db=>Sql.Words.Like(db.table1.col2, sub.Cast<string>())).
-            And(db=>Sql.Words.In(db.table1.col2, sub.Cast<string>())).
-            Or(db=>Sql.Words.Between(db.table1.col1, sub.Cast<int>(), sub.Cast<int>())).
-            ToQueryString();
-
-            Debug.Print(text);
-        }
-
+        
+        
         [TestMethod]
         public void TestBlock()
         {
@@ -294,25 +266,12 @@ namespace Test
                 }
             });
 
-            var text = define.Where().BlockStart().And(db => db.table1.col1 == 3).Or().BlockStart().And(db => db.table1.col1 == 1).And(db => db.table1.col1 == 2).BlockEnd().BlockEnd().ToQueryString();
+            var exp1 = define.Expression(db => db.table1.col1 == 3 && db.table1.col1 == 1);
+            var exp2 = define.Expression(db => db.table1.col1 == 5 && db.table1.col1 == 6);
+            var text = define.Where(db=>exp1.Cast<bool>() || exp2.Cast<bool>()).ToQueryString();
             Debug.Print(text);
         }
-
-        [TestMethod]
-        public void TestParameters()
-        {
-            var define = Sql.Query(() => new
-            {
-                table1 = new
-                {
-                    col1 = default(int),
-                    col2 = default(string)
-                }
-            });
-
-            var text = define.Where((db, p) => db.table1.col1 == p._1, new { _1 = 3 }).ToQueryString();
-            Debug.Print(text);
-        }
+        
     }
 
     interface IFuncs : ISqlFuncs{ }

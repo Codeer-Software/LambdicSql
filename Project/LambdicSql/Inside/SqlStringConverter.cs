@@ -36,6 +36,8 @@ namespace LambdicSql.Inside
 
         public DbInfo DbInfo => _dbInfo;
 
+        internal string ContinueConditionExpressionText { get; set; }
+
         public string ToString(object obj)
         {
             var exp = obj as Expression;
@@ -123,9 +125,9 @@ namespace LambdicSql.Inside
 
         DecodedInfo ToString(ParameterExpression param)
         {
-            if (typeof(IConnectionSqlExpression).IsAssignableFrom(param.Type))
+            if (typeof(PreviousCondition) == param.Type)
             {
-                return new DecodedInfo(typeof(ISqlExpression), "{@BeforeExpression}");//TODO
+                return new DecodedInfo(typeof(ISqlExpression), ContinueConditionExpressionText);
             }
             throw new NotSupportedException();
         }
@@ -170,7 +172,7 @@ namespace LambdicSql.Inside
             {
                 if (typeof(IConnectionSqlExpression).IsAssignableFrom(method.Arguments[0].Type))
                 {
-                    return new DecodedInfo(typeof(ISqlExpression), "{@BeforeExpression}");//TODO
+                    return new DecodedInfo(typeof(ISqlExpression), ContinueConditionExpressionText);
                 }
 
                 object obj;
@@ -281,6 +283,10 @@ namespace LambdicSql.Inside
         {
             var left = ToString(binary.Left);
             var right = ToString(binary.Right);
+
+            if (string.IsNullOrEmpty(left.Text)) return right;
+            if (string.IsNullOrEmpty(right.Text)) return left;
+
             var nodeType = ToString(left, binary.NodeType, right);
 
             //for null
