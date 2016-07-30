@@ -61,6 +61,12 @@ namespace LambdicSql.Inside
                     method.Method.DeclaringType == typeof(QueryExtensions) &&
                     method.Method.Name == nameof(QueryExtensions.Cast);
 
+        internal static bool IsSqlExpression(MethodCallExpression method)
+            => method.Arguments.Count == 1 &&
+                    typeof(ISqlExpression).IsAssignableFrom(method.Arguments[0].Type) &&
+                    method.Method.DeclaringType == typeof(SqlExpressionExtensions) &&
+                    method.Method.Name == nameof(SqlExpressionExtensions.Cast);
+
         internal static string ToString(IQuery query, PrepareParameters parameters, IQueryCustomizer queryCustomizer)
             => ToStringCore(query, parameters, queryCustomizer, 0);
 
@@ -109,6 +115,18 @@ namespace LambdicSql.Inside
             var array = exp as NewArrayExpression;
             if (array != null) return ToString(array);
 
+            var param = exp as ParameterExpression;
+            if (param != null) return ToString(param);
+            
+            throw new NotSupportedException();
+        }
+
+        DecodedInfo ToString(ParameterExpression param)
+        {
+            if (typeof(IConnectionSqlExpression).IsAssignableFrom(param.Type))
+            {
+                return new DecodedInfo(typeof(ISqlExpression), "{@BeforeExpression}");//TODO
+            }
             throw new NotSupportedException();
         }
 
@@ -148,7 +166,21 @@ namespace LambdicSql.Inside
                         funcSubQuery.DynamicInvoke(_queryCustomizer, _prepare, _nestLevel).ToString());
                 }
             }
+            if (IsSqlExpression(method))
+            {
+                if (typeof(IConnectionSqlExpression).IsAssignableFrom(method.Arguments[0].Type))
+                {
+                    return new DecodedInfo(typeof(ISqlExpression), "{@BeforeExpression}");//TODO
+                }
 
+                object obj;
+                if (!ExpressionToObject.GetMemberObject(method.Arguments[0] as MemberExpression, out obj))
+                {
+                    throw new NotSupportedException();
+                }
+                return new DecodedInfo(typeof(ISqlExpression), ((ISqlExpression)obj).ToString(this));
+            }
+             
             //funcs
             if (0 < method.Arguments.Count && typeof(ISqlFuncs).IsAssignableFrom(method.Arguments[0].Type))
             {

@@ -56,6 +56,12 @@
     <Compile Include="Clause\InsertInto\InsertIntoExtensions.cs" />
     <Compile Include="Clause\Select\AggregatePredicate.cs" />
     <Compile Include="Clause\Select\SelectClauseExtensions.cs" />
+    <Compile Include="QueryBase\ConnectionSqlExpression.cs" />
+    <Compile Include="QueryBase\IConnectionSqlExpression.cs" />
+    <Compile Include="QueryBase\ISqlExpression.cs" />
+    <Compile Include="QueryBase\SqlExpressionCore.cs" />
+    <Compile Include="QueryBase\SqlInfo.cs" />
+    <Compile Include="SqlExpressionExtensions.cs" />
     <Compile Include="Clause\Update\ISetQuery.cs" />
     <Compile Include="Clause\Update\IUpdateQuery.cs" />
     <Compile Include="Clause\Update\SetElement.cs" />
@@ -110,7 +116,7 @@
     <Compile Include="Clause\Condition\ConditionClause.cs" />
     <Compile Include="QueryBase\IQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QueryCustomizeResolver.cs" />
+    <Compile Include="Inside\QueryCustomizeResolver.cs" />
     <Compile Include="QueryExtensions.cs" />
     <Compile Include="Sql.cs" />
     <Compile Include="Clause\Where\WhereQueryExtensions.cs" />

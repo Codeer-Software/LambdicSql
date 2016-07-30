@@ -19,9 +19,13 @@ namespace LambdicSql
             throw new NotSupportedException("do not call cast except in expression.");
         }
 
-        public static string ToSqlString<T>(this IQuery query)
+        public static SqlInfo ToSqlInfo<T>(this IQuery query)
              where T : IDbConnection
-            => SqlStringConverter.ToString(query, new PrepareParameters(), QueryCustomizeResolver.CreateCustomizer(typeof(T).FullName));
+        {
+            var parameters = new PrepareParameters();
+            var text = SqlStringConverter.ToString(query, parameters, QueryCustomizeResolver.CreateCustomizer(typeof(T).FullName));
+            return new SqlInfo(text, parameters.GetParameters());
+        }
 
         public static ISqlExecutor<TSelect> ToExecutor<TDB, TSelect>(this IQuery<TDB, TSelect> query, IDbConnection connection)
              where TDB : class

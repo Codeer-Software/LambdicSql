@@ -2,11 +2,11 @@
 using LambdicSql.QueryBase;
 using LambdicSql.SQLite;
 
-namespace LambdicSql
+namespace LambdicSql.Inside
 {
     public static class QueryCustomizeResolver
     {
-        public static IQueryCustomizer CreateCustomizer(string connectionTypeFullName)
+        internal static IQueryCustomizer CreateCustomizer(string connectionTypeFullName)
         {
             if (connectionTypeFullName == "Npgsql.NpgsqlConnection")
             {
