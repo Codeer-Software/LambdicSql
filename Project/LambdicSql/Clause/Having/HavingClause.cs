@@ -1,14 +1,19 @@
-﻿using LambdicSql.Clause.Condition;
-using LambdicSql.QueryBase;
+﻿using LambdicSql.QueryBase;
+using System;
 using System.Linq.Expressions;
 
 namespace LambdicSql.Clause.Having
 {
-    public class HavingClause : ConditionClause, IClause
+    public class HavingClause : IClause
     {
-        public HavingClause() { }
-        public HavingClause(Expression exp) : base(exp) { }
-        public IClause Clone() => (HavingClause)Copy(new HavingClause());
-        public string ToString(ISqlStringConverter decoder) => ToString(decoder, "HAVING");
+        Expression _exp;
+        public HavingClause(Expression exp) { _exp = exp; }
+        public IClause Clone() => this;
+        public string ToString(ISqlStringConverter decoder)
+        {
+            var text = decoder.ToString(_exp);
+            if (string.IsNullOrEmpty(text.Replace("(", string.Empty).Replace(")", string.Empty).Trim())) return string.Empty;
+            return "HAVING" + Environment.NewLine + "\t" + text;
+        }
     }
 }

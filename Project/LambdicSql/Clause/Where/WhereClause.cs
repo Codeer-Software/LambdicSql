@@ -1,16 +1,19 @@
-﻿using LambdicSql.Clause.Condition;
-using LambdicSql.QueryBase;
+﻿using LambdicSql.QueryBase;
+using System;
 using System.Linq.Expressions;
 
 namespace LambdicSql.Clause.Where
 {
-    public class WhereClause : ConditionClause, IClause
+    public class WhereClause : IClause
     {
-        public WhereClause() { }
-        public WhereClause(Expression exp) : base(exp) { }
-        public WhereClause(Expression exp, object parameters) : base(exp, parameters) { }
-
-        public IClause Clone() => (WhereClause)Copy(new WhereClause());
-        public string ToString(ISqlStringConverter decoder) => ToString(decoder, "WHERE");
+        Expression _exp;
+        public WhereClause(Expression exp) { _exp = exp; }
+        public IClause Clone() => this;
+        public string ToString(ISqlStringConverter decoder)
+        {
+            var text = decoder.ToString(_exp);
+            if (string.IsNullOrEmpty(text.Replace("(", string.Empty).Replace(")", string.Empty).Trim())) return string.Empty;
+            return "WHERE" + Environment.NewLine + "\t" + text;
+        }
     }
 }
