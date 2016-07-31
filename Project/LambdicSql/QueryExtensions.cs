@@ -32,7 +32,7 @@ namespace LambdicSql
              where TSelect : class
             => new SqlExecutor<TSelect>(connection, query as IQuery<TDB, TSelect>);
 
-        public static IQuery<TDB, TSelect> AddQuery<TDB, TSelect>(this IQuery<TDB, TSelect> query, IQuery<TDB> addQuery)
+        public static IQuery<TDB, TSelect> Concat<TDB, TSelect>(this IQuery<TDB, TSelect> query, IQuery addQuery)
             where TDB : class
             where TSelect : class
             => new ClauseMakingQuery<TDB, TSelect, IClause>(query, addQuery.GetClausesClone());

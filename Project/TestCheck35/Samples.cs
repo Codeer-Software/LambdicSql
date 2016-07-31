@@ -223,38 +223,6 @@ namespace TestCore
 
             var datas = query.ToExecutor(_connection).Read();
         }
-        
-        //You can write sequencial AND OR.
-        public void WhereAndOr()
-        {
-            WhereAndOr(new ValueY() { Value = new ValueX() { Value = 3000 } });
-            WhereAndOr(new ValueY() { Value = new ValueX() { Value = 3000 } });
-        }
-
-        public class ValueX
-        {
-            public Decimal Value { get; set; }
-        }
-        public class ValueY
-        {
-            public ValueX Value { get; set; }
-        }
-        public void WhereAndOr(ValueY x)
-        {
-            var exp = Sql.Query<DB>().
-                ConditionBuilder().
-                Continue((db, p) => x.Value.Value < db.tbl_remuneration.money).
-                Continue((db, p) => p && db.tbl_remuneration.money < 4000).
-                Continue((db, p) => p || db.tbl_staff.id == 1);
-
-            var query = Sql.Query(() => new DB()).
-                Select().
-                From(db => db.tbl_remuneration).
-                    Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
-                Where(db=>exp.Cast<bool>());
-        
-            var datas = query.ToExecutor(_connection).Read();
-        }
 
         //Like, In, Between
         public void Like()
@@ -289,67 +257,6 @@ namespace TestCore
             var datas = query.ToExecutor(_connection).Read();
         }
         
-        //You can use sub query.
-        public void WhereInSubQuery()
-        {
-            var define = Sql.Query<DB>();
-
-            var sub = define.
-                Select(db => new { total = db.tbl_remuneration.staff_id }).
-                From(db => db.tbl_remuneration);
-
-            var datas = define.
-                Select(db => new { name = db.tbl_staff.name }).
-                From(db => db.tbl_staff).
-                Where(db => Sql.Words.In(db.tbl_staff.id, sub.Cast<int>())).//sub query.
-                ToExecutor(_connection).Read();
-        }
-
-        public void SelectSubQuery()
-        {
-            var define = Sql.Query<DB>();
-
-            var sub = define.
-                Select(db => new { total = Sql.Funcs.Sum(db.tbl_remuneration.money) }).
-                From(db => db.tbl_remuneration);
-
-            var datas = define.
-                Select(db => new
-                {
-                    name = db.tbl_staff.name,
-                    total = sub.Cast<decimal>()//sub query.
-                }).
-                From(db => db.tbl_staff).
-                ToExecutor(_connection).Read();
-        }
-        
-        public void FromSubQuery()
-        {
-            var subQuery = Sql.Query(() => new DB()).
-                Select(db => new SelectData()
-                {
-                    name = db.tbl_staff.name,
-                    payment_date = db.tbl_remuneration.payment_date,
-                    money = db.tbl_remuneration.money,
-                }).
-                From(db => db.tbl_remuneration).
-                    Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
-                Where(db => 3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000);
-
-            var query = Sql.Query(() => new
-            {
-                tbl_staff = new Staff(),
-                tbl_sub = subQuery.Cast() //sub query.
-            }).
-            Select(db => new
-            {
-                name = db.tbl_sub.name
-            }).
-            From(db => db.tbl_sub);
-
-            var datas = query.ToExecutor(_connection).Read();
-        }
-
         //Distinct
         //```cs
         public void SelectPredicateDistinct()
@@ -619,6 +526,137 @@ namespace TestCore
                 }).
                 From(db => db.tbl_staff).
                 ToExecutor(_connection).Read();
+        }
+
+        //Building Query
+        //Concat query.
+        public void QueryConcat()
+        {
+            var select = Sql.Query<DB>().
+                Select(db => new SelectData()
+                {
+                    name = db.tbl_staff.name,
+                    payment_date = db.tbl_remuneration.payment_date,
+                    money = db.tbl_remuneration.money,
+                });
+
+            var from = Sql.Query<DB>().
+                From(db => db.tbl_remuneration).
+                Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id);
+
+            var where = Sql.Query<DB>().
+                Where(db => 3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000);
+
+            var orderby = Sql.Query<DB>().
+                OrderBy().ASC(db => db.tbl_staff.name);
+
+            var query = select.Concat(from).Concat(where).Concat(orderby);
+
+            //execute.
+            var datas = query.ToExecutor(_connection).Read();
+        }
+
+        public void SqlExtension()
+        {
+            var define = Sql.Query<DB>();
+
+            var expMoneyAdd = define.Expression(db => db.tbl_remuneration.money + 100);
+            var expWhereMin = define.Expression(db => 3000 < db.tbl_remuneration.money);
+            var expWhereMax = define.Expression(db => db.tbl_remuneration.money < 4000);
+
+            var query = define.
+                Select(db => new SelectData()
+                {
+                    name = db.tbl_staff.name,
+                    payment_date = db.tbl_remuneration.payment_date,
+                    money = expMoneyAdd.Cast<decimal>(),
+                }).
+                From(db => db.tbl_remuneration).
+                    Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
+                Where(db => expWhereMin.Cast<bool>() && expWhereMax.Cast<bool>()).
+                OrderBy().ASC(db => db.tbl_staff.name);
+
+            //execute.
+            var datas = query.ToExecutor(_connection).Read();
+        }
+
+        //You can write sequencial Conditions
+        public void ContinueCondition()
+        {
+            var exp = Sql.Query<DB>().
+                ConditionBuilder().
+                Continue((db, x) => x && 3000 < db.tbl_remuneration.money).
+                Continue((db, x) => x && db.tbl_remuneration.money < 4000).
+                Continue((db, x) => x || db.tbl_staff.id == 1);
+
+            var query = Sql.Query<DB>().
+                Select().
+                From(db => db.tbl_remuneration).
+                    Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
+                Where(db => exp.Cast<bool>());
+
+            var datas = query.ToExecutor(_connection).Read();
+        }
+
+        //You can use sub query.
+        public void WhereInSubQuery()
+        {
+            var define = Sql.Query<DB>();
+
+            var sub = define.
+                Select(db => new { total = db.tbl_remuneration.staff_id }).
+                From(db => db.tbl_remuneration);
+
+            var datas = define.
+                Select(db => new { name = db.tbl_staff.name }).
+                From(db => db.tbl_staff).
+                Where(db => Sql.Words.In(db.tbl_staff.id, sub.Cast<int>())).//sub query.
+                ToExecutor(_connection).Read();
+        }
+
+        public void SelectSubQuery()
+        {
+            var define = Sql.Query<DB>();
+
+            var sub = define.
+                Select(db => new { total = Sql.Funcs.Sum(db.tbl_remuneration.money) }).
+                From(db => db.tbl_remuneration);
+
+            var datas = define.
+                Select(db => new
+                {
+                    name = db.tbl_staff.name,
+                    total = sub.Cast<decimal>()//sub query.
+                }).
+                From(db => db.tbl_staff).
+                ToExecutor(_connection).Read();
+        }
+
+        public void FromSubQuery()
+        {
+            var subQuery = Sql.Query(() => new DB()).
+                Select(db => new SelectData()
+                {
+                    name = db.tbl_staff.name,
+                    payment_date = db.tbl_remuneration.payment_date,
+                    money = db.tbl_remuneration.money,
+                }).
+                From(db => db.tbl_remuneration).
+                    Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
+                Where(db => 3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000);
+
+            var query = Sql.Query(() => new
+            {
+                tbl_staff = new Staff(),
+                tbl_sub = subQuery.Cast() //sub query.
+            }).
+            Select(db => new
+            {
+                name = db.tbl_sub.name
+            }).
+            From(db => db.tbl_sub);
+
+            var datas = query.ToExecutor(_connection).Read();
         }
     }
 }

@@ -49,9 +49,6 @@ namespace Test
         public void Having() => _core.Having();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void WhereAndOr() => _core.WhereAndOr();
-
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void Like() => _core.Like();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
@@ -59,15 +56,6 @@ namespace Test
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void Between() => _core.Between();
-        
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void WhereInSubQuery() => _core.WhereInSubQuery();
-
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void SelectSubQuery() => _core.SelectSubQuery();
-
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void FromSubQuery() => _core.FromSubQuery();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void SelectPredicateDistinct() => _core.SelectPredicateDistinct();
@@ -116,5 +104,23 @@ namespace Test
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void Case2() => _core.Case2();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void QueryConcat() => _core.QueryConcat();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void SqlExtension() => _core.SqlExtension();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void ContinueCondition() => _core.ContinueCondition();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void WhereInSubQuery() => _core.WhereInSubQuery();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void SelectSubQuery() => _core.SelectSubQuery();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void FromSubQuery() => _core.FromSubQuery();
     }
 }
