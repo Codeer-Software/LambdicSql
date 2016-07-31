@@ -190,11 +190,16 @@ namespace LambdicSql.Inside
             }
 
             //words
+            if (0 < method.Arguments.Count && typeof(ISqlWordsChaining).IsAssignableFrom(method.Arguments[0].Type))
+            {
+                var t = CusotmInvoke(method, CustomTargetType.Funcs);
+                return new DecodedInfo(t.Type, ToString(method.Arguments[0]).Text + t.Text);
+            }
             if (0 < method.Arguments.Count && typeof(ISqlWords).IsAssignableFrom(method.Arguments[0].Type))
             {
                 return CusotmInvoke(method, CustomTargetType.Funcs);
             }
-
+            
             //normal
             //check
             CheckNormalFuncArguments(method);
@@ -214,7 +219,7 @@ namespace LambdicSql.Inside
             if (_queryCustomizer != null)
             {
                 var customed = _queryCustomizer.CusotmInvoke(invokeType, method.Method.ReturnType, method.Method.Name, arguments);
-                if (!string.IsNullOrEmpty(customed))
+                if (customed != null)
                 {
                     return new DecodedInfo(method.Method.ReturnType, customed);
                 }
@@ -225,7 +230,7 @@ namespace LambdicSql.Inside
             if (custom != null)
             {
                 var customed = (string)custom.Invoke(null, new object[] { method.Method.ReturnType, method.Method.Name, arguments });
-                if (!string.IsNullOrEmpty(customed))
+                if (customed != null)
                 {
                     return new DecodedInfo(method.Method.ReturnType, customed);
                 }

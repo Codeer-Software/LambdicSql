@@ -1,6 +1,5 @@
 ﻿using LambdicSql.QueryBase;
 using System;
-using System.Linq.Expressions;
 using System.Linq;
 
 namespace LambdicSql
@@ -16,8 +15,8 @@ namespace LambdicSql
             switch (name)
             {
                 case nameof(Like): return argSrc[0].Text + " LIKE " + argSrc[1].Text;
-                case nameof(Between): return argSrc[0].Text + " BETWEEN " + argSrc[1].Text + " AND " + argSrc[1].Text;
-                case nameof(In): return argSrc[0].Text + " IN(" + string.Join(", ", argSrc.Skip(1).Select(e=>e.Text).ToArray()) + ")";
+                case nameof(Between): return argSrc[0].Text + " BETWEEN " + argSrc[1].Text + " AND " + argSrc[2].Text;
+                case nameof(In): return argSrc[0].Text + " IN(" + string.Join(", ", argSrc.Skip(1).Select(e => e.Text).ToArray()) + ")";
             }
             return null;
         }

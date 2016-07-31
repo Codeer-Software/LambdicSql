@@ -498,15 +498,17 @@ namespace TestCore
         
         public void Case1()
         {
-            var caseQuery = Sql.Query<DB>().Case().
-                WhenThen(db => db.tbl_staff.id == 3, "x").
-                WhenThen(db => db.tbl_staff.id == 4, "y").
-                Else("z");
+            var caseExp = Sql.Query<DB>().Expression(db =>
+                Sql.Words.Case().
+                When(db.tbl_staff.id == 3).Then("x").
+                When(db.tbl_staff.id == 4).Then("y").
+                Else("z").
+                End());
 
             var datas = Sql.Query<DB>().
                 Select(db => new
                 {
-                    type = caseQuery.Cast<string>()
+                    type = caseExp.Cast<string>()
                 }).
                 From(db => db.tbl_staff).
                 ToExecutor(_connection).Read();
@@ -514,15 +516,17 @@ namespace TestCore
         
         public void Case2()
         {
-            var caseQuery = Sql.Query<DB>().Case(db => db.tbl_staff.id).
-                WhenThen(3, "x").
-                WhenThen(4, "y").
-                Else("z");
+            var caseExp = Sql.Query<DB>().Expression(db =>
+                Sql.Words.Case(db.tbl_staff.id).
+                When(3).Then("x").
+                When(4).Then("y").
+                Else("z").
+                End());
 
             var datas = Sql.Query<DB>().
                 Select(db => new
                 {
-                    type = caseQuery.Cast<string>()
+                    type = caseExp.Cast<string>()
                 }).
                 From(db => db.tbl_staff).
                 ToExecutor(_connection).Read();
@@ -578,6 +582,7 @@ namespace TestCore
 
             //execute.
             var datas = query.ToExecutor(_connection).Read();
+
         }
 
         //You can write sequencial Conditions

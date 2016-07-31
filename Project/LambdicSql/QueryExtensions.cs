@@ -12,8 +12,7 @@ namespace LambdicSql
             throw new NotSupportedException("do not call cast except in expression.");
         }
 
-        public static TSelect Cast<TDB, TSelect>(this IQuery<TDB, TSelect> query)
-            where TDB : class
+        public static TSelect Cast<TSelect>(this ISelectedQuery<TSelect> query)
             where TSelect : class
         {
             throw new NotSupportedException("do not call cast except in expression.");

@@ -26,7 +26,7 @@ namespace Test
 
         [TestCleanup]
         public void TestCleanup() => _connection.Dispose();
-        
+
         [TestMethod]
         public void LambdaOnlySelectFrom()
         {
@@ -182,11 +182,11 @@ namespace Test
                 tbl_staff = new Staff(),
                 tbl_sub = subQuery.Cast()
             }).
-            Select(db=>new
+            Select(db => new
             {
                 name = db.tbl_sub.name
             }).
-            From(db=>db.tbl_sub);
+            From(db => db.tbl_sub);
 
             query1.ToExecutor(_connection).Read();
 
@@ -340,15 +340,15 @@ namespace Test
 
         [TestMethod]
         public void TestFree()
-        {            
+        {
             //log for debug.
             Sql.Log = l => Debug.Print(l);
 
             //make sql.
-            var query = Sql.Query(()=>new { tbl_staff = new Staff() }).
+            var query = Sql.Query(() => new { tbl_staff = new Staff() }).
             Free("/* comment */").
             Select().
-            From(db=>db.tbl_staff);
+            From(db => db.tbl_staff);
 
             //execute.
             query.ToExecutor(_connection).Read();
@@ -482,7 +482,7 @@ namespace Test
                 Debug.Print("{0}, {1}, {2}, {3}, {4}, {5}", e.name, e.total);
             }
         }
-        
+
         //TODO other sample.
         [TestMethod]
         public void WhereAndOr()
@@ -598,12 +598,12 @@ namespace Test
             Where(db => 3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000).
             OrderBy().ASC(db => db.tbl_staff.name).
             ToExecutor(_connection).Read();
-        
+
         public IEnumerable<Staff> ReadData3() =>
             Sql.Query(() => new { tbl_staff = new Staff() }).
             Select().
             From(db => db.tbl_staff).
-            ToExecutor(_connection).Read().Select(e=>e.tbl_staff);
+            ToExecutor(_connection).Read().Select(e => e.tbl_staff);
 
         [TestMethod]
         public void SelectSubQuery()
@@ -640,7 +640,7 @@ namespace Test
                 From(db => db.tbl_remuneration);
 
             var datas = define.
-                Select(db=>new { name = db.tbl_staff.name }).
+                Select(db => new { name = db.tbl_staff.name }).
                 From(db => db.tbl_staff).
                 Where(db => Sql.Words.In(db.tbl_staff.id, sub.Cast<int>())).
                 ToExecutor(_connection).Read();
@@ -687,7 +687,7 @@ namespace Test
             var count = Sql.Query<DataChangeTest>().
                 Delete().
                 From(db => db.tbl_data).
-                Where(db=>db.tbl_data.id == 3).
+                Where(db => db.tbl_data.id == 3).
                 ToExecutor(_connection).Write();
         }
 
@@ -703,7 +703,7 @@ namespace Test
                 InsertInto(db => db.tbl_data).
                 Values(data).
                 ToExecutor(_connection).Write();
-            
+
             Delete();
             var count2 = Sql.Query<DataChangeTest>().
                 InsertInto(db => db.tbl_data, tbl => tbl.id, tbl => tbl.val1).
@@ -721,7 +721,7 @@ namespace Test
                 Set().
                 Assign(tbl => tbl.val1, 100).
                 Assign(tbl => tbl.val2, "200").
-                Where(db=>db.tbl_data.id == 1).
+                Where(db => db.tbl_data.id == 1).
                 ToExecutor(_connection).Write();
 
             var count2 = Sql.Query<DataChangeTest>().
@@ -731,7 +731,7 @@ namespace Test
                 Where(db => db.tbl_data.id == 1).
                 ToExecutor(_connection).Write();
         }
-        
+
         public class DB
         {
             public Staff tbl_staff { get; set; }
@@ -750,7 +750,7 @@ namespace Test
             }).
             From(db => db.tbl_remuneration).
                 Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id);
-            
+
             var data1 = query.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Read();
             var data2 = query.ToExecutor(new NpgsqlConnection(TestEnvironment.PostgresConnectionString)).Read();
             var data3 = query.ToExecutor(new SQLiteConnection("Data Source=" + TestEnvironment.SQLiteTest1Path)).Read();
@@ -771,7 +771,6 @@ namespace Test
                 ToExecutor(_connection).Read();
         }
 
-
         [TestMethod]
         public void Exp()
         {
@@ -788,7 +787,7 @@ namespace Test
                 Select().
                 From(db => db.tbl_remuneration).
                     Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
-                    Where(db=> exp.Cast<bool>());
+                    Where(db => exp.Cast<bool>());
 
             var datas = query.ToExecutor(_connection).Read();
             foreach (var e in datas)
@@ -796,6 +795,5 @@ namespace Test
                 Debug.Print("{0}, {1}", e.tbl_staff.name, e.tbl_remuneration.money);
             }
         }
-
     }
 }
