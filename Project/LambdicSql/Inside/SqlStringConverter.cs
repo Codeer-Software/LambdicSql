@@ -36,6 +36,17 @@ namespace LambdicSql.Inside
 
         public DbInfo DbInfo => _dbInfo;
 
+        public string ResolvePrepare(string value)
+        {
+            object obj;
+            if (!_prepare.TryGetParam(value, out obj))
+            {
+                return value;
+            }
+            _prepare.Remove(value);
+            return obj.ToString();
+        }
+
         internal string ContinueConditionExpressionText { get; set; }
 
         public string ToString(object obj)
@@ -85,16 +96,21 @@ namespace LambdicSql.Inside
             {
                 return string.Join(Environment.NewLine,
                         text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).
-                        Where(e=>!string.IsNullOrEmpty(e.Trim())).ToArray()) + ";";
+                        Where(e => !string.IsNullOrEmpty(e.Trim())).ToArray()) + ";";
             }
             var isExpressionClause = 0 < clauses.Length && clauses[0] is IExpressionClause;
             if (!isExpressionClause) text = "(" + text + ")";
 
+            return AddNestTab(text, _nestLevel);
+        }
+
+        static string AddNestTab(string text, int nestLevel)
+        {
             var t = string.Empty;
-            Enumerable.Range(0, _nestLevel).ToList().ForEach(e => t += "\t");
-            return Environment.NewLine + string.Join(Environment.NewLine, 
+            Enumerable.Range(0, nestLevel).ToList().ForEach(e => t += "\t");
+            return Environment.NewLine + string.Join(Environment.NewLine,
                 text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).
-                Select(e=>t + e).ToArray());
+                Select(e => t + e).ToArray());
         }
 
         DecodedInfo ToString(Expression exp)
@@ -180,26 +196,21 @@ namespace LambdicSql.Inside
                 {
                     throw new NotSupportedException();
                 }
-                return new DecodedInfo(typeof(ISqlExpression), ((ISqlExpression)obj).ToString(this));
-            }
-             
-            //funcs
-            if (0 < method.Arguments.Count && typeof(ISqlFuncs).IsAssignableFrom(method.Arguments[0].Type))
-            {
-                return CusotmInvoke(method, CustomTargetType.Funcs);
+                var text = ((ISqlExpression)obj).ToString(this);
+                //TODO
+                if (text.Replace(Environment.NewLine, string.Empty).Trim().IndexOf("SELECT") == 0)
+                {
+                    text = "(" + AddNestTab(text, 1).TrimStart() + ")";
+                }
+                return new DecodedInfo(typeof(ISqlExpression), text);
             }
 
             //words
-            if (0 < method.Arguments.Count && typeof(ISqlWordsChaining).IsAssignableFrom(method.Arguments[0].Type))
-            {
-                var t = CusotmInvoke(method, CustomTargetType.Funcs);
-                return new DecodedInfo(t.Type, ToString(method.Arguments[0]).Text + t.Text);
-            }
             if (0 < method.Arguments.Count && typeof(ISqlWords).IsAssignableFrom(method.Arguments[0].Type))
             {
-                return CusotmInvoke(method, CustomTargetType.Funcs);
+                return CusotmInvoke(method);
             }
-            
+
             //normal
             //check
             CheckNormalFuncArguments(method);
@@ -209,27 +220,84 @@ namespace LambdicSql.Inside
             return new DecodedInfo(funcNormal.Method.ReturnType, ToString(funcNormal.DynamicInvoke()));
         }
 
-        DecodedInfo CusotmInvoke(MethodCallExpression method, CustomTargetType invokeType)
+        public List<MethodCallExpression>[] GetMethodChain(MethodCallExpression end)
+        {
+            var chainX = new List<List<MethodCallExpression>>();
+            var curent = end;
+            while (true)
+            {
+                var type = curent.Method.DeclaringType;
+                var chain = new List<MethodCallExpression>();
+                while (true)
+                {
+                    chain.Add(curent);
+                    var next = curent.Arguments[0] as MethodCallExpression;
+                    if (next == null)
+                    {
+                        chain.Reverse();
+                        chainX.Add(chain);
+                        chainX.Reverse();
+                        return chainX.ToArray();
+                    }
+                    curent = next;
+                    if (next.Method.DeclaringType != type)
+                    {
+                        break;
+                    }
+                }
+                chain.Reverse();
+                chainX.Add(chain);
+            }
+        }
+
+        DecodedInfo CusotmInvoke(MethodCallExpression method)
+        {
+            var chainX = GetMethodChain(method);
+            var ret = new List<string>();
+            foreach (var chain in chainX)
+            {
+                var custom = chain[0].Method.DeclaringType.GetMethod("MethodChainToString");
+                if (custom != null)
+                {
+                    ret.Add((string)custom.Invoke(null, new object[] { this, chain.ToArray() }));
+                }
+                else
+                {
+                    ret.Add(CusotmInvokeOne(chain[0]).Text);
+                }
+            }
+
+            //TODO
+            var text = new DecodedInfo(method.Method.ReturnType, string.Join(string.Empty, ret.ToArray()));
+            if (method.Method.Name == "Cast" && text.Text.Replace(Environment.NewLine, string.Empty).Trim().IndexOf("SELECT") == 0)
+            {
+               return new DecodedInfo(method.Method.ReturnType, "(" + AddNestTab(text.Text, 1).TrimStart() + ")");
+            }
+            return text;
+        }
+        
+        DecodedInfo CusotmInvokeOne(MethodCallExpression method)
         {
             //sql function.
             var argumentsSrc = method.Arguments.Skip(1).ToArray();//skip this. 
 
-            //custom by user.
-            var arguments = argumentsSrc.Select(e => ToString(e)).ToArray();
-            if (_queryCustomizer != null)
+
+            //custom by defined class.
+            var custom = method.Method.DeclaringType.GetMethod("MethodToString");
+            if (custom != null)
             {
-                var customed = _queryCustomizer.CusotmInvoke(invokeType, method.Method.ReturnType, method.Method.Name, arguments);
+                var customed = (string)custom.Invoke(null, new object[] { this, method });
                 if (customed != null)
                 {
                     return new DecodedInfo(method.Method.ReturnType, customed);
                 }
             }
 
-            //custom by defined class.
-            var custom = method.Method.DeclaringType.GetMethod(nameof(_queryCustomizer.CusotmInvoke));
-            if (custom != null)
+            //custom by user.
+            var arguments = argumentsSrc.Select(e => ToString(e)).ToArray();
+            if (_queryCustomizer != null)
             {
-                var customed = (string)custom.Invoke(null, new object[] { method.Method.ReturnType, method.Method.Name, arguments });
+                var customed = _queryCustomizer.CusotmInvoke(method.Method.ReturnType, method.Method.Name, arguments);
                 if (customed != null)
                 {
                     return new DecodedInfo(method.Method.ReturnType, customed);

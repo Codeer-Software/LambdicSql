@@ -64,7 +64,7 @@ namespace Test.Properties {
         ///   CREATE TABLE tbl_data (
         ///	id INTEGER,
         ///	val1 INTEGER,
-        ///	val2 VARCHAR(50)
+        ///	val2 VARCHAR(50),
         ///	PRIMARY KEY (id)
         ///)
         /// に類似しているローカライズされた文字列を検索します。
@@ -79,7 +79,7 @@ namespace Test.Properties {
         ///   CREATE TABLE tbl_remuneration (
         ///	id INTEGER,
         ///	staff_id INTEGER,
-        ///	payment_date DATE,
+        ///	payment_date VARCHAR(50),
         ///	money DECIMAL,
         ///	PRIMARY KEY (id)
         ///)
@@ -92,7 +92,7 @@ namespace Test.Properties {
         }
         
         /// <summary>
-        ///   CREATE TABLE table_preset_value (
+        ///   CREATE TABLE tbl_staff (
         ///	id INTEGER,
         ///	name VARCHAR(50),
         ///	PRIMARY KEY (id)
@@ -106,7 +106,7 @@ namespace Test.Properties {
         }
         
         /// <summary>
-        ///   INSERT INTO table_scene (id, scene_index) VALUES({0}, {1}) に類似しているローカライズされた文字列を検索します。
+        ///   INSERT INTO tbl_remuneration (id, staff_id, payment_date, money) VALUES({0}, {1}, {2}, {3}) に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string InsertTableRemuneration {
             get {
@@ -115,7 +115,7 @@ namespace Test.Properties {
         }
         
         /// <summary>
-        ///   INSERT INTO table_scene (id, scene_index) VALUES({0}, {1}) に類似しているローカライズされた文字列を検索します。
+        ///   INSERT INTO tbl_staff (id, name) VALUES({0}, {1}) に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string InsertTableStaff {
             get {

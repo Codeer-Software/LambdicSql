@@ -129,7 +129,7 @@
     <None Include="Resources\InsertTableRemuneration.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\InsertTableStaff.txt" />
+    <Content Include="Resources\InsertTableStaff.sql" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

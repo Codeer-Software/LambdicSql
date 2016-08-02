@@ -131,6 +131,6 @@
     <value>..\Resources\InsertTableRemuneration.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;shift_jis</value>
   </data>
   <data name="InsertTableStaff" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\InsertTableStaff.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;shift_jis</value>
+    <value>..\Resources\InsertTableStaff.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;shift_jis</value>
   </data>
 </root>

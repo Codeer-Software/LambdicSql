@@ -670,7 +670,6 @@ namespace Test
         {
             Sql.Log = l => Debug.Print(l);
 
-
             var count = Sql.Query<DataChangeTest>().
                 Delete().
                 From(db => db.tbl_data).
@@ -794,6 +793,220 @@ namespace Test
             {
                 Debug.Print("{0}, {1}", e.tbl_staff.name, e.tbl_remuneration.money);
             }
+        }
+
+
+        /////////////////////////////////////////////////////////////////////
+        //Insert Into とValues が弱くなるなー
+
+        [TestMethod]
+        public void SelectEx()
+        {
+            Sql.Log = l => Debug.Print(l);
+            var query = Sql.Using<Data>().Create((db, x) =>
+                x.
+                Select(new
+                {
+                    name = db.tbl_staff.name,
+                    payment_date = db.tbl_remuneration.payment_date,
+                    money = db.tbl_remuneration.money,
+                }).
+                From(db.tbl_remuneration).
+                    Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
+                Where(3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
+
+            var y = query.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Read();
+        }
+
+        [TestMethod]
+        public void GroupByEx()
+        {
+            Sql.Log = l => Debug.Print(l);
+            var query = Sql.Using<Data>().Create((db, x) =>
+                x.
+                Select(new
+                {
+                    name = db.tbl_staff.name,
+                    count = x.Count(db.tbl_remuneration.money),
+                    total = x.Sum(db.tbl_remuneration.money),
+                    average = x.Avg(db.tbl_remuneration.money),
+                    minimum = x.Min(db.tbl_remuneration.money),
+                    maximum = x.Max(db.tbl_remuneration.money),
+                }).
+                From(db.tbl_remuneration).
+                    Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
+                GroupBy(db.tbl_staff.id, db.tbl_staff.name));
+
+            var datas = query.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Read();
+        }
+
+        [TestMethod]
+        public void OrderByEx()
+        {
+            Sql.Log = l => Debug.Print(l);
+
+            var query = Sql.Using<Data>().Create((db, x) => x.
+                Select(new
+                {
+                    name = db.tbl_staff.name,
+                    payment_date = db.tbl_remuneration.payment_date,
+                    money = db.tbl_remuneration.money,
+                }).
+                From(db.tbl_remuneration).
+                Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
+                Where(3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000).
+                OrderBy().ASC(db.tbl_staff.id).DESC(db.tbl_remuneration.id));
+
+            var y = query.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Read();
+        }
+
+        [TestMethod]
+        public void SubEx()
+        {
+            Sql.Log = l => Debug.Print(l);
+
+            var q = Sql.Using<Data>().Create((db, x) => x.
+                Select(new
+                {
+                    id = db.tbl_staff.id,
+                    rid = db.tbl_remuneration.id,
+                    type = x.Case().
+                                When(db.tbl_remuneration.money < 1000).Then("poverty").
+                                When(4000 < db.tbl_remuneration.money).Then("rich").
+                                Else("normal").
+                            End().Cast<string>(),
+                    total = x.Select(new { total = x.Sum(db.tbl_remuneration.money) }).
+                            From(db.tbl_remuneration).Cast<decimal>()
+                }).
+                From(db.tbl_staff).
+                    Join(db.tbl_remuneration, db.tbl_staff.id == db.tbl_remuneration.staff_id).
+                Where(100 < db.tbl_remuneration.money && db.tbl_remuneration.money < 500).
+                OrderBy().ASC(db.tbl_remuneration.money));
+
+            var datas = q.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Read();
+        }
+
+        [TestMethod]
+        public void SubEx2()
+        {
+            Sql.Log = l => Debug.Print(l);
+
+            var caseExp = Sql.Using<Data>().Create((db, x) => x.
+                Case().
+                    When(db.tbl_remuneration.money < 1000).Then("poverty").
+                    When(4000 < db.tbl_remuneration.money).Then("rich").
+                    Else("normal").
+                End());
+
+            var subQuery = Sql.Using<Data>().Create((db, x) => x.
+                Select(new { total = x.Sum(db.tbl_remuneration.money) }).
+                            From(db.tbl_remuneration));
+
+            var condition = Sql.Using<Data>().Create((db, x) =>
+                 100 < db.tbl_remuneration.money && db.tbl_remuneration.money < 500);
+
+            var query = Sql.Using<Data>().Create((db, x) => x.
+                Select(new
+                {
+                    id = db.tbl_staff.id,
+                    rid = db.tbl_remuneration.id,
+                    type = caseExp.Cast<string>(),
+                    total = subQuery.Cast<decimal>()
+                }).
+                From(db.tbl_staff).
+                    Join(db.tbl_remuneration, db.tbl_staff.id == db.tbl_remuneration.staff_id).
+                Where(condition.Cast<bool>()).
+                OrderBy().ASC(db.tbl_remuneration.money));
+
+            var datas = query.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Read();
+        }
+
+        [TestMethod]
+        public void InsertEx()
+        {
+            Sql.Log = l => Debug.Print(l);
+
+            var data = new tbl_data() { id = 1, val1 = 10, val2 = "a" };
+
+            Delete();
+            var query = Sql.Using<DataChangeTest>().Create((db, x) =>
+                x.
+                InsertInto(db.tbl_data, db.tbl_data.id, db.tbl_data.val1, db.tbl_data.val2).
+                Values(data.id, data.val1, data.val2));//TODO change style.
+
+            query.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Write();
+        }
+
+        [TestMethod]
+        public void UpdateEx()
+        {
+            Sql.Log = l => Debug.Print(l);
+            var count1 = Sql.Using<DataChangeTest>().Create((db, x) => x.
+                Update(db.tbl_data).
+                Set().
+                    Assign(db.tbl_data.val1, 100).
+                    Assign(db.tbl_data.val2, "200").
+                    Where(db.tbl_data.id == 1)).
+                ToExecutor(_connection).Write();
+
+            var count2 = Sql.Using<DataChangeTest>().Create((db, x) => x.
+                Update(db.tbl_data).
+                Set().
+                    Assign(db.tbl_data.val1, db.tbl_data.val1 * 2).
+                    Where(db.tbl_data.id == 1)).
+                ToExecutor(_connection).Write();
+            //TODO change style to under.
+            /*
+            var query = Sql.Using<DataChangeTest>().Create((db, x) => x.
+            Update(db.tbl_data).
+            Set(new tbl_data()
+            {
+                val1 = 100,
+                val2 = "200"
+            })).
+            ToExecutor(_connection).Write();
+            */
+        }
+
+        [TestMethod]
+        public void Window()
+        {
+            Sql.Log = l => Debug.Print(l);
+            var query = Sql.Using<Data>().Create((db, x) => x.
+                Select(new
+                {
+                    x = x.AvgOver(db.tbl_remuneration.money).
+                            PartitionBy(db.tbl_staff.name, db.tbl_remuneration.payment_date).
+                            OrderBy().Asc(db.tbl_remuneration.money).Desc(db.tbl_remuneration.payment_date).
+                            Rows(1, 1).Cast<decimal>(),
+                    payment_date = db.tbl_remuneration.payment_date,
+                    money = db.tbl_remuneration.money,
+                }).
+                From(db.tbl_remuneration).
+                Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id));
+
+            var y = query.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Read();
+        }
+
+        [TestMethod]
+        public void Lag()
+        {
+            Sql.Log = l => Debug.Print(l);
+            var query = Sql.Using<Data>().Create((db, x) =>
+                x.
+                Select(new
+                {
+                    x = x.LagOver(db.tbl_remuneration.money, 1, 0).
+                            PartitionBy(db.tbl_staff.name, db.tbl_remuneration.payment_date).
+                            OrderBy().Asc(db.tbl_remuneration.money).Desc(db.tbl_remuneration.payment_date).Cast<decimal>(),
+                    payment_date = db.tbl_remuneration.payment_date,
+                    money = db.tbl_remuneration.money,
+                }).
+                From(db.tbl_remuneration).
+                Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id));
+
+            var y = query.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Read();
+
         }
     }
 }

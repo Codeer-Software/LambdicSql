@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LambdicSql.Clause.Select;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -11,6 +12,9 @@ namespace LambdicSql.QueryBase
         Dictionary<string, TableInfo> _lambdaNameAndTable = new Dictionary<string, TableInfo>();
         public Dictionary<string, ColumnInfo> GetLambdaNameAndColumn() => _lambdaNameAndColumn.ToDictionary(e=>e.Key, e=>e.Value);
         public Dictionary<string, TableInfo> GetLambdaNameAndTable() => _lambdaNameAndTable.ToDictionary(e => e.Key, e => e.Value);
+
+        public SelectClause SelectClause { get; internal set; }//TODO
+
 
         internal void Add(ColumnInfo col)
         {

@@ -55,7 +55,6 @@
     <Compile Include="ConditionBuilderExtensions.cs" />
     <Compile Include="QueryBase\IConnectionSqlExpression.cs" />
     <Compile Include="QueryBase\ISqlExpression.cs" />
-    <Compile Include="QueryBase\ISqlWordsChaining.cs" />
     <Compile Include="QueryBase\PreviousCondition.cs" />
     <Compile Include="QueryBase\SqlExpressionCore.cs" />
     <Compile Include="QueryBase\SqlInfo.cs" />
@@ -81,7 +80,6 @@
     <Compile Include="QueryBase\IExpressionClause.cs" />
     <Compile Include="QueryBase\ISqlWords.cs" />
     <Compile Include="SQLite\SQLiteCustomizer.cs" />
-    <Compile Include="QueryBase\CustomTargetType.cs" />
     <Compile Include="QueryBase\ISqlFuncs.cs" />
     <Compile Include="QueryBase\InvalidDbItemException.cs" />
     <Compile Include="QueryBase\IQueryCustomizer.cs" />
@@ -112,6 +110,7 @@
     <Compile Include="Sql.cs" />
     <Compile Include="Clause\Where\WhereQueryExtensions.cs" />
     <Compile Include="Words\CaseWordsExtensions.cs" />
+    <Compile Include="Words\Clauses.cs" />
     <Compile Include="Words\WordsExtensions.cs" />
   </ItemGroup>
   <ItemGroup />

@@ -10,11 +10,21 @@ namespace LambdicSql
         public static Action<string> Log { get; set; }
         public static ISqlFuncs Funcs { get; set; }
         public static ISqlWords Words { get; set; }
-
+        public static IWindowWords Window { get; set; }
         public static IQuery<T, T> Query<T>(Expression<Func<T>> define) where T : class
             => DBDefineAnalyzer.CreateQuery(define);
 
         public static IQuery<T, T> Query<T>() where T : class, new()
-            => DBDefineAnalyzer.CreateQuery(()=>new T());
+            => DBDefineAnalyzer.CreateQuery(() => new T());
+
+
+        //TODO
+        public static Creating<T> Using<T>() where T : class, new()
+            => new Creating<T>() { Query = DBDefineAnalyzer.CreateQuery(() => new T()) };
+    }
+
+    public class Creating<T> where T : class, new()
+    {
+        public IQuery<T, T> Query { get; set; }
     }
 }

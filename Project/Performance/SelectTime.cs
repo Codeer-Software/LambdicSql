@@ -98,7 +98,9 @@ namespace Performance
         {
             TestCore(connection =>
             {
-                var datas = connection.Query<TableValues>("select IntVal, FloatVal, DoubleVal, DecimalVal, StringVal from TableValues  where IntVal = @Id;", new { Id = 0 }).ToList();
+                var datas = connection.
+                Query<TableValues>("select IntVal, FloatVal, DoubleVal, DecimalVal, StringVal from TableValues  where IntVal = @Id;", 
+                new { Id = 0 }).ToList();
             });
         }
     }

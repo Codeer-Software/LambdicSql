@@ -1,6 +1,6 @@
 ﻿using LambdicSql.QueryBase;
-using System;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace LambdicSql
 {
@@ -10,13 +10,14 @@ namespace LambdicSql
         public static bool Between<TTarget>(this ISqlWords words, TTarget target, TTarget min, TTarget max) => false;
         public static bool In<TTarget>(this ISqlWords words, TTarget target, params TTarget[] inArguments) => false;
 
-        public static string CusotmInvoke(Type returnType, string name, DecodedInfo[] argSrc)
+        public static string MethodToString(ISqlStringConverter converter, MethodCallExpression method)
         {
-            switch (name)
+            var args = method.Arguments.Skip(1).Select(e => converter.ToString(e)).ToArray();
+            switch (method.Method.Name)
             {
-                case nameof(Like): return argSrc[0].Text + " LIKE " + argSrc[1].Text;
-                case nameof(Between): return argSrc[0].Text + " BETWEEN " + argSrc[1].Text + " AND " + argSrc[2].Text;
-                case nameof(In): return argSrc[0].Text + " IN(" + string.Join(", ", argSrc.Skip(1).Select(e => e.Text).ToArray()) + ")";
+                case nameof(Like): return args[0] + " LIKE " + args[1];
+                case nameof(Between): return args[0] + " BETWEEN " + args[1] + " AND " + args[2];
+                case nameof(In): return args[0] + " IN(" + string.Join(", ", args.Skip(1).ToArray()) + ")";
             }
             return null;
         }

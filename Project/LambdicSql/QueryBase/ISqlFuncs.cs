@@ -1,4 +1,4 @@
 ﻿namespace LambdicSql.QueryBase
 {
-    public interface ISqlFuncs { }
+    public interface ISqlFuncs : ISqlWords { }
 }

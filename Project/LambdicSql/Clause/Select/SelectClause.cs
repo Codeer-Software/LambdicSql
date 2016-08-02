@@ -2,11 +2,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace LambdicSql.Clause.Select
 {
     public class SelectClause : IClause
     {
+        public Type SelectedType { get; internal set; }//TODO
+        public Expression Define { get; internal set; }
+
+
+
         List<SelectElement> _elements = new List<SelectElement>();
         string _predicate = string.Empty;
         public SelectElement[] GetElements() => _elements.ToArray();
