@@ -220,7 +220,7 @@ namespace LambdicSql.Inside
             return new DecodedInfo(funcNormal.Method.ReturnType, ToString(funcNormal.DynamicInvoke()));
         }
 
-        public List<MethodCallExpression>[] GetMethodChain(MethodCallExpression end)
+        List<MethodCallExpression>[] GetMethodChain(MethodCallExpression end)
         {
             var chainX = new List<List<MethodCallExpression>>();
             var curent = end;
@@ -357,6 +357,7 @@ namespace LambdicSql.Inside
             var left = ToString(binary.Left);
             var right = ToString(binary.Right);
 
+            if (string.IsNullOrEmpty(left.Text) && string.IsNullOrEmpty(right.Text)) return new DecodedInfo(null, string.Empty);
             if (string.IsNullOrEmpty(left.Text)) return right;
             if (string.IsNullOrEmpty(right.Text)) return left;
 
@@ -454,6 +455,14 @@ namespace LambdicSql.Inside
                 //notify converting info.
                 SpecialElementConverting(this, new SqlStringConvertingEventArgs(SpecialElementType.Column, name));
                 return new DecodedInfo(col.Type, col.SqlFullName);
+            }
+
+            //TODO naming rule.
+            var method = member.Expression as MethodCallExpression;
+            if (method != null && IsSqlExpression(method))
+            {
+                var mem2 = method.Arguments[0] as MemberExpression;
+                return new DecodedInfo(null, mem2.Member.Name + "." + name);
             }
 
             if (HasParameter(member)) return new DecodedInfo(null, name);

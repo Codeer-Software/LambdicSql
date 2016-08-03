@@ -24,14 +24,14 @@ namespace Test
         [TestCleanup]
         public void TestCleanup() => _connection.Dispose();
 
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void LambdaOnly() => _core.LambdaOnly();
+   //     [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+   //     public void LambdaOnly() => _core.LambdaOnly();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void StandardNoramlType() => _core.StandardNoramlType();
         
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void SelectAll() => _core.SelectAll();
+  //      [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+   //     public void SelectAll() => _core.SelectAll();
         
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void SelectFrom() => _core.SelectFrom();
@@ -72,11 +72,11 @@ namespace Test
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void Insert() => _core.Insert();
 
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void InsertSelectedData() => _core.InsertSelectedData();
+  //      [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+    //    public void InsertSelectedData() => _core.InsertSelectedData();
 
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void InsertUsingAnonymousType() => _core.InsertUsingAnonymousType();
+   //     [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+     //   public void InsertUsingAnonymousType() => _core.InsertUsingAnonymousType();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void Update() => _core.Update();
@@ -110,9 +110,6 @@ namespace Test
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void SqlExtension() => _core.SqlExtension();
-
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void ContinueCondition() => _core.ContinueCondition();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void WhereInSubQuery() => _core.WhereInSubQuery();

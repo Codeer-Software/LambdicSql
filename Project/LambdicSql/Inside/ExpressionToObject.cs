@@ -8,6 +8,17 @@ namespace LambdicSql.Inside
     {
         static Dictionary<string, IGetter> _memberGet = new Dictionary<string, IGetter>();
 
+        internal static bool GetExpressionObject(Expression exp, out object obj)
+        {
+            var constExp = exp as ConstantExpression;
+            if (constExp != null)
+            {
+                obj = constExp.Value;
+                return true;
+            }
+            return GetMemberObject(exp as MemberExpression, out obj);
+        }
+
         internal static bool GetMemberObject(MemberExpression exp, out object obj)
         {
             obj = null;

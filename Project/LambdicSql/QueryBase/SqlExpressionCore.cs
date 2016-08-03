@@ -7,6 +7,7 @@ namespace LambdicSql.QueryBase
     {
         SqlExpressionCore<TDB> _before;
         Expression _core;
+        public Expression Expression => _core;
         public IQuery Query { get; private set; }
         public SqlExpressionCore(IQuery query)
         {
@@ -32,7 +33,13 @@ namespace LambdicSql.QueryBase
             {
                 return string.Empty;
             }
-
+            var decoder = src as SqlStringConverter;
+            var text = decoder.ToString(_core);
+            if (_before != null)
+            {
+                text = _before.ToString(decoder) + text;
+            }
+            /*
             var decoder = src as SqlStringConverter;
             var onditionExpressionText = (_before == null || _before._core == null) ? string.Empty : "{@BeforeExpression}";
             decoder.ContinueConditionExpressionText = onditionExpressionText;
@@ -42,7 +49,7 @@ namespace LambdicSql.QueryBase
             if (_before != null)
             {
                 text = text.Replace("{@BeforeExpression}", _before.ToString(decoder));
-            }
+            }*/
             return text;
         }
     }

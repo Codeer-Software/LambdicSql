@@ -11,7 +11,8 @@ namespace LambdicSql
     {
         public static ISqlWords<TSelected> Select<TSelected>(this ISqlWords words, AggregatePredicate predicate, TSelected selected) => null;
         public static ISqlWords<TSelected> Select<TSelected>(this ISqlWords words, TSelected selected) => null;
-
+        public static ISqlWords<TSelected> SelectFrom<TSelected>(this ISqlWords words, TSelected selected) => null;
+        
         public static string MethodToString(ISqlStringConverter converter, MethodCallExpression method)
         {
             Expression define = null;
@@ -26,7 +27,7 @@ namespace LambdicSql
                 define = method.Arguments[1];
             }
 
-            var select = SelectDefineAnalyzer.MakeSelectInfo(method.Arguments[1]);
+            var select = SelectDefineAnalyzer.MakeSelectInfo(define);
             select.SetPredicate(aggregatePredicate);
             select.SelectedType = method.Method.ReturnType;
             if (converter.DbInfo.SelectClause == null)
@@ -35,6 +36,10 @@ namespace LambdicSql
                 converter.DbInfo.SelectClause.Define = define;
             }
             var text = select.ToString(converter);
+            if (method.Method.Name == nameof(SelectFrom))
+            {
+                text = text + Environment.NewLine + "FROM " + converter.ToString(method.Arguments[1]);
+            }
             return Environment.NewLine + text;
         }
     }
@@ -53,20 +58,43 @@ namespace LambdicSql
             var list = new List<string>();
             foreach (var m in methods)
             {
-                var argSrc = m.Arguments.Skip(1).Select(e => converter.ToString(e)).ToArray();
-                list.Add(MethodToString(m.Method.Name, argSrc));
+                list.Add(MethodToString(converter, m));
             }
             return string.Join(string.Empty, list.ToArray());
         }
 
-        static string MethodToString(string name, string[] argSrc)
+        static string MethodToString(ISqlStringConverter converter, MethodCallExpression method)
         {
+            string name = method.Method.Name;
+            string[] argSrc = method.Arguments.Skip(1).Select(e => converter.ToString(e)).ToArray();//TODO
             switch (name)
             {
-                case nameof(From): return Environment.NewLine + "FROM " + argSrc[0];
-                case nameof(CrossJoin): return Environment.NewLine + "\tCROSS JOIN " + argSrc[0];
+                case nameof(From): return Environment.NewLine + "FROM " + ExpressionToTableName(converter, method.Arguments[1]);
+                case nameof(CrossJoin): return Environment.NewLine + "\tCROSS JOIN " + ExpressionToTableName(converter, method.Arguments[1]);
             }
-            return Environment.NewLine + "\t" + name.ToUpper() + " " + argSrc[0] + " ON " + argSrc[1];
+            return Environment.NewLine + "\t" + name.ToUpper() + " " + ExpressionToTableName(converter, method.Arguments[1]) + " ON " + argSrc[1];
+        }
+
+        static string ExpressionToTableName(ISqlStringConverter decoder, Expression exp)
+        {
+            var text = decoder.ToString(exp);
+            var methodCall = exp as MethodCallExpression;
+            if (methodCall != null)
+            {
+                //TODO if cast expression
+                //TODO oracl custom
+                var x = ((MemberExpression)methodCall.Arguments[0]).Member.Name;
+                return text + " AS " + x;
+            }
+
+            var table = decoder.DbInfo.GetLambdaNameAndTable()[text];
+            if (table.SubQuery == null)
+            {
+                return table.SqlFullName;
+            }
+            
+            //TODO no need
+            return decoder.ToString(table.SubQuery) + " AS " + table.SqlFullName;
         }
     }
 
@@ -76,7 +104,34 @@ namespace LambdicSql
 
         public static string MethodToString(ISqlStringConverter converter, MethodCallExpression method)
         {
-            return Environment.NewLine + "WHERE " + converter.ToString(method.Arguments[1]);
+            var text = converter.ToString(method.Arguments[1]);
+            return string.IsNullOrEmpty(text.Trim()) ? string.Empty : Environment.NewLine + "WHERE " + converter.ToString(method.Arguments[1]);
+        }
+    }
+
+    public static class ConditionWordsExtensions
+    {
+        public static bool Condition(this ISqlHelper words, bool enable, bool condition) => default(bool);
+
+        public static string MethodToString(ISqlStringConverter converter, MethodCallExpression method)
+        {
+            object obj;
+            ExpressionToObject.GetExpressionObject(method.Arguments[1], out obj);
+            return (bool)obj ? converter.ToString(method.Arguments[2]) : string.Empty;
+        }
+    }
+
+
+    //ISqlHelper
+
+    public static class HavingWordsExtensions
+    {
+        public static ISqlWords<TSelected> Having<TSelected>(this ISqlWords<TSelected> words, bool condition) => null;
+
+        public static string MethodToString(ISqlStringConverter converter, MethodCallExpression method)
+        {
+            var text = converter.ToString(method.Arguments[1]);
+            return string.IsNullOrEmpty(text.Trim()) ? string.Empty : Environment.NewLine + "HAVING " + converter.ToString(method.Arguments[1]);
         }
     }
 
@@ -140,10 +195,21 @@ namespace LambdicSql
         {
             switch (name)
             {
-                case nameof(InsertInto): return Environment.NewLine + "INSERT INTO " + argSrc[0] + "(" + string.Join(", ", argSrc.Skip(1).ToArray()) + ")";
+                case nameof(InsertInto):
+                {
+                    var arg = argSrc.Last().Split(',').Select(e => GetColumnOnly(e)).ToArray();
+                    return Environment.NewLine + "INSERT INTO " + argSrc[0] + "(" + string.Join(", ", arg) + ")";
+
+                }
                 case nameof(Values): return Environment.NewLine + "\tVALUES (" + string.Join(", ", argSrc) + ")";
             }
             throw new NotSupportedException();
+        }
+
+        static string GetColumnOnly(string src)
+        {
+            var index = src.LastIndexOf(".");
+            return index == -1 ? src : src.Substring(index + 1);
         }
     }
 
@@ -185,16 +251,26 @@ namespace LambdicSql
             {
                 case nameof(Update): return Environment.NewLine + "UPDATE " + argSrc[0];
                 case nameof(Set): return Environment.NewLine + "SET";
-                case nameof(Assign): return Environment.NewLine + "\t" + argSrc[0] + " = " + argSrc[1];
+                case nameof(Assign): return Environment.NewLine + "\t" + MemberNameOnly(argSrc[0]) + " = " + argSrc[1];
             }
             throw new NotSupportedException();
         }
-        /*
+        
         static string MemberNameOnly(string src)
         {
             var index = src.LastIndexOf(".");
             return index == -1 ? src : src.Substring(index + 1);
         }
-        */
+        
+    }
+
+    public static class DeleteWordsExtensions
+    {
+        public static ISqlWords<TSelected> Delete<TSelected>(this ISqlWords<TSelected> words) => null;
+
+        public static string MethodToString(ISqlStringConverter converter, MethodCallExpression method)
+        {
+            return Environment.NewLine + "DELETE";
+        }
     }
 }

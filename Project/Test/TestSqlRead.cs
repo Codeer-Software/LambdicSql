@@ -483,32 +483,6 @@ namespace Test
             }
         }
 
-        //TODO other sample.
-        [TestMethod]
-        public void WhereAndOr()
-        {
-            //log for debug.
-            Sql.Log = l => Debug.Print(l);
-
-            var exp = Sql.Query<Data>().
-                ConditionBuilder().
-                Continue((db, x) => 3000 < db.tbl_remuneration.money).
-                Continue((db, x) => x && db.tbl_remuneration.money < 4000).
-                Continue((db, x) => x || db.tbl_staff.id == 1);
-
-            var query = Sql.Query<Data>().
-                Select().
-                From(db => db.tbl_remuneration).
-                    Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
-                Where(db => exp.Cast<bool>());
-
-            var datas = query.ToExecutor(_connection).Read();
-            foreach (var e in datas)
-            {
-                Debug.Print("{0}, {1}", e.tbl_staff.name, e.tbl_remuneration.money);
-            }
-        }
-
         [TestMethod]
         public void WhereLike()
         {
@@ -769,32 +743,6 @@ namespace Test
                 From(db => db.tbl_remuneration).GroupBy(db => db.tbl_remuneration.id).
                 ToExecutor(_connection).Read();
         }
-
-        [TestMethod]
-        public void Exp()
-        {
-            //log for debug.
-            Sql.Log = l => Debug.Print(l);
-
-            var exp = Sql.Query<Data>().
-                ConditionBuilder().
-                Continue((db, x) => 3000 < db.tbl_remuneration.money).
-                Continue((db, x) => x && db.tbl_remuneration.money < 4000).
-                Continue((db, x) => x || db.tbl_remuneration.money < 10000);
-
-            var query = Sql.Query<Data>().
-                Select().
-                From(db => db.tbl_remuneration).
-                    Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
-                    Where(db => exp.Cast<bool>());
-
-            var datas = query.ToExecutor(_connection).Read();
-            foreach (var e in datas)
-            {
-                Debug.Print("{0}, {1}", e.tbl_staff.name, e.tbl_remuneration.money);
-            }
-        }
-
 
         /////////////////////////////////////////////////////////////////////
         //Insert Into とValues が弱くなるなー

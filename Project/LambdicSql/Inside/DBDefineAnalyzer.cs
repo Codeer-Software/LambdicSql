@@ -59,7 +59,8 @@ namespace LambdicSql.Inside
             else if (type.IsClass)
             {
                 var list = new List<ColumnInfo>();
-                foreach (var p in type.GetProperties().Where(e => e.DeclaringType == type))
+                //TODO DeclaringType
+                foreach (var p in type.GetProperties()/*.Where(e => e.DeclaringType == type)*/)
                 {
                     list.AddRange(FindColumns(p.PropertyType, names.Concat(new[] { p.Name }).ToArray()));
                 }
@@ -133,6 +134,11 @@ namespace LambdicSql.Inside
         {
             var methodCall = arg as MethodCallExpression;
             if (methodCall != null && SqlStringConverter.IsSubQuery(methodCall))
+            {
+                var name = string.Join(".", currentNames);
+                lambdaNameAndSubQuery[name] = methodCall;
+            }
+            if (methodCall != null && SqlStringConverter.IsSqlExpression(methodCall))
             {
                 var name = string.Join(".", currentNames);
                 lambdaNameAndSubQuery[name] = methodCall;

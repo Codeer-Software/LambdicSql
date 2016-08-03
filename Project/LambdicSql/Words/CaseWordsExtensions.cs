@@ -59,20 +59,21 @@ namespace LambdicSql
     }
 
     public interface IWindowWords : ISqlWords { }
+    public interface IWindowAfterWords : ISqlWords { }
 
     public static class WindowWordsExtensions
     {
-        public static IWindowWords AvgOver<T>(this IWindowWords words, T t) => null;
-        public static IWindowWords LagOver<T>(this IWindowWords words, T t) => null;
-        public static IWindowWords LagOver<T>(this IWindowWords words, T t, object offset) => null;
-        public static IWindowWords LagOver<T>(this IWindowWords words, T t, object offset, object @default) => null;
-        public static IWindowWords PartitionBy(this IWindowWords words, params object[] t) => null;
-        public static IWindowWords OrderBy(this IWindowWords words) => null;
-        public static IWindowWords Asc<T>(this IWindowWords words, T t) => null;
-        public static IWindowWords Desc<T>(this IWindowWords words, T t) => null;
-        public static IWindowWords Rows<T>(this IWindowWords words, T t) => null;
-        public static IWindowWords Rows<T>(this IWindowWords words, T t, T t2) => null;
-        public static T Cast<T>(this IWindowWords words) => default(T);
+        public static IWindowAfterWords AvgOver<T>(this IWindowWords words, T t) => null;
+        public static IWindowAfterWords LagOver<T>(this IWindowWords words, T t) => null;
+        public static IWindowAfterWords LagOver<T>(this IWindowWords words, T t, object offset) => null;
+        public static IWindowAfterWords LagOver<T>(this IWindowWords words, T t, object offset, object @default) => null;
+        public static IWindowAfterWords PartitionBy(this IWindowAfterWords words, params object[] t) => null;
+        public static IWindowAfterWords OrderBy(this IWindowAfterWords words) => null;
+        public static IWindowAfterWords Asc<T>(this IWindowAfterWords words, T t) => null;
+        public static IWindowAfterWords Desc<T>(this IWindowAfterWords words, T t) => null;
+        public static IWindowAfterWords Rows<T>(this IWindowAfterWords words, T t) => null;
+        public static IWindowAfterWords Rows<T>(this IWindowAfterWords words, T t, T t2) => null;
+        public static T Cast<T>(this IWindowAfterWords words) => default(T);
 
         public static string MethodChainToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {

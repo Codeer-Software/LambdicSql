@@ -19,6 +19,8 @@ namespace LambdicSql.Inside
             _connection = connection;
             _info = info;
             _sql = GetCommandText(_parameters);
+            Sql.Log?.Invoke(_sql);
+            /*
             if (Sql.Log != null)
             {
                 Sql.Log.Invoke(Environment.NewLine);
@@ -28,7 +30,7 @@ namespace LambdicSql.Inside
                 {
                     Sql.Log.Invoke(e.Key + " = " + e.Value);
                 }
-            }
+            }*/
         }
 
         public IEnumerable<TSelect> Read()
