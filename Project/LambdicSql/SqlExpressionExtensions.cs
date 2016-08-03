@@ -29,8 +29,8 @@ namespace LambdicSql
           => new SqlExpression<TResult>((SqlExpression<TResult>)query, addExp.Expression);
     }
 
-    public interface ISqlHelper : ISqlWords { }
-    public interface IQueryDesigner<T> : ISqlWords<T>, ISqlFuncs, IWindowWords, ISqlHelper { }
+    public interface ISqlHelper : ISqlSyntax { }
+    public interface IQueryDesigner<T> : ISqlWords<T>, ISqlFuncs, IWindowFunctions, ISqlHelper { }
 
     public class NoSelected { }
 }

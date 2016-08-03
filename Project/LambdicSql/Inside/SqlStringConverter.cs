@@ -185,7 +185,7 @@ namespace LambdicSql.Inside
             }
 
             //words
-            if (0 < method.Arguments.Count && typeof(ISqlWords).IsAssignableFrom(method.Arguments[0].Type))
+            if (0 < method.Arguments.Count && typeof(ISqlSyntax).IsAssignableFrom(method.Arguments[0].Type))
             {
                 return CusotmInvoke(method);
             }

@@ -15,7 +15,6 @@ namespace LambdicSql.QueryBase
 
         public SelectClause SelectClause { get; internal set; }//TODO
 
-
         internal void Add(ColumnInfo col)
         {
             _lambdaNameAndColumn.Add(col.LambdaFullName, col);

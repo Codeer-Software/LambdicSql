@@ -8,21 +8,21 @@ namespace LambdicSql
 {
     public static class CaseWordsExtensions
     {
-        public interface ICaseAfter : ISqlWords { }
-        public interface IWhenAfter : ISqlWords { }
-        public interface IThenAfter : ISqlWords { }
-        public interface IElseAfter : ISqlWords { }
-        public interface IEndAfter : ISqlWords { }
+        public interface ICaseAfter : ISqlSyntax { }
+        public interface IWhenAfter : ISqlSyntax { }
+        public interface IThenAfter : ISqlSyntax { }
+        public interface IElseAfter : ISqlSyntax { }
+        public interface IEndAfter : ISqlSyntax { }
 
-        public static ICaseAfter Case(this ISqlWords words) => null;
-        public static ICaseAfter Case<T>(this ISqlWords words, T t) => null;
+        public static ICaseAfter Case(this ISqlSyntax words) => null;
+        public static ICaseAfter Case<T>(this ISqlSyntax words, T t) => null;
         public static IWhenAfter When<T>(this ICaseAfter words, T t) => null;
         public static IWhenAfter When<T>(this IThenAfter words, T t) => null;
         public static IThenAfter Then<T>(this IWhenAfter words, T t) => null;
         public static IElseAfter Else<T>(this IThenAfter words, T t) => null;
         public static IEndAfter End(this IThenAfter words) => null;
         public static IEndAfter End(this IElseAfter words) => null;
-        public static T Cast<T>(this ISqlWords words) => default(T);
+        public static T Cast<T>(this ISqlSyntax words) => default(T);
 
         public static string MethodChainToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
@@ -58,22 +58,20 @@ namespace LambdicSql
         }
     }
 
-    public interface IWindowWords : ISqlWords { }
-    public interface IWindowAfterWords : ISqlWords { }
 
     public static class WindowWordsExtensions
     {
-        public static IWindowAfterWords AvgOver<T>(this IWindowWords words, T t) => null;
-        public static IWindowAfterWords LagOver<T>(this IWindowWords words, T t) => null;
-        public static IWindowAfterWords LagOver<T>(this IWindowWords words, T t, object offset) => null;
-        public static IWindowAfterWords LagOver<T>(this IWindowWords words, T t, object offset, object @default) => null;
-        public static IWindowAfterWords PartitionBy(this IWindowAfterWords words, params object[] t) => null;
-        public static IWindowAfterWords OrderBy(this IWindowAfterWords words) => null;
-        public static IWindowAfterWords Asc<T>(this IWindowAfterWords words, T t) => null;
-        public static IWindowAfterWords Desc<T>(this IWindowAfterWords words, T t) => null;
-        public static IWindowAfterWords Rows<T>(this IWindowAfterWords words, T t) => null;
-        public static IWindowAfterWords Rows<T>(this IWindowAfterWords words, T t, T t2) => null;
-        public static T Cast<T>(this IWindowAfterWords words) => default(T);
+        public static IWindowFunctionsAfter AvgOver<T>(this IWindowFunctions words, T t) => null;
+        public static IWindowFunctionsAfter LagOver<T>(this IWindowFunctions words, T t) => null;
+        public static IWindowFunctionsAfter LagOver<T>(this IWindowFunctions words, T t, object offset) => null;
+        public static IWindowFunctionsAfter LagOver<T>(this IWindowFunctions words, T t, object offset, object @default) => null;
+        public static IWindowFunctionsAfter PartitionBy(this IWindowFunctionsAfter words, params object[] t) => null;
+        public static IWindowFunctionsAfter OrderBy(this IWindowFunctionsAfter words) => null;
+        public static IWindowFunctionsAfter Asc<T>(this IWindowFunctionsAfter words, T t) => null;
+        public static IWindowFunctionsAfter Desc<T>(this IWindowFunctionsAfter words, T t) => null;
+        public static IWindowFunctionsAfter Rows<T>(this IWindowFunctionsAfter words, T t) => null;
+        public static IWindowFunctionsAfter Rows<T>(this IWindowFunctionsAfter words, T t, T t2) => null;
+        public static T Cast<T>(this IWindowFunctionsAfter words) => default(T);
 
         public static string MethodChainToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {

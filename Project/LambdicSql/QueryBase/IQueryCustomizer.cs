@@ -2,6 +2,7 @@
 
 namespace LambdicSql.QueryBase
 {
+    //TODO
     public interface IQueryCustomizer
     {
         string CustomOperator(Type type1, string @operator, Type type2);

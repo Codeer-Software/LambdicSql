@@ -6,9 +6,9 @@ namespace LambdicSql
 {
     public static class WordsExtensions
     {
-        public static bool Like(this ISqlWords words, string target, string serachText) => false;
-        public static bool Between<TTarget>(this ISqlWords words, TTarget target, TTarget min, TTarget max) => false;
-        public static bool In<TTarget>(this ISqlWords words, TTarget target, params TTarget[] inArguments) => false;
+        public static bool Like(this ISqlSyntax words, string target, string serachText) => false;
+        public static bool Between<TTarget>(this ISqlSyntax words, TTarget target, TTarget min, TTarget max) => false;
+        public static bool In<TTarget>(this ISqlSyntax words, TTarget target, params TTarget[] inArguments) => false;
 
         public static string MethodToString(ISqlStringConverter converter, MethodCallExpression method)
         {

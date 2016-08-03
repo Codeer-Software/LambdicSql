@@ -1,17 +1,33 @@
-﻿using LambdicSql.QueryBase;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace LambdicSql.Inside
 {
-    public static class SupportedTypeSpec
+    static class SupportedTypeSpec
     {
         static List<Type> _supported = new List<Type>();
 
         static SupportedTypeSpec()
         {
-            _supported.AddRange(typeof(ISqlResult).GetMethods().Where(e=>e.DeclaringType == typeof(ISqlResult)).Select(e=>e.ReturnType));
+            _supported.Add(typeof(string));
+            _supported.Add(typeof(bool));
+            _supported.Add(typeof(bool?));
+            _supported.Add(typeof(byte));
+            _supported.Add(typeof(byte?));
+            _supported.Add(typeof(short));
+            _supported.Add(typeof(short?));
+            _supported.Add(typeof(int));
+            _supported.Add(typeof(int?));
+            _supported.Add(typeof(long));
+            _supported.Add(typeof(long?));
+            _supported.Add(typeof(float));
+            _supported.Add(typeof(float?));
+            _supported.Add(typeof(double));
+            _supported.Add(typeof(double?));
+            _supported.Add(typeof(decimal));
+            _supported.Add(typeof(decimal?));
+            _supported.Add(typeof(DateTime));
+            _supported.Add(typeof(DateTime?));
         }
 
         public static bool IsSupported(Type type)
@@ -20,15 +36,6 @@ namespace LambdicSql.Inside
             {
                 return _supported.Contains(type);
             }
-        }
-
-        public static string GetFuncName(Type type)
-        {
-            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
-            {
-                return "Get" + type.GetGenericArguments()[0].Name + "Nullable";
-            }
-            return "Get" + type.Name;
         }
     }
 }
