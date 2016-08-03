@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace LambdicSql.Words
+namespace LambdicSql
 {
     public class SelectClause
     {

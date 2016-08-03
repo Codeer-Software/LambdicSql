@@ -36,15 +36,25 @@
     <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="QueryBase\IQueryDesigner.cs" />
+    <Compile Include="QueryBase\ISqlHelper.cs" />
     <Compile Include="QueryBase\ISqlWords.cs" />
     <Compile Include="Funcs\AggregatePredicate.cs" />
     <Compile Include="QueryBase\ISqlExpression.cs" />
     <Compile Include="QueryBase\IWindowFunctions.cs" />
     <Compile Include="QueryBase\IWindowFunctionsAfter.cs" />
+    <Compile Include="QueryBase\Non.cs" />
     <Compile Include="QueryBase\SqlExpression.cs" />
     <Compile Include="SqlInfo.cs" />
     <Compile Include="SqlExpressionExtensions.cs" />
     <Compile Include="Funcs\AggregateFuncsExtensions.cs" />
+    <Compile Include="Window\WindowWordsExtensions.cs" />
+    <Compile Include="Helper\ConditionWordsExtensions.cs" />
+    <Compile Include="Words\FromWordsExtensions.cs" />
+    <Compile Include="Words\GroupByWordsExtensions.cs" />
+    <Compile Include="Words\HavingWordsExtensions.cs" />
+    <Compile Include="Words\InsertIntoWordsExtensions.cs" />
+    <Compile Include="Words\OrderByWordsExtensions.cs" />
     <Compile Include="Words\SelectClause.cs" />
     <Compile Include="Words\SelectElement.cs" />
     <Compile Include="Inside\ExpressionToObject.cs" />
@@ -69,12 +79,13 @@
     <Compile Include="Inside\QueryCustomizeResolver.cs" />
     <Compile Include="Sql.cs" />
     <Compile Include="Words\CaseWordsExtensions.cs" />
-    <Compile Include="Words\Clauses.cs" />
+    <Compile Include="Words\DeleteWordsExtensions.cs" />
+    <Compile Include="Words\SelectWordsExtensions.cs" />
+    <Compile Include="Words\UpdateWordsExtensions.cs" />
+    <Compile Include="Words\WhereWordsExtensions.cs" />
     <Compile Include="Words\WordsExtensions.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Window\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if $(ConfigurationName) == Release "../../../.nuget/nuget" pack "../../../.nuget/LambdicSql.nuspec"

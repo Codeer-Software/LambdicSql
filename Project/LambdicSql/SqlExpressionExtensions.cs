@@ -1,7 +1,6 @@
 ﻿using LambdicSql.Inside;
 using LambdicSql.QueryBase;
 using System;
-using System.Data;
 
 namespace LambdicSql
 {
@@ -16,7 +15,10 @@ namespace LambdicSql
         {
             throw new NotSupportedException("do not call cast except in expression.");
         }
-        
+
+        public static ISqlExpression<TResult> Concat<TResult>(this ISqlExpression<TResult> query, ISqlExpression addExp)
+          => new SqlExpression<TResult>((SqlExpression<TResult>)query, addExp.Expression);
+
         public static SqlInfo<TSelected> ToSqlInfo<TSelected>(this ISqlExpression<ISqlWords<TSelected>> exp, Type connectionType)
              where TSelected : class
         {
@@ -24,13 +26,5 @@ namespace LambdicSql
             var converter = new SqlStringConverter(exp.DbInfo, parameters, QueryCustomizeResolver.CreateCustomizer(connectionType.FullName), 0);
             return new SqlInfo<TSelected>(exp.DbInfo, exp.ToString(converter), parameters.GetParameters());
         }
-
-        public static ISqlExpression<TResult> Concat<TResult>(this ISqlExpression<TResult> query, ISqlExpression addExp)
-          => new SqlExpression<TResult>((SqlExpression<TResult>)query, addExp.Expression);
     }
-
-    public interface ISqlHelper : ISqlSyntax { }
-    public interface IQueryDesigner<T> : ISqlWords<T>, ISqlFuncs, IWindowFunctions, ISqlHelper { }
-
-    public class NoSelected { }
 }

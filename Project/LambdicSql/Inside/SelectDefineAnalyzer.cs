@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Linq;
 using System;
-using LambdicSql.Words;
+using LambdicSql;
 
 namespace LambdicSql.Inside
 {

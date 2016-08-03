@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace LambdicSql.Words
+namespace LambdicSql
 {
     public class SelectElement
     {
