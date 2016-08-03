@@ -726,7 +726,7 @@ namespace Test
         [TestMethod]
         public void Delete()
         {
-            Sql.Log = l => Debug.Print(l);
+            SqlOption.Log = l => Debug.Print(l);
 
             var count = Sql<DataChangeTest>.Create((db, x) => x.
                 Delete().
@@ -738,7 +738,7 @@ namespace Test
         [TestMethod]
         public void DeleteWhere()
         {
-            Sql.Log = l => Debug.Print(l);
+            SqlOption.Log = l => Debug.Print(l);
 
             var count = Sql<DataChangeTest>.Create((db, x) => x.
                 Delete().
@@ -750,7 +750,7 @@ namespace Test
         [TestMethod]
         public void SelectEx()
         {
-            Sql.Log = l => Debug.Print(l);
+            SqlOption.Log = l => Debug.Print(l);
             var query = Sql<Data>.Create((db, x) =>
                 x.
                 Select(new
@@ -769,7 +769,7 @@ namespace Test
         [TestMethod]
         public void GroupByEx()
         {
-            Sql.Log = l => Debug.Print(l);
+            SqlOption.Log = l => Debug.Print(l);
             var query = Sql<Data>.Create((db, x) =>
                 x.
                 Select(new
@@ -791,7 +791,7 @@ namespace Test
         [TestMethod]
         public void OrderByEx()
         {
-            Sql.Log = l => Debug.Print(l);
+            SqlOption.Log = l => Debug.Print(l);
 
             var query = Sql<Data>.Create((db, x) => x.
                 Select(new
@@ -811,7 +811,7 @@ namespace Test
         [TestMethod]
         public void SubEx()
         {
-            Sql.Log = l => Debug.Print(l);
+            SqlOption.Log = l => Debug.Print(l);
 
             var q = Sql<Data>.Create((db, x) => x.
                 Select(new
@@ -837,7 +837,7 @@ namespace Test
         [TestMethod]
         public void SubEx2()
         {
-            Sql.Log = l => Debug.Print(l);
+            SqlOption.Log = l => Debug.Print(l);
 
             var caseExp = Sql<Data>.Create((db, x) => x.
                 Case().
@@ -872,7 +872,7 @@ namespace Test
         [TestMethod]
         public void InsertEx()
         {
-            Sql.Log = l => Debug.Print(l);
+            SqlOption.Log = l => Debug.Print(l);
 
             var data = new tbl_data() { id = 1, val1 = 10, val2 = "a" };
 
@@ -888,7 +888,7 @@ namespace Test
         [TestMethod]
         public void UpdateEx()
         {
-            Sql.Log = l => Debug.Print(l);
+            SqlOption.Log = l => Debug.Print(l);
             var count1 = Sql<DataChangeTest>.Create((db, x) => x.
                 Update(db.tbl_data).
                 Set().
@@ -919,7 +919,7 @@ namespace Test
         [TestMethod]
         public void Window()
         {
-            Sql.Log = l => Debug.Print(l);
+            SqlOption.Log = l => Debug.Print(l);
             var query = Sql<Data>.Create((db, x) => x.
                 Select(new
                 {
@@ -939,7 +939,7 @@ namespace Test
         [TestMethod]
         public void Lag()
         {
-            Sql.Log = l => Debug.Print(l);
+            SqlOption.Log = l => Debug.Print(l);
             var query = Sql<Data>.Create((db, x) =>
                 x.
                 Select(new

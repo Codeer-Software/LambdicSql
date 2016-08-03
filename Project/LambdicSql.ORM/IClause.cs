@@ -1,4 +1,6 @@
-﻿namespace LambdicSql.QueryBase
+﻿using LambdicSql.QueryBase;
+
+namespace LambdicSql.ORM
 {
     public interface IClause
     {

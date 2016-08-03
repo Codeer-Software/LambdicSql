@@ -14,9 +14,9 @@ namespace TestCore
         {
             _connection = connection;
 
-            Sql.Log = null;
+            SqlOption.Log = null;
             Delete();
-            Sql.Log = l =>
+            SqlOption.Log = l =>
             {
                 Debug.Print("");
                 Debug.Print(testName);
@@ -94,7 +94,7 @@ namespace TestCore
         public void StandardNoramlType()
         {
             //log for debug.
-            Sql.Log = l => Debug.Print(l);
+            SqlOption.Log = l => Debug.Print(l);
 
             var query = Sql<DB>.Create((db, x) => x.
                 Select(new SelectData()

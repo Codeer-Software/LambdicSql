@@ -10,35 +10,17 @@ namespace LambdicSql.ORM
         where TSelect : class
     {
         IDbConnection _connection;
-        ISelectedQuery<TSelect> _info;
-        string _sql;
-        PrepareParameters _parameters = new PrepareParameters();
+        SqlInfo<TSelect> _info;
 
-        internal SqlExecutor(IDbConnection connection, ISelectedQuery<TSelect> info)
+        internal SqlExecutor(IDbConnection connection, SqlInfo<TSelect> info)
         {
             _connection = connection;
             _info = info;
-            _sql = string.Empty;//@@@ GetCommandText(_parameters);
-            Sql.Log?.Invoke(_sql);
-            /*
-            if (Sql.Log != null)
-            {
-                Sql.Log.Invoke(Environment.NewLine);
-                Sql.Log.Invoke(_sql);
-                Sql.Log.Invoke(string.Empty);
-                foreach (var e in _parameters.GetParameters())
-                {
-                    Sql.Log.Invoke(e.Key + " = " + e.Value);
-                }
-            }*/
+            SqlOption.Log?.Invoke(_info.SqlText);
         }
 
         public IEnumerable<TSelect> Read()
         {
-            if (_info.Create == null)
-            {
-                throw new NotSupportedException("selected type is not able to be created.");
-            }
             bool openNow = false;
             if (_connection.State == ConnectionState.Closed)
             {
@@ -47,12 +29,14 @@ namespace LambdicSql.ORM
             }
             try
             {
-                var create = _info.Create();
+                var indexInSelect = _info.DbInfo.SelectClause.GetElements().Select(e => e.Name).ToList();
+                var create = ExpressionToCreateFunc.ToCreateUseDbResult<TSelect>(indexInSelect, _info.DbInfo.SelectClause.Define);
+
                 using (var com = _connection.CreateCommand())
                 {
-                    com.CommandText = _sql;
+                    com.CommandText = _info.SqlText;
                     com.Connection = _connection;
-                    foreach (var obj in _parameters.GetParameters().Select(e => CreateParameter(com, e.Key, e.Value)))
+                    foreach (var obj in _info.Parameters.Select(e => CreateParameter(com, e.Key, e.Value)))
                     {
                         com.Parameters.Add(obj);
                     }
@@ -90,9 +74,9 @@ namespace LambdicSql.ORM
             {
                 using (var com = _connection.CreateCommand())
                 {
-                    com.CommandText = _sql;
+                    com.CommandText = _info.SqlText;
                     com.Connection = _connection;
-                    foreach (var obj in _parameters.GetParameters().Select(e => CreateParameter(com, e.Key, e.Value)))
+                    foreach (var obj in _info.Parameters.Select(e => CreateParameter(com, e.Key, e.Value)))
                     {
                         com.Parameters.Add(obj);
                     }

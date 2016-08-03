@@ -3,7 +3,10 @@ using System;
 using System.Data;
 
 namespace LambdicSql.ORM
-{
+{   
+    //    var indexInSelect = db.GetLambdaNameAndColumn().Keys.ToList();
+    //  return new ClauseMakingQuery<T, T, IClause>(db, ()=> ExpressionToCreateFunc.ToCreateUseDbResult<T>(indexInSelect, define.Body), new IClause[0]);
+
     class SqlResult : ISqlResult
     {
         IDataReader _reader;

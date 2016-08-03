@@ -45,7 +45,7 @@ namespace LambdicSql.Inside
             if (member != null)
             {
                 var type = ((PropertyInfo)member.Member).PropertyType;
-                foreach (var p in type.GetProperties().Where(e => e.DeclaringType == type))
+                foreach (var p in type.GetProperties())
                 {
                     select.Add(new SelectElement(p.Name, null));
                 }

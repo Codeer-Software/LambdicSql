@@ -54,8 +54,8 @@ namespace LambdicSql.Inside
             var exp = obj as Expression;
             if (exp != null) return ToString(exp).Text;
 
-            var query = obj as IQuery;
-            if (query != null) return ToString(query);
+         //   var query = obj as IQuery;
+           // if (query != null) return ToString(query);
 
             return _prepare.Push(obj);
         }
@@ -76,7 +76,7 @@ namespace LambdicSql.Inside
                     typeof(ISqlExpression).IsAssignableFrom(method.Arguments[0].Type) &&
                     method.Method.DeclaringType == typeof(SqlExpressionExtensions) &&
                     method.Method.Name == nameof(SqlExpressionExtensions.Cast);
-
+        /*
         internal static string ToString(IQuery query, PrepareParameters parameters, IQueryCustomizer queryCustomizer)
             => ToStringCore(query, parameters, queryCustomizer, 0);
 
@@ -97,7 +97,7 @@ namespace LambdicSql.Inside
             }
             text = "(" + text + ")";
             return AddNestTab(text, _nestLevel);
-        }
+        }*/
 
         static string AddNestTab(string text, int nestLevel)
         {
@@ -144,6 +144,7 @@ namespace LambdicSql.Inside
 
         DecodedInfo ToString(MethodCallExpression method)
         {
+            /*
             //sub query.
             if (IsSubQuery(method))
             {
@@ -166,7 +167,7 @@ namespace LambdicSql.Inside
                     return new DecodedInfo(funcSubQuery.Method.ReturnType,
                         funcSubQuery.DynamicInvoke(_queryCustomizer, _prepare, _nestLevel).ToString());
                 }
-            }
+            }*/
             if (IsSqlExpression(method))
             {
                 object obj;
@@ -327,9 +328,10 @@ namespace LambdicSql.Inside
             }
         }
 
+        /*
         static string MakeQueryString(IQuery query, IQueryCustomizer queryCustomizer, PrepareParameters parameters, int nestLevel)
             => ToStringCore(query, parameters, queryCustomizer, nestLevel + 1);
-
+            */
         DecodedInfo ToString(BinaryExpression binary)
         {
             var left = ToString(binary.Left);

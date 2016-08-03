@@ -98,6 +98,10 @@
     <Compile Include="TestDbInfoNormalType.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\LambdicSql.ORM\LambdicSql.ORM.csproj">
+      <Project>{47719998-a412-4ab1-b264-2a055b5d092a}</Project>
+      <Name>LambdicSql.ORM</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LambdicSql\LambdicSql.csproj">
       <Project>{9079c3c3-839d-4ff1-a774-b7f15de9248d}</Project>
       <Name>LambdicSql</Name>

@@ -13,7 +13,6 @@ namespace LambdicSql.SQLite
             }
             return @operator;
         }
-        public IClause[] CustomClauses(IClause[] clauses) => clauses;
         public string CusotmInvoke(Type returnType, string name, DecodedInfo[] argSrc) => null;
     }
 }

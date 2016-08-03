@@ -1,6 +1,7 @@
-﻿using System;
+﻿using LambdicSql.QueryBase;
+using System;
 
-namespace LambdicSql.QueryBase
+namespace LambdicSql.ORM
 {
     public interface IQuery
     {

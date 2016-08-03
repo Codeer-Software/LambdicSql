@@ -1,7 +1,8 @@
-﻿using System;
+﻿using LambdicSql.QueryBase;
+using System;
 using System.Linq;
 
-namespace LambdicSql.QueryBase
+namespace LambdicSql.ORM
 {
     public class ClauseMakingQuery<TDB, TSelect, TClause> : IQuery<TDB, TSelect, TClause>
         where TDB : class

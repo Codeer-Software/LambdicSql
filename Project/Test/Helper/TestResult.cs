@@ -5,6 +5,7 @@ using System.Linq;
 
 namespace Test
 {
+    /*
     class TestResult : ISqlResult
     {
         public Dictionary<string, object> Data { get; } = new Dictionary<string, object>();
@@ -37,5 +38,5 @@ namespace Test
             var info = query as ISelectedQuery<T>;
             return info.Create()(this);
         }
-    }
+    }*/
 }
