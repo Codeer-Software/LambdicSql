@@ -69,10 +69,7 @@ namespace LambdicSql.Inside
         }
 
         internal static bool IsSubQuery(MethodCallExpression method)
-            => method.Arguments.Count == 1 &&
-                    typeof(IQuery).IsAssignableFrom(method.Arguments[0].Type) &&
-                    method.Method.DeclaringType == typeof(QueryExtensions) &&
-                    method.Method.Name == nameof(QueryExtensions.Cast);
+            => false;
 
         internal static bool IsSqlExpression(MethodCallExpression method)
             => method.Arguments.Count == 1 &&
@@ -98,9 +95,7 @@ namespace LambdicSql.Inside
                         text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).
                         Where(e => !string.IsNullOrEmpty(e.Trim())).ToArray()) + ";";
             }
-            var isExpressionClause = 0 < clauses.Length && clauses[0] is IExpressionClause;
-            if (!isExpressionClause) text = "(" + text + ")";
-
+            text = "(" + text + ")";
             return AddNestTab(text, _nestLevel);
         }
 
@@ -133,18 +128,6 @@ namespace LambdicSql.Inside
             var array = exp as NewArrayExpression;
             if (array != null) return ToString(array);
 
-            var param = exp as ParameterExpression;
-            if (param != null) return ToString(param);
-            
-            throw new NotSupportedException();
-        }
-
-        DecodedInfo ToString(ParameterExpression param)
-        {
-            if (typeof(PreviousCondition) == param.Type)
-            {
-                return new DecodedInfo(typeof(ISqlExpression), ContinueConditionExpressionText);
-            }
             throw new NotSupportedException();
         }
 
@@ -186,11 +169,6 @@ namespace LambdicSql.Inside
             }
             if (IsSqlExpression(method))
             {
-                if (typeof(IConnectionSqlExpression).IsAssignableFrom(method.Arguments[0].Type))
-                {
-                    return new DecodedInfo(typeof(ISqlExpression), ContinueConditionExpressionText);
-                }
-
                 object obj;
                 if (!ExpressionToObject.GetMemberObject(method.Arguments[0] as MemberExpression, out obj))
                 {
