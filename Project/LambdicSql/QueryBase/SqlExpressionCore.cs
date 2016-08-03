@@ -8,21 +8,21 @@ namespace LambdicSql.QueryBase
         SqlExpressionCore<TDB> _before;
         Expression _core;
         public Expression Expression => _core;
-        public IQuery Query { get; private set; }
-        public SqlExpressionCore(IQuery query)
+        public DbInfo DbInfo { get; private set; }
+        public SqlExpressionCore(DbInfo dbInfo)
         {
-            Query = query;
+            DbInfo = dbInfo;
         }
 
-        public SqlExpressionCore(IQuery query, Expression core)
+        public SqlExpressionCore(DbInfo dbInfo, Expression core)
         {
-            Query = query;
+            DbInfo = dbInfo;
             _core = core;
         }
 
         public SqlExpressionCore(SqlExpressionCore<TDB> before, Expression core)
         {
-            Query = before.Query;
+            DbInfo = before.DbInfo;
             _before = before;
             _core = core;
         }
@@ -56,8 +56,8 @@ namespace LambdicSql.QueryBase
 
     class SqlExpressionCore<TDB, TResult> : SqlExpressionCore<TDB>, ISqlExpression<TDB, TResult>
     {
-        public SqlExpressionCore(IQuery query) : base(query) { }
-        public SqlExpressionCore(IQuery query, Expression core) : base(query, core) { }
+        public SqlExpressionCore(DbInfo dbInfo) : base(dbInfo) { }
+        public SqlExpressionCore(DbInfo dbInfo, Expression core) : base(dbInfo, core) { }
         public SqlExpressionCore(SqlExpressionCore<TDB> before, Expression core) : base(before, core) { }
     }
 }

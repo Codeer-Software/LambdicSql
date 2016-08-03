@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace LambdicSql.Inside
 {
-    static class SupportedTypeSpec
+    public static class SupportedTypeSpec
     {
         static List<Type> _supported = new List<Type>();
 
@@ -14,7 +14,7 @@ namespace LambdicSql.Inside
             _supported.AddRange(typeof(ISqlResult).GetMethods().Where(e=>e.DeclaringType == typeof(ISqlResult)).Select(e=>e.ReturnType));
         }
 
-        internal static bool IsSupported(Type type)
+        public static bool IsSupported(Type type)
         {
             lock (_supported)
             {
@@ -22,7 +22,7 @@ namespace LambdicSql.Inside
             }
         }
 
-        internal static string GetFuncName(Type type)
+        public static string GetFuncName(Type type)
         {
             if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
             {

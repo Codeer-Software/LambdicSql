@@ -4,7 +4,7 @@ namespace LambdicSql.QueryBase
 {
     public interface ISqlExpression
     {
-        IQuery Query { get; }
+        DbInfo DbInfo { get; }
         string ToString(ISqlStringConverter decoder);
         Expression Expression { get; }
     }

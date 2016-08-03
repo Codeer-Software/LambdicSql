@@ -58,7 +58,6 @@
     <Compile Include="Inside\SqlResult.cs" />
     <Compile Include="Inside\SqlStringConverter.cs" />
     <Compile Include="Inside\SqlExecutor.cs" />
-    <Compile Include="Inside\TestAdaptor.cs" />
     <Compile Include="QueryBase\DecodedInfo.cs" />
     <Compile Include="Inside\DBDefineAnalyzer.cs" />
     <Compile Include="QueryBase\ISqlExecutor.cs" />

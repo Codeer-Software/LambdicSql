@@ -5,41 +5,16 @@ using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace LambdicSql
+namespace LambdicSql.ORM
 {
     public static class SqlExpressionExtensions
     {
-        public static DB Cast<DB>(this ISqlExpression query)
-        {
-            throw new NotSupportedException("do not call cast except in expression.");
-        }
-
-        public static TResult Cast<DB, TResult>(this ISqlExpression<DB, ISqlWords<TResult>> query)
-        {
-            throw new NotSupportedException("do not call cast except in expression.");
-        }
-        
-        public static SqlInfo ToSqlInfo<T>(this ISqlExpression exp)
-             where T : IDbConnection
-        {
-            var parameters = new PrepareParameters();
-            var converter = new SqlStringConverter(exp.DbInfo, parameters, QueryCustomizeResolver.CreateCustomizer(typeof(T).FullName), 0);
-            return new SqlInfo(exp.ToString(converter), parameters.GetParameters());
-        }
-
         public static ISqlExecutor<TSelected> ToExecutor<TDB, TSelected>(this ISqlExpression<TDB, ISqlWords<TSelected>> exp, IDbConnection connection)
             where TDB : class
             where TSelected : class
             => new SqlExecutor<TSelected>(connection, new XXX<TSelected>(exp.DbInfo, exp));
-
-        public static ISqlExpression<TDB, TResult> Concat<TDB, TResult>(this ISqlExpression<TDB, TResult> query, ISqlExpression addExp)
-            where TDB : class
-          => new SqlExpressionCore<TDB, TResult>((SqlExpressionCore<TDB, TResult>)query, addExp.Expression);
     }
-
-    public interface ISqlHelper : ISqlWords { }
-    public interface IQueryDesigner<T> : ISqlWords<T>, ISqlFuncs, IWindowWords, ISqlHelper { }
-
+    
     public class NoSelected { }
     public class XXXClause : IClause
     {
