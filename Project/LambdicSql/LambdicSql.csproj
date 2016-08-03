@@ -38,7 +38,7 @@
   <ItemGroup>
     <Compile Include="Words\AggregatePredicate.cs" />
     <Compile Include="QueryBase\ISqlExpression.cs" />
-    <Compile Include="QueryBase\SqlExpressionCore.cs" />
+    <Compile Include="QueryBase\SqlExpression.cs" />
     <Compile Include="SqlInfo.cs" />
     <Compile Include="SqlExpressionExtensions.cs" />
     <Compile Include="Funcs\AggregateFuncsExtensions.cs" />

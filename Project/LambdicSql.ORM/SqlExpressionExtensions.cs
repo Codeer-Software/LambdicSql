@@ -12,8 +12,8 @@ namespace LambdicSql
 
     public static class SqlExpressionExtensions
     {
-        public static ISqlExecutor<TSelected> ToExecutor<TDB, TSelected>
-            (this ISqlExpression<TDB, ISqlWords<TSelected>> exp, IDbConnection connection)
+        public static ISqlExecutor<TSelected> ToExecutor<TSelected>
+            (this ISqlExpression<ISqlWords<TSelected>> exp, IDbConnection connection)
         where TSelected : class
             => new SqlExecutor<TSelected>(connection, exp.ToSqlInfo(connection.GetType()));
     }
