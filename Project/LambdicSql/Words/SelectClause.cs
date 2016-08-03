@@ -4,14 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace LambdicSql.Clause.Select
+namespace LambdicSql.Words
 {
     public class SelectClause : IClause
     {
         public Type SelectedType { get; internal set; }//TODO
         public Expression Define { get; internal set; }
-
-
 
         List<SelectElement> _elements = new List<SelectElement>();
         string _predicate = string.Empty;

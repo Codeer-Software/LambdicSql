@@ -1,4 +1,4 @@
-﻿using LambdicSql.Clause.Select;
+﻿using LambdicSql.Words;
 using System;
 using System.Collections.Generic;
 using System.Linq;

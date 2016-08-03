@@ -1,8 +1,8 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 using System.Linq;
-using LambdicSql.Clause.Select;
 using System;
+using LambdicSql.Words;
 
 namespace LambdicSql.Inside
 {
