@@ -5,6 +5,7 @@ using System;
 
 namespace Test
 {
+    /*
     [TestClass]
     public class TestDbInfoLambda
     {
@@ -167,5 +168,5 @@ namespace Test
             Assert.AreEqual(obj.table1.col9, 9);
             Assert.AreEqual(obj.table1.col10, new DateTime(1999, 12, 31));
         }
-    }
+    }*/
 }

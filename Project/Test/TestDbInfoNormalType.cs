@@ -4,6 +4,7 @@ using System.Diagnostics;
 
 namespace Test
 {
+    /*
     [TestClass]
     public class TestDbInfoNormalType
     {
@@ -76,5 +77,5 @@ namespace Test
             public Tbl1 table1 { get; set; }
             public Tbl2 table2 { get; set; }
         }
-    }
+    }*/
 }

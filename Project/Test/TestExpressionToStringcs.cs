@@ -8,6 +8,7 @@ using System.Linq.Expressions;
 
 namespace Test
 {
+    /*
     //TODO refactor to product for this testing.
     [TestClass]
     public class TestExpressionToStringcs
@@ -301,5 +302,5 @@ namespace Test
             var info = query as IQuery;
             return TestAdaptor.ToSqlString(info.Db, exp.Body);
         }
-    }
+    }*/
 }

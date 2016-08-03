@@ -72,7 +72,7 @@ namespace Performance
         {
             TestCore(connection =>
             {
-                var datas = Sql.Query<DB>().SelectFrom(db => db.TableValues).ToExecutor(connection).Read().ToList();
+                var datas = Sql<DB>.Create((db, x)=> x.SelectFrom(db.TableValues)).ToExecutor(connection).Read().ToList();
             });
         }
 
@@ -88,9 +88,9 @@ namespace Performance
         {
             TestCore(connection =>
             {
-                int x = 0;
-                var datas = Sql.Query<DB>().SelectFrom(db => db.TableValues).
-                       Where(db => db.TableValues.IntVal == x).ToExecutor(connection).Read().ToList();
+                int y = 0;
+                var datas = Sql<DB>.Create((db, x)=>x.SelectFrom(db.TableValues).
+                       Where(db.TableValues.IntVal == y)).ToExecutor(connection).Read().ToList();
             });
         }
 

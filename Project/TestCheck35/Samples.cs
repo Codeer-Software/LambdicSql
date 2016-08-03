@@ -578,16 +578,14 @@ namespace TestCore
             var datas = Sql<DB>.Create((db, x) => x.
                 Select(new { name = db.tbl_staff.name }).
                 From(db.tbl_staff).
-                Where(Sql.Words.In(db.tbl_staff.id, sub.Cast<int>()))).//sub query.
+                Where(x.In(db.tbl_staff.id, sub.Cast<int>()))).//sub query.
                 ToExecutor(_connection).Read();
         }
 
         public void SelectSubQuery()
         {
-            var define = Sql.Query<DB>();
-
             var sub = Sql<DB>.Create((db, x) => x.
-                Select(new { total = Sql.Funcs.Sum(db.tbl_remuneration.money) }).
+                Select(new { total = x.Sum(db.tbl_remuneration.money) }).
                 From(db.tbl_remuneration));
 
             var datas = Sql<DB>.Create((db, x) => x.

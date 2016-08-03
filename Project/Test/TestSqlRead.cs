@@ -15,6 +15,50 @@ namespace Test
     [TestClass]
     public class TestSqlRead
     {
+        //noraml type.
+        public class Staff
+        {
+            public int id { get; set; }
+            public string name { get; set; }
+        }
+        public class Remuneration
+        {
+            public int id { get; set; }
+            public int staff_id { get; set; }
+            public DateTime payment_date { get; set; }
+            public decimal money { get; set; }
+        }
+        public class Data
+        {
+            public Staff tbl_staff { get; set; }
+            public Remuneration tbl_remuneration { get; set; }
+        }
+        public class SelectData
+        {
+            public string name { get; set; }
+            public DateTime payment_date { get; set; }
+            public decimal money { get; set; }
+        }
+
+        class Data2
+        {
+            public Staff tbl_staff { get; set; }
+            public SelectData tbl_sub { get; set; }
+        }
+        public class tbl_data
+        {
+            public int id { get; set; }
+            public int val1 { get; set; }
+            public string val2 { get; set; }
+        }
+
+        public class DataChangeTest
+        {
+            public Staff tbl_staff { get; set; }
+            public Remuneration tbl_remuneration { get; set; }
+            public tbl_data tbl_data { get; set; }
+        }
+
         public IDbConnection _connection;
 
         [TestInitialize]
@@ -26,7 +70,7 @@ namespace Test
 
         [TestCleanup]
         public void TestCleanup() => _connection.Dispose();
-
+#if xxxxx
         [TestMethod]
         public void LambdaOnlySelectFrom()
         {
@@ -95,30 +139,6 @@ namespace Test
             Assert.AreEqual(3500, first.money);
         }
 
-        //noraml type.
-        public class Staff
-        {
-            public int id { get; set; }
-            public string name { get; set; }
-        }
-        public class Remuneration
-        {
-            public int id { get; set; }
-            public int staff_id { get; set; }
-            public DateTime payment_date { get; set; }
-            public decimal money { get; set; }
-        }
-        public class Data
-        {
-            public Staff tbl_staff { get; set; }
-            public Remuneration tbl_remuneration { get; set; }
-        }
-        public class SelectData
-        {
-            public string name { get; set; }
-            public DateTime payment_date { get; set; }
-            public decimal money { get; set; }
-        }
 
         [TestMethod]
         public void StandardNoramlTypeInit()
@@ -155,11 +175,6 @@ namespace Test
             });
         }
 
-        class Data2
-        {
-            public Staff tbl_staff { get; set; }
-            public SelectData tbl_sub { get; set; }
-        }
 
         [TestMethod]
         public void SubQueryUsingType()
@@ -625,45 +640,6 @@ namespace Test
             }
         }
 
-        public class tbl_data
-        {
-            public int id { get; set; }
-            public int val1 { get; set; }
-            public string val2 { get; set; }
-        }
-
-        public class DataChangeTest
-        {
-            public Staff tbl_staff { get; set; }
-            public Remuneration tbl_remuneration { get; set; }
-            public tbl_data tbl_data { get; set; }
-        }
-
-        [TestMethod]
-        public void Delete()
-        {
-            Sql.Log = l => Debug.Print(l);
-
-            var count = Sql.Query<DataChangeTest>().
-                Delete().
-                From(db => db.tbl_data).
-                ToExecutor(_connection).Write();
-
-        }
-
-        [TestMethod]
-        public void DeleteWhere()
-        {
-            Sql.Log = l => Debug.Print(l);
-
-
-            var count = Sql.Query<DataChangeTest>().
-                Delete().
-                From(db => db.tbl_data).
-                Where(db => db.tbl_data.id == 3).
-                ToExecutor(_connection).Write();
-        }
-
         [TestMethod]
         public void Insert()
         {
@@ -743,15 +719,39 @@ namespace Test
                 From(db => db.tbl_remuneration).GroupBy(db => db.tbl_remuneration.id).
                 ToExecutor(_connection).Read();
         }
-
+#endif
         /////////////////////////////////////////////////////////////////////
         //Insert Into とValues が弱くなるなー
+
+        [TestMethod]
+        public void Delete()
+        {
+            Sql.Log = l => Debug.Print(l);
+
+            var count = Sql<DataChangeTest>.Create((db, x) => x.
+                Delete().
+                From(db.tbl_data)).
+                ToExecutor(_connection).Write();
+
+        }
+
+        [TestMethod]
+        public void DeleteWhere()
+        {
+            Sql.Log = l => Debug.Print(l);
+
+            var count = Sql<DataChangeTest>.Create((db, x) => x.
+                Delete().
+                From(db.tbl_data).
+                Where(db.tbl_data.id == 3)).
+                ToExecutor(_connection).Write();
+        }
 
         [TestMethod]
         public void SelectEx()
         {
             Sql.Log = l => Debug.Print(l);
-            var query = Sql.Using<Data>().Create((db, x) =>
+            var query = Sql<Data>.Create((db, x) =>
                 x.
                 Select(new
                 {
@@ -770,7 +770,7 @@ namespace Test
         public void GroupByEx()
         {
             Sql.Log = l => Debug.Print(l);
-            var query = Sql.Using<Data>().Create((db, x) =>
+            var query = Sql<Data>.Create((db, x) =>
                 x.
                 Select(new
                 {
@@ -793,7 +793,7 @@ namespace Test
         {
             Sql.Log = l => Debug.Print(l);
 
-            var query = Sql.Using<Data>().Create((db, x) => x.
+            var query = Sql<Data>.Create((db, x) => x.
                 Select(new
                 {
                     name = db.tbl_staff.name,
@@ -813,7 +813,7 @@ namespace Test
         {
             Sql.Log = l => Debug.Print(l);
 
-            var q = Sql.Using<Data>().Create((db, x) => x.
+            var q = Sql<Data>.Create((db, x) => x.
                 Select(new
                 {
                     id = db.tbl_staff.id,
@@ -839,21 +839,21 @@ namespace Test
         {
             Sql.Log = l => Debug.Print(l);
 
-            var caseExp = Sql.Using<Data>().Create((db, x) => x.
+            var caseExp = Sql<Data>.Create((db, x) => x.
                 Case().
                     When(db.tbl_remuneration.money < 1000).Then("poverty").
                     When(4000 < db.tbl_remuneration.money).Then("rich").
                     Else("normal").
                 End());
 
-            var subQuery = Sql.Using<Data>().Create((db, x) => x.
+            var subQuery = Sql<Data>.Create((db, x) => x.
                 Select(new { total = x.Sum(db.tbl_remuneration.money) }).
                             From(db.tbl_remuneration));
 
-            var condition = Sql.Using<Data>().Create((db, x) =>
+            var condition = Sql<Data>.Create((db, x) =>
                  100 < db.tbl_remuneration.money && db.tbl_remuneration.money < 500);
 
-            var query = Sql.Using<Data>().Create((db, x) => x.
+            var query = Sql<Data>.Create((db, x) => x.
                 Select(new
                 {
                     id = db.tbl_staff.id,
@@ -877,7 +877,7 @@ namespace Test
             var data = new tbl_data() { id = 1, val1 = 10, val2 = "a" };
 
             Delete();
-            var query = Sql.Using<DataChangeTest>().Create((db, x) =>
+            var query = Sql<DataChangeTest>.Create((db, x) =>
                 x.
                 InsertInto(db.tbl_data, db.tbl_data.id, db.tbl_data.val1, db.tbl_data.val2).
                 Values(data.id, data.val1, data.val2));//TODO change style.
@@ -889,7 +889,7 @@ namespace Test
         public void UpdateEx()
         {
             Sql.Log = l => Debug.Print(l);
-            var count1 = Sql.Using<DataChangeTest>().Create((db, x) => x.
+            var count1 = Sql<DataChangeTest>.Create((db, x) => x.
                 Update(db.tbl_data).
                 Set().
                     Assign(db.tbl_data.val1, 100).
@@ -897,7 +897,7 @@ namespace Test
                     Where(db.tbl_data.id == 1)).
                 ToExecutor(_connection).Write();
 
-            var count2 = Sql.Using<DataChangeTest>().Create((db, x) => x.
+            var count2 = Sql<DataChangeTest>.Create((db, x) => x.
                 Update(db.tbl_data).
                 Set().
                     Assign(db.tbl_data.val1, db.tbl_data.val1 * 2).
@@ -905,7 +905,7 @@ namespace Test
                 ToExecutor(_connection).Write();
             //TODO change style to under.
             /*
-            var query = Sql.Using<DataChangeTest>().Create((db, x) => x.
+            var query = Sql<DataChangeTest>.Create((db, x) => x.
             Update(db.tbl_data).
             Set(new tbl_data()
             {
@@ -920,7 +920,7 @@ namespace Test
         public void Window()
         {
             Sql.Log = l => Debug.Print(l);
-            var query = Sql.Using<Data>().Create((db, x) => x.
+            var query = Sql<Data>.Create((db, x) => x.
                 Select(new
                 {
                     x = x.AvgOver(db.tbl_remuneration.money).
@@ -940,7 +940,7 @@ namespace Test
         public void Lag()
         {
             Sql.Log = l => Debug.Print(l);
-            var query = Sql.Using<Data>().Create((db, x) =>
+            var query = Sql<Data>.Create((db, x) =>
                 x.
                 Select(new
                 {
