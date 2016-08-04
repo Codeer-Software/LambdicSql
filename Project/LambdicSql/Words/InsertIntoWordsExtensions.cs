@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 
 namespace LambdicSql
 {
+    //TODO chang style.
     public static class InsertIntoWordsExtensions
     {
         public static ISqlKeyWord<TSelected> InsertInto<TSelected>(this ISqlKeyWord<TSelected> words, object table, params object[] targets) => null;

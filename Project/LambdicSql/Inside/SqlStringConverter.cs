@@ -77,7 +77,7 @@ namespace LambdicSql.Inside
             if (string.IsNullOrEmpty(right.Text)) return left;
 
             //for null
-            var nullCheck = NullCheck(left, binary.NodeType, right);
+            var nullCheck = ResolveNullCheck(left, binary.NodeType, right);
             if (nullCheck != null) return nullCheck;
 
             var nodeType = ToString(left, binary.NodeType, right);
@@ -192,7 +192,7 @@ namespace LambdicSql.Inside
             return new DecodedInfo(method.Method.ReturnType, text);
         }
 
-        DecodedInfo NullCheck(DecodedInfo left, ExpressionType nodeType, DecodedInfo right)
+        DecodedInfo ResolveNullCheck(DecodedInfo left, ExpressionType nodeType, DecodedInfo right)
         {
             string ope;
             switch (nodeType)
