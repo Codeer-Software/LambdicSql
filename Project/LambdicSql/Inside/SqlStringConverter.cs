@@ -122,10 +122,12 @@ namespace LambdicSql.Inside
             object obj;
             if (!ExpressionToObject.GetMemberObject(member, out obj)) return null;
 
-            //TODO parameter name.
             if (obj == null) return new DecodedInfo(null, ToString((object)null));
-            if (SupportedTypeSpec.IsSupported(obj.GetType())) return new DecodedInfo(obj.GetType(), ToString(obj));
-
+            if (SupportedTypeSpec.IsSupported(obj.GetType()))
+            {
+                //use field name.
+                return new DecodedInfo(obj.GetType(), Context.Parameters.Push(name, member.Member.MetadataToken, obj));
+            }
             throw new NotSupportedException("Invalid object.");
         }
 

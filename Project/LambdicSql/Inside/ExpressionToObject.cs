@@ -19,9 +19,9 @@ namespace LambdicSql.Inside
             return GetMemberObject(exp as MemberExpression, out obj);
         }
 
-        internal static bool GetMemberObject(MemberExpression exp, out object obj)
+        internal static bool GetMemberObject(MemberExpression exp, out object value)
         {
-            obj = null;
+            value = null;
             var member = exp;
             var names = new List<string>();
             ConstantExpression constant = null;
@@ -46,25 +46,19 @@ namespace LambdicSql.Inside
             {
                 if (_memberGet.TryGetValue(getterName, out getter))
                 {
-                    obj = getter.GetMemberObject(constant.Value);
+                    value = getter.GetMemberObject(constant.Value);
                     return true;
                 }
-            }
 
-            var param = Expression.Parameter(constant.Type, "param");
-            Expression target = param;
-            names.Reverse();
-            names.ForEach(e => target = Expression.PropertyOrField(target, e));
-            getter = Activator.CreateInstance(typeof(GetterCore<>).MakeGenericType(constant.Type), true) as IGetter;
-            getter.Init(Expression.Convert(target, typeof(object)), param);
-            lock (_memberGet)
-            {
-                if (!_memberGet.ContainsKey(getterName))
-                {
-                    _memberGet.Add(getterName, getter);
-                }
+                var param = Expression.Parameter(constant.Type, "param");
+                Expression target = param;
+                names.Reverse();
+                names.ForEach(e => target = Expression.PropertyOrField(target, e));
+                getter = Activator.CreateInstance(typeof(GetterCore<>).MakeGenericType(constant.Type), true) as IGetter;
+                getter.Init(Expression.Convert(target, typeof(object)), param);
+                _memberGet.Add(getterName, getter);
             }
-            obj = getter.GetMemberObject(constant.Value);
+            value = getter.GetMemberObject(constant.Value);
             return true;
         }
 

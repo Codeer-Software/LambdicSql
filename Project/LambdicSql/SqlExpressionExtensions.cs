@@ -22,6 +22,9 @@ namespace LambdicSql
 
         public static SqlInfo<TSelected> ToSqlInfo<TSelected>(this ISqlExpression<ISqlKeyWord<TSelected>> exp, Type connectionType)
              where TSelected : class
+          => new SqlInfo<TSelected>(ToSqlInfo((ISqlExpression)exp, connectionType));
+
+        public static SqlInfo ToSqlInfo(this ISqlExpression exp, Type connectionType)
         {
             var context = new DecodeContext(exp.DbInfo);
             var converter = new SqlStringConverter(context, QueryCustomizeResolver.CreateCustomizer(connectionType.FullName));
@@ -31,7 +34,7 @@ namespace LambdicSql
             var lines = text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
             text = string.Join(Environment.NewLine, lines.Where(e => !string.IsNullOrEmpty(e.Trim())).ToArray());
 
-            return new SqlInfo<TSelected>(exp.DbInfo, text, context.SelectClauseInfo, context.Parameters.GetParameters());
+            return new SqlInfo(exp.DbInfo, text, context.SelectClauseInfo, context.Parameters.GetParameters());
         }
     }
 }

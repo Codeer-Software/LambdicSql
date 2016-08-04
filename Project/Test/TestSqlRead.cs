@@ -1,4 +1,5 @@
 ﻿using LambdicSql;
+using LambdicSql.QueryBase;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Npgsql;
 using System;
@@ -955,6 +956,25 @@ namespace Test
 
             var y = query.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Read();
 
+        }
+
+        [TestMethod]
+        public void TestMeta()
+        {
+            int a = 0;
+            int b = 0;
+            var exp = GetExp();
+            var query = Sql<Data>.Create((db, x) => a == 1 && a == b && exp.Cast<bool>());
+            var info = query.ToSqlInfo(typeof(SqlConnection));
+
+            Debug.Print(info.SqlText);
+        }
+
+        public ISqlExpression GetExp()
+        {
+            int a = 0;
+            int b = 0;
+            return Sql<Data>.Create((db, x) => a == 2 && a == b);
         }
     }
 }
