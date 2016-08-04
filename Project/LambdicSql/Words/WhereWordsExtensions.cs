@@ -6,7 +6,7 @@ namespace LambdicSql
 {
     public static class WhereWordsExtensions
     {
-        public static ISqlWords<TSelected> Where<TSelected>(this ISqlWords<TSelected> words, bool condition) => null;
+        public static ISqlKeyWord<TSelected> Where<TSelected>(this ISqlKeyWord<TSelected> words, bool condition) => null;
 
         public static string MethodToString(ISqlStringConverter converter, MethodCallExpression method)
         {

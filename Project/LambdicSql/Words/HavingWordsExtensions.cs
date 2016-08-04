@@ -6,7 +6,7 @@ namespace LambdicSql
 {
     public static class HavingWordsExtensions
     {
-        public static ISqlWords<TSelected> Having<TSelected>(this ISqlWords<TSelected> words, bool condition) => null;
+        public static ISqlKeyWord<TSelected> Having<TSelected>(this ISqlKeyWord<TSelected> words, bool condition) => null;
 
         public static string MethodToString(ISqlStringConverter converter, MethodCallExpression method)
         {

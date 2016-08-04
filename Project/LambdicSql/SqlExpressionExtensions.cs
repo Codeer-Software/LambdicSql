@@ -11,7 +11,7 @@ namespace LambdicSql
             throw new NotSupportedException("do not call cast except in expression.");
         }
 
-        public static TResult Cast<TResult>(this ISqlExpression<ISqlWords<TResult>> query)
+        public static TResult Cast<TResult>(this ISqlExpression<ISqlKeyWord<TResult>> query)
         {
             throw new NotSupportedException("do not call cast except in expression.");
         }
@@ -19,7 +19,7 @@ namespace LambdicSql
         public static ISqlExpression<TResult> Concat<TResult>(this ISqlExpression<TResult> query, ISqlExpression addExp)
           => new SqlExpression<TResult>((SqlExpression<TResult>)query, addExp.Expression);
 
-        public static SqlInfo<TSelected> ToSqlInfo<TSelected>(this ISqlExpression<ISqlWords<TSelected>> exp, Type connectionType)
+        public static SqlInfo<TSelected> ToSqlInfo<TSelected>(this ISqlExpression<ISqlKeyWord<TSelected>> exp, Type connectionType)
              where TSelected : class
         {
             var parameters = new PrepareParameters();

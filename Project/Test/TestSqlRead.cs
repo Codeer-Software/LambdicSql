@@ -775,11 +775,11 @@ namespace Test
                 Select(new
                 {
                     name = db.tbl_staff.name,
-                    count = x.Count(db.tbl_remuneration.money),
-                    total = x.Sum(db.tbl_remuneration.money),
-                    average = x.Avg(db.tbl_remuneration.money),
-                    minimum = x.Min(db.tbl_remuneration.money),
-                    maximum = x.Max(db.tbl_remuneration.money),
+                    count = x.Func().Count(db.tbl_remuneration.money),
+                    total = x.Func().Sum(db.tbl_remuneration.money),
+                    average = x.Func().Avg(db.tbl_remuneration.money),
+                    minimum = x.Func().Min(db.tbl_remuneration.money),
+                    maximum = x.Func().Max(db.tbl_remuneration.money),
                 }).
                 From(db.tbl_remuneration).
                     Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
@@ -823,7 +823,7 @@ namespace Test
                                 When(4000 < db.tbl_remuneration.money).Then("rich").
                                 Else("normal").
                             End().Cast<string>(),
-                    total = x.Select(new { total = x.Sum(db.tbl_remuneration.money) }).
+                    total = x.Select(new { total = x.Func().Sum(db.tbl_remuneration.money) }).
                             From(db.tbl_remuneration).Cast<decimal>()
                 }).
                 From(db.tbl_staff).
@@ -847,7 +847,7 @@ namespace Test
                 End());
 
             var subQuery = Sql<Data>.Create((db, x) => x.
-                Select(new { total = x.Sum(db.tbl_remuneration.money) }).
+                Select(new { total = x.Func().Sum(db.tbl_remuneration.money) }).
                             From(db.tbl_remuneration));
 
             var condition = Sql<Data>.Create((db, x) =>
@@ -923,7 +923,7 @@ namespace Test
             var query = Sql<Data>.Create((db, x) => x.
                 Select(new
                 {
-                    x = x.AvgOver(db.tbl_remuneration.money).
+                    x = x.Window().AvgOver(db.tbl_remuneration.money).
                             PartitionBy(db.tbl_staff.name, db.tbl_remuneration.payment_date).
                             OrderBy().Asc(db.tbl_remuneration.money).Desc(db.tbl_remuneration.payment_date).
                             Rows(1, 1).Cast<decimal>(),
@@ -944,7 +944,7 @@ namespace Test
                 x.
                 Select(new
                 {
-                    x = x.LagOver(db.tbl_remuneration.money, 1, 0).
+                    x = x.Window().LagOver(db.tbl_remuneration.money, 1, 0).
                             PartitionBy(db.tbl_staff.name, db.tbl_remuneration.payment_date).
                             OrderBy().Asc(db.tbl_remuneration.money).Desc(db.tbl_remuneration.payment_date).Cast<decimal>(),
                     payment_date = db.tbl_remuneration.payment_date,

@@ -6,7 +6,7 @@ namespace LambdicSql
 {
     public static class DeleteWordsExtensions
     {
-        public static ISqlWords<TSelected> Delete<TSelected>(this ISqlWords<TSelected> words) => null;
+        public static ISqlKeyWord<TSelected> Delete<TSelected>(this ISqlKeyWord<TSelected> words) => null;
 
         public static string MethodToString(ISqlStringConverter converter, MethodCallExpression method)
         {

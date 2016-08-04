@@ -8,9 +8,9 @@ namespace LambdicSql
 {
     public static class UpdateWordsExtensions
     {
-        public static ISqlWords<TSelected> Update<TSelected>(this ISqlWords<TSelected> words, object table) => null;
-        public static ISqlWords<TSelected> Set<TSelected>(this ISqlWords<TSelected> words) => null;
-        public static ISqlWords<TSelected> Assign<TSelected>(this ISqlWords<TSelected> words, object target, object value) => null;
+        public static ISqlKeyWord<TSelected> Update<TSelected>(this ISqlKeyWord<TSelected> words, object table) => null;
+        public static ISqlKeyWord<TSelected> Set<TSelected>(this ISqlKeyWord<TSelected> words) => null;
+        public static ISqlKeyWord<TSelected> Assign<TSelected>(this ISqlKeyWord<TSelected> words, object target, object value) => null;
 
         public static string MethodChainToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {

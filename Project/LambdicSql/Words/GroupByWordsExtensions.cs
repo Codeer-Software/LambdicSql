@@ -6,7 +6,7 @@ namespace LambdicSql
 {
     public static class GroupByWordsExtensions
     {
-        public static ISqlWords<TSelected> GroupBy<TSelected>(this ISqlWords<TSelected> words, params object[] target) => null;
+        public static ISqlKeyWord<TSelected> GroupBy<TSelected>(this ISqlKeyWord<TSelected> words, params object[] target) => null;
 
         public static string MethodToString(ISqlStringConverter converter, MethodCallExpression method)
         {

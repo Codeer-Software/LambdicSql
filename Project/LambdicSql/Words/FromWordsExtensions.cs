@@ -8,11 +8,11 @@ namespace LambdicSql
 {
     public static class FromWordsExtensions
     {
-        public static ISqlWords<TSelected> From<TSelected, T>(this ISqlWords<TSelected> words, T tbale) => null;
-        public static ISqlWords<TSelected> Join<TSelected, T>(this ISqlWords<TSelected> words, T tbale, bool condition) => null;
-        public static ISqlWords<TSelected> LeftJoin<TSelected, T>(this ISqlWords<TSelected> words, T tbale, bool condition) => null;
-        public static ISqlWords<TSelected> RightJoin<TSelected, T>(this ISqlWords<TSelected> words, T tbale, bool condition) => null;
-        public static ISqlWords<TSelected> CrossJoin<TSelected, T>(this ISqlWords<TSelected> words, T tbale) => null;
+        public static ISqlKeyWord<TSelected> From<TSelected, T>(this ISqlKeyWord<TSelected> words, T tbale) => null;
+        public static ISqlKeyWord<TSelected> Join<TSelected, T>(this ISqlKeyWord<TSelected> words, T tbale, bool condition) => null;
+        public static ISqlKeyWord<TSelected> LeftJoin<TSelected, T>(this ISqlKeyWord<TSelected> words, T tbale, bool condition) => null;
+        public static ISqlKeyWord<TSelected> RightJoin<TSelected, T>(this ISqlKeyWord<TSelected> words, T tbale, bool condition) => null;
+        public static ISqlKeyWord<TSelected> CrossJoin<TSelected, T>(this ISqlKeyWord<TSelected> words, T tbale) => null;
 
         public static string MethodChainToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {

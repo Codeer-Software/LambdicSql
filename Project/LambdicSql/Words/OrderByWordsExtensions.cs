@@ -8,9 +8,9 @@ namespace LambdicSql
 {
     public static class OrderByWordsExtensions
     {
-        public static ISqlWords<TSelected> OrderBy<TSelected>(this ISqlWords<TSelected> words) => null;
-        public static ISqlWords<TSelected> ASC<TSelected>(this ISqlWords<TSelected> words, object target) => null;
-        public static ISqlWords<TSelected> DESC<TSelected>(this ISqlWords<TSelected> words, object target) => null;
+        public static ISqlKeyWord<TSelected> OrderBy<TSelected>(this ISqlKeyWord<TSelected> words) => null;
+        public static ISqlKeyWord<TSelected> ASC<TSelected>(this ISqlKeyWord<TSelected> words, object target) => null;
+        public static ISqlKeyWord<TSelected> DESC<TSelected>(this ISqlKeyWord<TSelected> words, object target) => null;
 
         public static string MethodChainToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {

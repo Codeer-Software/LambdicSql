@@ -148,11 +148,11 @@ namespace TestCore
                 Select(new
                 {
                     name = db.tbl_staff.name,
-                    count = x.Count(db.tbl_remuneration.money),
-                    total = x.Sum(db.tbl_remuneration.money),
-                    average = x.Avg(db.tbl_remuneration.money),
-                    minimum = x.Min(db.tbl_remuneration.money),
-                    maximum = x.Max(db.tbl_remuneration.money),
+                    count = x.Func().Count(db.tbl_remuneration.money),
+                    total = x.Func().Sum(db.tbl_remuneration.money),
+                    average = x.Func().Avg(db.tbl_remuneration.money),
+                    minimum = x.Func().Min(db.tbl_remuneration.money),
+                    maximum = x.Func().Max(db.tbl_remuneration.money),
                 }).
                 From(db.tbl_remuneration).
                     Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
@@ -172,8 +172,8 @@ namespace TestCore
                 Select(new
                 {
                     name = db.tbl_staff.name,
-                    count = x.Count(AggregatePredicate.Distinct, db.tbl_remuneration.money),
-                    total = x.Sum(AggregatePredicate.Distinct, db.tbl_remuneration.money)
+                    count = x.Func().Count(AggregatePredicate.Distinct, db.tbl_remuneration.money),
+                    total = x.Func().Sum(AggregatePredicate.Distinct, db.tbl_remuneration.money)
                 }).
                 From(db.tbl_remuneration).
                     Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
@@ -189,8 +189,8 @@ namespace TestCore
                 Select(new
                 {
                     name = db.tbl_staff.name,
-                    count = x.Count(AggregatePredicate.All, db.tbl_remuneration.money),
-                    total = x.Sum(AggregatePredicate.All, db.tbl_remuneration.money)
+                    count = x.Func().Count(AggregatePredicate.All, db.tbl_remuneration.money),
+                    total = x.Func().Sum(AggregatePredicate.All, db.tbl_remuneration.money)
                 }).
                 From(db.tbl_remuneration).
                     Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
@@ -206,12 +206,12 @@ namespace TestCore
                 Select(new
                 {
                     name = db.tbl_staff.name,
-                    total = x.Sum(db.tbl_remuneration.money)
+                    total = x.Func().Sum(db.tbl_remuneration.money)
                 }).
                 From(db.tbl_remuneration).
                     Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
                 GroupBy(db.tbl_staff.id, db.tbl_staff.name).
-                Having(10000 < x.Sum(db.tbl_remuneration.money)));
+                Having(10000 < x.Func().Sum(db.tbl_remuneration.money)));
 
             var datas = query.ToExecutor(_connection).Read();
         }
@@ -474,8 +474,8 @@ namespace TestCore
         public void WhereEx(bool minCondition, bool maxCondition)
         {
             var exp = Sql<DB>.Create((db, x) =>
-                x.Condition(minCondition, 3000 < db.tbl_remuneration.money) &&
-                x.Condition(maxCondition, db.tbl_remuneration.money < 4000));
+                x.Util().Condition(minCondition, 3000 < db.tbl_remuneration.money) &&
+                x.Util().Condition(maxCondition, db.tbl_remuneration.money < 4000));
 
             var datas = Sql<DB>.Create((db, x) => x.SelectFrom(db.tbl_remuneration).Where(exp.Cast<bool>())).
                 ToExecutor(_connection).Read();
@@ -585,7 +585,7 @@ namespace TestCore
         public void SelectSubQuery()
         {
             var sub = Sql<DB>.Create((db, x) => x.
-                Select(new { total = x.Sum(db.tbl_remuneration.money) }).
+                Select(new { total = x.Func().Sum(db.tbl_remuneration.money) }).
                 From(db.tbl_remuneration));
 
             var datas = Sql<DB>.Create((db, x) => x.
