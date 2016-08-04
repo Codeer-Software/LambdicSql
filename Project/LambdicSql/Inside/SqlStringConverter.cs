@@ -8,17 +8,9 @@ namespace LambdicSql.Inside
 {
     class SqlStringConverter : ISqlStringConverter
     {
-        public DecodeContext Context { get; }
         IQueryCustomizer _queryCustomizer;
 
-        internal string ContinueConditionExpressionText { get; set; }
-
-        public string ToString(object obj)
-        {
-            var exp = obj as Expression;
-            if (exp != null) return ToString(exp).Text;
-            return Context.Parameters.Push(obj);
-        }
+        public DecodeContext Context { get; }
 
         internal SqlStringConverter(DecodeContext context, IQueryCustomizer queryCustomizer)
         {
@@ -26,22 +18,11 @@ namespace LambdicSql.Inside
             _queryCustomizer = queryCustomizer;
         }
 
-        internal static bool IsSubQuery(MethodCallExpression method)
-            => false;
-
-        internal static bool IsSqlExpression(MethodCallExpression method)
-            => method.Arguments.Count == 1 &&
-                    typeof(ISqlExpression).IsAssignableFrom(method.Arguments[0].Type) &&
-                    method.Method.DeclaringType == typeof(SqlExpressionExtensions) &&
-                    method.Method.Name == nameof(SqlExpressionExtensions.Cast);
-
-        static string AddNestTab(string text, int nestLevel)
+        public string ToString(object obj)
         {
-            var t = string.Empty;
-            Enumerable.Range(0, nestLevel).ToList().ForEach(e => t += "\t");
-            return Environment.NewLine + string.Join(Environment.NewLine,
-                text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).
-                Select(e => t + e).ToArray());
+            var exp = obj as Expression;
+            if (exp != null) return ToString(exp).Text;
+            return Context.Parameters.Push(obj);
         }
 
         DecodedInfo ToString(Expression exp)
@@ -64,7 +45,7 @@ namespace LambdicSql.Inside
             var array = exp as NewArrayExpression;
             if (array != null) return ToString(array);
 
-            throw new NotSupportedException();
+            throw new NotSupportedException("Not suported expression at LambdicSql.");
         }
 
         DecodedInfo ToString(NewArrayExpression array)
@@ -80,7 +61,7 @@ namespace LambdicSql.Inside
 
         DecodedInfo ToString(MethodCallExpression method)
         {
-            if (IsSqlExpression(method))
+            if (IsSqlExpressionCast(method))
             {
                 object obj;
                 if (!ExpressionToObject.GetMemberObject(method.Arguments[0] as MemberExpression, out obj))
@@ -88,11 +69,7 @@ namespace LambdicSql.Inside
                     throw new NotSupportedException();
                 }
                 var text = ((ISqlExpression)obj).ToString(this);
-                //TODO
-                if (text.Replace(Environment.NewLine, string.Empty).Trim().IndexOf("SELECT") == 0)
-                {
-                    text = "(" + AddNestTab(text, 1).TrimStart() + ")";
-                }
+                text = AdjustSubQueryString(text);
                 return new DecodedInfo(typeof(ISqlExpression), text);
             }
 
@@ -105,94 +82,6 @@ namespace LambdicSql.Inside
             throw new NotSupportedException("Can't use normal functions.");
         }
 
-        List<MethodCallExpression>[] GetMethodChain(MethodCallExpression end)
-        {
-            var chainX = new List<List<MethodCallExpression>>();
-            var curent = end;
-            while (true)
-            {
-                var type = curent.Method.DeclaringType;
-                var chain = new List<MethodCallExpression>();
-                while (true)
-                {
-                    chain.Add(curent);
-                    var next = curent.Arguments[0] as MethodCallExpression;
-                    if (next == null)
-                    {
-                        chain.Reverse();
-                        chainX.Add(chain);
-                        chainX.Reverse();
-                        return chainX.ToArray();
-                    }
-                    curent = next;
-                    if (next.Method.DeclaringType != type)
-                    {
-                        break;
-                    }
-                }
-                chain.Reverse();
-                chainX.Add(chain);
-            }
-        }
-
-        DecodedInfo CusotmInvoke(MethodCallExpression method)
-        {
-            var chainX = GetMethodChain(method);
-            var ret = new List<string>();
-            foreach (var chain in chainX)
-            {
-                var custom = chain[0].Method.DeclaringType.GetMethod("MethodChainToString");
-                if (custom != null)
-                {
-                    ret.Add((string)custom.Invoke(null, new object[] { this, chain.ToArray() }));
-                }
-                else
-                {
-                    ret.Add(CusotmInvokeOne(chain[0]).Text);
-                }
-            }
-
-            //TODO
-            var text = new DecodedInfo(method.Method.ReturnType, string.Join(string.Empty, ret.ToArray()));
-            if (method.Method.Name == "Cast" && text.Text.Replace(Environment.NewLine, string.Empty).Trim().IndexOf("SELECT") == 0)
-            {
-               return new DecodedInfo(method.Method.ReturnType, "(" + AddNestTab(text.Text, 1).TrimStart() + ")");
-            }
-            return text;
-        }
-        
-        DecodedInfo CusotmInvokeOne(MethodCallExpression method)
-        {
-            //sql function.
-            var argumentsSrc = method.Arguments.Skip(1).ToArray();//skip this. 
-
-
-            //custom by defined class.
-            var custom = method.Method.DeclaringType.GetMethod("MethodToString");
-            if (custom != null)
-            {
-                var customed = (string)custom.Invoke(null, new object[] { this, method });
-                if (customed != null)
-                {
-                    return new DecodedInfo(method.Method.ReturnType, customed);
-                }
-            }
-
-            //custom by user.
-            var arguments = argumentsSrc.Select(e => ToString(e)).ToArray();
-            if (_queryCustomizer != null)
-            {
-                var customed = _queryCustomizer.CusotmInvoke(method.Method.ReturnType, method.Method.Name, arguments);
-                if (customed != null)
-                {
-                    return new DecodedInfo(method.Method.ReturnType, customed);
-                }
-            }
-
-            //normal format.
-            return new DecodedInfo(method.Method.ReturnType, method.Method.Name + "(" + string.Join(", ", arguments.Select(e => e.Text).ToArray()) + ")");
-        }
-
         DecodedInfo ToString(BinaryExpression binary)
         {
             var left = ToString(binary.Left);
@@ -202,13 +91,57 @@ namespace LambdicSql.Inside
             if (string.IsNullOrEmpty(left.Text)) return right;
             if (string.IsNullOrEmpty(right.Text)) return left;
 
-            var nodeType = ToString(left, binary.NodeType, right);
-
             //for null
             var nullCheck = NullCheck(left, binary.NodeType, right);
             if (nullCheck != null) return nullCheck;
 
+            var nodeType = ToString(left, binary.NodeType, right);
             return new DecodedInfo(nodeType.Type, "(" + left.Text + ") " + nodeType.Text + " (" + right.Text + ")");
+        }
+
+        DecodedInfo ToString(ConstantExpression constant)
+        {
+            if (constant.Value == null) return new DecodedInfo(null, ToString((object)null));
+            var type = constant.Value.GetType();
+            if (SupportedTypeSpec.IsSupported(type)) return new DecodedInfo(type, ToString(constant.Value));
+            if (type.IsEnum) return new DecodedInfo(type, constant.Value.ToString());
+
+            throw new NotSupportedException();
+        }
+
+        DecodedInfo ToString(MemberExpression member)
+        {
+            string name = GetMemberCheckName(member);
+            
+            //db element.
+            TableInfo table;
+            if (Context.DbInfo.GetLambdaNameAndTable().TryGetValue(name, out table))
+            {
+                return new DecodedInfo(null, table.SqlFullName);
+            }
+            ColumnInfo col;
+            if (Context.DbInfo.GetLambdaNameAndColumn().TryGetValue(name, out col))
+            {
+                return new DecodedInfo(col.Type, col.SqlFullName);
+            }
+
+            //subQuery.member
+            var method = member.Expression as MethodCallExpression;
+            if (method != null && IsSqlExpressionCast(method))
+            {
+                var mem2 = method.Arguments[0] as MemberExpression;
+                return new DecodedInfo(null, mem2.Member.Name + "." + name);
+            }
+
+            //value.
+            object obj;
+            if (!ExpressionToObject.GetMemberObject(member, out obj)) return null;
+
+            //TODO parameter name.
+            if (obj == null) return new DecodedInfo(null, ToString((object)null));
+            if (SupportedTypeSpec.IsSupported(obj.GetType())) return new DecodedInfo(obj.GetType(), ToString(obj));
+
+            throw new NotSupportedException("Invalid object.");
         }
 
         DecodedInfo NullCheck(DecodedInfo left, ExpressionType nodeType, DecodedInfo right)
@@ -227,7 +160,7 @@ namespace LambdicSql.Inside
             if (leftIsParam && rightIsParam) return null;
 
             var isParams = new[] { leftIsParam, rightIsParam };
-            var objs = new[] { leftObj, rightObj};
+            var objs = new[] { leftObj, rightObj };
             var names = new[] { left.Text, right.Text };
             var targetTexts = new[] { right.Text, left.Text };
             for (int i = 0; i < isParams.Length; i++)
@@ -268,65 +201,98 @@ namespace LambdicSql.Inside
             throw new NotImplementedException();
         }
 
-        DecodedInfo ToString(ConstantExpression constant)
+        //////////////////////////////////////
+        //TODO refactoring and speed up.
+        DecodedInfo CusotmInvoke(MethodCallExpression method)
         {
-            if (constant.Value == null) return new DecodedInfo(null, ToString((object)null));
+            var chainX = GetMethodChains(method);
+            var ret = new List<string>();
+            foreach (var chain in chainX)
+            {
+                var custom = chain[0].Method.DeclaringType.GetMethod("MethodChainToString");
+                if (custom != null)
+                {
+                    ret.Add((string)custom.Invoke(null, new object[] { this, chain.ToArray() }));
+                }
+                else
+                {
+                    ret.Add(CusotmInvokeOne(chain[0]).Text);
+                }
+            }
 
-            var type = constant.Value.GetType();
-            if (SupportedTypeSpec.IsSupported(type)) return new DecodedInfo(type, ToString(constant.Value));
-            if (type.IsEnum) return new DecodedInfo(type, constant.Value.ToString());
-
-            throw new NotSupportedException();
+            var text = string.Join(string.Empty, ret.ToArray());
+            if (method.Method.Name == "Cast")
+            {
+                text = AdjustSubQueryString(text);
+            }
+            return new DecodedInfo(method.Method.ReturnType, text);
         }
 
-        DecodedInfo ToString(MemberExpression member)
+        DecodedInfo CusotmInvokeOne(MethodCallExpression method)
         {
-            string name = GetMemberCheckName(member);
-            
-            TableInfo table;
-            if (Context.DbInfo.GetLambdaNameAndTable().TryGetValue(name, out table))
-            {
-                return new DecodedInfo(null, table.SqlFullName);
-            }
-            ColumnInfo col;
-            if (Context.DbInfo.GetLambdaNameAndColumn().TryGetValue(name, out col))
-            {
-                return new DecodedInfo(col.Type, col.SqlFullName);
-            }
+            //sql function.
+            var argumentsSrc = method.Arguments.Skip(1).ToArray();//skip this. 
 
-            //TODO naming rule.
-            var method = member.Expression as MethodCallExpression;
-            if (method != null && IsSqlExpression(method))
+
+            //custom by defined class.
+            var custom = method.Method.DeclaringType.GetMethod("MethodToString");
+            if (custom != null)
             {
-                var mem2 = method.Arguments[0] as MemberExpression;
-                return new DecodedInfo(null, mem2.Member.Name + "." + name);
+                var customed = (string)custom.Invoke(null, new object[] { this, method });
+                if (customed != null)
+                {
+                    return new DecodedInfo(method.Method.ReturnType, customed);
+                }
             }
 
-            if (HasParameter(member)) return new DecodedInfo(null, name);
+            //custom by user.
+            var arguments = argumentsSrc.Select(e => ToString(e)).ToArray();
+            if (_queryCustomizer != null)
+            {
+                var customed = _queryCustomizer.CusotmInvoke(method.Method.ReturnType, method.Method.Name, arguments);
+                if (customed != null)
+                {
+                    return new DecodedInfo(method.Method.ReturnType, customed);
+                }
+            }
 
-            var decoded = MemberToStringByLambda(member);
-            if (decoded != null) return decoded;
-
-            throw new NotSupportedException();
+            //normal format.
+            return new DecodedInfo(method.Method.ReturnType, method.Method.Name + "(" + string.Join(", ", arguments.Select(e => e.Text).ToArray()) + ")");
         }
+        ///////////////////////////////////////////////////////
 
-        DecodedInfo MemberToStringByLambda(MemberExpression member)
-        {
-            object obj;
-            if (!ExpressionToObject.GetMemberObject(member, out obj)) return null;
-            if (obj == null) return new DecodedInfo(null, ToString((object)null));
-            if (SupportedTypeSpec.IsSupported(obj.GetType())) return new DecodedInfo(obj.GetType(), ToString(obj));
-            return null;
-        }
+        static string AdjustSubQueryString(string text)
+            => (text.Replace(Environment.NewLine, string.Empty).Trim().IndexOf("SELECT") == 0) ?
+            "(" + AddNestTab(text, 1).TrimStart() + ")" : text;
 
-        static bool HasParameter(MemberExpression member)
+        static List<MethodCallExpression>[] GetMethodChains(MethodCallExpression end)
         {
-            while (member != null)
+            var chains = new List<List<MethodCallExpression>>();
+            var curent = end;
+            while (true)
             {
-                if (member.Expression is ParameterExpression) return true;
-                member = member.Expression as MemberExpression;
+                var type = curent.Method.DeclaringType;
+                var chain = new List<MethodCallExpression>();
+                while (true)
+                {
+                    chain.Add(curent);
+                    var next = curent.Arguments[0] as MethodCallExpression;
+                    if (next == null)
+                    {
+                        chain.Reverse();
+                        chains.Add(chain);
+                        chains.Reverse();
+                        return chains.ToArray();
+                    }
+                    curent = next;
+                    if (next.Method.DeclaringType != type)
+                    {
+                        break;
+                    }
+                }
+                chain.Reverse();
+                chains.Add(chain);
             }
-            return false;
         }
 
         static string GetMemberCheckName(MemberExpression member)
@@ -340,6 +306,21 @@ namespace LambdicSql.Inside
             }
             var name = string.Join(".", names.ToArray());
             return name;
+        }
+
+        static bool IsSqlExpressionCast(MethodCallExpression method)
+            => method.Arguments.Count == 1 &&
+                    typeof(ISqlExpression).IsAssignableFrom(method.Arguments[0].Type) &&
+                    method.Method.DeclaringType == typeof(SqlExpressionExtensions) &&
+                    method.Method.Name == nameof(SqlExpressionExtensions.Cast);
+
+        static string AddNestTab(string text, int nestLevel)
+        {
+            var t = string.Empty;
+            Enumerable.Range(0, nestLevel).ToList().ForEach(e => t += "\t");
+            return Environment.NewLine + string.Join(Environment.NewLine,
+                text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).
+                Select(e => t + e).ToArray());
         }
     }
 }
