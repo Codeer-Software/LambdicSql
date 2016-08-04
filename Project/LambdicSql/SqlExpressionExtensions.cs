@@ -1,6 +1,7 @@
 ﻿using LambdicSql.Inside;
 using LambdicSql.QueryBase;
 using System;
+using System.Linq;
 
 namespace LambdicSql
 {
@@ -24,7 +25,13 @@ namespace LambdicSql
         {
             var context = new DecodeContext(exp.DbInfo);
             var converter = new SqlStringConverter(context, QueryCustomizeResolver.CreateCustomizer(connectionType.FullName));
-            return new SqlInfo<TSelected>(exp.DbInfo, exp.ToString(converter), context.SelectClauseInfo, context.Parameters.GetParameters());
+            var text = exp.ToString(converter);
+
+            //adjust. remove empty line.
+            var lines = text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+            text = string.Join(Environment.NewLine, lines.Where(e => !string.IsNullOrEmpty(e.Trim())).ToArray());
+
+            return new SqlInfo<TSelected>(exp.DbInfo, text, context.SelectClauseInfo, context.Parameters.GetParameters());
         }
     }
 }

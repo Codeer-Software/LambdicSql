@@ -14,7 +14,7 @@ namespace LambdicSql
         public static ISqlKeyWord<TSelected> RightJoin<TSelected, T>(this ISqlKeyWord<TSelected> words, T tbale, bool condition) => null;
         public static ISqlKeyWord<TSelected> CrossJoin<TSelected, T>(this ISqlKeyWord<TSelected> words, T tbale) => null;
 
-        public static string MethodChainToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var list = new List<string>();
             foreach (var m in methods)

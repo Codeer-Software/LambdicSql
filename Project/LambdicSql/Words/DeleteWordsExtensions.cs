@@ -8,7 +8,7 @@ namespace LambdicSql
     {
         public static ISqlKeyWord<TSelected> Delete<TSelected>(this ISqlKeyWord<TSelected> words) => null;
 
-        public static string MethodToString(ISqlStringConverter converter, MethodCallExpression method)
+        public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             return Environment.NewLine + "DELETE";
         }

@@ -20,7 +20,7 @@ namespace LambdicSql
         public static IWindowFunctionsAfter Rows<T>(this IWindowFunctionsAfter words, T t, T t2) => null;
         public static T Cast<T>(this IWindowFunctionsAfter words) => default(T);
 
-        public static string MethodChainToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var list = new List<string>();
             for (int i = 0; i < methods.Length; i++)

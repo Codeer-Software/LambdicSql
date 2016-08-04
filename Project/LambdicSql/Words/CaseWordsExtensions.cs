@@ -23,7 +23,7 @@ namespace LambdicSql
         public static IEndAfter End(this IThenAfter words) => null;
         public static IEndAfter End(this IElseAfter words) => null;
 
-        public static string MethodChainToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var list = new List<string>();
             foreach (var m in methods)

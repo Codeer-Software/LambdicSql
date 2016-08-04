@@ -11,7 +11,7 @@ namespace LambdicSql
         public static ISqlKeyWord<TSelected> InsertInto<TSelected>(this ISqlKeyWord<TSelected> words, object table, params object[] targets) => null;
         public static ISqlKeyWord<TSelected> Values<TSelected>(this ISqlKeyWord<TSelected> words, params object[] targets) => null;
 
-        public static string MethodChainToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var list = new List<string>();
             foreach (var m in methods)

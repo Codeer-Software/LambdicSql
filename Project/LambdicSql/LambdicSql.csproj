@@ -46,6 +46,7 @@
     <Compile Include="QueryBase\IWindowFunctionsAfter.cs" />
     <Compile Include="QueryBase\Non.cs" />
     <Compile Include="QueryBase\SqlExpression.cs" />
+    <Compile Include="QueryBase\SqlFuncUtility.cs" />
     <Compile Include="SqlInfo.cs" />
     <Compile Include="SqlExpressionExtensions.cs" />
     <Compile Include="Funcs\AggregateFuncsExtensions.cs" />

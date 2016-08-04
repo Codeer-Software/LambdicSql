@@ -57,28 +57,13 @@ namespace LambdicSql.Inside
 
         DecodedInfo ToString(UnaryExpression unary)
             => unary.NodeType == ExpressionType.Not ?
-                new DecodedInfo(typeof(bool), "NOT (" + ToString(unary.Operand) + ")") : ToString(unary.Operand);
+                new DecodedInfo(typeof(bool), "NOT (" + ToString(unary.Operand) + ")") :
+                ToString(unary.Operand);
 
         DecodedInfo ToString(MethodCallExpression method)
         {
-            if (IsSqlExpressionCast(method))
-            {
-                object obj;
-                if (!ExpressionToObject.GetMemberObject(method.Arguments[0] as MemberExpression, out obj))
-                {
-                    throw new NotSupportedException();
-                }
-                var text = ((ISqlExpression)obj).ToString(this);
-                text = AdjustSubQueryString(text);
-                return new DecodedInfo(typeof(ISqlExpression), text);
-            }
-
-            //words
-            if (0 < method.Arguments.Count && typeof(ISqlSyntax).IsAssignableFrom(method.Arguments[0].Type))
-            {
-                return CusotmInvoke(method);
-            }
-
+            if (IsSqlExpressionCast(method)) return ResolveSqlExpression(method);
+            if (IsSqlSyntaxResolver(method)) return ResolveSqlSyntax(method);
             throw new NotSupportedException("Can't use normal functions.");
         }
 
@@ -144,6 +129,58 @@ namespace LambdicSql.Inside
             throw new NotSupportedException("Invalid object.");
         }
 
+        DecodedInfo ToString(DecodedInfo left, ExpressionType nodeType, DecodedInfo right)
+        {
+            Func<string, string> custom = @operator => _queryCustomizer == null ? @operator : _queryCustomizer.CustomOperator(left.Type, @operator, right.Type);
+            switch (nodeType)
+            {
+                case ExpressionType.Equal: return new DecodedInfo(typeof(bool), custom("="));
+                case ExpressionType.NotEqual: return new DecodedInfo(typeof(bool), custom("<>"));
+                case ExpressionType.LessThan: return new DecodedInfo(typeof(bool), custom("<"));
+                case ExpressionType.LessThanOrEqual: return new DecodedInfo(typeof(bool), custom("<="));
+                case ExpressionType.GreaterThan: return new DecodedInfo(typeof(bool), custom(">"));
+                case ExpressionType.GreaterThanOrEqual: return new DecodedInfo(typeof(bool), custom(">="));
+                case ExpressionType.Add: return new DecodedInfo(left.Type, custom("+"));
+                case ExpressionType.Subtract: return new DecodedInfo(left.Type, custom("-"));
+                case ExpressionType.Multiply: return new DecodedInfo(left.Type, custom("*"));
+                case ExpressionType.Divide: return new DecodedInfo(left.Type, custom("/"));
+                case ExpressionType.Modulo: return new DecodedInfo(left.Type, custom("%"));
+                case ExpressionType.And: return new DecodedInfo(typeof(bool), custom("AND"));
+                case ExpressionType.AndAlso: return new DecodedInfo(typeof(bool), custom("AND"));
+                case ExpressionType.Or: return new DecodedInfo(typeof(bool), custom("OR"));
+                case ExpressionType.OrElse: return new DecodedInfo(typeof(bool), custom("OR"));
+            }
+            throw new NotImplementedException();
+        }
+
+        DecodedInfo ResolveSqlExpression(MethodCallExpression method)
+        {
+            object obj;
+            if (!ExpressionToObject.GetMemberObject(method.Arguments[0] as MemberExpression, out obj))
+            {
+                throw new NotSupportedException();
+            }
+            var text = ((ISqlExpression)obj).ToString(this);
+            text = AdjustSubQueryString(text);
+            return new DecodedInfo(typeof(ISqlExpression), text);
+        }
+
+        DecodedInfo ResolveSqlSyntax(MethodCallExpression method)
+        {
+            //TODO speed up.
+            //TODO custom.
+            var ret = new List<string>();
+            foreach (var chain in GetMethodChains(method))
+            {
+                var custom = chain[0].Method.DeclaringType.GetMethod("MethodsToString");
+                ret.Add((string)custom.Invoke(null, new object[] { this, chain.ToArray() }));
+            }
+
+            var text = string.Join(string.Empty, ret.ToArray());
+            if (IsSqlKeyWordCast(method)) text = AdjustSubQueryString(text);
+            return new DecodedInfo(method.Method.ReturnType, text);
+        }
+
         DecodedInfo NullCheck(DecodedInfo left, ExpressionType nodeType, DecodedInfo right)
         {
             string ope;
@@ -177,91 +214,54 @@ namespace LambdicSql.Inside
             return null;
         }
 
-        DecodedInfo ToString(DecodedInfo left, ExpressionType nodeType, DecodedInfo right)
+        static string GetMemberCheckName(MemberExpression member)
         {
-            Func<string, string> custom = @operator => _queryCustomizer == null ? @operator : _queryCustomizer.CustomOperator(left.Type, @operator, right.Type);
-            switch (nodeType)
+            var names = new List<string>();
+            var checkName = member;
+            while (checkName != null)
             {
-                case ExpressionType.Equal: return new DecodedInfo(typeof(bool), custom("="));
-                case ExpressionType.NotEqual: return new DecodedInfo(typeof(bool), custom("<>"));
-                case ExpressionType.LessThan: return new DecodedInfo(typeof(bool), custom("<"));
-                case ExpressionType.LessThanOrEqual: return new DecodedInfo(typeof(bool), custom("<="));
-                case ExpressionType.GreaterThan: return new DecodedInfo(typeof(bool), custom(">"));
-                case ExpressionType.GreaterThanOrEqual: return new DecodedInfo(typeof(bool), custom(">="));
-                case ExpressionType.Add: return new DecodedInfo(left.Type, custom("+"));
-                case ExpressionType.Subtract: return new DecodedInfo(left.Type, custom("-"));
-                case ExpressionType.Multiply: return new DecodedInfo(left.Type, custom("*"));
-                case ExpressionType.Divide: return new DecodedInfo(left.Type, custom("/"));
-                case ExpressionType.Modulo: return new DecodedInfo(left.Type, custom("%"));
-                case ExpressionType.And: return new DecodedInfo(typeof(bool), custom("AND"));
-                case ExpressionType.AndAlso: return new DecodedInfo(typeof(bool), custom("AND"));
-                case ExpressionType.Or: return new DecodedInfo(typeof(bool), custom("OR"));
-                case ExpressionType.OrElse: return new DecodedInfo(typeof(bool), custom("OR"));
+                names.Insert(0, checkName.Member.Name);
+                checkName = checkName.Expression as MemberExpression;
             }
-            throw new NotImplementedException();
+            var name = string.Join(".", names.ToArray());
+            return name;
         }
 
-        //////////////////////////////////////
-        //TODO refactoring and speed up.
-        DecodedInfo CusotmInvoke(MethodCallExpression method)
-        {
-            var chainX = GetMethodChains(method);
-            var ret = new List<string>();
-            foreach (var chain in chainX)
-            {
-                var custom = chain[0].Method.DeclaringType.GetMethod("MethodChainToString");
-                if (custom != null)
-                {
-                    ret.Add((string)custom.Invoke(null, new object[] { this, chain.ToArray() }));
-                }
-                else
-                {
-                    ret.Add(CusotmInvokeOne(chain[0]).Text);
-                }
-            }
+        static bool IsSqlSyntaxResolver(MethodCallExpression method)
+            => method.Method.IsStatic &&
+                0 < method.Arguments.Count &&
+                typeof(ISqlSyntax).IsAssignableFrom(method.Arguments[0].Type);
 
-            var text = string.Join(string.Empty, ret.ToArray());
-            if (IsSqlKeyWordCast(method)) text = AdjustSubQueryString(text);
-            return new DecodedInfo(method.Method.ReturnType, text);
-        }
+        static bool IsSqlExpressionCast(MethodCallExpression method)
+            => method.Method.DeclaringType == typeof(SqlExpressionExtensions) &&
+               method.Method.Name == nameof(SqlExpressionExtensions.Cast);
 
-        DecodedInfo CusotmInvokeOne(MethodCallExpression method)
-        {
-            //sql function.
-            var argumentsSrc = method.Arguments.Skip(1).ToArray();//skip this. 
-
-            //custom by defined class.
-            var custom = method.Method.DeclaringType.GetMethod("MethodToString");
-            if (custom != null)
-            {
-                var customed = (string)custom.Invoke(null, new object[] { this, method });
-                if (customed != null)
-                {
-                    return new DecodedInfo(method.Method.ReturnType, customed);
-                }
-            }
-
-            //custom by user.
-            var arguments = argumentsSrc.Select(e => ToString(e)).ToArray();
-            if (_queryCustomizer != null)
-            {
-                var customed = _queryCustomizer.CusotmInvoke(method.Method.ReturnType, method.Method.Name, arguments);
-                if (customed != null)
-                {
-                    return new DecodedInfo(method.Method.ReturnType, customed);
-                }
-            }
-
-            //normal format.
-            return new DecodedInfo(method.Method.ReturnType, method.Method.Name + "(" + string.Join(", ", arguments.Select(e => e.Text).ToArray()) + ")");
-        }
-        ///////////////////////////////////////////////////////
+        static bool IsSqlKeyWordCast(MethodCallExpression method)
+            => method.Method.DeclaringType == typeof(SqlKeyWordExtensions) &&
+               method.Method.Name == nameof(SqlKeyWordExtensions.Cast);
 
         static string AdjustSubQueryString(string text)
-            => (text.Replace(Environment.NewLine, string.Empty).Trim().IndexOf("SELECT") == 0) ?
-            "(" + AddNestTab(text, 1).TrimStart() + ")" : text;
+        {
+            if (text.Replace(Environment.NewLine, string.Empty).Trim().IndexOf("SELECT") != 0) return text;
 
-        static List<MethodCallExpression>[] GetMethodChains(MethodCallExpression end)
+            var lines = text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToArray();
+            lines[0] = InsertSubQueryStart(lines[0]);
+            return Environment.NewLine + string.Join(Environment.NewLine, lines.Select(e => "\t" + e).ToArray()) + ")";
+        }
+
+        static string InsertSubQueryStart(string line)
+        {
+            for (int i = 0; i < line.Length; i++)
+            {
+                if (line[i] != '\t')
+                {
+                    return line.Substring(0, i) + "(" + line.Substring(i);
+                }
+            }
+            return line;
+        }
+
+        static List<List<MethodCallExpression>> GetMethodChains(MethodCallExpression end)
         {
             var chains = new List<List<MethodCallExpression>>();
             var curent = end;
@@ -278,7 +278,7 @@ namespace LambdicSql.Inside
                         chain.Reverse();
                         chains.Add(chain);
                         chains.Reverse();
-                        return chains.ToArray();
+                        return chains;
                     }
                     curent = next;
                     if (next.Method.DeclaringType != type)
@@ -289,36 +289,6 @@ namespace LambdicSql.Inside
                 chain.Reverse();
                 chains.Add(chain);
             }
-        }
-
-        static string GetMemberCheckName(MemberExpression member)
-        {
-            var names = new List<string>();
-            var checkName = member;
-            while (checkName != null)
-            {
-                names.Insert(0, checkName.Member.Name);
-                checkName = checkName.Expression as MemberExpression;
-            }
-            var name = string.Join(".", names.ToArray());
-            return name;
-        }
-
-        static bool IsSqlExpressionCast(MethodCallExpression method)
-            => method.Method.DeclaringType == typeof(SqlExpressionExtensions) &&
-               method.Method.Name == nameof(SqlExpressionExtensions.Cast);
-
-        static bool IsSqlKeyWordCast(MethodCallExpression method)
-            => method.Method.DeclaringType == typeof(SqlKeyWordExtensions) &&
-               method.Method.Name == nameof(SqlKeyWordExtensions.Cast);
-        
-        static string AddNestTab(string text, int nestLevel)
-        {
-            var t = string.Empty;
-            Enumerable.Range(0, nestLevel).ToList().ForEach(e => t += "\t");
-            return Environment.NewLine + string.Join(Environment.NewLine,
-                text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).
-                Select(e => t + e).ToArray());
         }
     }
 }

@@ -10,8 +10,9 @@ namespace LambdicSql
         public static bool Between<TTarget>(this ISqlSyntax words, TTarget target, TTarget min, TTarget max) => false;
         public static bool In<TTarget>(this ISqlSyntax words, TTarget target, params TTarget[] inArguments) => false;
 
-        public static string MethodToString(ISqlStringConverter converter, MethodCallExpression method)
+        public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
+            var method = methods[0];
             var args = method.Arguments.Skip(1).Select(e => converter.ToString(e)).ToArray();
             switch (method.Method.Name)
             {

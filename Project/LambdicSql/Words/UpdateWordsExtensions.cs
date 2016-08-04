@@ -12,7 +12,7 @@ namespace LambdicSql
         public static ISqlKeyWord<TSelected> Set<TSelected>(this ISqlKeyWord<TSelected> words) => null;
         public static ISqlKeyWord<TSelected> Assign<TSelected>(this ISqlKeyWord<TSelected> words, object target, object value) => null;
 
-        public static string MethodChainToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var list = new List<string>();
             for (int i = 0; i < methods.Length; i++)

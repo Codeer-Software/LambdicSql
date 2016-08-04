@@ -12,8 +12,9 @@ namespace LambdicSql
         public static ISqlKeyWord<TSelected> Select<TSelected>(this ISqlSyntax words, TSelected selected) => null;
         public static ISqlKeyWord<TSelected> SelectFrom<TSelected>(this ISqlSyntax words, TSelected selected) => null;
 
-        public static string MethodToString(ISqlStringConverter converter, MethodCallExpression method)
+        public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
+            var method = methods[0];
             Expression define = null;
             AggregatePredicate? aggregatePredicate = null;
             if (method.Arguments[1].Type == typeof(AggregatePredicate))
