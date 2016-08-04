@@ -1,5 +1,6 @@
 ﻿using LambdicSql.QueryBase;
 using System;
+using System.Linq.Expressions;
 
 namespace LambdicSql.SQLite
 {
@@ -13,6 +14,6 @@ namespace LambdicSql.SQLite
             }
             return @operator;
         }
-        public string CusotmInvoke(Type returnType, string name, DecodedInfo[] argSrc) => null;
+        public string CusotmSqlSyntax(ISqlStringConverter converter, MethodCallExpression[] methods) => null;
     }
 }

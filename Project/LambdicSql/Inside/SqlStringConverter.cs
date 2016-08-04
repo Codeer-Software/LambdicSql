@@ -167,13 +167,24 @@ namespace LambdicSql.Inside
 
         DecodedInfo ResolveSqlSyntax(MethodCallExpression method)
         {
-            //TODO speed up.
-            //TODO custom.
             var ret = new List<string>();
-            foreach (var chain in GetMethodChains(method))
+            foreach (var c in GetMethodChains(method))
             {
-                var custom = chain[0].Method.DeclaringType.GetMethod("MethodsToString");
-                ret.Add((string)custom.Invoke(null, new object[] { this, chain.ToArray() }));
+                var chain = c.ToArray();
+
+                //custom.
+                if (_queryCustomizer != null)
+                {
+                    var custom = _queryCustomizer.CusotmSqlSyntax(this, chain);
+                    if (custom != null)
+                    {
+                        ret.Add(custom);
+                        continue;
+                    }
+                }
+
+                //normal.
+                ret.Add(chain[0].Method.GetMethodsToString()(this, chain));
             }
 
             var text = string.Join(string.Empty, ret.ToArray());

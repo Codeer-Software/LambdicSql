@@ -70,7 +70,7 @@
     <Compile Include="QueryBase\IQueryCustomizer.cs" />
     <Compile Include="QueryBase\ISqlStringConverter.cs" />
     <Compile Include="Inside\SqlStringConverter.cs" />
-    <Compile Include="QueryBase\DecodedInfo.cs" />
+    <Compile Include="Inside\DecodedInfo.cs" />
     <Compile Include="Inside\DBDefineAnalyzer.cs" />
     <Compile Include="Inside\SelectDefineAnalyzer.cs" />
     <Compile Include="QueryBase\ColumnInfo.cs" />

@@ -1,18 +1,16 @@
 ﻿using System;
 
-namespace LambdicSql.QueryBase
+namespace LambdicSql.Inside
 {
-    public class DecodedInfo
+    class DecodedInfo
     {
-        public Type Type { get; }
-        public string Text { get; }
-
+        internal Type Type { get; }
+        internal string Text { get; }
         internal DecodedInfo(Type type, string text)
         {
             Type = type;
             Text = text;
         }
-
         public override string ToString() => Text;
     }
 }

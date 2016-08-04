@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Linq.Expressions;
 
 namespace LambdicSql.QueryBase
 {
-    //TODO
     public interface IQueryCustomizer
     {
         string CustomOperator(Type type1, string @operator, Type type2);
-        string CusotmInvoke(Type returnType, string name, DecodedInfo[] argSrc);
+        string CusotmSqlSyntax(ISqlStringConverter converter, MethodCallExpression[] methods);
     }
 }
