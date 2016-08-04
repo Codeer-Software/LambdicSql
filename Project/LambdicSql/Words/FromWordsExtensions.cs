@@ -48,7 +48,7 @@ namespace LambdicSql
                 return text + " AS " + x;
             }
 
-            var table = decoder.DbInfo.GetLambdaNameAndTable()[text];
+            var table = decoder.Context.DbInfo.GetLambdaNameAndTable()[text];
             if (table.SubQuery == null)
             {
                 return table.SqlFullName;

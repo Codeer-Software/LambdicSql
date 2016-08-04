@@ -23,5 +23,16 @@ namespace LambdicSql.QueryBase
 
         public void Remove(string name)
             => _parameters.Remove(name);
+
+        public string ResolvePrepare(string value)
+        {
+            object obj;
+            if (!_parameters.TryGetValue(value, out obj))
+            {
+                return value;
+            }
+            _parameters.Remove(value);
+            return obj.ToString();
+        }
     }
 }

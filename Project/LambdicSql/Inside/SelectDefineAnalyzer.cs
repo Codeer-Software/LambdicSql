@@ -3,14 +3,15 @@ using System.Reflection;
 using System.Linq;
 using System;
 using LambdicSql;
+using System.Collections.Generic;
 
 namespace LambdicSql.Inside
 {
     static class SelectDefineAnalyzer
     {
-        internal static SelectClause MakeSelectInfo(Expression exp)
+        internal static SelectClauseInfo MakeSelectInfo(Expression exp)
         {
-            var select = new SelectClause();
+            var select = new List<SelectElement>();
             var newExp = exp as NewExpression;
             if (newExp != null)
             {
@@ -30,7 +31,7 @@ namespace LambdicSql.Inside
                     }
                     select.Add(new SelectElement(name, newExp.Arguments[i]));
                 }
-                return select;
+                return new SelectClauseInfo(select, exp);
             }
             var initExp = exp as MemberInitExpression;
             if (initExp != null)
@@ -39,7 +40,7 @@ namespace LambdicSql.Inside
                 {
                     select.Add(new SelectElement(b.Member.Name, b.Expression));
                 }
-                return select;
+                return new SelectClauseInfo(select, exp);
             }
             var member = exp as MemberExpression;
             if (member != null)
@@ -49,7 +50,7 @@ namespace LambdicSql.Inside
                 {
                     select.Add(new SelectElement(p.Name, null));
                 }
-                return select;
+                return new SelectClauseInfo(select, exp);
             }
             throw new NotSupportedException();
         }

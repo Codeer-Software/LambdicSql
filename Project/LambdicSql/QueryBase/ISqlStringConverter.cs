@@ -2,8 +2,7 @@
 {
     public interface ISqlStringConverter
     {
-        DbInfo DbInfo { get; }
+        DecodeContext Context { get; }
         string ToString(object obj);
-        string ResolvePrepare(string value);
     }
 }

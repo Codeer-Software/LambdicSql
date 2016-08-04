@@ -65,8 +65,8 @@ namespace LambdicSql
                         }
                         else
                         {
-                            return Environment.NewLine + "\tROWS BETWEEN " + converter.ResolvePrepare(argSrc[0]) +
-                                " PRECEDING AND " + converter.ResolvePrepare(argSrc[1]) + " FOLLOWING";
+                            return Environment.NewLine + "\tROWS BETWEEN " + converter.Context.Parameters.ResolvePrepare(argSrc[0]) +
+                                " PRECEDING AND " + converter.Context.Parameters.ResolvePrepare(argSrc[1]) + " FOLLOWING";
                         }
                     }
             }

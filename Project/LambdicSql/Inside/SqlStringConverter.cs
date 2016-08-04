@@ -3,49 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
 
 namespace LambdicSql.Inside
 {
     class SqlStringConverter : ISqlStringConverter
     {
-        enum SpecialElementType
-        {
-            Table,
-            Column,
-            SubQuery
-        }
-
-        class SqlStringConvertingEventArgs : EventArgs
-        {
-            internal SpecialElementType SpecialElementType { get; set; }
-            internal string Detail { get; set; }
-            internal SqlStringConvertingEventArgs(SpecialElementType type, string detail)
-            {
-                SpecialElementType = type;
-                Detail = detail;
-            }
-        }
-
-        DbInfo _dbInfo;
+        public DecodeContext Context { get; }
         IQueryCustomizer _queryCustomizer;
-        PrepareParameters _prepare;
-        int _nestLevel;
-
-        EventHandler<SqlStringConvertingEventArgs> SpecialElementConverting = (_, __)=> { };
-
-        public DbInfo DbInfo => _dbInfo;
-
-        public string ResolvePrepare(string value)
-        {
-            object obj;
-            if (!_prepare.TryGetParam(value, out obj))
-            {
-                return value;
-            }
-            _prepare.Remove(value);
-            return obj.ToString();
-        }
 
         internal string ContinueConditionExpressionText { get; set; }
 
@@ -53,19 +17,13 @@ namespace LambdicSql.Inside
         {
             var exp = obj as Expression;
             if (exp != null) return ToString(exp).Text;
-
-         //   var query = obj as IQuery;
-           // if (query != null) return ToString(query);
-
-            return _prepare.Push(obj);
+            return Context.Parameters.Push(obj);
         }
 
-        internal SqlStringConverter(DbInfo dbInfo, PrepareParameters parameters, IQueryCustomizer queryCustomizer, int nestLevel)
+        internal SqlStringConverter(DecodeContext context, IQueryCustomizer queryCustomizer)
         {
-            _dbInfo = dbInfo;
-            _prepare = parameters;
+            Context = context;
             _queryCustomizer = queryCustomizer;
-            _nestLevel = nestLevel;
         }
 
         internal static bool IsSubQuery(MethodCallExpression method)
@@ -76,28 +34,6 @@ namespace LambdicSql.Inside
                     typeof(ISqlExpression).IsAssignableFrom(method.Arguments[0].Type) &&
                     method.Method.DeclaringType == typeof(SqlExpressionExtensions) &&
                     method.Method.Name == nameof(SqlExpressionExtensions.Cast);
-        /*
-        internal static string ToString(IQuery query, PrepareParameters parameters, IQueryCustomizer queryCustomizer)
-            => ToStringCore(query, parameters, queryCustomizer, 0);
-
-        static string ToStringCore(IQuery query, PrepareParameters parameters, IQueryCustomizer queryCustomizer, int nestLevel)
-           => new SqlStringConverter(query.Db, parameters, queryCustomizer, nestLevel).ToString(query);
-
-        string ToString(IQuery query)
-        {
-            var clauses = query.GetClausesClone();
-            if (_queryCustomizer != null) clauses = _queryCustomizer.CustomClauses(clauses);
-            var text = string.Join(Environment.NewLine, clauses.Select(e => e.ToString(this)).ToArray());
-
-            if (_nestLevel == 0)
-            {
-                return string.Join(Environment.NewLine,
-                        text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).
-                        Where(e => !string.IsNullOrEmpty(e.Trim())).ToArray()) + ";";
-            }
-            text = "(" + text + ")";
-            return AddNestTab(text, _nestLevel);
-        }*/
 
         static string AddNestTab(string text, int nestLevel)
         {
@@ -144,30 +80,6 @@ namespace LambdicSql.Inside
 
         DecodedInfo ToString(MethodCallExpression method)
         {
-            /*
-            //sub query.
-            if (IsSubQuery(method))
-            {
-                //notify converting info.
-                SpecialElementConverting(this, new SqlStringConvertingEventArgs(SpecialElementType.SubQuery, string.Empty));
-                object obj;
-                if (ExpressionToObject.GetMemberObject(method.Arguments[0] as MemberExpression, out obj))
-                {
-                    return new DecodedInfo(method.Method.ReturnType, MakeQueryString(obj as IQuery, _queryCustomizer, _prepare, _nestLevel));
-                }
-                else
-                {
-                    var paramQueryCustomizer = Expression.Parameter(typeof(IQueryCustomizer), "queryCustomizer");
-                    var paramPrepare = Expression.Parameter(typeof(PrepareParameters), "prepareParameters");
-                    var nestLevel = Expression.Parameter(typeof(int), "nestLevel");
-                    var call = Expression.Call(null, GetType().
-                        GetMethod(nameof(MakeQueryString), BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public), 
-                                new[] { method.Arguments[0], paramQueryCustomizer, paramPrepare, nestLevel });
-                    var funcSubQuery = Expression.Lambda(call, new[] { paramQueryCustomizer, paramPrepare, nestLevel }).Compile();
-                    return new DecodedInfo(funcSubQuery.Method.ReturnType,
-                        funcSubQuery.DynamicInvoke(_queryCustomizer, _prepare, _nestLevel).ToString());
-                }
-            }*/
             if (IsSqlExpression(method))
             {
                 object obj;
@@ -190,13 +102,7 @@ namespace LambdicSql.Inside
                 return CusotmInvoke(method);
             }
 
-            //normal
-            //check
-            CheckNormalFuncArguments(method);
-
-            //invoke
-            var funcNormal = Expression.Lambda(method).Compile();
-            return new DecodedInfo(funcNormal.Method.ReturnType, ToString(funcNormal.DynamicInvoke()));
+            throw new NotSupportedException("Can't use normal functions.");
         }
 
         List<MethodCallExpression>[] GetMethodChain(MethodCallExpression end)
@@ -287,51 +193,6 @@ namespace LambdicSql.Inside
             return new DecodedInfo(method.Method.ReturnType, method.Method.Name + "(" + string.Join(", ", arguments.Select(e => e.Text).ToArray()) + ")");
         }
 
-        void CheckNormalFuncArguments(MethodCallExpression method)
-        {
-            EventHandler<SqlStringConvertingEventArgs> check = (s, e) =>
-            {
-                string message = string.Empty;
-                switch (e.SpecialElementType)
-                {
-                    case SpecialElementType.Table:
-                        message = string.Format("can't use table({0}) in {1}", e.Detail, method.Method.Name);
-                        break;
-                    case SpecialElementType.Column:
-                        message = string.Format("can't use column({0}) in {1}", e.Detail, method.Method.Name);
-                        break;
-                    case SpecialElementType.SubQuery:
-                        message = string.Format("can't use sub query in {0}", method.Method.Name);
-                        break;
-                }
-                throw new InvalidDbItemException(message);
-            };
-            SpecialElementConverting += check;
-            try
-            {
-                method.Arguments.ToList().ForEach(e =>
-                {
-                    try
-                    {
-                        ToString(e);
-                    }
-                    catch (InvalidDbItemException exception)
-                    {
-                        throw exception;
-                    }
-                    catch (Exception) { }//ignore other exception, because it will be checked at invokeing.
-                });
-            }
-            finally
-            {
-                SpecialElementConverting -= check;
-            }
-        }
-
-        /*
-        static string MakeQueryString(IQuery query, IQueryCustomizer queryCustomizer, PrepareParameters parameters, int nestLevel)
-            => ToStringCore(query, parameters, queryCustomizer, nestLevel + 1);
-            */
         DecodedInfo ToString(BinaryExpression binary)
         {
             var left = ToString(binary.Left);
@@ -361,8 +222,8 @@ namespace LambdicSql.Inside
             }
 
             object leftObj, rightObj;
-            var leftIsParam = _prepare.TryGetParam(left.Text, out leftObj);
-            var rightIsParam = _prepare.TryGetParam(right.Text, out rightObj);
+            var leftIsParam = Context.Parameters.TryGetParam(left.Text, out leftObj);
+            var rightIsParam = Context.Parameters.TryGetParam(right.Text, out rightObj);
             if (leftIsParam && rightIsParam) return null;
 
             var isParams = new[] { leftIsParam, rightIsParam };
@@ -376,7 +237,7 @@ namespace LambdicSql.Inside
                 {
                     var nullObj = obj == null;
                     if (!nullObj) return null;
-                    _prepare.Remove(names[i]);
+                    Context.Parameters.Remove(names[i]);
                     return new DecodedInfo(null, "(" + targetTexts[i] + ")" + ope);
                 }
             }
@@ -421,19 +282,15 @@ namespace LambdicSql.Inside
         DecodedInfo ToString(MemberExpression member)
         {
             string name = GetMemberCheckName(member);
-
+            
             TableInfo table;
-            if (_dbInfo.GetLambdaNameAndTable().TryGetValue(name, out table))
+            if (Context.DbInfo.GetLambdaNameAndTable().TryGetValue(name, out table))
             {
-                //notify converting info.
-                SpecialElementConverting(this, new SqlStringConvertingEventArgs(SpecialElementType.Table, name));
                 return new DecodedInfo(null, table.SqlFullName);
             }
             ColumnInfo col;
-            if (_dbInfo.GetLambdaNameAndColumn().TryGetValue(name, out col))
+            if (Context.DbInfo.GetLambdaNameAndColumn().TryGetValue(name, out col))
             {
-                //notify converting info.
-                SpecialElementConverting(this, new SqlStringConvertingEventArgs(SpecialElementType.Column, name));
                 return new DecodedInfo(col.Type, col.SqlFullName);
             }
 

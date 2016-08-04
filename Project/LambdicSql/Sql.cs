@@ -20,5 +20,9 @@ namespace LambdicSql
         public static ISqlFunc Func<T>(this ISqlKeyWord<T> words) => null;
         public static ISqlUtility Util<T>(this ISqlKeyWord<T> words) => null;
         public static IWindowFuncs Window<T>(this ISqlKeyWord<T> words) => null;
+        public static string MethodToString(ISqlStringConverter converter, MethodCallExpression method)
+        {
+            return string.Empty;
+        }
     }
 }

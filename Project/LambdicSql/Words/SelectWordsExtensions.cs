@@ -28,12 +28,11 @@ namespace LambdicSql
 
             var select = SelectDefineAnalyzer.MakeSelectInfo(define);
 
-            if (converter.DbInfo.SelectClause == null)
+            if (converter.Context.SelectClauseInfo == null)
             {
-                converter.DbInfo.SelectClause = select;
-                converter.DbInfo.SelectClause.Define = define;
+                converter.Context.SelectClauseInfo = select;
             }
-            var text = ToString(GetPredicate(aggregatePredicate), select.GetElements(), converter);
+            var text = ToString(GetPredicate(aggregatePredicate), select.Elements, converter);
             if (method.Method.Name == nameof(SelectFrom))
             {
                 text = text + Environment.NewLine + "FROM " + converter.ToString(method.Arguments[1]);
