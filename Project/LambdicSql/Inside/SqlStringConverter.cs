@@ -221,10 +221,7 @@ namespace LambdicSql.Inside
             }
 
             var text = string.Join(string.Empty, ret.ToArray());
-            if (method.Method.Name == "Cast")
-            {
-                text = AdjustSubQueryString(text);
-            }
+            if (IsSqlKeyWordCast(method)) text = AdjustSubQueryString(text);
             return new DecodedInfo(method.Method.ReturnType, text);
         }
 
@@ -232,7 +229,6 @@ namespace LambdicSql.Inside
         {
             //sql function.
             var argumentsSrc = method.Arguments.Skip(1).ToArray();//skip this. 
-
 
             //custom by defined class.
             var custom = method.Method.DeclaringType.GetMethod("MethodToString");
@@ -309,11 +305,13 @@ namespace LambdicSql.Inside
         }
 
         static bool IsSqlExpressionCast(MethodCallExpression method)
-            => method.Arguments.Count == 1 &&
-                    typeof(ISqlExpression).IsAssignableFrom(method.Arguments[0].Type) &&
-                    method.Method.DeclaringType == typeof(SqlExpressionExtensions) &&
-                    method.Method.Name == nameof(SqlExpressionExtensions.Cast);
+            => method.Method.DeclaringType == typeof(SqlExpressionExtensions) &&
+               method.Method.Name == nameof(SqlExpressionExtensions.Cast);
 
+        static bool IsSqlKeyWordCast(MethodCallExpression method)
+            => method.Method.DeclaringType == typeof(SqlKeyWordExtensions) &&
+               method.Method.Name == nameof(SqlKeyWordExtensions.Cast);
+        
         static string AddNestTab(string text, int nestLevel)
         {
             var t = string.Empty;

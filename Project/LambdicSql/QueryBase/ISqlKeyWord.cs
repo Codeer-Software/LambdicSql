@@ -1,4 +1,5 @@
 ﻿namespace LambdicSql.QueryBase
 {
-    public interface ISqlKeyWord<TSelected> : ISqlSyntax { }
+    public interface ISqlKeyWord : ISqlSyntax { }
+    public interface ISqlKeyWord<TSelected> : ISqlKeyWord { }
 }
