@@ -8,10 +8,10 @@ namespace LambdicSql
 {
     public static class WindowWordsExtensions
     {
-        public static IWindowFunctionsAfter AvgOver<T>(this IWindowFunctions words, T t) => null;
-        public static IWindowFunctionsAfter LagOver<T>(this IWindowFunctions words, T t) => null;
-        public static IWindowFunctionsAfter LagOver<T>(this IWindowFunctions words, T t, object offset) => null;
-        public static IWindowFunctionsAfter LagOver<T>(this IWindowFunctions words, T t, object offset, object @default) => null;
+        public static IWindowFunctionsAfter AvgOver<T>(this IWindowFuncs words, T t) => null;
+        public static IWindowFunctionsAfter LagOver<T>(this IWindowFuncs words, T t) => null;
+        public static IWindowFunctionsAfter LagOver<T>(this IWindowFuncs words, T t, object offset) => null;
+        public static IWindowFunctionsAfter LagOver<T>(this IWindowFuncs words, T t, object offset, object @default) => null;
         public static IWindowFunctionsAfter PartitionBy(this IWindowFunctionsAfter words, params object[] t) => null;
         public static IWindowFunctionsAfter OrderBy(this IWindowFunctionsAfter words) => null;
         public static IWindowFunctionsAfter Asc<T>(this IWindowFunctionsAfter words, T t) => null;

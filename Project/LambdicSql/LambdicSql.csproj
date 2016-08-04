@@ -37,11 +37,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="QueryBase\IQueryDesigner.cs" />
-    <Compile Include="QueryBase\ISqlHelper.cs" />
-    <Compile Include="QueryBase\ISqlWords.cs" />
+    <Compile Include="QueryBase\ISqlUtility.cs" />
+    <Compile Include="QueryBase\ISqlKeyWord.cs" />
     <Compile Include="Funcs\AggregatePredicate.cs" />
     <Compile Include="QueryBase\ISqlExpression.cs" />
-    <Compile Include="QueryBase\IWindowFunctions.cs" />
+    <Compile Include="QueryBase\IWindowFuncs.cs" />
     <Compile Include="QueryBase\IWindowFunctionsAfter.cs" />
     <Compile Include="QueryBase\Non.cs" />
     <Compile Include="QueryBase\SqlExpression.cs" />
@@ -62,7 +62,7 @@
     <Compile Include="Inside\RefrectionHelpercs.cs" />
     <Compile Include="QueryBase\ISqlSyntax.cs" />
     <Compile Include="SQLite\SQLiteCustomizer.cs" />
-    <Compile Include="QueryBase\ISqlFuncs.cs" />
+    <Compile Include="QueryBase\ISqlFunc.cs" />
     <Compile Include="QueryBase\InvalidDbItemException.cs" />
     <Compile Include="QueryBase\IQueryCustomizer.cs" />
     <Compile Include="QueryBase\ISqlStringConverter.cs" />

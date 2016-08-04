@@ -17,8 +17,8 @@ namespace LambdicSql
 
     public static class EX
     {
-        public static ISqlFuncs Func<T>(this ISqlKeyWord<T> words) => null;
+        public static ISqlFunc Func<T>(this ISqlKeyWord<T> words) => null;
+        public static ISqlUtility Util<T>(this ISqlKeyWord<T> words) => null;
         public static IWindowFuncs Window<T>(this ISqlKeyWord<T> words) => null;
-        public static ISqlUtils Util<T>(this ISqlKeyWord<T> words) => null;
     }
 }

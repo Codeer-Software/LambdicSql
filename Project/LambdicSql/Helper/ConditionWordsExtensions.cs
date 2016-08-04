@@ -6,7 +6,7 @@ namespace LambdicSql
 {
     public static class ConditionWordsExtensions
     {
-        public static bool Condition(this ISqlHelper words, bool enable, bool condition) => default(bool);
+        public static bool Condition(this ISqlUtility words, bool enable, bool condition) => default(bool);
 
         public static string MethodToString(ISqlStringConverter converter, MethodCallExpression method)
         {
