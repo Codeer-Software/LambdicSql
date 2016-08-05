@@ -1,59 +1,44 @@
-﻿using LambdicSql.QueryBase;
+﻿using LambdicSql.Inside;
+using LambdicSql.QueryBase;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 
 namespace LambdicSql
 {
-    //TODO chang style.
     public static class UpdateWordsExtensions
     {
-        public static ISqlKeyWord<TSelected> Update<TSelected>(this ISqlKeyWord<TSelected> words, object table) => null;
-        public static ISqlKeyWord<TSelected> Set<TSelected>(this ISqlKeyWord<TSelected> words) => null;
-        public static ISqlKeyWord<TSelected> Assign<TSelected>(this ISqlKeyWord<TSelected> words, object target, object value) => null;
+        public interface IUpdateAfter<TSelected, T> : ISqlKeyWord<TSelected> where T : class { }
+        public static IUpdateAfter<TSelected, T> Update<TSelected, T>(this ISqlKeyWord<TSelected> words, T table) where T : class => null;
+        public static ISqlKeyWord<TSelected> Set<TSelected, T>(this IUpdateAfter<TSelected, T> words, T setting) where T :class => null;
 
         public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var list = new List<string>();
-            for (int i = 0; i < methods.Length; i++)
+            foreach (var m in methods)
             {
-                var m = methods[i];
-                var argSrc = m.Arguments.Skip(1).Select(e => converter.ToString(e)).ToArray();
-                list.Add(MethodToString(m.Method.Name, argSrc));
-                if (i + 1 < methods.Length)
-                {
-                    switch (methods[i].Method.Name)
-                    {
-                        case nameof(Assign):
-                            switch (methods[i + 1].Method.Name)
-                            {
-                                case nameof(Assign):
-                                    list.Add(", ");
-                                    break;
-                            }
-                            break;
-                    }
-                }
+                list.Add(MethodToString(converter, m));
             }
             return string.Join(string.Empty, list.ToArray());
         }
 
-        static string MethodToString(string name, string[] argSrc)
+        static string MethodToString(ISqlStringConverter converter, MethodCallExpression method)
         {
-            switch (name)
+            switch (method.Method.Name)
             {
-                case nameof(Update): return Environment.NewLine + "UPDATE " + argSrc[0];
-                case nameof(Set): return Environment.NewLine + "SET";
-                case nameof(Assign): return Environment.NewLine + "\t" + MemberNameOnly(argSrc[0]) + " = " + argSrc[1];
+                case nameof(Update): return Environment.NewLine + "UPDATE " + converter.ToString(method.Arguments[1]);
+                case nameof(Set):
+                    {
+                        var select = SelectDefineAnalyzer.MakeSelectInfo(method.Arguments[1]);
+                        var list = new List<string>();
+                        foreach (var e in select.Elements)
+                        {
+                            list.Add(Environment.NewLine + "\t" + e.Name + " = " + converter.ToString(e.Expression)); 
+                        }
+                        return Environment.NewLine + "SET" + string.Join(",", list.ToArray());
+                    }
             }
             throw new NotSupportedException();
-        }
-
-        static string MemberNameOnly(string src)
-        {
-            var index = src.LastIndexOf(".");
-            return index == -1 ? src : src.Substring(index + 1);
         }
     }
 }

@@ -893,29 +893,15 @@ namespace Test
             SqlOption.Log = l => Debug.Print(l);
             var count1 = Sql<DataChangeTest>.Create((db, x) => x.
                 Update(db.tbl_data).
-                Set().
-                    Assign(db.tbl_data.val1, 100).
-                    Assign(db.tbl_data.val2, "200").
-                    Where(db.tbl_data.id == 1)).
+                Set(new tbl_data() { val1 = 100, val2 = "200" }).
+                Where(db.tbl_data.id == 1)).
                 ToExecutor(_connection).Write();
 
             var count2 = Sql<DataChangeTest>.Create((db, x) => x.
                 Update(db.tbl_data).
-                Set().
-                    Assign(db.tbl_data.val1, db.tbl_data.val1 * 2).
-                    Where(db.tbl_data.id == 1)).
+                Set(new tbl_data() { val1 = db.tbl_data.val1 * 2 }).
+                Where(db.tbl_data.id == 1)).
                 ToExecutor(_connection).Write();
-            //TODO change style to under.
-            /*
-            var query = Sql<DataChangeTest>.Create((db, x) => x.
-            Update(db.tbl_data).
-            Set(new tbl_data()
-            {
-                val1 = 100,
-                val2 = "200"
-            })).
-            ToExecutor(_connection).Write();
-            */
         }
 
         [TestMethod]

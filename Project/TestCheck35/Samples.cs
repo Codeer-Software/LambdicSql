@@ -340,16 +340,14 @@ namespace TestCore
                 ToExecutor(_connection).Write();
         }*/
         //```
-
+         
         //Update
         //```cs
         public void Update()
         {
-            var count = Sql<DBData>.Create((db, x) => x.
+            var count1 = Sql<DBData>.Create((db, x) => x.
                 Update(db.tbl_data).
-                Set().
-                Assign(db.tbl_data.val1, 100).
-                Assign(db.tbl_data.val2, "200").
+                Set(new Data() { val1 = 100, val2 = "200" }).
                 Where(db.tbl_data.id == 1)).
                 ToExecutor(_connection).Write();
         }
@@ -359,10 +357,9 @@ namespace TestCore
         //```cs
         public void UpdateUsingTableValue()
         {
-            var count = Sql<DBData>.Create((db, x) => x.
+            var count2 = Sql<DBData>.Create((db, x) => x.
                 Update(db.tbl_data).
-                Set().
-                Assign(db.tbl_data.val1, db.tbl_data.val1 * 2).
+                Set(new Data() { val1 = db.tbl_data.val1 * 2 }).
                 Where(db.tbl_data.id == 1)).
                 ToExecutor(_connection).Write();
         }
