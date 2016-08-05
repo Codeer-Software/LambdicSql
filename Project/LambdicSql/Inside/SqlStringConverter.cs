@@ -113,7 +113,7 @@ namespace LambdicSql.Inside
             }
 
             //SubQuery's member.
-            //sub.id
+            //exsample [sub.id]
             var method = member.Expression as MethodCallExpression;
             if (method != null && IsSqlExpressionCast(method))
             {
@@ -131,6 +131,17 @@ namespace LambdicSql.Inside
                 //use field name.
                 return new DecodedInfo(obj.GetType(), Context.Parameters.Push(name, member.Member.MetadataToken, obj));
             }
+
+            //SqlExpression.
+            var sqlExp = obj as ISqlExpression;
+            if (sqlExp != null)
+            {
+                Type type = null;
+                var types = sqlExp.GetType().GetGenericArguments();
+                if (0 < types.Length) type = types[0];
+                return new DecodedInfo(type, sqlExp.ToString(this));
+            }
+
             throw new NotSupportedException("Invalid object.");
         }
 

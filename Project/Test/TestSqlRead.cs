@@ -1001,7 +1001,13 @@ namespace Test
         public int GetInstance2() => 2;
         public int GetInstance3(int a, int b) => a + b;
 
-
-        //TODO テキストとSQLの相互やり取り
+        [TestMethod]
+        public void TestExpression()
+        {
+            var exp = GetExp();
+            var query = Sql<Data>.Create((db, x) => exp);
+            var info = query.ToSqlInfo(typeof(SqlConnection));
+            Debug.Print(info.SqlText);
+        }
     }
 }
