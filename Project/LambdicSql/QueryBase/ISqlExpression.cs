@@ -9,5 +9,5 @@ namespace LambdicSql.QueryBase
         Expression Expression { get; }
     }
 
-    public interface ISqlExpression<TSelected> : ISqlExpression { }
+    public interface ISqlExpression<out TSelected> : ISqlExpression { }
 }

@@ -9,8 +9,10 @@ namespace LambdicSql
     //TODO chang style.
     public static class InsertIntoWordsExtensions
     {
-        public static ISqlKeyWord<TSelected> InsertInto<TSelected>(this ISqlKeyWord<TSelected> words, object table, params object[] targets) => null;
-        public static ISqlKeyWord<TSelected> Values<TSelected>(this ISqlKeyWord<TSelected> words, params object[] targets) => null;
+        public interface IInsertIntoAfter<T> : ISqlKeyWord<T> { }
+
+        public static IInsertIntoAfter<TSelected> InsertInto<TSelected>(this ISqlKeyWord<TSelected> words, object table, params object[] targets) => null;
+        public static ISqlKeyWord<TSelected> Values<TSelected>(this IInsertIntoAfter<TSelected> words, params object[] targets) => null;
 
         public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {

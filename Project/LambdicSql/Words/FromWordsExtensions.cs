@@ -8,11 +8,13 @@ namespace LambdicSql
 {
     public static class FromWordsExtensions
     {
-        public static ISqlKeyWord<TSelected> From<TSelected, T>(this ISqlKeyWord<TSelected> words, T tbale) => null;
-        public static ISqlKeyWord<TSelected> Join<TSelected, T>(this ISqlKeyWord<TSelected> words, T tbale, bool condition) => null;
-        public static ISqlKeyWord<TSelected> LeftJoin<TSelected, T>(this ISqlKeyWord<TSelected> words, T tbale, bool condition) => null;
-        public static ISqlKeyWord<TSelected> RightJoin<TSelected, T>(this ISqlKeyWord<TSelected> words, T tbale, bool condition) => null;
-        public static ISqlKeyWord<TSelected> CrossJoin<TSelected, T>(this ISqlKeyWord<TSelected> words, T tbale) => null;
+        public interface IFromAfter<T> : ISqlKeyWord<T> { }
+
+        public static IFromAfter<TSelected> From<TSelected, T>(this ISqlKeyWord<TSelected> words, T tbale) => null;
+        public static ISqlKeyWord<TSelected> Join<TSelected, T>(this IFromAfter<TSelected> words, T tbale, bool condition) => null;
+        public static ISqlKeyWord<TSelected> LeftJoin<TSelected, T>(this IFromAfter<TSelected> words, T tbale, bool condition) => null;
+        public static ISqlKeyWord<TSelected> RightJoin<TSelected, T>(this IFromAfter<TSelected> words, T tbale, bool condition) => null;
+        public static ISqlKeyWord<TSelected> CrossJoin<TSelected, T>(this IFromAfter<TSelected> words, T tbale) => null;
 
         public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
@@ -27,7 +29,7 @@ namespace LambdicSql
         static string MethodToString(ISqlStringConverter converter, MethodCallExpression method)
         {
             string name = method.Method.Name;
-            string[] argSrc = method.Arguments.Skip(1).Select(e => converter.ToString(e)).ToArray();//TODO
+            string[] argSrc = method.Arguments.Skip(1).Select(e => converter.ToString(e)).ToArray();
             switch (name)
             {
                 case nameof(From): return Environment.NewLine + "FROM " + ExpressionToTableName(converter, method.Arguments[1]);
@@ -42,7 +44,6 @@ namespace LambdicSql
             var methodCall = exp as MethodCallExpression;
             if (methodCall != null)
             {
-                //TODO if cast expression
                 //TODO oracl custom
                 var x = ((MemberExpression)methodCall.Arguments[0]).Member.Name;
                 return text + " AS " + x;

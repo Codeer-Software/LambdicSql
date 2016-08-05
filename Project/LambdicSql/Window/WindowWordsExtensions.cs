@@ -4,14 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace LambdicSql
+namespace LambdicSql.Window
 {
     public static class WindowWordsExtensions
     {
-        public static IWindowFunctionsAfter AvgOver<T>(this IWindowFuncs words, T t) => null;
-        public static IWindowFunctionsAfter LagOver<T>(this IWindowFuncs words, T t) => null;
-        public static IWindowFunctionsAfter LagOver<T>(this IWindowFuncs words, T t, object offset) => null;
-        public static IWindowFunctionsAfter LagOver<T>(this IWindowFuncs words, T t, object offset, object @default) => null;
+        public static IWindowFunctionsAfter Avg<T>(this IWindowFuncs words, T t) => null;
+        public static IWindowFunctionsAfter Lag<T>(this IWindowFuncs words, T t) => null;
+        public static IWindowFunctionsAfter Lag<T>(this IWindowFuncs words, T t, object offset) => null;
+        public static IWindowFunctionsAfter Lag<T>(this IWindowFuncs words, T t, object offset, object @default) => null;
+        public static IWindowFunctionsAfter Over(this IWindowFunctionsAfter words) => null;
         public static IWindowFunctionsAfter PartitionBy(this IWindowFunctionsAfter words, params object[] t) => null;
         public static IWindowFunctionsAfter OrderBy(this IWindowFunctionsAfter words) => null;
         public static IWindowFunctionsAfter Asc<T>(this IWindowFunctionsAfter words, T t) => null;
@@ -52,6 +53,7 @@ namespace LambdicSql
         {
             switch (name)
             {
+                case nameof(Over): return Environment.NewLine + "\t" + name.ToUpper() + "(";
                 case nameof(Cast): return string.Empty;
                 case nameof(PartitionBy): return Environment.NewLine + "\t" + "PARTITION BY" + " " + argSrc[0];
                 case nameof(OrderBy): return Environment.NewLine + "\t" + "ORDER BY";
@@ -70,8 +72,7 @@ namespace LambdicSql
                         }
                     }
             }
-            return Environment.NewLine + "\t" + name.ToUpper().Replace("OVER", string.Empty)
-                + "(" + string.Join(", ", argSrc) + ") OVER(";
+            return Environment.NewLine + "\t" + name.ToUpper() + "(" + string.Join(", ", argSrc) + ")";
         }
     }
 }

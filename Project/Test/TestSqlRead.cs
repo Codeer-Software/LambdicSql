@@ -1,5 +1,6 @@
 ﻿using LambdicSql;
 using LambdicSql.QueryBase;
+using LambdicSql.Window;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Npgsql;
 using System;
@@ -924,7 +925,7 @@ namespace Test
             var query = Sql<Data>.Create((db, x) => x.
                 Select(new
                 {
-                    x = x.Window().AvgOver(db.tbl_remuneration.money).
+                    x = x.Window().Avg(db.tbl_remuneration.money).Over().
                             PartitionBy(db.tbl_staff.name, db.tbl_remuneration.payment_date).
                             OrderBy().Asc(db.tbl_remuneration.money).Desc(db.tbl_remuneration.payment_date).
                             Rows(1, 1).Cast<decimal>(),
@@ -945,7 +946,7 @@ namespace Test
                 x.
                 Select(new
                 {
-                    x = x.Window().LagOver(db.tbl_remuneration.money, 1, 0).
+                    x = x.Window().Lag(db.tbl_remuneration.money, 1, 0).Over().
                             PartitionBy(db.tbl_staff.name, db.tbl_remuneration.payment_date).
                             OrderBy().Asc(db.tbl_remuneration.money).Desc(db.tbl_remuneration.payment_date).Cast<decimal>(),
                     payment_date = db.tbl_remuneration.payment_date,
