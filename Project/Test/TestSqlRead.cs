@@ -958,11 +958,11 @@ namespace Test
 
         }
 
+        int b = 0;
         [TestMethod]
         public void TestMeta()
         {
             int a = 0;
-            int b = 0;
             var exp = GetExp();
             var query = Sql<Data>.Create((db, x) => a == 1 && a == b && exp.Cast<bool>());
             var info = query.ToSqlInfo(typeof(SqlConnection));
@@ -973,8 +973,25 @@ namespace Test
         public ISqlExpression GetExp()
         {
             int a = 0;
-            int b = 0;
             return Sql<Data>.Create((db, x) => a == 2 && a == b);
         }
+
+        [TestMethod]
+        public void TestMetaMethod()
+        {
+            var info1 = Sql<Data>.Create((db, x) => GetStatic1()).ToSqlInfo(typeof(SqlConnection));
+            Debug.Print(info1.SqlText);
+            var info2 = Sql<Data>.Create((db, x) => GetInstance2()).ToSqlInfo(typeof(SqlConnection));
+            Debug.Print(info2.SqlText);
+
+            //check cahe.
+            info1 = Sql<Data>.Create((db, x) => GetStatic1()).ToSqlInfo(typeof(SqlConnection));
+            Debug.Print(info1.SqlText);
+            info2 = Sql<Data>.Create((db, x) => GetInstance2()).ToSqlInfo(typeof(SqlConnection));
+            Debug.Print(info2.SqlText);
+        }
+
+        public static int GetStatic1() => 1;
+        public int GetInstance2() => 2;
     }
 }

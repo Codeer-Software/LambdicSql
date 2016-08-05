@@ -64,6 +64,8 @@ namespace LambdicSql.Inside
         {
             if (IsSqlExpressionCast(method)) return ResolveSqlExpression(method);
             if (IsSqlSyntaxResolver(method)) return ResolveSqlSyntax(method);
+            object value;
+            if (ExpressionToObject.GetMethodObject(method, out value)) return new DecodedInfo(method.Method.ReturnType, ToString(value));
             throw new NotSupportedException("Can't use normal functions.");
         }
 
