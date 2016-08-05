@@ -966,7 +966,10 @@ namespace Test
             var exp = GetExp();
             var query = Sql<Data>.Create((db, x) => a == 1 && a == b && exp.Cast<bool>());
             var info = query.ToSqlInfo(typeof(SqlConnection));
-
+            Debug.Print(info.SqlText);
+            
+            query = Sql<Data>.Create((db, x) => a == 1 && a == b && GetExp().Cast<bool>());
+            info = query.ToSqlInfo(typeof(SqlConnection));
             Debug.Print(info.SqlText);
         }
 
@@ -984,6 +987,9 @@ namespace Test
             var info2 = Sql<Data>.Create((db, x) => GetInstance2()).ToSqlInfo(typeof(SqlConnection));
             Debug.Print(info2.SqlText);
 
+            var info3 = Sql<Data>.Create((db, x) => GetInstance3(GetStatic1(), GetInstance2())).ToSqlInfo(typeof(SqlConnection));
+            Debug.Print(info3.SqlText);
+
             //check cahe.
             info1 = Sql<Data>.Create((db, x) => GetStatic1()).ToSqlInfo(typeof(SqlConnection));
             Debug.Print(info1.SqlText);
@@ -993,5 +999,6 @@ namespace Test
 
         public static int GetStatic1() => 1;
         public int GetInstance2() => 2;
+        public int GetInstance3(int a, int b) => a + b;
     }
 }

@@ -62,7 +62,7 @@ namespace LambdicSql.Inside
 
         DecodedInfo ToString(MethodCallExpression method)
         {
-            if (IsSqlExpressionCast(method)) return ResolveSqlExpression(method);
+            if (IsSqlExpressionCast(method)) return ResolveSqlExpressionCast(method);
             if (IsSqlSyntaxResolver(method)) return ResolveSqlSyntax(method);
             object value;
             if (ExpressionToObject.GetMethodObject(method, out value)) return new DecodedInfo(method.Method.ReturnType, ToString(value));
@@ -112,7 +112,8 @@ namespace LambdicSql.Inside
                 return new DecodedInfo(col.Type, col.SqlFullName);
             }
 
-            //subQuery.member
+            //SubQuery's member.
+            //sub.id
             var method = member.Expression as MethodCallExpression;
             if (method != null && IsSqlExpressionCast(method))
             {
@@ -157,10 +158,10 @@ namespace LambdicSql.Inside
             throw new NotImplementedException();
         }
 
-        DecodedInfo ResolveSqlExpression(MethodCallExpression method)
+        DecodedInfo ResolveSqlExpressionCast(MethodCallExpression method)
         {
             object obj;
-            if (!ExpressionToObject.GetMemberObject(method.Arguments[0] as MemberExpression, out obj))
+            if (!ExpressionToObject.GetExpressionObject(method.Arguments[0], out obj))
             {
                 throw new NotSupportedException();
             }
