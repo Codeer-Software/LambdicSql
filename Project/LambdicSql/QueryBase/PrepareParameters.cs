@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace LambdicSql.QueryBase
 {
-    class PrepareParameter
+    class ParameterInfo
     {
         public int? MetadataToken { get; set; }
         public object Value { get; set; }
@@ -13,7 +12,7 @@ namespace LambdicSql.QueryBase
     public class PrepareParameters
     {
         int _count;
-        Dictionary<string, PrepareParameter> _parameters = new Dictionary<string, PrepareParameter>();
+        Dictionary<string, ParameterInfo> _parameters = new Dictionary<string, ParameterInfo>();
 
         public string Push(object obj)
         {
@@ -25,7 +24,7 @@ namespace LambdicSql.QueryBase
         {
             nameSrc = nameSrc.Replace(".", "_");
             var name = "@" + nameSrc;
-            PrepareParameter val;
+            ParameterInfo val;
             if (_parameters.TryGetValue(name, out val))
             {
                 //not be same direct value. 
@@ -52,7 +51,7 @@ namespace LambdicSql.QueryBase
                     nameSrc += "_";
                 }
             }
-            _parameters.Add(name, new PrepareParameter() { Value = obj, MetadataToken = metadataToken });
+            _parameters.Add(name, new ParameterInfo() { Value = obj, MetadataToken = metadataToken });
             return name;
         }
 
@@ -62,7 +61,7 @@ namespace LambdicSql.QueryBase
         public bool TryGetParam(string name, out object leftObj)
         {
             leftObj = null;
-            PrepareParameter val;
+            ParameterInfo val;
             if (_parameters.TryGetValue(name, out val))
             {
                 leftObj = val.Value;
@@ -76,7 +75,7 @@ namespace LambdicSql.QueryBase
 
         public string ResolvePrepare(string key)
         {
-            PrepareParameter val;
+            ParameterInfo val;
             if (!_parameters.TryGetValue(key, out val))
             {
                 return key;

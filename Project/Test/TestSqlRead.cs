@@ -1000,5 +1000,8 @@ namespace Test
         public static int GetStatic1() => 1;
         public int GetInstance2() => 2;
         public int GetInstance3(int a, int b) => a + b;
+
+
+        //TODO テキストとSQLの相互やり取り
     }
 }

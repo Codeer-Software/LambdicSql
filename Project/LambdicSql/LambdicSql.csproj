@@ -54,7 +54,7 @@
     <Compile Include="Funcs\AggregateFuncsExtensions.cs" />
     <Compile Include="SqlKeyWordExtensions.cs" />
     <Compile Include="Window\WindowWordsExtensions.cs" />
-    <Compile Include="Helper\ConditionWordsExtensions.cs" />
+    <Compile Include="Utility\ConditionWordsExtensions.cs" />
     <Compile Include="Words\FromWordsExtensions.cs" />
     <Compile Include="Words\GroupByWordsExtensions.cs" />
     <Compile Include="Words\HavingWordsExtensions.cs" />
