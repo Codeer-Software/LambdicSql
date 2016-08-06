@@ -28,47 +28,6 @@ namespace TestCore
                 Debug.Print("```");
             };
         }
-        /*
-        public void LambdaOnly()
-        {
-            //log for debug.
-            Sql.Log = l => Debug.Print(l);
-
-            //make sql.
-            var query = Sql.Query(() => new
-            {
-                tbl_staff = new
-                {
-                    id = 0,
-                    name = ""
-                },
-                tbl_remuneration = new
-                {
-                    id = 0,
-                    staff_id = 0,
-                    payment_date = default(DateTime),
-                    money = default(decimal)
-                }
-            }).
-            Select(db => new
-            {
-                name = db.tbl_staff.name,
-                payment_date = db.tbl_remuneration.payment_date,
-                money = db.tbl_remuneration.money,
-            }).
-            From(db => db.tbl_remuneration).
-                Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
-            Where(db => 3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000).
-            OrderBy().ASC(db => db.tbl_staff.name);
-
-            //execute.
-            var datas = query.ToExecutor(_connection).Read();
-
-            foreach (var e in datas)
-            {
-                Debug.Print("{0}, {1}, {2}", e.name, e.payment_date, e.money);
-            }
-        }*/
 
         public class Staff
         {
@@ -112,27 +71,6 @@ namespace TestCore
 
             var datas = query.ToExecutor(_connection).Read();
         }
-
-        /*
-        //Select all.
-        public void SelectAll()
-        {
-            //make sql.
-            var query = Sql.Query(() => new DB()).
-            Select().
-            From(db => db.tbl_remuneration).
-                Join(db => db.tbl_staff, db => db.tbl_remuneration.staff_id == db.tbl_staff.id).
-            Where(db => 3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000).
-                OrderBy().ASC(db => db.tbl_staff.name);
-
-            //execute.
-            var datas = query.ToExecutor(_connection).Read();
-
-            foreach (var e in datas)
-            {
-                Debug.Print("{0}, {1}, {2}", e.tbl_staff.name, e.tbl_remuneration.payment_date, e.tbl_remuneration.money);
-            }
-        }*/
 
         //Select one table.
         public void SelectFromX()
@@ -307,43 +245,7 @@ namespace TestCore
                    Values(1, 10, "a")).
                 ToExecutor(_connection).Write();
         }
-        //```
-        /*
-        //Insert selected data.
-        //```cs
-        public void InsertSelectedData()
-        {
-            var count = 
-                Sql.Query<DBData>().
-                InsertInto(db => db.tbl_data, tbl => tbl.id, tbl => tbl.val1).
-                Values(new Data() { id = 1, val1 = 10 }).
-                ToExecutor(_connection).Write();
-        }*/
 
-        //```
-        /*
-        //Insert using anonymous type.
-        //```cs
-        public void InsertUsingAnonymousType()
-        {
-            var data = new
-            {
-                id = 1,
-                val1 = 1,
-                val2 = 1.ToString()
-            };
-
-            var count =
-                Sql.Query(() => new
-                {
-                    tbl_data = data
-                }).
-                InsertInto(db => db.tbl_data).
-                Values(data).
-                ToExecutor(_connection).Write();
-        }*/
-        //```
-         
         //Update
         //```cs
         public void UpdateX()
@@ -616,25 +518,13 @@ namespace TestCore
                     Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
                 Where(3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
             
-            //★これかな！
-            //テーブル名はsubQueryになればいいやな！
             var query = Sql<DB>.Create(db => 
                 Select(new
                 {
                     name = subQuery.Cast().name
                 }).
                 From(subQuery.Cast()));
-            /*
-            var query = Sql.Using(()=>new DBSub()
-                {
-                    tbl_sub = subQuery.Cast()
-                }).Create(db => 
-                Select(new
-                {
-                    name = db.tbl_sub.name
-                }).
-                From(db.tbl_sub));
-            */
+
             var datas = query.ToExecutor(_connection).Read();
         }
     }

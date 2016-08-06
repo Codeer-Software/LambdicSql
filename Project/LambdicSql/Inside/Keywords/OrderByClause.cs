@@ -12,7 +12,7 @@ namespace LambdicSql.Inside.Keywords
             var method = methods[0];
             var arg = method.Arguments[method.SqlSyntaxMethodArgumentAdjuster()(0)];
             var array = arg as NewArrayExpression;
-            return Environment.NewLine + "ORDER BY" + string.Join(",", array.Expressions.Select(e => converter.ToString(e)).ToArray());
+            return Environment.NewLine + "ORDER BY" + Environment.NewLine + "\t" + string.Join("," + Environment.NewLine + "\t", array.Expressions.Select(e => converter.ToString(e)).ToArray());
         }
     }
 }

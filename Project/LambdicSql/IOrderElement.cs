@@ -11,7 +11,7 @@ namespace LambdicSql
         public Asc(object target) { }
         public static string NewToString(ISqlStringConverter cnv, NewExpression exp)
         {
-            return Environment.NewLine + "\t" + cnv.ToString(exp.Arguments[0]) + " " + "ASC";
+            return cnv.ToString(exp.Arguments[0]) + " " + "ASC";
         }
     }
 
@@ -20,7 +20,7 @@ namespace LambdicSql
         public Desc(object target) { }
         public static string NewToString(ISqlStringConverter cnv, NewExpression exp)
         {
-            return Environment.NewLine + "\t" + cnv.ToString(exp.Arguments[0]) + " " + "DESC";
+            return cnv.ToString(exp.Arguments[0]) + " " + "DESC";
         }
     }
 }
