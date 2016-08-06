@@ -37,6 +37,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Inside\ParameterInfo.cs" />
+    <Compile Include="Inside\SqlExpressionFormatText.cs" />
+    <Compile Include="Inside\TowWaySqlSpec.cs" />
     <Compile Include="QueryBase\ExpressionToObject.CreateGetter.cs" />
     <Compile Include="QueryBase\ExpressionToObject.Getter.cs" />
     <Compile Include="Inside\SqlExpressionMulti.cs" />

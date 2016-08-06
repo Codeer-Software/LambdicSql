@@ -1,4 +1,5 @@
 ﻿using LambdicSql.QueryBase;
+using System;
 using System.Linq.Expressions;
 
 namespace LambdicSql
@@ -10,9 +11,6 @@ namespace LambdicSql
         public static IWindowFuncs Window<T>(this ISqlKeyWord<T> words) => null;
         public static T Cast<T>(this ISqlKeyWord words) => default(T);
 
-        public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
-        {
-            return string.Empty;
-        }
+        public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods) => string.Empty;
     }
 }

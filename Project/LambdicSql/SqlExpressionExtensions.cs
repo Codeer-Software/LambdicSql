@@ -15,9 +15,10 @@ namespace LambdicSql
 
         public static TResult Cast<TResult>(this ISqlExpression<ISqlKeyWord<TResult>> query)
         {
+            //TODO error to all.
             throw new NotSupportedException("do not call cast except in expression.");
         }
-
+        
         public static ISqlExpression<TResult> Concat<TResult>(this ISqlExpression<TResult> query, ISqlExpression addExp)
           => new SqlExpressionMulti<TResult>(query, addExp);
 

@@ -5,6 +5,12 @@ using System.Linq.Expressions;
 
 namespace LambdicSql
 {
+    public class Sql
+    {
+        public static ISqlExpression Format2WaySql(string sql, params ISqlExpression[] exps)
+            => new SqlExpressionFormatText(TowWaySqlSpec.ToStringFormat(sql), exps);
+    }
+
     public class Sql<TDB> where TDB : class, new()
     {
         public static ISqlExpression<TResult> Create<TResult>(Expression<Func<TDB, ISqlKeyWord<Non>, TResult>> exp)
