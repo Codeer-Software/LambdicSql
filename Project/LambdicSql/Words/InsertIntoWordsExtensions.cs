@@ -11,7 +11,7 @@ namespace LambdicSql
     {
         public interface IInsertIntoAfter<T> : ISqlKeyWord<T> { }
 
-        public static IInsertIntoAfter<TSelected> InsertInto<TSelected>(this ISqlKeyWord<TSelected> words, object table, params object[] targets)
+        public static IInsertIntoAfter<TSelected> InsertInto<TSelected, TTable>(this ISqlKeyWord<TSelected> words, TTable table, params object[] targets)
              => InvalitContext.Throw<IInsertIntoAfter<TSelected>>(nameof(InsertInto));
         public static ISqlKeyWord<TSelected> Values<TSelected>(this IInsertIntoAfter<TSelected> words, params object[] targets)
              => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(Values));

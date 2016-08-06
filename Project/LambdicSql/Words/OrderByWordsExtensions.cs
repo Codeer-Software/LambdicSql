@@ -12,8 +12,8 @@ namespace LambdicSql
         public interface IOrderByAfter<T> : ISqlKeyWord<T> { }
 
         public static IOrderByAfter<TSelected> OrderBy<TSelected>(this ISqlKeyWord<TSelected> words) => InvalitContext.Throw<IOrderByAfter<TSelected>>(nameof(OrderBy));
-        public static IOrderByAfter<TSelected> ASC<TSelected>(this IOrderByAfter<TSelected> words, object target) => InvalitContext.Throw<IOrderByAfter<TSelected>>(nameof(ASC));
-        public static IOrderByAfter<TSelected> DESC<TSelected>(this IOrderByAfter<TSelected> words, object target) => InvalitContext.Throw<IOrderByAfter<TSelected>>(nameof(DESC));
+        public static IOrderByAfter<TSelected> ASC<TSelected, T>(this IOrderByAfter<TSelected> words, T target) => InvalitContext.Throw<IOrderByAfter<TSelected>>(nameof(ASC));
+        public static IOrderByAfter<TSelected> DESC<TSelected, T>(this IOrderByAfter<TSelected> words, T target) => InvalitContext.Throw<IOrderByAfter<TSelected>>(nameof(DESC));
 
         public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {

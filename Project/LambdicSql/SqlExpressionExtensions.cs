@@ -15,7 +15,6 @@ namespace LambdicSql
           => new SqlExpressionConcat<TResult>(query, addExp);
 
         public static SqlInfo<TSelected> ToSqlInfo<TSelected>(this ISqlExpression<ISqlKeyWord<TSelected>> exp, Type connectionType)
-             where TSelected : class
           => new SqlInfo<TSelected>(ToSqlInfo((ISqlExpression)exp, connectionType));
 
         public static SqlInfo ToSqlInfo(this ISqlExpression exp, Type connectionType)

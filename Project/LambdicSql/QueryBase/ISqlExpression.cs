@@ -8,12 +8,12 @@ namespace LambdicSql.QueryBase
         string ToString(ISqlStringConverter decoder);
     }
     
-    public interface ISqlExpression<out TSelected> : ISqlExpression { }
+    public interface ISqlExpression<out T> : ISqlExpression { }
 
-    public abstract class SqlExpression<TSelected> : ISqlExpression<TSelected>
+    public abstract class SqlExpression<T> : ISqlExpression<T>
     {
         public abstract DbInfo DbInfo { get; protected set; }
         public abstract string ToString(ISqlStringConverter decoder);
-        public static implicit operator TSelected(SqlExpression<TSelected> src) => default(TSelected);
+        public static implicit operator T(SqlExpression<T> src) => default(T);
     }
 }
