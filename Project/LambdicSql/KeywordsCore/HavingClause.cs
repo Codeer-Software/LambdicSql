@@ -5,10 +5,8 @@ using System.Linq.Expressions;
 
 namespace LambdicSql
 {
-    public static class HavingWordsExtensions
+    public static class HavingClause
     {
-        public static ISqlKeyWord<TSelected> Having<TSelected>(this ISqlKeyWord<TSelected> words, bool condition) => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(Having));
-
         public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];

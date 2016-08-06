@@ -44,12 +44,15 @@
     <Compile Include="QueryBase\ExpressionToObject.Getter.cs" />
     <Compile Include="Inside\SqlExpressionConcat.cs" />
     <Compile Include="QueryBase\DecodeContext.cs" />
+    <Compile Include="QueryBase\ISqlChainingKeyWord.cs" />
+    <Compile Include="QueryBase\ISqlChainingSyntax.cs" />
     <Compile Include="QueryBase\ISqlUtility.cs" />
     <Compile Include="QueryBase\ISqlKeyWord.cs" />
     <Compile Include="AggregatePredicate.cs" />
     <Compile Include="QueryBase\ISqlExpression.cs" />
     <Compile Include="QueryBase\IWindowFuncs.cs" />
     <Compile Include="QueryBase\IWindowFunctionsAfter.cs" />
+    <Compile Include="QueryBase\SqlExpression.cs" />
     <Compile Include="QueryBase\SqlSyntaxAttribute.cs" />
     <Compile Include="QueryBase\Non.cs" />
     <Compile Include="Inside\SqlExpressionSingle.cs" />
@@ -64,11 +67,11 @@
     <Compile Include="Utils.cs" />
     <Compile Include="Window.cs" />
     <Compile Include="Utility\ConditionUtilityExtensions.cs" />
-    <Compile Include="KeyWords\FromWordsExtensions.cs" />
-    <Compile Include="KeyWords\GroupByWordsExtensions.cs" />
-    <Compile Include="KeyWords\HavingWordsExtensions.cs" />
-    <Compile Include="KeyWords\InsertIntoWordsExtensions.cs" />
-    <Compile Include="KeyWords\OrderByWordsExtensions.cs" />
+    <Compile Include="KeywordsCore\FromClause.cs" />
+    <Compile Include="KeywordsCore\GroupByClause.cs" />
+    <Compile Include="KeywordsCore\HavingClause.cs" />
+    <Compile Include="KeywordsCore\InsertIntoClause.cs" />
+    <Compile Include="KeywordsCore\OrderByClause.cs" />
     <Compile Include="QueryBase\ObjectCreateInfo.cs" />
     <Compile Include="QueryBase\ObjectCreateMemberElement.cs" />
     <Compile Include="QueryBase\ExpressionToObject.cs" />
@@ -91,12 +94,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryBase\Dialect\DialectResolver.cs" />
     <Compile Include="Sql.cs" />
-    <Compile Include="KeyWords\CaseWordsExtensions.cs" />
-    <Compile Include="KeyWords\DeleteWordsExtensions.cs" />
-    <Compile Include="KeyWords\SelectWordsExtensions.cs" />
-    <Compile Include="KeyWords\UpdateWordsExtensions.cs" />
-    <Compile Include="KeyWords\WhereWordsExtensions.cs" />
-    <Compile Include="KeyWords\WordsExtensions.cs" />
+    <Compile Include="KeywordsCore\CaseClause.cs" />
+    <Compile Include="KeywordsCore\DeleteClause.cs" />
+    <Compile Include="KeywordsCore\SelectClause.cs" />
+    <Compile Include="KeywordsCore\UpdateClause.cs" />
+    <Compile Include="KeywordsCore\WhereClause.cs" />
+    <Compile Include="KeywordsCore\ConditionKeyWords.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,12 +1,10 @@
-﻿using LambdicSql.Inside;
-using LambdicSql.QueryBase;
+﻿using LambdicSql.QueryBase;
 using System.Linq;
 using System.Linq.Expressions;
 
 namespace LambdicSql
 {
-    
-    public static class WordsExtensions
+    public static class ConditionKeyWords
     {
         public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {

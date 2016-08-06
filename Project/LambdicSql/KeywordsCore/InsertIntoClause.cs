@@ -1,5 +1,4 @@
-﻿using LambdicSql.Inside;
-using LambdicSql.QueryBase;
+﻿using LambdicSql.QueryBase;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,13 +6,8 @@ using System.Linq.Expressions;
 
 namespace LambdicSql
 {
-    public static class InsertIntoWordsExtensions
+    public static class InsertIntoClause
     {
-        public interface IInsertIntoAfter<T> : ISqlChainingKeyWord<T> { }
-
-        public static ISqlKeyWord<TSelected> Values<TSelected>(this IInsertIntoAfter<TSelected> words, params object[] targets)
-             => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(Values));
-
         public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var list = new List<string>();
@@ -35,7 +29,7 @@ namespace LambdicSql
                         return Environment.NewLine + "INSERT INTO " + argSrc[0] + "(" + string.Join(", ", arg) + ")";
 
                     }
-                case nameof(Values): return Environment.NewLine + "\tVALUES (" + string.Join(", ", argSrc) + ")";
+                case nameof(Sql.Values): return Environment.NewLine + "\tVALUES (" + string.Join(", ", argSrc) + ")";
             }
             throw new NotSupportedException();
         }

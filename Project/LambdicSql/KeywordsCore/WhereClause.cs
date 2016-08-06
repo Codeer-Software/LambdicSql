@@ -5,10 +5,8 @@ using System.Linq.Expressions;
 
 namespace LambdicSql
 {
-    public static class WhereWordsExtensions
+    public static class WhereClause
     {
-        public static ISqlKeyWord<TSelected> Where<TSelected>(this ISqlKeyWord<TSelected> words, bool condition) => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(Where));
-
         public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];

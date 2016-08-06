@@ -1,16 +1,12 @@
-﻿using LambdicSql.Inside;
-using LambdicSql.QueryBase;
+﻿using LambdicSql.QueryBase;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace LambdicSql
 {
-    public static class UpdateWordsExtensions
+    public static class UpdateClause
     {
-        public interface IUpdateAfter<TSelected, T> : ISqlChainingKeyWord<TSelected> { }
-        public static ISqlKeyWord<TSelected> Set<TSelected, T>(this IUpdateAfter<TSelected, T> words, T setting) => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(Set));
-
         public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var list = new List<string>();
@@ -26,7 +22,7 @@ namespace LambdicSql
             switch (method.Method.Name)
             {
                 case nameof(Sql.Update): return Environment.NewLine + "UPDATE " + converter.ToString(method.Arguments[0]);
-                case nameof(Set):
+                case nameof(Sql.Set):
                     {
                         var select = ObjectCreateAnalyzer.MakeSelectInfo(method.Arguments[1]);
                         var list = new List<string>();

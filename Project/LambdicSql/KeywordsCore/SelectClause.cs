@@ -1,17 +1,12 @@
-﻿using LambdicSql.Inside;
-using LambdicSql.QueryBase;
+﻿using LambdicSql.QueryBase;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
 
 namespace LambdicSql
 {
-    public static class SelectWordsExtensions
+    public static class SelectClause
     {
-        public static ISqlKeyWord<TSelected> Select<TSelected>(this ISqlKeyWord words, AggregatePredicate predicate, TSelected selected) => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(Select));
-        public static ISqlKeyWord<TSelected> Select<TSelected>(this ISqlKeyWord words, TSelected selected) => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(Select));
-        public static ISqlKeyWord<TSelected> SelectFrom<TSelected>(this ISqlKeyWord words, TSelected selected) => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(SelectFrom));
-
         public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
@@ -36,7 +31,7 @@ namespace LambdicSql
                 converter.Context.SelectClauseInfo = select;
             }
             var text = ToString(GetPredicate(aggregatePredicate), select.Elements, converter);
-            if (method.Method.Name == nameof(SelectFrom))
+            if (method.Method.Name == nameof(Sql.SelectFrom))
             {
                 text = text + Environment.NewLine + "FROM " + converter.ToString(method.Arguments[index(0)]);
             }
