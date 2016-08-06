@@ -1,5 +1,5 @@
 ﻿namespace LambdicSql.QueryBase
 {
-    public interface ISqlChainingKeyWord : ISqlKeyWord, ISqlChainingSyntax { }
-    public interface ISqlChainingKeyWord<TSelected> : ISqlKeyWord<TSelected>, ISqlChainingKeyWord { }
+    public interface ISqlGroupingKeyWord : ISqlKeyWord, ISqlGroupingSyntax { }
+    public interface ISqlGroupingKeyWord<TSelected> : ISqlKeyWord<TSelected>, ISqlGroupingKeyWord { }
 }

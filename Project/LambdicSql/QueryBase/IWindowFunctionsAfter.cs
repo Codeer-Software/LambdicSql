@@ -1,4 +1,4 @@
 ﻿namespace LambdicSql.QueryBase
 {
-    public interface IWindowFunctionsAfter : ISqlChainingSyntax { }
+    public interface IWindowFunctionsAfter : ISqlGroupingSyntax { }
 }

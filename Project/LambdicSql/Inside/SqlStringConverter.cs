@@ -308,28 +308,34 @@ namespace LambdicSql.Inside
             while (true)
             {
                 var type = curent.Method.DeclaringType;
-                var chain = new List<MethodCallExpression>();
+                var group = new List<MethodCallExpression>();
                 while (true)
                 {
-                    chain.Add(curent);
-                    var next = curent.Arguments.Count == 0 ? null : curent.Arguments[0] as MethodCallExpression;
+                    group.Add(curent);
+                    var ps = curent.Method.GetParameters();
+                    bool isGrouping = 0 < ps.Length && typeof(ISqlGroupingSyntax).IsAssignableFrom(ps[0].ParameterType);
+                    bool isSqlSyntax = 0 < ps.Length && typeof(ISqlSyntax).IsAssignableFrom(ps[0].ParameterType);
+                    var next = isSqlSyntax ? curent.Arguments[0] as MethodCallExpression : null;
+
+                    //end of syntax
                     if (next == null)
                     {
-                        chain.Reverse();
-                        chains.Add(chain);
+                        group.Reverse();
+                        chains.Add(group);
                         chains.Reverse();
                         return chains;
                     }
-                    //TODO ↑refactoring
-                    bool chaining = typeof(ISqlChainingSyntax).IsAssignableFrom(curent.Method.GetParameters()[0].ParameterType);
+
                     curent = next;
-                    if (!chaining)
+
+                    //end of chain
+                    if (!isGrouping)
                     {
                         break;
                     }
                 }
-                chain.Reverse();
-                chains.Add(chain);
+                group.Reverse();
+                chains.Add(group);
             }
         }
     }
