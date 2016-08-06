@@ -1,5 +1,7 @@
 ﻿using LambdicSql.Inside;
 using LambdicSql.QueryBase;
+using System;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace LambdicSql
@@ -16,9 +18,4 @@ namespace LambdicSql
             return (bool)obj ? converter.ToString(method.Arguments[2]) : string.Empty;
         }
     }
-    /*
-    public static class StringUtilityExtensions
-    {
-        public static bool 
-    }*/
 }

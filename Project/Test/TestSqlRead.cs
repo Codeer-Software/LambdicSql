@@ -1,4 +1,5 @@
-﻿using LambdicSql;
+﻿using Dapper;
+using LambdicSql;
 using LambdicSql.QueryBase;
 using LambdicSql.Window;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -10,6 +11,7 @@ using System.Data.SqlClient;
 using System.Data.SQLite;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 
 namespace Test
 {
@@ -995,6 +997,112 @@ namespace Test
             var query = Sql<Data>.Create((db, x) => exp);
             var info = query.ToSqlInfo(typeof(SqlConnection));
             Debug.Print(info.SqlText);
+        }
+
+        [TestMethod]
+        public void TextFormatText()
+        {
+            var query = Sql<Data>.Create((db, x) => x.Util().FormatText<object>("{0} - {1}", db.tbl_staff.id, db.tbl_staff.id == 2));
+            var info = query.ToSqlInfo(typeof(SqlConnection));
+            Debug.Print(info.SqlText);
+        }
+
+        [TestMethod]
+        public void TestTextFormatText2()
+        {
+            SqlOption.Log = l => Debug.Print(l);
+            var query = Sql<Data>.Create((db, x) =>
+                x.
+                Select(new
+                {
+                    name = db.tbl_staff.name,
+                    payment_date = db.tbl_remuneration.payment_date,
+                    money = x.Util().FormatText<decimal>("{0} + 1000", db.tbl_remuneration.money),
+                }).
+                From(db.tbl_remuneration).
+                    Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
+                Where(3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
+
+            var y = query.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Read();
+        }
+
+        [TestMethod]
+        public void TestFormat2WaySql()
+        {
+            SqlOption.Log = l => Debug.Print(l);
+
+            var query = Sql<Data>.Create((db, x) =>
+                x.Util().Format2WaySql("aaa/*0*/bbb/**/ccc",
+                3, 4, 5));
+
+            var info = query.ToSqlInfo(typeof(SqlConnection));
+            Debug.Print(info.SqlText);
+        }
+
+        public class SelectedData
+        {
+            public string name { get; set; }
+            public DateTime payment_date { get; set; }
+            public decimal money { get; set; }
+        }
+
+        [TestMethod]
+        public void Dapper()
+        {
+       //     SqlOption.Log = l => Debug.Print(l);
+
+            SqlInfo info = null;
+            var times = new List<double>();
+            for (int i = 0; i < 1000; i++)
+            {
+
+                var watch = new Stopwatch();
+                watch.Start();
+                var query = Sql<Data>.Create((db, x) =>
+                    x.
+                    Select(new SelectedData()
+                    {
+                        name = db.tbl_staff.name,
+                        payment_date = db.tbl_remuneration.payment_date,
+                        money = db.tbl_remuneration.money,
+                    }).
+                    From(db.tbl_remuneration).
+                        Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
+                    Where(3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
+
+                info = query.ToSqlInfo(typeof(SqlConnection));
+
+                watch.Stop();
+                times.Add(watch.Elapsed.TotalMilliseconds);
+            }
+
+
+            times = times.Skip(1).ToList();
+            times.Select(e => e.ToString()).ToList().ForEach(e => Debug.Print(e));
+            Debug.Print(times.Average().ToString());
+
+            //  var con = new SqlConnection(TestEnvironment.SqlServerConnectionString);
+            // var data = con.Query(query);
+
+            //   var ps = new DynamicParameters();
+            //  info.Parameters.ToList().ForEach(e => ps.Add(e.Key, e.Value));
+            var datas = new SqlConnection(TestEnvironment.SqlServerConnectionString).Query<SelectedData>(info.SqlText, info.Parameters).ToList();
+            
+        }
+    }
+
+    public static class DapperApaptExtensions
+    {
+        public static IEnumerable<T> Query<T>(this IDbConnection cnn, ISqlExpression<ISqlKeyWord<T>> exp)
+            where T : class
+            => Query<T>(cnn, (ISqlExpression)exp);
+
+        public static IEnumerable<T> Query<T>(this IDbConnection cnn, ISqlExpression exp)
+        {
+            var info = exp.ToSqlInfo(cnn.GetType());
+            var ps = new DynamicParameters();
+            info.Parameters.ToList().ForEach(e => ps.Add(e.Key, e.Value));
+            return cnn.Query<T>(info.SqlText, ps);
         }
     }
 }
