@@ -1110,20 +1110,8 @@ FROM tbl_remuneration
         [TestMethod]
         public void NewSyntax()
         {
-            var info = Sql<Data>.Create(db => new AAA(7)).ToSqlInfo(typeof(SqlConnection));
+            var info = Sql<Data>.Create(db => new DateTime(1999, 1, 1)).ToSqlInfo(typeof(SqlConnection));
             Debug.Print(info.SqlText);
-        }
-
-        public class AAA : ISqlSyntaxObject
-        {
-            public AAA(int a)
-            {
-
-            }
-            public static string NewToString(ISqlStringConverter cnv, NewExpression exp)
-            {
-                return "AAA(" + cnv.ToString(exp.Arguments[0]) + ")";
-            }
         }
     }
 

@@ -33,8 +33,50 @@ namespace LambdicSql.QueryBase
             {
                 return GetMethodObject(method, out obj);
             }
+            var newExp = exp as NewExpression;
+            if (newExp != null)
+            {
+                return GetNewObject(newExp, out obj);
+            }
             obj = null;
             return false;
+        }
+
+        public static bool GetNewObject(NewExpression newExp, out object value)
+        {
+            value = null;
+
+            //arguments.
+            var ps = newExp.Constructor.GetParameters().Select(e => e.ParameterType).ToList();
+            var psExp = new List<ParameterExpression>();
+            var args = new List<object>();
+            for (int i = 0; i < ps.Count; i++)
+            {
+                psExp.Add(Expression.Parameter(ps[i], "p" + i));
+                object arg;
+                GetExpressionObject(newExp.Arguments[i], out arg);
+                args.Add(arg);
+            }
+
+            //name.
+            var getterName = newExp.Type.FullName + 
+                "(" + string.Join(",", ps.Select(e => e.FullName).ToArray()) + ")";
+
+            //getter.
+            IGetter getter;
+            lock (_memberGet)
+            {
+                if (!_memberGet.TryGetValue(getterName, out getter))
+                {
+                    Expression body = null;
+                    body = Expression.Convert(Expression.New(newExp.Constructor, psExp.ToArray()), typeof(object));
+                    getter = CreateGetter(ps.ToArray());
+                    getter.Init(body, psExp.ToArray());
+                    _memberGet[getterName] = getter;
+                }
+            }
+            value = getter.GetMemberObject(args.ToArray());
+            return true;
         }
 
         public static bool GetMethodObject(MethodCallExpression method, out object value)

@@ -58,12 +58,8 @@ namespace LambdicSql.Inside
                 var func = newExp.GetNewToString();
                 return new DecodedInfo(null, func(this, newExp));
             }
-            /*
-
-            if (IsSqlExpressionCast(method)) return ResolveSqlExpressionCast(method);
-            if (IsSqlSyntaxResolver(method)) return ResolveSqlSyntax(method);
             object value;
-            if (ExpressionToObject.GetMethodObject(method, out value)) return new DecodedInfo(method.Method.ReturnType, ToString(value));*/
+            if (ExpressionToObject.GetNewObject(newExp, out value)) return new DecodedInfo(newExp.Type, ToString(value));
             throw new NotSupportedException();
         }
 
