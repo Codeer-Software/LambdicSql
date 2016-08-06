@@ -5,15 +5,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace LambdicSql.Window
+namespace LambdicSql
 {
-    public static class WindowExtensions
+    public static class Window
     {
-        public static IWindowFunctionsAfter Avg<T>(this IWindowFuncs words, T t) => InvalitContext.Throw<IWindowFunctionsAfter>(nameof(Avg));
-        public static IWindowFunctionsAfter Lag<T>(this IWindowFuncs words, T t) => InvalitContext.Throw<IWindowFunctionsAfter>(nameof(Lag));
-        public static IWindowFunctionsAfter Lag<T>(this IWindowFuncs words, T t, object offset) => InvalitContext.Throw<IWindowFunctionsAfter>(nameof(Lag));
-        public static IWindowFunctionsAfter Lag<T>(this IWindowFuncs words, T t, object offset, object @default) => InvalitContext.Throw<IWindowFunctionsAfter>(nameof(Lag));
-        public static IWindowFunctionsAfter Over(this IWindowFunctionsAfter words) => InvalitContext.Throw<IWindowFunctionsAfter>(nameof(Over));
+        public static IWindowFunctionsAfter AvgOver<T>(T t) => InvalitContext.Throw<IWindowFunctionsAfter>(nameof(AvgOver));
+        public static IWindowFunctionsAfter LagOver<T>(T t) => InvalitContext.Throw<IWindowFunctionsAfter>(nameof(LagOver));
+        public static IWindowFunctionsAfter LagOver<T>(T t, object offset) => InvalitContext.Throw<IWindowFunctionsAfter>(nameof(LagOver));
+        public static IWindowFunctionsAfter LagOver<T>(T t, object offset, object @default) => InvalitContext.Throw<IWindowFunctionsAfter>(nameof(LagOver));
         public static IWindowFunctionsAfter PartitionBy(this IWindowFunctionsAfter words, params object[] t) => InvalitContext.Throw<IWindowFunctionsAfter>(nameof(PartitionBy));
         public static IWindowFunctionsAfter OrderBy(this IWindowFunctionsAfter words) => InvalitContext.Throw<IWindowFunctionsAfter>(nameof(OrderBy));
         public static IWindowFunctionsAfter Asc<T>(this IWindowFunctionsAfter words, T t) => InvalitContext.Throw<IWindowFunctionsAfter>(nameof(Asc));
@@ -28,7 +27,8 @@ namespace LambdicSql.Window
             for (int i = 0; i < methods.Length; i++)
             {
                 var m = methods[i];
-                var argSrc = m.Arguments.Skip(1).Select(e => converter.ToString(e)).ToArray();
+                var adjuster = m.SqlSyntaxMethodArgumentAdjuster();
+                var argSrc = m.Arguments.Skip(adjuster(0)).Select(e => converter.ToString(e)).ToArray();
                 list.Add(MethodToString(converter, m.Method.Name, argSrc));
                 if (i + 1 < methods.Length)
                 {
@@ -54,7 +54,6 @@ namespace LambdicSql.Window
         {
             switch (name)
             {
-                case nameof(Over): return Environment.NewLine + "\t" + name.ToUpper() + "(";
                 case nameof(Cast): return string.Empty;
                 case nameof(PartitionBy): return Environment.NewLine + "\t" + "PARTITION BY" + " " + argSrc[0];
                 case nameof(OrderBy): return Environment.NewLine + "\t" + "ORDER BY";
@@ -73,7 +72,7 @@ namespace LambdicSql.Window
                         }
                     }
             }
-            return Environment.NewLine + "\t" + name.ToUpper() + "(" + string.Join(", ", argSrc) + ")";
+            return Environment.NewLine + "\t" + name.ToUpper().Replace("OVER", string.Empty) + "(" + string.Join(", ", argSrc) + ") OVER(";
         }
     }
 }

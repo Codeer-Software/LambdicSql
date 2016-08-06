@@ -49,13 +49,13 @@ namespace Test
         public void Having() => _core.Having();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void Like() => _core.Like();
+        public void Like() => _core.LikeX();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void In() => _core.In();
+        public void In() => _core.InX();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void Between() => _core.Between();
+        public void Between() => _core.BetweenX();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void SelectPredicateDistinct() => _core.SelectPredicateDistinct();
@@ -64,7 +64,7 @@ namespace Test
         public void SelectPredicateAll() => _core.SelectPredicateAll();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void Delete() => _core.Delete();
+        public void Delete() => _core.DeleteEx();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void DeleteWhere() => _core.DeleteWhere();
@@ -79,7 +79,7 @@ namespace Test
      //   public void InsertUsingAnonymousType() => _core.InsertUsingAnonymousType();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void Update() => _core.Update();
+        public void Update() => _core.UpdateX();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void UpdateUsingTableValue() => _core.UpdateUsingTableValue();

@@ -10,7 +10,6 @@ namespace LambdicSql
         public static ISqlUtility Util<T>(this ISqlKeyWord<T> words) => InvalitContext.Throw<ISqlUtility>(nameof(Util));
         public static IWindowFuncs Window<T>(this ISqlKeyWord<T> words) => InvalitContext.Throw<IWindowFuncs>(nameof(Window));
         public static T Cast<T>(this ISqlKeyWord words) => default(T);
-
         public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods) => string.Empty;
     }
 }

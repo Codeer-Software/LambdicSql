@@ -12,8 +12,8 @@ namespace LambdicSql
         public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
-            var text = converter.ToString(method.Arguments[1]);
-            return string.IsNullOrEmpty(text.Trim()) ? string.Empty : Environment.NewLine + "WHERE " + converter.ToString(method.Arguments[1]);
+            var text = converter.ToString(method.Arguments[method.SqlSyntaxMethodArgumentAdjuster()(0)]);
+            return string.IsNullOrEmpty(text.Trim()) ? string.Empty : Environment.NewLine + "WHERE " + text;
         }
     }
 }

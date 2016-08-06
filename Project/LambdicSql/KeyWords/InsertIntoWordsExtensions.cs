@@ -11,8 +11,6 @@ namespace LambdicSql
     {
         public interface IInsertIntoAfter<T> : ISqlKeyWord<T> { }
 
-        public static IInsertIntoAfter<TSelected> InsertInto<TSelected, TTable>(this ISqlKeyWord<TSelected> words, TTable table, params object[] targets)
-             => InvalitContext.Throw<IInsertIntoAfter<TSelected>>(nameof(InsertInto));
         public static ISqlKeyWord<TSelected> Values<TSelected>(this IInsertIntoAfter<TSelected> words, params object[] targets)
              => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(Values));
 
@@ -21,7 +19,7 @@ namespace LambdicSql
             var list = new List<string>();
             foreach (var m in methods)
             {
-                var argSrc = m.Arguments.Skip(1).Select(e => converter.ToString(e)).ToArray();
+                var argSrc = m.Arguments.Skip(m.SqlSyntaxMethodArgumentAdjuster()(0)).Select(e => converter.ToString(e)).ToArray();
                 list.Add(MethodToString(m.Method.Name, argSrc));
             }
             return string.Join(string.Empty, list.ToArray());
@@ -31,7 +29,7 @@ namespace LambdicSql
         {
             switch (name)
             {
-                case nameof(InsertInto):
+                case nameof(Sql.InsertInto):
                     {
                         var arg = argSrc.Last().Split(',').Select(e => GetColumnOnly(e)).ToArray();
                         return Environment.NewLine + "INSERT INTO " + argSrc[0] + "(" + string.Join(", ", arg) + ")";

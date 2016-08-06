@@ -8,23 +8,25 @@ namespace LambdicSql
 {
     public static class SelectWordsExtensions
     {
-        public static ISqlKeyWord<TSelected> Select<TSelected>(this ISqlSyntax words, AggregatePredicate predicate, TSelected selected) => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(Select));
-        public static ISqlKeyWord<TSelected> Select<TSelected>(this ISqlSyntax words, TSelected selected) => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(Select));
-        public static ISqlKeyWord<TSelected> SelectFrom<TSelected>(this ISqlSyntax words, TSelected selected) => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(SelectFrom));
+        public static ISqlKeyWord<TSelected> Select<TSelected>(this ISqlKeyWord words, AggregatePredicate predicate, TSelected selected) => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(Select));
+        public static ISqlKeyWord<TSelected> Select<TSelected>(this ISqlKeyWord words, TSelected selected) => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(Select));
+        public static ISqlKeyWord<TSelected> SelectFrom<TSelected>(this ISqlKeyWord words, TSelected selected) => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(SelectFrom));
 
         public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
+            var index = method.SqlSyntaxMethodArgumentAdjuster();
+
             Expression define = null;
             AggregatePredicate? aggregatePredicate = null;
-            if (method.Arguments[1].Type == typeof(AggregatePredicate))
+            if (method.Arguments[index(0)].Type == typeof(AggregatePredicate))
             {
-                aggregatePredicate = (AggregatePredicate)((ConstantExpression)method.Arguments[1]).Value;
-                define = method.Arguments[2];
+                aggregatePredicate = (AggregatePredicate)((ConstantExpression)method.Arguments[index(0)]).Value;
+                define = method.Arguments[index(1)];
             }
             else
             {
-                define = method.Arguments[1];
+                define = method.Arguments[index(0)];
             }
 
             var select = ObjectCreateAnalyzer.MakeSelectInfo(define);
@@ -36,7 +38,7 @@ namespace LambdicSql
             var text = ToString(GetPredicate(aggregatePredicate), select.Elements, converter);
             if (method.Method.Name == nameof(SelectFrom))
             {
-                text = text + Environment.NewLine + "FROM " + converter.ToString(method.Arguments[1]);
+                text = text + Environment.NewLine + "FROM " + converter.ToString(method.Arguments[index(0)]);
             }
             return Environment.NewLine + text;
         }

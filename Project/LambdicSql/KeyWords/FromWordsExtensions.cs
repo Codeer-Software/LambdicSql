@@ -33,7 +33,7 @@ namespace LambdicSql
             string[] argSrc = method.Arguments.Skip(1).Select(e => converter.ToString(e)).ToArray();
             switch (name)
             {
-                case nameof(From): return Environment.NewLine + "FROM " + ExpressionToTableName(converter, method.Arguments[1]);
+                case nameof(From): return Environment.NewLine + "FROM " + ExpressionToTableName(converter, method.Arguments[method.SqlSyntaxMethodArgumentAdjuster()(0)]);
                 case nameof(CrossJoin): return Environment.NewLine + "\tCROSS JOIN " + ExpressionToTableName(converter, method.Arguments[1]);
             }
             return Environment.NewLine + "\t" + name.ToUpper() + " " + ExpressionToTableName(converter, method.Arguments[1]) + " ON " + argSrc[1];

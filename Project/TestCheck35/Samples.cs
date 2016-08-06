@@ -3,6 +3,8 @@ using System;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
+using static LambdicSql.Sql;
+using static LambdicSql.Funcs;
 
 namespace TestCore
 {
@@ -15,7 +17,7 @@ namespace TestCore
             _connection = connection;
 
             SqlOption.Log = null;
-            Delete();
+            DeleteEx();
             SqlOption.Log = l =>
             {
                 Debug.Print("");
@@ -148,11 +150,11 @@ namespace TestCore
                 Select(new
                 {
                     name = db.tbl_staff.name,
-                    count = x.Func().Count(db.tbl_remuneration.money),
-                    total = x.Func().Sum(db.tbl_remuneration.money),
-                    average = x.Func().Avg(db.tbl_remuneration.money),
-                    minimum = x.Func().Min(db.tbl_remuneration.money),
-                    maximum = x.Func().Max(db.tbl_remuneration.money),
+                    count = Count(db.tbl_remuneration.money),
+                    total = Sum(db.tbl_remuneration.money),
+                    average = Avg(db.tbl_remuneration.money),
+                    minimum = Min(db.tbl_remuneration.money),
+                    maximum = Max(db.tbl_remuneration.money),
                 }).
                 From(db.tbl_remuneration).
                     Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
@@ -172,8 +174,8 @@ namespace TestCore
                 Select(new
                 {
                     name = db.tbl_staff.name,
-                    count = x.Func().Count(AggregatePredicate.Distinct, db.tbl_remuneration.money),
-                    total = x.Func().Sum(AggregatePredicate.Distinct, db.tbl_remuneration.money)
+                    count = Count(AggregatePredicate.Distinct, db.tbl_remuneration.money),
+                    total = Sum(AggregatePredicate.Distinct, db.tbl_remuneration.money)
                 }).
                 From(db.tbl_remuneration).
                     Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
@@ -189,8 +191,8 @@ namespace TestCore
                 Select(new
                 {
                     name = db.tbl_staff.name,
-                    count = x.Func().Count(AggregatePredicate.All, db.tbl_remuneration.money),
-                    total = x.Func().Sum(AggregatePredicate.All, db.tbl_remuneration.money)
+                    count = Count(AggregatePredicate.All, db.tbl_remuneration.money),
+                    total = Sum(AggregatePredicate.All, db.tbl_remuneration.money)
                 }).
                 From(db.tbl_remuneration).
                     Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
@@ -206,40 +208,40 @@ namespace TestCore
                 Select(new
                 {
                     name = db.tbl_staff.name,
-                    total = x.Func().Sum(db.tbl_remuneration.money)
+                    total = Sum(db.tbl_remuneration.money)
                 }).
                 From(db.tbl_remuneration).
                     Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
                 GroupBy(db.tbl_staff.id, db.tbl_staff.name).
-                Having(10000 < x.Func().Sum(db.tbl_remuneration.money)));
+                Having(10000 < Sum(db.tbl_remuneration.money)));
 
             var datas = query.ToExecutor(_connection).Read();
         }
 
         //Like, In, Between
-        public void Like()
+        public void LikeX()
         {
             var query = Sql<DB>.Create((db, x) => x.
                 SelectFrom(db.tbl_staff).
-                Where(x.Like(db.tbl_staff.name, "%son%")));
+                Where(Like(db.tbl_staff.name, "%son%")));
 
             var datas = query.ToExecutor(_connection).Read();
         }
         
-        public void In()
+        public void InX()
         {
             var query = Sql<DB>.Create((db, x) => x.
                 SelectFrom(db.tbl_staff).
-                Where(x.In(db.tbl_staff.id, 1, 3)));
+                Where(In(db.tbl_staff.id, 1, 3)));
 
             var datas = query.ToExecutor(_connection).Read();
         }
         
-        public void Between()
+        public void BetweenX()
         {
             var query = Sql<DB>.Create((db, x) => x.
                 SelectFrom(db.tbl_staff).
-                Where(x.Between(db.tbl_staff.id, 1, 3)));
+                Where(Between(db.tbl_staff.id, 1, 3)));
 
             var datas = query.ToExecutor(_connection).Read();
         }
@@ -274,9 +276,9 @@ namespace TestCore
 
         //Delete all.
         //```cs
-        public void Delete()
+        public void DeleteEx()
         {
-            var count = Sql<DBData>.Create((db, x) => x.
+            var count = Sql<DBData>.Create((db, x) =>
                 Delete().
                 From(db.tbl_data)).
                 ToExecutor(_connection).Write();
@@ -287,7 +289,7 @@ namespace TestCore
         //```cs
         public void DeleteWhere()
         {
-            var count = Sql<DBData>.Create((db, x) => x.
+            var count = Sql<DBData>.Create((db, x) =>
                 Delete().
                 From(db.tbl_data).
                 Where(db.tbl_data.id == 3)).
@@ -299,7 +301,7 @@ namespace TestCore
         //```cs
         public void Insert()
         {
-            var count = Sql<DBData>.Create((db, x) => x.
+            var count = Sql<DBData>.Create((db, x) =>
                    InsertInto(db.tbl_data, db.tbl_data.id, db.tbl_data.val1, db.tbl_data.val2).
                    Values(1, 10, "a")).
                 ToExecutor(_connection).Write();
@@ -343,9 +345,9 @@ namespace TestCore
          
         //Update
         //```cs
-        public void Update()
+        public void UpdateX()
         {
-            var count1 = Sql<DBData>.Create((db, x) => x.
+            var count1 = Sql<DBData>.Create((db, x) =>
                 Update(db.tbl_data).
                 Set(new Data() { val1 = 100, val2 = "200" }).
                 Where(db.tbl_data.id == 1)).
@@ -357,7 +359,7 @@ namespace TestCore
         //```cs
         public void UpdateUsingTableValue()
         {
-            var count2 = Sql<DBData>.Create((db, x) => x.
+            var count2 = Sql<DBData>.Create((db, x) =>
                 Update(db.tbl_data).
                 Set(new Data() { val1 = db.tbl_data.val1 * 2 }).
                 Where(db.tbl_data.id == 1)).
@@ -480,8 +482,8 @@ namespace TestCore
         
         public void Case1()
         {
-            var caseExp = Sql<DB>.Create((db, x) => 
-                x.Case().
+            var caseExp = Sql<DB>.Create((db, x) =>
+                Case().
                 When(db.tbl_staff.id == 3).Then("x").
                 When(db.tbl_staff.id == 4).Then("y").
                 Else("z").
@@ -499,7 +501,7 @@ namespace TestCore
         public void Case2()
         {
             var caseExp = Sql<DB>.Create((db, x) =>
-                x.Case(db.tbl_staff.id).
+                Case(db.tbl_staff.id).
                 When(3).Then("x").
                 When(4).Then("y").
                 Else("z").
@@ -575,14 +577,14 @@ namespace TestCore
             var datas = Sql<DB>.Create((db, x) => x.
                 Select(new { name = db.tbl_staff.name }).
                 From(db.tbl_staff).
-                Where(x.In(db.tbl_staff.id, sub.Cast<int>()))).//sub query.
+                Where(In(db.tbl_staff.id, sub.Cast<int>()))).//sub query.
                 ToExecutor(_connection).Read();
         }
 
         public void SelectSubQuery()
         {
             var sub = Sql<DB>.Create((db, x) => x.
-                Select(new { total = x.Func().Sum(db.tbl_remuneration.money) }).
+                Select(new { total = Sum(db.tbl_remuneration.money) }).
                 From(db.tbl_remuneration));
 
             var datas = Sql<DB>.Create((db, x) => x.

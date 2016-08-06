@@ -9,7 +9,6 @@ namespace LambdicSql
     public static class UpdateWordsExtensions
     {
         public interface IUpdateAfter<TSelected, T> : ISqlKeyWord<TSelected> { }
-        public static IUpdateAfter<TSelected, T> Update<TSelected, T>(this ISqlKeyWord<TSelected> words, T table) => InvalitContext.Throw<IUpdateAfter<TSelected, T>>(nameof(Update));
         public static ISqlKeyWord<TSelected> Set<TSelected, T>(this IUpdateAfter<TSelected, T> words, T setting) => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(Set));
 
         public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
@@ -26,7 +25,7 @@ namespace LambdicSql
         {
             switch (method.Method.Name)
             {
-                case nameof(Update): return Environment.NewLine + "UPDATE " + converter.ToString(method.Arguments[1]);
+                case nameof(Sql.Update): return Environment.NewLine + "UPDATE " + converter.ToString(method.Arguments[0]);
                 case nameof(Set):
                     {
                         var select = ObjectCreateAnalyzer.MakeSelectInfo(method.Arguments[1]);

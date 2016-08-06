@@ -255,9 +255,7 @@ namespace LambdicSql.Inside
         }
 
         static bool IsSqlSyntaxResolver(MethodCallExpression method)
-            => method.Method.IsStatic &&
-                0 < method.Arguments.Count &&
-                typeof(ISqlSyntax).IsAssignableFrom(method.Arguments[0].Type);
+            => method.Method.IsSqlSyntaxResolver();
 
         static bool IsSqlExpressionCast(MethodCallExpression method)
             => method.Method.DeclaringType == typeof(SqlExpressionExtensions) &&
@@ -299,7 +297,7 @@ namespace LambdicSql.Inside
                 while (true)
                 {
                     chain.Add(curent);
-                    var next = curent.Arguments[0] as MethodCallExpression;
+                    var next = curent.Arguments.Count == 0 ? null : curent.Arguments[0] as MethodCallExpression;
                     if (next == null)
                     {
                         chain.Reverse();

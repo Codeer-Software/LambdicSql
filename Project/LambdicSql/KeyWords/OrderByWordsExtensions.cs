@@ -7,6 +7,7 @@ using System.Linq.Expressions;
 
 namespace LambdicSql
 {
+    //TODO style change?
     public static class OrderByWordsExtensions
     {
         public interface IOrderByAfter<T> : ISqlKeyWord<T> { }
