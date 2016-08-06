@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace LambdicSql
 {
-    public static class ConditionWordsExtensions
+    public static class ConditionUtilityExtensions
     {
         public static bool Condition(this ISqlUtility words, bool enable, bool condition) => default(bool);
 
@@ -16,4 +16,9 @@ namespace LambdicSql
             return (bool)obj ? converter.ToString(method.Arguments[2]) : string.Empty;
         }
     }
+    /*
+    public static class StringUtilityExtensions
+    {
+        public static bool 
+    }*/
 }

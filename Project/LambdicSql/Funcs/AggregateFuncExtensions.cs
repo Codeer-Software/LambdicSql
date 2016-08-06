@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace LambdicSql
 {
-    public static class AggregateFuncsExtensions
+    public static class AggregateFuncExtensions
     {
         public static T Sum<T>(this ISqlFunc func, T item) => default(T);
         public static T Sum<T>(this ISqlFunc func, AggregatePredicate aggregatePredicate, T item) => default(T);

@@ -38,6 +38,7 @@
   <ItemGroup>
     <Compile Include="Inside\ExpressionToObject.CreateGetter.cs" />
     <Compile Include="Inside\ExpressionToObject.Getter.cs" />
+    <Compile Include="Inside\SqlExpressionMulti.cs" />
     <Compile Include="QueryBase\DecodeContext.cs" />
     <Compile Include="QueryBase\IQueryDesigner.cs" />
     <Compile Include="QueryBase\ISqlUtility.cs" />
@@ -47,14 +48,14 @@
     <Compile Include="QueryBase\IWindowFuncs.cs" />
     <Compile Include="QueryBase\IWindowFunctionsAfter.cs" />
     <Compile Include="QueryBase\Non.cs" />
-    <Compile Include="QueryBase\SqlExpression.cs" />
+    <Compile Include="Inside\SqlExpression.cs" />
     <Compile Include="QueryBase\SqlFuncUtility.cs" />
     <Compile Include="SqlInfo.cs" />
     <Compile Include="SqlExpressionExtensions.cs" />
-    <Compile Include="Funcs\AggregateFuncsExtensions.cs" />
+    <Compile Include="Funcs\AggregateFuncExtensions.cs" />
     <Compile Include="SqlKeyWordExtensions.cs" />
-    <Compile Include="Window\WindowWordsExtensions.cs" />
-    <Compile Include="Utility\ConditionWordsExtensions.cs" />
+    <Compile Include="Window\WindowExtensions.cs" />
+    <Compile Include="Utility\ConditionUtilityExtensions.cs" />
     <Compile Include="Words\FromWordsExtensions.cs" />
     <Compile Include="Words\GroupByWordsExtensions.cs" />
     <Compile Include="Words\HavingWordsExtensions.cs" />

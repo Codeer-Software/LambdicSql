@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace LambdicSql.Window
 {
-    public static class WindowWordsExtensions
+    public static class WindowExtensions
     {
         public static IWindowFunctionsAfter Avg<T>(this IWindowFuncs words, T t) => null;
         public static IWindowFunctionsAfter Lag<T>(this IWindowFuncs words, T t) => null;

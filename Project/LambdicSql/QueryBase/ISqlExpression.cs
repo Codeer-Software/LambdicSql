@@ -6,7 +6,6 @@ namespace LambdicSql.QueryBase
     {
         DbInfo DbInfo { get; }
         string ToString(ISqlStringConverter decoder);
-        Expression Expression { get; }
     }
 
     public interface ISqlExpression<out TSelected> : ISqlExpression { }
