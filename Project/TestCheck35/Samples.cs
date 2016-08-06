@@ -659,11 +659,11 @@ namespace TestCore
                 {
                     Name = db.tbl_staff.name,
                     PaymentDate = db.tbl_remuneration.payment_date,
-                    Money = expMoneyAdd.Cast<decimal>(),
+                    Money = expMoneyAdd,
                 }).
                 From(db.tbl_remuneration).
                     Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
-                Where(expWhereMin.Cast<bool>() && expWhereMax.Cast<bool>()).
+                Where(expWhereMin && expWhereMax).
                 OrderBy(new Asc(db.tbl_staff.name)));
 
             //to string and params.
