@@ -2,13 +2,13 @@
 
 namespace LambdicSql.Inside
 {
-    class SqlExpressionMulti<TSelected> : ISqlExpression<TSelected>
+    class SqlExpressionConcat<TSelected> : SqlExpression<TSelected>
     {
         ISqlExpression _before;
         ISqlExpression _after;
-        public DbInfo DbInfo { get; }
+        public override DbInfo DbInfo { get; protected set; }
 
-        public SqlExpressionMulti(ISqlExpression before, ISqlExpression after)
+        public SqlExpressionConcat(ISqlExpression before, ISqlExpression after)
         {
             _before = before;
             _after = after;
@@ -22,7 +22,7 @@ namespace LambdicSql.Inside
             }
         }
 
-        public string ToString(ISqlStringConverter converter)
+        public override string ToString(ISqlStringConverter converter)
             => _before.ToString(converter) + _after.ToString(converter);
     }
 }

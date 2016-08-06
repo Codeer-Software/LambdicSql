@@ -41,7 +41,7 @@
     <Compile Include="Inside\TowWaySqlSpec.cs" />
     <Compile Include="QueryBase\ExpressionToObject.CreateGetter.cs" />
     <Compile Include="QueryBase\ExpressionToObject.Getter.cs" />
-    <Compile Include="Inside\SqlExpressionMulti.cs" />
+    <Compile Include="Inside\SqlExpressionConcat.cs" />
     <Compile Include="QueryBase\DecodeContext.cs" />
     <Compile Include="QueryBase\ISqlUtility.cs" />
     <Compile Include="QueryBase\ISqlKeyWord.cs" />
@@ -50,7 +50,7 @@
     <Compile Include="QueryBase\IWindowFuncs.cs" />
     <Compile Include="QueryBase\IWindowFunctionsAfter.cs" />
     <Compile Include="QueryBase\Non.cs" />
-    <Compile Include="Inside\SqlExpression.cs" />
+    <Compile Include="Inside\SqlExpressionSingle.cs" />
     <Compile Include="QueryBase\SqlFuncUtility.cs" />
     <Compile Include="SqlInfo.cs" />
     <Compile Include="SqlExpressionExtensions.cs" />

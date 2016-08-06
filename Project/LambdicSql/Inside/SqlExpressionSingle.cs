@@ -3,18 +3,18 @@ using System.Linq.Expressions;
 
 namespace LambdicSql.Inside
 {
-    class SqlExpression<TSelected> : ISqlExpression<TSelected>
+    class SqlExpressionSingle<TSelected> : SqlExpression<TSelected>
     {
         Expression _core;
-        public DbInfo DbInfo { get; private set; }
+        public override DbInfo DbInfo { get; protected set; }
 
-        public SqlExpression(DbInfo dbInfo, Expression core)
+        public SqlExpressionSingle(DbInfo dbInfo, Expression core)
         {
             DbInfo = dbInfo;
             _core = core;
         }
         
-        public string ToString(ISqlStringConverter converter)
+        public override string ToString(ISqlStringConverter converter)
             => (_core == null) ? string.Empty : converter.ToString(_core);
     }
 }

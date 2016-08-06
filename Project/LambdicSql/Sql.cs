@@ -13,10 +13,10 @@ namespace LambdicSql
 
     public class Sql<TDB> where TDB : class, new()
     {
-        public static ISqlExpression<TResult> Create<TResult>(Expression<Func<TDB, ISqlKeyWord<Non>, TResult>> exp)
+        public static SqlExpression<TResult> Create<TResult>(Expression<Func<TDB, ISqlKeyWord<Non>, TResult>> exp)
         {
             var db = DBDefineAnalyzer.GetDbInfo(() => new TDB());
-            return new SqlExpression<TResult>(db, exp.Body);
+            return new SqlExpressionSingle<TResult>(db, exp.Body);
         }
     }
 }
