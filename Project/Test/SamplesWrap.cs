@@ -107,5 +107,14 @@ namespace Test
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void FromSubQuery() => _core.TestSubQueryAtFrom();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void FormatText() => _core.TestFormatText();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Format2WaySql() => _core.TestFormat2WaySql();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Window() => _core.TestWindow();
     }
 }

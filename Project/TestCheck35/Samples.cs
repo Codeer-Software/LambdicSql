@@ -109,7 +109,14 @@ namespace TestCore
             public DateTime? PaymentDate { get; set; }
             public decimal? Money { get; set; }
         }
-        
+
+        public class SelectData8
+        {
+            public decimal Avg { get; set; }
+            public DateTime PaymentDate { get; set; }
+            public decimal Money { get; set; }
+        }
+
         public void TestStandard()
         {
             //make sql.
@@ -570,6 +577,34 @@ namespace TestCore
                            End()
                 }).
                 From(db.tbl_staff));
+
+            //to string and params.
+            var info = query.ToSqlInfo(_connection.GetType());
+            Debug.Print(info.SqlText);
+
+            //dapper
+            var datas = _connection.Query<SelectData1>(info.SqlText, info.Parameters).ToList();
+        }
+
+        //window functions.
+        public void TestWindow()
+        {
+            //not supported db.
+            if (_connection.GetType().FullName == "System.Data.SQLite.SQLiteConnection") return;
+
+            //make sql.
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData8()
+                {
+                    Avg = Window.Avg(db.tbl_remuneration.money).
+                            Over<decimal>(new PartitionBy(db.tbl_staff.name, db.tbl_remuneration.payment_date),
+                                new OrderBy(new Asc(db.tbl_remuneration.money), new Desc(db.tbl_remuneration.payment_date)),
+                                new Rows(1, 1)),
+                    PaymentDate = db.tbl_remuneration.payment_date,
+                    Money = db.tbl_remuneration.money,
+                }).
+                From(db.tbl_remuneration).
+                Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id));
 
             //to string and params.
             var info = query.ToSqlInfo(_connection.GetType());
