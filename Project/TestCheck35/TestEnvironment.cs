@@ -1,5 +1,4 @@
-﻿using LambdicSql.QueryBase;
-using System;
+﻿using System;
 using System.IO;
 
 namespace TestCore

@@ -14,25 +14,6 @@ namespace Performance
             Test();
         }
 
-        static void Profile()
-        {
-            SelectTime.IsProfile = true;
-            Console.ReadLine();
-            SelectTime.CheckLambdicSqlCondition();
-        }
-
-        static void CompareOne()
-        {
-            SelectTime.IsProfile = false;
-            Console.ReadLine();
-            Console.WriteLine("Dapper");
-            SelectTime.CheckDapperCondition();
-            Console.WriteLine("Lambdic");
-            SelectTime.CheckLambdicSqlCondition();
-            Console.WriteLine("Finish");
-            Console.ReadLine();
-        }
-
         public class SelectedData
         {
             public string name { get; set; }
@@ -58,12 +39,12 @@ namespace Performance
         }
         static void Test()
         {
-
             Console.ReadKey();
             Console.WriteLine("Start");
             SqlInfo info = null;
             var times = new List<double>();
             var watch = new Stopwatch();
+
             for (int i = 0; i < 10000; i++)
             {
                 watch.Start();
@@ -89,16 +70,7 @@ namespace Performance
             times = times.Skip(1).ToList();
             times.Select(e => e.ToString()).ToList().ForEach(e => Console.WriteLine(e));
             Console.WriteLine(times.Average().ToString());
-
             Console.ReadKey();
-
-            //  var con = new SqlConnection(TestEnvironment.SqlServerConnectionString);
-            // var data = con.Query(query);
-
-            //   var ps = new DynamicParameters();
-            //  info.Parameters.ToList().ForEach(e => ps.Add(e.Key, e.Value));
-            //   var datas = new SqlConnection(TestEnvironment.SqlServerConnectionString).Query<SelectedData>(info.SqlText, info.Parameters).ToList();
-
         }
     }
 }
