@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using static LambdicSql.Sql;
 using static LambdicSql.Funcs;
+using static LambdicSql.Utils;
 
 namespace TestCore
 {
@@ -98,7 +99,7 @@ namespace TestCore
             //log for debug.
             SqlOption.Log = l => Debug.Print(l);
 
-            var query = Sql<DB>.Create((db, x) => x.
+            var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
                     name = db.tbl_staff.name,
@@ -134,10 +135,10 @@ namespace TestCore
         }*/
 
         //Select one table.
-        public void SelectFrom()
+        public void SelectFromX()
         {
             //make sql.
-            var query = Sql<DB>.Create((db, x) => x.SelectFrom(db.tbl_staff));
+            var query = Sql<DB>.Create(db => SelectFrom(db.tbl_staff));
 
             //execute.
             var datas = query.ToExecutor(_connection).Read();
@@ -146,7 +147,7 @@ namespace TestCore
         //Group by.
         public void GroupBy()
         {
-            var query = Sql< DB>.Create((db, x) => x.
+            var query = Sql< DB>.Create(db =>
                 Select(new
                 {
                     name = db.tbl_staff.name,
@@ -170,7 +171,7 @@ namespace TestCore
         //Group by using Distinct.
         public void GroupByPredicateDistinct()
         {
-            var query = Sql<DB>.Create((db, x) => x.
+            var query = Sql<DB>.Create(db =>
                 Select(new
                 {
                     name = db.tbl_staff.name,
@@ -187,7 +188,7 @@ namespace TestCore
         //Group by using All.
         public void GroupByPredicateAll()
         {
-            var query = Sql<DB>.Create((db, x) => x.
+            var query = Sql<DB>.Create(db =>
                 Select(new
                 {
                     name = db.tbl_staff.name,
@@ -204,7 +205,7 @@ namespace TestCore
         //Having
         public void Having()
         {
-            var query = Sql<DB>.Create((db, x) => x.
+            var query = Sql<DB>.Create(db =>
                 Select(new
                 {
                     name = db.tbl_staff.name,
@@ -221,7 +222,7 @@ namespace TestCore
         //Like, In, Between
         public void LikeX()
         {
-            var query = Sql<DB>.Create((db, x) => x.
+            var query = Sql<DB>.Create(db =>
                 SelectFrom(db.tbl_staff).
                 Where(Like(db.tbl_staff.name, "%son%")));
 
@@ -230,7 +231,7 @@ namespace TestCore
         
         public void InX()
         {
-            var query = Sql<DB>.Create((db, x) => x.
+            var query = Sql<DB>.Create(db =>
                 SelectFrom(db.tbl_staff).
                 Where(In(db.tbl_staff.id, 1, 3)));
 
@@ -239,7 +240,7 @@ namespace TestCore
         
         public void BetweenX()
         {
-            var query = Sql<DB>.Create((db, x) => x.
+            var query = Sql<DB>.Create(db =>
                 SelectFrom(db.tbl_staff).
                 Where(Between(db.tbl_staff.id, 1, 3)));
 
@@ -250,7 +251,7 @@ namespace TestCore
         //```cs
         public void SelectPredicateDistinct()
         {
-            var datas = Sql<DB>.Create((db, x) => x.
+            var datas = Sql<DB>.Create(db =>
                 Select(AggregatePredicate.Distinct, new
                 {
                     id = db.tbl_remuneration.staff_id
@@ -264,7 +265,7 @@ namespace TestCore
         //```cs
         public void SelectPredicateAll()
         {
-            var datas = Sql<DB>.Create((db, x) => x.
+            var datas = Sql<DB>.Create(db =>
                 Select(AggregatePredicate.All, new
                 {
                     id = db.tbl_remuneration.staff_id
@@ -278,7 +279,7 @@ namespace TestCore
         //```cs
         public void DeleteEx()
         {
-            var count = Sql<DBData>.Create((db, x) =>
+            var count = Sql<DBData>.Create(db =>
                 Delete().
                 From(db.tbl_data)).
                 ToExecutor(_connection).Write();
@@ -289,7 +290,7 @@ namespace TestCore
         //```cs
         public void DeleteWhere()
         {
-            var count = Sql<DBData>.Create((db, x) =>
+            var count = Sql<DBData>.Create(db =>
                 Delete().
                 From(db.tbl_data).
                 Where(db.tbl_data.id == 3)).
@@ -301,7 +302,7 @@ namespace TestCore
         //```cs
         public void Insert()
         {
-            var count = Sql<DBData>.Create((db, x) =>
+            var count = Sql<DBData>.Create(db =>
                    InsertInto(db.tbl_data, db.tbl_data.id, db.tbl_data.val1, db.tbl_data.val2).
                    Values(1, 10, "a")).
                 ToExecutor(_connection).Write();
@@ -347,7 +348,7 @@ namespace TestCore
         //```cs
         public void UpdateX()
         {
-            var count1 = Sql<DBData>.Create((db, x) =>
+            var count1 = Sql<DBData>.Create(db =>
                 Update(db.tbl_data).
                 Set(new Data() { val1 = 100, val2 = "200" }).
                 Where(db.tbl_data.id == 1)).
@@ -359,7 +360,7 @@ namespace TestCore
         //```cs
         public void UpdateUsingTableValue()
         {
-            var count2 = Sql<DBData>.Create((db, x) =>
+            var count2 = Sql<DBData>.Create(db =>
                 Update(db.tbl_data).
                 Set(new Data() { val1 = db.tbl_data.val1 * 2 }).
                 Where(db.tbl_data.id == 1)).
@@ -382,7 +383,7 @@ namespace TestCore
         public void IsNull()
         {
             decimal? val = null;
-            var query = Sql<DB>.Create((db, x) => x.
+            var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
                     name = db.tbl_staff.name,
@@ -399,7 +400,7 @@ namespace TestCore
         public void IsNotNull()
         {
             decimal? val = null;
-            var query = Sql<DB>.Create((db, x) => x.
+            var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
                     name = db.tbl_staff.name,
@@ -435,7 +436,7 @@ namespace TestCore
         
         public void Nullable()
         {
-            var query = Sql<DBNullable>.Create((db, x) => x.
+            var query = Sql<DBNullable>.Create(db =>
                 Select(new SelectDataNullable()
                 {
                     name = db.tbl_staff.name,
@@ -451,7 +452,7 @@ namespace TestCore
         
         public void StringCalc()
         {
-            var query = Sql<DB>.Create((db, x) => x.
+            var query = Sql<DB>.Create(db =>
             Select(new SelectData()
             {
                 name = db.tbl_staff.name + "x"
@@ -472,24 +473,24 @@ namespace TestCore
 
         public void WhereEx(bool minCondition, bool maxCondition)
         {
-            var exp = Sql<DB>.Create((db, x) =>
-                x.Util().Condition(minCondition, 3000 < db.tbl_remuneration.money) &&
-                x.Util().Condition(maxCondition, db.tbl_remuneration.money < 4000));
+            var exp = Sql<DB>.Create(db =>
+                Condition(minCondition, 3000 < db.tbl_remuneration.money) &&
+                Condition(maxCondition, db.tbl_remuneration.money < 4000));
 
-            var datas = Sql<DB>.Create((db, x) => x.SelectFrom(db.tbl_remuneration).Where(exp.Cast<bool>())).
+            var datas = Sql<DB>.Create(db => SelectFrom(db.tbl_remuneration).Where(exp.Cast<bool>())).
                 ToExecutor(_connection).Read();
         }
         
         public void Case1()
         {
-            var caseExp = Sql<DB>.Create((db, x) =>
+            var caseExp = Sql<DB>.Create(db =>
                 Case().
                 When(db.tbl_staff.id == 3).Then("x").
                 When(db.tbl_staff.id == 4).Then("y").
                 Else("z").
                 End());
 
-            var datas = Sql<DB>.Create((db, x) => x.
+            var datas = Sql<DB>.Create(db => 
                 Select(new
                 {
                     type = caseExp.Cast<string>()
@@ -500,14 +501,14 @@ namespace TestCore
         
         public void Case2()
         {
-            var caseExp = Sql<DB>.Create((db, x) =>
+            var caseExp = Sql<DB>.Create(db =>
                 Case(db.tbl_staff.id).
                 When(3).Then("x").
                 When(4).Then("y").
                 Else("z").
                 End());
 
-            var datas = Sql<DB>.Create((db, x) => x.
+            var datas = Sql<DB>.Create(db => 
                 Select(new
                 {
                     type = caseExp.Cast<string>()
@@ -520,7 +521,7 @@ namespace TestCore
         //Concat query.
         public void QueryConcat()
         {
-            var select = Sql<DB>.Create((db, x) => x.
+            var select = Sql<DB>.Create(db => 
                 Select(new SelectData()
                 {
                     name = db.tbl_staff.name,
@@ -528,14 +529,14 @@ namespace TestCore
                     money = db.tbl_remuneration.money,
                 }));
 
-            var from = Sql<DB>.Create((db, x) => x.
+            var from = Sql<DB>.Create(db => 
                  From(db.tbl_remuneration).
                 Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id));
 
-            var where = Sql<DB>.Create((db, x) => x.
+            var where = Sql<DB>.Create(db => 
                 Where(3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
 
-            var orderby = Sql<DB>.Create((db, x) => x.
+            var orderby = Sql<DB>.Create(db => 
                  OrderBy().ASC(db.tbl_staff.name));
 
             var query = select.Concat(from).Concat(where).Concat(orderby);
@@ -546,11 +547,11 @@ namespace TestCore
 
         public void SqlExtension()
         {
-            var expMoneyAdd = Sql<DB>.Create((db, x) => db.tbl_remuneration.money + 100);
-            var expWhereMin = Sql<DB>.Create((db, x) => 3000 < db.tbl_remuneration.money);
-            var expWhereMax = Sql<DB>.Create((db, x) => db.tbl_remuneration.money < 4000);
+            var expMoneyAdd = Sql<DB>.Create(db => db.tbl_remuneration.money + 100);
+            var expWhereMin = Sql<DB>.Create(db => 3000 < db.tbl_remuneration.money);
+            var expWhereMax = Sql<DB>.Create(db => db.tbl_remuneration.money < 4000);
 
-            var query = Sql< DB>.Create((db, x) => x.
+            var query = Sql< DB>.Create(db =>
                 Select(new SelectData()
                 {
                     name = db.tbl_staff.name,
@@ -570,11 +571,11 @@ namespace TestCore
         //You can use sub query.
         public void WhereInSubQuery()
         {
-            var sub = Sql<DB>.Create((db, x) => x.
+            var sub = Sql<DB>.Create(db => 
                 Select(new { total = db.tbl_remuneration.staff_id }).
                 From(db.tbl_remuneration));
 
-            var datas = Sql<DB>.Create((db, x) => x.
+            var datas = Sql<DB>.Create(db => 
                 Select(new { name = db.tbl_staff.name }).
                 From(db.tbl_staff).
                 Where(In(db.tbl_staff.id, sub.Cast<int>()))).//sub query.
@@ -583,11 +584,11 @@ namespace TestCore
 
         public void SelectSubQuery()
         {
-            var sub = Sql<DB>.Create((db, x) => x.
+            var sub = Sql<DB>.Create(db => 
                 Select(new { total = Sum(db.tbl_remuneration.money) }).
                 From(db.tbl_remuneration));
 
-            var datas = Sql<DB>.Create((db, x) => x.
+            var datas = Sql<DB>.Create(db => 
                 Select(new
                 {
                     name = db.tbl_staff.name,
@@ -604,7 +605,7 @@ namespace TestCore
         
         public void FromSubQuery()
         {
-            var subQuery = Sql<DB>.Create((db, x) => x.
+            var subQuery = Sql<DB>.Create(db => 
                 Select(new SelectData()
                 {
                     name = db.tbl_staff.name,
@@ -617,7 +618,7 @@ namespace TestCore
             
             //★これかな！
             //テーブル名はsubQueryになればいいやな！
-            var query = Sql<DB>.Create((db, x) => x.
+            var query = Sql<DB>.Create(db => 
                 Select(new
                 {
                     name = subQuery.Cast().name
@@ -627,7 +628,7 @@ namespace TestCore
             var query = Sql.Using(()=>new DBSub()
                 {
                     tbl_sub = subQuery.Cast()
-                }).Create((db, x) => x.
+                }).Create(db => 
                 Select(new
                 {
                     name = db.tbl_sub.name

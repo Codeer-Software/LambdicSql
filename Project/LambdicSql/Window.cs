@@ -7,6 +7,7 @@ using System.Linq.Expressions;
 
 namespace LambdicSql
 {
+    [SqlSyntax]
     public static class Window
     {
         public static IWindowFunctionsAfter AvgOver<T>(T t) => InvalitContext.Throw<IWindowFunctionsAfter>(nameof(AvgOver));

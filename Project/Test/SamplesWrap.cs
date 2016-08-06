@@ -34,7 +34,7 @@ namespace Test
    //     public void SelectAll() => _core.SelectAll();
         
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void SelectFrom() => _core.SelectFrom();
+        public void SelectFrom() => _core.SelectFromX();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void GroupBy() => _core.GroupBy();

@@ -9,7 +9,7 @@ namespace LambdicSql
 {
     public static class FromWordsExtensions
     {
-        public interface IFromAfter<T> : ISqlKeyWord<T> { }
+        public interface IFromAfter<T> : ISqlChainingKeyWord<T> { }
 
         public static IFromAfter<TSelected> From<TSelected, T>(this ISqlKeyWord<TSelected> words, T tbale) => InvalitContext.Throw<IFromAfter<TSelected>>(nameof(From));
         public static ISqlKeyWord<TSelected> Join<TSelected, T>(this IFromAfter<TSelected> words, T tbale, bool condition) => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(Join));

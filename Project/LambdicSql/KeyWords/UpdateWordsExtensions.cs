@@ -8,7 +8,7 @@ namespace LambdicSql
 {
     public static class UpdateWordsExtensions
     {
-        public interface IUpdateAfter<TSelected, T> : ISqlKeyWord<TSelected> { }
+        public interface IUpdateAfter<TSelected, T> : ISqlChainingKeyWord<TSelected> { }
         public static ISqlKeyWord<TSelected> Set<TSelected, T>(this IUpdateAfter<TSelected, T> words, T setting) => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(Set));
 
         public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)

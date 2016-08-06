@@ -9,7 +9,7 @@ namespace LambdicSql
 {
     public static class InsertIntoWordsExtensions
     {
-        public interface IInsertIntoAfter<T> : ISqlKeyWord<T> { }
+        public interface IInsertIntoAfter<T> : ISqlChainingKeyWord<T> { }
 
         public static ISqlKeyWord<TSelected> Values<TSelected>(this IInsertIntoAfter<TSelected> words, params object[] targets)
              => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(Values));

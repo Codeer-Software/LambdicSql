@@ -10,7 +10,7 @@ namespace LambdicSql
     //TODO style change?
     public static class OrderByWordsExtensions
     {
-        public interface IOrderByAfter<T> : ISqlKeyWord<T> { }
+        public interface IOrderByAfter<T> : ISqlChainingKeyWord<T> { }
 
         public static IOrderByAfter<TSelected> OrderBy<TSelected>(this ISqlKeyWord<TSelected> words) => InvalitContext.Throw<IOrderByAfter<TSelected>>(nameof(OrderBy));
         public static IOrderByAfter<TSelected> ASC<TSelected, T>(this IOrderByAfter<TSelected> words, T target) => InvalitContext.Throw<IOrderByAfter<TSelected>>(nameof(ASC));

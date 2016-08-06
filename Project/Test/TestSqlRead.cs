@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Linq;
 using static LambdicSql.Sql;
 using static LambdicSql.Funcs;
+using static LambdicSql.Utils;
 using static LambdicSql.Window;
 
 namespace Test
@@ -731,7 +732,7 @@ namespace Test
         {
             SqlOption.Log = l => Debug.Print(l);
 
-            var count = Sql<DataChangeTest>.Create((db, x) => 
+            var count = Sql<DataChangeTest>.Create(db => 
                 Delete().
                 From(db.tbl_data)).
                 ToExecutor(_connection).Write();
@@ -743,7 +744,7 @@ namespace Test
         {
             SqlOption.Log = l => Debug.Print(l);
 
-            var count = Sql<DataChangeTest>.Create((db, x) => 
+            var count = Sql<DataChangeTest>.Create(db => 
                 Delete().
                 From(db.tbl_data).
                 Where(db.tbl_data.id == 3)).
@@ -754,7 +755,7 @@ namespace Test
         public void SelectEx()
         {
             SqlOption.Log = l => Debug.Print(l);
-            var query = Sql<Data>.Create((db, x) =>
+            var query = Sql<Data>.Create(db =>
                 Select(new
                 {
                     name = db.tbl_staff.name,
@@ -772,8 +773,7 @@ namespace Test
         public void GroupByEx()
         {
             SqlOption.Log = l => Debug.Print(l);
-            var query = Sql<Data>.Create((db, x) =>
-                x.
+            var query = Sql<Data>.Create(db =>
                 Select(new
                 {
                     name = db.tbl_staff.name,
@@ -795,7 +795,7 @@ namespace Test
         {
             SqlOption.Log = l => Debug.Print(l);
 
-            var query = Sql<Data>.Create((db, x) => x.
+            var query = Sql<Data>.Create(db =>
                 Select(new
                 {
                     name = db.tbl_staff.name,
@@ -815,7 +815,7 @@ namespace Test
         {
             SqlOption.Log = l => Debug.Print(l);
 
-            var q = Sql<Data>.Create((db, x) => x.
+            var q = Sql<Data>.Create(db =>
                 Select(new
                 {
                     id = db.tbl_staff.id,
@@ -825,7 +825,7 @@ namespace Test
                                 When(4000 < db.tbl_remuneration.money).Then("rich").
                                 Else("normal").
                             End().Cast<string>(),
-                    total = x.Select(new { total = Sum(db.tbl_remuneration.money) }).
+                    total = Select(new { total = Sum(db.tbl_remuneration.money) }).
                             From(db.tbl_remuneration).Cast<decimal>()
                 }).
                 From(db.tbl_staff).
@@ -841,21 +841,21 @@ namespace Test
         {
             SqlOption.Log = l => Debug.Print(l);
 
-            var caseExp = Sql<Data>.Create((db, x) => 
+            var caseExp = Sql<Data>.Create(db => 
                 Case().
                     When(db.tbl_remuneration.money < 1000).Then("poverty").
                     When(4000 < db.tbl_remuneration.money).Then("rich").
                     Else("normal").
                 End());
 
-            var subQuery = Sql<Data>.Create((db, x) => x.
+            var subQuery = Sql<Data>.Create(db =>
                 Select(new { total = Sum(db.tbl_remuneration.money) }).
                             From(db.tbl_remuneration));
 
-            var condition = Sql<Data>.Create((db, x) =>
+            var condition = Sql<Data>.Create(db =>
                  100 < db.tbl_remuneration.money && db.tbl_remuneration.money < 500);
 
-            var query = Sql<Data>.Create((db, x) => x.
+            var query = Sql<Data>.Create(db =>
                 Select(new
                 {
                     id = db.tbl_staff.id,
@@ -879,7 +879,7 @@ namespace Test
             var data = new tbl_data() { id = 1, val1 = 10, val2 = "a" };
 
             DeleteX();
-            var query = Sql<DataChangeTest>.Create((db, x) =>
+            var query = Sql<DataChangeTest>.Create(db =>
                 InsertInto(db.tbl_data, db.tbl_data.id, db.tbl_data.val1, db.tbl_data.val2).
                 Values(data.id, data.val1, data.val2));//TODO change style.
 
@@ -890,13 +890,13 @@ namespace Test
         public void UpdateEx()
         {
             SqlOption.Log = l => Debug.Print(l);
-            var count1 = Sql<DataChangeTest>.Create((db, x) =>
+            var count1 = Sql<DataChangeTest>.Create(db =>
                 Update(db.tbl_data).
                 Set(new tbl_data() { val1 = 100, val2 = "200" }).
                 Where(db.tbl_data.id == 1)).
                 ToExecutor(_connection).Write();
 
-            var count2 = Sql<DataChangeTest>.Create((db, x) =>
+            var count2 = Sql<DataChangeTest>.Create(db =>
                 Update(db.tbl_data).
                 Set(new tbl_data() { val1 = db.tbl_data.val1 * 2 }).
                 Where(db.tbl_data.id == 1)).
@@ -907,7 +907,7 @@ namespace Test
         public void Window()
         {
             SqlOption.Log = l => Debug.Print(l);
-            var query = Sql<Data>.Create((db, x) => x.
+            var query = Sql<Data>.Create(db =>
                 Select(new
                 {
                     x = AvgOver(db.tbl_remuneration.money).
@@ -927,8 +927,8 @@ namespace Test
         public void Lag()
         {
             SqlOption.Log = l => Debug.Print(l);
-            var query = Sql<Data>.Create((db, x) =>
-                x.Select(new
+            var query = Sql<Data>.Create(db =>
+                Select(new
                 {
                     lag = LagOver(db.tbl_remuneration.money, 1, 0).
                             PartitionBy(db.tbl_staff.name, db.tbl_remuneration.payment_date).
@@ -949,11 +949,11 @@ namespace Test
         {
             int a = 0;
             var exp = GetExp();
-            var query = Sql<Data>.Create((db, x) => a == 1 && a == b && exp.Cast<bool>());
+            var query = Sql<Data>.Create(db => a == 1 && a == b && exp.Cast<bool>());
             var info = query.ToSqlInfo(typeof(SqlConnection));
             Debug.Print(info.SqlText);
             
-            query = Sql<Data>.Create((db, x) => a == 1 && a == b && GetExp().Cast<bool>());
+            query = Sql<Data>.Create(db => a == 1 && a == b && GetExp().Cast<bool>());
             info = query.ToSqlInfo(typeof(SqlConnection));
             Debug.Print(info.SqlText);
         }
@@ -961,24 +961,24 @@ namespace Test
         public ISqlExpression GetExp()
         {
             int a = 0;
-            return Sql<Data>.Create((db, x) => a == 2 && a == b);
+            return Sql<Data>.Create(db => a == 2 && a == b);
         }
 
         [TestMethod]
         public void TestMetaMethod()
         {
-            var info1 = Sql<Data>.Create((db, x) => GetStatic1()).ToSqlInfo(typeof(SqlConnection));
+            var info1 = Sql<Data>.Create(db => GetStatic1()).ToSqlInfo(typeof(SqlConnection));
             Debug.Print(info1.SqlText);
-            var info2 = Sql<Data>.Create((db, x) => GetInstance2()).ToSqlInfo(typeof(SqlConnection));
+            var info2 = Sql<Data>.Create(db => GetInstance2()).ToSqlInfo(typeof(SqlConnection));
             Debug.Print(info2.SqlText);
 
-            var info3 = Sql<Data>.Create((db, x) => GetInstance3(GetStatic1(), GetInstance2())).ToSqlInfo(typeof(SqlConnection));
+            var info3 = Sql<Data>.Create(db => GetInstance3(GetStatic1(), GetInstance2())).ToSqlInfo(typeof(SqlConnection));
             Debug.Print(info3.SqlText);
 
             //check cahe.
-            info1 = Sql<Data>.Create((db, x) => GetStatic1()).ToSqlInfo(typeof(SqlConnection));
+            info1 = Sql<Data>.Create(db => GetStatic1()).ToSqlInfo(typeof(SqlConnection));
             Debug.Print(info1.SqlText);
-            info2 = Sql<Data>.Create((db, x) => GetInstance2()).ToSqlInfo(typeof(SqlConnection));
+            info2 = Sql<Data>.Create(db => GetInstance2()).ToSqlInfo(typeof(SqlConnection));
             Debug.Print(info2.SqlText);
         }
 
@@ -990,7 +990,7 @@ namespace Test
         public void TestExpression()
         {
             var exp = GetExp();
-            var query = Sql<Data>.Create((db, x) => exp);
+            var query = Sql<Data>.Create(db => exp);
             var info = query.ToSqlInfo(typeof(SqlConnection));
             Debug.Print(info.SqlText);
         }
@@ -998,7 +998,7 @@ namespace Test
         [TestMethod]
         public void TextFormatText()
         {
-            var query = Sql<Data>.Create((db, x) => x.Util().Text<object>("{0} - {1}", db.tbl_staff.id, db.tbl_staff.id == 2));
+            var query = Sql<Data>.Create(db => Text<object>("{0} - {1}", db.tbl_staff.id, db.tbl_staff.id == 2));
             var info = query.ToSqlInfo(typeof(SqlConnection));
             Debug.Print(info.SqlText);
         }
@@ -1007,13 +1007,12 @@ namespace Test
         public void TestFormatText2()
         {
             SqlOption.Log = l => Debug.Print(l);
-            var query = Sql<Data>.Create((db, x) =>
-                x.
+            var query = Sql<Data>.Create(db =>
                 Select(new
                 {
                     name = db.tbl_staff.name,
                     payment_date = db.tbl_remuneration.payment_date,
-                    money = x.Util().Text<decimal>("{0} + 1000", db.tbl_remuneration.money),
+                    money = Text<decimal>("{0} + 1000", db.tbl_remuneration.money),
                 }).
                 From(db.tbl_remuneration).
                     Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
@@ -1036,12 +1035,12 @@ FROM tbl_remuneration
 /*1*/WHERE tbl_remuneration.money = 100/**/";
 
             var bonus = 1000;
-            var addMoney = Sql<Data>.Create((db, x) => bonus);
+            var addMoney = Sql<Data>.Create(db => bonus);
 
-            var where = Sql<Data>.Create((db, x) => 
-                x.Where(
-                    x.Util().Condition(false, 3000 < db.tbl_remuneration.money) &&
-                    x.Util().Condition(false, db.tbl_remuneration.money < 4000)));
+            var where = Sql<Data>.Create(db => 
+                Where(
+                    Condition(false, 3000 < db.tbl_remuneration.money) &&
+                    Condition(false, db.tbl_remuneration.money < 4000)));
 
             var query = TwoWaySql.Format(sql, addMoney, where);
 
@@ -1060,8 +1059,8 @@ FROM tbl_remuneration
         [TestMethod]
         public void Dapper()
         {
-            var query = Sql<Data>.Create((db, x) =>
-                x.Select(new SelectedData()
+            var query = Sql<Data>.Create(db =>
+                Select(new SelectedData()
                 {
                     name = db.tbl_staff.name,
                     payment_date = db.tbl_remuneration.payment_date,
@@ -1080,23 +1079,23 @@ FROM tbl_remuneration
         public void UsingStatic()
         {
             {
-                var info = Sql<Data>.Create((db, x) => From(db.tbl_remuneration)).ToSqlInfo(typeof(SqlConnection));
+                var info = Sql<Data>.Create(db => From(db.tbl_remuneration)).ToSqlInfo(typeof(SqlConnection));
                 Debug.Print(info.SqlText);
             }
             {
-                var info = Sql<Data>.Create((db, x) => GroupBy(db.tbl_remuneration)).ToSqlInfo(typeof(SqlConnection));
+                var info = Sql<Data>.Create(db => GroupBy(db.tbl_remuneration)).ToSqlInfo(typeof(SqlConnection));
                 Debug.Print(info.SqlText);
             }
             {
-                var info = Sql<Data>.Create((db, x) => Having(db.tbl_remuneration.id == 0)).ToSqlInfo(typeof(SqlConnection));
+                var info = Sql<Data>.Create(db => Having(db.tbl_remuneration.id == 0)).ToSqlInfo(typeof(SqlConnection));
                 Debug.Print(info.SqlText);
             }
             {
-                var info = Sql<Data>.Create((db, x) => InsertInto(db.tbl_remuneration, db.tbl_remuneration.id).Values(1)).ToSqlInfo(typeof(SqlConnection));
+                var info = Sql<Data>.Create(db => InsertInto(db.tbl_remuneration, db.tbl_remuneration.id).Values(1)).ToSqlInfo(typeof(SqlConnection));
                 Debug.Print(info.SqlText);
             }
             {
-                var info = Sql<Data>.Create((db, x) => OrderBy().ASC(db.tbl_remuneration.id).DESC(db.tbl_staff.id)).ToSqlInfo(typeof(SqlConnection));
+                var info = Sql<Data>.Create(db => OrderBy().ASC(db.tbl_remuneration.id).DESC(db.tbl_staff.id)).ToSqlInfo(typeof(SqlConnection));
                 Debug.Print(info.SqlText);
             }
         }

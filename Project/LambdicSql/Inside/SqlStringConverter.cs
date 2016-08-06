@@ -305,8 +305,10 @@ namespace LambdicSql.Inside
                         chains.Reverse();
                         return chains;
                     }
+                    //TODO ↑refactoring
+                    bool chaining = typeof(ISqlChainingSyntax).IsAssignableFrom(curent.Method.GetParameters()[0].ParameterType);
                     curent = next;
-                    if (next.Method.DeclaringType != type)
+                    if (!chaining)
                     {
                         break;
                     }

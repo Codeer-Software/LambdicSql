@@ -9,11 +9,11 @@ namespace LambdicSql
 {
     public static class CaseWordsExtensions
     {
-        public interface ICaseAfter : ISqlKeyWord { }
-        public interface IWhenAfter : ISqlKeyWord { }
-        public interface IThenAfter : ISqlKeyWord { }
-        public interface IElseAfter : ISqlKeyWord { }
-        public interface IEndAfter : ISqlKeyWord { }
+        public interface ICaseAfter : ISqlChainingKeyWord { }
+        public interface IWhenAfter : ISqlChainingKeyWord { }
+        public interface IThenAfter : ISqlChainingKeyWord { }
+        public interface IElseAfter : ISqlChainingKeyWord { }
+        public interface IEndAfter : ISqlChainingKeyWord { }
         
         public static IWhenAfter When<T>(this ICaseAfter words, T t) => InvalitContext.Throw<IWhenAfter>(nameof(When));
         public static IWhenAfter When<T>(this IThenAfter words, T t) => InvalitContext.Throw<IWhenAfter>(nameof(When));

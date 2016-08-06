@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 
 namespace LambdicSql
 {
+    
     public static class WordsExtensions
     {
         public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
+using static LambdicSql.Sql;
 
 namespace Performance
 {
@@ -48,8 +49,7 @@ namespace Performance
             for (int i = 0; i < 10000; i++)
             {
                 watch.Start();
-                var query = Sql<Data>.Create((db, x) =>
-                    x.
+                var query = Sql<Data>.Create(db =>
                     Select(new SelectedData()
                     {
                         name = db.tbl_staff.name,

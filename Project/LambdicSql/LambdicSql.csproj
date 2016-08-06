@@ -61,6 +61,7 @@
     <Compile Include="SqlKeyWordExtensions.cs" />
     <Compile Include="TwoWaySql.cs" />
     <Compile Include="Utility\StringUtilityExtensions.cs" />
+    <Compile Include="Utils.cs" />
     <Compile Include="Window.cs" />
     <Compile Include="Utility\ConditionUtilityExtensions.cs" />
     <Compile Include="KeyWords\FromWordsExtensions.cs" />
