@@ -138,7 +138,7 @@ namespace LambdicSql.ORM
                         var constructor = paramType.GetConstructor(new Type[0]);
                         if (constructor == null)
                         {
-                            throw new CanNotCreateException();
+                            throw new CanNotCreateException("Can't create " + paramType.FullName);
                         }
                         newArgs.Add(New(getIndexInSelect, currentNames.ToArray(), Expression.New(paramType.GetConstructor(new Type[0])), param));
                     }

@@ -11,16 +11,17 @@ namespace LambdicSql
     {
         public interface ICaseAfter : ISqlChainingKeyWord { }
         public interface IWhenAfter : ISqlChainingKeyWord { }
-        public interface IThenAfter : ISqlChainingKeyWord { }
-        public interface IElseAfter : ISqlChainingKeyWord { }
-        public interface IEndAfter : ISqlChainingKeyWord { }
+        public interface IWhenAfter<T> : ISqlChainingKeyWord { }
+        public interface IThenAfter<T> : ISqlChainingKeyWord { }
+        public interface IElseAfter<T> : ISqlChainingKeyWord { }
         
         public static IWhenAfter When<T>(this ICaseAfter words, T t) => InvalitContext.Throw<IWhenAfter>(nameof(When));
-        public static IWhenAfter When<T>(this IThenAfter words, T t) => InvalitContext.Throw<IWhenAfter>(nameof(When));
-        public static IThenAfter Then<T>(this IWhenAfter words, T t) => InvalitContext.Throw<IThenAfter>(nameof(Then));
-        public static IElseAfter Else<T>(this IThenAfter words, T t) => InvalitContext.Throw<IElseAfter>(nameof(Then));
-        public static IEndAfter End(this IThenAfter words) => InvalitContext.Throw<IEndAfter>(nameof(End));
-        public static IEndAfter End(this IElseAfter words) => InvalitContext.Throw<IEndAfter>(nameof(End));
+        public static IWhenAfter<T1> When<T1, T2>(this IThenAfter<T1> words, T2 t) => InvalitContext.Throw<IWhenAfter<T1>>(nameof(When));
+        public static IThenAfter<T> Then<T>(this IWhenAfter words, T t) => InvalitContext.Throw<IThenAfter<T>>(nameof(Then));
+        public static IThenAfter<T> Then<T>(this IWhenAfter<T> words, T t) => InvalitContext.Throw<IThenAfter<T>>(nameof(Then));
+        public static IElseAfter<T> Else<T>(this IThenAfter<T> words, T t) => InvalitContext.Throw<IElseAfter<T>>(nameof(Then));
+        public static T End<T>(this IThenAfter<T> words) => InvalitContext.Throw<T>(nameof(End));
+        public static T End<T>(this IElseAfter<T> words) => InvalitContext.Throw<T>(nameof(End));
 
         public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {

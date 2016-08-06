@@ -824,7 +824,7 @@ namespace Test
                                 When(db.tbl_remuneration.money < 1000).Then("poverty").
                                 When(4000 < db.tbl_remuneration.money).Then("rich").
                                 Else("normal").
-                            End().Cast<string>(),
+                            End(),
                     total = Select(new { total = Sum(db.tbl_remuneration.money) }).
                             From(db.tbl_remuneration).Cast<decimal>()
                 }).
@@ -1041,6 +1041,12 @@ FROM tbl_remuneration
                 Where(
                     Condition(false, 3000 < db.tbl_remuneration.money) &&
                     Condition(false, db.tbl_remuneration.money < 4000)));
+            
+            var where2 = Sql<Data>.Create(db =>
+                Where(
+                    Condition(false, 3000 < db.tbl_remuneration.money) &&
+                    Condition(false, db.tbl_remuneration.money < 4000)));
+
 
             var query = TwoWaySql.Format(sql, addMoney, where);
 
