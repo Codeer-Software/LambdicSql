@@ -2,11 +2,11 @@
 using System;
 using System.Linq.Expressions;
 
-namespace LambdicSql
+namespace LambdicSql.Inside.Keywords
 {
-    public static class GroupByClause
+    static class GroupByClause
     {
-        public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
             return Environment.NewLine + "GROUP BY " + converter.ToString(method.Arguments[method.SqlSyntaxMethodArgumentAdjuster()(0)]);

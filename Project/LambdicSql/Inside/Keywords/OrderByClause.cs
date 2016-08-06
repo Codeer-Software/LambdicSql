@@ -1,16 +1,15 @@
-﻿using LambdicSql.Inside;
-using LambdicSql.QueryBase;
+﻿using LambdicSql.QueryBase;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace LambdicSql
+namespace LambdicSql.Inside.Keywords
 {
     //TODO style change?
-    public static class OrderByWordsClause
+    static class OrderByWordsClause
     {
-        public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var list = new List<string>();
             foreach (var m in methods.Skip(1))
@@ -25,9 +24,9 @@ namespace LambdicSql
         {
             switch (name)
             {
-                case nameof(Sql.OrderBy): return Environment.NewLine + "ORDER BY";
-                case nameof(Sql.ASC): return Environment.NewLine + "\t" + argSrc[0] + " ASC";
-                case nameof(Sql.DESC): return Environment.NewLine + "\t" + argSrc[0] + " DESC";
+                case nameof(KeyWords.OrderBy): return Environment.NewLine + "ORDER BY";
+                case nameof(KeyWords.ASC): return Environment.NewLine + "\t" + argSrc[0] + " ASC";
+                case nameof(KeyWords.DESC): return Environment.NewLine + "\t" + argSrc[0] + " DESC";
             }
             throw new NotSupportedException();
         }

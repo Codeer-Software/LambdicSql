@@ -3,11 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace LambdicSql
+namespace LambdicSql.Inside.Keywords
 {
-    public static class UpdateClause
+    static class UpdateClause
     {
-        public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var list = new List<string>();
             foreach (var m in methods)
@@ -21,8 +21,8 @@ namespace LambdicSql
         {
             switch (method.Method.Name)
             {
-                case nameof(Sql.Update): return Environment.NewLine + "UPDATE " + converter.ToString(method.Arguments[0]);
-                case nameof(Sql.Set):
+                case nameof(KeyWords.Update): return Environment.NewLine + "UPDATE " + converter.ToString(method.Arguments[0]);
+                case nameof(KeyWords.Set):
                     {
                         var select = ObjectCreateAnalyzer.MakeSelectInfo(method.Arguments[1]);
                         var list = new List<string>();

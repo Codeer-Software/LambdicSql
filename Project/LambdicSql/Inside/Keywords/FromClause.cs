@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace LambdicSql
+namespace LambdicSql.Inside.Keywords
 {
-    public static class FromClause
+    static class FromClause
     {
-        public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var list = new List<string>();
             foreach (var m in methods)
@@ -24,8 +24,8 @@ namespace LambdicSql
             string[] argSrc = method.Arguments.Skip(1).Select(e => converter.ToString(e)).ToArray();
             switch (name)
             {
-                case nameof(Sql.From): return Environment.NewLine + "FROM " + ExpressionToTableName(converter, method.Arguments[method.SqlSyntaxMethodArgumentAdjuster()(0)]);
-                case nameof(Sql.CrossJoin): return Environment.NewLine + "\tCROSS JOIN " + ExpressionToTableName(converter, method.Arguments[1]);
+                case nameof(KeyWords.From): return Environment.NewLine + "FROM " + ExpressionToTableName(converter, method.Arguments[method.SqlSyntaxMethodArgumentAdjuster()(0)]);
+                case nameof(KeyWords.CrossJoin): return Environment.NewLine + "\tCROSS JOIN " + ExpressionToTableName(converter, method.Arguments[1]);
             }
             return Environment.NewLine + "\t" + name.ToUpper() + " " + ExpressionToTableName(converter, method.Arguments[1]) + " ON " + argSrc[1];
         }

@@ -4,11 +4,11 @@ using System.Linq.Expressions;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace LambdicSql
+namespace LambdicSql.Inside.Keywords
 {
-    public static class CaseClause
+    static class CaseClause
     {
-        public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var list = new List<string>();
             foreach (var m in methods)
@@ -23,7 +23,7 @@ namespace LambdicSql
         {
             switch (name)
             {
-                case nameof(Sql.Case):
+                case nameof(KeyWords.Case):
                     {
                         var text = Environment.NewLine + "\tCASE";
                         if (argSrc.Length == 1)
@@ -32,10 +32,10 @@ namespace LambdicSql
                         }
                         return text;
                     }
-                case nameof(Sql.When): return Environment.NewLine + "\t\tWHEN " + argSrc[0];
-                case nameof(Sql.Then): return " THEN " + argSrc[0];
-                case nameof(Sql.Else): return Environment.NewLine + "\t\tELSE " + argSrc[0];
-                case nameof(Sql.End): return Environment.NewLine + "\tEND";
+                case nameof(KeyWords.When): return Environment.NewLine + "\t\tWHEN " + argSrc[0];
+                case nameof(KeyWords.Then): return " THEN " + argSrc[0];
+                case nameof(KeyWords.Else): return Environment.NewLine + "\t\tELSE " + argSrc[0];
+                case nameof(KeyWords.End): return Environment.NewLine + "\tEND";
             }
             return null;
         }

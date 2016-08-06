@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace LambdicSql
+namespace LambdicSql.Inside.Keywords
 {
-    public static class InsertIntoClause
+    static class InsertIntoClause
     {
-        public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var list = new List<string>();
             foreach (var m in methods)
@@ -23,13 +23,13 @@ namespace LambdicSql
         {
             switch (name)
             {
-                case nameof(Sql.InsertInto):
+                case nameof(KeyWords.InsertInto):
                     {
                         var arg = argSrc.Last().Split(',').Select(e => GetColumnOnly(e)).ToArray();
                         return Environment.NewLine + "INSERT INTO " + argSrc[0] + "(" + string.Join(", ", arg) + ")";
 
                     }
-                case nameof(Sql.Values): return Environment.NewLine + "\tVALUES (" + string.Join(", ", argSrc) + ")";
+                case nameof(KeyWords.Values): return Environment.NewLine + "\tVALUES (" + string.Join(", ", argSrc) + ")";
             }
             throw new NotSupportedException();
         }

@@ -3,11 +3,11 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace LambdicSql
+namespace LambdicSql.Inside.Keywords
 {
-    public static class SelectClause
+    static class SelectClause
     {
-        public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
             var index = method.SqlSyntaxMethodArgumentAdjuster();
@@ -31,7 +31,7 @@ namespace LambdicSql
                 converter.Context.SelectClauseInfo = select;
             }
             var text = ToString(GetPredicate(aggregatePredicate), select.Elements, converter);
-            if (method.Method.Name == nameof(Sql.SelectFrom))
+            if (method.Method.Name == nameof(KeyWords.SelectFrom))
             {
                 text = text + Environment.NewLine + "FROM " + converter.ToString(method.Arguments[index(0)]);
             }

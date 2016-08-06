@@ -40,6 +40,7 @@
     <Compile Include="Inside\ParameterInfo.cs" />
     <Compile Include="Inside\SqlExpressionFormatText.cs" />
     <Compile Include="Inside\TowWaySqlSpec.cs" />
+    <Compile Include="KeyWords.cs" />
     <Compile Include="QueryBase\ExpressionToObject.CreateGetter.cs" />
     <Compile Include="QueryBase\ExpressionToObject.Getter.cs" />
     <Compile Include="Inside\SqlExpressionConcat.cs" />
@@ -67,11 +68,11 @@
     <Compile Include="Utils.cs" />
     <Compile Include="Window.cs" />
     <Compile Include="Utility\ConditionUtilityExtensions.cs" />
-    <Compile Include="KeywordsCore\FromClause.cs" />
-    <Compile Include="KeywordsCore\GroupByClause.cs" />
-    <Compile Include="KeywordsCore\HavingClause.cs" />
-    <Compile Include="KeywordsCore\InsertIntoClause.cs" />
-    <Compile Include="KeywordsCore\OrderByClause.cs" />
+    <Compile Include="Inside\Keywords\FromClause.cs" />
+    <Compile Include="Inside\Keywords\GroupByClause.cs" />
+    <Compile Include="Inside\Keywords\HavingClause.cs" />
+    <Compile Include="Inside\Keywords\InsertIntoClause.cs" />
+    <Compile Include="Inside\Keywords\OrderByClause.cs" />
     <Compile Include="QueryBase\ObjectCreateInfo.cs" />
     <Compile Include="QueryBase\ObjectCreateMemberElement.cs" />
     <Compile Include="QueryBase\ExpressionToObject.cs" />
@@ -94,12 +95,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryBase\Dialect\DialectResolver.cs" />
     <Compile Include="Sql.cs" />
-    <Compile Include="KeywordsCore\CaseClause.cs" />
-    <Compile Include="KeywordsCore\DeleteClause.cs" />
-    <Compile Include="KeywordsCore\SelectClause.cs" />
-    <Compile Include="KeywordsCore\UpdateClause.cs" />
-    <Compile Include="KeywordsCore\WhereClause.cs" />
-    <Compile Include="KeywordsCore\ConditionKeyWords.cs" />
+    <Compile Include="Inside\Keywords\CaseClause.cs" />
+    <Compile Include="Inside\Keywords\DeleteClause.cs" />
+    <Compile Include="Inside\Keywords\SelectClause.cs" />
+    <Compile Include="Inside\Keywords\UpdateClause.cs" />
+    <Compile Include="Inside\Keywords\WhereClause.cs" />
+    <Compile Include="Inside\Keywords\ConditionKeyWords.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

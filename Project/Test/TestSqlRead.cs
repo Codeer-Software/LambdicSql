@@ -8,7 +8,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
-using static LambdicSql.Sql;
+using static LambdicSql.KeyWords;
 using static LambdicSql.Funcs;
 using static LambdicSql.Utils;
 using static LambdicSql.Window;
