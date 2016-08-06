@@ -537,7 +537,7 @@ namespace TestCore
                 Where(3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
 
             var orderby = Sql<DB>.Create(db => 
-                 OrderBy().ASC(db.tbl_staff.name));
+                 OrderBy(new Asc(db.tbl_staff.name)));
 
             var query = select.Concat(from).Concat(where).Concat(orderby);
 
@@ -561,7 +561,7 @@ namespace TestCore
                 From(db.tbl_remuneration).
                     Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
                 Where(expWhereMin.Cast<bool>() && expWhereMax.Cast<bool>()).
-                OrderBy().ASC(db.tbl_staff.name));
+                OrderBy(new Asc(db.tbl_staff.name)));
 
             //execute.
             var datas = query.ToExecutor(_connection).Read();

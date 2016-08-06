@@ -12,6 +12,7 @@ using static LambdicSql.KeyWords;
 using static LambdicSql.Funcs;
 using static LambdicSql.Utils;
 using static LambdicSql.Window;
+using System.Linq.Expressions;
 
 namespace Test
 {
@@ -805,7 +806,7 @@ namespace Test
                 From(db.tbl_remuneration).
                 Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
                 Where(3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000).
-                OrderBy().ASC(db.tbl_staff.id).DESC(db.tbl_remuneration.id));
+                OrderBy(new Asc(db.tbl_staff.id), new Desc(db.tbl_remuneration.id)));
 
             var y = query.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Read();
         }
@@ -831,7 +832,7 @@ namespace Test
                 From(db.tbl_staff).
                     Join(db.tbl_remuneration, db.tbl_staff.id == db.tbl_remuneration.staff_id).
                 Where(100 < db.tbl_remuneration.money && db.tbl_remuneration.money < 500).
-                OrderBy().ASC(db.tbl_remuneration.money));
+                OrderBy(new Asc(db.tbl_remuneration.money)));
 
             var datas = q.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Read();
         }
@@ -866,7 +867,7 @@ namespace Test
                 From(db.tbl_staff).
                     Join(db.tbl_remuneration, db.tbl_staff.id == db.tbl_remuneration.staff_id).
                 Where(condition.Cast<bool>()).
-                OrderBy().ASC(db.tbl_remuneration.money));
+                OrderBy(new Asc(db.tbl_remuneration.money)));
 
             var datas = query.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Read();
         }
@@ -1101,8 +1102,27 @@ FROM tbl_remuneration
                 Debug.Print(info.SqlText);
             }
             {
-                var info = Sql<Data>.Create(db => OrderBy().ASC(db.tbl_remuneration.id).DESC(db.tbl_staff.id)).ToSqlInfo(typeof(SqlConnection));
+                var info = Sql<Data>.Create(db => OrderBy(new Asc(db.tbl_remuneration.id), new Desc(db.tbl_staff.id))).ToSqlInfo(typeof(SqlConnection));
                 Debug.Print(info.SqlText);
+            }
+        }
+
+        [TestMethod]
+        public void NewSyntax()
+        {
+            var info = Sql<Data>.Create(db => new AAA(7)).ToSqlInfo(typeof(SqlConnection));
+            Debug.Print(info.SqlText);
+        }
+
+        public class AAA : ISqlSyntaxObject
+        {
+            public AAA(int a)
+            {
+
+            }
+            public static string NewToString(ISqlStringConverter cnv, NewExpression exp)
+            {
+                return "AAA(" + cnv.ToString(exp.Arguments[0]) + ")";
             }
         }
     }

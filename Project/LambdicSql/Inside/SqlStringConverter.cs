@@ -45,7 +45,26 @@ namespace LambdicSql.Inside
             var array = exp as NewArrayExpression;
             if (array != null) return ToString(array);
 
+            var newExp = exp as NewExpression;
+            if (newExp != null) return ToString(newExp);
+
             throw new NotSupportedException("Not suported expression at LambdicSql.");
+        }
+
+        DecodedInfo ToString(NewExpression newExp)
+        {
+            if (typeof(ISqlSyntaxObject).IsAssignableFrom(newExp.Constructor.DeclaringType))
+            {
+                var func = newExp.GetNewToString();
+                return new DecodedInfo(null, func(this, newExp));
+            }
+            /*
+
+            if (IsSqlExpressionCast(method)) return ResolveSqlExpressionCast(method);
+            if (IsSqlSyntaxResolver(method)) return ResolveSqlSyntax(method);
+            object value;
+            if (ExpressionToObject.GetMethodObject(method, out value)) return new DecodedInfo(method.Method.ReturnType, ToString(value));*/
+            throw new NotSupportedException();
         }
 
         DecodedInfo ToString(NewArrayExpression array)
@@ -200,7 +219,7 @@ namespace LambdicSql.Inside
                 }
 
                 //normal.
-                ret.Add(chain[0].Method.GetMethodsToString()(this, chain));
+                ret.Add(chain[0].GetMethodsToString()(this, chain));
             }
 
             var text = string.Join(string.Empty, ret.ToArray());

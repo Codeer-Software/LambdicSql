@@ -41,12 +41,14 @@
     <Compile Include="Inside\SqlExpressionFormatText.cs" />
     <Compile Include="Inside\TowWaySqlSpec.cs" />
     <Compile Include="KeyWords.cs" />
+    <Compile Include="IOrderElement.cs" />
     <Compile Include="QueryBase\ExpressionToObject.CreateGetter.cs" />
     <Compile Include="QueryBase\ExpressionToObject.Getter.cs" />
     <Compile Include="Inside\SqlExpressionConcat.cs" />
     <Compile Include="QueryBase\DecodeContext.cs" />
     <Compile Include="QueryBase\ISqlChainingKeyWord.cs" />
     <Compile Include="QueryBase\ISqlChainingSyntax.cs" />
+    <Compile Include="QueryBase\ISqlSyntaxObject.cs" />
     <Compile Include="QueryBase\ISqlUtility.cs" />
     <Compile Include="QueryBase\ISqlKeyWord.cs" />
     <Compile Include="AggregatePredicate.cs" />

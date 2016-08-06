@@ -53,10 +53,8 @@ namespace LambdicSql
              => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(Values));
 
         public interface IOrderByAfter<T> : ISqlChainingKeyWord<T> { }
-        public static IOrderByAfter<Non> OrderBy() => InvalitContext.Throw<IOrderByAfter<Non>>(nameof(OrderBy));
-        public static IOrderByAfter<TSelected> OrderBy<TSelected>(this ISqlKeyWord<TSelected> words) => InvalitContext.Throw<IOrderByAfter<TSelected>>(nameof(OrderBy));
-        public static IOrderByAfter<TSelected> ASC<TSelected, T>(this IOrderByAfter<TSelected> words, T target) => InvalitContext.Throw<IOrderByAfter<TSelected>>(nameof(ASC));
-        public static IOrderByAfter<TSelected> DESC<TSelected, T>(this IOrderByAfter<TSelected> words, T target) => InvalitContext.Throw<IOrderByAfter<TSelected>>(nameof(DESC));
+        public static IOrderByAfter<Non> OrderBy(params IOrderElement[] elements) => InvalitContext.Throw<IOrderByAfter<Non>>(nameof(OrderBy));
+        public static IOrderByAfter<TSelected> OrderBy<TSelected>(this ISqlKeyWord<TSelected> words, params IOrderElement[] elements) => InvalitContext.Throw<IOrderByAfter<TSelected>>(nameof(OrderBy));
 
         public interface IUpdateAfter<TSelected, T> : ISqlChainingKeyWord<TSelected> { }
         public static IUpdateAfter<Non, T> Update<T>(T table) => InvalitContext.Throw<IUpdateAfter<Non, T>>(nameof(Update));
