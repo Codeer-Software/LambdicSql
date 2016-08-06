@@ -3,6 +3,7 @@ using System;
 using System.Linq.Expressions;
 using System.Linq;
 using System.Collections.Generic;
+using LambdicSql.Inside;
 
 namespace LambdicSql
 {
@@ -14,14 +15,14 @@ namespace LambdicSql
         public interface IElseAfter : ISqlKeyWord { }
         public interface IEndAfter : ISqlKeyWord { }
 
-        public static ICaseAfter Case(this ISqlKeyWord words) => null;
-        public static ICaseAfter Case<T>(this ISqlKeyWord words, T t) => null;
-        public static IWhenAfter When<T>(this ICaseAfter words, T t) => null;
-        public static IWhenAfter When<T>(this IThenAfter words, T t) => null;
-        public static IThenAfter Then<T>(this IWhenAfter words, T t) => null;
-        public static IElseAfter Else<T>(this IThenAfter words, T t) => null;
-        public static IEndAfter End(this IThenAfter words) => null;
-        public static IEndAfter End(this IElseAfter words) => null;
+        public static ICaseAfter Case(this ISqlKeyWord words) => InvalitContext.Throw<ICaseAfter>(nameof(Case));
+        public static ICaseAfter Case<T>(this ISqlKeyWord words, T t) => InvalitContext.Throw<ICaseAfter>(nameof(Case));
+        public static IWhenAfter When<T>(this ICaseAfter words, T t) => InvalitContext.Throw<IWhenAfter>(nameof(When));
+        public static IWhenAfter When<T>(this IThenAfter words, T t) => InvalitContext.Throw<IWhenAfter>(nameof(When));
+        public static IThenAfter Then<T>(this IWhenAfter words, T t) => InvalitContext.Throw<IThenAfter>(nameof(Then));
+        public static IElseAfter Else<T>(this IThenAfter words, T t) => InvalitContext.Throw<IElseAfter>(nameof(Then));
+        public static IEndAfter End(this IThenAfter words) => InvalitContext.Throw<IEndAfter>(nameof(End));
+        public static IEndAfter End(this IElseAfter words) => InvalitContext.Throw<IEndAfter>(nameof(End));
 
         public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {

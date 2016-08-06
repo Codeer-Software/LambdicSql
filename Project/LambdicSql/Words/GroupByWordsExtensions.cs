@@ -1,4 +1,5 @@
-﻿using LambdicSql.QueryBase;
+﻿using LambdicSql.Inside;
+using LambdicSql.QueryBase;
 using System;
 using System.Linq.Expressions;
 
@@ -6,7 +7,7 @@ namespace LambdicSql
 {
     public static class GroupByWordsExtensions
     {
-        public static ISqlKeyWord<TSelected> GroupBy<TSelected>(this ISqlKeyWord<TSelected> words, params object[] target) => null;
+        public static ISqlKeyWord<TSelected> GroupBy<TSelected>(this ISqlKeyWord<TSelected> words, params object[] target) => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(GroupBy));
 
         public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {

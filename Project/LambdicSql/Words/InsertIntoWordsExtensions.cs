@@ -1,4 +1,5 @@
-﻿using LambdicSql.QueryBase;
+﻿using LambdicSql.Inside;
+using LambdicSql.QueryBase;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +11,10 @@ namespace LambdicSql
     {
         public interface IInsertIntoAfter<T> : ISqlKeyWord<T> { }
 
-        public static IInsertIntoAfter<TSelected> InsertInto<TSelected>(this ISqlKeyWord<TSelected> words, object table, params object[] targets) => null;
-        public static ISqlKeyWord<TSelected> Values<TSelected>(this IInsertIntoAfter<TSelected> words, params object[] targets) => null;
+        public static IInsertIntoAfter<TSelected> InsertInto<TSelected>(this ISqlKeyWord<TSelected> words, object table, params object[] targets)
+             => InvalitContext.Throw<IInsertIntoAfter<TSelected>>(nameof(InsertInto));
+        public static ISqlKeyWord<TSelected> Values<TSelected>(this IInsertIntoAfter<TSelected> words, params object[] targets)
+             => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(Values));
 
         public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {

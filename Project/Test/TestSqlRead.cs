@@ -1054,6 +1054,11 @@ FROM tbl_remuneration
             var datas = cnn.Query<SelectedData>(info.SqlText, info.Parameters).ToList();
         }
 
+        public class Condition
+        {
+            public static implicit operator bool(Condition s)=>false;
+        }
+
         public class SelectedData
         {
             public string name { get; set; }

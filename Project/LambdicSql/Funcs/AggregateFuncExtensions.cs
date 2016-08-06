@@ -1,4 +1,5 @@
-﻿using LambdicSql.QueryBase;
+﻿using LambdicSql.Inside;
+using LambdicSql.QueryBase;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -6,13 +7,13 @@ namespace LambdicSql
 {
     public static class AggregateFuncExtensions
     {
-        public static T Sum<T>(this ISqlFunc func, T item) => default(T);
-        public static T Sum<T>(this ISqlFunc func, AggregatePredicate aggregatePredicate, T item) => default(T);
-        public static T Count<T>(this ISqlFunc func, T item) => default(T);
-        public static T Count<T>(this ISqlFunc func, AggregatePredicate aggregatePredicate, T item) => default(T);
-        public static T Avg<T>(this ISqlFunc func, T item) => default(T);
-        public static T Min<T>(this ISqlFunc func, T item) => default(T);
-        public static T Max<T>(this ISqlFunc func, T item) => default(T);
+        public static T Sum<T>(this ISqlFunc func, T item) => InvalitContext.Throw<T>(nameof(Sum));
+        public static T Sum<T>(this ISqlFunc func, AggregatePredicate aggregatePredicate, T item) => InvalitContext.Throw<T>(nameof(Sum));
+        public static T Count<T>(this ISqlFunc func, T item) => InvalitContext.Throw<T>(nameof(Count));
+        public static T Count<T>(this ISqlFunc func, AggregatePredicate aggregatePredicate, T item) => InvalitContext.Throw<T>(nameof(Count));
+        public static T Avg<T>(this ISqlFunc func, T item) => InvalitContext.Throw<T>(nameof(Avg));
+        public static T Min<T>(this ISqlFunc func, T item) => InvalitContext.Throw<T>(nameof(Min));
+        public static T Max<T>(this ISqlFunc func, T item) => InvalitContext.Throw<T>(nameof(Max));
 
         public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {

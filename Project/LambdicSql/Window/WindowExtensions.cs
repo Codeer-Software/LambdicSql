@@ -1,4 +1,5 @@
-﻿using LambdicSql.QueryBase;
+﻿using LambdicSql.Inside;
+using LambdicSql.QueryBase;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,17 +9,17 @@ namespace LambdicSql.Window
 {
     public static class WindowExtensions
     {
-        public static IWindowFunctionsAfter Avg<T>(this IWindowFuncs words, T t) => null;
-        public static IWindowFunctionsAfter Lag<T>(this IWindowFuncs words, T t) => null;
-        public static IWindowFunctionsAfter Lag<T>(this IWindowFuncs words, T t, object offset) => null;
-        public static IWindowFunctionsAfter Lag<T>(this IWindowFuncs words, T t, object offset, object @default) => null;
-        public static IWindowFunctionsAfter Over(this IWindowFunctionsAfter words) => null;
-        public static IWindowFunctionsAfter PartitionBy(this IWindowFunctionsAfter words, params object[] t) => null;
-        public static IWindowFunctionsAfter OrderBy(this IWindowFunctionsAfter words) => null;
-        public static IWindowFunctionsAfter Asc<T>(this IWindowFunctionsAfter words, T t) => null;
-        public static IWindowFunctionsAfter Desc<T>(this IWindowFunctionsAfter words, T t) => null;
-        public static IWindowFunctionsAfter Rows<T>(this IWindowFunctionsAfter words, T t) => null;
-        public static IWindowFunctionsAfter Rows<T>(this IWindowFunctionsAfter words, T t, T t2) => null;
+        public static IWindowFunctionsAfter Avg<T>(this IWindowFuncs words, T t) => InvalitContext.Throw<IWindowFunctionsAfter>(nameof(Avg));
+        public static IWindowFunctionsAfter Lag<T>(this IWindowFuncs words, T t) => InvalitContext.Throw<IWindowFunctionsAfter>(nameof(Lag));
+        public static IWindowFunctionsAfter Lag<T>(this IWindowFuncs words, T t, object offset) => InvalitContext.Throw<IWindowFunctionsAfter>(nameof(Lag));
+        public static IWindowFunctionsAfter Lag<T>(this IWindowFuncs words, T t, object offset, object @default) => InvalitContext.Throw<IWindowFunctionsAfter>(nameof(Lag));
+        public static IWindowFunctionsAfter Over(this IWindowFunctionsAfter words) => InvalitContext.Throw<IWindowFunctionsAfter>(nameof(Over));
+        public static IWindowFunctionsAfter PartitionBy(this IWindowFunctionsAfter words, params object[] t) => InvalitContext.Throw<IWindowFunctionsAfter>(nameof(PartitionBy));
+        public static IWindowFunctionsAfter OrderBy(this IWindowFunctionsAfter words) => InvalitContext.Throw<IWindowFunctionsAfter>(nameof(OrderBy));
+        public static IWindowFunctionsAfter Asc<T>(this IWindowFunctionsAfter words, T t) => InvalitContext.Throw<IWindowFunctionsAfter>(nameof(Asc));
+        public static IWindowFunctionsAfter Desc<T>(this IWindowFunctionsAfter words, T t) => InvalitContext.Throw<IWindowFunctionsAfter>(nameof(Desc));
+        public static IWindowFunctionsAfter Rows<T>(this IWindowFunctionsAfter words, T t) => InvalitContext.Throw<IWindowFunctionsAfter>(nameof(Rows));
+        public static IWindowFunctionsAfter Rows<T>(this IWindowFunctionsAfter words, T t, T t2) => InvalitContext.Throw<IWindowFunctionsAfter>(nameof(Rows));
         public static T Cast<T>(this IWindowFunctionsAfter words) => default(T);
 
         public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)

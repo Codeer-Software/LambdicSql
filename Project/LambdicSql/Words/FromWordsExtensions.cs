@@ -1,4 +1,5 @@
-﻿using LambdicSql.QueryBase;
+﻿using LambdicSql.Inside;
+using LambdicSql.QueryBase;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +11,11 @@ namespace LambdicSql
     {
         public interface IFromAfter<T> : ISqlKeyWord<T> { }
 
-        public static IFromAfter<TSelected> From<TSelected, T>(this ISqlKeyWord<TSelected> words, T tbale) => null;
-        public static ISqlKeyWord<TSelected> Join<TSelected, T>(this IFromAfter<TSelected> words, T tbale, bool condition) => null;
-        public static ISqlKeyWord<TSelected> LeftJoin<TSelected, T>(this IFromAfter<TSelected> words, T tbale, bool condition) => null;
-        public static ISqlKeyWord<TSelected> RightJoin<TSelected, T>(this IFromAfter<TSelected> words, T tbale, bool condition) => null;
-        public static ISqlKeyWord<TSelected> CrossJoin<TSelected, T>(this IFromAfter<TSelected> words, T tbale) => null;
+        public static IFromAfter<TSelected> From<TSelected, T>(this ISqlKeyWord<TSelected> words, T tbale) => InvalitContext.Throw<IFromAfter<TSelected>>(nameof(From));
+        public static ISqlKeyWord<TSelected> Join<TSelected, T>(this IFromAfter<TSelected> words, T tbale, bool condition) => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(Join));
+        public static ISqlKeyWord<TSelected> LeftJoin<TSelected, T>(this IFromAfter<TSelected> words, T tbale, bool condition) => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(LeftJoin));
+        public static ISqlKeyWord<TSelected> RightJoin<TSelected, T>(this IFromAfter<TSelected> words, T tbale, bool condition) => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(RightJoin));
+        public static ISqlKeyWord<TSelected> CrossJoin<TSelected, T>(this IFromAfter<TSelected> words, T tbale) => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(CrossJoin));
 
         public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {

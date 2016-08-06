@@ -1,4 +1,5 @@
-﻿using LambdicSql.QueryBase;
+﻿using LambdicSql.Inside;
+using LambdicSql.QueryBase;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -6,9 +7,9 @@ namespace LambdicSql
 {
     public static class WordsExtensions
     {
-        public static bool Like(this ISqlKeyWord words, string target, string serachText) => false;
-        public static bool Between<TTarget>(this ISqlKeyWord words, TTarget target, TTarget min, TTarget max) => false;
-        public static bool In<TTarget>(this ISqlKeyWord words, TTarget target, params TTarget[] inArguments) => false;
+        public static bool Like(this ISqlKeyWord words, string target, string serachText) => InvalitContext.Throw<bool>(nameof(Like));
+        public static bool Between<TTarget>(this ISqlKeyWord words, TTarget target, TTarget min, TTarget max) => InvalitContext.Throw<bool>(nameof(Between));
+        public static bool In<TTarget>(this ISqlKeyWord words, TTarget target, params TTarget[] inArguments) => InvalitContext.Throw<bool>(nameof(In));
 
         public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {

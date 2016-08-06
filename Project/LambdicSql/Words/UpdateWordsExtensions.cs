@@ -9,8 +9,8 @@ namespace LambdicSql
     public static class UpdateWordsExtensions
     {
         public interface IUpdateAfter<TSelected, T> : ISqlKeyWord<TSelected> where T : class { }
-        public static IUpdateAfter<TSelected, T> Update<TSelected, T>(this ISqlKeyWord<TSelected> words, T table) where T : class => null;
-        public static ISqlKeyWord<TSelected> Set<TSelected, T>(this IUpdateAfter<TSelected, T> words, T setting) where T :class => null;
+        public static IUpdateAfter<TSelected, T> Update<TSelected, T>(this ISqlKeyWord<TSelected> words, T table) where T : class => InvalitContext.Throw<IUpdateAfter<TSelected, T>>(nameof(Update));
+        public static ISqlKeyWord<TSelected> Set<TSelected, T>(this IUpdateAfter<TSelected, T> words, T setting) where T :class => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(Set));
 
         public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {

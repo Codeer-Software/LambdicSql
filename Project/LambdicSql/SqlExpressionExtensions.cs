@@ -8,17 +8,9 @@ namespace LambdicSql
 {
     public static class SqlExpressionExtensions
     {
-        public static DB Cast<DB>(this ISqlExpression query)
-        {
-            throw new NotSupportedException("do not call cast except in expression.");
-        }
+        public static T Cast<T>(this ISqlExpression query) => InvalitContext.Throw<T>(nameof(Cast));
+        public static TTable Cast<TTable>(this ISqlExpression<ISqlKeyWord<TTable>> query) => InvalitContext.Throw<TTable>(nameof(Cast));
 
-        public static TResult Cast<TResult>(this ISqlExpression<ISqlKeyWord<TResult>> query)
-        {
-            //TODO error to all.
-            throw new NotSupportedException("do not call cast except in expression.");
-        }
-        
         public static SqlExpression<TResult> Concat<TResult>(this ISqlExpression<TResult> query, ISqlExpression addExp)
           => new SqlExpressionConcat<TResult>(query, addExp);
 

@@ -1,4 +1,5 @@
-﻿using LambdicSql.QueryBase;
+﻿using LambdicSql.Inside;
+using LambdicSql.QueryBase;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
@@ -7,8 +8,8 @@ namespace LambdicSql
 {
     public static class StringUtilityExtensions
     {
-        public static object Text(this ISqlUtility words, string text, params object[] args) => null;
-        public static T Text<T>(this ISqlUtility words, string text, params object[] args) => default(T);
+        public static object Text(this ISqlUtility words, string text, params object[] args) => InvalitContext.Throw<object>(nameof(Text));
+        public static T Text<T>(this ISqlUtility words, string text, params object[] args) => InvalitContext.Throw<T>(nameof(Text));
 
         public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {

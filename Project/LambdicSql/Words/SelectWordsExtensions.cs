@@ -8,9 +8,9 @@ namespace LambdicSql
 {
     public static class SelectWordsExtensions
     {
-        public static ISqlKeyWord<TSelected> Select<TSelected>(this ISqlSyntax words, AggregatePredicate predicate, TSelected selected) => null;
-        public static ISqlKeyWord<TSelected> Select<TSelected>(this ISqlSyntax words, TSelected selected) => null;
-        public static ISqlKeyWord<TSelected> SelectFrom<TSelected>(this ISqlSyntax words, TSelected selected) => null;
+        public static ISqlKeyWord<TSelected> Select<TSelected>(this ISqlSyntax words, AggregatePredicate predicate, TSelected selected) => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(Select));
+        public static ISqlKeyWord<TSelected> Select<TSelected>(this ISqlSyntax words, TSelected selected) => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(Select));
+        public static ISqlKeyWord<TSelected> SelectFrom<TSelected>(this ISqlSyntax words, TSelected selected) => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(SelectFrom));
 
         public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
