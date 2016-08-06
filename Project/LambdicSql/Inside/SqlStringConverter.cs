@@ -154,7 +154,7 @@ namespace LambdicSql.Inside
                 Type type = null;
                 var types = sqlExp.GetType().GetGenericArguments();
                 if (0 < types.Length) type = types[0];
-                return new DecodedInfo(type, sqlExp.ToString(this));
+                return new DecodedInfo(type, AdjustSubQueryString(sqlExp.ToString(this)));
             }
 
             throw new NotSupportedException("Invalid object.");

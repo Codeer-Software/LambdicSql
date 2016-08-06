@@ -737,7 +737,7 @@ namespace TestCore
                 {
                     Name = subQuery.Cast().name_sub
                 }).
-                From(subQuery.Cast()));
+                From(subQuery));
 
             //to string and params.
             var info = query.ToSqlInfo(_connection.GetType());
