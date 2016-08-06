@@ -4,14 +4,15 @@ using System.Linq;
 using System;
 using LambdicSql;
 using System.Collections.Generic;
+using LambdicSql.Inside;
 
-namespace LambdicSql.Inside
+namespace LambdicSql.QueryBase
 {
-    static class SelectDefineAnalyzer
+    public static class ObjectCreateAnalyzer
     {
-        internal static SelectClauseInfo MakeSelectInfo(Expression exp)
+        public static ObjectCreateInfo MakeSelectInfo(Expression exp)
         {
-            var select = new List<SelectElement>();
+            var select = new List<ObjectCreateMemberElement>();
             var newExp = exp as NewExpression;
             if (newExp != null)
             {
@@ -29,18 +30,18 @@ namespace LambdicSql.Inside
                         var method = newExp.Members[i] as MethodInfo;
                         name = method.GetPropertyName();
                     }
-                    select.Add(new SelectElement(name, newExp.Arguments[i]));
+                    select.Add(new ObjectCreateMemberElement(name, newExp.Arguments[i]));
                 }
-                return new SelectClauseInfo(select, exp);
+                return new ObjectCreateInfo(select, exp);
             }
             var initExp = exp as MemberInitExpression;
             if (initExp != null)
             {
                 foreach (var b in initExp.Bindings.Cast<MemberAssignment>())
                 {
-                    select.Add(new SelectElement(b.Member.Name, b.Expression));
+                    select.Add(new ObjectCreateMemberElement(b.Member.Name, b.Expression));
                 }
-                return new SelectClauseInfo(select, exp);
+                return new ObjectCreateInfo(select, exp);
             }
             var member = exp as MemberExpression;
             if (member != null)
@@ -48,9 +49,9 @@ namespace LambdicSql.Inside
                 var type = ((PropertyInfo)member.Member).PropertyType;
                 foreach (var p in type.GetProperties())
                 {
-                    select.Add(new SelectElement(p.Name, null));
+                    select.Add(new ObjectCreateMemberElement(p.Name, null));
                 }
-                return new SelectClauseInfo(select, exp);
+                return new ObjectCreateInfo(select, exp);
             }
             throw new NotSupportedException();
         }

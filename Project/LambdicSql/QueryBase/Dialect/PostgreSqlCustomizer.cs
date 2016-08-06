@@ -2,9 +2,9 @@
 using System;
 using System.Linq.Expressions;
 
-namespace LambdicSql.SQLite
+namespace LambdicSql.Dialect
 {
-    public class SQLiteCustomizer : IQueryCustomizer
+    public class PostgreSqlCustomizer : IQueryCustomizer
     {
         public string CustomOperator(Type type1, string @operator, Type type2)
         {

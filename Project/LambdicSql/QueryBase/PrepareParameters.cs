@@ -1,14 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using LambdicSql.Inside;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace LambdicSql.QueryBase
 {
-    class ParameterInfo
-    {
-        public int? MetadataToken { get; set; }
-        public object Value { get; set; }
-    }
-
     public class PrepareParameters
     {
         int _count;

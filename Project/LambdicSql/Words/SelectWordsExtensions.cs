@@ -27,7 +27,7 @@ namespace LambdicSql
                 define = method.Arguments[1];
             }
 
-            var select = SelectDefineAnalyzer.MakeSelectInfo(define);
+            var select = ObjectCreateAnalyzer.MakeSelectInfo(define);
 
             if (converter.Context.SelectClauseInfo == null)
             {
@@ -41,11 +41,11 @@ namespace LambdicSql
             return Environment.NewLine + text;
         }
 
-        static string ToString(string _predicate, SelectElement[] _elements, ISqlStringConverter decoder)
+        static string ToString(string _predicate, ObjectCreateMemberElement[] _elements, ISqlStringConverter decoder)
             => "SELECT" + _predicate + Environment.NewLine + "\t" +
             string.Join("," + Environment.NewLine + "\t", _elements.Select(e => ToString(decoder, e)).ToArray());
 
-        static string ToString(ISqlStringConverter decoder, SelectElement element)
+        static string ToString(ISqlStringConverter decoder, ObjectCreateMemberElement element)
             => element.Expression == null ? element.Name : decoder.ToString(element.Expression) + " AS \"" + element.Name + "\"";
 
         static string GetPredicate(AggregatePredicate? aggregatePredicate)

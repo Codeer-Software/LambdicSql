@@ -29,7 +29,7 @@ namespace LambdicSql
                 case nameof(Update): return Environment.NewLine + "UPDATE " + converter.ToString(method.Arguments[1]);
                 case nameof(Set):
                     {
-                        var select = SelectDefineAnalyzer.MakeSelectInfo(method.Arguments[1]);
+                        var select = ObjectCreateAnalyzer.MakeSelectInfo(method.Arguments[1]);
                         var list = new List<string>();
                         foreach (var e in select.Elements)
                         {

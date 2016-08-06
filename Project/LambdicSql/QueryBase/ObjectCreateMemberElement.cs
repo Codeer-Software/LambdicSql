@@ -1,13 +1,13 @@
 ﻿using System.Linq.Expressions;
 
-namespace LambdicSql
+namespace LambdicSql.QueryBase
 {
-    public class SelectElement
+    public class ObjectCreateMemberElement
     {
         public string Name { get; }
         public Expression Expression { get; }
 
-        public SelectElement(string name, Expression expression)
+        public ObjectCreateMemberElement(string name, Expression expression)
         {
             Name = name;
             Expression = expression;

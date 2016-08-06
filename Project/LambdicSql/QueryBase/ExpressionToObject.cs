@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Linq;
 
-namespace LambdicSql.Inside
+namespace LambdicSql.QueryBase
 {
-    static partial class ExpressionToObject
+    public static partial class ExpressionToObject
     {
         interface IGetter
         {
@@ -15,7 +15,7 @@ namespace LambdicSql.Inside
 
         static Dictionary<string, IGetter> _memberGet = new Dictionary<string, IGetter>();
 
-        internal static bool GetExpressionObject(Expression exp, out object obj)
+        public static bool GetExpressionObject(Expression exp, out object obj)
         {
             var constExp = exp as ConstantExpression;
             if (constExp != null)
@@ -37,7 +37,7 @@ namespace LambdicSql.Inside
             return false;
         }
 
-        internal static bool GetMethodObject(MethodCallExpression method, out object value)
+        public static bool GetMethodObject(MethodCallExpression method, out object value)
         {
             value = null;
 
@@ -96,8 +96,8 @@ namespace LambdicSql.Inside
             value = getter.GetMemberObject(args.ToArray());
             return true;
         }
-        
-        internal static bool GetMemberObject(MemberExpression exp, out object value)
+
+        public static bool GetMemberObject(MemberExpression exp, out object value)
         {
             value = null;
             var member = exp;

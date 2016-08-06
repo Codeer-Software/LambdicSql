@@ -2,7 +2,7 @@
 {
     public class DecodeContext
     {
-        public SelectClauseInfo SelectClauseInfo { get; internal set; }
+        public ObjectCreateInfo SelectClauseInfo { get; internal set; }
         public DbInfo DbInfo { get; }
         public PrepareParameters Parameters { get; } = new PrepareParameters();
 

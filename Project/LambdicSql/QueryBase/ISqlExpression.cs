@@ -1,6 +1,4 @@
-﻿using System.Linq.Expressions;
-
-namespace LambdicSql.QueryBase
+﻿namespace LambdicSql.QueryBase
 {
     public interface ISqlExpression
     {
@@ -8,5 +6,6 @@ namespace LambdicSql.QueryBase
         string ToString(ISqlStringConverter decoder);
     }
 
+    //TODO implecit cast...
     public interface ISqlExpression<out TSelected> : ISqlExpression { }
 }

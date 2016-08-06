@@ -1,4 +1,5 @@
-﻿using LambdicSql.Inside;
+﻿using LambdicSql.Dialect;
+using LambdicSql.Inside;
 using LambdicSql.QueryBase;
 using System;
 using System.Linq;
@@ -27,7 +28,7 @@ namespace LambdicSql
         public static SqlInfo ToSqlInfo(this ISqlExpression exp, Type connectionType)
         {
             var context = new DecodeContext(exp.DbInfo);
-            var converter = new SqlStringConverter(context, QueryCustomizeResolver.CreateCustomizer(connectionType.FullName));
+            var converter = new SqlStringConverter(context, DialectResolver.CreateCustomizer(connectionType.FullName));
             var text = exp.ToString(converter);
 
             //adjust. remove empty line.

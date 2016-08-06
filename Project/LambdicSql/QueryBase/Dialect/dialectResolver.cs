@@ -1,10 +1,8 @@
-﻿using LambdicSql.PostgreSql;
-using LambdicSql.QueryBase;
-using LambdicSql.SQLite;
+﻿using LambdicSql.QueryBase;
 
-namespace LambdicSql.Inside
+namespace LambdicSql.Dialect
 {
-    public static class QueryCustomizeResolver
+    public static class DialectResolver
     {
         internal static IQueryCustomizer CreateCustomizer(string connectionTypeFullName)
         {

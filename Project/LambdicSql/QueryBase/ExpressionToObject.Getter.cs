@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace LambdicSql.Inside
+namespace LambdicSql.QueryBase
 {
-    static partial class ExpressionToObject
+    public static partial class ExpressionToObject
     {
         class GetterCore : IGetter
         {

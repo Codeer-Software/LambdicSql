@@ -2,14 +2,14 @@
 using System.Linq.Expressions;
 using System.Linq;
 
-namespace LambdicSql
+namespace LambdicSql.QueryBase
 {
-    public class SelectClauseInfo
+    public class ObjectCreateInfo
     {
-        public SelectElement[] Elements { get; }
+        public ObjectCreateMemberElement[] Elements { get; }
         public Expression Expression { get; }
 
-        public SelectClauseInfo(IEnumerable<SelectElement> elements, Expression exp)
+        public ObjectCreateInfo(IEnumerable<ObjectCreateMemberElement> elements, Expression exp)
         {
             Elements = elements.ToArray();
             Expression = exp;
