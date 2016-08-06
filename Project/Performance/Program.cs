@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
-using static LambdicSql.KeyWords;
+using static LambdicSql.Keywords;
 
 namespace Performance
 {

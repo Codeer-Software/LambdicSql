@@ -3,9 +3,10 @@ using System.Data;
 using System.Diagnostics;
 using System.Linq;
 
+//important
 using Dapper;
 using LambdicSql;
-using static LambdicSql.KeyWords;
+using static LambdicSql.Keywords;
 using static LambdicSql.Funcs;
 using static LambdicSql.Utils;
 
@@ -109,7 +110,7 @@ namespace TestCore
             public decimal? Money { get; set; }
         }
         
-        public void StandardNoramlType()
+        public void TestStandard()
         {
             //make sql.
             var query = Sql<DB>.Create(db =>
@@ -132,7 +133,7 @@ namespace TestCore
         }
 
         //Select one table.
-        public void SelectFromX()
+        public void TestSelectFrom()
         {
             //make sql.
             var query = Sql<DB>.Create(db => SelectFrom(db.tbl_staff));
@@ -146,7 +147,7 @@ namespace TestCore
         }
 
         //Group by.
-        public void GroupBy()
+        public void TestGroupBy()
         {
             //make sql.
             var query = Sql< DB>.Create(db =>
@@ -172,7 +173,7 @@ namespace TestCore
         }
 
         //Group by using Distinct.
-        public void GroupByPredicateDistinct()
+        public void TestGroupByPredicateDistinct()
         {
             //make sql.
             var query = Sql<DB>.Create(db =>
@@ -195,7 +196,7 @@ namespace TestCore
         }
 
         //Group by using All.
-        public void GroupByPredicateAll()
+        public void TestGroupByPredicateAll()
         {
             //make sql.
             var query = Sql<DB>.Create(db =>
@@ -218,7 +219,7 @@ namespace TestCore
         }
 
         //Having
-        public void Having()
+        public void TestHaving()
         {
             //make sql.
             var query = Sql<DB>.Create(db =>
@@ -242,7 +243,7 @@ namespace TestCore
         }
 
         //Like, In, Between
-        public void LikeX()
+        public void TestLike()
         {
             //make sql.
             var query = Sql<DB>.Create(db =>
@@ -257,7 +258,7 @@ namespace TestCore
             var datas = _connection.Query<SelectData1>(info.SqlText, info.Parameters).ToList();
         }
         
-        public void InX()
+        public void TestIn()
         {
             //make sql.
             var query = Sql<DB>.Create(db =>
@@ -272,7 +273,7 @@ namespace TestCore
             var datas = _connection.Query<SelectData1>(info.SqlText, info.Parameters).ToList();
         }
         
-        public void BetweenX()
+        public void TestBetween()
         {
             //make sql.
             var query = Sql<DB>.Create(db =>
@@ -289,7 +290,7 @@ namespace TestCore
 
         //Distinct
         //```cs
-        public void SelectPredicateDistinct()
+        public void TestSelectPredicateDistinct()
         {
             //make sql.
             var query = Sql<DB>.Create(db =>
@@ -310,7 +311,7 @@ namespace TestCore
 
         //All
         //```cs
-        public void SelectPredicateAll()
+        public void TestSelectPredicateAll()
         {
             //make sql.
             var query = Sql<DB>.Create(db =>
@@ -331,7 +332,7 @@ namespace TestCore
 
         //Delete all.
         //```cs
-        public void DeleteEx()
+        public void TestDelete()
         {
             //make sql.
             var query = Sql<DB>.Create(db =>
@@ -349,7 +350,7 @@ namespace TestCore
 
         //Delete condition matching row. 
         //```cs
-        public void DeleteWhere()
+        public void TestDeleteWhere()
         {
             //make sql.
             var query = Sql<DB>.Create(db =>
@@ -368,7 +369,7 @@ namespace TestCore
 
         //Insert.
         //```cs
-        public void Insert()
+        public void TestInsert()
         {
             //make sql.
             var query = Sql<DB>.Create(db =>
@@ -385,7 +386,7 @@ namespace TestCore
 
         //Update
         //```cs
-        public void UpdateX()
+        public void TestUpdate()
         {
             //make sql.
             var query = Sql<DB>.Create(db =>
@@ -404,7 +405,7 @@ namespace TestCore
 
         //Update using table value.
         //```cs
-        public void UpdateUsingTableValue()
+        public void TestUpdateUsingTableValue()
         {
             //make sql.
             var query = Sql<DB>.Create(db =>
@@ -421,7 +422,7 @@ namespace TestCore
         }
         //```
 
-        public void IsNull()
+        public void TestIsNull()
         {
             decimal? val = null;
 
@@ -445,7 +446,7 @@ namespace TestCore
             var datas = _connection.Query<SelectData1>(info.SqlText, info.Parameters).ToList();
         }
         
-        public void IsNotNull()
+        public void TestIsNotNull()
         {
             decimal? val = null;
 
@@ -469,7 +470,7 @@ namespace TestCore
             var datas = _connection.Query<SelectData1>(info.SqlText, info.Parameters).ToList();
         }
 
-        public void Nullable()
+        public void TestNullable()
         {
             //make sql.
             var query = Sql<DBNullable>.Create(db =>
@@ -491,7 +492,7 @@ namespace TestCore
             var datas = _connection.Query<SelectData1>(info.SqlText, info.Parameters).ToList();
         }
         
-        public void StringCalc()
+        public void TestStringCalc()
         {
             //make sql.
             var query = Sql<DB>.Create(db =>
@@ -509,15 +510,15 @@ namespace TestCore
             var datas = _connection.Query<SelectData1>(info.SqlText, info.Parameters).ToList();
         }
         
-        public void WhereEx()
+        public void TestWhereEx()
         {
-            WhereEx(true, true);
-            WhereEx(true, false);
-            WhereEx(false, true);
-            WhereEx(false, false);
+            TestWhereEx(true, true);
+            TestWhereEx(true, false);
+            TestWhereEx(false, true);
+            TestWhereEx(false, false);
         }
 
-        public void WhereEx(bool minCondition, bool maxCondition)
+        public void TestWhereEx(bool minCondition, bool maxCondition)
         {
             //make sql.
             var exp = Sql<DB>.Create(db =>
@@ -534,20 +535,17 @@ namespace TestCore
             var datas = _connection.Query<SelectData1>(info.SqlText, info.Parameters).ToList();
         }
 
-        public void Case1()
+        public void TestCase1()
         {
             //make sql.
-            var caseExp = Sql<DB>.Create(db =>
-                Case().
-                When(db.tbl_staff.id == 3).Then("x").
-                When(db.tbl_staff.id == 4).Then("y").
-                Else("z").
-                End());
-
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData5()
                 {
-                    Type = caseExp.Cast<string>()
+                    Type = Case().
+                                When(db.tbl_staff.id == 3).Then("x").
+                                When(db.tbl_staff.id == 4).Then("y").
+                                Else("z").
+                           End()
                 }).
                 From(db.tbl_staff));
 
@@ -559,20 +557,17 @@ namespace TestCore
             var datas = _connection.Query<SelectData1>(info.SqlText, info.Parameters).ToList();
         }
         
-        public void Case2()
+        public void TestCase2()
         {
             //make sql.
-            var caseExp = Sql<DB>.Create(db =>
-                Case(db.tbl_staff.id).
-                When(3).Then("x").
-                When(4).Then("y").
-                Else("z").
-                End());
-
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData5()
                 {
-                    Type = caseExp.Cast<string>()
+                    Type = Case(db.tbl_staff.id).
+                                When(3).Then("x").
+                                When(4).Then("y").
+                                Else("z").
+                           End()
                 }).
                 From(db.tbl_staff));
 
@@ -586,7 +581,7 @@ namespace TestCore
 
         //Building Query
         //Concat query.
-        public void QueryConcat()
+        public void TestQueryConcat()
         {
             //make sql.
             var select = Sql<DB>.Create(db => 
@@ -617,7 +612,7 @@ namespace TestCore
             var datas = _connection.Query<SelectData1>(info.SqlText, info.Parameters).ToList();
         }
 
-        public void SqlExtension()
+        public void TestSqlExpression()
         {
             //make sql.
             var expMoneyAdd = Sql<DB>.Create(db => db.tbl_remuneration.money + 100);
@@ -642,11 +637,10 @@ namespace TestCore
 
             //dapper
             var datas = _connection.Query<SelectData1>(info.SqlText, info.Parameters).ToList();
-
         }
 
         //You can use sub query.
-        public void WhereInSubQuery()
+        public void TestSubQueryAtWhere()
         {
             //make sql.
             var sub = Sql<DB>.Create(db => 
@@ -666,7 +660,7 @@ namespace TestCore
             var datas = _connection.Query<SelectData1>(info.SqlText, info.Parameters).ToList();
         }
 
-        public void SelectSubQuery()
+        public void TestSubQuerySelect()
         {
             //make sql.
             var sub = Sql<DB>.Create(db => 
@@ -689,12 +683,7 @@ namespace TestCore
             var datas = _connection.Query<SelectData1>(info.SqlText, info.Parameters).ToList();
         }
 
-        public class DBSub : DB
-        {
-            public SelectData1 tbl_sub { get; set; }
-        }
-        
-        public void FromSubQuery()
+        public void TestSubQueryAtFrom()
         {
             //make sql.
             var subQuery = Sql<DB>.Create(db => 
@@ -714,6 +703,67 @@ namespace TestCore
                     Name = subQuery.Cast().name_sub
                 }).
                 From(subQuery.Cast()));
+
+            //to string and params.
+            var info = query.ToSqlInfo(_connection.GetType());
+            Debug.Print(info.SqlText);
+
+            //dapper
+            var datas = _connection.Query<SelectData1>(info.SqlText, info.Parameters).ToList();
+        }
+
+        //You can use text.
+        public void TestFormatText()
+        {
+            //make sql.
+            var query = Sql<DB>.Create(db =>
+                Select(new
+                {
+                    name = db.tbl_staff.name,
+                    payment_date = db.tbl_remuneration.payment_date,
+                    money = Text<decimal>("{0} + 1000", db.tbl_remuneration.money),
+                }).
+                From(db.tbl_remuneration).
+                    Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
+                Where(3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
+
+            //to string and params.
+            var info = query.ToSqlInfo(_connection.GetType());
+            Debug.Print(info.SqlText);
+
+            //dapper
+            var datas = _connection.Query<SelectData1>(info.SqlText, info.Parameters).ToList();
+        }
+
+        //2 way sql
+        public void TestFormat2WaySql()
+        {
+            TestFormat2WaySql(true, true, 1000);
+            TestFormat2WaySql(true, false, 2000);
+            TestFormat2WaySql(false, true, 3000);
+            TestFormat2WaySql(false, false, 4000);
+        }
+        public void TestFormat2WaySql(bool minCondition, bool maxCondition, decimal bonus)
+        {
+            //make sql.
+            //replace /*no*/---/**/.
+            var sql = @"
+SELECT
+	tbl_staff.name AS name,
+    tbl_remuneration.payment_date AS payment_date,
+	tbl_remuneration.money + /*0*/1000/**/ AS money
+FROM tbl_remuneration 
+    JOIN tbl_staff ON tbl_staff.id = tbl_remuneration.staff_id
+/*1*/WHERE tbl_remuneration.money = 100/**/";
+            
+            var addMoney = Sql<DB>.Create(db => bonus);
+
+            var where = Sql<DB>.Create(db =>
+                Where(
+                    Condition(false, 3000 < db.tbl_remuneration.money) &&
+                    Condition(false, db.tbl_remuneration.money < 4000)));
+
+            var query = TwoWaySql.Format(sql, addMoney, where);
 
             //to string and params.
             var info = query.ToSqlInfo(_connection.GetType());

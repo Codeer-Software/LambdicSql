@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 namespace LambdicSql
 {
     [SqlSyntax]
-    public static class KeyWords
+    public static class Keywords
     {
         public static ISqlKeyWord<TSelected> Select<TSelected>(AggregatePredicate predicate, TSelected selected) => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(Select));
         public static ISqlKeyWord<TSelected> Select<TSelected>(TSelected selected) => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(Select));

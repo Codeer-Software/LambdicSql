@@ -23,13 +23,13 @@ namespace LambdicSql.Inside.Keywords
         {
             switch (name)
             {
-                case nameof(KeyWords.InsertInto):
+                case nameof(LambdicSql.Keywords.InsertInto):
                     {
                         var arg = argSrc.Last().Split(',').Select(e => GetColumnOnly(e)).ToArray();
                         return Environment.NewLine + "INSERT INTO " + argSrc[0] + "(" + string.Join(", ", arg) + ")";
 
                     }
-                case nameof(KeyWords.Values): return Environment.NewLine + "\tVALUES (" + string.Join(", ", argSrc) + ")";
+                case nameof(LambdicSql.Keywords.Values): return Environment.NewLine + "\tVALUES (" + string.Join(", ", argSrc) + ")";
             }
             throw new NotSupportedException();
         }

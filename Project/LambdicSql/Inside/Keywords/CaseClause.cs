@@ -23,7 +23,7 @@ namespace LambdicSql.Inside.Keywords
         {
             switch (name)
             {
-                case nameof(KeyWords.Case):
+                case nameof(LambdicSql.Keywords.Case):
                     {
                         var text = Environment.NewLine + "\tCASE";
                         if (argSrc.Length == 1)
@@ -32,10 +32,10 @@ namespace LambdicSql.Inside.Keywords
                         }
                         return text;
                     }
-                case nameof(KeyWords.When): return Environment.NewLine + "\t\tWHEN " + argSrc[0];
-                case nameof(KeyWords.Then): return " THEN " + argSrc[0];
-                case nameof(KeyWords.Else): return Environment.NewLine + "\t\tELSE " + argSrc[0];
-                case nameof(KeyWords.End): return Environment.NewLine + "\tEND";
+                case nameof(LambdicSql.Keywords.When): return Environment.NewLine + "\t\tWHEN " + argSrc[0];
+                case nameof(LambdicSql.Keywords.Then): return " THEN " + argSrc[0];
+                case nameof(LambdicSql.Keywords.Else): return Environment.NewLine + "\t\tELSE " + argSrc[0];
+                case nameof(LambdicSql.Keywords.End): return Environment.NewLine + "\tEND";
             }
             return null;
         }

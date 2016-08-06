@@ -40,7 +40,7 @@
     <Compile Include="Inside\ParameterInfo.cs" />
     <Compile Include="Inside\SqlExpressionFormatText.cs" />
     <Compile Include="Inside\TowWaySqlSpec.cs" />
-    <Compile Include="KeyWords.cs" />
+    <Compile Include="Keywords.cs" />
     <Compile Include="IOrderElement.cs" />
     <Compile Include="QueryBase\ExpressionToObject.CreateGetter.cs" />
     <Compile Include="QueryBase\ExpressionToObject.Getter.cs" />

@@ -25,87 +25,87 @@ namespace Test
         public void TestCleanup() => _connection.Dispose();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void StandardNoramlType() => _core.StandardNoramlType();
+        public void StandardNoramlType() => _core.TestStandard();
         
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void SelectFrom() => _core.SelectFromX();
+        public void SelectFrom() => _core.TestSelectFrom();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void GroupBy() => _core.GroupBy();
+        public void GroupBy() => _core.TestGroupBy();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void GroupByPredicateDistinct() => _core.GroupByPredicateDistinct();
+        public void GroupByPredicateDistinct() => _core.TestGroupByPredicateDistinct();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void GroupByPredicateAll() => _core.GroupByPredicateAll();
+        public void GroupByPredicateAll() => _core.TestGroupByPredicateAll();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void Having() => _core.Having();
+        public void Having() => _core.TestHaving();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void Like() => _core.LikeX();
+        public void Like() => _core.TestLike();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void In() => _core.InX();
+        public void In() => _core.TestIn();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void Between() => _core.BetweenX();
+        public void Between() => _core.TestBetween();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void SelectPredicateDistinct() => _core.SelectPredicateDistinct();
+        public void SelectPredicateDistinct() => _core.TestSelectPredicateDistinct();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void SelectPredicateAll() => _core.SelectPredicateAll();
+        public void SelectPredicateAll() => _core.TestSelectPredicateAll();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void Delete() => _core.DeleteEx();
+        public void Delete() => _core.TestDelete();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void DeleteWhere() => _core.DeleteWhere();
+        public void DeleteWhere() => _core.TestDeleteWhere();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void Insert() => _core.Insert();
+        public void Insert() => _core.TestInsert();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void Update() => _core.UpdateX();
+        public void Update() => _core.TestUpdate();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void UpdateUsingTableValue() => _core.UpdateUsingTableValue();
+        public void UpdateUsingTableValue() => _core.TestUpdateUsingTableValue();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void IsNull() => _core.IsNull();
+        public void IsNull() => _core.TestIsNull();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void IsNotNull() => _core.IsNotNull();
+        public void IsNotNull() => _core.TestIsNotNull();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void Nullable() => _core.Nullable();
+        public void Nullable() => _core.TestNullable();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void StringCalc() => _core.StringCalc();
+        public void StringCalc() => _core.TestStringCalc();
         
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void WhereEx() => _core.WhereEx();
+        public void WhereEx() => _core.TestWhereEx();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void Case1() => _core.Case1();
+        public void Case1() => _core.TestCase1();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void Case2() => _core.Case2();
+        public void Case2() => _core.TestCase2();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void QueryConcat() => _core.QueryConcat();
+        public void QueryConcat() => _core.TestQueryConcat();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void SqlExtension() => _core.SqlExtension();
+        public void SqlExtension() => _core.TestSqlExpression();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void WhereInSubQuery() => _core.WhereInSubQuery();
+        public void WhereInSubQuery() => _core.TestSubQueryAtWhere();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void SelectSubQuery() => _core.SelectSubQuery();
+        public void SelectSubQuery() => _core.TestSubQuerySelect();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void FromSubQuery() => _core.FromSubQuery();
+        public void FromSubQuery() => _core.TestSubQueryAtFrom();
     }
 }

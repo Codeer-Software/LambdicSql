@@ -31,7 +31,7 @@ namespace LambdicSql.Inside.Keywords
                 converter.Context.SelectClauseInfo = select;
             }
             var text = ToString(GetPredicate(aggregatePredicate), select.Elements, converter);
-            if (method.Method.Name == nameof(KeyWords.SelectFrom))
+            if (method.Method.Name == nameof(LambdicSql.Keywords.SelectFrom))
             {
                 text = text + Environment.NewLine + "FROM " + converter.ToString(method.Arguments[index(0)]);
             }
