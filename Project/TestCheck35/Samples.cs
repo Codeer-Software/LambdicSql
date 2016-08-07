@@ -532,7 +532,7 @@ namespace TestCore
                 Condition(minCondition, 3000 < db.tbl_remuneration.money) &&
                 Condition(maxCondition, db.tbl_remuneration.money < 4000));
 
-            var query = Sql<DB>.Create(db => SelectFrom(db.tbl_remuneration).Where(exp.Cast<bool>()));
+            var query = Sql<DB>.Create(db => SelectFrom(db.tbl_remuneration).Where(exp));
 
             //to string and params.
             var info = query.ToSqlInfo(_connection.GetType());
