@@ -119,6 +119,8 @@ namespace TestCore
 
         public void TestStandard()
         {
+            var min = 3000;
+
             //make sql.
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData1()
@@ -129,7 +131,7 @@ namespace TestCore
                 }).
                 From(db.tbl_remuneration).
                     Join(db.tbl_staff, db.tbl_staff.id == db.tbl_remuneration.staff_id).
-                Where(3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
+                Where(min < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
 
             //to string and params.
             var info = query.ToSqlInfo(_connection.GetType());
@@ -795,8 +797,8 @@ FROM tbl_remuneration
 
             var where = Sql<DB>.Create(db =>
                 Where(
-                    Condition(false, 3000 < db.tbl_remuneration.money) &&
-                    Condition(false, db.tbl_remuneration.money < 4000)));
+                    Condition(minCondition, 3000 < db.tbl_remuneration.money) &&
+                    Condition(maxCondition, db.tbl_remuneration.money < 4000)));
 
             var query = TwoWaySql.Format(sql, addMoney, where);
 
