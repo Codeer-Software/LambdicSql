@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace LambdicSql.QueryBase
+namespace LambdicSql.SqlBase
 {
     public interface ISqlStringConverterCustomizer
     {

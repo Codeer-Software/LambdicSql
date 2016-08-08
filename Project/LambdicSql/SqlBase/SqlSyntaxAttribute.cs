@@ -1,7 +1,6 @@
 ﻿using System;
 
-namespace LambdicSql.QueryBase
+namespace LambdicSql.SqlBase
 {
-    //TODO cahe attr check.
     public class SqlSyntaxAttribute : Attribute { }
 }

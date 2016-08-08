@@ -1,6 +1,6 @@
 ﻿using LambdicSql.Dialect;
 using LambdicSql.Inside;
-using LambdicSql.QueryBase;
+using LambdicSql.SqlBase;
 using System;
 using System.Linq;
 

@@ -2,7 +2,7 @@
 using System.Linq.Expressions;
 using System.Linq;
 
-namespace LambdicSql.QueryBase
+namespace LambdicSql.SqlBase
 {
     public class ObjectCreateInfo
     {

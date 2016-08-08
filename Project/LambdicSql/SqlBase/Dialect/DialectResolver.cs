@@ -1,4 +1,4 @@
-﻿using LambdicSql.QueryBase;
+﻿using LambdicSql.SqlBase;
 
 namespace LambdicSql.Dialect
 {

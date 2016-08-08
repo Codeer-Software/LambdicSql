@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LambdicSql.QueryBase
+namespace LambdicSql.SqlBase
 {
     public class ColumnInfo
     {

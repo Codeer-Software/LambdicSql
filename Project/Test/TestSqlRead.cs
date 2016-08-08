@@ -1,6 +1,6 @@
 ﻿using Dapper;
 using LambdicSql;
-using LambdicSql.QueryBase;
+using LambdicSql.SqlBase;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Linq;
 
-namespace LambdicSql.QueryBase
+namespace LambdicSql.SqlBase
 {
     public static partial class ExpressionToObject
     {

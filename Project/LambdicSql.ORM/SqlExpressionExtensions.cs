@@ -1,5 +1,5 @@
 ﻿using LambdicSql.ORM;
-using LambdicSql.QueryBase;
+using LambdicSql.SqlBase;
 using System;
 using System.Data;
 

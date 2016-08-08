@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using System.Linq;
 
-namespace LambdicSql.QueryBase
+namespace LambdicSql.SqlBase
 {
     public static class SqlFuncUtility
     {

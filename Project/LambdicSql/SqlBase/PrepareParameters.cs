@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace LambdicSql.QueryBase
+namespace LambdicSql.SqlBase
 {
     public class PrepareParameters
     {

@@ -1,4 +1,4 @@
-﻿namespace LambdicSql.QueryBase
+﻿namespace LambdicSql.SqlBase
 {
     public abstract class SqlExpression<T> : ISqlExpression<T>
     {

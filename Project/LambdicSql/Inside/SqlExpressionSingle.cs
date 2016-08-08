@@ -1,4 +1,4 @@
-﻿using LambdicSql.QueryBase;
+﻿using LambdicSql.SqlBase;
 using System.Linq.Expressions;
 
 namespace LambdicSql.Inside

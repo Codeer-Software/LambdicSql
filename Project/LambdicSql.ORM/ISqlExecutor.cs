@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace LambdicSql.QueryBase
+namespace LambdicSql.SqlBase
 {
     public interface ISqlExecutor<TSelect>
     {

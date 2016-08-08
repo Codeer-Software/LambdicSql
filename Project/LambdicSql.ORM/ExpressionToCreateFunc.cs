@@ -1,5 +1,5 @@
 ﻿using LambdicSql.Inside;
-using LambdicSql.QueryBase;
+using LambdicSql.SqlBase;
 using System;
 using System.Collections.Generic;
 using System.Linq;

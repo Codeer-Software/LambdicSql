@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace LambdicSql.QueryBase
+namespace LambdicSql.SqlBase
 {
     public class TableInfo
     {

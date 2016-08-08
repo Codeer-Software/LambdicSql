@@ -6,7 +6,7 @@ using LambdicSql;
 using System.Collections.Generic;
 using LambdicSql.Inside;
 
-namespace LambdicSql.QueryBase
+namespace LambdicSql.SqlBase
 {
     public static class ObjectCreateAnalyzer
     {
