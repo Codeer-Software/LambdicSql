@@ -21,23 +21,18 @@ namespace LambdicSql.Inside
             => (method.Name.IndexOf("get_") == 0) ?
                 method.Name.Substring(4) : method.Name;
 
-        internal static bool IsSqlSyntaxResolver(this MethodInfo method)
+        internal static bool IsSqlSyntax(this Type type)
         {
             lock (_isSqlSyntax)
             {
                 bool check;
-                if (!_isSqlSyntax.TryGetValue(method.DeclaringType, out check))
+                if (!_isSqlSyntax.TryGetValue(type, out check))
                 {
-                    check = method.DeclaringType.GetCustomAttributes(true).Any(e=>e is SqlSyntaxAttribute);
-                    _isSqlSyntax[method.DeclaringType] = check;
+                    check = type.GetCustomAttributes(true).Any(e=>e is SqlSyntaxAttribute);
+                    _isSqlSyntax[type] = check;
                 }
-                if (check) return true;
+                return check;
             }
-
-            var ps = method.GetParameters();
-            return method.IsStatic &&
-                0 < ps.Length &&
-                typeof(IMethodChain).IsAssignableFrom(ps[0].ParameterType);
         }
 
         internal static Func<ISqlStringConverter, MethodCallExpression[], string>

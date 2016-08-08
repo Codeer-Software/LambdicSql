@@ -53,7 +53,7 @@ namespace LambdicSql.Inside
 
         DecodedInfo ToString(NewExpression newExp)
         {
-            if (typeof(ISqlSyntaxObject).IsAssignableFrom(newExp.Constructor.DeclaringType))
+            if (newExp.Type.IsSqlSyntax())
             {
                 var func = newExp.GetNewToString();
                 return new DecodedInfo(null, func(this, newExp));
@@ -270,7 +270,7 @@ namespace LambdicSql.Inside
         }
 
         static bool IsSqlSyntaxResolver(MethodCallExpression method)
-            => method.Method.IsSqlSyntaxResolver();
+            => method.Method.DeclaringType.IsSqlSyntax();
 
         //TODO
         static bool IsSqlExpressionCast(MethodCallExpression method)

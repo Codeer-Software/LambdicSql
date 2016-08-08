@@ -6,7 +6,8 @@ using System.Linq.Expressions;
 
 namespace LambdicSql
 {
-    public class PartitionBy : ISqlSyntaxObject
+    [SqlSyntax]
+    public class PartitionBy
     {
         public PartitionBy(params object[] targets) { InvalitContext.Throw("new " + nameof(PartitionBy)); }
         public static string NewToString(ISqlStringConverter converter, NewExpression exp)
@@ -18,7 +19,8 @@ namespace LambdicSql
         }
     }
 
-    public class OrderBy : ISqlSyntaxObject
+    [SqlSyntax]
+    public class OrderBy
     {
         public OrderBy(params IOrderElement[] elements) { InvalitContext.Throw("new " + nameof(OrderBy)); }
         public static string NewToString(ISqlStringConverter converter, NewExpression exp)
@@ -30,7 +32,8 @@ namespace LambdicSql
         }
     }
 
-    public class Rows : ISqlSyntaxObject
+    [SqlSyntax]
+    public class Rows
     {
         public Rows(int p) { InvalitContext.Throw("new " + nameof(Rows)); }
         public Rows(int p1, int p2) { InvalitContext.Throw("new " + nameof(Rows)); }

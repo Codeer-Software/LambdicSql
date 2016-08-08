@@ -1,11 +1,11 @@
 ﻿using LambdicSql.QueryBase;
-using System;
 using System.Linq.Expressions;
 
 namespace LambdicSql
 {
-    public interface IOrderElement : ISqlSyntaxObject { }
+    public interface IOrderElement { }
 
+    [SqlSyntax]
     public class Asc : IOrderElement
     {
         public Asc(object target) { }
@@ -15,6 +15,7 @@ namespace LambdicSql
         }
     }
 
+    [SqlSyntax]
     public class Desc : IOrderElement
     {
         public Desc(object target) { }

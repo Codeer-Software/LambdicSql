@@ -48,7 +48,6 @@
     <Compile Include="QueryBase\DecodeContext.cs" />
     <Compile Include="QueryBase\IQueryGroup.cs" />
     <Compile Include="QueryBase\IMethodChainGroup.cs" />
-    <Compile Include="QueryBase\ISqlSyntaxObject.cs" />
     <Compile Include="QueryBase\IQuery.cs" />
     <Compile Include="AggregatePredicate.cs" />
     <Compile Include="QueryBase\ISqlExpression.cs" />
