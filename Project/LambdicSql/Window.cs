@@ -52,11 +52,13 @@ namespace LambdicSql
     [SqlSyntax]
     public static class Window
     {
-        public static IWindowFunctionsAfter Avg<T>(T t) => InvalitContext.Throw<IWindowFunctionsAfter>(nameof(Avg));
-        public static IWindowFunctionsAfter Lag<T>(T t) => InvalitContext.Throw<IWindowFunctionsAfter>(nameof(Lag));
-        public static IWindowFunctionsAfter Lag<T>(T t, object offset) => InvalitContext.Throw<IWindowFunctionsAfter>(nameof(Lag));
-        public static IWindowFunctionsAfter Lag<T>(T t, object offset, object @default) => InvalitContext.Throw<IWindowFunctionsAfter>(nameof(Lag));
-        public static T Over<T>(this IWindowFunctionsAfter words, PartitionBy p, OrderBy o, Rows r) => InvalitContext.Throw<T>(nameof(Over));
+        public interface IFuncAfter : IMethodChainGroup { }
+
+        public static IFuncAfter Avg<T>(T t) => InvalitContext.Throw<IFuncAfter>(nameof(Avg));
+        public static IFuncAfter Lag<T>(T t) => InvalitContext.Throw<IFuncAfter>(nameof(Lag));
+        public static IFuncAfter Lag<T>(T t, object offset) => InvalitContext.Throw<IFuncAfter>(nameof(Lag));
+        public static IFuncAfter Lag<T>(T t, object offset, object @default) => InvalitContext.Throw<IFuncAfter>(nameof(Lag));
+        public static T Over<T>(this IFuncAfter words, PartitionBy p, OrderBy o, Rows r) => InvalitContext.Throw<T>(nameof(Over));
 
         public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {

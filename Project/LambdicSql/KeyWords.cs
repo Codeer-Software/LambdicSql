@@ -9,18 +9,18 @@ namespace LambdicSql
     [SqlSyntax]
     public static class Keywords
     {
-        public static ISqlKeyWord<TSelected> Select<TSelected>(AggregatePredicate predicate, TSelected selected) => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(Select));
-        public static ISqlKeyWord<TSelected> Select<TSelected>(TSelected selected) => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(Select));
-        public static ISqlKeyWord<TSelected> SelectFrom<TSelected>(TSelected selected) => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(SelectFrom));
-        public static ISqlKeyWord<TSelected> Select<TSelected>(this ISqlKeyWord words, AggregatePredicate predicate, TSelected selected) => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(Select));
-        public static ISqlKeyWord<TSelected> Select<TSelected>(this ISqlKeyWord words, TSelected selected) => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(Select));
-        public static ISqlKeyWord<TSelected> SelectFrom<TSelected>(this ISqlKeyWord words, TSelected selected) => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(SelectFrom));
+        public static IQuery<TSelected> Select<TSelected>(AggregatePredicate predicate, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
+        public static IQuery<TSelected> Select<TSelected>(TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
+        public static IQuery<TSelected> SelectFrom<TSelected>(TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(SelectFrom));
+        public static IQuery<TSelected> Select<TSelected>(this IQuery words, AggregatePredicate predicate, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
+        public static IQuery<TSelected> Select<TSelected>(this IQuery words, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
+        public static IQuery<TSelected> SelectFrom<TSelected>(this IQuery words, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(SelectFrom));
 
-        public interface ICaseAfter : ISqlGroupingKeyWord { }
-        public interface IWhenAfter : ISqlGroupingKeyWord { }
-        public interface IWhenAfter<T> : ISqlGroupingKeyWord { }
-        public interface IThenAfter<T> : ISqlGroupingKeyWord { }
-        public interface IElseAfter<T> : ISqlGroupingKeyWord { }
+        public interface ICaseAfter : IQueryGroup { }
+        public interface IWhenAfter : IQueryGroup { }
+        public interface IWhenAfter<T> : IQueryGroup { }
+        public interface IThenAfter<T> : IQueryGroup { }
+        public interface IElseAfter<T> : IQueryGroup { }
         public static ICaseAfter Case() => InvalitContext.Throw<ICaseAfter>(nameof(Case));
         public static ICaseAfter Case<T>(T t) => InvalitContext.Throw<ICaseAfter>(nameof(Case));
         public static IWhenAfter When<T>(this ICaseAfter words, T t) => InvalitContext.Throw<IWhenAfter>(nameof(When));
@@ -31,37 +31,37 @@ namespace LambdicSql
         public static T End<T>(this IThenAfter<T> words) => InvalitContext.Throw<T>(nameof(End));
         public static T End<T>(this IElseAfter<T> words) => InvalitContext.Throw<T>(nameof(End));
 
-        public static ISqlKeyWord<Non> Delete() => InvalitContext.Throw<ISqlKeyWord<Non>>(nameof(Delete));
+        public static IQuery<Non> Delete() => InvalitContext.Throw<IQuery<Non>>(nameof(Delete));
 
-        public interface IFromAfter<T> : ISqlGroupingKeyWord<T> { }
-        public static IFromAfter<TSelected> From<TSelected, T>(this ISqlKeyWord<TSelected> words, T tbale) => InvalitContext.Throw<IFromAfter<TSelected>>(nameof(From));
-        public static ISqlKeyWord<TSelected> Join<TSelected, T>(this IFromAfter<TSelected> words, T tbale, bool condition) => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(Join));
-        public static ISqlKeyWord<TSelected> LeftJoin<TSelected, T>(this IFromAfter<TSelected> words, T tbale, bool condition) => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(LeftJoin));
-        public static ISqlKeyWord<TSelected> RightJoin<TSelected, T>(this IFromAfter<TSelected> words, T tbale, bool condition) => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(RightJoin));
-        public static ISqlKeyWord<TSelected> CrossJoin<TSelected, T>(this IFromAfter<TSelected> words, T tbale) => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(CrossJoin));
+        public interface IFromAfter<T> : IQueryGroup<T> { }
+        public static IFromAfter<TSelected> From<TSelected, T>(this IQuery<TSelected> words, T tbale) => InvalitContext.Throw<IFromAfter<TSelected>>(nameof(From));
+        public static IQuery<TSelected> Join<TSelected, T>(this IFromAfter<TSelected> words, T tbale, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Join));
+        public static IQuery<TSelected> LeftJoin<TSelected, T>(this IFromAfter<TSelected> words, T tbale, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(LeftJoin));
+        public static IQuery<TSelected> RightJoin<TSelected, T>(this IFromAfter<TSelected> words, T tbale, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(RightJoin));
+        public static IQuery<TSelected> CrossJoin<TSelected, T>(this IFromAfter<TSelected> words, T tbale) => InvalitContext.Throw<IQuery<TSelected>>(nameof(CrossJoin));
         public static IFromAfter<Non> From<T>(T tbale) => InvalitContext.Throw<IFromAfter<Non>>(nameof(From));
 
-        public static ISqlKeyWord<Non> GroupBy(params object[] target) => InvalitContext.Throw<ISqlKeyWord<Non>>(nameof(GroupBy));
-        public static ISqlKeyWord<TSelected> GroupBy<TSelected>(this ISqlKeyWord<TSelected> words, params object[] target) => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(GroupBy));
+        public static IQuery<Non> GroupBy(params object[] target) => InvalitContext.Throw<IQuery<Non>>(nameof(GroupBy));
+        public static IQuery<TSelected> GroupBy<TSelected>(this IQuery<TSelected> words, params object[] target) => InvalitContext.Throw<IQuery<TSelected>>(nameof(GroupBy));
 
-        public static ISqlKeyWord<Non> Having(bool condition) => InvalitContext.Throw<ISqlKeyWord<Non>>(nameof(Having));
-        public static ISqlKeyWord<TSelected> Having<TSelected>(this ISqlKeyWord<TSelected> words, bool condition) => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(Having));
+        public static IQuery<Non> Having(bool condition) => InvalitContext.Throw<IQuery<Non>>(nameof(Having));
+        public static IQuery<TSelected> Having<TSelected>(this IQuery<TSelected> words, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Having));
 
-        public interface IInsertIntoAfter<T> : ISqlGroupingKeyWord<T> { }
+        public interface IInsertIntoAfter<T> : IQueryGroup<T> { }
         public static IInsertIntoAfter<Non> InsertInto<TTable>(TTable table, params object[] targets) => InvalitContext.Throw<IInsertIntoAfter<Non>>(nameof(InsertInto));
-        public static ISqlKeyWord<TSelected> Values<TSelected>(this IInsertIntoAfter<TSelected> words, params object[] targets)
-             => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(Values));
+        public static IQuery<TSelected> Values<TSelected>(this IInsertIntoAfter<TSelected> words, params object[] targets)
+             => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
 
-        public interface IOrderByAfter<T> : ISqlGroupingKeyWord<T> { }
+        public interface IOrderByAfter<T> : IQueryGroup<T> { }
         public static IOrderByAfter<Non> OrderBy(params IOrderElement[] elements) => InvalitContext.Throw<IOrderByAfter<Non>>(nameof(OrderBy));
-        public static IOrderByAfter<TSelected> OrderBy<TSelected>(this ISqlKeyWord<TSelected> words, params IOrderElement[] elements) => InvalitContext.Throw<IOrderByAfter<TSelected>>(nameof(OrderBy));
+        public static IOrderByAfter<TSelected> OrderBy<TSelected>(this IQuery<TSelected> words, params IOrderElement[] elements) => InvalitContext.Throw<IOrderByAfter<TSelected>>(nameof(OrderBy));
 
-        public interface IUpdateAfter<TSelected, T> : ISqlGroupingKeyWord<TSelected> { }
+        public interface IUpdateAfter<TSelected, T> : IQueryGroup<TSelected> { }
         public static IUpdateAfter<Non, T> Update<T>(T table) => InvalitContext.Throw<IUpdateAfter<Non, T>>(nameof(Update));
-        public static ISqlKeyWord<TSelected> Set<TSelected, T>(this IUpdateAfter<TSelected, T> words, T setting) => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(Set));
+        public static IQuery<TSelected> Set<TSelected, T>(this IUpdateAfter<TSelected, T> words, T setting) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Set));
 
-        public static ISqlKeyWord<Non> Where(bool condition) => InvalitContext.Throw<ISqlKeyWord<Non>>(nameof(Where));
-        public static ISqlKeyWord<TSelected> Where<TSelected>(this ISqlKeyWord<TSelected> words, bool condition) => InvalitContext.Throw<ISqlKeyWord<TSelected>>(nameof(Where));
+        public static IQuery<Non> Where(bool condition) => InvalitContext.Throw<IQuery<Non>>(nameof(Where));
+        public static IQuery<TSelected> Where<TSelected>(this IQuery<TSelected> words, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Where));
 
         public static bool Like(string target, string serachText) => InvalitContext.Throw<bool>(nameof(Like));
         public static bool Between<TTarget>(TTarget target, TTarget min, TTarget max) => InvalitContext.Throw<bool>(nameof(Between));

@@ -758,7 +758,7 @@ namespace TestCore
                 {
                     name = db.tbl_staff.name,
                     payment_date = db.tbl_remuneration.payment_date,
-                    money = Text<decimal>("{0} + 1000", db.tbl_remuneration.money),
+                    money = Text<decimal>("{0} + {1}", db.tbl_remuneration.money, 1000),
                 }).
                 From(db.tbl_remuneration).
                     Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).

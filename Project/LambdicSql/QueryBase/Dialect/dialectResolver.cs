@@ -4,7 +4,7 @@ namespace LambdicSql.Dialect
 {
     public static class DialectResolver
     {
-        internal static IQueryCustomizer CreateCustomizer(string connectionTypeFullName)
+        internal static ISqlStringConverterCustomizer CreateCustomizer(string connectionTypeFullName)
         {
             if (connectionTypeFullName == "Npgsql.NpgsqlConnection")
             {

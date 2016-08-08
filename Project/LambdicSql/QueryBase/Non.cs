@@ -1,4 +1,7 @@
 ﻿namespace LambdicSql.QueryBase
 {
-    public class Non { }
+    public class Non
+    {
+        private Non() { }
+    }
 }

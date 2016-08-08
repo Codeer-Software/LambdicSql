@@ -8,11 +8,11 @@ namespace LambdicSql.Inside
 {
     class SqlStringConverter : ISqlStringConverter
     {
-        IQueryCustomizer _queryCustomizer;
+        ISqlStringConverterCustomizer _queryCustomizer;
 
         public DecodeContext Context { get; }
 
-        internal SqlStringConverter(DecodeContext context, IQueryCustomizer queryCustomizer)
+        internal SqlStringConverter(DecodeContext context, ISqlStringConverterCustomizer queryCustomizer)
         {
             Context = context;
             _queryCustomizer = queryCustomizer;
@@ -206,7 +206,7 @@ namespace LambdicSql.Inside
                 //custom.
                 if (_queryCustomizer != null)
                 {
-                    var custom = _queryCustomizer.CusotmSqlSyntax(this, chain);
+                    var custom = _queryCustomizer.CusotmMethodsToString(this, chain);
                     if (custom != null)
                     {
                         ret.Add(custom);
@@ -277,8 +277,8 @@ namespace LambdicSql.Inside
                method.Method.Name == nameof(SqlExpressionExtensions.Cast);
 
         static bool IsSqlKeyWordCast(MethodCallExpression method)
-            => method.Method.DeclaringType == typeof(SqlKeyWordExtensions) &&
-               method.Method.Name == nameof(SqlKeyWordExtensions.Cast);
+            => method.Method.DeclaringType == typeof(MethodChainExtensions) &&
+               method.Method.Name == nameof(MethodChainExtensions.Cast);
 
         static string AdjustSubQueryString(string text)
         {
@@ -313,8 +313,8 @@ namespace LambdicSql.Inside
                 {
                     group.Add(curent);
                     var ps = curent.Method.GetParameters();
-                    bool isGrouping = 0 < ps.Length && typeof(ISqlGroupingSyntax).IsAssignableFrom(ps[0].ParameterType);
-                    bool isSqlSyntax = 0 < ps.Length && typeof(ISqlSyntax).IsAssignableFrom(ps[0].ParameterType);
+                    bool isGrouping = 0 < ps.Length && typeof(IMethodChainGroup).IsAssignableFrom(ps[0].ParameterType);
+                    bool isSqlSyntax = 0 < ps.Length && typeof(IMethodChain).IsAssignableFrom(ps[0].ParameterType);
                     var next = isSqlSyntax ? curent.Arguments[0] as MethodCallExpression : null;
 
                     //end of syntax

@@ -37,7 +37,7 @@ namespace LambdicSql.Inside
             var ps = method.GetParameters();
             return method.IsStatic &&
                 0 < ps.Length &&
-                typeof(ISqlSyntax).IsAssignableFrom(ps[0].ParameterType);
+                typeof(IMethodChain).IsAssignableFrom(ps[0].ParameterType);
         }
 
         internal static Func<ISqlStringConverter, MethodCallExpression[], string>
@@ -54,6 +54,9 @@ namespace LambdicSql.Inside
                     Expression.Parameter(typeof(ISqlStringConverter), "cnv"),
                     Expression.Parameter(typeof(MethodCallExpression[]), "exps")
                 };
+
+                //TODO check sql syntax
+
                 func = Expression.Lambda<Func<ISqlStringConverter, MethodCallExpression[], string>>
                     (Expression.Call(null, methodToString, arguments), arguments).Compile();
                 _methodToStrings.Add(type, func);

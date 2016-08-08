@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace LambdicSql.Dialect
 {
-    public class PostgreSqlCustomizer : IQueryCustomizer
+    public class PostgreSqlCustomizer : ISqlStringConverterCustomizer
     {
         public string CustomOperator(Type type1, string @operator, Type type2)
         {
@@ -14,6 +14,6 @@ namespace LambdicSql.Dialect
             }
             return @operator;
         }
-        public string CusotmSqlSyntax(ISqlStringConverter converter, MethodCallExpression[] methods) => null;
+        public string CusotmMethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods) => null;
     }
 }

@@ -426,7 +426,7 @@ FROM tbl_remuneration
 
             var cnn = new SqlConnection(TestEnvironment.SqlServerConnectionString);
             var info = query.ToSqlInfo(cnn.GetType());
-            var datas = cnn.Query<SelectedData>(info.SqlText, info.Parameters).ToList();
+            var datas = cnn.Query(query).ToList();
         }
 
         [TestMethod]
@@ -464,7 +464,7 @@ FROM tbl_remuneration
 
     public static class DapperApaptExtensions
     {
-        public static IEnumerable<T> Query<T>(this IDbConnection cnn, ISqlExpression<ISqlKeyWord<T>> exp)
+        public static IEnumerable<T> Query<T>(this IDbConnection cnn, ISqlExpression<IQuery<T>> exp)
             where T : class
             => Query<T>(cnn, (ISqlExpression)exp);
 
