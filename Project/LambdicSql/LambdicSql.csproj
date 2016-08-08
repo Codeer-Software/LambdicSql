@@ -61,7 +61,6 @@
     <Compile Include="SqlInfo.cs" />
     <Compile Include="SqlExpressionExtensions.cs" />
     <Compile Include="Funcs.cs" />
-    <Compile Include="MethodChainExtensions.cs" />
     <Compile Include="TwoWaySql.cs" />
     <Compile Include="Utility\StringUtilityExtensions.cs" />
     <Compile Include="Utils.cs" />

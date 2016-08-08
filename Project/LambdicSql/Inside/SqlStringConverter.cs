@@ -272,13 +272,15 @@ namespace LambdicSql.Inside
         static bool IsSqlSyntaxResolver(MethodCallExpression method)
             => method.Method.IsSqlSyntaxResolver();
 
+        //TODO
         static bool IsSqlExpressionCast(MethodCallExpression method)
-            => method.Method.DeclaringType == typeof(SqlExpressionExtensions) &&
-               method.Method.Name == nameof(SqlExpressionExtensions.Cast);
+            => method.Method.Name == "Cast" &&
+               typeof(ISqlExpression).IsAssignableFrom(method.Method.GetParameters()[0].ParameterType);
 
+        //TODO
         static bool IsSqlKeyWordCast(MethodCallExpression method)
-            => method.Method.DeclaringType == typeof(MethodChainExtensions) &&
-               method.Method.Name == nameof(MethodChainExtensions.Cast);
+            => method.Method.Name == "Cast";/* &&
+               typeof(IQuery).IsAssignableFrom(method.Method.GetParameters()[0].ParameterType);*/
 
         static string AdjustSubQueryString(string text)
         {
