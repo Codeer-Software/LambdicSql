@@ -17,6 +17,9 @@ namespace LambdicSql.SqlBase
 
         internal string Push(string nameSrc, int? metadataToken, object obj)
         {
+            //TODO refactoring.
+            if (string.IsNullOrEmpty(nameSrc)) Push(obj);
+
             nameSrc = nameSrc.Replace(".", "_");
             var name = "@" + nameSrc;
             ParameterInfo val;

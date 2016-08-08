@@ -44,7 +44,7 @@
     <Compile Include="IOrderElement.cs" />
     <Compile Include="SqlBase\ExpressionToObject.CreateGetter.cs" />
     <Compile Include="SqlBase\ExpressionToObject.Getter.cs" />
-    <Compile Include="Inside\SqlExpressionConcat.cs" />
+    <Compile Include="Inside\SqlExpressionCoupled.cs" />
     <Compile Include="SqlBase\DecodeContext.cs" />
     <Compile Include="SqlBase\IQueryGroup.cs" />
     <Compile Include="SqlBase\IMethodChainGroup.cs" />

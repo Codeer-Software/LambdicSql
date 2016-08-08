@@ -184,12 +184,13 @@ namespace TestCore
         //Group by using Distinct.
         public void TestGroupByPredicateDistinct()
         {
+            var distinct = AggregatePredicate.Distinct;
             //make sql.
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData3()
                 {
                     Name = db.tbl_staff.name,
-                    Count = Count(AggregatePredicate.Distinct, db.tbl_remuneration.money),
+                    Count = Count(distinct, db.tbl_remuneration.money),
                     Total = Sum(AggregatePredicate.Distinct, db.tbl_remuneration.money)
                 }).
                 From(db.tbl_remuneration).

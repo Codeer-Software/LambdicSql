@@ -2,13 +2,13 @@
 
 namespace LambdicSql.Inside
 {
-    class SqlExpressionConcat<TSelected> : SqlExpression<TSelected>
+    class SqlExpressionCoupled<TSelected> : SqlExpression<TSelected>
     {
         ISqlExpression _before;
         ISqlExpression _after;
         public override DbInfo DbInfo { get; protected set; }
 
-        public SqlExpressionConcat(ISqlExpression before, ISqlExpression after)
+        public SqlExpressionCoupled(ISqlExpression before, ISqlExpression after)
         {
             _before = before;
             _after = after;
