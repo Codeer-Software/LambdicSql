@@ -112,7 +112,6 @@ namespace LambdicSql.Inside
             }
             
             //TODO db =>のdbからの要素であること
-            //TODO ★Expressionが異なると、DbInfoも異なる。これ対応できてない！
             //db element.
             string name = GetMemberCheckName(member);
             TableInfo table;
@@ -172,10 +171,11 @@ namespace LambdicSql.Inside
 
         DecodedInfo ResolveExpressionObject(Expression exp)
         {
-            //TODO member.GetFunc().idの対応
-
             object obj;
-            if (!ExpressionToObject.GetExpressionObject(exp, out obj)) return null;
+            if (!ExpressionToObject.GetExpressionObject(exp, out obj))
+            {
+                throw new NotSupportedException();
+            }
 
             //value type is SqlSyntax
             //example [ enum ]
@@ -278,6 +278,8 @@ namespace LambdicSql.Inside
 
         static string GetMemberCheckName(MemberExpression member)
         {
+            //TODO db =>のdbからの要素であることとか上で知りたい→関数わけるか。そんなに重くないでしょう？
+                //ParameterExpression
 
             //TODO Function().value
             //この場合は、名前を付けてはならない。
