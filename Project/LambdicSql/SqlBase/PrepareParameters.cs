@@ -8,17 +8,10 @@ namespace LambdicSql.SqlBase
     {
         int _count;
         Dictionary<string, ParameterInfo> _parameters = new Dictionary<string, ParameterInfo>();
-
-        public string Push(object obj)
+        
+        internal string Push(object obj, string nameSrc = null, int? metadataToken = null)
         {
-            var name = "p_" + _count++;
-            return Push(name, null, obj);
-        }
-
-        internal string Push(string nameSrc, int? metadataToken, object obj)
-        {
-            //TODO refactoring.
-            if (string.IsNullOrEmpty(nameSrc)) Push(obj);
+            if (string.IsNullOrEmpty(nameSrc)) nameSrc = "p_" + _count++;
 
             nameSrc = nameSrc.Replace(".", "_");
             var name = "@" + nameSrc;

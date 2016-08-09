@@ -202,7 +202,7 @@ namespace LambdicSql.Inside
                 }
 
                 //use field name.
-                return new DecodedInfo(obj.GetType(), Context.Parameters.Push(name, metadataToken, obj));
+                return new DecodedInfo(obj.GetType(), Context.Parameters.Push(obj, name, metadataToken));
             }
 
             //SqlExpression.

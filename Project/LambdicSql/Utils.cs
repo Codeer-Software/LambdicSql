@@ -28,14 +28,14 @@ namespace LambdicSql
             throw new NotSupportedException();
         }
 
-        public static string Condition(ISqlStringConverter converter, MethodCallExpression method)
+        static string Condition(ISqlStringConverter converter, MethodCallExpression method)
         {
             object obj;
             ExpressionToObject.GetExpressionObject(method.Arguments[0], out obj);
             return (bool)obj ? converter.ToString(method.Arguments[1]) : string.Empty;
         }
         
-        public static string Text(ISqlStringConverter converter, MethodCallExpression method)
+        static string Text(ISqlStringConverter converter, MethodCallExpression method)
         {
             object obj;
             ExpressionToObject.GetExpressionObject(method.Arguments[0], out obj);
