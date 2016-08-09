@@ -63,7 +63,7 @@ namespace LambdicSql
         public static IFuncAfter Lag<T>(T t, object offset, object @default) => InvalitContext.Throw<IFuncAfter>(nameof(Lag));
         public static T Over<T>(this IFuncAfter words, PartitionBy p, OrderBy o, Rows r) => InvalitContext.Throw<T>(nameof(Over));
 
-        public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var func = converter.MakeNormalSqlFunctionString(methods[0]);
 

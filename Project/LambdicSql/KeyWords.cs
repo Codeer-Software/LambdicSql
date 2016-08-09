@@ -67,7 +67,7 @@ namespace LambdicSql
         public static bool Between<TTarget>(TTarget target, TTarget min, TTarget max) => InvalitContext.Throw<bool>(nameof(Between));
         public static bool In<TTarget>(TTarget target, params TTarget[] inArguments) => InvalitContext.Throw<bool>(nameof(In));
 
-        public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
             switch (method.Method.Name)

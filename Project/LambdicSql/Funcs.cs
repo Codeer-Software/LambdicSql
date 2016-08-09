@@ -16,7 +16,7 @@ namespace LambdicSql
         public static T Min<T>(T item) => InvalitContext.Throw<T>(nameof(Min));
         public static T Max<T>(T item) => InvalitContext.Throw<T>(nameof(Max));
 
-        public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
             var args = method.Arguments.Select(e => converter.ToString(e)).ToArray();

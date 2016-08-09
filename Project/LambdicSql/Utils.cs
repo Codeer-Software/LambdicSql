@@ -16,7 +16,7 @@ namespace LambdicSql
         public static object Text(string text, params object[] args) => InvalitContext.Throw<object>(nameof(Text));
         public static T Text<T>(string text, params object[] args) => InvalitContext.Throw<T>(nameof(Text));
 
-        public static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
             switch (method.Method.Name)
