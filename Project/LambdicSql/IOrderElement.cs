@@ -1,4 +1,5 @@
-﻿using LambdicSql.SqlBase;
+﻿using LambdicSql.Inside;
+using LambdicSql.SqlBase;
 using System.Linq.Expressions;
 
 namespace LambdicSql
@@ -8,7 +9,7 @@ namespace LambdicSql
     [SqlSyntax]
     public class Asc : IOrderElement
     {
-        public Asc(object target) { }
+        public Asc(object target) { InvalitContext.Throw("new " + nameof(Asc)); }
         public static string NewToString(ISqlStringConverter cnv, NewExpression exp)
         {
             return cnv.ToString(exp.Arguments[0]) + " " + "ASC";
@@ -18,7 +19,7 @@ namespace LambdicSql
     [SqlSyntax]
     public class Desc : IOrderElement
     {
-        public Desc(object target) { }
+        public Desc(object target) { InvalitContext.Throw("new " + nameof(Desc)); }
         public static string NewToString(ISqlStringConverter cnv, NewExpression exp)
         {
             return cnv.ToString(exp.Arguments[0]) + " " + "DESC";

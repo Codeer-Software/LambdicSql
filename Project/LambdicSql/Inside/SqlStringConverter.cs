@@ -101,10 +101,20 @@ namespace LambdicSql.Inside
 
         DecodedInfo ToString(MemberExpression member)
         {
-            string name = GetMemberCheckName(member);
-
-            //todo check from lambd parameter.
+            //SubQuery's member.
+            //example [ sub.Cast().id ]
+            var method = member.Expression as MethodCallExpression;
+            if (method != null && method.Method.DeclaringType.IsSqlSyntax())
+            {
+                if (method.Method.Name != "Cast") throw new NotSupportedException();
+                var mem2 = method.Arguments[0] as MemberExpression;
+                return new DecodedInfo(null, mem2.Member.Name + "." + member.Member.Name);
+            }
+            
+            //TODO db =>のdbからの要素であること
+            //TODO ★Expressionが異なると、DbInfoも異なる。これ対応できてない！
             //db element.
+            string name = GetMemberCheckName(member);
             TableInfo table;
             if (Context.DbInfo.GetLambdaNameAndTable().TryGetValue(name, out table))
             {
@@ -116,37 +126,22 @@ namespace LambdicSql.Inside
                 return new DecodedInfo(col.Type, col.SqlFullName);
             }
 
-            //TODO ★ちがうなー、
-            //そもそも、真面目に考えると、先祖のどこかに混ざってたらだよねー
-            //Function().value
-            var method = member.Expression as MethodCallExpression;
-            if (method != null)
-            {
-                //SubQuery's member.
-                //example [ sub.Cast().id ]
-                if (method.Method.DeclaringType.IsSqlSyntax())
-                {
-                    if (method.Method.Name != "Cast") throw new NotSupportedException();
-                    var mem2 = method.Arguments[0] as MemberExpression;
-                    return new DecodedInfo(null, mem2.Member.Name + "." + name);
-                }
-            }
-
-            return ResolveExpressionObject(name, member, member.Member.MetadataToken);
+            //get value.
+            return ResolveExpressionObject(member);
         }
 
         DecodedInfo ToString(MethodCallExpression method)
         {
             if (!method.Method.DeclaringType.IsSqlSyntax())
             {
-                return ResolveExpressionObject(string.Empty, method, null);
+                return ResolveExpressionObject(method);
             }
 
             //ISqlExpression extensions.
             if (typeof(ISqlExpression).IsAssignableFrom(method.Method.GetParameters()[0].ParameterType))
             {
                 if (method.Method.Name != "Cast") throw new NotSupportedException();
-                return ResolveExpressionObject(string.Empty, method.Arguments[0], null);
+                return ResolveExpressionObject(method.Arguments[0]);
             }
 
             var ret = new List<string>();
@@ -175,8 +170,10 @@ namespace LambdicSql.Inside
             return new DecodedInfo(method.Method.ReturnType, text);
         }
 
-        DecodedInfo ResolveExpressionObject(string name, Expression exp, int? metadataToken)
+        DecodedInfo ResolveExpressionObject(Expression exp)
         {
+            //TODO member.GetFunc().idの対応
+
             object obj;
             if (!ExpressionToObject.GetExpressionObject(exp, out obj)) return null;
 
@@ -195,6 +192,15 @@ namespace LambdicSql.Inside
 
             if (SupportedTypeSpec.IsSupported(exp.Type))
             {
+                string name = string.Empty;
+                int? metadataToken = null;
+                var member = exp as MemberExpression;
+                if (member != null)
+                {
+                    name = GetMemberCheckName(member);
+                    metadataToken = member.Member.MetadataToken;
+                }
+
                 //use field name.
                 return new DecodedInfo(obj.GetType(), Context.Parameters.Push(name, metadataToken, obj));
             }
@@ -272,6 +278,10 @@ namespace LambdicSql.Inside
 
         static string GetMemberCheckName(MemberExpression member)
         {
+
+            //TODO Function().value
+            //この場合は、名前を付けてはならない。
+
             var names = new List<string>();
             var checkName = member;
             while (checkName != null)
