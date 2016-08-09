@@ -144,41 +144,50 @@ namespace LambdicSql.SqlBase
             value = null;
             var member = exp;
             var names = new List<string>();
-            ConstantExpression constant = null;
+            object targt = null;
+            Type type = null;
             while (member != null)
             {
                 names.Add(member.Member.Name);
-                constant = member.Expression as ConstantExpression;
+                var constant = member.Expression as ConstantExpression;
                 if (constant != null)
                 {
+                    targt = constant.Value;
+                    type = constant.Type;
                     break;
+                }
+                var method = member.Expression as MethodCallExpression;
+                if (method != null)
+                {
+                    type = method.Type;
+                    if (!GetMethodObject(method, out targt)) return false;
                 }
                 member = member.Expression as MemberExpression;
             }
-            if (constant == null)
+            if (targt == null)
             {
                 return false;
             }
 
-            var getterName = constant.Type.FullName + "@" + string.Join("@", names.ToArray());
+            var getterName = type.FullName + "@" + string.Join("@", names.ToArray());
             IGetter getter;
             lock (_memberGet)
             {
                 if (_memberGet.TryGetValue(getterName, out getter))
                 {
-                    value = getter.GetMemberObject(new object[] { constant.Value });
+                    value = getter.GetMemberObject(new object[] { targt });
                     return true;
                 }
 
-                var param = Expression.Parameter(constant.Type, "param");
+                var param = Expression.Parameter(type, "param");
                 Expression target = param;
                 names.Reverse();
                 names.ForEach(e => target = Expression.PropertyOrField(target, e));
-                getter = Activator.CreateInstance(typeof(GetterCore<>).MakeGenericType(constant.Type), true) as IGetter;
+                getter = Activator.CreateInstance(typeof(GetterCore<>).MakeGenericType(type), true) as IGetter;
                 getter.Init(Expression.Convert(target, typeof(object)), new[] { param });
                 _memberGet.Add(getterName, getter);
             }
-            value = getter.GetMemberObject(new object[] { constant.Value });
+            value = getter.GetMemberObject(new object[] { targt });
             return true;
         }
     }

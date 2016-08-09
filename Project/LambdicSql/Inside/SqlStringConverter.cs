@@ -110,19 +110,22 @@ namespace LambdicSql.Inside
                 var mem2 = method.Arguments[0] as MemberExpression;
                 return new DecodedInfo(null, mem2.Member.Name + "." + member.Member.Name);
             }
-            
-            //TODO db =>のdbからの要素であること
+
             //db element.
-            string name = GetMemberCheckName(member);
-            TableInfo table;
-            if (Context.DbInfo.GetLambdaNameAndTable().TryGetValue(name, out table))
+            string name;
+            if (IsDbDesignParam(member, out name))
             {
-                return new DecodedInfo(null, table.SqlFullName);
-            }
-            ColumnInfo col;
-            if (Context.DbInfo.GetLambdaNameAndColumn().TryGetValue(name, out col))
-            {
-                return new DecodedInfo(col.Type, col.SqlFullName);
+                TableInfo table;
+                if (Context.DbInfo.GetLambdaNameAndTable().TryGetValue(name, out table))
+                {
+                    return new DecodedInfo(null, table.SqlFullName);
+                }
+                ColumnInfo col;
+                if (Context.DbInfo.GetLambdaNameAndColumn().TryGetValue(name, out col))
+                {
+                    return new DecodedInfo(col.Type, col.SqlFullName);
+                }
+                throw new NotSupportedException();
             }
 
             //get value.
@@ -197,7 +200,7 @@ namespace LambdicSql.Inside
                 var member = exp as MemberExpression;
                 if (member != null)
                 {
-                    name = GetMemberCheckName(member);
+                    name = member.Member.Name;
                     metadataToken = member.Member.MetadataToken;
                 }
 
@@ -276,23 +279,21 @@ namespace LambdicSql.Inside
             return null;
         }
 
-        static string GetMemberCheckName(MemberExpression member)
+        static bool IsDbDesignParam(MemberExpression member, out string lambdaName)
         {
-            //TODO db =>のdbからの要素であることとか上で知りたい→関数わけるか。そんなに重くないでしょう？
-                //ParameterExpression
-
-            //TODO Function().value
-            //この場合は、名前を付けてはならない。
-
+            lambdaName = string.Empty;
             var names = new List<string>();
-            var checkName = member;
-            while (checkName != null)
+            while (member != null)
             {
-                names.Insert(0, checkName.Member.Name);
-                checkName = checkName.Expression as MemberExpression;
+                names.Insert(0, member.Member.Name);
+                if (member.Expression is ParameterExpression)
+                {
+                    lambdaName = string.Join(".", names.ToArray());
+                    return true;
+                }
+                member = member.Expression as MemberExpression;
             }
-            var name = string.Join(".", names.ToArray());
-            return name;
+            return false;
         }
 
         static string AdjustSubQueryString(string text)
