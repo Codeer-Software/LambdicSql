@@ -460,8 +460,7 @@ FROM tbl_remuneration
             var info = Sql<Data>.Create(db => new DateTime(1999, 1, 1)).ToSqlInfo(typeof(SqlConnection));
             Debug.Print(info.SqlText);
         }
-
-        //TODO メソッドとプロパティーの組み合わせは色々みないといけない
+        
         [TestMethod]
         public void TestX()
         {
@@ -474,7 +473,7 @@ FROM tbl_remuneration
                 }).
                 From(db.tbl_remuneration).
                     Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
-                Where(3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < GetDataX().Max));
+                Where(3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < GetDataY(3000).X.GetMax()));
 
             var cnn = new SqlConnection(TestEnvironment.SqlServerConnectionString);
             var info = query.ToSqlInfo(cnn.GetType());
@@ -485,9 +484,14 @@ FROM tbl_remuneration
         class DataX
         {
             public int Max { get; set; }
+            public int GetMax() => Max;
+        }
+        class DataY
+        {
+            public DataX X { get; set; }
         }
 
-        DataX GetDataX() => new DataX() { Max = 4000 };
+        DataY GetDataY(int max) => new DataY() { X = new DataX() { Max = max } };
     }
 
     public static class DapperApaptExtensions
