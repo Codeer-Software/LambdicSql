@@ -4,7 +4,6 @@ using System.Linq;
 using System;
 using LambdicSql;
 using System.Collections.Generic;
-using LambdicSql.Inside;
 
 namespace LambdicSql.SqlBase
 {
@@ -55,5 +54,9 @@ namespace LambdicSql.SqlBase
             }
             throw new NotSupportedException();
         }
+
+        static string GetPropertyName(this MethodInfo method)
+            => (method.Name.IndexOf("get_") == 0) ?
+                method.Name.Substring(4) : method.Name;
     }
 }

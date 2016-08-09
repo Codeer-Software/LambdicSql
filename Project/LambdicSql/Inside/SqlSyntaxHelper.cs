@@ -2,12 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Reflection;
 using System.Linq;
+using System.Reflection;
 
 namespace LambdicSql.Inside
 {
-    static class RefrectionHelpercs
+    static class SqlSyntaxHelper
     {
         static Dictionary<Type, Func<ISqlStringConverter, MethodCallExpression[], string>> _methodToStrings =
                 new Dictionary<Type, Func<ISqlStringConverter, MethodCallExpression[], string>>();
@@ -16,10 +16,6 @@ namespace LambdicSql.Inside
                 new Dictionary<Type, Func<ISqlStringConverter, NewExpression, string>>();
 
         static Dictionary<Type, bool> _isSqlSyntax = new Dictionary<Type, bool>();
-
-        internal static string GetPropertyName(this MethodInfo method)
-            => (method.Name.IndexOf("get_") == 0) ?
-                method.Name.Substring(4) : method.Name;
 
         internal static bool IsSqlSyntax(this Type type)
         {
@@ -44,13 +40,11 @@ namespace LambdicSql.Inside
                 Func<ISqlStringConverter, MethodCallExpression[], string> func;
                 if (_methodToStrings.TryGetValue(type, out func)) return func;
 
-                var methodToString = type.GetMethod("MethodsToString");
+                var methodToString = type.GetMethod("MethodsToString", BindingFlags.Static| BindingFlags.Public | BindingFlags.NonPublic);
                 var arguments = new[] {
                     Expression.Parameter(typeof(ISqlStringConverter), "cnv"),
                     Expression.Parameter(typeof(MethodCallExpression[]), "exps")
                 };
-
-                //TODO check sql syntax
 
                 func = Expression.Lambda<Func<ISqlStringConverter, MethodCallExpression[], string>>
                     (Expression.Call(null, methodToString, arguments), arguments).Compile();
@@ -68,7 +62,7 @@ namespace LambdicSql.Inside
                 Func<ISqlStringConverter, NewExpression, string> func;
                 if (_newToStrings.TryGetValue(type, out func)) return func;
 
-                var newToString = type.GetMethod("NewToString");
+                var newToString = type.GetMethod("NewToString", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
                 var arguments = new[] {
                     Expression.Parameter(typeof(ISqlStringConverter), "cnv"),
                     Expression.Parameter(typeof(NewExpression), "exps")

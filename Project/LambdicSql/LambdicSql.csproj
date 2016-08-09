@@ -74,7 +74,7 @@
     <Compile Include="SqlBase\ObjectCreateMemberElement.cs" />
     <Compile Include="SqlBase\ExpressionToObject.cs" />
     <Compile Include="SqlBase\Dialect\PostgreSqlCustomizer.cs" />
-    <Compile Include="Inside\RefrectionHelpercs.cs" />
+    <Compile Include="Inside\SqlSyntaxHelper.cs" />
     <Compile Include="SqlBase\IMethodChain.cs" />
     <Compile Include="SqlBase\Dialect\SQLiteCustomizer.cs" />
     <Compile Include="SqlBase\ISqlStringConverterCustomizer.cs" />
