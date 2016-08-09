@@ -1,16 +1,14 @@
-﻿using System;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 
 namespace LambdicSql.SqlBase
 {
     public static class SqlSyntaxUtility
     {
-        //TODO refactoring.
-        public static Func<int, int> SqlSyntaxMethodArgumentAdjuster(this MethodCallExpression exp)
+        public static int AdjustSqlSyntaxMethodArgumentIndex(this MethodCallExpression exp, int index)
         {
             var ps = exp.Method.GetParameters();
-            if (0 < ps.Length && typeof(IMethodChain).IsAssignableFrom(ps[0].ParameterType)) return i => i + 1;
-            else return i => i;
+            if (0 < ps.Length && typeof(IMethodChain).IsAssignableFrom(ps[0].ParameterType)) return index + 1;
+            else return index;
         }
     }
 }

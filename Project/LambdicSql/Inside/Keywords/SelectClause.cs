@@ -10,7 +10,7 @@ namespace LambdicSql.Inside.Keywords
         internal static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
-            var index = method.SqlSyntaxMethodArgumentAdjuster();
+            Func<int, int> index = i => method.AdjustSqlSyntaxMethodArgumentIndex(i);
 
             Expression define = null;
             AggregatePredicate? aggregatePredicate = null;
