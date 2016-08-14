@@ -22,20 +22,7 @@ namespace LambdicSql.SqlBase
             {
                 sep = col.SqlFullName.Split('.');
                 var tableSql = string.Join(".", sep.Take(sep.Length - 1).ToArray());
-                _lambdaNameAndTable.Add(tableLambda, new TableInfo(tableLambda, tableSql, null));
-            }
-        }
-
-        internal void AddSubQueryTableInfo(Dictionary<string, Expression> lambdaNameAndSubQuery)
-        {
-            foreach (var e in lambdaNameAndSubQuery)
-            {
-                TableInfo table;
-                if (!_lambdaNameAndTable.TryGetValue(e.Key, out table))
-                {
-                    throw new NotSupportedException("can use sub query table only at Sql.Using.");
-                }
-                _lambdaNameAndTable[e.Key] = new TableInfo(table.LambdaFullName, table.SqlFullName, e.Value);
+                _lambdaNameAndTable.Add(tableLambda, new TableInfo(tableLambda, tableSql));
             }
         }
     }

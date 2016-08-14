@@ -11,6 +11,7 @@ using System.Linq;
 using static LambdicSql.Keywords;
 using static LambdicSql.Funcs;
 using static LambdicSql.Utils;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Test
 {
@@ -31,11 +32,21 @@ namespace Test
             public DateTime payment_date { get; set; }
             public decimal money { get; set; }
         }
+        public class Work
+        {
+            public DateTime date { get; set; }
+            public int member1_id { get; set; }
+            public int member2_id { get; set; }
+            public int member3_id { get; set; }
+        }
+
         public class Data
         {
             public Staff tbl_staff { get; set; }
             public Remuneration tbl_remuneration { get; set; }
+            public Work tbl_work { get; set; }
         }
+
         public class SelectData
         {
             public string name { get; set; }
@@ -462,7 +473,7 @@ FROM tbl_remuneration
         }
         
         [TestMethod]
-        public void TestX()
+        public void TestDifficultExp()
         {
             var query = Sql<Data>.Create(db =>
                 Select(new SelectedData()
@@ -492,6 +503,105 @@ FROM tbl_remuneration
         }
 
         DataY GetDataY(int max) => new DataY() { X = new DataX() { Max = max } };
+
+        //あっと、見せるようのサンプルにはもう少しDBにテーブル足せばいいか。
+        [TestMethod]
+        public void TestAlias()
+        {
+            SqlOption.Log = l => Debug.Print(l);
+
+            var member1 = Sql<Data>.Create(db => db.tbl_staff);
+            var member2 = Sql<Data>.Create(db => db.tbl_staff);
+            var member3 = Sql<Data>.Create(db => db.tbl_staff);
+
+            var query = Sql<Data>.Create(db =>
+                Select(new
+                {
+                    date = db.tbl_work.date,
+                    name1 = member1.Cast().name,
+                    name2 = member2.Cast().name,
+                    name3 = member3.Cast().name
+                }).
+                From(db.tbl_work).
+                    Join(member1, db.tbl_work.member1_id == member1.Cast().id).
+                    Join(member2, db.tbl_work.member2_id == member2.Cast().id).
+                    Join(member3, db.tbl_work.member3_id == member3.Cast().id));
+
+            var ret = query.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Read();
+        }
+
+        //noraml type.
+        [Table("tbl_staff")]
+        public class StaffX
+        {
+            [Column("id")]
+            public int idx { get; set; }
+            [Column("name")]
+            public string namex { get; set; }
+        }
+
+        [Table("tbl_remuneration")]
+        public class RemunerationX
+        {
+            [Column("id")]
+            public int idx { get; set; }
+            [Column("staff_id")]
+            public int staff_idx { get; set; }
+            [Column("payment_date")]
+            public DateTime payment_datex { get; set; }
+            [Column("money")]
+            public decimal moneyx { get; set; }
+        }
+
+        public class DataAttr
+        {
+            public StaffX tbl_staffx { get; set; }
+            public RemunerationX tbl_remunerationx { get; set; }
+        }
+
+        [TestMethod]
+        public void SelectX()
+        {
+            SqlOption.Log = l => Debug.Print(l);
+            var query = Sql<DataAttr>.Create(db =>
+                Select(new
+                {
+                    name = db.tbl_staffx.namex,
+                    payment_date = db.tbl_remunerationx.payment_datex,
+                    money = db.tbl_remunerationx.moneyx,
+                }).
+                From(db.tbl_remunerationx).
+                    Join(db.tbl_staffx, db.tbl_remunerationx.staff_idx == db.tbl_staffx.idx).
+                Where(3000 < db.tbl_remunerationx.moneyx && db.tbl_remunerationx.moneyx < 4000));
+
+            var y = query.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Read();
+        }
+
+        [TestMethod]
+        public void TestEF()
+        {
+            var m = new ModelLambdicSqlTestDB();
+            var datas = m.tbl_staff.ToList();
+        }
+        [TestMethod]
+        public void TestEFAndLambdic()
+        {
+            var query = Sql<ModelLambdicSqlTestDB>.Create(db =>
+                Select(new
+                {
+                    name = db.tbl_staff.Entity().name,
+                    payment_date = db.tbl_remuneration.Entity().payment_date,
+                    money = db.tbl_remuneration.Entity().money,
+                }).
+                From(db.tbl_remuneration).
+                    Join(db.tbl_staff, db.tbl_remuneration.Entity().staff_id == db.tbl_staff.Entity().id).
+                Where(3000 < db.tbl_remuneration.Entity().money && db.tbl_remuneration.Entity().money < 4000));
+            
+            var cnn = new SqlConnection(TestEnvironment.SqlServerConnectionString);
+            var info = query.ToSqlInfo(cnn.GetType());
+            Debug.Print(info.SqlText);
+            var datas = cnn.Query(query).ToList();
+        }
     }
 
     public static class DapperApaptExtensions

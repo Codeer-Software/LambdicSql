@@ -106,9 +106,12 @@ namespace LambdicSql.Inside
             var method = member.Expression as MethodCallExpression;
             if (method != null && method.Method.DeclaringType.IsSqlSyntax())
             {
-                if (method.Method.Name != "Cast") throw new NotSupportedException();
+                var text = method.GetMethodsToString()(this, new[] { method });
+                if (string.IsNullOrEmpty(text)) text = ".";
+                else text = "." + text + ".";
+
                 var mem2 = method.Arguments[0] as MemberExpression;
-                return new DecodedInfo(null, mem2.Member.Name + "." + member.Member.Name);
+                return new DecodedInfo(null, mem2.Member.Name + text + member.Member.Name);
             }
 
             //db element.

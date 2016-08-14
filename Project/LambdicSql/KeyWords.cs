@@ -35,10 +35,10 @@ namespace LambdicSql
 
         public interface IFromAfter<T> : IQueryGroup<T> { }
         public static IFromAfter<TSelected> From<TSelected, T>(this IQuery<TSelected> words, T tbale) => InvalitContext.Throw<IFromAfter<TSelected>>(nameof(From));
-        public static IQuery<TSelected> Join<TSelected, T>(this IFromAfter<TSelected> words, T tbale, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Join));
-        public static IQuery<TSelected> LeftJoin<TSelected, T>(this IFromAfter<TSelected> words, T tbale, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(LeftJoin));
-        public static IQuery<TSelected> RightJoin<TSelected, T>(this IFromAfter<TSelected> words, T tbale, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(RightJoin));
-        public static IQuery<TSelected> CrossJoin<TSelected, T>(this IFromAfter<TSelected> words, T tbale) => InvalitContext.Throw<IQuery<TSelected>>(nameof(CrossJoin));
+        public static IFromAfter<TSelected> Join<TSelected, T>(this IFromAfter<TSelected> words, T tbale, bool condition) => InvalitContext.Throw<IFromAfter<TSelected>>(nameof(Join));
+        public static IFromAfter<TSelected> LeftJoin<TSelected, T>(this IFromAfter<TSelected> words, T tbale, bool condition) => InvalitContext.Throw<IFromAfter<TSelected>>(nameof(LeftJoin));
+        public static IFromAfter<TSelected> RightJoin<TSelected, T>(this IFromAfter<TSelected> words, T tbale, bool condition) => InvalitContext.Throw<IFromAfter<TSelected>>(nameof(RightJoin));
+        public static IFromAfter<TSelected> CrossJoin<TSelected, T>(this IFromAfter<TSelected> words, T tbale) => InvalitContext.Throw<IFromAfter<TSelected>>(nameof(CrossJoin));
         public static IFromAfter<Non> From<T>(T tbale) => InvalitContext.Throw<IFromAfter<Non>>(nameof(From));
 
         public static IQuery<Non> GroupBy(params object[] target) => InvalitContext.Throw<IQuery<Non>>(nameof(GroupBy));

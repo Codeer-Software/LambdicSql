@@ -10,11 +10,13 @@ namespace LambdicSql
     public static class Utils
     {
         public static T Cast<T>(this ISqlExpression query) => InvalitContext.Throw<T>(nameof(Cast));
+        public static T Cast<T>(this ISqlExpression<T> query) => InvalitContext.Throw<T>(nameof(Cast));
         public static TTable Cast<TTable>(this ISqlExpression<IQuery<TTable>> query) => InvalitContext.Throw<TTable>(nameof(Cast));
         public static T Cast<T>(this IMethodChain words) => InvalitContext.Throw<T>(nameof(Cast));
         public static bool Condition(bool enable, bool condition) => InvalitContext.Throw<bool>(nameof(Condition));
         public static object Text(string text, params object[] args) => InvalitContext.Throw<object>(nameof(Text));
         public static T Text<T>(string text, params object[] args) => InvalitContext.Throw<T>(nameof(Text));
+        public static TEntity Entity<TEntity>(this IQueryable<TEntity> queryable) => InvalitContext.Throw<TEntity>(nameof(Entity));
 
         static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
@@ -22,6 +24,7 @@ namespace LambdicSql
             switch (method.Method.Name)
             {
                 case nameof(Cast): return string.Empty;
+                case nameof(Entity): return string.Empty;
                 case nameof(Condition): return Condition(converter, method);
                 case nameof(Text): return Text(converter, method);
             }

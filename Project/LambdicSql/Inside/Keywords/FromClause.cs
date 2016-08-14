@@ -38,27 +38,18 @@ namespace LambdicSql.Inside.Keywords
             var methodCall = exp as MethodCallExpression;
             if (methodCall != null)
             {
-                //TODO oracl custom
                 var x = ((MemberExpression)methodCall.Arguments[0]).Member.Name;
-                return text + " AS " + x;
+                return text + " " + x;
             }
             if (typeof(ISqlExpression).IsAssignableFrom(exp.Type))
             {
                 var member = exp as MemberExpression;
                 if (member != null)
                 {
-                    //TODO oracl custom
-                    return text + " AS " + member.Member.Name;
+                    return text + " " + member.Member.Name;
                 }
             }
-
-            var table = decoder.Context.DbInfo.GetLambdaNameAndTable()[text];
-            if (table.SubQuery == null)
-            {
-                return table.SqlFullName;
-            }
-
-            throw new NotSupportedException();
+            return text;
         }
     }
 }
