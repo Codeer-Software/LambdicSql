@@ -555,24 +555,33 @@ FROM tbl_remuneration
 
         public class DataAttr
         {
-            public StaffX tbl_staffx { get; set; }
-            public RemunerationX tbl_remunerationx { get; set; }
+            public StaffX xxx { get; set; }
+            public Remuneration tbl_remuneration { get; set; }
+        }
+        public class DBO
+        {
+            public Staff tbl_staff { get; set; }
+            public Remuneration tbl_remuneration { get; set; }
+        }
+        public class DB_EX
+        {
+            //スキーマも変数名で表す
+            public DBO dbo { get; set; }
         }
 
         [TestMethod]
         public void SelectX()
         {
             SqlOption.Log = l => Debug.Print(l);
-            var query = Sql<DataAttr>.Create(db =>
+            var query = Sql<DB_EX>.Create(db =>
                 Select(new
                 {
-                    name = db.tbl_staffx.namex,
-                    payment_date = db.tbl_remunerationx.payment_datex,
-                    money = db.tbl_remunerationx.moneyx,
+                    Name = db.dbo.tbl_staff.name,
+                    PaymentDate = db.dbo.tbl_remuneration.payment_date,
+                    Money = db.dbo.tbl_remuneration.money,
                 }).
-                From(db.tbl_remunerationx).
-                    Join(db.tbl_staffx, db.tbl_remunerationx.staff_idx == db.tbl_staffx.idx).
-                Where(3000 < db.tbl_remunerationx.moneyx && db.tbl_remunerationx.moneyx < 4000));
+                From(db.dbo.tbl_remuneration).
+                    Join(db.dbo.tbl_staff, db.dbo.tbl_staff.id == db.dbo.tbl_remuneration.staff_id));
 
             var y = query.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Read();
         }
@@ -602,6 +611,51 @@ FROM tbl_remuneration
             Debug.Print(info.SqlText);
             var datas = cnn.Query(query).ToList();
         }
+
+
+
+        [TestMethod]
+        public void ParamName()
+        {
+            var min = 3000;
+            var max = 4000;
+
+            var query = Sql<Data>.Create(db =>
+                Select(new
+                {
+                    money = db.tbl_remuneration.money,
+                }).
+                From(db.tbl_remuneration).
+                Where(min < db.tbl_remuneration.money && db.tbl_remuneration.money < max));
+
+            var cnn = new SqlConnection(TestEnvironment.SqlServerConnectionString);
+            var info = query.ToSqlInfo(cnn.GetType());
+            Debug.Print(info.SqlText);
+            var datas = cnn.Query(query).ToList();
+        }
+
+        [TestMethod]
+        public void ParamName2()
+        {
+            var min = 3000;
+            var max = 4000;
+
+            var query = Sql<Data>.Create(db =>
+                Select(new
+                {
+                    money = MoneyExp(3, 10).Cast<decimal>(),
+                }).
+                From(db.tbl_remuneration).
+                Where(min < db.tbl_remuneration.money && db.tbl_remuneration.money < max));
+
+            var cnn = new SqlConnection(TestEnvironment.SqlServerConnectionString);
+            var info = query.ToSqlInfo(cnn.GetType());
+            Debug.Print(info.SqlText);
+            var datas = cnn.Query(query).ToList();
+        }
+
+        public ISqlExpression<decimal> MoneyExp(int min, int max)
+            => Sql<Data>.Create(db => db.tbl_remuneration.money + min + max);
     }
 
     public static class DapperApaptExtensions

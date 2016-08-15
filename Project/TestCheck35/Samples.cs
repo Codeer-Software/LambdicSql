@@ -602,7 +602,7 @@ namespace TestCore
                     Avg = Window.Avg(db.tbl_remuneration.money).
                             Over<decimal>(new PartitionBy(db.tbl_staff.name, db.tbl_remuneration.payment_date),
                                 new OrderBy(new Asc(db.tbl_remuneration.money), new Desc(db.tbl_remuneration.payment_date)),
-                                new Rows(1, 1)),
+                                new Rows(1, 5)),
                     PaymentDate = db.tbl_remuneration.payment_date,
                     Money = db.tbl_remuneration.money,
                 }).

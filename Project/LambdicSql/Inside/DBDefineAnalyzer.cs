@@ -71,7 +71,8 @@ namespace LambdicSql.Inside
             var tableAttr = p.PropertyType.GetCustomAttributes(true).Where(e => e.GetType().FullName == "System.ComponentModel.DataAnnotations.Schema.TableAttribute").FirstOrDefault();
             if (tableAttr != null)
             {
-                return tableAttr.GetType().GetProperty("Name").GetValue(tableAttr, new object[0]).ToString();
+                var name = tableAttr.GetType().GetProperty("Name").GetValue(tableAttr, new object[0]);
+                if (name != null) return name.ToString();
             }
             var columnAttr = p.GetCustomAttributes(true).Where(e => e.GetType().FullName == "System.ComponentModel.DataAnnotations.Schema.ColumnAttribute").FirstOrDefault();
             if (columnAttr != null)
