@@ -252,6 +252,7 @@ paket-files/
 *.sln.iml
 
 Project/Test/db.txt
+Project/Test/ef.txt
 Project/TestCheck35/db.txt
 Project/Test/postgres.txt
 Project/Performance/db.txt

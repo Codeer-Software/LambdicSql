@@ -16,7 +16,7 @@ namespace LambdicSql
         public static bool Condition(bool enable, bool condition) => InvalitContext.Throw<bool>(nameof(Condition));
         public static object Text(string text, params object[] args) => InvalitContext.Throw<object>(nameof(Text));
         public static T Text<T>(string text, params object[] args) => InvalitContext.Throw<T>(nameof(Text));
-        public static TEntity Entity<TEntity>(this IQueryable<TEntity> queryable) => InvalitContext.Throw<TEntity>(nameof(Entity));
+        public static TEntity T<TEntity>(this IQueryable<TEntity> queryable) => InvalitContext.Throw<TEntity>(nameof(T));
 
         static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
@@ -24,7 +24,7 @@ namespace LambdicSql
             switch (method.Method.Name)
             {
                 case nameof(Cast): return string.Empty;
-                case nameof(Entity): return string.Empty;
+                case nameof(T): return string.Empty;
                 case nameof(Condition): return Condition(converter, method);
                 case nameof(Text): return Text(converter, method);
             }

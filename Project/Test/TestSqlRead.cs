@@ -589,13 +589,13 @@ FROM tbl_remuneration
             var query = Sql<ModelLambdicSqlTestDB>.Create(db =>
                 Select(new
                 {
-                    name = db.tbl_staff.Entity().name,
-                    payment_date = db.tbl_remuneration.Entity().payment_date,
-                    money = db.tbl_remuneration.Entity().money,
+                    name = db.tbl_staff.T().name,
+                    payment_date = db.tbl_remuneration.T().payment_date,
+                    money = db.tbl_remuneration.T().money,
                 }).
-                From(db.tbl_remuneration).
-                    Join(db.tbl_staff, db.tbl_remuneration.Entity().staff_id == db.tbl_staff.Entity().id).
-                Where(3000 < db.tbl_remuneration.Entity().money && db.tbl_remuneration.Entity().money < 4000));
+                From(db.tbl_remuneration.T()).
+                    Join(db.tbl_staff, db.tbl_remuneration.T().staff_id == db.tbl_staff.T().id).
+                Where(3000 < db.tbl_remuneration.T().money && db.tbl_remuneration.T().money < 4000));
             
             var cnn = new SqlConnection(TestEnvironment.SqlServerConnectionString);
             var info = query.ToSqlInfo(cnn.GetType());

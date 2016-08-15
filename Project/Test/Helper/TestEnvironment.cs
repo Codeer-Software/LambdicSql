@@ -12,6 +12,7 @@ namespace Test
     static class TestEnvironment
     {
         internal static string SqlServerConnectionString => File.ReadAllText(FindNearFile("db.txt")).Trim();
+        internal static string EFConnectionString => File.ReadAllText(FindNearFile("ef.txt")).Trim();
         internal static string PostgresConnectionStringForDBCreate => File.ReadAllText(FindNearFile("postgres.txt")).Trim();
         internal static string PostgresConnectionString => PostgresConnectionStringForDBCreate + "Database=lambdicsqltest1;";
         internal static string SQLiteTest1Path => Path.GetFullPath("../../../SQLiteTest1.db");

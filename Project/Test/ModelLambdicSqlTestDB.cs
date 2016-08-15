@@ -8,7 +8,7 @@ namespace Test
     public partial class ModelLambdicSqlTestDB : DbContext
     {
         public ModelLambdicSqlTestDB()
-            : base("data source=DESKTOP-IBN02LQ;initial catalog=LambdicSqlTest;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework")//"name=ModelLambdicSqlTestDB")
+            : base(TestEnvironment.EFConnectionString)
         {
         }
 
