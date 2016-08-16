@@ -266,14 +266,12 @@ namespace Test
             //InsertIntoと合わせて仕様を練る必要があるね
             SqlOption.Log = l => Debug.Print(l);
             var count1 = Sql<DataChangeTest>.Create(db =>
-                Update(db.tbl_data).
-                Set(new tbl_data() { val1 = 100, val2 = "200" }).
+                UpdateSet(db.tbl_data, new tbl_data() { val1 = 100, val2 = "200" }).
                 Where(db.tbl_data.id == 1)).
                 ToExecutor(_connection).Write();
 
             var count2 = Sql<DataChangeTest>.Create(db =>
-                Update(db.tbl_data).
-                Set(new tbl_data() { val1 = db.tbl_data.val1 * 2 }).
+                UpdateSet(db.tbl_data, new tbl_data() { val1 = db.tbl_data.val1 * 2 }).
                 Where(db.tbl_data.id == 1)).
                 ToExecutor(_connection).Write();
         }

@@ -52,10 +52,8 @@ namespace LambdicSql
         public interface IOrderByAfter<T> : IQueryGroup<T> { }
         public static IOrderByAfter<Non> OrderBy(params IOrderElement[] elements) => InvalitContext.Throw<IOrderByAfter<Non>>(nameof(OrderBy));
         public static IOrderByAfter<TSelected> OrderBy<TSelected>(this IQuery<TSelected> words, params IOrderElement[] elements) => InvalitContext.Throw<IOrderByAfter<TSelected>>(nameof(OrderBy));
-
-        public interface IUpdateAfter<TSelected, T> : IQueryGroup<TSelected> { }
-        public static IUpdateAfter<Non, T> Update<T>(T table) => InvalitContext.Throw<IUpdateAfter<Non, T>>(nameof(Update));
-        public static IQuery<TSelected> Set<TSelected, T>(this IUpdateAfter<TSelected, T> words, T setting) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Set));
+        
+        public static IQuery<Non> UpdateSet<T>(T table, T updateData) => InvalitContext.Throw<IQuery<Non>>(nameof(UpdateSet));
 
         public static IQuery<Non> Where(bool condition) => InvalitContext.Throw<IQuery<Non>>(nameof(Where));
         public static IQuery<TSelected> Where<TSelected>(this IQuery<TSelected> words, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Where));
@@ -86,7 +84,7 @@ namespace LambdicSql
                     return InsertIntoClause.MethodsToString(converter, methods);
                 case nameof(OrderBy):
                     return OrderByWordsClause.MethodsToString(converter, methods);
-                case nameof(Update):
+                case nameof(UpdateSet):
                     return UpdateClause.MethodsToString(converter, methods);
                 case nameof(Where):
                     return WhereClause.MethodsToString(converter, methods);

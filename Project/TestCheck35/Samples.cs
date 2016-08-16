@@ -401,8 +401,7 @@ namespace TestCore
         {
             //make sql.
             var query = Sql<DB>.Create(db =>
-                Update(db.tbl_data).
-                Set(new Data() { val1 = 100, val2 = "200" }).
+                UpdateSet(db.tbl_data, new Data() { val1 = 100, val2 = "200" }).
                 Where(db.tbl_data.id == 1));
 
             //to string and params.
@@ -420,8 +419,7 @@ namespace TestCore
         {
             //make sql.
             var query = Sql<DB>.Create(db =>
-                Update(db.tbl_data).
-                Set(new Data() { val1 = db.tbl_data.val1 * 2 }).
+                UpdateSet(db.tbl_data, new Data() { val1 = db.tbl_data.val1 * 2 }).
                 Where(db.tbl_data.id == 1));
 
             //to string and params.

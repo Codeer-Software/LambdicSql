@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Linq;
 
 namespace LambdicSql.Inside.Keywords
 {
@@ -9,31 +10,32 @@ namespace LambdicSql.Inside.Keywords
     {
         internal static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
+            var method = methods[0];
+            var tbl = converter.ToString(method.Arguments[0]);
+            var select = ObjectCreateAnalyzer.MakeSelectInfo(method.Arguments[1]);
             var list = new List<string>();
-            foreach (var m in methods)
+            
+            var isAll = select.Elements.Any(e => e.Expression == null);
+            if (isAll)
             {
-                list.Add(MethodToString(converter, m));
+                object obj = null;
+                ExpressionToObject.GetExpressionObject(method.Arguments[1], out obj);
+                var type = method.Arguments[1].Type;
+                foreach (var e in select.Elements)
+                {
+                    var val = type.GetPropertyValue(e.Name, obj);
+                    list.Add(Environment.NewLine + "\t" + e.Name + " = " + converter.ToString(val));
+                }
             }
-            return string.Join(string.Empty, list.ToArray());
-        }
-
-        static string MethodToString(ISqlStringConverter converter, MethodCallExpression method)
-        {
-            switch (method.Method.Name)
+            else
             {
-                case nameof(LambdicSql.Keywords.Update): return Environment.NewLine + "UPDATE " + converter.ToString(method.Arguments[0]);
-                case nameof(LambdicSql.Keywords.Set):
-                    {
-                        var select = ObjectCreateAnalyzer.MakeSelectInfo(method.Arguments[1]);
-                        var list = new List<string>();
-                        foreach (var e in select.Elements)
-                        {
-                            list.Add(Environment.NewLine + "\t" + e.Name + " = " + converter.ToString(e.Expression)); 
-                        }
-                        return Environment.NewLine + "SET" + string.Join(",", list.ToArray());
-                    }
+                foreach (var e in select.Elements)
+                {
+                    list.Add(Environment.NewLine + "\t" + e.Name + " = " + converter.ToString(e.Expression));
+                }
             }
-            throw new NotSupportedException();
+            return Environment.NewLine + "UPDATE " + tbl +
+                    Environment.NewLine + "SET" + string.Join(",", list.ToArray());
         }
     }
 }
