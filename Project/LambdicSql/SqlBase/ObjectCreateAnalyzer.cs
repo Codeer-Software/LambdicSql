@@ -45,7 +45,10 @@ namespace LambdicSql.SqlBase
             var member = exp as MemberExpression;
             if (member != null)
             {
-                var type = ((PropertyInfo)member.Member).PropertyType;
+                Type type = null;
+                var prop = member.Member as PropertyInfo;
+                if (prop != null) type = prop.PropertyType;
+                else type = ((FieldInfo)member.Member).FieldType;
                 foreach (var p in type.GetProperties())
                 {
                     select.Add(new ObjectCreateMemberElement(p.Name, null));

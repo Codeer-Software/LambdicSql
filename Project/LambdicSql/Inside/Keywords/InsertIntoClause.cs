@@ -10,34 +10,24 @@ namespace LambdicSql.Inside.Keywords
     {
         internal static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
-            var list = new List<string>();
-            foreach (var m in methods)
+            var method = methods[0];
+            var tbl = converter.ToString(method.Arguments[0]);
+            var select = ObjectCreateAnalyzer.MakeSelectInfo(method.Arguments[1]);
+            var cols = new List<string>();
+            var values = new List<string>();
+
+            object obj = null;
+            ExpressionToObject.GetExpressionObject(method.Arguments[1], out obj);
+            var type = method.Arguments[1].Type;
+
+            foreach (var e in select.Elements)
             {
-                var argSrc = m.Arguments.Skip(m.AdjustSqlSyntaxMethodArgumentIndex(0)).Select(e => converter.ToString(e)).ToArray();
-                list.Add(MethodToString(m.Method.Name, argSrc));
+                var val = type.GetPropertyValue(e.Name, obj);
+                values.Add(converter.ToString(val));
+                cols.Add(e.Name);
             }
-            return string.Join(string.Empty, list.ToArray());
-        }
-
-        static string MethodToString(string name, string[] argSrc)
-        {
-            switch (name)
-            {
-                case nameof(LambdicSql.Keywords.InsertInto):
-                    {
-                        var arg = argSrc.Last().Split(',').Select(e => GetColumnOnly(e)).ToArray();
-                        return Environment.NewLine + "INSERT INTO " + argSrc[0] + "(" + string.Join(", ", arg) + ")";
-
-                    }
-                case nameof(LambdicSql.Keywords.Values): return Environment.NewLine + "\tVALUES (" + string.Join(", ", argSrc) + ")";
-            }
-            throw new NotSupportedException();
-        }
-
-        static string GetColumnOnly(string src)
-        {
-            var index = src.LastIndexOf(".");
-            return index == -1 ? src : src.Substring(index + 1);
+            return Environment.NewLine + "INSERT INTO " + tbl + "(" + string.Join(",", cols.ToArray()) + ")" + 
+                   Environment.NewLine +"VALUES(" + string.Join(",", values.ToArray()) + ")";
         }
     }
 }

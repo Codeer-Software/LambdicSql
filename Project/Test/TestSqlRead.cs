@@ -237,9 +237,24 @@ namespace Test
             var data = new tbl_data() { id = 1, val1 = 10, val2 = "a" };
 
             DeleteX();
+            
             var query = Sql<DataChangeTest>.Create(db =>
-                InsertInto(db.tbl_data, db.tbl_data.id, db.tbl_data.val1, db.tbl_data.val2).
-                Values(data.id, data.val1, data.val2));//TODO change style.
+                InsertIntoValues(db.tbl_data, new tbl_data() { id = 1, val2 = "b" }));
+
+            query.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Write();
+        }
+
+        [TestMethod]
+        public void InsertEx2()
+        {
+            SqlOption.Log = l => Debug.Print(l);
+
+            var data = new tbl_data() { id = 1, val1 = 10, val2 = "a" };
+
+            DeleteX();
+            
+            var query = Sql<DataChangeTest>.Create(db =>
+                InsertIntoValues(db.tbl_data, data));
 
             query.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Write();
         }
@@ -247,6 +262,8 @@ namespace Test
         [TestMethod]
         public void UpdateEx()
         {
+            //どうだろう。
+            //InsertIntoと合わせて仕様を練る必要があるね
             SqlOption.Log = l => Debug.Print(l);
             var count1 = Sql<DataChangeTest>.Create(db =>
                 Update(db.tbl_data).
@@ -455,10 +472,11 @@ FROM tbl_remuneration
                 var info = Sql<Data>.Create(db => Having(db.tbl_remuneration.id == 0)).ToSqlInfo(typeof(SqlConnection));
                 Debug.Print(info.SqlText);
             }
+            /*@@@
             {
                 var info = Sql<Data>.Create(db => InsertInto(db.tbl_remuneration, db.tbl_remuneration.id).Values(1)).ToSqlInfo(typeof(SqlConnection));
                 Debug.Print(info.SqlText);
-            }
+            }*/
             {
                 var info = Sql<Data>.Create(db => OrderBy(new Asc(db.tbl_remuneration.id), new Desc(db.tbl_staff.id))).ToSqlInfo(typeof(SqlConnection));
                 Debug.Print(info.SqlText);

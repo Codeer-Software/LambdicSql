@@ -46,11 +46,8 @@ namespace LambdicSql
 
         public static IQuery<Non> Having(bool condition) => InvalitContext.Throw<IQuery<Non>>(nameof(Having));
         public static IQuery<TSelected> Having<TSelected>(this IQuery<TSelected> words, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Having));
-
-        public interface IInsertIntoAfter<T> : IQueryGroup<T> { }
-        public static IInsertIntoAfter<Non> InsertInto<TTable>(TTable table, params object[] targets) => InvalitContext.Throw<IInsertIntoAfter<Non>>(nameof(InsertInto));
-        public static IQuery<TSelected> Values<TSelected>(this IInsertIntoAfter<TSelected> words, params object[] targets)
-             => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
+        
+        public static IQuery<Non> InsertIntoValues<TTable>(TTable table, TTable insertData) => InvalitContext.Throw<IQuery<Non>>(nameof(InsertIntoValues));
 
         public interface IOrderByAfter<T> : IQueryGroup<T> { }
         public static IOrderByAfter<Non> OrderBy(params IOrderElement[] elements) => InvalitContext.Throw<IOrderByAfter<Non>>(nameof(OrderBy));
@@ -85,7 +82,7 @@ namespace LambdicSql
                     return GroupByClause.MethodsToString(converter, methods);
                 case nameof(Having):
                     return HavingClause.MethodsToString(converter, methods);
-                case nameof(InsertInto):
+                case nameof(InsertIntoValues):
                     return InsertIntoClause.MethodsToString(converter, methods);
                 case nameof(OrderBy):
                     return OrderByWordsClause.MethodsToString(converter, methods);

@@ -5,6 +5,7 @@ using System.Linq;
 
 namespace LambdicSql.SqlBase
 {
+    //TODO refactoring.
     public static partial class ExpressionToObject
     {
         interface IGetter
@@ -38,8 +39,52 @@ namespace LambdicSql.SqlBase
             {
                 return GetNewObject(newExp, out obj);
             }
+            var memberInit = exp as MemberInitExpression;
+            if (memberInit != null)
+            {
+                return GetMemberInitObject(memberInit, out obj);
+            }
+
             obj = null;
             return false;
+        }
+
+        //TODO あー、newとMemberInitが混ざったやつとか、入れ子とかかなり面倒なのでは？
+        public static bool GetMemberInitObject(MemberInitExpression memberInit, out object value)
+        {
+            value = null;
+            var srcs = memberInit.Bindings.Select(e => ((MemberAssignment)e).Expression).ToList();
+            var ps = srcs.Select(e => e.Type).ToList();
+            var psExp = ps.Select((e, i) => Expression.Parameter(e, "p" + i)).ToArray();
+
+            var bs = memberInit.Bindings.Select((e, i) => Expression.Bind(e.Member, psExp[i])).ToArray();
+            var args = new List<object>();
+            for (int i = 0; i < ps.Count; i++)
+            {
+                object arg;
+                GetExpressionObject(srcs[i], out arg);
+                args.Add(arg);
+            }
+
+            //name.
+            var getterName = memberInit.NewExpression.Type.FullName +
+                "()(" + string.Join(",", ps.Select(e => e.FullName).ToArray()) + ")";
+
+            //getter.
+            IGetter getter;
+            lock (_memberGet)
+            {
+                if (!_memberGet.TryGetValue(getterName, out getter))
+                {
+                    Expression body = null;
+                    body = Expression.Convert(Expression.MemberInit(memberInit.NewExpression, bs), typeof(object));
+                    getter = CreateGetter(ps.ToArray());
+                    getter.Init(body, psExp);
+                    _memberGet[getterName] = getter;
+                }
+            }
+            value = getter.GetMemberObject(args.ToArray());
+            return true;
         }
 
         public static bool GetNewObject(NewExpression newExp, out object value)

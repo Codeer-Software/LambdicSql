@@ -38,6 +38,7 @@
   <ItemGroup>
     <Compile Include="Inside\InvalitContext.cs" />
     <Compile Include="Inside\DecodingParameterInfo.cs" />
+    <Compile Include="Inside\RefrectionUtility.cs" />
     <Compile Include="Inside\SqlExpressionFormatText.cs" />
     <Compile Include="Inside\TowWaySqlSpec.cs" />
     <Compile Include="Keywords.cs" />

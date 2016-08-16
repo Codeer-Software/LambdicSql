@@ -381,10 +381,11 @@ namespace TestCore
         //```cs
         public void TestInsert()
         {
+            TestDelete();
+
             //make sql.
             var query = Sql<DB>.Create(db =>
-                   InsertInto(db.tbl_data, db.tbl_data.id, db.tbl_data.val1, db.tbl_data.val2).
-                   Values(1, 10, "a"));
+                   InsertIntoValues(db.tbl_data, new Data() { id = 1, val2 = "100" }));
 
             //to string and params.
             var info = query.ToSqlInfo(_connection.GetType());
