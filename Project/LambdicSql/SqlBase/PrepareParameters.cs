@@ -7,15 +7,15 @@ namespace LambdicSql.SqlBase
     public class PrepareParameters
     {
         int _count;
-        Dictionary<string, ParameterInfo> _parameters = new Dictionary<string, ParameterInfo>();
+        Dictionary<string, DecodingParameterInfo> _parameters = new Dictionary<string, DecodingParameterInfo>();
         
-        internal string Push(object obj, string nameSrc = null, int? metadataToken = null)
+        internal string Push(object obj, string nameSrc = null, int? metadataToken = null, DbParam param = null)
         {
             if (string.IsNullOrEmpty(nameSrc)) nameSrc = "p_" + _count++;
 
             nameSrc = nameSrc.Replace(".", "_");
             var name = "@" + nameSrc;
-            ParameterInfo val;
+            DecodingParameterInfo val;
             if (_parameters.TryGetValue(name, out val))
             {
                 //not be same direct value. 
@@ -42,20 +42,27 @@ namespace LambdicSql.SqlBase
                     nameSrc += "_";
                 }
             }
-            _parameters.Add(name, new ParameterInfo() { Value = obj, MetadataToken = metadataToken });
+            if (param == null)
+            {
+                param = new DbParam(obj);
+            }
+            _parameters.Add(name, new DecodingParameterInfo() { MetadataToken = metadataToken, Detail = param });
             return name;
         }
 
-        public Dictionary<string, object> GetParameters()
-            => _parameters.ToDictionary(e => e.Key, e => e.Value.Value);
+        public Dictionary<string, object> GetParams()
+            => _parameters.ToDictionary(e => e.Key, e => e.Value.Detail.Value);
+
+        public Dictionary<string, DbParam> GetDbParams()
+            => _parameters.ToDictionary(e => e.Key, e => e.Value.Detail);
 
         public bool TryGetParam(string name, out object leftObj)
         {
             leftObj = null;
-            ParameterInfo val;
+            DecodingParameterInfo val;
             if (_parameters.TryGetValue(name, out val))
             {
-                leftObj = val.Value;
+                leftObj = val.Detail.Value;
                 return true;
             }
             return false;
@@ -66,13 +73,13 @@ namespace LambdicSql.SqlBase
 
         public string ResolvePrepare(string key)
         {
-            ParameterInfo val;
+            DecodingParameterInfo val;
             if (!_parameters.TryGetValue(key, out val))
             {
                 return key;
             }
             _parameters.Remove(key);
-            return val.Value.ToString();
+            return val.Detail.Value.ToString();
         }
     }
 }

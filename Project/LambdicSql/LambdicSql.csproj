@@ -37,7 +37,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Inside\InvalitContext.cs" />
-    <Compile Include="Inside\ParameterInfo.cs" />
+    <Compile Include="Inside\DecodingParameterInfo.cs" />
     <Compile Include="Inside\SqlExpressionFormatText.cs" />
     <Compile Include="Inside\TowWaySqlSpec.cs" />
     <Compile Include="Keywords.cs" />
@@ -51,6 +51,7 @@
     <Compile Include="SqlBase\IQuery.cs" />
     <Compile Include="AggregatePredicate.cs" />
     <Compile Include="SqlBase\ISqlExpression.cs" />
+    <Compile Include="DbParam.cs" />
     <Compile Include="SqlBase\SqlExpression.cs" />
     <Compile Include="SqlBase\SqlSyntaxAttribute.cs" />
     <Compile Include="SqlBase\Non.cs" />
@@ -61,10 +62,8 @@
     <Compile Include="SqlExpressionExtensions.cs" />
     <Compile Include="Funcs.cs" />
     <Compile Include="TwoWaySql.cs" />
-    <Compile Include="Utility\StringUtilityExtensions.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="Window.cs" />
-    <Compile Include="Utility\ConditionUtilityExtensions.cs" />
     <Compile Include="Inside\Keywords\FromClause.cs" />
     <Compile Include="Inside\Keywords\GroupByClause.cs" />
     <Compile Include="Inside\Keywords\HavingClause.cs" />

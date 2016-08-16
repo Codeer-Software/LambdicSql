@@ -37,7 +37,7 @@ namespace LambdicSql
             ExpressionToObject.GetExpressionObject(method.Arguments[0], out obj);
             return (bool)obj ? converter.ToString(method.Arguments[1]) : string.Empty;
         }
-        
+
         static string Text(ISqlStringConverter converter, MethodCallExpression method)
         {
             object obj;

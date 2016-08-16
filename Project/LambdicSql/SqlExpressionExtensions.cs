@@ -24,7 +24,7 @@ namespace LambdicSql
             var lines = text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
             text = string.Join(Environment.NewLine, lines.Where(e => !string.IsNullOrEmpty(e.Trim())).ToArray());
 
-            return new SqlInfo(exp.DbInfo, text, context.SelectClauseInfo, context.Parameters.GetParameters());
+            return new SqlInfo(exp.DbInfo, text, context.SelectClauseInfo, context.Parameters.GetParams());
         }
     }
 }

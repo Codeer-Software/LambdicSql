@@ -612,8 +612,6 @@ FROM tbl_remuneration
             var datas = cnn.Query(query).ToList();
         }
 
-
-
         [TestMethod]
         public void ParamName()
         {
@@ -656,6 +654,35 @@ FROM tbl_remuneration
 
         public ISqlExpression<decimal> MoneyExp(int min, int max)
             => Sql<Data>.Create(db => db.tbl_remuneration.money + min + max);
+
+        [TestMethod]
+        public void TestParam()
+        {
+            var xxx = new DbParam<string>("xxx");
+            var query = Sql<Data>.Create(db =>
+                Select(new
+                {
+                    name = db.tbl_staff.name + xxx,
+                }).
+                From(db.tbl_staff));
+
+            var info = query.ToSqlInfo(typeof(SqlConnection));
+            Debug.Print(info.SqlText);
+        }
+
+        [TestMethod]
+        public void TestParam2()
+        {
+            var query = Sql<Data>.Create(db =>
+                Select(new
+                {
+                    name = db.tbl_staff.name + new DbParam<string>("xxx"),
+                }).
+                From(db.tbl_staff));
+
+            var info = query.ToSqlInfo(typeof(SqlConnection));
+            Debug.Print(info.SqlText);
+        }
     }
 
     public static class DapperApaptExtensions
@@ -670,6 +697,13 @@ FROM tbl_remuneration
             var ps = new DynamicParameters();
             info.Parameters.ToList().ForEach(e => ps.Add(e.Key, e.Value));
             return cnn.Query<T>(info.SqlText, ps);
+        }
+        static IDbDataParameter CreateParameter(IDbCommand com, string name, object obj)
+        {
+            var param = com.CreateParameter();
+            param.ParameterName = name;
+            param.Value = obj;
+            return param;
         }
     }
 }

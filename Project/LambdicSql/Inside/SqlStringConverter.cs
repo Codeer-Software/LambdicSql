@@ -22,6 +22,10 @@ namespace LambdicSql.Inside
         {
             var exp = obj as Expression;
             if (exp != null) return ToString(exp).Text;
+
+            var param = obj as DbParam;
+            if (param != null) return Context.Parameters.Push(param.Value, null, null, param);
+
             return Context.Parameters.Push(obj);
         }
 
@@ -208,7 +212,24 @@ namespace LambdicSql.Inside
                 }
 
                 //use field name.
-                return new DecodedInfo(obj.GetType(), Context.Parameters.Push(obj, name, metadataToken));
+                return new DecodedInfo(exp.Type, Context.Parameters.Push(obj, name, metadataToken));
+            }
+
+            //TODO refactoring.
+            if (typeof(DbParam).IsAssignableFrom(exp.Type))
+            {
+                string name = string.Empty;
+                int? metadataToken = null;
+                var member = exp as MemberExpression;
+                if (member != null)
+                {
+                    name = member.Member.Name;
+                    metadataToken = member.Member.MetadataToken;
+                }
+                var param = ((DbParam)obj);
+                obj = param.Value;
+                //use field name.
+                return new DecodedInfo(exp.Type.GetGenericArguments()[0], Context.Parameters.Push(obj, name, metadataToken, param));
             }
 
             //SqlExpression.
