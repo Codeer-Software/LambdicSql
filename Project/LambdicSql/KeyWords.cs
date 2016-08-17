@@ -2,10 +2,22 @@
 using LambdicSql.Inside.Keywords;
 using LambdicSql.SqlBase;
 using System;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace LambdicSql
 {
+    [SqlSyntax]
+    public class Assign
+    {
+        public Assign(object target, object value) { InvalitContext.Throw("new " + nameof(Assign)); }
+        public static string NewToString(ISqlStringConverter converter, NewExpression exp)
+        {
+            var args = exp.Arguments.Select(e => converter.ToString(e)).ToArray();
+            return converter.Context.Parameters.ResolvePrepare(args[0]) + " = " + converter.Context.Parameters.ResolvePrepare(args[1]);
+        }
+    }
+
     [SqlSyntax]
     public static class Keywords
     {
@@ -46,14 +58,37 @@ namespace LambdicSql
 
         public static IQuery<Non> Having(bool condition) => InvalitContext.Throw<IQuery<Non>>(nameof(Having));
         public static IQuery<TSelected> Having<TSelected>(this IQuery<TSelected> words, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Having));
-        
-        public static IQuery<Non> InsertIntoValues<TTable>(TTable table, TTable insertData) => InvalitContext.Throw<IQuery<Non>>(nameof(InsertIntoValues));
+
+        //TODO 既存の属性を使って実現する
+        //
+        /*
+    ColumnとDatabaseGenerated
+    
+    Nはユニコード
+    varcharは可変長
+
+InsertIntoByAttribute().
+ValuesByAttribute();
+
+Update()
+SetByAttribute()
+
+        */
+        public interface IInsertIntoAfter<TSelected, TTable> : IQueryGroup<TSelected> { }
+        public static IInsertIntoAfter<Non, TTable> InsertInto<TTable>(TTable table, params object[] targets) => InvalitContext.Throw<IInsertIntoAfter<Non, TTable>>(nameof(InsertInto));
+        public static IInsertIntoAfter<Non, TTable> InsertIntoAll<TTable>(TTable table) => InvalitContext.Throw<IInsertIntoAfter<Non, TTable>>(nameof(InsertInto));
+        public static IQuery<TSelected> Values<TSelected, TTable>(this IInsertIntoAfter<TSelected, TTable> words, params object[] targets)
+             => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
+        public static IQuery<TSelected> Values<TSelected, TTable>(this IInsertIntoAfter<TSelected, TTable> words, TTable value)
+             => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
 
         public interface IOrderByAfter<T> : IQueryGroup<T> { }
         public static IOrderByAfter<Non> OrderBy(params IOrderElement[] elements) => InvalitContext.Throw<IOrderByAfter<Non>>(nameof(OrderBy));
         public static IOrderByAfter<TSelected> OrderBy<TSelected>(this IQuery<TSelected> words, params IOrderElement[] elements) => InvalitContext.Throw<IOrderByAfter<TSelected>>(nameof(OrderBy));
-        
-        public static IQuery<Non> UpdateSet<T>(T table, T updateData) => InvalitContext.Throw<IQuery<Non>>(nameof(UpdateSet));
+
+        public interface IUpdateAfter<TSelected, T> : IQueryGroup<TSelected> { }
+        public static IUpdateAfter<Non, T> Update<T>(T table) => InvalitContext.Throw<IUpdateAfter<Non, T>>(nameof(Update));
+        public static IQuery<TSelected> Set<TSelected, T>(this IUpdateAfter<TSelected, T> words, params Assign[] assigns) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Set));
 
         public static IQuery<Non> Where(bool condition) => InvalitContext.Throw<IQuery<Non>>(nameof(Where));
         public static IQuery<TSelected> Where<TSelected>(this IQuery<TSelected> words, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Where));
@@ -80,11 +115,12 @@ namespace LambdicSql
                     return GroupByClause.MethodsToString(converter, methods);
                 case nameof(Having):
                     return HavingClause.MethodsToString(converter, methods);
-                case nameof(InsertIntoValues):
+                case nameof(InsertInto):
+                case nameof(InsertIntoAll):
                     return InsertIntoClause.MethodsToString(converter, methods);
                 case nameof(OrderBy):
                     return OrderByWordsClause.MethodsToString(converter, methods);
-                case nameof(UpdateSet):
+                case nameof(Update):
                     return UpdateClause.MethodsToString(converter, methods);
                 case nameof(Where):
                     return WhereClause.MethodsToString(converter, methods);

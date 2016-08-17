@@ -16,6 +16,7 @@ namespace LambdicSql
         public static bool Condition(bool enable, bool condition) => InvalitContext.Throw<bool>(nameof(Condition));
         public static object Text(string text, params object[] args) => InvalitContext.Throw<object>(nameof(Text));
         public static T Text<T>(string text, params object[] args) => InvalitContext.Throw<T>(nameof(Text));
+        public static IQuery<Non> TwoWaySql(string text, params object[] args) => InvalitContext.Throw<IQuery<Non>>(nameof(Text));
         public static TEntity T<TEntity>(this IQueryable<TEntity> queryable) => InvalitContext.Throw<TEntity>(nameof(T));
 
         static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
@@ -27,6 +28,7 @@ namespace LambdicSql
                 case nameof(T): return string.Empty;
                 case nameof(Condition): return Condition(converter, method);
                 case nameof(Text): return Text(converter, method);
+                case nameof(TwoWaySql): return TwoWaySql(converter, method);
             }
             throw new NotSupportedException();
         }
@@ -43,6 +45,16 @@ namespace LambdicSql
             object obj;
             ExpressionToObject.GetExpressionObject(method.Arguments[0], out obj);
             var text = (string)obj;
+
+            var array = method.Arguments[1] as NewArrayExpression;
+            return string.Format(text, array.Expressions.Select(e => converter.ToString(e)).ToArray());
+        }
+
+        static string TwoWaySql(ISqlStringConverter converter, MethodCallExpression method)
+        {
+            object obj;
+            ExpressionToObject.GetExpressionObject(method.Arguments[0], out obj);
+            var text = TowWaySqlSpec.ToStringFormat((string)obj);
 
             var array = method.Arguments[1] as NewArrayExpression;
             return string.Format(text, array.Expressions.Select(e => converter.ToString(e)).ToArray());

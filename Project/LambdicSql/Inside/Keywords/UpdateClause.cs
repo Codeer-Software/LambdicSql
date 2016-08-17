@@ -1,8 +1,8 @@
 ﻿using LambdicSql.SqlBase;
 using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace LambdicSql.Inside.Keywords
 {
@@ -10,32 +10,33 @@ namespace LambdicSql.Inside.Keywords
     {
         internal static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
-            var method = methods[0];
-            var tbl = converter.ToString(method.Arguments[0]);
-            var select = ObjectCreateAnalyzer.MakeSelectInfo(method.Arguments[1]);
             var list = new List<string>();
-            
-            var isAll = select.Elements.Any(e => e.Expression == null);
-            if (isAll)
+            string tableName = string.Empty;
+            foreach (var m in methods)
             {
-                object obj = null;
-                ExpressionToObject.GetExpressionObject(method.Arguments[1], out obj);
-                var type = method.Arguments[1].Type;
-                foreach (var e in select.Elements)
-                {
-                    var val = type.GetPropertyValue(e.Name, obj);
-                    list.Add(Environment.NewLine + "\t" + e.Name + " = " + converter.ToString(val));
-                }
+                list.Add(MethodToString(converter, m, ref tableName));
             }
-            else
+            return string.Join(string.Empty, list.ToArray());
+        }
+
+        static string MethodToString(ISqlStringConverter converter, MethodCallExpression method, ref string tableName)
+        {
+            switch (method.Method.Name)
             {
-                foreach (var e in select.Elements)
-                {
-                    list.Add(Environment.NewLine + "\t" + e.Name + " = " + converter.ToString(e.Expression));
-                }
+                case nameof(LambdicSql.Keywords.Update):
+                    {
+                        tableName = converter.ToString(method.Arguments[0]);
+                        return Environment.NewLine + "UPDATE " + tableName;
+                    }
+                case nameof(LambdicSql.Keywords.Set):
+                    {
+                        var name = tableName + ".";
+                        var array = method.Arguments[1] as NewArrayExpression;
+                        return Environment.NewLine + "SET" + Environment.NewLine + "\t" +
+                            string.Join("," + Environment.NewLine + "\t", array.Expressions.Select(e => converter.ToString(e).Replace(name, string.Empty)).ToArray());
+                    }
             }
-            return Environment.NewLine + "UPDATE " + tbl +
-                    Environment.NewLine + "SET" + string.Join(",", list.ToArray());
+            throw new NotSupportedException();
         }
     }
 }

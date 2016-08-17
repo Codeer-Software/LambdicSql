@@ -45,6 +45,7 @@ namespace LambdicSql.SqlBase
             var member = exp as MemberExpression;
             if (member != null)
             {
+                //TODO ef
                 Type type = null;
                 var prop = member.Member as PropertyInfo;
                 if (prop != null) type = prop.PropertyType;

@@ -10,36 +10,61 @@ namespace LambdicSql.Inside.Keywords
     {
         internal static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
-            var method = methods[0];
-            var tbl = converter.ToString(method.Arguments[0]);
-            var select = ObjectCreateAnalyzer.MakeSelectInfo(method.Arguments[1]);
-            var cols = new List<string>();
-            var values = new List<string>();
-
-            var isAll = select.Elements.Any(e => e.Expression == null);
-            if (isAll)
+            var list = new List<string>();
+            var insertTargets = new List<string>();
+            foreach (var m in methods)
             {
-                object obj = null;
-                ExpressionToObject.GetExpressionObject(method.Arguments[1], out obj);
-                var type = method.Arguments[1].Type;
+                list.Add(MethodToString(converter, m, insertTargets));
+            }
+            return string.Join(string.Empty, list.ToArray());
+        }
 
-                foreach (var e in select.Elements)
-                {
-                    var val = type.GetPropertyValue(e.Name, obj);
-                    values.Add(converter.ToString(val));
-                    cols.Add(e.Name);
-                }
-            }
-            else
+        static string MethodToString(ISqlStringConverter converter, MethodCallExpression method, List<string> insertTargets)
+        {
+            switch (method.Method.Name)
             {
-                foreach (var e in select.Elements)
-                {
-                    values.Add(converter.ToString(e.Expression));
-                    cols.Add(e.Name);
-                }
+                case nameof(LambdicSql.Keywords.InsertInto):
+                    {
+                        var arg = converter.ToString(method.Arguments[1]).Split(',').Select(e => GetColumnOnly(e)).ToArray();
+                        insertTargets.AddRange(arg);
+                        return Environment.NewLine + "INSERT INTO " + converter.ToString(method.Arguments[0]) + "(" + string.Join(", ", arg) + ")";
+                    }
+                case nameof(LambdicSql.Keywords.InsertIntoAll):
+                    {
+                        var select = ObjectCreateAnalyzer.MakeSelectInfo(method.Arguments[0]);
+                        var arg = select.Elements.Select(e => e.Name).ToArray();
+                        insertTargets.AddRange(arg);
+                        return Environment.NewLine + "INSERT INTO " + converter.ToString(method.Arguments[0]) + "(" + string.Join(", ", arg) + ")";
+                    }
+                case nameof(LambdicSql.Keywords.Values):
+                    {
+                        if (method.Arguments[1] is NewArrayExpression)
+                        {
+                            return Environment.NewLine + "\tVALUES (" + converter.ToString(method.Arguments[1]) + ")";
+                        }
+                        else
+                        {
+                            object obj = null;
+                            ExpressionToObject.GetExpressionObject(method.Arguments[1], out obj);
+                            var type = method.Arguments[1].Type;
+
+                            var values = new List<string>();
+                            foreach (var e in insertTargets)
+                            {
+                                var val = type.GetPropertyValue(e, obj);
+                                values.Add(converter.ToString(val));
+                            }
+                            return Environment.NewLine + "\tVALUES (" + string.Join(", ", values.ToArray()) + ")";
+                        }
+                    }
             }
-            return Environment.NewLine + "INSERT INTO " + tbl + "(" + string.Join(",", cols.ToArray()) + ")" + 
-                   Environment.NewLine +"VALUES(" + string.Join(",", values.ToArray()) + ")";
+            throw new NotSupportedException();
+        }
+
+        static string GetColumnOnly(string src)
+        {
+            var index = src.LastIndexOf(".");
+            return index == -1 ? src : src.Substring(index + 1);
         }
     }
 }

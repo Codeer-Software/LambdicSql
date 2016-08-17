@@ -237,9 +237,9 @@ namespace Test
             var data = new tbl_data() { id = 1, val1 = 10, val2 = "a" };
 
             DeleteX();
-            
+
             var query = Sql<DataChangeTest>.Create(db =>
-                InsertIntoValues(db.tbl_data, new tbl_data() { id = 1, val2 = "b" }));
+                InsertInto(db.tbl_data, db.tbl_data.id, db.tbl_data.val2).Values(1, "b"));
 
             query.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Write();
         }
@@ -252,9 +252,24 @@ namespace Test
             var data = new tbl_data() { id = 1, val1 = 10, val2 = "a" };
 
             DeleteX();
-            
+
             var query = Sql<DataChangeTest>.Create(db =>
-                InsertIntoValues(db.tbl_data, data));
+                InsertInto(db.tbl_data, db.tbl_data.id, db.tbl_data.val2).Values(data));
+
+            query.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Write();
+        }
+        
+        [TestMethod]
+        public void InsertAll()
+        {
+            SqlOption.Log = l => Debug.Print(l);
+
+            var data = new tbl_data() { id = 1, val1 = 10, val2 = "a" };
+
+            DeleteX();
+
+            var query = Sql<DataChangeTest>.Create(db =>
+                InsertIntoAll(db.tbl_data).Values(data));
 
             query.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Write();
         }
@@ -262,16 +277,14 @@ namespace Test
         [TestMethod]
         public void UpdateEx()
         {
-            //どうだろう。
-            //InsertIntoと合わせて仕様を練る必要があるね
             SqlOption.Log = l => Debug.Print(l);
             var count1 = Sql<DataChangeTest>.Create(db =>
-                UpdateSet(db.tbl_data, new tbl_data() { val1 = 100, val2 = "200" }).
+                Update(db.tbl_data).Set(new Assign(db.tbl_data.val1, 100), new Assign(db.tbl_data.val2, "200")).
                 Where(db.tbl_data.id == 1)).
                 ToExecutor(_connection).Write();
 
             var count2 = Sql<DataChangeTest>.Create(db =>
-                UpdateSet(db.tbl_data, new tbl_data() { val1 = db.tbl_data.val1 * 2 }).
+                Update(db.tbl_data).Set(new Assign(db.tbl_data.val1, db.tbl_data.val1 * 2)).
                 Where(db.tbl_data.id == 1)).
                 ToExecutor(_connection).Write();
         }
@@ -422,7 +435,7 @@ FROM tbl_remuneration
                     Condition(false, db.tbl_remuneration.money < 4000)));
 
 
-            var query = TwoWaySql.Format(sql, addMoney, where);
+            var query = TwoWaySqlUtility.Format(sql, addMoney, where);
 
             var cnn = new SqlConnection(TestEnvironment.SqlServerConnectionString);
             var info = query.ToSqlInfo(cnn.GetType());
@@ -470,11 +483,10 @@ FROM tbl_remuneration
                 var info = Sql<Data>.Create(db => Having(db.tbl_remuneration.id == 0)).ToSqlInfo(typeof(SqlConnection));
                 Debug.Print(info.SqlText);
             }
-            /*@@@
             {
                 var info = Sql<Data>.Create(db => InsertInto(db.tbl_remuneration, db.tbl_remuneration.id).Values(1)).ToSqlInfo(typeof(SqlConnection));
                 Debug.Print(info.SqlText);
-            }*/
+            }
             {
                 var info = Sql<Data>.Create(db => OrderBy(new Asc(db.tbl_remuneration.id), new Desc(db.tbl_staff.id))).ToSqlInfo(typeof(SqlConnection));
                 Debug.Print(info.SqlText);

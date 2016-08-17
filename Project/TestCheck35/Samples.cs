@@ -385,7 +385,7 @@ namespace TestCore
 
             //make sql.
             var query = Sql<DB>.Create(db =>
-                   InsertIntoValues(db.tbl_data, new Data() { id = 1, val2 = "100" }));
+                   InsertInto(db.tbl_data, db.tbl_data.id, db.tbl_data.val2).Values(1, "val2"));
 
             //to string and params.
             var info = query.ToSqlInfo(_connection.GetType());
@@ -401,7 +401,7 @@ namespace TestCore
         {
             //make sql.
             var query = Sql<DB>.Create(db =>
-                UpdateSet(db.tbl_data, new Data() { val1 = 100, val2 = "200" }).
+                Update(db.tbl_data).Set(new Assign(db.tbl_data.val1, 100), new Assign(db.tbl_data.val2, "200")).
                 Where(db.tbl_data.id == 1));
 
             //to string and params.
@@ -419,7 +419,7 @@ namespace TestCore
         {
             //make sql.
             var query = Sql<DB>.Create(db =>
-                UpdateSet(db.tbl_data, new Data() { val1 = db.tbl_data.val1 * 2 }).
+                Update(db.tbl_data).Set(new Assign(db.tbl_data.val1, db.tbl_data.val1 * 2)).
                 Where(db.tbl_data.id == 1));
 
             //to string and params.
@@ -800,7 +800,7 @@ FROM tbl_remuneration
                     Condition(minCondition, 3000 < db.tbl_remuneration.money) &&
                     Condition(maxCondition, db.tbl_remuneration.money < 4000)));
 
-            var query = TwoWaySql.Format(sql, addMoney, where);
+            var query = TwoWaySqlUtility.Format(sql, addMoney, where);
 
             //to string and params.
             var info = query.ToSqlInfo(_connection.GetType());
@@ -808,6 +808,29 @@ FROM tbl_remuneration
 
             //dapper
             var datas = _connection.Query<SelectData1>(info.SqlText, info.Parameters).ToList();
+
+            //TODO やっぱり最初はこれだけに絞るかな。
+            var query2 = Sql<DB>.Create(db => TwoWaySql(sql,
+                bonus,
+                Where(Condition(minCondition, 3000 < db.tbl_remuneration.money) &&
+                    Condition(maxCondition, db.tbl_remuneration.money < 4000))
+                ));
+            info = query2.ToSqlInfo(_connection.GetType());
+            Debug.Print(info.SqlText);
+
+            //dapper
+            datas = _connection.Query<SelectData1>(info.SqlText, info.Parameters).ToList();
+
+
+            var query3 = Sql<DB>.Create(db => TwoWaySql(sql,
+                bonus,
+                where
+                ));
+            info = query3.ToSqlInfo(_connection.GetType());
+            Debug.Print(info.SqlText);
+
+            //dapper
+            datas = _connection.Query<SelectData1>(info.SqlText, info.Parameters).ToList();
         }
     }
 }
