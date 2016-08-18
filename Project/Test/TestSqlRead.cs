@@ -39,6 +39,27 @@ namespace Test
             public int member2_id { get; set; }
             public int member3_id { get; set; }
         }
+        public class Types
+        {
+            [Column(TypeName = "ntext")]
+            public string ntext { get; set; }
+            [Column(TypeName = "text")]
+            public string text { get; set; }
+            [Column(TypeName = "nchar(10)")]
+            public string nchar { get; set; }
+            [Column(TypeName = "char(10)")]
+            public string @char { get; set; }
+            [Column(TypeName = "varchar(50)")]
+            public string varchar { get; set; }
+            [Column(TypeName = "nvarchar(50)")]
+            public string nvarchar { get; set; }
+            [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+            public int id { get; set; }
+            [Column(TypeName = "datetime")]
+            public DateTime datetime { get; set; }
+            [Column(TypeName = "datetime2(7)")]
+            public DateTime datetime2 { get; set; }
+        }
 
         public class Data
         {
@@ -71,6 +92,7 @@ namespace Test
             public Staff tbl_staff { get; set; }
             public Remuneration tbl_remuneration { get; set; }
             public tbl_data tbl_data { get; set; }
+            public Types tbl_types { get; set; }
         }
 
         public IDbConnection _connection;
@@ -95,6 +117,10 @@ namespace Test
                 From(db.tbl_data)).
                 ToExecutor(_connection).Write();
 
+            count = Sql<DataChangeTest>.Create(db =>
+                Delete().
+                From(db.tbl_types)).
+                ToExecutor(_connection).Write();
         }
 
         [TestMethod]
@@ -258,7 +284,61 @@ namespace Test
 
             query.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Write();
         }
-        
+
+        [TestMethod]
+        public void InsertEx3()
+        {
+            SqlOption.Log = l => Debug.Print(l);
+
+            var data = new Types()
+            {
+                id = 1,
+                text = "text",
+                ntext = "ntext",
+                @char = "char",
+                nchar = "nchar",
+                varchar = "varchar",
+                nvarchar = "nvarchar",
+                datetime = new DateTime(1999, 1, 1),
+                datetime2 = new DateTime(2000, 1, 1)
+            };
+
+            DeleteX();
+
+            var query = Sql<DataChangeTest>.Create(db =>
+                InsertIntoAll(db.tbl_types).ValuesWithTypes(data));
+            var info = query.ToSqlInfo(typeof(SqlConnection));
+            var detail = info.DbParams;
+            query.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Write();
+        }
+
+        [TestMethod]
+        public void InsertEx4()
+        {
+            SqlOption.Log = l => Debug.Print(l);
+
+            var data = new Types()
+            {
+                id = 1,
+                text = "text",
+                ntext = "ntext",
+                @char = "char",
+                nchar = "nchar",
+                varchar = "varchar",
+                nvarchar = "nvarchar",
+                datetime = new DateTime(1999, 1, 1),
+                datetime2 = new DateTime(2000, 1, 1)
+            };
+
+            DeleteX();
+
+            var query = Sql<DataChangeTest>.Create(db =>
+                InsertIntoIgnoreDbGenerated(db.tbl_types).ValuesWithTypes(data));
+            var info = query.ToSqlInfo(typeof(SqlConnection));
+            var detail = info.DbParams;
+            Debug.Print(info.SqlText);
+        }
+
         [TestMethod]
         public void InsertAll()
         {
@@ -286,6 +366,12 @@ namespace Test
             var count2 = Sql<DataChangeTest>.Create(db =>
                 Update(db.tbl_data).Set(new Assign(db.tbl_data.val1, db.tbl_data.val1 * 2)).
                 Where(db.tbl_data.id == 1)).
+                ToExecutor(_connection).Write();
+
+            InsertEx3();
+            var count3 = Sql<DataChangeTest>.Create(db =>
+                Update(db.tbl_types).Set(new AssignWithType(db.tbl_types.nvarchar, "nvarchar")).
+                Where(db.tbl_types.id == 1)).
                 ToExecutor(_connection).Write();
         }
 
@@ -439,7 +525,7 @@ FROM tbl_remuneration
 
             var cnn = new SqlConnection(TestEnvironment.SqlServerConnectionString);
             var info = query.ToSqlInfo(cnn.GetType());
-            var datas = cnn.Query<SelectedData>(info.SqlText, info.Parameters).ToList();
+            var datas = cnn.Query<SelectedData>(info.SqlText, info.Params).ToList();
         }
 
         public class SelectedData
@@ -723,7 +809,7 @@ FROM tbl_remuneration
         {
             var info = exp.ToSqlInfo(cnn.GetType());
             var ps = new DynamicParameters();
-            info.Parameters.ToList().ForEach(e => ps.Add(e.Key, e.Value));
+            info.Params.ToList().ForEach(e => ps.Add(e.Key, e.Value));
             return cnn.Query<T>(info.SqlText, ps);
         }
         static IDbDataParameter CreateParameter(IDbCommand com, string name, object obj)

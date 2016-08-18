@@ -1,6 +1,7 @@
 ﻿using LambdicSql.Inside;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace LambdicSql.SqlBase
 {
@@ -19,7 +20,7 @@ namespace LambdicSql.SqlBase
             if (_parameters.TryGetValue(name, out val))
             {
                 //not be same direct value. 
-                if (metadataToken == val.MetadataToken)
+                if (metadataToken != null && metadataToken == val.MetadataToken)
                 {
                     return name;
                 }
@@ -29,7 +30,7 @@ namespace LambdicSql.SqlBase
                     if (_parameters.TryGetValue(nameCheck, out val))
                     {
                         //not be same direct value. 
-                        if (metadataToken == val.MetadataToken)
+                        if (metadataToken != null && metadataToken == val.MetadataToken)
                         {
                             return nameCheck;
                         }
@@ -42,12 +43,16 @@ namespace LambdicSql.SqlBase
                     nameSrc += "_";
                 }
             }
-            if (param == null)
-            {
-                param = new DbParam(obj);
-            }
+            if (param == null) param = new DbParam();
+            param.Value = obj;
             _parameters.Add(name, new DecodingParameterInfo() { MetadataToken = metadataToken, Detail = param });
             return name;
+        }
+
+        internal void SetDbParam(string key, DbParam param)
+        {
+            param.Value = _parameters[key].Detail.Value;
+            _parameters[key].Detail = param;
         }
 
         public Dictionary<string, object> GetParams()

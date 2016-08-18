@@ -10,11 +10,31 @@ namespace LambdicSql
     [SqlSyntax]
     public class Assign
     {
+        protected Assign() { }
         public Assign(object target, object value) { InvalitContext.Throw("new " + nameof(Assign)); }
         public static string NewToString(ISqlStringConverter converter, NewExpression exp)
         {
             var args = exp.Arguments.Select(e => converter.ToString(e)).ToArray();
-            return converter.Context.Parameters.ResolvePrepare(args[0]) + " = " + converter.Context.Parameters.ResolvePrepare(args[1]);
+            return args[0] + " = " + args[1];
+        }
+    }
+
+    [SqlSyntax]
+    public class AssignWithType : Assign
+    {
+        protected AssignWithType() { }
+        public AssignWithType(object target, object value) { InvalitContext.Throw("new " + nameof(Assign)); }
+        public new static string NewToString(ISqlStringConverter converter, NewExpression exp)
+        {
+            var col = converter.ToString(exp.Arguments[0]);
+            var val = converter.ToString(exp.Arguments[1]);
+
+            var param = converter.Context.DbInfo.GetDbParamByLambdaName(col);
+            if (param != null)
+            {
+                converter.Context.Parameters.SetDbParam(val, param);
+            }
+            return col + " = " + val;
         }
     }
 
@@ -59,28 +79,16 @@ namespace LambdicSql
         public static IQuery<Non> Having(bool condition) => InvalitContext.Throw<IQuery<Non>>(nameof(Having));
         public static IQuery<TSelected> Having<TSelected>(this IQuery<TSelected> words, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Having));
 
-        //TODO 既存の属性を使って実現する
-        //
-        /*
-    ColumnとDatabaseGenerated
-    
-    Nはユニコード
-    varcharは可変長
-
-InsertIntoByAttribute().
-ValuesByAttribute();
-
-Update()
-SetByAttribute()
-
-        */
         public interface IInsertIntoAfter<TSelected, TTable> : IQueryGroup<TSelected> { }
         public static IInsertIntoAfter<Non, TTable> InsertInto<TTable>(TTable table, params object[] targets) => InvalitContext.Throw<IInsertIntoAfter<Non, TTable>>(nameof(InsertInto));
         public static IInsertIntoAfter<Non, TTable> InsertIntoAll<TTable>(TTable table) => InvalitContext.Throw<IInsertIntoAfter<Non, TTable>>(nameof(InsertInto));
+        public static IInsertIntoAfter<Non, TTable> InsertIntoIgnoreDbGenerated<TTable>(TTable table) => InvalitContext.Throw<IInsertIntoAfter<Non, TTable>>(nameof(InsertInto));
         public static IQuery<TSelected> Values<TSelected, TTable>(this IInsertIntoAfter<TSelected, TTable> words, params object[] targets)
              => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
         public static IQuery<TSelected> Values<TSelected, TTable>(this IInsertIntoAfter<TSelected, TTable> words, TTable value)
              => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
+        public static IQuery<TSelected> ValuesWithTypes<TSelected, TTable>(this IInsertIntoAfter<TSelected, TTable> words, TTable value)
+            => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
 
         public interface IOrderByAfter<T> : IQueryGroup<T> { }
         public static IOrderByAfter<Non> OrderBy(params IOrderElement[] elements) => InvalitContext.Throw<IOrderByAfter<Non>>(nameof(OrderBy));
@@ -117,6 +125,7 @@ SetByAttribute()
                     return HavingClause.MethodsToString(converter, methods);
                 case nameof(InsertInto):
                 case nameof(InsertIntoAll):
+                case nameof(InsertIntoIgnoreDbGenerated):
                     return InsertIntoClause.MethodsToString(converter, methods);
                 case nameof(OrderBy):
                     return OrderByWordsClause.MethodsToString(converter, methods);

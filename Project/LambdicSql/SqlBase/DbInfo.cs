@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 
 namespace LambdicSql.SqlBase
 {
@@ -25,5 +23,7 @@ namespace LambdicSql.SqlBase
                 _lambdaNameAndTable.Add(tableLambda, new TableInfo(tableLambda, tableSql));
             }
         }
+
+        internal DbParam GetDbParamByLambdaName(string lambdaName) => _lambdaNameAndColumn[lambdaName].GetDbParamClone();
     }
 }
