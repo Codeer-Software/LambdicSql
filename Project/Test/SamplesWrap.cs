@@ -21,6 +21,9 @@ namespace Test
             _core.TestInitialize(TestContext.TestName, _connection);
         }
 
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Check() => _core.Check();
+
         [TestCleanup]
         public void TestCleanup() => _connection.Dispose();
 

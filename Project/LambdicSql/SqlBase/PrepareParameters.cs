@@ -9,13 +9,19 @@ namespace LambdicSql.SqlBase
     {
         int _count;
         Dictionary<string, DecodingParameterInfo> _parameters = new Dictionary<string, DecodingParameterInfo>();
-        
+        string _prefix;
+
+        public PrepareParameters(string prefix)
+        {
+            _prefix = prefix;
+        }
+
         internal string Push(object obj, string nameSrc = null, int? metadataToken = null, DbParam param = null)
         {
             if (string.IsNullOrEmpty(nameSrc)) nameSrc = "p_" + _count++;
 
             nameSrc = nameSrc.Replace(".", "_");
-            var name = "@" + nameSrc;
+            var name = _prefix + nameSrc;
             DecodingParameterInfo val;
             if (_parameters.TryGetValue(name, out val))
             {
@@ -26,7 +32,7 @@ namespace LambdicSql.SqlBase
                 }
                 while (true)
                 {
-                    var nameCheck = "@" + nameSrc;
+                    var nameCheck = _prefix + nameSrc;
                     if (_parameters.TryGetValue(nameCheck, out val))
                     {
                         //not be same direct value. 

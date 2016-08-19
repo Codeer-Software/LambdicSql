@@ -43,7 +43,7 @@ namespace LambdicSql.Inside.Keywords
             string.Join("," + Environment.NewLine + "\t", _elements.Select(e => ToString(decoder, e)).ToArray());
 
         static string ToString(ISqlStringConverter decoder, ObjectCreateMemberElement element)
-            => element.Expression == null ? element.Name : decoder.ToString(element.Expression) + " AS \"" + element.Name + "\"";
+            => element.Expression == null ? element.Name : decoder.ToString(element.Expression) + " AS " + element.Name;
 
         static string GetPredicate(AggregatePredicate? aggregatePredicate)
         {

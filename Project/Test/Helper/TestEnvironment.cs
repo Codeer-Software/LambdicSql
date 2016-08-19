@@ -7,6 +7,7 @@ using Test.Properties;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Npgsql;
 using MySql.Data.MySqlClient;
+using Oracle.ManagedDataAccess.Client;
 
 namespace Test
 {
@@ -35,12 +36,16 @@ namespace Test
 
         internal static IDbConnection CreateConnection(object db)
         {
+            var str = "User Id=system; Password=codeer; Data Source=" +
+                "(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))" +
+                "(CONNECT_DATA =(SERVER = DEDICATED)))";
             switch (db.ToString())
             {
                 case "SQLServer": return new SqlConnection(SqlServerConnectionString);
                 case "SQLite": return new SQLiteConnection("Data Source=" + SQLiteTest1Path);
                 case "Postgres": return new NpgsqlConnection(PostgresConnectionString);
                 case "MySQL": return new MySqlConnection("Server=localhost;Database=lambdicsqltest;Uid=root;Pwd=codeer");
+                case "Oracle":return new OracleConnection(str);
             }
             throw new NotSupportedException();
         }
@@ -97,6 +102,15 @@ namespace Test
             }
 
             CreateTable(new MySqlConnection("Server=localhost;Database=lambdicsqltest;Uid=root;Pwd=codeer"));
+        }
+
+        [TestMethod]
+        public void CreateOracleTable()
+        {
+            var str = "User Id=system; Password=codeer; Data Source=" +
+                "(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))"+
+                "(CONNECT_DATA =(SERVER = DEDICATED)))";
+            CreateTable(new OracleConnection(str));
         }
 
         void CreateTable(IDbConnection connection)

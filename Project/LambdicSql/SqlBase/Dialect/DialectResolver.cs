@@ -10,7 +10,8 @@ namespace LambdicSql.Dialect
             {
                 return new PostgreSqlCustomizer();
             }
-            if (connectionTypeFullName == "System.Data.SQLite.SQLiteConnection")
+            if (connectionTypeFullName == "System.Data.SQLite.SQLiteConnection" ||
+              connectionTypeFullName == "Oracle.ManagedDataAccess.Client.OracleConnection")//TODO refactoring.
             {
                 return new SQLiteCustomizer();
             }

@@ -16,7 +16,11 @@ namespace LambdicSql
 
         public static SqlInfo ToSqlInfo(this ISqlExpression exp, Type connectionType)
         {
-            var context = new DecodeContext(exp.DbInfo);
+            //TODO refactoring.
+            string prefix = connectionType.FullName == "Oracle.ManagedDataAccess.Client.OracleConnection" ?
+                            ":" : "@";
+
+            var context = new DecodeContext(exp.DbInfo, prefix);
             var converter = new SqlStringConverter(context, DialectResolver.CreateCustomizer(connectionType.FullName));
             var text = exp.ToString(converter);
 

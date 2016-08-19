@@ -9,6 +9,7 @@ using LambdicSql;
 using static LambdicSql.Keywords;
 using static LambdicSql.Funcs;
 using static LambdicSql.Utils;
+using System.Collections.Generic;
 
 namespace TestCore
 {
@@ -115,6 +116,96 @@ namespace TestCore
             public decimal Avg { get; set; }
             public DateTime PaymentDate { get; set; }
             public decimal Money { get; set; }
+        }
+
+
+
+        static IDbDataParameter CreateParameter(IDbCommand com, string name, object obj)
+        {
+            var param = com.CreateParameter();
+            param.ParameterName = name;
+            param.Value = obj;
+            return param;
+        }
+        public void Read(string text, Dictionary<string, object> param)
+        {
+            bool openNow = false;
+            if (_connection.State == ConnectionState.Closed)
+            {
+                _connection.Open();
+                openNow = true;
+            }
+            try
+            {
+                using (var com = _connection.CreateCommand())
+                {
+                    com.CommandText = text;
+                    com.Connection = _connection;
+                    foreach (var obj in param.Select(e => CreateParameter(com, e.Key, e.Value)))
+                    {
+                        com.Parameters.Add(obj);
+                    }
+                    using (var sdr = com.ExecuteReader())
+                    {
+                        while (sdr.Read())
+                        {
+                        }
+                    }
+                }
+
+            }
+            finally
+            {
+                if (openNow)
+                {
+                    _connection.Close();
+                }
+            }
+        }
+
+        //★パラメータはオラクルは:でなければならない
+        public void Check()
+        {
+            if (_connection.GetType().FullName != "Oracle.ManagedDataAccess.Client.OracleConnection") return;
+            var text = @"
+SELECT
+	tbl_staff.name AS ""Name"",
+
+    tbl_remuneration.payment_date AS ""PaymentDate"",
+	tbl_remuneration.money AS ""Money""
+FROM tbl_remuneration
+
+    JOIN tbl_staff ON(tbl_staff.id) = (tbl_remuneration.staff_id)
+WHERE((:p0) < (tbl_remuneration.money)) AND((tbl_remuneration.money) < (100000))";
+
+            var param = new Dictionary<string, object>();
+            param[":p0"] = 10;
+            Read(text, param);
+            //var datas = _connection.Query<SelectData1>(text, param).ToList();
+
+
+
+            /*
+            var min = 3000;
+
+            //make sql.
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData1()
+                {
+                    Name = db.tbl_staff.name,
+                    PaymentDate = db.tbl_remuneration.payment_date,
+                    Money = db.tbl_remuneration.money,
+                }).
+                From(db.tbl_remuneration).
+                    Join(db.tbl_staff, db.tbl_staff.id == db.tbl_remuneration.staff_id).
+                Where(min < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
+
+            //to string and params.
+            var info = query.ToSqlInfo(_connection.GetType());
+            Debug.Print(info.SqlText);
+
+            //dapper
+            datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();*/
         }
 
         public void TestStandard()
