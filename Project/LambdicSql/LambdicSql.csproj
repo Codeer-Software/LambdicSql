@@ -62,7 +62,6 @@
     <Compile Include="SqlInfo.cs" />
     <Compile Include="SqlExpressionExtensions.cs" />
     <Compile Include="Funcs.cs" />
-    <Compile Include="TwoWaySqlUtility.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="Window.cs" />
     <Compile Include="Inside\Keywords\FromClause.cs" />

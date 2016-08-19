@@ -792,41 +792,27 @@ SELECT
 FROM tbl_remuneration 
     JOIN tbl_staff ON tbl_staff.id = tbl_remuneration.staff_id
 /*1*/WHERE tbl_remuneration.money = 100/**/";
-            
-            var addMoney = Sql<DB>.Create(db => bonus);
 
-            var where = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Create(db => TwoWaySql(sql,
+                bonus,
                 Where(
                     Condition(minCondition, 3000 < db.tbl_remuneration.money) &&
-                    Condition(maxCondition, db.tbl_remuneration.money < 4000)));
-
-            /*
-            var query = TwoWaySqlUtility.Format(sql, addMoney, where);
-
-            //to string and params.
+                    Condition(maxCondition, db.tbl_remuneration.money < 4000))
+                ));
             var info = query.ToSqlInfo(_connection.GetType());
             Debug.Print(info.SqlText);
 
             //dapper
             var datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();
-            */
-            var query2 = Sql<DB>.Create(db => TwoWaySql(sql,
-                bonus,
-                Where(Condition(minCondition, 3000 < db.tbl_remuneration.money) &&
-                    Condition(maxCondition, db.tbl_remuneration.money < 4000))
-                ));
-            var info = query2.ToSqlInfo(_connection.GetType());
-            Debug.Print(info.SqlText);
-
-            //dapper
-            var datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();
 
 
-            var query3 = Sql<DB>.Create(db => TwoWaySql(sql,
-                bonus,
-                where
-                ));
-            info = query3.ToSqlInfo(_connection.GetType());
+            //pattern2 building.
+            var where = Sql<DB>.Create(db => Where(
+                    Condition(minCondition, 3000 < db.tbl_remuneration.money) &&
+                    Condition(maxCondition, db.tbl_remuneration.money < 4000)));
+
+            var query2 = Sql<DB>.Create(db => TwoWaySql(sql, bonus, where));
+            info = query2.ToSqlInfo(_connection.GetType());
             Debug.Print(info.SqlText);
 
             //dapper

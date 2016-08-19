@@ -508,25 +508,16 @@ FROM tbl_remuneration
 /*1*/WHERE tbl_remuneration.money = 100/**/";
 
             var bonus = 1000;
-            var addMoney = Sql<Data>.Create(db => bonus);
-
-            var where = Sql<Data>.Create(db => 
+            var query = Sql<Data>.Create(db => TwoWaySql(sql,
+                bonus,
                 Where(
                     Condition(false, 3000 < db.tbl_remuneration.money) &&
-                    Condition(false, db.tbl_remuneration.money < 4000)));
-            
-            var where2 = Sql<Data>.Create(db =>
-                Where(
-                    Condition(false, 3000 < db.tbl_remuneration.money) &&
-                    Condition(false, db.tbl_remuneration.money < 4000)));
-
-            //TODO
-            /*
-            var query = TwoWaySqlUtility.Format(sql, addMoney, where);
+                    Condition(false, db.tbl_remuneration.money < 4000))
+                ));
 
             var cnn = new SqlConnection(TestEnvironment.SqlServerConnectionString);
             var info = query.ToSqlInfo(cnn.GetType());
-            var datas = cnn.Query<SelectedData>(info.SqlText, info.Params).ToList();*/
+            var datas = cnn.Query<SelectedData>(info.SqlText, info.Params).ToList();
         }
 
         public class SelectedData
