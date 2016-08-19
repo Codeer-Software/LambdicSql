@@ -593,6 +593,7 @@ namespace TestCore
         {
             //not supported db.
             if (_connection.GetType().FullName == "System.Data.SQLite.SQLiteConnection") return;
+            if (_connection.GetType().FullName == "MySql.Data.MySqlClient.MySqlConnection") return;
 
             //make sql.
             var query = Sql<DB>.Create(db =>

@@ -6,6 +6,7 @@ using System.Data.SQLite;
 using Test.Properties;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Npgsql;
+using MySql.Data.MySqlClient;
 
 namespace Test
 {
@@ -39,6 +40,7 @@ namespace Test
                 case "SQLServer": return new SqlConnection(SqlServerConnectionString);
                 case "SQLite": return new SQLiteConnection("Data Source=" + SQLiteTest1Path);
                 case "Postgres": return new NpgsqlConnection(PostgresConnectionString);
+                case "MySQL": return new MySqlConnection("Server=localhost;Database=lambdicsqltest;Uid=root;Pwd=codeer");
             }
             throw new NotSupportedException();
         }
@@ -72,8 +74,29 @@ namespace Test
                     command.ExecuteNonQuery();
                 }
             }
-            
+
             CreateTable(new NpgsqlConnection(TestEnvironment.PostgresConnectionString));
+        }
+
+        [TestMethod]
+        public void CreateMySqlTable()
+        {
+            using (var connection = new MySqlConnection("Server=localhost;Uid=root;Pwd=codeer"))
+            {
+                connection.Open();
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = "DROP DATABASE lambdicsqltest;";
+                    command.ExecuteNonQuery();
+                }
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = "CREATE DATABASE lambdicsqltest;";
+                    command.ExecuteNonQuery();
+                }
+            }
+
+            CreateTable(new MySqlConnection("Server=localhost;Database=lambdicsqltest;Uid=root;Pwd=codeer"));
         }
 
         void CreateTable(IDbConnection connection)
