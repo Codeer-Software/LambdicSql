@@ -800,6 +800,7 @@ FROM tbl_remuneration
                     Condition(minCondition, 3000 < db.tbl_remuneration.money) &&
                     Condition(maxCondition, db.tbl_remuneration.money < 4000)));
 
+            /*
             var query = TwoWaySqlUtility.Format(sql, addMoney, where);
 
             //to string and params.
@@ -808,18 +809,17 @@ FROM tbl_remuneration
 
             //dapper
             var datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();
-
-            //TODO やっぱり最初はこれだけに絞るかな。
+            */
             var query2 = Sql<DB>.Create(db => TwoWaySql(sql,
                 bonus,
                 Where(Condition(minCondition, 3000 < db.tbl_remuneration.money) &&
                     Condition(maxCondition, db.tbl_remuneration.money < 4000))
                 ));
-            info = query2.ToSqlInfo(_connection.GetType());
+            var info = query2.ToSqlInfo(_connection.GetType());
             Debug.Print(info.SqlText);
 
             //dapper
-            datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();
+            var datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();
 
 
             var query3 = Sql<DB>.Create(db => TwoWaySql(sql,

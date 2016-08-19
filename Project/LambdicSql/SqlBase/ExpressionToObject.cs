@@ -18,6 +18,16 @@ namespace LambdicSql.SqlBase
 
         public static bool GetExpressionObject(Expression exp, out object obj)
         {
+            while (true)
+            {
+                var unary = exp as UnaryExpression;
+                if (unary == null)
+                {
+                    break;
+                }
+                exp = unary.Operand;
+            }
+
             var constExp = exp as ConstantExpression;
             if (constExp != null)
             {
@@ -49,26 +59,41 @@ namespace LambdicSql.SqlBase
             return false;
         }
 
-        //TODO あー、newとMemberInitが混ざったやつとか、入れ子とかかなり面倒なのでは？
+        //TODO refactoring.
         public static bool GetMemberInitObject(MemberInitExpression memberInit, out object value)
         {
             value = null;
-            var srcs = memberInit.Bindings.Select(e => ((MemberAssignment)e).Expression).ToList();
-            var ps = srcs.Select(e => e.Type).ToList();
-            var psExp = ps.Select((e, i) => Expression.Parameter(e, "p" + i)).ToArray();
 
-            var bs = memberInit.Bindings.Select((e, i) => Expression.Bind(e.Member, psExp[i])).ToArray();
+            var newExp = memberInit.NewExpression;
+            var paramsTypes = newExp.Constructor.GetParameters().Select(e => e.ParameterType).ToList();
+            var prams = new List<ParameterExpression>();
             var args = new List<object>();
-            for (int i = 0; i < ps.Count; i++)
+            for (int i = 0; i < paramsTypes.Count; i++)
+            {
+                prams.Add(Expression.Parameter(paramsTypes[i], "p" + i));
+                object arg;
+                GetExpressionObject(newExp.Arguments[i], out arg);
+                args.Add(arg);
+            }
+            
+            int offset = paramsTypes.Count;
+            var assignments = memberInit.Bindings.Select(e => ((MemberAssignment)e).Expression).ToList();
+            paramsTypes.AddRange(assignments.Select(e => e.Type));
+
+            prams.AddRange(assignments.Select((e, i) => Expression.Parameter(e.Type, "p" + (offset + i))));
+
+            var bs = memberInit.Bindings.Select((e, i) => Expression.Bind(e.Member, prams[offset + i])).ToArray();
+            for (int i = 0; i < assignments.Count; i++)
             {
                 object arg;
-                GetExpressionObject(srcs[i], out arg);
+                GetExpressionObject(assignments[i], out arg);
                 args.Add(arg);
             }
 
             //name.
             var getterName = memberInit.NewExpression.Type.FullName +
-                "()(" + string.Join(",", ps.Select(e => e.FullName).ToArray()) + ")";
+                "(" + string.Join(",", paramsTypes.Take(offset).Select(e => e.FullName).ToArray()) + ")" + 
+                "()(" + string.Join(",", paramsTypes.Skip(offset).Select(e => e.FullName).ToArray()) + ")";
 
             //getter.
             IGetter getter;
@@ -77,9 +102,9 @@ namespace LambdicSql.SqlBase
                 if (!_memberGet.TryGetValue(getterName, out getter))
                 {
                     Expression body = null;
-                    body = Expression.Convert(Expression.MemberInit(memberInit.NewExpression, bs), typeof(object));
-                    getter = CreateGetter(ps.ToArray());
-                    getter.Init(body, psExp);
+                    body = Expression.Convert(Expression.MemberInit(Expression.New(newExp.Constructor, prams.Take(offset).ToArray()), bs), typeof(object));
+                    getter = CreateGetter(paramsTypes.ToArray());
+                    getter.Init(body, prams.ToArray());
                     _memberGet[getterName] = getter;
                 }
             }

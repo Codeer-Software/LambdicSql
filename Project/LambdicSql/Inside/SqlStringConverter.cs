@@ -52,7 +52,17 @@ namespace LambdicSql.Inside
             var method = exp as MethodCallExpression;
             if (method != null) return ToString(method);
 
+            var memberInit = exp as MemberInitExpression;
+            if (memberInit != null) return ToString(memberInit);
+
             throw new NotSupportedException("Not suported expression at LambdicSql.");
+        }
+
+        DecodedInfo ToString(MemberInitExpression memberInit)
+        {
+            object value;
+            if (ExpressionToObject.GetMemberInitObject(memberInit, out value)) return new DecodedInfo(memberInit.Type, ToString(value));
+            throw new NotSupportedException();
         }
 
         DecodedInfo ToString(ConstantExpression constant)

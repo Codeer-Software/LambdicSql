@@ -520,12 +520,13 @@ FROM tbl_remuneration
                     Condition(false, 3000 < db.tbl_remuneration.money) &&
                     Condition(false, db.tbl_remuneration.money < 4000)));
 
-
+            //TODO
+            /*
             var query = TwoWaySqlUtility.Format(sql, addMoney, where);
 
             var cnn = new SqlConnection(TestEnvironment.SqlServerConnectionString);
             var info = query.ToSqlInfo(cnn.GetType());
-            var datas = cnn.Query<SelectedData>(info.SqlText, info.Params).ToList();
+            var datas = cnn.Query<SelectedData>(info.SqlText, info.Params).ToList();*/
         }
 
         public class SelectedData
@@ -796,6 +797,25 @@ FROM tbl_remuneration
 
             var info = query.ToSqlInfo(typeof(SqlConnection));
             Debug.Print(info.SqlText);
+        }
+
+        [TestMethod]
+        public void TestParam3()
+        {
+            var a = TestParamCore("a", DbType.AnsiString).DbParams.First().Value;
+            Assert.AreEqual(a.DbType, DbType.AnsiString);
+            Assert.AreEqual(a.Value, "a");
+            var b = TestParamCore("b", DbType.String).DbParams.First().Value;
+            Assert.AreEqual(b.DbType, DbType.String);
+            Assert.AreEqual(b.Value, "b");
+        }
+
+        public SqlInfo TestParamCore(string value, DbType type)
+        {
+            var query = Sql<Data>.Create(db => new DbParam<string>(value) { DbType = type });
+            var info = query.ToSqlInfo(typeof(SqlConnection));
+            Debug.Print(info.SqlText);
+            return info;
         }
     }
 
