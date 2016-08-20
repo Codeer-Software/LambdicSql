@@ -1,5 +1,4 @@
-﻿using LambdicSql.Dialect;
-using LambdicSql.Inside;
+﻿using LambdicSql.Inside;
 using LambdicSql.SqlBase;
 using System;
 using System.Linq;
@@ -14,14 +13,16 @@ namespace LambdicSql
         public static SqlInfo<TSelected> ToSqlInfo<TSelected>(this ISqlExpression<IQuery<TSelected>> exp, Type connectionType)
           => new SqlInfo<TSelected>(ToSqlInfo((ISqlExpression)exp, connectionType));
 
-        public static SqlInfo ToSqlInfo(this ISqlExpression exp, Type connectionType)
-        {
-            //TODO refactoring.
-            string prefix = connectionType.FullName == "Oracle.ManagedDataAccess.Client.OracleConnection" ?
-                            ":" : "@";
+        public static SqlInfo ToSqlInfo(this ISqlExpression exp)
+            => ToSqlInfo(exp, new SqlConvertOption());
 
-            var context = new DecodeContext(exp.DbInfo, prefix);
-            var converter = new SqlStringConverter(context, DialectResolver.CreateCustomizer(connectionType.FullName));
+        public static SqlInfo ToSqlInfo(this ISqlExpression exp, Type connectionType)
+            => ToSqlInfo(exp, DialectResolver.CreateCustomizer(connectionType.FullName));
+
+        public static SqlInfo ToSqlInfo(this ISqlExpression exp, SqlConvertOption option)
+        {
+            var context = new DecodeContext(exp.DbInfo, option.ParameterPrefix);
+            var converter = new SqlStringConverter(context, option);
             var text = exp.ToString(converter);
 
             //adjust. remove empty line.

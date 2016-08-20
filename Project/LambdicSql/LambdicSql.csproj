@@ -59,6 +59,7 @@
     <Compile Include="Inside\SqlExpressionSingle.cs" />
     <Compile Include="SqlBase\SqlFuncUtility.cs" />
     <Compile Include="SqlBase\SqlSyntaxUtility.cs" />
+    <Compile Include="SqlConvertOption.cs" />
     <Compile Include="SqlInfo.cs" />
     <Compile Include="SqlExpressionExtensions.cs" />
     <Compile Include="Funcs.cs" />
@@ -72,11 +73,8 @@
     <Compile Include="SqlBase\ObjectCreateInfo.cs" />
     <Compile Include="SqlBase\ObjectCreateMemberElement.cs" />
     <Compile Include="SqlBase\ExpressionToObject.cs" />
-    <Compile Include="SqlBase\Dialect\PostgreSqlCustomizer.cs" />
     <Compile Include="Inside\SqlSyntaxHelper.cs" />
     <Compile Include="SqlBase\IMethodChain.cs" />
-    <Compile Include="SqlBase\Dialect\SQLiteCustomizer.cs" />
-    <Compile Include="SqlBase\ISqlStringConverterCustomizer.cs" />
     <Compile Include="SqlBase\ISqlStringConverter.cs" />
     <Compile Include="Inside\SqlStringConverter.cs" />
     <Compile Include="Inside\DecodedInfo.cs" />
@@ -88,7 +86,7 @@
     <Compile Include="SqlBase\PrepareParameters.cs" />
     <Compile Include="SqlBase\TableInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SqlBase\Dialect\DialectResolver.cs" />
+    <Compile Include="Inside\DialectResolver.cs" />
     <Compile Include="Sql.cs" />
     <Compile Include="Inside\Keywords\CaseClause.cs" />
     <Compile Include="Inside\Keywords\DeleteClause.cs" />

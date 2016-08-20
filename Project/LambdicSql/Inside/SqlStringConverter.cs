@@ -8,14 +8,14 @@ namespace LambdicSql.Inside
 {
     class SqlStringConverter : ISqlStringConverter
     {
-        ISqlStringConverterCustomizer _queryCustomizer;
+        SqlConvertOption _option;
 
         public DecodeContext Context { get; }
 
-        internal SqlStringConverter(DecodeContext context, ISqlStringConverterCustomizer queryCustomizer)
+        internal SqlStringConverter(DecodeContext context, SqlConvertOption option)
         {
             Context = context;
-            _queryCustomizer = queryCustomizer;
+            _option = option;
         }
 
         public string ToString(object obj)
@@ -167,19 +167,6 @@ namespace LambdicSql.Inside
             foreach (var c in GetMethodChains(method))
             {
                 var chain = c.ToArray();
-
-                //custom.
-                if (_queryCustomizer != null)
-                {
-                    var custom = _queryCustomizer.CusotmMethodsToString(this, chain);
-                    if (custom != null)
-                    {
-                        ret.Add(custom);
-                        continue;
-                    }
-                }
-
-                //normal.
                 ret.Add(chain[0].GetMethodsToString()(this, chain));
             }
 
@@ -258,24 +245,31 @@ namespace LambdicSql.Inside
 
         DecodedInfo ToString(DecodedInfo left, ExpressionType nodeType, DecodedInfo right)
         {
-            Func<string, string> custom = @operator => _queryCustomizer == null ? @operator : _queryCustomizer.CustomOperator(left.Type, @operator, right.Type);
+            //_option
             switch (nodeType)
             {
-                case ExpressionType.Equal: return new DecodedInfo(typeof(bool), custom("="));
-                case ExpressionType.NotEqual: return new DecodedInfo(typeof(bool), custom("<>"));
-                case ExpressionType.LessThan: return new DecodedInfo(typeof(bool), custom("<"));
-                case ExpressionType.LessThanOrEqual: return new DecodedInfo(typeof(bool), custom("<="));
-                case ExpressionType.GreaterThan: return new DecodedInfo(typeof(bool), custom(">"));
-                case ExpressionType.GreaterThanOrEqual: return new DecodedInfo(typeof(bool), custom(">="));
-                case ExpressionType.Add: return new DecodedInfo(left.Type, custom("+"));
-                case ExpressionType.Subtract: return new DecodedInfo(left.Type, custom("-"));
-                case ExpressionType.Multiply: return new DecodedInfo(left.Type, custom("*"));
-                case ExpressionType.Divide: return new DecodedInfo(left.Type, custom("/"));
-                case ExpressionType.Modulo: return new DecodedInfo(left.Type, custom("%"));
-                case ExpressionType.And: return new DecodedInfo(typeof(bool), custom("AND"));
-                case ExpressionType.AndAlso: return new DecodedInfo(typeof(bool), custom("AND"));
-                case ExpressionType.Or: return new DecodedInfo(typeof(bool), custom("OR"));
-                case ExpressionType.OrElse: return new DecodedInfo(typeof(bool), custom("OR"));
+                case ExpressionType.Equal: return new DecodedInfo(typeof(bool), "=");
+                case ExpressionType.NotEqual: return new DecodedInfo(typeof(bool), "<>");
+                case ExpressionType.LessThan: return new DecodedInfo(typeof(bool), "<");
+                case ExpressionType.LessThanOrEqual: return new DecodedInfo(typeof(bool), "<=");
+                case ExpressionType.GreaterThan: return new DecodedInfo(typeof(bool), ">");
+                case ExpressionType.GreaterThanOrEqual: return new DecodedInfo(typeof(bool), ">=");
+                case ExpressionType.Add:
+                    {
+                        if (left.Type == typeof(string) || right.Type == typeof(string))
+                        {
+                            return new DecodedInfo(left.Type, _option.StringAddOperator);
+                        }
+                        return new DecodedInfo(left.Type, "+");
+                    }
+                case ExpressionType.Subtract: return new DecodedInfo(left.Type, "-");
+                case ExpressionType.Multiply: return new DecodedInfo(left.Type, "*");
+                case ExpressionType.Divide: return new DecodedInfo(left.Type, "/");
+                case ExpressionType.Modulo: return new DecodedInfo(left.Type, "%");
+                case ExpressionType.And: return new DecodedInfo(typeof(bool), "AND");
+                case ExpressionType.AndAlso: return new DecodedInfo(typeof(bool), "AND");
+                case ExpressionType.Or: return new DecodedInfo(typeof(bool), "OR");
+                case ExpressionType.OrElse: return new DecodedInfo(typeof(bool), "OR");
             }
             throw new NotImplementedException();
         }
