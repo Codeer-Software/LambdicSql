@@ -119,5 +119,8 @@ namespace Test
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void Window() => _core.TestWindow();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void CheckOperatior() => _core.CheckOperatior();
     }
 }

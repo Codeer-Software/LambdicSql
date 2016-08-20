@@ -910,5 +910,27 @@ FROM tbl_remuneration
             //dapper
             datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();
         }
+
+        public void CheckOperatior()
+        {
+            //make sql.
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData1()
+                {
+                    Name = db.tbl_staff.name + "x",
+                    PaymentDate = db.tbl_remuneration.payment_date,
+                    Money = db.tbl_remuneration.money,
+                }).
+                From(db.tbl_remuneration).
+                    Join(db.tbl_staff, db.tbl_staff.id == db.tbl_remuneration.staff_id).
+                Where(db.tbl_remuneration.money != 100));
+
+            //to string and params.
+            var info = query.ToSqlInfo(_connection.GetType());
+            Debug.Print(info.SqlText);
+
+            //dapper
+            var datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();
+        }
     }
 }
