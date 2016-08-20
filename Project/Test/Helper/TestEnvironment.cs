@@ -8,6 +8,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Npgsql;
 using MySql.Data.MySqlClient;
 using Oracle.ManagedDataAccess.Client;
+using IBM.Data.DB2;
+using System.Text;
 
 namespace Test
 {
@@ -39,13 +41,23 @@ namespace Test
             var str = "User Id=system; Password=codeer; Data Source=" +
                 "(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))" +
                 "(CONNECT_DATA =(SERVER = DEDICATED)))";
+
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("Server=127.0.0.1:50000;");
+            sb.Append("User Id=db2admin;");
+            sb.Append("Password=codeer;");
+            sb.Append("Database=sample");
+
+
             switch (db.ToString())
             {
                 case "SQLServer": return new SqlConnection(SqlServerConnectionString);
                 case "SQLite": return new SQLiteConnection("Data Source=" + SQLiteTest1Path);
                 case "Postgres": return new NpgsqlConnection(PostgresConnectionString);
                 case "MySQL": return new MySqlConnection("Server=localhost;Database=lambdicsqltest;Uid=root;Pwd=codeer");
-                case "Oracle":return new OracleConnection(str);
+                case "Oracle": return new OracleConnection(str);
+                case "DB2": return new DB2Connection(sb.ToString());
             }
             throw new NotSupportedException();
         }
@@ -102,6 +114,19 @@ namespace Test
             }
 
             CreateTable(new MySqlConnection("Server=localhost;Database=lambdicsqltest;Uid=root;Pwd=codeer"));
+        }
+
+        [TestMethod]
+        public void CreateDb2Table()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("Server=127.0.0.1:50000;");
+            sb.Append("User Id=db2admin;");
+            sb.Append("Password=codeer;");
+            sb.Append("Database=sample");
+
+            var connString = sb.ToString();
+            CreateTable(new DB2Connection(connString));
         }
 
         [TestMethod]

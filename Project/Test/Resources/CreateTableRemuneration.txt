@@ -1,5 +1,5 @@
 CREATE TABLE tbl_remuneration (
-	id INTEGER,
+	id INTEGER NOT NULL,
 	staff_id INTEGER,
 	payment_date VARCHAR(50),
 	money DECIMAL,
