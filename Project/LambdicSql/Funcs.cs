@@ -31,14 +31,14 @@ namespace LambdicSql
         public static string Substring(string target, int startIndex, int length) => InvalitContext.Throw<string>(nameof(Substring));
 
         public static DateTime CurrentDate() => InvalitContext.Throw<DateTime>(nameof(CurrentDate));
-        public static DateTime CurrentTime() => InvalitContext.Throw<DateTime>(nameof(CurrentTime));
+        public static T CurrentTime<T>() => InvalitContext.Throw<T>(nameof(DateTimeOffset));
         public static DateTime CurrentTimeStamp() => InvalitContext.Throw<DateTime>(nameof(CurrentTimeStamp));
 
         public static DateTime CurrentSpaceDate() => InvalitContext.Throw<DateTime>(nameof(CurrentSpaceDate));
-        public static DateTime CurrentSpaceTime() => InvalitContext.Throw<DateTime>(nameof(CurrentSpaceTime));
+        public static TimeSpan CurrentSpaceTime() => InvalitContext.Throw<TimeSpan>(nameof(CurrentSpaceTime));
         public static DateTime CurrentSpaceTimeStamp() => InvalitContext.Throw<DateTime>(nameof(CurrentSpaceTimeStamp));
         public static T Extract<T>(DateTiemElement element, DateTime src) => InvalitContext.Throw<T>(nameof(Extract));
-        public static T DatePart<T>(DateTiemElement element, DateTime src) => InvalitContext.Throw<T>(nameof(Extract));
+        public static int DatePart(DateTiemElement element, DateTime src) => InvalitContext.Throw<int>(nameof(Extract));
 
         //TODO DateTiemElementと思想的にイマイチあってない
         public static TDst Cast<TSrc, TDst>(TSrc src, string dataType) => InvalitContext.Throw<TDst>(nameof(Cast));
@@ -67,8 +67,9 @@ namespace LambdicSql
                 case nameof(CurrentSpaceTimeStamp):
                     return "CURRENT TIMESTAMP";
                 case nameof(Extract):
+                    return method.Method.Name.ToUpper() + "(" + args[0].ToUpper() + " FROM " + args[1] + ")";
                 case nameof(DatePart):
-                    return method.Method.Name.ToUpper() + " " + args[0].ToUpper() + " FROM " + args[1];
+                    return method.Method.Name.ToUpper() + "(" + args[0].ToUpper() + ", " + args[1] + ")";
                 case nameof(Cast):
                     return "CAST(" + args[0] + " AS " + args[1] + ")";
             }

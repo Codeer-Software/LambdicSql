@@ -18,7 +18,6 @@ namespace LambdicSql
         Millisecond,
         Microsecond,
         Nanosecond,
-        TZoffset,
         ISO_WEEK,
     }
 }

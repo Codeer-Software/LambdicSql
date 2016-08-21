@@ -809,7 +809,7 @@ FROM tbl_remuneration
             return info;
         }
     }
-
+    
     public static class DapperApaptExtensions
     {
         public static IEnumerable<T> Query<T>(this IDbConnection cnn, ISqlExpression<IQuery<T>> exp)

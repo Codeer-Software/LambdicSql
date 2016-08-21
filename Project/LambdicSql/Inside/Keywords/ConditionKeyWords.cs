@@ -15,6 +15,7 @@ namespace LambdicSql.Inside.Keywords
                 case nameof(LambdicSql.Keywords.Like): return args[0] + " LIKE " + args[1];
                 case nameof(LambdicSql.Keywords.Between): return args[0] + " BETWEEN " + args[1] + " AND " + args[2];
                 case nameof(LambdicSql.Keywords.In): return args[0] + " IN(" + string.Join(", ", args.Skip(1).ToArray()) + ")";
+                case nameof(LambdicSql.Keywords.Exists): return "EXISTS" + args[0];
             }
             return null;
         }

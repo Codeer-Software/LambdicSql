@@ -166,10 +166,10 @@ namespace LambdicSql.Inside
             }
 
             //ISqlExpression extensions.
-            if (typeof(ISqlExpression).IsAssignableFrom(method.Method.GetParameters()[0].ParameterType))
+            var args = method.Method.GetParameters();
+            if (0 < args.Length && typeof(ISqlExpression).IsAssignableFrom(args[0].ParameterType))
             {
-                if (method.Method.Name != "Cast") throw new NotSupportedException();
-                return ResolveExpressionObject(method.Arguments[0]);
+                if (method.Method.Name == "Cast") return ResolveExpressionObject(method.Arguments[0]);
             }
 
             var ret = new List<string>();

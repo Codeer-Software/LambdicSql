@@ -10,6 +10,7 @@ using static LambdicSql.Keywords;
 using static LambdicSql.Funcs;
 using static LambdicSql.Utils;
 using System.Collections.Generic;
+using LambdicSql.SqlBase;
 
 namespace TestCore
 {
@@ -166,7 +167,7 @@ namespace TestCore
         {
             public string 名前 { get; set; }
         }
-        //★パラメータはオラクルは:でなければならない
+
         public void Check()
         {
             //make sql.
@@ -320,7 +321,7 @@ namespace TestCore
             var datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();
         }
 
-        //Like, In, Between
+        //Like, In, Between, Exsists
         public void TestLike()
         {
             //make sql.
@@ -365,6 +366,27 @@ namespace TestCore
             //dapper
             var datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();
         }
+
+        public void TestExists()
+        {
+            //make sql.
+            var sub = Sql<DB>.Create(db =>
+                Select(new { total = db.tbl_remuneration.staff_id }).
+                From(db.tbl_remuneration));
+
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData6 { Name = db.tbl_staff.name }).
+                From(db.tbl_staff).
+                Where(Exists(sub)));//sub query.
+
+            //to string and params.
+            var info = query.ToSqlInfo(_connection.GetType());
+            Debug.Print(info.SqlText);
+
+            //dapper
+            var datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();
+        }
+
 
         //Distinct
         //```cs
@@ -908,6 +930,339 @@ FROM tbl_remuneration
 
             //dapper
             var datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();
+        }
+
+        public void FromMany()
+        {
+            //make sql.
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData1()
+                {
+                    Name = db.tbl_staff.name,
+                    PaymentDate = db.tbl_remuneration.payment_date,
+                }).
+                From(db.tbl_staff, db.tbl_remuneration));
+
+            //to string and params.
+            var info = query.ToSqlInfo(_connection.GetType());
+            Debug.Print(info.SqlText);
+
+            //dapper
+            var datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();
+        }
+
+        public void Funcs()
+        {
+            var name = _connection.GetType().FullName;
+            
+            if (name != "System.Data.SQLite.SQLiteConnection")
+            {
+                var query = Sql<DB>.Create(db =>
+                    Select(new
+                    {
+                        Name = Concat(db.tbl_staff.name, "a")
+                    }).
+                    From(db.tbl_staff));
+
+                ExecuteRead(query);
+            }
+            if (name == "Npgsql.NpgsqlConnection" ||
+                name == "IBM.Data.DB2.DB2Connection")
+            {
+                var query = Sql<DB>.Create(db =>
+                    Select(new
+                    {
+                        Length = Length(db.tbl_staff.name)
+                    }).
+                    From(db.tbl_staff));
+                ExecuteRead(query);
+            }
+            if (name == "System.Data.SqlClient.SqlConnection")
+            {
+                var query = Sql<DB>.Create(db =>
+                    Select(new
+                    {
+                        Length = Len(db.tbl_staff.name)
+                    }).
+                    From(db.tbl_staff));
+                ExecuteRead(query);
+            }
+            {
+                var query = Sql<DB>.Create(db =>
+                    Select(new
+                    {
+                        Lower = Lower(db.tbl_staff.name),
+                        Upper = Upper(db.tbl_staff.name)
+                    }).
+                    From(db.tbl_staff));
+                ExecuteRead(query);
+            }
+            {
+                var query = Sql<DB>.Create(db =>
+                    Select(new
+                    {
+                        Dst = Replace(db.tbl_staff.name, "a", "b")
+                    }).
+                    From(db.tbl_staff));
+                ExecuteRead(query);
+            }
+            if (name != "System.Data.SQLite.SQLiteConnection" &&
+                name != "Oracle.ManagedDataAccess.Client.OracleConnection")
+            {
+                var query = Sql<DB>.Create(db =>
+                    Select(new
+                    {
+                        Dst = Substring(db.tbl_staff.name, 1, 2)
+                    }).
+                    From(db.tbl_staff));
+                ExecuteRead(query);
+            }
+
+            //CurrentDate
+            if (name == "Npgsql.NpgsqlConnection" ||
+                name == "MySql.Data.MySqlClient.MySqlConnection")
+            {
+                var query = Sql<DB>.Create(db =>
+                    Select(new
+                    {
+                        Dst = CurrentDate()
+                    }));
+                ExecuteRead(query);
+            }
+            if (name == "Oracle.ManagedDataAccess.Client.OracleConnection")
+            {
+                var query = Sql<DB>.Create(db =>
+                    Select(new
+                    {
+                        Dst = CurrentDate()
+                    }).From(Text("dual")));
+                ExecuteRead(query);
+            }
+            if (name == "IBM.Data.DB2.DB2Connection")
+            {
+                var query = Sql<DB>.Create(db =>
+                    Select(new
+                    {
+                        Dst = CurrentSpaceDate()
+                    }).From(Text("sysibm.sysdummy1")));
+                ExecuteRead(query);
+            }
+
+            //CurrentTime
+            /* error
+            if (name == "Npgsql.NpgsqlConnection")
+            {
+                var query = Sql<DB>.Create(db =>
+                    Select(new
+                    {
+                        Dst = CurrentTime<DateTimeOffset>()
+                    }));
+                var x = ExecuteRead(query);
+            }*/
+            if (name == "MySql.Data.MySqlClient.MySqlConnection")
+            {
+                var query = Sql<DB>.Create(db =>
+                    Select(new
+                    {
+                        Dst = CurrentTime<TimeSpan>()
+                    }));
+                var x = ExecuteRead(query);
+            }
+
+            if (name == "IBM.Data.DB2.DB2Connection")
+            {
+                var query = Sql<DB>.Create(db =>
+                    Select(new
+                    {
+                        Dst = CurrentSpaceTime()
+                    }).From(Text("sysibm.sysdummy1")));
+                var x = ExecuteRead(query);
+            }
+
+            //CurrentTimeStamp
+            if (name == "System.Data.SqlClient.SqlConnection" || 
+                name == "Npgsql.NpgsqlConnection" ||
+                name == "MySql.Data.MySqlClient.MySqlConnection")
+            {
+                var query = Sql<DB>.Create(db =>
+                    Select(new
+                    {
+                        Dst = CurrentTimeStamp()
+                    }));
+                ExecuteRead(query);
+            }
+            if (name == "Oracle.ManagedDataAccess.Client.OracleConnection")
+            {
+                var query = Sql<DB>.Create(db =>
+                    Select(new
+                    {
+                        Dst = CurrentTimeStamp()
+                    }).From(Text("dual")));
+                ExecuteRead(query);
+            }
+            if (name == "Oracle.ManagedDataAccess.Client.OracleConnection")
+            {
+                var query = Sql<DB>.Create(db =>
+                    Select(new
+                    {
+                        Dst = CurrentTimeStamp()
+                    }).From(Text("dual")));
+                ExecuteRead(query);
+            }
+            if (name == "IBM.Data.DB2.DB2Connection")
+            {
+                var query = Sql<DB>.Create(db =>
+                    Select(new
+                    {
+                        Dst = CurrentSpaceTimeStamp()
+                    }).From(Text("sysibm.sysdummy1")));
+                var x = ExecuteRead(query);
+            }
+            if (name == "IBM.Data.DB2.DB2Connection")
+            {
+                var query = Sql<DB>.Create(db =>
+                    Select(new
+                    {
+                        Dst = CurrentSpaceTimeStamp()
+                    }).From(Text("sysibm.sysdummy1")));
+                var x = ExecuteRead(query);
+            }
+
+            //Extract, DatePart
+            if (name == "Npgsql.NpgsqlConnection")
+            {
+                var query = Sql<DB>.Create(db =>
+                    Select(new
+                    {
+                        Dst1 = Extract<double>(DateTiemElement.Year, CurrentTimeStamp()),
+                        Dst2 = Extract<double>(DateTiemElement.Month, CurrentTimeStamp()),
+                        Dst3 = Extract<double>(DateTiemElement.Day, CurrentTimeStamp()),
+                        Dst4 = Extract<double>(DateTiemElement.Hour, CurrentTimeStamp()),
+                        Dst5 = Extract<double>(DateTiemElement.Minute, CurrentTimeStamp()),
+                        Dst6 = Extract<double>(DateTiemElement.Second, CurrentTimeStamp()),
+                        Dst7 = Extract<double>(DateTiemElement.Millisecond, CurrentTimeStamp()),
+                        Dst8 = Extract<double>(DateTiemElement.Microsecond, CurrentTimeStamp()),
+                        Dst9 = Extract<double>(DateTiemElement.Quarter, CurrentTimeStamp()),
+                        Dst10 = Extract<double>(DateTiemElement.Week, CurrentTimeStamp())
+                    }));
+                var x = ExecuteRead(query);
+            }
+            if (name == "MySql.Data.MySqlClient.MySqlConnection")
+            {
+                var query = Sql<DB>.Create(db =>
+                    Select(new
+                    {
+                        Dst1 = Extract<long>(DateTiemElement.Year, CurrentTimeStamp()),
+                        Dst2 = Extract<long>(DateTiemElement.Month, CurrentTimeStamp()),
+                        Dst3 = Extract<long>(DateTiemElement.Day, CurrentTimeStamp()),
+                        Dst4 = Extract<long>(DateTiemElement.Hour, CurrentTimeStamp()),
+                        Dst5 = Extract<long>(DateTiemElement.Minute, CurrentTimeStamp()),
+                        Dst6 = Extract<long>(DateTiemElement.Second, CurrentTimeStamp()),
+                        Dst9 = Extract<long>(DateTiemElement.Quarter, CurrentTimeStamp()),
+                        Dst10 = Extract<long>(DateTiemElement.Week, CurrentTimeStamp())
+                    }));
+                var x = ExecuteRead(query);
+            }
+            if (name == "System.Data.SqlClient.SqlConnection")
+            {
+                var query = Sql<DB>.Create(db =>
+                    Select(new
+                    {
+                        Year = DatePart(DateTiemElement.Year, CurrentTimeStamp()),
+                        Quarter = DatePart(DateTiemElement.Quarter, CurrentTimeStamp()),
+                        Month = DatePart(DateTiemElement.Month, CurrentTimeStamp()),
+                        Dayofyear = DatePart(DateTiemElement.Dayofyear, CurrentTimeStamp()),
+                        Day = DatePart(DateTiemElement.Day, CurrentTimeStamp()),
+                        Week = DatePart(DateTiemElement.Week, CurrentTimeStamp()),
+                        Weekday = DatePart(DateTiemElement.Weekday, CurrentTimeStamp()),
+                        Hour = DatePart(DateTiemElement.Hour, CurrentTimeStamp()),
+                        Minute = DatePart(DateTiemElement.Minute, CurrentTimeStamp()),
+                        Second = DatePart(DateTiemElement.Second, CurrentTimeStamp()),
+                        Millisecond = DatePart(DateTiemElement.Millisecond, CurrentTimeStamp()),
+                        Microsecond = DatePart(DateTiemElement.Microsecond, CurrentTimeStamp()),
+                        Nanosecond = DatePart(DateTiemElement.Nanosecond, CurrentTimeStamp()),
+                        ISO_WEEK = DatePart(DateTiemElement.ISO_WEEK, CurrentTimeStamp())
+                    }));
+                var x = ExecuteRead(query);
+            }
+        }
+
+        public void TestUnion()
+        {
+            var query = Sql<DB>.Create(db => SelectFrom(db.tbl_staff).Union().SelectFrom(db.tbl_staff));
+            ExecuteRead(query);
+            query = Sql<DB>.Create(db => SelectFrom(db.tbl_staff).Union(true).SelectFrom(db.tbl_staff));
+            ExecuteRead(query);
+        }
+
+        public void TestIntersect()
+        {
+            var name = _connection.GetType().FullName;
+            if (name == "MySql.Data.MySqlClient.MySqlConnection") return;
+            var query = Sql<DB>.Create(db => SelectFrom(db.tbl_staff).Intersect().SelectFrom(db.tbl_staff));
+            ExecuteRead(query);
+            if (name == "System.Data.SqlClient.SqlConnection") return;
+            if (name == "System.Data.SQLite.SQLiteConnection") return;
+            if (name == "Oracle.ManagedDataAccess.Client.OracleConnection") return;
+            query = Sql<DB>.Create(db => SelectFrom(db.tbl_staff).Intersect(true).SelectFrom(db.tbl_staff));
+            ExecuteRead(query);
+        }
+
+        public void TestExcept()
+        {
+            var name = _connection.GetType().FullName;
+            if (name == "MySql.Data.MySqlClient.MySqlConnection") return;
+            if (name == "Oracle.ManagedDataAccess.Client.OracleConnection") return;
+            var query = Sql<DB>.Create(db => SelectFrom(db.tbl_staff).Except().SelectFrom(db.tbl_staff));
+            ExecuteRead(query);
+            if (name == "System.Data.SqlClient.SqlConnection") return;
+            if (name == "System.Data.SQLite.SQLiteConnection") return;
+            query = Sql<DB>.Create(db => SelectFrom(db.tbl_staff).Except(true).SelectFrom(db.tbl_staff));
+            ExecuteRead(query);
+        }
+
+        public void TestMinus()
+        {
+            var name = _connection.GetType().FullName;
+            if (name != "Oracle.ManagedDataAccess.Client.OracleConnection") return;
+            var query = Sql<DB>.Create(db => SelectFrom(db.tbl_staff).Minus().SelectFrom(db.tbl_staff));
+            ExecuteRead(query);
+        }
+
+        public void TestGroupByEx()
+        {           
+            //make sql.
+            var selectFrom = Sql<DB>.Create(db =>
+               Select(new SelectData2
+               {
+                   Total = Sum(db.tbl_remuneration.money)
+               }).
+               From(db.tbl_remuneration));
+
+            var name = _connection.GetType().FullName;
+            if (name == "System.Data.SQLite.SQLiteConnection") return;
+            if (name == "MySql.Data.MySqlClient.MySqlConnection")
+            {
+                var queryWith = selectFrom.Concat(Sql<DB>.Create(db => GroupByWithRollup(db.tbl_remuneration.id, db.tbl_remuneration.staff_id)));
+                ExecuteRead(queryWith);
+                return;
+            }
+
+            var query = selectFrom.Concat(Sql<DB>.Create(db => GroupByRollup(db.tbl_remuneration.id, db.tbl_remuneration.staff_id)));
+            ExecuteRead(query);
+
+            query = selectFrom.Concat(Sql<DB>.Create(db => GroupByCube(db.tbl_remuneration.id, db.tbl_remuneration.staff_id)));
+            ExecuteRead(query);
+
+            query = selectFrom.Concat(Sql<DB>.Create(db => GroupByGroupingSets(db.tbl_remuneration.id, db.tbl_remuneration.staff_id)));
+            ExecuteRead(query);
+        }
+
+        public IEnumerable<T> ExecuteRead<T>(ISqlExpression<IQuery<T>> exp)
+        {
+            var info = exp.ToSqlInfo(_connection.GetType());
+            Debug.Print(info.SqlText);
+            return _connection.Query<T>(info.SqlText, info.Params).ToList();
         }
     }
 }

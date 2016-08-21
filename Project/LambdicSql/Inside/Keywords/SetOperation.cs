@@ -1,4 +1,5 @@
 ﻿using LambdicSql.SqlBase;
+using System;
 using System.Linq.Expressions;
 
 namespace LambdicSql.Inside.Keywords
@@ -8,11 +9,15 @@ namespace LambdicSql.Inside.Keywords
         internal static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
-            var obj = converter.ToObject(method.Arguments[method.AdjustSqlSyntaxMethodArgumentIndex(0)]);
-            var text = method.Method.Name.ToUpper();
-            if ((bool)obj)
+            var text = Environment.NewLine + method.Method.Name.ToUpper();
+            var index = method.AdjustSqlSyntaxMethodArgumentIndex(0);
+            if (index < method.Arguments.Count)
             {
-                text += " ALL";
+                var obj = converter.ToObject(method.Arguments[index]);
+                if ((bool)obj)
+                {
+                    text += " ALL";
+                }
             }
             return text;
         }

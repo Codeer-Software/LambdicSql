@@ -28,6 +28,8 @@ namespace LambdicSql.Inside
             _supported.Add(typeof(decimal?));
             _supported.Add(typeof(DateTime));
             _supported.Add(typeof(DateTime?));
+            _supported.Add(typeof(DateTimeOffset));
+            _supported.Add(typeof(DateTimeOffset?));
         }
 
         public static bool IsSupported(Type type)

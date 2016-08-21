@@ -44,8 +44,13 @@ namespace LambdicSql.Inside.Keywords
             var methodCall = exp as MethodCallExpression;
             if (methodCall != null)
             {
-                var x = ((MemberExpression)methodCall.Arguments[0]).Member.Name;
-                return text + " " + x;
+                var member = methodCall.Arguments[0] as MemberExpression;
+                if (member != null)
+                {
+                    var x = member.Member.Name;
+                    return text + " " + x;
+                }
+                return text;
             }
             if (typeof(ISqlExpression).IsAssignableFrom(exp.Type))
             {

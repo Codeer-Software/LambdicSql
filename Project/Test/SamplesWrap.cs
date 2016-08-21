@@ -55,6 +55,9 @@ namespace Test
         public void Between() => _core.TestBetween();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Exists() => _core.TestExists();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void SelectPredicateDistinct() => _core.TestSelectPredicateDistinct();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
@@ -122,5 +125,26 @@ namespace Test
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void CheckOperatior() => _core.CheckOperatior();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void FromMany() => _core.FromMany();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Funcs() => _core.Funcs();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Union() => _core.TestUnion();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Intersect() => _core.TestIntersect();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Except() => _core.TestExcept();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Minus() => _core.TestMinus();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void GroupByEx() => _core.TestGroupByEx();
     }
 }
