@@ -35,15 +35,13 @@ namespace LambdicSql
 
         static string Condition(ISqlStringConverter converter, MethodCallExpression method)
         {
-            object obj;
-            ExpressionToObject.GetExpressionObject(method.Arguments[0], out obj);
+            var obj = converter.ToObject(method.Arguments[0]);
             return (bool)obj ? converter.ToString(method.Arguments[1]) : string.Empty;
         }
 
         static string Text(ISqlStringConverter converter, MethodCallExpression method)
         {
-            object obj;
-            ExpressionToObject.GetExpressionObject(method.Arguments[0], out obj);
+            var obj = converter.ToObject(method.Arguments[0]);
             var text = (string)obj;
 
             var array = method.Arguments[1] as NewArrayExpression;
@@ -52,8 +50,7 @@ namespace LambdicSql
 
         static string TwoWaySql(ISqlStringConverter converter, MethodCallExpression method)
         {
-            object obj;
-            ExpressionToObject.GetExpressionObject(method.Arguments[0], out obj);
+            var obj = converter.ToObject(method.Arguments[0]);
             var text = TowWaySqlSpec.ToStringFormat((string)obj);
 
             var array = method.Arguments[1] as NewArrayExpression;

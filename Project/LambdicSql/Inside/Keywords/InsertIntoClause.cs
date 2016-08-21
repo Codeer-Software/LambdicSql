@@ -52,8 +52,7 @@ namespace LambdicSql.Inside.Keywords
                         }
                         else
                         {
-                            object obj = null;
-                            ExpressionToObject.GetExpressionObject(method.Arguments[1], out obj);
+                            var obj = converter.ToObject(method.Arguments[1]);
                             var type = method.Arguments[1].Type;
 
                             var values = new List<string>();
@@ -68,8 +67,7 @@ namespace LambdicSql.Inside.Keywords
                     }
                 case nameof(LambdicSql.Keywords.ValuesWithTypes):
                     {
-                        object obj = null;
-                        ExpressionToObject.GetExpressionObject(method.Arguments[1], out obj);
+                        var obj = converter.ToObject(method.Arguments[1]);
                         var type = method.Arguments[1].Type;
 
                         var values = new List<string>();

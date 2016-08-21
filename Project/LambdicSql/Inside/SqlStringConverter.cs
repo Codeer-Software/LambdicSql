@@ -18,6 +18,13 @@ namespace LambdicSql.Inside
             _option = option;
         }
 
+        public object ToObject(Expression exp)
+        {
+            object obj;
+            if (!ExpressionToObject.GetExpressionObject(exp, out obj)) throw new NotSupportedException();
+            return obj;
+        }
+
         public string ToString(object obj)
         {
             if (obj == null) return "NULL";

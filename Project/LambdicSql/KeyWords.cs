@@ -12,7 +12,7 @@ namespace LambdicSql
     {
         protected Assign() { }
         public Assign(object target, object value) { InvalitContext.Throw("new " + nameof(Assign)); }
-        public static string NewToString(ISqlStringConverter converter, NewExpression exp)
+        public static string ToString(ISqlStringConverter converter, NewExpression exp)
         {
             var args = exp.Arguments.Select(e => converter.ToString(e)).ToArray();
             return args[0] + " = " + args[1];
@@ -24,7 +24,7 @@ namespace LambdicSql
     {
         protected AssignWithType() { }
         public AssignWithType(object target, object value) { InvalitContext.Throw("new " + nameof(Assign)); }
-        public new static string NewToString(ISqlStringConverter converter, NewExpression exp)
+        public new static string ToString(ISqlStringConverter converter, NewExpression exp)
         {
             var col = converter.ToString(exp.Arguments[0]);
             var val = converter.ToString(exp.Arguments[1]);

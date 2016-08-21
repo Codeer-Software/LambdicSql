@@ -10,7 +10,7 @@ namespace LambdicSql
     public class PartitionBy
     {
         public PartitionBy(params object[] targets) { InvalitContext.Throw("new " + nameof(PartitionBy)); }
-        public static string NewToString(ISqlStringConverter converter, NewExpression exp)
+        public static string ToString(ISqlStringConverter converter, NewExpression exp)
         {
             var arg = exp.Arguments[0];
             var array = arg as NewArrayExpression;
@@ -23,7 +23,7 @@ namespace LambdicSql
     public class OrderBy
     {
         public OrderBy(params IOrderElement[] elements) { InvalitContext.Throw("new " + nameof(OrderBy)); }
-        public static string NewToString(ISqlStringConverter converter, NewExpression exp)
+        public static string ToString(ISqlStringConverter converter, NewExpression exp)
         {
             var arg = exp.Arguments[0];
             var array = arg as NewArrayExpression;
@@ -37,7 +37,7 @@ namespace LambdicSql
     {
         public Rows(int preceding) { InvalitContext.Throw("new " + nameof(Rows)); }
         public Rows(int preceding, int following) { InvalitContext.Throw("new " + nameof(Rows)); }
-        public static string NewToString(ISqlStringConverter converter, NewExpression exp)
+        public static string ToString(ISqlStringConverter converter, NewExpression exp)
         {
             var args = exp.Arguments.Select(e => converter.ToString(e)).ToArray();
             if (exp.Arguments.Count == 1)

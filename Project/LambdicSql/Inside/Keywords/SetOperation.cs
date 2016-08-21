@@ -8,8 +8,7 @@ namespace LambdicSql.Inside.Keywords
         internal static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
-            object obj;
-            ExpressionToObject.GetExpressionObject(method.Arguments[method.AdjustSqlSyntaxMethodArgumentIndex(0)], out obj);
+            var obj = converter.ToObject(method.Arguments[method.AdjustSqlSyntaxMethodArgumentIndex(0)]);
             var text = method.Method.Name.ToUpper();
             if ((bool)obj)
             {
