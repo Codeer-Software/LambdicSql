@@ -20,6 +20,8 @@ namespace LambdicSql.Inside
 
         public string ToString(object obj)
         {
+            if (obj == null) return "NULL";
+
             var exp = obj as Expression;
             if (exp != null) return ToString(exp).Text;
 
@@ -167,6 +169,19 @@ namespace LambdicSql.Inside
             foreach (var c in GetMethodChains(method))
             {
                 var chain = c.ToArray();
+
+                //custom.
+                if (_option.CustomSqlSyntax != null)
+                {
+                    var custom = _option.CustomSqlSyntax.ToString(this, chain);
+                    if (custom != null)
+                    {
+                        ret.Add(custom);
+                        continue;
+                    }
+                }
+
+                //normal.
                 ret.Add(chain[0].GetMethodsToString()(this, chain));
             }
 

@@ -7,7 +7,7 @@ namespace LambdicSql.Inside.Keywords
 {
     static class SelectClause
     {
-        internal static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
             Func<int, int> index = i => method.AdjustSqlSyntaxMethodArgumentIndex(i);
@@ -41,7 +41,7 @@ namespace LambdicSql.Inside.Keywords
         static string ToString(string _predicate, ObjectCreateMemberElement[] _elements, ISqlStringConverter decoder)
             => "SELECT" + _predicate + Environment.NewLine + "\t" +
             string.Join("," + Environment.NewLine + "\t", _elements.Select(e => ToString(decoder, e)).ToArray());
-
+        
         static string ToString(ISqlStringConverter decoder, ObjectCreateMemberElement element)
             => element.Expression == null ? element.Name : decoder.ToString(element.Expression) + " AS " + element.Name;
 

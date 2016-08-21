@@ -37,7 +37,7 @@ namespace LambdicSql
             return col + " = " + val;
         }
     }
-
+    //Set operation
     [SqlSyntax]
     public static class Keywords
     {
@@ -66,15 +66,21 @@ namespace LambdicSql
         public static IQuery<Non> Delete() => InvalitContext.Throw<IQuery<Non>>(nameof(Delete));
 
         public interface IFromAfter<T> : IQueryGroup<T> { }
-        public static IFromAfter<TSelected> From<TSelected, T>(this IQuery<TSelected> words, T tbale) => InvalitContext.Throw<IFromAfter<TSelected>>(nameof(From));
+        public static IFromAfter<TSelected> From<TSelected>(this IQuery<TSelected> words, params object[] tbale) => InvalitContext.Throw<IFromAfter<TSelected>>(nameof(From));
+        public static IFromAfter<Non> From(params object[] tbale) => InvalitContext.Throw<IFromAfter<Non>>(nameof(From));
         public static IFromAfter<TSelected> Join<TSelected, T>(this IFromAfter<TSelected> words, T tbale, bool condition) => InvalitContext.Throw<IFromAfter<TSelected>>(nameof(Join));
         public static IFromAfter<TSelected> LeftJoin<TSelected, T>(this IFromAfter<TSelected> words, T tbale, bool condition) => InvalitContext.Throw<IFromAfter<TSelected>>(nameof(LeftJoin));
         public static IFromAfter<TSelected> RightJoin<TSelected, T>(this IFromAfter<TSelected> words, T tbale, bool condition) => InvalitContext.Throw<IFromAfter<TSelected>>(nameof(RightJoin));
         public static IFromAfter<TSelected> CrossJoin<TSelected, T>(this IFromAfter<TSelected> words, T tbale) => InvalitContext.Throw<IFromAfter<TSelected>>(nameof(CrossJoin));
-        public static IFromAfter<Non> From<T>(T tbale) => InvalitContext.Throw<IFromAfter<Non>>(nameof(From));
 
         public static IQuery<Non> GroupBy(params object[] target) => InvalitContext.Throw<IQuery<Non>>(nameof(GroupBy));
         public static IQuery<TSelected> GroupBy<TSelected>(this IQuery<TSelected> words, params object[] target) => InvalitContext.Throw<IQuery<TSelected>>(nameof(GroupBy));
+        public static IQuery<Non> GroupByRollup(params object[] target) => InvalitContext.Throw<IQuery<Non>>(nameof(GroupByRollup));
+        public static IQuery<TSelected> GroupByRollup<TSelected>(this IQuery<TSelected> words, params object[] target) => InvalitContext.Throw<IQuery<TSelected>>(nameof(GroupByRollup));
+        public static IQuery<Non> GroupByCube(params object[] target) => InvalitContext.Throw<IQuery<Non>>(nameof(GroupByCube));
+        public static IQuery<TSelected> GroupByCube<TSelected>(this IQuery<TSelected> words, params object[] target) => InvalitContext.Throw<IQuery<TSelected>>(nameof(GroupByCube));
+        public static IQuery<Non> GroupByGroupingSets(params object[] target) => InvalitContext.Throw<IQuery<Non>>(nameof(GroupByGroupingSets));
+        public static IQuery<TSelected> GroupByGroupingSets<TSelected>(this IQuery<TSelected> words, params object[] target) => InvalitContext.Throw<IQuery<TSelected>>(nameof(GroupByGroupingSets));
 
         public static IQuery<Non> Having(bool condition) => InvalitContext.Throw<IQuery<Non>>(nameof(Having));
         public static IQuery<TSelected> Having<TSelected>(this IQuery<TSelected> words, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Having));
@@ -104,39 +110,52 @@ namespace LambdicSql
         public static bool Like(string target, string serachText) => InvalitContext.Throw<bool>(nameof(Like));
         public static bool Between<TTarget>(TTarget target, TTarget min, TTarget max) => InvalitContext.Throw<bool>(nameof(Between));
         public static bool In<TTarget>(TTarget target, params TTarget[] inArguments) => InvalitContext.Throw<bool>(nameof(In));
+        public static bool In(ISqlExpression exp) => InvalitContext.Throw<bool>(nameof(In));
+        public static bool In(IQuery exp) => InvalitContext.Throw<bool>(nameof(In));
+        public static bool Exists(ISqlExpression exp) => InvalitContext.Throw<bool>(nameof(Exists));
+        public static bool Exists(IQuery exp) => InvalitContext.Throw<bool>(nameof(Exists));
 
-        static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        public static IQuery<Non> Union(bool isAll = false) => InvalitContext.Throw<IQuery<Non>>(nameof(Union));
+        public static IQuery<TSelected> Union<TSelected>(this IQuery<TSelected> words, bool isAll = false) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Union));
+        public static IQuery<Non> Intersect(bool isAll = false) => InvalitContext.Throw<IQuery<Non>>(nameof(Intersect));
+        public static IQuery<TSelected> Intersect<TSelected>(this IQuery<TSelected> words, bool isAll = false) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Intersect));
+        public static IQuery<Non> Except(bool isAll = false) => InvalitContext.Throw<IQuery<Non>>(nameof(Except));
+        public static IQuery<TSelected> Except<TSelected>(this IQuery<TSelected> words, bool isAll = false) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Except));
+        public static IQuery<Non> Minus(bool isAll = false) => InvalitContext.Throw<IQuery<Non>>(nameof(Minus));
+        public static IQuery<TSelected> Minus<TSelected>(this IQuery<TSelected> words, bool isAll = false) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Minus));
+
+        static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
             switch (method.Method.Name)
             {
                 case nameof(Select):
                 case nameof(SelectFrom):
-                    return SelectClause.MethodsToString(converter, methods);
+                    return SelectClause.ToString(converter, methods);
                 case nameof(Case):
-                    return CaseClause.MethodsToString(converter, methods);
+                    return CaseClause.ToString(converter, methods);
                 case nameof(Delete):
-                    return DeleteClause.MethodsToString(converter, methods);
+                    return DeleteClause.ToString(converter, methods);
                 case nameof(From):
-                    return FromClause.MethodsToString(converter, methods);
+                    return FromClause.ToString(converter, methods);
                 case nameof(GroupBy):
-                    return GroupByClause.MethodsToString(converter, methods);
+                    return GroupByClause.ToString(converter, methods);
                 case nameof(Having):
-                    return HavingClause.MethodsToString(converter, methods);
+                    return HavingClause.ToString(converter, methods);
                 case nameof(InsertInto):
                 case nameof(InsertIntoAll):
                 case nameof(InsertIntoIgnoreDbGenerated):
-                    return InsertIntoClause.MethodsToString(converter, methods);
+                    return InsertIntoClause.ToString(converter, methods);
                 case nameof(OrderBy):
-                    return OrderByWordsClause.MethodsToString(converter, methods);
+                    return OrderByWordsClause.ToString(converter, methods);
                 case nameof(Update):
-                    return UpdateClause.MethodsToString(converter, methods);
+                    return UpdateClause.ToString(converter, methods);
                 case nameof(Where):
-                    return WhereClause.MethodsToString(converter, methods);
+                    return WhereClause.ToString(converter, methods);
                 case nameof(In):
                 case nameof(Like):
                 case nameof(Between):
-                    return ConditionKeyWords.MethodsToString(converter, methods);
+                    return ConditionKeyWords.ToString(converter, methods);
             }
             throw new NotSupportedException();
         }

@@ -6,7 +6,7 @@ namespace LambdicSql.Inside.Keywords
 {
     static class WhereClause
     {
-        internal static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
             var text = converter.ToString(method.Arguments[method.AdjustSqlSyntaxMethodArgumentIndex(0)]);

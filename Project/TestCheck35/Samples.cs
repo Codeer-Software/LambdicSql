@@ -162,50 +162,27 @@ namespace TestCore
                 }
             }
         }
-
+        class SelectDataX
+        {
+            public string 名前 { get; set; }
+        }
         //★パラメータはオラクルは:でなければならない
         public void Check()
         {
-            if (_connection.GetType().FullName != "Oracle.ManagedDataAccess.Client.OracleConnection") return;
-            var text = @"
-SELECT
-	tbl_staff.name AS ""Name"",
-
-    tbl_remuneration.payment_date AS ""PaymentDate"",
-	tbl_remuneration.money AS ""Money""
-FROM tbl_remuneration
-
-    JOIN tbl_staff ON(tbl_staff.id) = (tbl_remuneration.staff_id)
-WHERE((:p0) < (tbl_remuneration.money)) AND((tbl_remuneration.money) < (100000))";
-
-            var param = new Dictionary<string, object>();
-            param[":p0"] = 10;
-            Read(text, param);
-            //var datas = _connection.Query<SelectData1>(text, param).ToList();
-
-
-
-            /*
-            var min = 3000;
-
             //make sql.
             var query = Sql<DB>.Create(db =>
-                Select(new SelectData1()
+                Select(new SelectDataX()
                 {
-                    Name = db.tbl_staff.name,
-                    PaymentDate = db.tbl_remuneration.payment_date,
-                    Money = db.tbl_remuneration.money,
+                    名前 = db.tbl_staff.name
                 }).
-                From(db.tbl_remuneration).
-                    Join(db.tbl_staff, db.tbl_staff.id == db.tbl_remuneration.staff_id).
-                Where(min < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
+                From(db.tbl_staff));
 
             //to string and params.
             var info = query.ToSqlInfo(_connection.GetType());
             Debug.Print(info.SqlText);
 
             //dapper
-            datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();*/
+            var datas = _connection.Query<SelectDataX>(info.SqlText, info.Params).ToList();
         }
 
         public void TestStandard()

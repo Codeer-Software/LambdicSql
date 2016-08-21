@@ -8,7 +8,7 @@ namespace LambdicSql.Inside.Keywords
 {
     static class UpdateClause
     {
-        internal static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var list = new List<string>();
             string tableName = string.Empty;

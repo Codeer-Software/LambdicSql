@@ -6,7 +6,7 @@ namespace LambdicSql.Inside.Keywords
 {
     static class ConditionKeyWords
     {
-        internal static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
             var args = method.Arguments.Select(e => converter.ToString(e)).ToArray();

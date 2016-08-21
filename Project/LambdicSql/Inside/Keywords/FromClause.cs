@@ -8,7 +8,7 @@ namespace LambdicSql.Inside.Keywords
 {
     static class FromClause
     {
-        internal static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var list = new List<string>();
             foreach (var m in methods)
@@ -34,6 +34,12 @@ namespace LambdicSql.Inside.Keywords
 
         static string ExpressionToTableName(ISqlStringConverter decoder, Expression exp)
         {
+            var arry = exp as NewArrayExpression;
+            if (arry != null)
+            {
+                return string.Join(",", arry.Expressions.Select(e => ExpressionToTableName(decoder, e)).ToArray());
+            }
+
             var text = decoder.ToString(exp);
             var methodCall = exp as MethodCallExpression;
             if (methodCall != null)

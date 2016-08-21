@@ -40,7 +40,7 @@ namespace LambdicSql.Inside
                 Func<ISqlStringConverter, MethodCallExpression[], string> func;
                 if (_methodToStrings.TryGetValue(type, out func)) return func;
 
-                var methodToString = type.GetMethod("MethodsToString", BindingFlags.Static| BindingFlags.Public | BindingFlags.NonPublic);
+                var methodToString = type.GetMethod("ToString", BindingFlags.Static| BindingFlags.Public | BindingFlags.NonPublic);
                 var arguments = new[] {
                     Expression.Parameter(typeof(ISqlStringConverter), "cnv"),
                     Expression.Parameter(typeof(MethodCallExpression[]), "exps")

@@ -19,7 +19,7 @@ namespace LambdicSql
         public static IQuery<Non> TwoWaySql(string text, params object[] args) => InvalitContext.Throw<IQuery<Non>>(nameof(Text));
         public static TEntity T<TEntity>(this IQueryable<TEntity> queryable) => InvalitContext.Throw<TEntity>(nameof(T));
 
-        static string MethodsToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
             switch (method.Method.Name)

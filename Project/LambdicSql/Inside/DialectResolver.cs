@@ -1,4 +1,6 @@
-﻿namespace LambdicSql.Inside
+﻿using LambdicSql.SqlBase;
+
+namespace LambdicSql.Inside
 {
     static class DialectResolver
     {
