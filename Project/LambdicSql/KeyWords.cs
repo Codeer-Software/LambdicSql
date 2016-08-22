@@ -113,8 +113,26 @@ namespace LambdicSql
         public static IQuery<TSelected> Values<TSelected, TTable>(this IInsertIntoAfter<TSelected, TTable> words, TTable value)
              => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
 
+        //Createもでもいいような気がするなー。
+        //いやそもそもCreateは対応せんでいいだろ？
+        //しょうもない対応するか？
+        //→いや、もうやらない。
+        //1.0ではやらない！
+        //なぜなら！
+        //2WaySqlとかTextとかあるから
 
         //TODO ★そもそも、今のでは、タイプを正しくは解釈しきれない。DBによって差分あるし。
+        //→まあええか。これを強化していこう。
+        //！！！
+        //いやいやいや、やめや。そして、Tに合わなくてもいいってルールでどう？
+        //→げろ・・・、それはparam object[]と喧嘩する。
+        //IParamInfoを継承するってルールでどうや。
+
+        //★DbStringParam
+        //★DbTimeParam
+        //★自動生成だからなくてもいいといえばいい。
+
+        //ラッパーは自動生成させる!
         public static IQuery<TSelected> ValuesWithTypes<TSelected, TTable>(this IInsertIntoAfter<TSelected, TTable> words, TTable value)
             => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
 
@@ -124,6 +142,8 @@ namespace LambdicSql
 
         public interface IUpdateAfter<TSelected, T> : IQueryGroup<TSelected> { }
         public static IUpdateAfter<Non, T> Update<T>(T table) => InvalitContext.Throw<IUpdateAfter<Non, T>>(nameof(Update));
+
+        //★
         public static IQuery<TSelected> Set<TSelected, T>(this IUpdateAfter<TSelected, T> words, params Assign[] assigns) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Set));
 
         public static IQuery<Non> Where(bool condition) => InvalitContext.Throw<IQuery<Non>>(nameof(Where));
