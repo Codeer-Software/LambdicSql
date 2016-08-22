@@ -9,13 +9,15 @@ namespace LambdicSql.Inside
     class SqlStringConverter : ISqlStringConverter
     {
         SqlConvertOption _option;
+        ISqlSyntaxCustomizer _sqlSyntaxCustomizer;
 
         public DecodeContext Context { get; }
 
-        internal SqlStringConverter(DecodeContext context, SqlConvertOption option)
+        internal SqlStringConverter(DecodeContext context, SqlConvertOption option, ISqlSyntaxCustomizer sqlSyntaxCustomizer)
         {
             Context = context;
             _option = option;
+            _sqlSyntaxCustomizer = sqlSyntaxCustomizer;
         }
 
         public object ToObject(Expression exp)
@@ -85,6 +87,11 @@ namespace LambdicSql.Inside
         {
             if (newExp.Type.IsSqlSyntax())
             {
+                if (_sqlSyntaxCustomizer != null)
+                {
+                    var ret = _sqlSyntaxCustomizer.ToString(this, newExp);
+                    if (ret != null) return new DecodedInfo(null, ret);
+                }
                 var func = newExp.GetNewToString();
                 return new DecodedInfo(null, func(this, newExp));
             }
@@ -178,9 +185,9 @@ namespace LambdicSql.Inside
                 var chain = c.ToArray();
 
                 //custom.
-                if (_option.CustomSqlSyntax != null)
+                if (_sqlSyntaxCustomizer != null)
                 {
-                    var custom = _option.CustomSqlSyntax.ToString(this, chain);
+                    var custom = _sqlSyntaxCustomizer.ToString(this, chain);
                     if (custom != null)
                     {
                         ret.Add(custom);
@@ -210,6 +217,11 @@ namespace LambdicSql.Inside
             //example [ enum ]
             if (exp.Type.IsSqlSyntax())
             {
+                if (_sqlSyntaxCustomizer != null)
+                {
+                    var ret = _sqlSyntaxCustomizer.ToString(this, obj);
+                    if (ret != null) return new DecodedInfo(exp.Type, obj.ToString());
+                }
                 return new DecodedInfo(exp.Type, obj.ToString());
             }
 

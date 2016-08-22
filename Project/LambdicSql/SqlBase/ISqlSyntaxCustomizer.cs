@@ -2,7 +2,7 @@
 
 namespace LambdicSql.SqlBase
 {
-    public interface ICustomSqlSyntax
+    public interface ISqlSyntaxCustomizer
     {
         string ToString(ISqlStringConverter converter, object obj);
         string ToString(ISqlStringConverter converter, MethodCallExpression[] methods);

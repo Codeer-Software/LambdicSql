@@ -14,15 +14,15 @@ namespace LambdicSql
           => new SqlInfo<TSelected>(ToSqlInfo((ISqlExpression)exp, connectionType));
 
         public static SqlInfo ToSqlInfo(this ISqlExpression exp)
-            => ToSqlInfo(exp, new SqlConvertOption());
+            => ToSqlInfo(exp, new SqlConvertOption(), null);
 
         public static SqlInfo ToSqlInfo(this ISqlExpression exp, Type connectionType)
-            => ToSqlInfo(exp, DialectResolver.CreateCustomizer(connectionType.FullName));
+            => ToSqlInfo(exp, DialectResolver.CreateCustomizer(connectionType.FullName), null);
 
-        public static SqlInfo ToSqlInfo(this ISqlExpression exp, SqlConvertOption option)
+        public static SqlInfo ToSqlInfo(this ISqlExpression exp, SqlConvertOption option, ISqlSyntaxCustomizer customizer)
         {
             var context = new DecodeContext(exp.DbInfo, option.ParameterPrefix);
-            var converter = new SqlStringConverter(context, option);
+            var converter = new SqlStringConverter(context, option, customizer);
             var text = exp.ToString(converter);
 
             //adjust. remove empty line.

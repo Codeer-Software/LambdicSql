@@ -49,7 +49,7 @@
     <Compile Include="SqlBase\ExpressionToObject.Getter.cs" />
     <Compile Include="Inside\SqlExpressionCoupled.cs" />
     <Compile Include="SqlBase\DecodeContext.cs" />
-    <Compile Include="SqlBase\ICustomSqlSyntax.cs" />
+    <Compile Include="SqlBase\ISqlSyntaxCustomizer.cs" />
     <Compile Include="SqlBase\IQueryGroup.cs" />
     <Compile Include="SqlBase\IMethodChainGroup.cs" />
     <Compile Include="SqlBase\IQuery.cs" />

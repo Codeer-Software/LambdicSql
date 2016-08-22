@@ -37,6 +37,13 @@ namespace LambdicSql
             return col + " = " + val;
         }
     }
+
+    [SqlSyntax]
+    public class Asterisk
+    {
+        public Asterisk() { InvalitContext.Throw("new " + nameof(Asterisk)); }
+    }
+
     //Set operation
     [SqlSyntax]
     public static class Keywords
