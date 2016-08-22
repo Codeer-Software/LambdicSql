@@ -40,7 +40,7 @@ namespace LambdicSql
         public static T Extract<T>(DateTiemElement element, DateTime src) => InvalitContext.Throw<T>(nameof(Extract));
         public static int DatePart(DateTiemElement element, DateTime src) => InvalitContext.Throw<int>(nameof(Extract));
 
-        //TODO DateTiemElementと思想的にイマイチあってない
+        //TODO 文字列はイマイチなんだが。でもデータタイプは色々なんだよね。
         public static TDst Cast<TSrc, TDst>(TSrc src, string dataType) => InvalitContext.Throw<TDst>(nameof(Cast));
         public static T Coalesce<T>(params T[] args) => InvalitContext.Throw<T>(nameof(Coalesce));
 

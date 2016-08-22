@@ -764,7 +764,7 @@ FROM tbl_remuneration
         [TestMethod]
         public void TestParam()
         {
-            var xxx = new DbParam<string>("xxx");
+            var xxx = new DbParam<string>() { Value = "xxx" };
             var query = Sql<Data>.Create(db =>
                 Select(new
                 {
@@ -782,7 +782,7 @@ FROM tbl_remuneration
             var query = Sql<Data>.Create(db =>
                 Select(new
                 {
-                    name = db.tbl_staff.name + new DbParam<string>("xxx"),
+                    name = db.tbl_staff.name + new DbParam<string>() { Value = "xxx" },
                 }).
                 From(db.tbl_staff));
 
@@ -803,7 +803,7 @@ FROM tbl_remuneration
 
         public SqlInfo TestParamCore(string value, DbType type)
         {
-            var query = Sql<Data>.Create(db => new DbParam<string>(value) { DbType = type });
+            var query = Sql<Data>.Create(db => new DbParam<string>() { Value = value, DbType = type });
             var info = query.ToSqlInfo(typeof(SqlConnection));
             Debug.Print(info.SqlText);
             return info;

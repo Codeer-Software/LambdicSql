@@ -106,11 +106,18 @@ namespace LambdicSql
         public interface IInsertIntoAfter<TSelected, TTable> : IQueryGroup<TSelected> { }
         public static IInsertIntoAfter<Non, TTable> InsertInto<TTable>(TTable table, params object[] targets) => InvalitContext.Throw<IInsertIntoAfter<Non, TTable>>(nameof(InsertInto));
         public static IInsertIntoAfter<Non, TTable> InsertIntoAll<TTable>(TTable table) => InvalitContext.Throw<IInsertIntoAfter<Non, TTable>>(nameof(InsertInto));
+
+        //TODO ★これは属性に頼らずとも、Ignoreでいいじゃないか。
         public static IInsertIntoAfter<Non, TTable> InsertIntoIgnoreDbGenerated<TTable>(TTable table) => InvalitContext.Throw<IInsertIntoAfter<Non, TTable>>(nameof(InsertInto));
+
+
         public static IQuery<TSelected> Values<TSelected, TTable>(this IInsertIntoAfter<TSelected, TTable> words, params object[] targets)
              => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
         public static IQuery<TSelected> Values<TSelected, TTable>(this IInsertIntoAfter<TSelected, TTable> words, TTable value)
              => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
+
+
+        //TODO こいつよなー！！！
         public static IQuery<TSelected> ValuesWithTypes<TSelected, TTable>(this IInsertIntoAfter<TSelected, TTable> words, TTable value)
             => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
 

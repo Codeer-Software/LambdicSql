@@ -954,8 +954,9 @@ FROM tbl_remuneration
         public void Funcs()
         {
             var name = _connection.GetType().FullName;
-
-            /*@@@
+            if (name == "IBM.Data.DB2.DB2Connection" ||
+                name == "System.Data.SqlClient.SqlConnection" ||
+                name == "Npgsql.NpgsqlConnection")
             {
                 var query = Sql<DB>.Create(db =>
                     Select(new
@@ -966,7 +967,7 @@ FROM tbl_remuneration
 
                 ExecuteRead(query);
             }
-            */
+
             {
                 var query = Sql<DB>.Create(db =>
                    Select(new

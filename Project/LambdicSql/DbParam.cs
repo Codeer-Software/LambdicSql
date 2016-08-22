@@ -5,7 +5,7 @@ namespace LambdicSql
 {
     public class DbParam
     {
-        public object Value { get; internal set; }
+        public object Value { get; set; }
         public DbType? DbType { get; set; }
         public ParameterDirection? Direction { get; set; }
         public bool? IsNullable { get; set; }
@@ -14,13 +14,6 @@ namespace LambdicSql
         public byte? Precision { get; set; }
         public byte? Scale { get; set; }
         public int? Size { get; set; }
-
-        internal DbParam() { }
-
-        internal DbParam(object value)
-        {
-            Value = value;
-        }
 
         internal static DbParam Parse(string dbTypeText)
         {
@@ -54,7 +47,8 @@ namespace LambdicSql
 
     public class DbParam<T> : DbParam
     {
-        public DbParam(T value) : base(value) { }
         public static implicit operator T(DbParam<T> src) => InvalitContext.Throw<T>("new DbParameter<T>");
     }
+
+    //TODO 良く使う DbStringとDbTimeは別クラスにしておくか
 }
