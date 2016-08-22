@@ -42,7 +42,7 @@ namespace LambdicSql
 
         //TODO DateTiemElementと思想的にイマイチあってない
         public static TDst Cast<TSrc, TDst>(TSrc src, string dataType) => InvalitContext.Throw<TDst>(nameof(Cast));
-        public static T Coalesce<T>(params object[] args) => InvalitContext.Throw<T>(nameof(Coalesce));
+        public static T Coalesce<T>(params T[] args) => InvalitContext.Throw<T>(nameof(Coalesce));
 
         static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
@@ -71,7 +71,7 @@ namespace LambdicSql
                 case nameof(DatePart):
                     return method.Method.Name.ToUpper() + "(" + args[0].ToUpper() + ", " + args[1] + ")";
                 case nameof(Cast):
-                    return "CAST(" + args[0] + " AS " + args[1] + ")";
+                    return "CAST(" + args[0] + " AS " + converter.Context.Parameters.ResolvePrepare(args[1]) + ")";
             }
             return converter.MakeNormalSqlFunctionString(method);
         }

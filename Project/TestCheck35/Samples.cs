@@ -954,7 +954,30 @@ FROM tbl_remuneration
         public void Funcs()
         {
             var name = _connection.GetType().FullName;
-            
+
+            /*@@@
+            {
+                var query = Sql<DB>.Create(db =>
+                    Select(new
+                    {
+                        id = Cast<int, int>(db.tbl_staff.id, "int")
+                    }).
+                    From(db.tbl_staff));
+
+                ExecuteRead(query);
+            }
+            */
+            {
+                var query = Sql<DB>.Create(db =>
+                   Select(new
+                   {
+                       id = Coalesce(db.tbl_staff.name, "a", "b")
+                   }).
+                   From(db.tbl_staff));
+
+                ExecuteRead(query);
+            }
+
             if (name != "System.Data.SQLite.SQLiteConnection")
             {
                 var query = Sql<DB>.Create(db =>
@@ -1185,6 +1208,8 @@ FROM tbl_remuneration
                     }));
                 var x = ExecuteRead(query);
             }
+
+
         }
 
         public void TestUnion()

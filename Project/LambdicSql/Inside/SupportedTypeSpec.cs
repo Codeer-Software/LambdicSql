@@ -9,6 +9,7 @@ namespace LambdicSql.Inside
 
         static SupportedTypeSpec()
         {
+            _supported.Add(typeof(object));
             _supported.Add(typeof(string));
             _supported.Add(typeof(bool));
             _supported.Add(typeof(bool?));
@@ -30,6 +31,8 @@ namespace LambdicSql.Inside
             _supported.Add(typeof(DateTime?));
             _supported.Add(typeof(DateTimeOffset));
             _supported.Add(typeof(DateTimeOffset?));
+            _supported.Add(typeof(TimeSpan));
+            _supported.Add(typeof(TimeSpan?));
         }
 
         public static bool IsSupported(Type type)
