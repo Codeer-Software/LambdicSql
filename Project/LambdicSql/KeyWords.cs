@@ -19,6 +19,7 @@ namespace LambdicSql
         }
     }
 
+    //TODO ★
     [SqlSyntax]
     public class AssignWithType : Assign
     {
@@ -113,7 +114,7 @@ namespace LambdicSql
              => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
 
 
-        //TODO こいつよなー！！！
+        //TODO ★そもそも、今のでは、タイプを正しくは解釈しきれない。DBによって差分あるし。
         public static IQuery<TSelected> ValuesWithTypes<TSelected, TTable>(this IInsertIntoAfter<TSelected, TTable> words, TTable value)
             => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
 
