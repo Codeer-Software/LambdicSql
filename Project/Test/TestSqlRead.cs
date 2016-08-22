@@ -53,7 +53,6 @@ namespace Test
             public string varchar { get; set; }
             [Column(TypeName = "nvarchar(50)")]
             public string nvarchar { get; set; }
-            [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
             public int id { get; set; }
             [Column(TypeName = "datetime")]
             public DateTime datetime { get; set; }
@@ -306,7 +305,7 @@ namespace Test
             DeleteX();
 
             var query = Sql<DataChangeTest>.Create(db =>
-                InsertIntoAll(db.tbl_types).ValuesWithTypes(data));
+                InsertIntoExcepting(db.tbl_types).ValuesWithTypes(data));
             var info = query.ToSqlInfo(typeof(SqlConnection));
             var detail = info.DbParams;
             query.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Write();
@@ -333,7 +332,7 @@ namespace Test
             DeleteX();
 
             var query = Sql<DataChangeTest>.Create(db =>
-                InsertIntoIgnoreDbGenerated(db.tbl_types).ValuesWithTypes(data));
+                InsertIntoExcepting(db.tbl_types, db.tbl_types.id).ValuesWithTypes(data));
             var info = query.ToSqlInfo(typeof(SqlConnection));
             var detail = info.DbParams;
             Debug.Print(info.SqlText);
@@ -349,7 +348,7 @@ namespace Test
             DeleteX();
 
             var query = Sql<DataChangeTest>.Create(db =>
-                InsertIntoAll(db.tbl_data).Values(data));
+                InsertIntoExcepting(db.tbl_data).Values(data));
 
             query.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Write();
         }

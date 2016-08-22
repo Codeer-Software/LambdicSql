@@ -105,11 +105,7 @@ namespace LambdicSql
 
         public interface IInsertIntoAfter<TSelected, TTable> : IQueryGroup<TSelected> { }
         public static IInsertIntoAfter<Non, TTable> InsertInto<TTable>(TTable table, params object[] targets) => InvalitContext.Throw<IInsertIntoAfter<Non, TTable>>(nameof(InsertInto));
-        public static IInsertIntoAfter<Non, TTable> InsertIntoAll<TTable>(TTable table) => InvalitContext.Throw<IInsertIntoAfter<Non, TTable>>(nameof(InsertInto));
-
-        //TODO ★これは属性に頼らずとも、Ignoreでいいじゃないか。
-        public static IInsertIntoAfter<Non, TTable> InsertIntoIgnoreDbGenerated<TTable>(TTable table) => InvalitContext.Throw<IInsertIntoAfter<Non, TTable>>(nameof(InsertInto));
-
+        public static IInsertIntoAfter<Non, TTable> InsertIntoExcepting<TTable>(TTable table, params object[] exclusions) => InvalitContext.Throw<IInsertIntoAfter<Non, TTable>>(nameof(InsertInto));
 
         public static IQuery<TSelected> Values<TSelected, TTable>(this IInsertIntoAfter<TSelected, TTable> words, params object[] targets)
              => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
@@ -177,8 +173,7 @@ namespace LambdicSql
                 case nameof(Having):
                     return HavingClause.ToString(converter, methods);
                 case nameof(InsertInto):
-                case nameof(InsertIntoAll):
-                case nameof(InsertIntoIgnoreDbGenerated):
+                case nameof(InsertIntoExcepting):
                     return InsertIntoClause.ToString(converter, methods);
                 case nameof(OrderBy):
                     return OrderByWordsClause.ToString(converter, methods);

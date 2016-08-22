@@ -30,17 +30,14 @@ namespace LambdicSql.Inside.Keywords
                         insertTargets.AddRange(arg);
                         return Environment.NewLine + "INSERT INTO " + converter.ToString(method.Arguments[0]) + "(" + string.Join(", ", arg) + ")";
                     }
-                case nameof(LambdicSql.Keywords.InsertIntoAll):
+                case nameof(LambdicSql.Keywords.InsertIntoExcepting):
                     {
                         var select = ObjectCreateAnalyzer.MakeSelectInfo(method.Arguments[0]);
-                        var arg = select.Elements.Select(e => e.Name).ToArray();
-                        insertTargets.AddRange(arg);
-                        return Environment.NewLine + "INSERT INTO " + converter.ToString(method.Arguments[0]) + "(" + string.Join(", ", arg) + ")";
-                    }
-                case nameof(LambdicSql.Keywords.InsertIntoIgnoreDbGenerated):
-                    {
-                        var select = ObjectCreateAnalyzer.MakeSelectInfo(method.Arguments[0]);
-                        var arg = select.Elements.Select(e => e.Name).Where(e=> !method.Arguments[0].Type.IsDbGenerated(e)).ToArray();
+
+                        var array = method.Arguments[1] as NewArrayExpression;
+                        var exclusions = array.Expressions.Select(e => converter.ToString(e)).ToList();
+                        var arg = select.Elements.Select(e => e.Name).
+                            Where(e=>!exclusions.Any(ee=>ee == e)).ToArray();
                         insertTargets.AddRange(arg);
                         return Environment.NewLine + "INSERT INTO " + converter.ToString(method.Arguments[0]) + "(" + string.Join(", ", arg) + ")";
                     }
