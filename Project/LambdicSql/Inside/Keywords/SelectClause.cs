@@ -12,6 +12,8 @@ namespace LambdicSql.Inside.Keywords
             var method = methods[0];
             Func<int, int> index = i => method.AdjustSqlSyntaxMethodArgumentIndex(i);
 
+            if (method.Arguments.Any(e => e.Type == typeof(Asterisk))) return Environment.NewLine + "SELECT *";
+
             Expression define = null;
             AggregatePredicate? aggregatePredicate = null;
             if (method.Arguments[index(0)].Type == typeof(AggregatePredicate))
@@ -31,10 +33,11 @@ namespace LambdicSql.Inside.Keywords
                 converter.Context.SelectClauseInfo = select;
             }
             var text = ToString(GetPredicate(aggregatePredicate), select.Elements, converter);
+            /*
             if (method.Method.Name == nameof(LambdicSql.Keywords.SelectFrom))
             {
                 text = text + Environment.NewLine + "FROM " + converter.ToString(method.Arguments[index(0)]);
-            }
+            }*/
             return Environment.NewLine + text;
         }
 

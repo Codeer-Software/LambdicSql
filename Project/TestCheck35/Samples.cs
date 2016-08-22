@@ -214,14 +214,14 @@ namespace TestCore
         public void TestSelectFrom()
         {
             //make sql.
-            var query = Sql<DB>.Create(db => SelectFrom(db.tbl_staff));
+            var query = Sql<DB>.Create(db => Select(new Asterisk()).From(db.tbl_staff));
 
             //to string and params.
             var info = query.ToSqlInfo(_connection.GetType());
             Debug.Print(info.SqlText);
 
             //dapper
-            var datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();
+            var datas = _connection.Query<Staff>(info.SqlText, info.Params).ToList();
         }
 
         //Group by.
@@ -326,7 +326,7 @@ namespace TestCore
         {
             //make sql.
             var query = Sql<DB>.Create(db =>
-                SelectFrom(db.tbl_staff).
+                Select(new Asterisk()).From(db.tbl_staff).
                 Where(Like(db.tbl_staff.name, "%son%")));
 
             //to string and params.
@@ -334,14 +334,14 @@ namespace TestCore
             Debug.Print(info.SqlText);
 
             //dapper
-            var datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();
+            var datas = _connection.Query<Staff>(info.SqlText, info.Params).ToList();
         }
         
         public void TestIn()
         {
             //make sql.
             var query = Sql<DB>.Create(db =>
-                SelectFrom(db.tbl_staff).
+                Select(new Asterisk()).From(db.tbl_staff).
                 Where(In(db.tbl_staff.id, 1, 3)));
 
             //to string and params.
@@ -349,14 +349,14 @@ namespace TestCore
             Debug.Print(info.SqlText);
 
             //dapper
-            var datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();
+            var datas = _connection.Query<Staff>(info.SqlText, info.Params).ToList();
         }
         
         public void TestBetween()
         {
             //make sql.
             var query = Sql<DB>.Create(db =>
-                SelectFrom(db.tbl_staff).
+                Select(new Asterisk()).From(db.tbl_staff).
                 Where(Between(db.tbl_staff.id, 1, 3)));
 
             //to string and params.
@@ -364,7 +364,7 @@ namespace TestCore
             Debug.Print(info.SqlText);
 
             //dapper
-            var datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();
+            var datas = _connection.Query<Staff>(info.SqlText, info.Params).ToList();
         }
 
         public void TestExists()
@@ -624,14 +624,14 @@ namespace TestCore
                 Condition(minCondition, 3000 < db.tbl_remuneration.money) &&
                 Condition(maxCondition, db.tbl_remuneration.money < 4000));
 
-            var query = Sql<DB>.Create(db => SelectFrom(db.tbl_remuneration).Where(exp));
+            var query = Sql<DB>.Create(db => Select(new Asterisk()).From(db.tbl_remuneration).Where(exp));
 
             //to string and params.
             var info = query.ToSqlInfo(_connection.GetType());
             Debug.Print(info.SqlText);
 
             //dapper
-            var datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();
+            var datas = _connection.Query<Remuneration>(info.SqlText, info.Params).ToList();
         }
 
         public void TestCase1()
@@ -1214,23 +1214,23 @@ FROM tbl_remuneration
 
         public void TestUnion()
         {
-            var query = Sql<DB>.Create(db => SelectFrom(db.tbl_staff).Union().SelectFrom(db.tbl_staff));
-            ExecuteRead(query);
-            query = Sql<DB>.Create(db => SelectFrom(db.tbl_staff).Union(true).SelectFrom(db.tbl_staff));
-            ExecuteRead(query);
+            var query = Sql<DB>.Create(db => Select(new Asterisk()).From(db.tbl_staff).Union().Select(new Asterisk()).From(db.tbl_staff));
+            ExecuteRead<Staff>(query);
+            query = Sql<DB>.Create(db => Select(new Asterisk()).From(db.tbl_staff).Union(true).Select(new Asterisk()).From(db.tbl_staff));
+            ExecuteRead<Staff>(query);
         }
 
         public void TestIntersect()
         {
             var name = _connection.GetType().FullName;
             if (name == "MySql.Data.MySqlClient.MySqlConnection") return;
-            var query = Sql<DB>.Create(db => SelectFrom(db.tbl_staff).Intersect().SelectFrom(db.tbl_staff));
-            ExecuteRead(query);
+            var query = Sql<DB>.Create(db => Select(new Asterisk()).From(db.tbl_staff).Intersect().Select(new Asterisk()).From(db.tbl_staff));
+            ExecuteRead<Staff>(query);
             if (name == "System.Data.SqlClient.SqlConnection") return;
             if (name == "System.Data.SQLite.SQLiteConnection") return;
             if (name == "Oracle.ManagedDataAccess.Client.OracleConnection") return;
-            query = Sql<DB>.Create(db => SelectFrom(db.tbl_staff).Intersect(true).SelectFrom(db.tbl_staff));
-            ExecuteRead(query);
+            query = Sql<DB>.Create(db => Select(new Asterisk()).From(db.tbl_staff).Intersect(true).Select(new Asterisk()).From(db.tbl_staff));
+            ExecuteRead<Staff>(query);
         }
 
         public void TestExcept()
@@ -1238,20 +1238,20 @@ FROM tbl_remuneration
             var name = _connection.GetType().FullName;
             if (name == "MySql.Data.MySqlClient.MySqlConnection") return;
             if (name == "Oracle.ManagedDataAccess.Client.OracleConnection") return;
-            var query = Sql<DB>.Create(db => SelectFrom(db.tbl_staff).Except().SelectFrom(db.tbl_staff));
-            ExecuteRead(query);
+            var query = Sql<DB>.Create(db => Select(new Asterisk()).From(db.tbl_staff).Except().Select(new Asterisk()).From(db.tbl_staff));
+            ExecuteRead<Staff>(query);
             if (name == "System.Data.SqlClient.SqlConnection") return;
             if (name == "System.Data.SQLite.SQLiteConnection") return;
-            query = Sql<DB>.Create(db => SelectFrom(db.tbl_staff).Except(true).SelectFrom(db.tbl_staff));
-            ExecuteRead(query);
+            query = Sql<DB>.Create(db => Select(new Asterisk()).From(db.tbl_staff).Except(true).Select(new Asterisk()).From(db.tbl_staff));
+            ExecuteRead<Staff>(query);
         }
 
         public void TestMinus()
         {
             var name = _connection.GetType().FullName;
             if (name != "Oracle.ManagedDataAccess.Client.OracleConnection") return;
-            var query = Sql<DB>.Create(db => SelectFrom(db.tbl_staff).Minus().SelectFrom(db.tbl_staff));
-            ExecuteRead(query);
+            var query = Sql<DB>.Create(db => Select(new Asterisk()).From(db.tbl_staff).Minus().Select(new Asterisk()).From(db.tbl_staff));
+            ExecuteRead<Staff>(query);
         }
 
         public void TestGroupByEx()
@@ -1284,6 +1284,12 @@ FROM tbl_remuneration
         }
 
         public IEnumerable<T> ExecuteRead<T>(ISqlExpression<IQuery<T>> exp)
+        {
+            var info = exp.ToSqlInfo(_connection.GetType());
+            Debug.Print(info.SqlText);
+            return _connection.Query<T>(info.SqlText, info.Params).ToList();
+        }
+        public IEnumerable<T> ExecuteRead<T>(ISqlExpression exp)
         {
             var info = exp.ToSqlInfo(_connection.GetType());
             Debug.Print(info.SqlText);

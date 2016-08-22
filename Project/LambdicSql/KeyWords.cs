@@ -48,15 +48,21 @@ namespace LambdicSql
     [SqlSyntax]
     public static class Keywords
     {
-        public static IQuery<TSelected> Select<TSelected>(AggregatePredicate predicate, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
         public static IQuery<TSelected> Select<TSelected>(TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
-        public static IQuery<TSelected> SelectFrom<TSelected>(TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(SelectFrom));
-        public static IQuery<TSelected> Select<TSelected>(this IQuery<Non> words, AggregatePredicate predicate, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
         public static IQuery<TSelected> Select<TSelected>(this IQuery<Non> words, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
-        public static IQuery<TSelected> SelectFrom<TSelected>(this IQuery<Non> words, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(SelectFrom));
-        public static IQuery<TSelected> Select<TSelected>(this IQuery<TSelected> words, AggregatePredicate predicate, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
         public static IQuery<TSelected> Select<TSelected>(this IQuery<TSelected> words, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
-        public static IQuery<TSelected> SelectFrom<TSelected>(this IQuery<TSelected> words, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(SelectFrom));
+
+        public static IQuery<TSelected> Select<TSelected>(AggregatePredicate predicate, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
+        public static IQuery<TSelected> Select<TSelected>(this IQuery<Non> words, AggregatePredicate predicate, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
+        public static IQuery<TSelected> Select<TSelected>(this IQuery<TSelected> words, AggregatePredicate predicate, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
+
+        public static IQuery<Non> Select(Asterisk asterisk) => InvalitContext.Throw<IQuery<Non>>(nameof(Select));
+        public static IQuery<Non> Select(this IQuery<Non> words, Asterisk asterisk) => InvalitContext.Throw<IQuery<Non>>(nameof(Select));
+        public static IQuery<TSelected> Select<TSelected>(this IQuery<TSelected> words, Asterisk asterisk) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
+
+        public static IQuery<Non> Select(AggregatePredicate predicate, Asterisk asterisk) => InvalitContext.Throw<IQuery<Non>>(nameof(Select));
+        public static IQuery<Non> Select(this IQuery<Non> words, AggregatePredicate predicate, Asterisk asterisk) => InvalitContext.Throw<IQuery<Non>>(nameof(Select));
+        public static IQuery<TSelected> Select<TSelected>(this IQuery<TSelected> words, AggregatePredicate predicate, Asterisk asterisk) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
 
         public interface ICaseAfter : IQueryGroup { }
         public interface IWhenAfter : IQueryGroup { }
@@ -148,7 +154,6 @@ namespace LambdicSql
             switch (method.Method.Name)
             {
                 case nameof(Select):
-                case nameof(SelectFrom):
                     return SelectClause.ToString(converter, methods);
                 case nameof(Case):
                     return CaseClause.ToString(converter, methods);
