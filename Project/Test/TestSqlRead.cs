@@ -709,6 +709,7 @@ FROM tbl_remuneration
             var m = new ModelLambdicSqlTestDB();
             var datas = m.tbl_staff.ToList();
         }
+
         [TestMethod]
         public void TestEFAndLambdic()
         {
@@ -818,6 +819,14 @@ FROM tbl_remuneration
             var info = query.ToSqlInfo(typeof(SqlConnection));
             Debug.Print(info.SqlText);
             return info;
+        }
+
+        [TestMethod]
+        public void TestColumnOnly()
+        {
+            var query = Sql<Data>.Create(db => ColumnOnly(db.tbl_remuneration.id));
+            var info = query.ToSqlInfo(typeof(SqlConnection));
+            Debug.Print(info.SqlText);
         }
     }
     

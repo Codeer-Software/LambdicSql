@@ -38,7 +38,7 @@ namespace LambdicSql.Inside
             return db;
         }
 
-        static IEnumerable<ColumnInfo> FindColumns(Type type, IEnumerable<string> lambdicNames, IEnumerable<string> sqlNames)
+        static IEnumerable<ColumnInfo> FindColumns(Type type, IEnumerable<string> lambdicNames, string[] sqlNames)
         {
             //for entity framework.
             if (type.IsGenericType) type = type.GetGenericArguments()[0];
@@ -47,7 +47,7 @@ namespace LambdicSql.Inside
             {
                 var lambdicName = string.Join(".", lambdicNames.ToArray());
                 var sqlName = string.Join(".", sqlNames.ToArray());
-                return new[] { new ColumnInfo(type, lambdicName, sqlName) };
+                return new[] { new ColumnInfo(type, lambdicName, sqlName, sqlNames[sqlNames.Length - 1]) };
             }
             else if (type.IsClass)
             {
