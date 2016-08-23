@@ -6,6 +6,8 @@ using System;
 
 namespace LambdicSql
 {
+    //TODO ColumnNameOnly
+
     [SqlSyntax]
     public static class Utils
     {
