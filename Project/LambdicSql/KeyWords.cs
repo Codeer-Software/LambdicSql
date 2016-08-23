@@ -18,27 +18,7 @@ namespace LambdicSql
             return args[0] + " = " + args[1];
         }
     }
-
-    //TODO ★
-    [SqlSyntax]
-    public class AssignWithType : Assign
-    {
-        protected AssignWithType() { }
-        public AssignWithType(object target, object value) { InvalitContext.Throw("new " + nameof(Assign)); }
-        public new static string ToString(ISqlStringConverter converter, NewExpression exp)
-        {
-            var col = converter.ToString(exp.Arguments[0]);
-            var val = converter.ToString(exp.Arguments[1]);
-
-            var param = converter.Context.DbInfo.GetDbParamByLambdaName(col);
-            if (param != null)
-            {
-                converter.Context.Parameters.SetDbParam(val, param);
-            }
-            return col + " = " + val;
-        }
-    }
-
+    
     [SqlSyntax]
     public class Asterisk
     {
@@ -112,29 +92,8 @@ namespace LambdicSql
              => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
         public static IQuery<TSelected> Values<TSelected, TTable>(this IInsertIntoAfter<TSelected, TTable> words, TTable value)
              => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
-
-        //Createもでもいいような気がするなー。
-        //いやそもそもCreateは対応せんでいいだろ？
-        //しょうもない対応するか？
-        //→いや、もうやらない。
-        //1.0ではやらない！
-        //なぜなら！
-        //2WaySqlとかTextとかあるから
-
-        //TODO ★そもそも、今のでは、タイプを正しくは解釈しきれない。DBによって差分あるし。
-        //→まあええか。これを強化していこう。
-        //！！！
-        //いやいやいや、やめや。そして、Tに合わなくてもいいってルールでどう？
-        //→げろ・・・、それはparam object[]と喧嘩する。
-        //IParamInfoを継承するってルールでどうや。
-
-        //★DbStringParam
-        //★DbTimeParam
-        //★自動生成だからなくてもいいといえばいい。
-
-        //ラッパーは自動生成させる!
-        public static IQuery<TSelected> ValuesWithTypes<TSelected, TTable>(this IInsertIntoAfter<TSelected, TTable> words, TTable value)
-            => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
+        public static IQuery<TSelected> Values<TSelected, TTable>(this IInsertIntoAfter<TSelected, TTable> words, IParamInfo value)
+             => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
 
         public interface IOrderByAfter<T> : IQueryGroup<T> { }
         public static IOrderByAfter<Non> OrderBy(params IOrderElement[] elements) => InvalitContext.Throw<IOrderByAfter<Non>>(nameof(OrderBy));
@@ -142,8 +101,6 @@ namespace LambdicSql
 
         public interface IUpdateAfter<TSelected, T> : IQueryGroup<TSelected> { }
         public static IUpdateAfter<Non, T> Update<T>(T table) => InvalitContext.Throw<IUpdateAfter<Non, T>>(nameof(Update));
-
-        //★
         public static IQuery<TSelected> Set<TSelected, T>(this IUpdateAfter<TSelected, T> words, params Assign[] assigns) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Set));
 
         public static IQuery<Non> Where(bool condition) => InvalitContext.Throw<IQuery<Non>>(nameof(Where));

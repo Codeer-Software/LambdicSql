@@ -28,29 +28,5 @@ namespace LambdicSql.Inside
                 return func(obj);
             }
         }
-
-        internal static DbParam GetPropertyParamType(this Type type, string name)
-        {
-            string cacheName = type.FullName + "." + name;
-            lock (_paramTypes)
-            {
-                DbParam param = null;
-                if (_paramTypes.TryGetValue(cacheName, out param)) return param?.Clone();
-
-                //カラムタイプを取得する
-                var attrs = type.GetProperty(name).GetCustomAttributes(true);
-                var columnAttr = attrs.Where(e => e.GetType().FullName == "System.ComponentModel.DataAnnotations.Schema.ColumnAttribute").FirstOrDefault();
-                if (columnAttr != null)
-                {
-                    var typeName = columnAttr.GetType().GetProperty("TypeName").GetValue(columnAttr, new object[0]);
-                    if (typeName != null)
-                    {
-                        param = DbParam.Parse(typeName.ToString());
-                    }
-                }
-                _paramTypes.Add(cacheName, param);
-                return param?.Clone();
-            }
-        }
     }
 }

@@ -23,7 +23,7 @@ namespace LambdicSql.Inside
             }
 
             db = new DbInfo();
-            foreach (var column in FindColumns(typeof(T), null, new string[0], new string[0]))
+            foreach (var column in FindColumns(typeof(T), new string[0], new string[0]))
             {
                 db.Add(column);
             }
@@ -38,7 +38,7 @@ namespace LambdicSql.Inside
             return db;
         }
 
-        static IEnumerable<ColumnInfo> FindColumns(Type type, DbParam param, IEnumerable<string> lambdicNames, IEnumerable<string> sqlNames)
+        static IEnumerable<ColumnInfo> FindColumns(Type type, IEnumerable<string> lambdicNames, IEnumerable<string> sqlNames)
         {
             //for entity framework.
             if (type.IsGenericType) type = type.GetGenericArguments()[0];
@@ -47,7 +47,7 @@ namespace LambdicSql.Inside
             {
                 var lambdicName = string.Join(".", lambdicNames.ToArray());
                 var sqlName = string.Join(".", sqlNames.ToArray());
-                return new[] { new ColumnInfo(type, lambdicName, sqlName, param) };
+                return new[] { new ColumnInfo(type, lambdicName, sqlName) };
             }
             else if (type.IsClass)
             {
@@ -57,7 +57,7 @@ namespace LambdicSql.Inside
                     //for entity framework.
                     if (p.DeclaringType.FullName == "System.Data.Entity.DbContext") continue;
 
-                    list.AddRange(FindColumns(p.PropertyType, type.GetPropertyParamType(p.Name),
+                    list.AddRange(FindColumns(p.PropertyType,
                         lambdicNames.Concat(new[] { p.Name }).ToArray(),
                         sqlNames.Concat(new[] { GetSqlName(p) }).ToArray()));
                 }

@@ -23,7 +23,5 @@ namespace LambdicSql.SqlBase
                 _lambdaNameAndTable.Add(tableLambda, new TableInfo(tableLambda, tableSql));
             }
         }
-
-        internal DbParam GetDbParamByLambdaName(string lambdaName) => _lambdaNameAndColumn[lambdaName].GetDbParamClone();
     }
 }

@@ -39,26 +39,6 @@ namespace Test
             public int member2_id { get; set; }
             public int member3_id { get; set; }
         }
-        public class Types
-        {
-            [Column(TypeName = "ntext")]
-            public string ntext { get; set; }
-            [Column(TypeName = "text")]
-            public string text { get; set; }
-            [Column(TypeName = "nchar(10)")]
-            public string nchar { get; set; }
-            [Column(TypeName = "char(10)")]
-            public string @char { get; set; }
-            [Column(TypeName = "varchar(50)")]
-            public string varchar { get; set; }
-            [Column(TypeName = "nvarchar(50)")]
-            public string nvarchar { get; set; }
-            public int id { get; set; }
-            [Column(TypeName = "datetime")]
-            public DateTime datetime { get; set; }
-            [Column(TypeName = "datetime2(7)")]
-            public DateTime datetime2 { get; set; }
-        }
 
         public class Data
         {
@@ -284,6 +264,38 @@ namespace Test
             query.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Write();
         }
 
+        public class Types
+        {
+            public string ntext { get; set; }
+            public string text { get; set; }
+            public string nchar { get; set; }
+            public string @char { get; set; }
+            public string varchar { get; set; }
+            public string nvarchar { get; set; }
+            public int id { get; set; }
+            public DateTime datetime { get; set; }
+            public DateTime datetime2 { get; set; }
+        }
+
+        public class TypesParamInfo : IParamInfo
+        {
+            Types _core;
+            public string ntext => _core.ntext;
+            public string text => _core.text;
+            public DbParam nchar => new DbParam() { Value = _core.nchar, DbType = DbType.StringFixedLength, Size = 50 };
+            public DbParam @char => new DbParam() { Value = _core.@char, DbType = DbType.AnsiStringFixedLength, Size = 50 };
+            public DbParam varchar => new DbParam() { Value = _core.varchar, DbType = DbType.AnsiString, Size = 50 };
+            public DbParam nvarchar => new DbParam() { Value = _core.nvarchar, DbType = DbType.String, Size = 50 };
+            public int id { get; set; }
+            public DbParam datetime => new DbParam() { Value = _core.datetime, DbType = DbType.DateTime };
+            public DbParam datetime2 => new DbParam() { Value = _core.datetime2, DbType = DbType.DateTime2, Size = 7 };
+
+            public TypesParamInfo(Types core)
+            {
+                _core = core;
+            }
+        }
+
         [TestMethod]
         public void InsertEx3()
         {
@@ -305,7 +317,7 @@ namespace Test
             DeleteX();
 
             var query = Sql<DataChangeTest>.Create(db =>
-                InsertIntoExcepting(db.tbl_types).ValuesWithTypes(data));
+                InsertIntoExcepting(db.tbl_types).Values(new TypesParamInfo(data)));
             var info = query.ToSqlInfo(typeof(SqlConnection));
             var detail = info.DbParams;
             query.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Write();
@@ -332,7 +344,7 @@ namespace Test
             DeleteX();
 
             var query = Sql<DataChangeTest>.Create(db =>
-                InsertIntoExcepting(db.tbl_types, db.tbl_types.id).ValuesWithTypes(data));
+                InsertIntoExcepting(db.tbl_types, db.tbl_types.id).Values(data));
             var info = query.ToSqlInfo(typeof(SqlConnection));
             var detail = info.DbParams;
             Debug.Print(info.SqlText);
@@ -369,7 +381,7 @@ namespace Test
 
             InsertEx3();
             var count3 = Sql<DataChangeTest>.Create(db =>
-                Update(db.tbl_types).Set(new AssignWithType(db.tbl_types.nvarchar, "nvarchar")).
+                Update(db.tbl_types).Set(new Assign(db.tbl_types.nvarchar, new DbParam() { Value = "nvarchar", DbType = DbType.String })).
                 Where(db.tbl_types.id == 1)).
                 ToExecutor(_connection).Write();
         }
