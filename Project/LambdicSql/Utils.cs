@@ -12,6 +12,11 @@ namespace LambdicSql
         public static T Cast<T>(this ISqlExpression query) => InvalitContext.Throw<T>(nameof(Cast));
         public static T Cast<T>(this ISqlExpression<T> query) => InvalitContext.Throw<T>(nameof(Cast));
         public static TTable Cast<TTable>(this ISqlExpression<IQuery<TTable>> query) => InvalitContext.Throw<TTable>(nameof(Cast));
+
+        //TODO これもいいかもしれないね。
+        public static TTable T<TTable>(this ISqlExpression<IQuery<TTable>> query) => InvalitContext.Throw<TTable>(nameof(Cast));
+
+        //<TSelected> 
         public static T Cast<T>(this IMethodChain words) => InvalitContext.Throw<T>(nameof(Cast));
         public static bool Condition(bool enable, bool condition) => InvalitContext.Throw<bool>(nameof(Condition));
         public static object Text(string text, params object[] args) => InvalitContext.Throw<object>(nameof(Text));

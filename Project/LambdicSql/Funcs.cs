@@ -12,6 +12,7 @@ namespace LambdicSql
         public static T Sum<T>(T item) => InvalitContext.Throw<T>(nameof(Sum));
         public static T Sum<T>(AggregatePredicate aggregatePredicate, T item) => InvalitContext.Throw<T>(nameof(Sum));
         public static T Count<T>(T item) => InvalitContext.Throw<T>(nameof(Count));
+        public static T Count<T>(Asterisk ast) => InvalitContext.Throw<T>(nameof(Count));
         public static T Count<T>(AggregatePredicate aggregatePredicate, T item) => InvalitContext.Throw<T>(nameof(Count));
         public static T Avg<T>(T item) => InvalitContext.Throw<T>(nameof(Avg));
         public static T Min<T>(T item) => InvalitContext.Throw<T>(nameof(Min));
@@ -20,7 +21,6 @@ namespace LambdicSql
         public static T Abs<T>(T src) => InvalitContext.Throw<T>(nameof(Abs));
         public static T Mod<T>(T target, int div) => InvalitContext.Throw<T>(nameof(Mod));
         public static T Round<T>(T src, int digit) => InvalitContext.Throw<T>(nameof(Round));
-
 
         public static string Concat(params string[] values) => InvalitContext.Throw<string>(nameof(Concat));
         public static int Length(string target) => InvalitContext.Throw<int>(nameof(Length));
@@ -42,7 +42,10 @@ namespace LambdicSql
 
         //TODO 文字列はイマイチなんだが。でもデータタイプは色々なんだよね。
         public static TDst Cast<TSrc, TDst>(TSrc src, string dataType) => InvalitContext.Throw<TDst>(nameof(Cast));
+
         public static T Coalesce<T>(params T[] args) => InvalitContext.Throw<T>(nameof(Coalesce));
+        public static T IsNull<T>(T t1, T t2) => InvalitContext.Throw<T>(nameof(IsNull));
+        public static T NVL<T>(T t1, T t2) => InvalitContext.Throw<T>(nameof(NVL));
 
         static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {

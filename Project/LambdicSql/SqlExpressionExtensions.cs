@@ -17,7 +17,10 @@ namespace LambdicSql
             => ToSqlInfo(exp, new SqlConvertOption(), null);
 
         public static SqlInfo ToSqlInfo(this ISqlExpression exp, Type connectionType)
-            => ToSqlInfo(exp, DialectResolver.CreateCustomizer(connectionType.FullName), null);
+            => ToSqlInfo(exp, DialectResolver.CreateCustomizer(connectionType.FullName));
+
+        public static SqlInfo ToSqlInfo(this ISqlExpression exp, SqlConvertOption option)
+            => ToSqlInfo(exp, option, null);
 
         public static SqlInfo ToSqlInfo(this ISqlExpression exp, SqlConvertOption option, ISqlSyntaxCustomizer customizer)
         {
@@ -31,5 +34,25 @@ namespace LambdicSql
 
             return new SqlInfo(exp.DbInfo, text, context.SelectClauseInfo, context.Parameters);
         }
+    }
+
+    public static class SetOperationExtensions
+    {
+        public class Dummy { }
+
+        public static SqlExpression<TResult> Union<TResult>(this ISqlExpression<TResult> lhs, ISqlExpression rhs) 
+            => lhs.Concat(Sql<Dummy>.Create(db => Keywords.Union())).Concat(rhs);
+        public static SqlExpression<TResult> Union<TResult>(this ISqlExpression<TResult> lhs, bool isAll, ISqlExpression rhs)
+            => lhs.Concat(Sql<Dummy>.Create(db => Keywords.Union(isAll))).Concat(rhs);
+        public static SqlExpression<TResult> Intersect<TResult>(this ISqlExpression<TResult> lhs, ISqlExpression rhs)
+            => lhs.Concat(Sql<Dummy>.Create(db => Keywords.Intersect())).Concat(rhs);
+        public static SqlExpression<TResult> Intersect<TResult>(this ISqlExpression<TResult> lhs, bool isAll, ISqlExpression rhs)
+            => lhs.Concat(Sql<Dummy>.Create(db => Keywords.Intersect(isAll))).Concat(rhs);
+        public static SqlExpression<TResult> Except<TResult>(this ISqlExpression<TResult> lhs, ISqlExpression rhs)
+            => lhs.Concat(Sql<Dummy>.Create(db => Keywords.Except())).Concat(rhs);
+        public static SqlExpression<TResult> Except<TResult>(this ISqlExpression<TResult> lhs, bool isAll, ISqlExpression rhs)
+            => lhs.Concat(Sql<Dummy>.Create(db => Keywords.Except(isAll))).Concat(rhs);
+        public static SqlExpression<TResult> Minus<TResult>(this ISqlExpression<TResult> lhs, ISqlExpression rhs)
+            => lhs.Concat(Sql<Dummy>.Create(db => Keywords.Minus())).Concat(rhs);
     }
 }

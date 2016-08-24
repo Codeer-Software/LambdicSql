@@ -794,7 +794,8 @@ FROM tbl_remuneration
             var query = Sql<Data>.Create(db =>
                 Select(new
                 {
-                    name = db.tbl_staff.name + new DbParam<string>() { Value = "xxx" },
+                    name = db.tbl_staff.name 
+                        + new DbParam<string>() { Value = "xxx", DbType = DbType.AnsiStringFixedLength, Size = 10  },
                 }).
                 From(db.tbl_staff));
 
@@ -826,6 +827,23 @@ FROM tbl_remuneration
         {
             var query = Sql<Data>.Create(db => ColumnOnly(db.tbl_remuneration.id));
             var info = query.ToSqlInfo(typeof(SqlConnection));
+            Debug.Print(info.SqlText);
+        }
+
+        [TestMethod]
+        public void TestQ()
+        {
+            var query = Sql<Data>.Create(db =>
+                Select(new
+                {
+                    Name = db.tbl_staff.name + "★",
+                    Money = db.tbl_remuneration.money,
+                }).
+                From(db.tbl_remuneration).
+                    Join(db.tbl_staff, db.tbl_staff.id == db.tbl_remuneration.staff_id).
+                Where(1000000 < db.tbl_remuneration.money));
+
+            var info = query.ToSqlInfo(new SqlConvertOption() { ParameterPrefix = ":", StringAddOperator = "||" });
             Debug.Print(info.SqlText);
         }
     }

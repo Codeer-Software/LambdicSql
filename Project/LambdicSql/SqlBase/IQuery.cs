@@ -1,5 +1,5 @@
 ﻿namespace LambdicSql.SqlBase
 {
     public interface IQuery : IMethodChain { }
-    public interface IQuery<TSelected> : IQuery, IMethodChain<TSelected> { }
+    public interface IQuery<out TSelected> : IQuery, IMethodChain<TSelected> { }
 }

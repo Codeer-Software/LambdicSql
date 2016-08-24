@@ -23,6 +23,10 @@ namespace LambdicSql
     public class Asterisk
     {
         public Asterisk() { InvalitContext.Throw("new " + nameof(Asterisk)); }
+        public static string ToString(ISqlStringConverter converter, NewExpression exp)
+        {
+            return "*";
+        }
     }
 
     //Set operation
@@ -62,7 +66,8 @@ namespace LambdicSql
 
         public static IQuery<Non> Delete() => InvalitContext.Throw<IQuery<Non>>(nameof(Delete));
 
-        public interface IFromAfter<T> : IQueryGroup<T> { }
+        public interface IFromAfter<out T> : IQueryGroup<T> { }
+        public static TTable Cast<TTable>(this ISqlExpression<IFromAfter<TTable>> query) => InvalitContext.Throw<TTable>(nameof(Cast));
         public static IFromAfter<TSelected> From<TSelected>(this IQuery<TSelected> words, params object[] tbale) => InvalitContext.Throw<IFromAfter<TSelected>>(nameof(From));
         public static IFromAfter<Non> From(params object[] tbale) => InvalitContext.Throw<IFromAfter<Non>>(nameof(From));
         public static IFromAfter<TSelected> Join<TSelected, T>(this IFromAfter<TSelected> words, T tbale, bool condition) => InvalitContext.Throw<IFromAfter<TSelected>>(nameof(Join));
@@ -96,6 +101,7 @@ namespace LambdicSql
              => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
 
         public interface IOrderByAfter<T> : IQueryGroup<T> { }
+        public static TTable Cast<TTable>(this ISqlExpression<IOrderByAfter<TTable>> query) => InvalitContext.Throw<TTable>(nameof(Cast));
         public static IOrderByAfter<Non> OrderBy(params IOrderElement[] elements) => InvalitContext.Throw<IOrderByAfter<Non>>(nameof(OrderBy));
         public static IOrderByAfter<TSelected> OrderBy<TSelected>(this IQuery<TSelected> words, params IOrderElement[] elements) => InvalitContext.Throw<IOrderByAfter<TSelected>>(nameof(OrderBy));
 
@@ -169,6 +175,7 @@ namespace LambdicSql
                 case nameof(Except):
                 case nameof(Minus):
                     return SetOperation.ToString(converter, methods);
+                case nameof(Cast): return string.Empty;
             }
             throw new NotSupportedException();
         }
