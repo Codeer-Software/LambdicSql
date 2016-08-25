@@ -1,9 +1,8 @@
-﻿using Dapper;
-using LambdicSql;
+﻿using LambdicSql;
 using LambdicSql.SqlBase;
+using LambdicSql.feat.Dapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
@@ -96,10 +95,10 @@ namespace Test
                 From(db.tbl_data)).
                 ToExecutor(_connection).Write();
 
-            count = Sql<DataChangeTest>.Create(db =>
+            var query = Sql<DataChangeTest>.Create(db =>
                 Delete().
-                From(db.tbl_types)).
-                ToExecutor(_connection).Write();
+                From(db.tbl_types));
+            _connection.Execute(query);
         }
 
         [TestMethod]
@@ -527,8 +526,7 @@ FROM tbl_remuneration
                 ));
 
             var cnn = new SqlConnection(TestEnvironment.SqlServerConnectionString);
-            var info = query.ToSqlInfo(cnn.GetType());
-            var datas = cnn.Query<SelectedData>(info.SqlText, info.Params).ToList();
+            var datas = cnn.Query<SelectedData>(query).ToList();
         }
 
         public class SelectedData
@@ -845,28 +843,6 @@ FROM tbl_remuneration
 
             var info = query.ToSqlInfo(new SqlConvertOption() { ParameterPrefix = ":", StringAddOperator = "||" });
             Debug.Print(info.SqlText);
-        }
-    }
-    
-    public static class DapperApaptExtensions
-    {
-        public static IEnumerable<T> Query<T>(this IDbConnection cnn, ISqlExpression<IQuery<T>> exp)
-            where T : class
-            => Query<T>(cnn, (ISqlExpression)exp);
-
-        public static IEnumerable<T> Query<T>(this IDbConnection cnn, ISqlExpression exp)
-        {
-            var info = exp.ToSqlInfo(cnn.GetType());
-            var ps = new DynamicParameters();
-            info.Params.ToList().ForEach(e => ps.Add(e.Key, e.Value));
-            return cnn.Query<T>(info.SqlText, ps);
-        }
-        static IDbDataParameter CreateParameter(IDbCommand com, string name, object obj)
-        {
-            var param = com.CreateParameter();
-            param.ParameterName = name;
-            param.Value = obj;
-            return param;
         }
     }
 }

@@ -4,8 +4,8 @@ using System.Diagnostics;
 using System.Linq;
 
 //important
-using Dapper;
 using LambdicSql;
+using LambdicSql.feat.Dapper;
 using static LambdicSql.Keywords;
 using static LambdicSql.Funcs;
 using static LambdicSql.Utils;
@@ -183,7 +183,7 @@ namespace TestCore
             Debug.Print(info.SqlText);
 
             //dapper
-            var datas = _connection.Query<SelectDataX>(info.SqlText, info.Params).ToList();
+            var datas = _connection.Query(query).ToList();
         }
 
         public void TestStandard()
@@ -207,7 +207,7 @@ namespace TestCore
             Debug.Print(info.SqlText);
 
             //dapper
-            var datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();
+            var datas = _connection.Query(query).ToList();
         }
 
         //Select one table.
@@ -221,7 +221,7 @@ namespace TestCore
             Debug.Print(info.SqlText);
 
             //dapper
-            var datas = _connection.Query<Staff>(info.SqlText, info.Params).ToList();
+            var datas = _connection.Query(query).ToList();
         }
 
         //Group by.
@@ -247,7 +247,7 @@ namespace TestCore
             Debug.Print(info.SqlText);
 
             //dapper
-            var datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();
+            var datas = _connection.Query(query).ToList();
         }
 
         //Group by using Distinct.
@@ -271,7 +271,7 @@ namespace TestCore
             Debug.Print(info.SqlText);
 
             //dapper
-            var datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();
+            var datas = _connection.Query(query).ToList();
         }
 
         //Group by using All.
@@ -294,7 +294,7 @@ namespace TestCore
             Debug.Print(info.SqlText);
 
             //dapper
-            var datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();
+            var datas = _connection.Query(query).ToList();
         }
 
         //Having
@@ -318,7 +318,7 @@ namespace TestCore
             Debug.Print(info.SqlText);
 
             //dapper
-            var datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();
+            var datas = _connection.Query(query).ToList();
         }
 
         //Like, In, Between, Exsists
@@ -334,7 +334,7 @@ namespace TestCore
             Debug.Print(info.SqlText);
 
             //dapper
-            var datas = _connection.Query<Staff>(info.SqlText, info.Params).ToList();
+            var datas = _connection.Query(query).ToList();
         }
         
         public void TestIn()
@@ -349,7 +349,7 @@ namespace TestCore
             Debug.Print(info.SqlText);
 
             //dapper
-            var datas = _connection.Query<Staff>(info.SqlText, info.Params).ToList();
+            var datas = _connection.Query(query).ToList();
         }
         
         public void TestBetween()
@@ -364,7 +364,7 @@ namespace TestCore
             Debug.Print(info.SqlText);
 
             //dapper
-            var datas = _connection.Query<Staff>(info.SqlText, info.Params).ToList();
+            var datas = _connection.Query(query).ToList();
         }
 
         public void TestExists()
@@ -384,7 +384,7 @@ namespace TestCore
             Debug.Print(info.SqlText);
 
             //dapper
-            var datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();
+            var datas = _connection.Query(query).ToList();
         }
 
 
@@ -405,7 +405,7 @@ namespace TestCore
             Debug.Print(info.SqlText);
 
             //dapper
-            var datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();
+            var datas = _connection.Query(query).ToList();
         }
         //```
 
@@ -426,7 +426,7 @@ namespace TestCore
             Debug.Print(info.SqlText);
 
             //dapper
-            var datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();
+            var datas = _connection.Query(query).ToList();
         }
         //```
 
@@ -444,7 +444,7 @@ namespace TestCore
             Debug.Print(info.SqlText);
 
             //dapper
-            var count = _connection.Execute(info.SqlText, info.Params);
+            var count = _connection.Execute(query);
         }
         //```
 
@@ -463,7 +463,7 @@ namespace TestCore
             Debug.Print(info.SqlText);
 
             //dapper
-            var count = _connection.Execute(info.SqlText, info.Params);
+            var count = _connection.Execute(query);
         }
         //```
 
@@ -482,7 +482,7 @@ namespace TestCore
             Debug.Print(info.SqlText);
 
             //dapper
-            var count = _connection.Execute(info.SqlText, info.Params);
+            var count = _connection.Execute(query);
         }
 
         //Update
@@ -499,7 +499,7 @@ namespace TestCore
             Debug.Print(info.SqlText);
 
             //dapper
-            var count = _connection.Execute(info.SqlText, info.Params);
+            var count = _connection.Execute(query);
         }
         //```
 
@@ -517,7 +517,7 @@ namespace TestCore
             Debug.Print(info.SqlText);
 
             //dapper
-            var count = _connection.Execute(info.SqlText, info.Params);
+            var count = _connection.Execute(query);
         }
         //```
 
@@ -542,7 +542,7 @@ namespace TestCore
             Debug.Print(info.SqlText);
 
             //dapper
-            var datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();
+            var datas = _connection.Query(query).ToList();
         }
         
         public void TestIsNotNull()
@@ -566,7 +566,7 @@ namespace TestCore
             Debug.Print(info.SqlText);
 
             //dapper
-            var datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();
+            var datas = _connection.Query(query).ToList();
         }
 
         public void TestNullable()
@@ -588,7 +588,7 @@ namespace TestCore
             Debug.Print(info.SqlText);
 
             //dapper
-            var datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();
+            var datas = _connection.Query(query).ToList();
         }
         
         public void TestStringCalc()
@@ -606,7 +606,7 @@ namespace TestCore
             Debug.Print(info.SqlText);
 
             //dapper
-            var datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();
+            var datas = _connection.Query(query).ToList();
         }
         
         public void TestWhereEx()
@@ -631,7 +631,7 @@ namespace TestCore
             Debug.Print(info.SqlText);
 
             //dapper
-            var datas = _connection.Query<Remuneration>(info.SqlText, info.Params).ToList();
+            var datas = _connection.Query(query).ToList();
         }
 
         public void TestCase1()
@@ -653,7 +653,7 @@ namespace TestCore
             Debug.Print(info.SqlText);
 
             //dapper
-            var datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();
+            var datas = _connection.Query(query).ToList();
         }
         
         public void TestCase2()
@@ -675,7 +675,7 @@ namespace TestCore
             Debug.Print(info.SqlText);
 
             //dapper
-            var datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();
+            var datas = _connection.Query(query).ToList();
         }
 
         //window functions.
@@ -704,7 +704,7 @@ namespace TestCore
             Debug.Print(info.SqlText);
 
             //dapper
-            var datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();
+            var datas = _connection.Query(query).ToList();
         }
 
         //Building Query
@@ -737,7 +737,7 @@ namespace TestCore
             Debug.Print(info.SqlText);
 
             //dapper
-            var datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();
+            var datas = _connection.Query(query).ToList();
         }
 
         public void TestSqlExpression()
@@ -764,7 +764,7 @@ namespace TestCore
             Debug.Print(info.SqlText);
 
             //dapper
-            var datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();
+            var datas = _connection.Query(query).ToList();
         }
 
         //You can use sub query.
@@ -785,7 +785,7 @@ namespace TestCore
             Debug.Print(info.SqlText);
 
             //dapper
-            var datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();
+            var datas = _connection.Query(query).ToList();
         }
 
         public void TestSubQuerySelect()
@@ -808,7 +808,7 @@ namespace TestCore
             Debug.Print(info.SqlText);
 
             //dapper
-            var datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();
+            var datas = _connection.Query(query).ToList();
         }
 
         public void TestSubQueryAtFrom()
@@ -837,7 +837,7 @@ namespace TestCore
             Debug.Print(info.SqlText);
 
             //dapper
-            var datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();
+            var datas = _connection.Query(query).ToList();
         }
 
         //You can use text.
@@ -860,7 +860,7 @@ namespace TestCore
             Debug.Print(info.SqlText);
 
             //dapper
-            var datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();
+            var datas = _connection.Query<SelectData1>(query).ToList();
         }
 
         //2 way sql
@@ -894,7 +894,7 @@ FROM tbl_remuneration
             Debug.Print(info.SqlText);
 
             //dapper
-            var datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();
+            var datas = _connection.Query(query).ToList();
 
 
             //pattern2 building.
@@ -907,7 +907,7 @@ FROM tbl_remuneration
             Debug.Print(info.SqlText);
 
             //dapper
-            datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();
+            datas = _connection.Query(query2).ToList();
         }
 
         public void CheckOperatior()
@@ -929,7 +929,7 @@ FROM tbl_remuneration
             Debug.Print(info.SqlText);
 
             //dapper
-            var datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();
+            var datas = _connection.Query(query).ToList();
         }
 
         public void FromMany()
@@ -948,7 +948,7 @@ FROM tbl_remuneration
             Debug.Print(info.SqlText);
 
             //dapper
-            var datas = _connection.Query<SelectData1>(info.SqlText, info.Params).ToList();
+            var datas = _connection.Query(query).ToList();
         }
 
         public void Funcs()
@@ -1288,13 +1288,13 @@ FROM tbl_remuneration
         {
             var info = exp.ToSqlInfo(_connection.GetType());
             Debug.Print(info.SqlText);
-            return _connection.Query<T>(info.SqlText, info.Params).ToList();
+            return _connection.Query(exp).ToList();
         }
         public IEnumerable<T> ExecuteRead<T>(ISqlExpression exp)
         {
             var info = exp.ToSqlInfo(_connection.GetType());
             Debug.Print(info.SqlText);
-            return _connection.Query<T>(info.SqlText, info.Params).ToList();
+            return _connection.Query<T>(exp).ToList();
         }
     }
 }
