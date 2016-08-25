@@ -39,12 +39,14 @@
     <Compile Include="DateTiemElement.cs" />
     <Compile Include="feat\Dapper\DapperApaptExtensions.cs" />
     <Compile Include="feat\Dapper\DapperWrapper.cs" />
+    <Compile Include="feat\EntityFramework\EFApaptExtensions.cs" />
+    <Compile Include="feat\EntityFramework\EFSql.cs" />
+    <Compile Include="feat\EntityFramework\EFWrapper.cs" />
     <Compile Include="feat\PackageIsNotInstalledException.cs" />
     <Compile Include="Inside\InvalitContext.cs" />
     <Compile Include="Inside\DecodingParameterInfo.cs" />
     <Compile Include="Inside\Keywords\SetOperation.cs" />
     <Compile Include="Inside\RefrectionUtility.cs" />
-    <Compile Include="Inside\SqlExpressionFormatText.cs" />
     <Compile Include="Inside\TowWaySqlSpec.cs" />
     <Compile Include="Keywords.cs" />
     <Compile Include="IOrderElement.cs" />
@@ -102,9 +104,7 @@
     <Compile Include="Inside\Keywords\WhereClause.cs" />
     <Compile Include="Inside\Keywords\ConditionKeyWords.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="feat\EntityFramework\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if $(ConfigurationName) == Release "../../../.nuget/nuget" pack "../../../.nuget/LambdicSql.nuspec"

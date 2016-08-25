@@ -15,6 +15,7 @@ namespace LambdicSql.feat.Dapper
             var info = exp.ToSqlInfo(cnn.GetType());
             try
             {
+                //TODO params detail.
                 return DapperWrapper<T>.Query(cnn, info.SqlText, info.Params, transaction, buffered, commandTimeout, commandType);
             }
             catch (Exception e)
@@ -27,6 +28,7 @@ namespace LambdicSql.feat.Dapper
         {
             try
             {
+                //TODO params detail.
                 var info = exp.ToSqlInfo(cnn.GetType());
                 return DapperWrapper.Execute(cnn, info.SqlText, info.Params, transaction, commandTimeout, commandType);
             }

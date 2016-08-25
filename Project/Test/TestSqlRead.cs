@@ -11,6 +11,9 @@ using static LambdicSql.Keywords;
 using static LambdicSql.Funcs;
 using static LambdicSql.Utils;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
+using System.Data.Entity;
+using LambdicSql.feat.EntityFramework;
 
 namespace Test
 {
@@ -700,12 +703,42 @@ FROM tbl_remuneration
 
             var y = query.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Read();
         }
+        public class SelectDataEF
+        {
+            public string name { get; set; }
+            public string payment_date { get; set; }
+            public decimal? money { get; set; }
+        }
 
         [TestMethod]
         public void TestEF()
         {
             var m = new ModelLambdicSqlTestDB();
             var datas = m.tbl_staff.ToList();
+
+            var query = EFSql.USing(m).Create(db =>
+                Select(new SelectDataEF()
+                {
+                    name = db.tbl_staff.T().name + "xxx",
+                    payment_date = db.tbl_remuneration.T().payment_date,
+                    money = db.tbl_remuneration.T().money,
+                }).
+                From(db.tbl_remuneration.T()).
+                    Join(db.tbl_staff, db.tbl_remuneration.T().staff_id == db.tbl_staff.T().id));
+
+            var xxx = query.SqlQuery().ToArray();
+
+
+            var queryDelete = EFSql.USing(m).Create(db =>
+                Delete().
+                From(db.tbl_data.T()));
+
+            int a = queryDelete.ExecuteSqlCommand();
+
+            var queryInsert = EFSql.USing(m).Create(db =>
+                InsertInto(db.tbl_data.T(), db.tbl_data.T().id, db.tbl_data.T().val2).Values(1, "b"));
+            var b = queryInsert.ExecuteSqlCommand();
+
         }
 
         [TestMethod]

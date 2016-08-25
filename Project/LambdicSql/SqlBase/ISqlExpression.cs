@@ -2,6 +2,7 @@
 {
     public interface ISqlExpression
     {
+        object DbContext { get; }
         DbInfo DbInfo { get; }
         string ToString(ISqlStringConverter decoder);
     }

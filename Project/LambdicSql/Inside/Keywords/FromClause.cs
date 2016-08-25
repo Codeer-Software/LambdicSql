@@ -38,7 +38,7 @@ namespace LambdicSql.Inside.Keywords
             return Environment.NewLine + "\t" + name.ToUpper() + " " + ExpressionToTableName(converter, method.Arguments[1]) + " ON " + argSrc[1];
         }
 
-        static string ExpressionToTableName(ISqlStringConverter decoder, Expression exp)
+        internal static string ExpressionToTableName(ISqlStringConverter decoder, Expression exp)
         {
             var arry = exp as NewArrayExpression;
             if (arry != null)
@@ -50,6 +50,7 @@ namespace LambdicSql.Inside.Keywords
             var methodCall = exp as MethodCallExpression;
             if (methodCall != null)
             {
+                //TODO
                 var member = methodCall.Arguments[0] as MemberExpression;
                 if (member != null)
                 {

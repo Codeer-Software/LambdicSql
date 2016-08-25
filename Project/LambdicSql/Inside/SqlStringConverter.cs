@@ -179,6 +179,14 @@ namespace LambdicSql.Inside
                 if (method.Method.Name == "Cast") return ResolveExpressionObject(method.Arguments[0]);
             }
 
+            //TODO  if (method.Method.Name == "T")
+            /*
+            if (method.Method.Name == "T")
+            {
+                return ToString(method.Arguments[0]);
+            }
+            */
+
             var ret = new List<string>();
             foreach (var c in GetMethodChains(method))
             {

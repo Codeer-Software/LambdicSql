@@ -18,8 +18,8 @@ namespace LambdicSql.feat.Dapper
             {
                 asm = Assembly.LoadFrom("Dapper.dll");
             }
-            catch { throw new PackageIsNotInstalledException("Dapper is not installed."); }
-            if (asm == null) throw new PackageIsNotInstalledException("Dapper is not installed.");
+            catch { throw new PackageIsNotInstalledException("Dapper is not installed. Please install dapper of your faverit version."); }
+            if (asm == null) throw new PackageIsNotInstalledException("Dapper is not installed. Please install dapper of your faverit version.");
 
             var sqlMapper = asm.GetType("Dapper.SqlMapper");
 
@@ -48,8 +48,8 @@ namespace LambdicSql.feat.Dapper
             {
                 asm = Assembly.LoadFrom("Dapper.dll");
             }
-            catch { throw new PackageIsNotInstalledException("Dapper is not installed."); }
-            if (asm == null) throw new PackageIsNotInstalledException("Dapper is not installed.");
+            catch { throw new PackageIsNotInstalledException("Dapper is not installed. Please install dapper of your faverit version."); }
+            if (asm == null) throw new PackageIsNotInstalledException("Dapper is not installed. Please install dapper of your faverit version.");
 
             var sqlMapper = asm.GetType("Dapper.SqlMapper");
 

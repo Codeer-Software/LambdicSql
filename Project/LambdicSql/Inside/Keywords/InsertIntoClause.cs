@@ -26,12 +26,18 @@ namespace LambdicSql.Inside.Keywords
             {
                 case nameof(LambdicSql.Keywords.InsertInto):
                     {
+                        var table = FromClause.ExpressionToTableName(converter, method.Arguments[0]);
+                        //TODO  table = converter.ToString(method.Arguments[0]) <- beset!
+
                         var arg = converter.ToString(method.Arguments[1]).Split(',').Select(e => GetColumnOnly(e)).ToArray();
                         insertTargets.AddRange(arg);
-                        return Environment.NewLine + "INSERT INTO " + converter.ToString(method.Arguments[0]) + "(" + string.Join(", ", arg) + ")";
+                        return Environment.NewLine + "INSERT INTO " + table + "(" + string.Join(", ", arg) + ")";
                     }
                 case nameof(LambdicSql.Keywords.InsertIntoExcepting):
                     {
+                        var table = FromClause.ExpressionToTableName(converter, method.Arguments[0]);
+                        //TODO  table = converter.ToString(method.Arguments[0]) <- beset!
+
                         var select = ObjectCreateAnalyzer.MakeSelectInfo(method.Arguments[0]);
 
                         var array = method.Arguments[1] as NewArrayExpression;
@@ -39,7 +45,7 @@ namespace LambdicSql.Inside.Keywords
                         var arg = select.Elements.Select(e => e.Name).
                             Where(e=>!exclusions.Any(ee=>ee == e)).ToArray();
                         insertTargets.AddRange(arg);
-                        return Environment.NewLine + "INSERT INTO " + converter.ToString(method.Arguments[0]) + "(" + string.Join(", ", arg) + ")";
+                        return Environment.NewLine + "INSERT INTO " + table + "(" + string.Join(", ", arg) + ")";
                     }
                 case nameof(LambdicSql.Keywords.Values):
                     {
