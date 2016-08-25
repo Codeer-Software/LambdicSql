@@ -28,6 +28,12 @@ namespace LambdicSql.Inside.Keywords
                     return Environment.NewLine + "FROM " + ExpressionToTableName(converter, method.Arguments[method.AdjustSqlSyntaxMethodArgumentIndex(0)]);
                 case nameof(LambdicSql.Keywords.CrossJoin):
                     return Environment.NewLine + "\tCROSS JOIN " + ExpressionToTableName(converter, method.Arguments[1]);
+                case nameof(LambdicSql.Keywords.LeftJoin):
+                    name = "LEFT JOIN";
+                    break;
+                case nameof(LambdicSql.Keywords.RightJoin):
+                    name = "RIGHT JOIN";
+                    break;
             }
             return Environment.NewLine + "\t" + name.ToUpper() + " " + ExpressionToTableName(converter, method.Arguments[1]) + " ON " + argSrc[1];
         }
