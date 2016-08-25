@@ -716,7 +716,7 @@ FROM tbl_remuneration
             var m = new ModelLambdicSqlTestDB();
             var datas = m.tbl_staff.ToList();
 
-            var query = EFSql.USing(m).Create(db =>
+            var query = Sql<ModelLambdicSqlTestDB>.Create(db =>
                 Select(new SelectDataEF()
                 {
                     name = db.tbl_staff.T().name + "xxx",
@@ -726,18 +726,18 @@ FROM tbl_remuneration
                 From(db.tbl_remuneration.T()).
                     Join(db.tbl_staff, db.tbl_remuneration.T().staff_id == db.tbl_staff.T().id));
 
-            var xxx = query.SqlQuery().ToArray();
+            var xxx = query.SqlQuery(m).ToArray();
 
 
-            var queryDelete = EFSql.USing(m).Create(db =>
+            var queryDelete = Sql<ModelLambdicSqlTestDB>.Create(db =>
                 Delete().
                 From(db.tbl_data.T()));
 
-            int a = queryDelete.ExecuteSqlCommand();
+            int a = queryDelete.ExecuteSqlCommand(m);
 
-            var queryInsert = EFSql.USing(m).Create(db =>
+            var queryInsert = Sql<ModelLambdicSqlTestDB>.Create(db =>
                 InsertInto(db.tbl_data.T(), db.tbl_data.T().id, db.tbl_data.T().val2).Values(1, "b"));
-            var b = queryInsert.ExecuteSqlCommand();
+            var b = queryInsert.ExecuteSqlCommand(m);
 
         }
 

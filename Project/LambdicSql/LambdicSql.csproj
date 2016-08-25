@@ -40,7 +40,6 @@
     <Compile Include="feat\Dapper\DapperApaptExtensions.cs" />
     <Compile Include="feat\Dapper\DapperWrapper.cs" />
     <Compile Include="feat\EntityFramework\EFApaptExtensions.cs" />
-    <Compile Include="feat\EntityFramework\EFSql.cs" />
     <Compile Include="feat\EntityFramework\EFWrapper.cs" />
     <Compile Include="feat\PackageIsNotInstalledException.cs" />
     <Compile Include="Inside\InvalitContext.cs" />

@@ -7,7 +7,6 @@ namespace LambdicSql.Inside
         ISqlExpression _before;
         ISqlExpression _after;
         public override DbInfo DbInfo { get; protected set; }
-        public override object DbContext { get; protected set; }
 
         public SqlExpressionCoupled(ISqlExpression before, ISqlExpression after)
         {
@@ -20,15 +19,6 @@ namespace LambdicSql.Inside
             else if (_after.DbInfo != null)
             {
                 DbInfo = _after.DbInfo;
-            }
-
-            if (_before.DbContext != null)
-            {
-                DbContext = _before.DbContext;
-            }
-            else if (_after.DbContext != null)
-            {
-                DbContext = _after.DbContext;
             }
         }
 

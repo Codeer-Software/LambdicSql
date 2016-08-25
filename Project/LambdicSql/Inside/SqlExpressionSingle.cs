@@ -7,13 +7,11 @@ namespace LambdicSql.Inside
     {
         Expression _core;
         public override DbInfo DbInfo { get; protected set; }
-        public override object DbContext { get; protected set; }
 
-        public SqlExpressionSingle(DbInfo dbInfo, Expression core, object dbContext = null)
+        public SqlExpressionSingle(DbInfo dbInfo, Expression core)
         {
             DbInfo = dbInfo;
             _core = core;
-            DbContext = dbContext;
         }
 
         public override string ToString(ISqlStringConverter converter)
