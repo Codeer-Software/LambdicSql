@@ -100,10 +100,8 @@ namespace LambdicSql
         public static IQuery<TSelected> Values<TSelected, TTable>(this IInsertIntoAfter<TSelected, TTable> words, IParamInfo value)
              => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
 
-        public interface IOrderByAfter<T> : IQueryGroup<T> { }
-        public static TTable Cast<TTable>(this ISqlExpression<IOrderByAfter<TTable>> query) => InvalitContext.Throw<TTable>(nameof(Cast));
-        public static IOrderByAfter<Non> OrderBy(params IOrderElement[] elements) => InvalitContext.Throw<IOrderByAfter<Non>>(nameof(OrderBy));
-        public static IOrderByAfter<TSelected> OrderBy<TSelected>(this IQuery<TSelected> words, params IOrderElement[] elements) => InvalitContext.Throw<IOrderByAfter<TSelected>>(nameof(OrderBy));
+        public static IQuery<Non> OrderBy(params IOrderElement[] elements) => InvalitContext.Throw<IQuery<Non>>(nameof(OrderBy));
+        public static IQuery<TSelected> OrderBy<TSelected>(this IQuery<TSelected> words, params IOrderElement[] elements) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
 
         public interface IUpdateAfter<TSelected, T> : IQueryGroup<TSelected> { }
         public static IUpdateAfter<Non, T> Update<T>(T table) => InvalitContext.Throw<IUpdateAfter<Non, T>>(nameof(Update));
