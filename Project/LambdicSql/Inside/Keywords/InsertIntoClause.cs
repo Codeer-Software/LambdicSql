@@ -29,23 +29,22 @@ namespace LambdicSql.Inside.Keywords
                         var table = FromClause.ExpressionToTableName(converter, method.Arguments[0]);
                         //TODO  table = converter.ToString(method.Arguments[0]) <- beset!
 
-                        var arg = converter.ToString(method.Arguments[1]).Split(',').Select(e => GetColumnOnly(e)).ToArray();
-                        insertTargets.AddRange(arg);
-                        return Environment.NewLine + "INSERT INTO " + table + "(" + string.Join(", ", arg) + ")";
-                    }
-                case nameof(LambdicSql.Keywords.InsertIntoExcepting):
-                    {
-                        var table = FromClause.ExpressionToTableName(converter, method.Arguments[0]);
-                        //TODO  table = converter.ToString(method.Arguments[0]) <- beset!
+                        var arg = converter.ToString(method.Arguments[1]).Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(e => GetColumnOnly(e)).ToArray();
+                        if (arg.Length == 0)
+                        {
+                            var select = ObjectCreateAnalyzer.MakeSelectInfo(method.Arguments[0]);
 
-                        var select = ObjectCreateAnalyzer.MakeSelectInfo(method.Arguments[0]);
-
-                        var array = method.Arguments[1] as NewArrayExpression;
-                        var exclusions = array.Expressions.Select(e => converter.ToString(e)).ToList();
-                        var arg = select.Elements.Select(e => e.Name).
-                            Where(e=>!exclusions.Any(ee=>ee == e)).ToArray();
-                        insertTargets.AddRange(arg);
-                        return Environment.NewLine + "INSERT INTO " + table + "(" + string.Join(", ", arg) + ")";
+                            var array = method.Arguments[1] as NewArrayExpression;
+                            var exclusions = array.Expressions.Select(e => converter.ToString(e)).ToList();
+                            var argAll = select.Elements.Select(e => e.Name).ToArray();
+                            insertTargets.AddRange(argAll);
+                            return Environment.NewLine + "INSERT INTO " + table + "(" + string.Join(", ", argAll) + ")";
+                        }
+                        else
+                        {
+                            insertTargets.AddRange(arg);
+                            return Environment.NewLine + "INSERT INTO " + table + "(" + string.Join(", ", arg) + ")";
+                        }
                     }
                 case nameof(LambdicSql.Keywords.Values):
                     {

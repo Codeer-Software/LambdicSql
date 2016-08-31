@@ -317,12 +317,6 @@ namespace Test
             };
 
             DeleteX();
-
-            var query = Sql<DataChangeTest>.Create(db =>
-                InsertIntoExcepting(db.tbl_types).Values(new TypesParamInfo(data)));
-            var info = query.ToSqlInfo(typeof(SqlConnection));
-            var detail = info.DbParams;
-            query.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Write();
         }
 
         [TestMethod]
@@ -346,7 +340,7 @@ namespace Test
             DeleteX();
 
             var query = Sql<DataChangeTest>.Create(db =>
-                InsertIntoExcepting(db.tbl_types, db.tbl_types.id).Values(data));
+                InsertInto(db.tbl_types, db.tbl_types.id).Values(data));
             var info = query.ToSqlInfo(typeof(SqlConnection));
             var detail = info.DbParams;
             Debug.Print(info.SqlText);
@@ -362,7 +356,7 @@ namespace Test
             DeleteX();
 
             var query = Sql<DataChangeTest>.Create(db =>
-                InsertIntoExcepting(db.tbl_data).Values(data));
+                InsertInto(db.tbl_data).Values(data));
 
             query.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Write();
         }
