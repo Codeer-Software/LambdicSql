@@ -131,6 +131,19 @@ namespace LambdicSql.Inside
 
         DecodedInfo ToString(MemberExpression member)
         {
+            if (member.Member.DeclaringType.IsSqlSyntax())
+            {
+                if (_sqlSyntaxCustomizer != null)
+                {
+                    var custom = _sqlSyntaxCustomizer.ToString(this, member);
+                    if (custom != null)
+                    {
+                        return new DecodedInfo(member.Type, custom);
+                    }
+                }
+                return new DecodedInfo(member.Type, member.GetMemberToString()(this, member));
+            }
+
             //SubQuery's member.
             //example [ sub.Cast().id ]
             var method = member.Expression as MethodCallExpression;

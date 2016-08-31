@@ -1301,6 +1301,54 @@ FROM tbl_remuneration
             _connection.Query(query);
         }
 
+        public void TestLimit()
+        {
+            var name = _connection.GetType().FullName;
+            if (name == "System.Data.SqlClient.SqlConnection") return;
+            if (name == "Oracle.ManagedDataAccess.Client.OracleConnection") return;
+            if (name == "Npgsql.NpgsqlConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+                 Select(new Asterisk()).
+                 From(db.tbl_remuneration).
+                 OrderBy(new Asc(db.tbl_remuneration.id)).
+                 Limit(1, 3)
+                 );
+            Debug.Print(query.ToSqlInfo().SqlText);
+            _connection.Query(query);
+        }
+
+        public void TestLimitOffset()
+        {
+            var name = _connection.GetType().FullName;
+            if (name == "System.Data.SqlClient.SqlConnection") return;
+            if (name == "Oracle.ManagedDataAccess.Client.OracleConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+                 Select(new Asterisk()).
+                 From(db.tbl_remuneration).
+                 OrderBy(new Asc(db.tbl_remuneration.id)).
+                 Limit(1).
+                 Offset(3)
+                 );
+            Debug.Print(query.ToSqlInfo().SqlText);
+            _connection.Query(query);
+        }
+
+        public void TestRowNum()
+        {
+            var name = _connection.GetType().FullName;
+            if (name != "Oracle.ManagedDataAccess.Client.OracleConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+                 Select(new Asterisk()).
+                 From(db.tbl_remuneration).
+                 Where(Between(RowNum, 1, 5)).
+                 OrderBy(new Asc(db.tbl_remuneration.id))
+                 );
+            Debug.Print(query.ToSqlInfo().SqlText);
+            _connection.Query(query);
+        }
         public void TestTop()
         {
             var name = _connection.GetType().FullName;

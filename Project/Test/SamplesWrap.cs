@@ -152,5 +152,14 @@ namespace Test
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void TestOffsetFetchNext() => _core.TestOffsetFetchNext();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void TestLimit() => _core.TestLimit();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void TestLimitOffset() => _core.TestLimitOffset();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void TestRowNum() => _core.TestRowNum();
     }
 }

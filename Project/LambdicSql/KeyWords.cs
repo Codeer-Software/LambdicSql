@@ -138,6 +138,14 @@ namespace LambdicSql
         public static IQuery<Non> FetchNextRowsOnly(long rowCount) => InvalitContext.Throw<IQuery<Non>>(nameof(OrderBy));
         public static IQuery<TSelected> FetchNextRowsOnly<TSelected>(this IQuery<TSelected> words, long rowCount) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
 
+        public static IQuery<Non> Limit(long count) => InvalitContext.Throw<IQuery<Non>>(nameof(OrderBy));
+        public static IQuery<Non> Limit(long offset, long count) => InvalitContext.Throw<IQuery<Non>>(nameof(OrderBy));
+        public static IQuery<TSelected> Limit<TSelected>(this IQuery<TSelected> words, long count) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
+        public static IQuery<TSelected> Limit<TSelected>(this IQuery<TSelected> words, long offset, long count) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
+
+        public static IQuery<Non> Offset(long offset) => InvalitContext.Throw<IQuery<Non>>(nameof(OrderBy));
+        public static IQuery<TSelected> Offset<TSelected>(this IQuery<TSelected> words, long offset) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
+
         [MethodGroup(nameof(Update))]
         public static IQuery<Non, T> Update<T>(T table) => InvalitContext.Throw<IQuery<Non, T>>(nameof(Update));
         [MethodGroup(nameof(Update))]
@@ -169,6 +177,11 @@ namespace LambdicSql
         public static IQuery<Non> Minus() => InvalitContext.Throw<IQuery<Non>>(nameof(Minus));
         public static IQuery<TSelected> Minus<TSelected>(this IQuery<TSelected> words) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Minus));
 
+        public static long RowNum { get; }
+
+        static string ToString(ISqlStringConverter converter, MemberExpression member)
+            => member.Member.Name.ToUpper();
+
         static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
@@ -198,6 +211,10 @@ namespace LambdicSql
                     return OffsetRowsClause.ToString(converter, methods);
                 case nameof(FetchNextRowsOnly):
                     return FetchNextRowsOnlyClause.ToString(converter, methods);
+                case nameof(Limit):
+                    return LimitClause.ToString(converter, methods);
+                case nameof(Offset):
+                    return OffsetClause.ToString(converter, methods);
                 case nameof(Update):
                     return UpdateClause.ToString(converter, methods);
                 case nameof(Where):
@@ -212,6 +229,7 @@ namespace LambdicSql
                 case nameof(Except):
                 case nameof(Minus):
                     return SetOperation.ToString(converter, methods);
+
             }
             throw new NotSupportedException();
         }

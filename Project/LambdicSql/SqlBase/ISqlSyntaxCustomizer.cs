@@ -7,5 +7,6 @@ namespace LambdicSql.SqlBase
         string ToString(ISqlStringConverter converter, object obj);
         string ToString(ISqlStringConverter converter, MethodCallExpression[] methods);
         string ToString(ISqlStringConverter converter, NewExpression exp);
+        string ToString(ISqlStringConverter converter, MemberExpression exp);
     }
 }
