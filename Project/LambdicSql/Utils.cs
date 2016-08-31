@@ -12,6 +12,7 @@ namespace LambdicSql
         public static T Cast<T>(this ISqlExpression query) => InvalitContext.Throw<T>(nameof(Cast));
         public static TReturn T<TReturn>(this ISqlExpression<TReturn> query) => InvalitContext.Throw<TReturn>(nameof(Cast));
         public static TSelected T<TSelected>(this ISqlExpression<IQuery<TSelected>> query) => InvalitContext.Throw<TSelected>(nameof(Cast));
+        public static TSelected T<TSelected, TInfo>(this ISqlExpression<IQuery<TSelected, TInfo>> query) => InvalitContext.Throw<TSelected>(nameof(Cast));
 
         //<TSelected> 
         public static T Cast<T>(this IMethodChain words) => InvalitContext.Throw<T>(nameof(Cast));
