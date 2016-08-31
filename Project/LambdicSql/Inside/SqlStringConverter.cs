@@ -176,16 +176,8 @@ namespace LambdicSql.Inside
             var args = method.Method.GetParameters();
             if (0 < args.Length && typeof(ISqlExpression).IsAssignableFrom(args[0].ParameterType))
             {
-                if (method.Method.Name == "Cast") return ResolveExpressionObject(method.Arguments[0]);
+                if (method.Method.Name == "Cast" || method.Method.Name == "T") return ResolveExpressionObject(method.Arguments[0]);
             }
-
-            //TODO  if (method.Method.Name == "T")
-            /*
-            if (method.Method.Name == "T")
-            {
-                return ToString(method.Arguments[0]);
-            }
-            */
 
             var ret = new List<string>();
             foreach (var c in GetMethodChains(method))
@@ -209,7 +201,7 @@ namespace LambdicSql.Inside
 
             //Cast for IMethodChain.
             var text = string.Join(string.Empty, ret.ToArray());
-            if (method.Method.Name == "Cast") text = AdjustSubQueryString(text);
+            if (method.Method.Name == "Cast" || method.Method.Name == "T") text = AdjustSubQueryString(text);
             return new DecodedInfo(method.Method.ReturnType, text);
         }
 

@@ -828,7 +828,7 @@ namespace TestCore
             var query = Sql<DB>.Create(db => 
                 Select(new SelectData6
                 {
-                    Name = subQuery.Cast().name_sub
+                    Name = subQuery.T().name_sub
                 }).
                 From(subQuery));
 

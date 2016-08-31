@@ -6,5 +6,5 @@
         string ToString(ISqlStringConverter decoder);
     }
     
-    public interface ISqlExpression<out T> : ISqlExpression { }
+    public interface ISqlExpression<out TReturn> : ISqlExpression { }
 }

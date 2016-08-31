@@ -86,23 +86,6 @@ namespace LambdicSql.Inside.Keywords
                             return Environment.NewLine + "\tVALUES (" + string.Join(", ", values.ToArray()) + ")";
                         }
                     }
-                /*
-                case nameof(LambdicSql.Keywords.ValuesWithTypes):
-                    {
-                        var obj = converter.ToObject(method.Arguments[1]);
-                        var type = method.Arguments[1].Type;
-
-                        var values = new List<string>();
-                        foreach (var e in insertTargets)
-                        {
-                            var val = type.GetPropertyValue(e, obj);
-                            var param = type.GetPropertyParamType(e);
-                            var text = converter.Context.Parameters.Push(val, e, null, param);
-                            values.Add(text);
-                        }
-                        return Environment.NewLine + "\tVALUES (" + string.Join(", ", values.ToArray()) + ")";
-                    }
-                    */
             }
             throw new NotSupportedException();
         }
