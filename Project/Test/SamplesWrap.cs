@@ -149,5 +149,8 @@ namespace Test
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void TestTop() => _core.TestTop();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void TestOffsetFetchNext() => _core.TestOffsetFetchNext();
     }
 }

@@ -44,6 +44,8 @@
     <Compile Include="feat\PackageIsNotInstalledException.cs" />
     <Compile Include="Inside\InvalitContext.cs" />
     <Compile Include="Inside\DecodingParameterInfo.cs" />
+    <Compile Include="Inside\Keywords\FetchNextRowsOnlyClause.cs" />
+    <Compile Include="Inside\Keywords\OffsetRowsClause.cs" />
     <Compile Include="Inside\Keywords\SetOperation.cs" />
     <Compile Include="Inside\RefrectionUtility.cs" />
     <Compile Include="Inside\TowWaySqlSpec.cs" />

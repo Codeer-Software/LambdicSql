@@ -1284,6 +1284,23 @@ FROM tbl_remuneration
             ExecuteRead(query);
         }
 
+        public void TestOffsetFetchNext()
+        {
+            var name = _connection.GetType().FullName;
+            if (name != "System.Data.SqlClient.SqlConnection" &&
+                name != "IBM.Data.DB2.DB2Connection") return;
+
+            var query = Sql<DB>.Create(db =>
+                 Select(new Asterisk()).
+                 From(db.tbl_remuneration).
+                 OrderBy(new Asc(db.tbl_remuneration.id)).
+                 OffsetRows(1).
+                 FetchNextRowsOnly(3)
+                 );
+            Debug.Print(query.ToSqlInfo().SqlText);
+            _connection.Query(query);
+        }
+
         public void TestTop()
         {
             var name = _connection.GetType().FullName;

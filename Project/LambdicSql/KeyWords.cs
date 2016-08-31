@@ -132,7 +132,12 @@ namespace LambdicSql
 
         public static IQuery<Non> OrderBy(params IOrderElement[] elements) => InvalitContext.Throw<IQuery<Non>>(nameof(OrderBy));
         public static IQuery<TSelected> OrderBy<TSelected>(this IQuery<TSelected> words, params IOrderElement[] elements) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
-        
+
+        public static IQuery<Non> OffsetRows(long rowCount) => InvalitContext.Throw<IQuery<Non>>(nameof(OrderBy));
+        public static IQuery<TSelected> OffsetRows<TSelected>(this IQuery<TSelected> words, long rowCount) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
+        public static IQuery<Non> FetchNextRowsOnly(long rowCount) => InvalitContext.Throw<IQuery<Non>>(nameof(OrderBy));
+        public static IQuery<TSelected> FetchNextRowsOnly<TSelected>(this IQuery<TSelected> words, long rowCount) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
+
         [MethodGroup(nameof(Update))]
         public static IQuery<Non, T> Update<T>(T table) => InvalitContext.Throw<IQuery<Non, T>>(nameof(Update));
         [MethodGroup(nameof(Update))]
@@ -189,6 +194,10 @@ namespace LambdicSql
                     return InsertIntoClause.ToString(converter, methods);
                 case nameof(OrderBy):
                     return OrderByWordsClause.ToString(converter, methods);
+                case nameof(OffsetRows):
+                    return OffsetRowsClause.ToString(converter, methods);
+                case nameof(FetchNextRowsOnly):
+                    return FetchNextRowsOnlyClause.ToString(converter, methods);
                 case nameof(Update):
                     return UpdateClause.ToString(converter, methods);
                 case nameof(Where):
