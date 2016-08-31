@@ -1,5 +1,6 @@
 ﻿using LambdicSql.SqlBase;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -10,58 +11,32 @@ namespace LambdicSql.Inside.Keywords
         internal static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
-            Func<int, int> index = i => method.AdjustSqlSyntaxMethodArgumentIndex(i);
 
-            if (method.Arguments.Any(e => e.Type == typeof(Asterisk))) return Environment.NewLine + "SELECT *";
-
-            Expression define = null;
-            AggregatePredicate? aggregatePredicate = null;
-            if (method.Arguments[index(0)].Type == typeof(AggregatePredicate))
+            var define = method.Arguments[method.Arguments.Count - 1];
+            var modify = new List<Expression>();
+            for (int i = method.AdjustSqlSyntaxMethodArgumentIndex(0); i < method.Arguments.Count - 1; i++)
             {
-                aggregatePredicate = (AggregatePredicate)((ConstantExpression)method.Arguments[index(0)]).Value;
-                define = method.Arguments[index(1)];
+                modify.Add(method.Arguments[i]);
+            }
+            var selectText = string.Join(" ", new[] { "SELECT" }.Concat(modify.Select(e => converter.ToString(e))).ToArray());
+
+            if (define.Type == typeof(Asterisk))
+            {
+                return Environment.NewLine + selectText + " *";
             }
             else
             {
-                define = method.Arguments[index(0)];
+                var select = ObjectCreateAnalyzer.MakeSelectInfo(define);
+                if (converter.Context.SelectClauseInfo == null)
+                {
+                    converter.Context.SelectClauseInfo = select;
+                }
+                return Environment.NewLine + selectText + Environment.NewLine + 
+                    string.Join("," + Environment.NewLine + "\t", select.Elements.Select(e => ToString(converter, e)).ToArray());
             }
-
-            var select = ObjectCreateAnalyzer.MakeSelectInfo(define);
-
-            if (converter.Context.SelectClauseInfo == null)
-            {
-                converter.Context.SelectClauseInfo = select;
-            }
-            var text = ToString(GetPredicate(aggregatePredicate), select.Elements, converter);
-            /*
-            if (method.Method.Name == nameof(LambdicSql.Keywords.SelectFrom))
-            {
-                text = text + Environment.NewLine + "FROM " + converter.ToString(method.Arguments[index(0)]);
-            }*/
-            return Environment.NewLine + text;
         }
-
-        static string ToString(string _predicate, ObjectCreateMemberElement[] _elements, ISqlStringConverter decoder)
-            => "SELECT" + _predicate + Environment.NewLine + "\t" +
-            string.Join("," + Environment.NewLine + "\t", _elements.Select(e => ToString(decoder, e)).ToArray());
         
         static string ToString(ISqlStringConverter decoder, ObjectCreateMemberElement element)
             => element.Expression == null ? element.Name : decoder.ToString(element.Expression) + " AS " + element.Name;
-
-        static string GetPredicate(AggregatePredicate? aggregatePredicate)
-        {
-            if (aggregatePredicate == null)
-            {
-                return string.Empty;
-            }
-            switch (aggregatePredicate)
-            {
-                case AggregatePredicate.All:
-                    return " ALL";
-                case AggregatePredicate.Distinct:
-                    return " DISTINCT";
-            }
-            return string.Empty;
-        }
     }
 }

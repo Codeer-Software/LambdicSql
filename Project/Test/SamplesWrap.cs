@@ -146,5 +146,8 @@ namespace Test
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void GroupByEx() => _core.TestGroupByEx();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void TestTop() => _core.TestTop();
     }
 }

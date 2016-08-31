@@ -10,12 +10,11 @@ namespace LambdicSql
     public static class Utils
     {
         public static T Cast<T>(this ISqlExpression query) => InvalitContext.Throw<T>(nameof(Cast));
+        public static T Cast<T>(this IMethodChain words) => InvalitContext.Throw<T>(nameof(Cast));
         public static TReturn T<TReturn>(this ISqlExpression<TReturn> query) => InvalitContext.Throw<TReturn>(nameof(Cast));
         public static TSelected T<TSelected>(this ISqlExpression<IQuery<TSelected>> query) => InvalitContext.Throw<TSelected>(nameof(Cast));
         public static TSelected T<TSelected, TInfo>(this ISqlExpression<IQuery<TSelected, TInfo>> query) => InvalitContext.Throw<TSelected>(nameof(Cast));
-
-        //<TSelected> 
-        public static T Cast<T>(this IMethodChain words) => InvalitContext.Throw<T>(nameof(Cast));
+        
         public static bool Condition(bool enable, bool condition) => InvalitContext.Throw<bool>(nameof(Condition));
         public static object Text(string text, params object[] args) => InvalitContext.Throw<object>(nameof(Text));
         public static T Text<T>(string text, params object[] args) => InvalitContext.Throw<T>(nameof(Text));

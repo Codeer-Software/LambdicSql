@@ -1284,6 +1284,56 @@ FROM tbl_remuneration
             ExecuteRead(query);
         }
 
+        public void TestTop()
+        {
+            var name = _connection.GetType().FullName;
+            if (name != "System.Data.SqlClient.SqlConnection") return;
+            {
+                var query = Sql<DB>.Create(db =>
+                      Select(
+                          new Top(10),
+                          new
+                          {
+                              money = db.tbl_remuneration.money
+                          }).
+                      From(db.tbl_remuneration));
+                Debug.Print(query.ToSqlInfo().SqlText);
+                _connection.Query(query);
+            }
+            {
+                var query = Sql<DB>.Create(db =>
+                      Select(
+                          new Top(10),
+                          new Asterisk()).
+                      From(db.tbl_remuneration));
+                Debug.Print(query.ToSqlInfo().SqlText);
+                _connection.Query(query);
+            }
+            {
+                var query = Sql<DB>.Create(db =>
+                      Select(
+                          AggregatePredicate.Distinct,
+                          new Top(10),
+                          new
+                          {
+                              money = db.tbl_remuneration.money
+                          }).
+                      From(db.tbl_remuneration));
+                Debug.Print(query.ToSqlInfo().SqlText);
+                _connection.Query(query);
+            }
+            {
+                var query = Sql<DB>.Create(db =>
+                      Select(
+                          AggregatePredicate.Distinct,
+                          new Top(10),
+                          new Asterisk()).
+                      From(db.tbl_remuneration));
+                Debug.Print(query.ToSqlInfo().SqlText);
+                _connection.Query(query);
+            }
+        }
+
         public IEnumerable<T> ExecuteRead<T>(ISqlExpression<IQuery<T>> exp)
         {
             var info = exp.ToSqlInfo(_connection.GetType());

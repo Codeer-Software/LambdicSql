@@ -10,7 +10,6 @@ namespace LambdicSql
     [SqlSyntax]
     public class Assign
     {
-        protected Assign() { }
         public Assign(object target, object value) { InvalitContext.Throw("new " + nameof(Assign)); }
         public static string ToString(ISqlStringConverter converter, NewExpression exp)
         {
@@ -29,25 +28,41 @@ namespace LambdicSql
         }
     }
 
+    [SqlSyntax]
+    public class Top
+    {
+        public Top(long count) { InvalitContext.Throw("new " + nameof(Assign)); }
+        public static string ToString(ISqlStringConverter converter, NewExpression exp)
+        {
+            var args = exp.Arguments.Select(e => converter.ToString(e)).ToArray();
+            return "TOP " + converter.Context.Parameters.ResolvePrepare(args[0]);
+        }
+    }
+
+
+
+
     //Set operation
     [SqlSyntax]
     public static class Keywords
     {
         public static IQuery<TSelected> Select<TSelected>(TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
-        public static IQuery<TSelected> Select<TSelected>(this IQuery<Non> words, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
-        public static IQuery<TSelected> Select<TSelected>(this IQuery<TSelected> words, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
-
-        public static IQuery<TSelected> Select<TSelected>(AggregatePredicate predicate, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
-        public static IQuery<TSelected> Select<TSelected>(this IQuery<Non> words, AggregatePredicate predicate, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
-        public static IQuery<TSelected> Select<TSelected>(this IQuery<TSelected> words, AggregatePredicate predicate, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
-
+        public static IQuery<TSelected> Select<TSelected>(Top top, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
         public static IQuery<Non> Select(Asterisk asterisk) => InvalitContext.Throw<IQuery<Non>>(nameof(Select));
-        public static IQuery<Non> Select(this IQuery<Non> words, Asterisk asterisk) => InvalitContext.Throw<IQuery<Non>>(nameof(Select));
-        public static IQuery<TSelected> Select<TSelected>(this IQuery<TSelected> words, Asterisk asterisk) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
-
+        public static IQuery<Non> Select(Top top, Asterisk asterisk) => InvalitContext.Throw<IQuery<Non>>(nameof(Select));
+        public static IQuery<TSelected> Select<TSelected>(AggregatePredicate predicate, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
+        public static IQuery<TSelected> Select<TSelected>(AggregatePredicate predicate, Top top, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
         public static IQuery<Non> Select(AggregatePredicate predicate, Asterisk asterisk) => InvalitContext.Throw<IQuery<Non>>(nameof(Select));
-        public static IQuery<Non> Select(this IQuery<Non> words, AggregatePredicate predicate, Asterisk asterisk) => InvalitContext.Throw<IQuery<Non>>(nameof(Select));
+        public static IQuery<Non> Select(AggregatePredicate predicate, Top top, Asterisk asterisk) => InvalitContext.Throw<IQuery<Non>>(nameof(Select));
+
+        public static IQuery<TSelected> Select<TSelected>(this IQuery<TSelected> words, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
+        public static IQuery<TSelected> Select<TSelected>(this IQuery<TSelected> words, Top top, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
+        public static IQuery<TSelected> Select<TSelected>(this IQuery<TSelected> words, Asterisk asterisk) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
+        public static IQuery<TSelected> Select<TSelected>(this IQuery<TSelected> words, Top top, Asterisk asterisk) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
+        public static IQuery<TSelected> Select<TSelected>(this IQuery<TSelected> words, AggregatePredicate predicate, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
+        public static IQuery<TSelected> Select<TSelected>(this IQuery<TSelected> words, AggregatePredicate predicate, Top top, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
         public static IQuery<TSelected> Select<TSelected>(this IQuery<TSelected> words, AggregatePredicate predicate, Asterisk asterisk) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
+        public static IQuery<TSelected> Select<TSelected>(this IQuery<TSelected> words, AggregatePredicate predicate, Top top, Asterisk asterisk) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
 
         public interface ICaseAfter : IMethodChain { }
         public interface IWhenAfter : IMethodChain { }
