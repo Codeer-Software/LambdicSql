@@ -61,6 +61,7 @@
     <Compile Include="AggregatePredicate.cs" />
     <Compile Include="SqlBase\ISqlExpression.cs" />
     <Compile Include="DbParam.cs" />
+    <Compile Include="SqlBase\MethodGroupAttribute.cs" />
     <Compile Include="SqlBase\SqlExpression.cs" />
     <Compile Include="SqlBase\SqlSyntaxAttribute.cs" />
     <Compile Include="SqlBase\Non.cs" />

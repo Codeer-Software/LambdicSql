@@ -54,25 +54,40 @@ namespace LambdicSql
         public interface IWhenAfter<T> : IQueryGroup { }
         public interface IThenAfter<T> : IQueryGroup { }
         public interface IElseAfter<T> : IQueryGroup { }
+        [MethodGroup(nameof(Case))]
         public static ICaseAfter Case() => InvalitContext.Throw<ICaseAfter>(nameof(Case));
+        [MethodGroup(nameof(Case))]
         public static ICaseAfter Case<T>(T t) => InvalitContext.Throw<ICaseAfter>(nameof(Case));
+        [MethodGroup(nameof(Case))]
         public static IWhenAfter When<T>(this ICaseAfter words, T t) => InvalitContext.Throw<IWhenAfter>(nameof(When));
+        [MethodGroup(nameof(Case))]
         public static IWhenAfter<T1> When<T1, T2>(this IThenAfter<T1> words, T2 t) => InvalitContext.Throw<IWhenAfter<T1>>(nameof(When));
+        [MethodGroup(nameof(Case))]
         public static IThenAfter<T> Then<T>(this IWhenAfter words, T t) => InvalitContext.Throw<IThenAfter<T>>(nameof(Then));
+        [MethodGroup(nameof(Case))]
         public static IThenAfter<T> Then<T>(this IWhenAfter<T> words, T t) => InvalitContext.Throw<IThenAfter<T>>(nameof(Then));
+        [MethodGroup(nameof(Case))]
         public static IElseAfter<T> Else<T>(this IThenAfter<T> words, T t) => InvalitContext.Throw<IElseAfter<T>>(nameof(Then));
+        [MethodGroup(nameof(Case))]
         public static T End<T>(this IThenAfter<T> words) => InvalitContext.Throw<T>(nameof(End));
+        [MethodGroup(nameof(Case))]
         public static T End<T>(this IElseAfter<T> words) => InvalitContext.Throw<T>(nameof(End));
 
         public static IQuery<Non> Delete() => InvalitContext.Throw<IQuery<Non>>(nameof(Delete));
 
         public interface IFromAfter<out T> : IQueryGroup<T> { }
         public static TTable Cast<TTable>(this ISqlExpression<IFromAfter<TTable>> query) => InvalitContext.Throw<TTable>(nameof(Cast));
+        [MethodGroup(nameof(From))]
         public static IFromAfter<TSelected> From<TSelected>(this IQuery<TSelected> words, params object[] tbale) => InvalitContext.Throw<IFromAfter<TSelected>>(nameof(From));
+        [MethodGroup(nameof(From))]
         public static IFromAfter<Non> From(params object[] tbale) => InvalitContext.Throw<IFromAfter<Non>>(nameof(From));
+        [MethodGroup(nameof(From))]
         public static IFromAfter<TSelected> Join<TSelected, T>(this IFromAfter<TSelected> words, T tbale, bool condition) => InvalitContext.Throw<IFromAfter<TSelected>>(nameof(Join));
+        [MethodGroup(nameof(From))]
         public static IFromAfter<TSelected> LeftJoin<TSelected, T>(this IFromAfter<TSelected> words, T tbale, bool condition) => InvalitContext.Throw<IFromAfter<TSelected>>(nameof(LeftJoin));
+        [MethodGroup(nameof(From))]
         public static IFromAfter<TSelected> RightJoin<TSelected, T>(this IFromAfter<TSelected> words, T tbale, bool condition) => InvalitContext.Throw<IFromAfter<TSelected>>(nameof(RightJoin));
+        [MethodGroup(nameof(From))]
         public static IFromAfter<TSelected> CrossJoin<TSelected, T>(this IFromAfter<TSelected> words, T tbale) => InvalitContext.Throw<IFromAfter<TSelected>>(nameof(CrossJoin));
 
         public static IQuery<Non> GroupBy(params object[] target) => InvalitContext.Throw<IQuery<Non>>(nameof(GroupBy));
@@ -90,13 +105,18 @@ namespace LambdicSql
         public static IQuery<TSelected> Having<TSelected>(this IQuery<TSelected> words, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Having));
 
         public interface IInsertIntoAfter<TSelected, TTable> : IQueryGroup<TSelected> { }
+        [MethodGroup(nameof(InsertInto))]
         public static IInsertIntoAfter<Non, TTable> InsertInto<TTable>(TTable table, params object[] targets) => InvalitContext.Throw<IInsertIntoAfter<Non, TTable>>(nameof(InsertInto));
+        [MethodGroup(nameof(InsertInto))]
         public static IInsertIntoAfter<Non, TTable> InsertIntoExcepting<TTable>(TTable table, params object[] exclusions) => InvalitContext.Throw<IInsertIntoAfter<Non, TTable>>(nameof(InsertInto));
 
+        [MethodGroup(nameof(InsertInto))]
         public static IQuery<TSelected> Values<TSelected, TTable>(this IInsertIntoAfter<TSelected, TTable> words, params object[] targets)
              => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
+        [MethodGroup(nameof(InsertInto))]
         public static IQuery<TSelected> Values<TSelected, TTable>(this IInsertIntoAfter<TSelected, TTable> words, TTable value)
              => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
+        [MethodGroup(nameof(InsertInto))]
         public static IQuery<TSelected> Values<TSelected, TTable>(this IInsertIntoAfter<TSelected, TTable> words, IParamInfo value)
              => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
 
@@ -104,7 +124,9 @@ namespace LambdicSql
         public static IQuery<TSelected> OrderBy<TSelected>(this IQuery<TSelected> words, params IOrderElement[] elements) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
 
         public interface IUpdateAfter<TSelected, T> : IQueryGroup<TSelected> { }
+        [MethodGroup(nameof(Update))]
         public static IUpdateAfter<Non, T> Update<T>(T table) => InvalitContext.Throw<IUpdateAfter<Non, T>>(nameof(Update));
+        [MethodGroup(nameof(Update))]
         public static IQuery<TSelected> Set<TSelected, T>(this IUpdateAfter<TSelected, T> words, params Assign[] assigns) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Set));
 
         public static IQuery<Non> Where(bool condition) => InvalitContext.Throw<IQuery<Non>>(nameof(Where));

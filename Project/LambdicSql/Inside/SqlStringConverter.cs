@@ -387,6 +387,7 @@ namespace LambdicSql.Inside
             return line;
         }
 
+        //TODO refactoring.
         static List<List<MethodCallExpression>> GetMethodChains(MethodCallExpression end)
         {
             var chains = new List<List<MethodCallExpression>>();
@@ -395,11 +396,20 @@ namespace LambdicSql.Inside
             {
                 var type = curent.Method.DeclaringType;
                 var group = new List<MethodCallExpression>();
+                string groupName = string.Empty;
                 while (true)
                 {
+                    var oldGroupName = groupName;
+                    var currentGroupName = curent.Method.GetMethodGroupName();
+                    groupName = currentGroupName;
+                    if (!string.IsNullOrEmpty(oldGroupName) && oldGroupName != currentGroupName)
+                    {
+                        groupName = string.Empty;
+                        break;
+                    }
+
                     group.Add(curent);
                     var ps = curent.Method.GetParameters();
-                    bool isGrouping = 0 < ps.Length && typeof(IMethodChainGroup).IsAssignableFrom(ps[0].ParameterType);
                     bool isSqlSyntax = 0 < ps.Length && typeof(IMethodChain).IsAssignableFrom(ps[0].ParameterType);
                     var next = isSqlSyntax ? curent.Arguments[0] as MethodCallExpression : null;
 
@@ -413,10 +423,10 @@ namespace LambdicSql.Inside
                     }
 
                     curent = next;
-
                     //end of chain
-                    if (!isGrouping)
+                    if (string.IsNullOrEmpty(currentGroupName))
                     {
+                        groupName = string.Empty;
                         break;
                     }
                 }
