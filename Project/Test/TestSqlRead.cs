@@ -225,7 +225,7 @@ namespace Test
                 {
                     id = db.tbl_staff.id,
                     rid = db.tbl_remuneration.id,
-                    type = caseExp.Body,
+                    type = caseExp.T(),
                     total = subQuery.Cast<decimal>()
                 }).
                 From(db.tbl_staff).
@@ -630,14 +630,14 @@ FROM tbl_remuneration
                 Select(new
                 {
                     date = db.tbl_work.date,
-                    name1 = member1.Body.name,
-                    name2 = member2.Body.name,
-                    name3 = member3.Body.name
+                    name1 = member1.T().name,
+                    name2 = member2.T().name,
+                    name3 = member3.T().name
                 }).
                 From(db.tbl_work).
-                    Join(member1, db.tbl_work.member1_id == member1.Body.id).
-                    Join(member2, db.tbl_work.member2_id == member2.Body.id).
-                    Join(member3, db.tbl_work.member3_id == member3.Body.id));
+                    Join(member1, db.tbl_work.member1_id == member1.T().id).
+                    Join(member2, db.tbl_work.member2_id == member2.T().id).
+                    Join(member3, db.tbl_work.member3_id == member3.T().id));
 
             var ret = query.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Read();
         }
@@ -784,7 +784,7 @@ FROM tbl_remuneration
             var query = Sql<Data>.Create(db =>
                 Select(new
                 {
-                    money = MoneyExp(3, 10).Body,
+                    money = MoneyExp(3, 10).T(),
                 }).
                 From(db.tbl_remuneration).
                 Where(min < db.tbl_remuneration.money && db.tbl_remuneration.money < max));
