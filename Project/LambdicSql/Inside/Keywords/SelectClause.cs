@@ -20,8 +20,17 @@ namespace LambdicSql.Inside.Keywords
             }
             var selectText = string.Join(" ", new[] { "SELECT" }.Concat(modify.Select(e => converter.ToString(e))).ToArray());
 
-            if (define.Type == typeof(Asterisk))
+            if (typeof(Asterisk).IsAssignableFrom(define.Type))
             {
+                var asteriskType = define.Type.IsGenericType ? define.Type.GetGenericTypeDefinition() : null;
+                if (asteriskType == typeof(Asterisk<>))
+                {
+                    var select = ObjectCreateAnalyzer.MakeSelectInfo(asteriskType);
+                    if (converter.Context.SelectClauseInfo == null)
+                    {
+                        converter.Context.SelectClauseInfo = select;
+                    }
+                }
                 return Environment.NewLine + selectText + " *";
             }
             else

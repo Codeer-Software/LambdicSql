@@ -163,28 +163,6 @@ namespace TestCore
                 }
             }
         }
-        class SelectDataX
-        {
-            public string 名前 { get; set; }
-        }
-
-        public void Check()
-        {
-            //make sql.
-            var query = Sql<DB>.Create(db =>
-                Select(new SelectDataX()
-                {
-                    名前 = db.tbl_staff.name
-                }).
-                From(db.tbl_staff));
-
-            //to string and params.
-            var info = query.ToSqlInfo(_connection.GetType());
-            Debug.Print(info.SqlText);
-
-            //dapper
-            var datas = _connection.Query(query).ToList();
-        }
 
         public void TestStandard()
         {
@@ -828,7 +806,7 @@ namespace TestCore
             var query = Sql<DB>.Create(db => 
                 Select(new SelectData6
                 {
-                    Name = subQuery.T().name_sub
+                    Name = subQuery.Body.name_sub
                 }).
                 From(subQuery));
 

@@ -9,6 +9,16 @@ namespace LambdicSql.SqlBase
 {
     public static class ObjectCreateAnalyzer
     {
+        public static ObjectCreateInfo MakeSelectInfo(Type type)
+        {
+            var select = new List<ObjectCreateMemberElement>();
+            foreach (var p in type.GetProperties())
+            {
+                select.Add(new ObjectCreateMemberElement(p.Name, null));
+            }
+            return new ObjectCreateInfo(select, null);
+        }
+
         public static ObjectCreateInfo MakeSelectInfo(Expression exp)
         {
             var select = new List<ObjectCreateMemberElement>();
@@ -50,11 +60,7 @@ namespace LambdicSql.SqlBase
                 var prop = member.Member as PropertyInfo;
                 if (prop != null) type = prop.PropertyType;
                 else type = ((FieldInfo)member.Member).FieldType;
-                foreach (var p in type.GetProperties())
-                {
-                    select.Add(new ObjectCreateMemberElement(p.Name, null));
-                }
-                return new ObjectCreateInfo(select, exp);
+                return MakeSelectInfo(type);
             }
             throw new NotSupportedException();
         }

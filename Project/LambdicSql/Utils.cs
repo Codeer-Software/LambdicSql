@@ -17,18 +17,12 @@ namespace LambdicSql
         public static IQuery<Non> TwoWaySql(string text, params object[] args) => InvalitContext.Throw<IQuery<Non>>(nameof(Text));
         public static T ColumnOnly<T>(T target) => InvalitContext.Throw<T>(nameof(ColumnOnly));
 
-        //TODO thinking.
-        public static TReturn T<TReturn>(this ISqlExpression<TReturn> query) => InvalitContext.Throw<TReturn>(nameof(Cast));
-        public static TSelected T<TSelected>(this ISqlExpressionBase<IQuery<TSelected>> query) => InvalitContext.Throw<TSelected>(nameof(Cast));
-        public static TSelected T<TSelected, TInfo>(this ISqlExpressionBase<IQuery<TSelected, TInfo>> query) => InvalitContext.Throw<TSelected>(nameof(Cast));
-
         static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
             switch (method.Method.Name)
             {
                 case nameof(Cast): return string.Empty;
-                case nameof(T): return string.Empty;
                 case nameof(Condition): return Condition(converter, method);
                 case nameof(Text): return Text(converter, method);
                 case nameof(TwoWaySql): return TwoWaySql(converter, method);

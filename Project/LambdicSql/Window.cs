@@ -55,7 +55,7 @@ namespace LambdicSql
     [SqlSyntax]
     public static class Window
     {
-        public interface IFuncAfter : IMethodChainGroup { }
+        public interface IFuncAfter : IMethodChain { }
 
         [MethodGroup(nameof(Window))]
         public static IFuncAfter Avg<T>(T t) => InvalitContext.Throw<IFuncAfter>(nameof(Avg));

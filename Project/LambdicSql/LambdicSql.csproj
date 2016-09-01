@@ -62,7 +62,6 @@
     <Compile Include="SqlBase\ISqlExpressionBase.cs" />
     <Compile Include="SqlBase\ISqlQuery.cs" />
     <Compile Include="SqlBase\ISqlSyntaxCustomizer.cs" />
-    <Compile Include="SqlBase\IMethodChainGroup.cs" />
     <Compile Include="SqlBase\IQuery.cs" />
     <Compile Include="AggregatePredicate.cs" />
     <Compile Include="SqlBase\ISqlExpression.cs" />
