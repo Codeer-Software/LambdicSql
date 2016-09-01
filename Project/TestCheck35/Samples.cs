@@ -828,7 +828,7 @@ namespace TestCore
             var query = Sql<DB>.Create(db => 
                 Select(new SelectData6
                 {
-                    Name = subQuery.T().name_sub
+                    Name = subQuery.Body.name_sub
                 }).
                 From(subQuery));
 
@@ -1399,13 +1399,13 @@ FROM tbl_remuneration
             }
         }
 
-        public IEnumerable<T> ExecuteRead<T>(ISqlExpression<IQuery<T>> exp)
+        public IEnumerable<T> ExecuteRead<T>(ISqlExpressionBase<IQuery<T>> exp)
         {
             var info = exp.ToSqlInfo(_connection.GetType());
             Debug.Print(info.SqlText);
             return _connection.Query(exp).ToList();
         }
-        public IEnumerable<T> ExecuteRead<T>(ISqlExpression exp)
+        public IEnumerable<T> ExecuteRead<T>(ISqlExpressionBase exp)
         {
             var info = exp.ToSqlInfo(_connection.GetType());
             Debug.Print(info.SqlText);

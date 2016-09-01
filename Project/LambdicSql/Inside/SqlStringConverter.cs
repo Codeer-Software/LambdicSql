@@ -129,8 +129,60 @@ namespace LambdicSql.Inside
             return new DecodedInfo(nodeType.Type, "(" + left.Text + ") " + nodeType.Text + " (" + right.Text + ")");
         }
 
+        DecodedInfo IsSqlExpressionBody(MemberExpression member)
+        {
+            var type = member.Type;
+            var names = new List<string>();
+            bool isSqlExpressionBase = false;
+            bool isBody = false;
+            Expression exp = null;
+            while (member != null)
+            {
+                if (typeof(ISqlExpressionBase).IsAssignableFrom(member.Type))
+                {
+                    exp = member;
+                    isSqlExpressionBase = true;
+                }
+                if (member.Member.Name == "Body")
+                {
+                    isBody = true;
+                }
+                else
+                {
+                    names.Insert(0, member.Member.Name);
+                }
+                var next = member.Expression as MemberExpression;
+                if (next == null)
+                {
+                    if (member.Expression != null && typeof(ISqlExpressionBase).IsAssignableFrom(member.Expression.Type))
+                    {
+                        exp = member.Expression;
+                        isSqlExpressionBase = true;
+                    }
+                }
+                member = next;
+            }
+            if (isSqlExpressionBase && isBody)
+            {
+                //sub query
+                if (names.Count <= 1)
+                {
+                    return ResolveExpressionObject(exp);
+                }
+                else
+                {
+                    return new DecodedInfo(type, string.Join(".", names.ToArray()));
+                }
+            }
+            return null;
+        }
+
         DecodedInfo ToString(MemberExpression member)
         {
+            //ISqlExpression extensions.
+            var body = IsSqlExpressionBody(member);
+            if (body != null) return body;
+
             if (member.Member.DeclaringType.IsSqlSyntax())
             {
                 if (_sqlSyntaxCustomizer != null)
@@ -144,6 +196,7 @@ namespace LambdicSql.Inside
                 return new DecodedInfo(member.Type, member.GetMemberToString()(this, member));
             }
 
+            //TODO delete
             //SubQuery's member.
             //example [ sub.Cast().id ]
             var method = member.Expression as MethodCallExpression;
@@ -187,7 +240,7 @@ namespace LambdicSql.Inside
 
             //ISqlExpression extensions.
             var args = method.Method.GetParameters();
-            if (0 < args.Length && typeof(ISqlExpression).IsAssignableFrom(args[0].ParameterType))
+            if (0 < args.Length && typeof(ISqlExpressionBase).IsAssignableFrom(args[0].ParameterType))
             {
                 if (method.Method.Name == "Cast" || method.Method.Name == "T") return ResolveExpressionObject(method.Arguments[0]);
             }
@@ -278,7 +331,7 @@ namespace LambdicSql.Inside
 
             //SqlExpression.
             //example [ from(exp) ]
-            var sqlExp = obj as ISqlExpression;
+            var sqlExp = obj as ISqlExpressionBase;
             if (sqlExp != null)
             {
                 Type type = null;

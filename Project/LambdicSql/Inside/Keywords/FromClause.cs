@@ -59,7 +59,7 @@ namespace LambdicSql.Inside.Keywords
                 }
                 return text;
             }
-            if (typeof(ISqlExpression).IsAssignableFrom(exp.Type))
+            if (typeof(ISqlExpressionBase).IsAssignableFrom(exp.Type))
             {
                 var member = exp as MemberExpression;
                 if (member != null)

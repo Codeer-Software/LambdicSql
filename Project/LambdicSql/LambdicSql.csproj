@@ -39,6 +39,7 @@
     <Compile Include="DateTiemElement.cs" />
     <Compile Include="feat\Dapper\DapperApaptExtensions.cs" />
     <Compile Include="feat\Dapper\DapperWrapper.cs" />
+    <Compile Include="feat\EntityFramework\EFAdaptSqlSyntaxExtensions.cs" />
     <Compile Include="feat\EntityFramework\EFApaptExtensions.cs" />
     <Compile Include="feat\EntityFramework\EFWrapper.cs" />
     <Compile Include="feat\PackageIsNotInstalledException.cs" />
@@ -58,6 +59,8 @@
     <Compile Include="Inside\SqlExpressionCoupled.cs" />
     <Compile Include="SqlBase\DecodeContext.cs" />
     <Compile Include="SqlBase\IParamInfo.cs" />
+    <Compile Include="SqlBase\ISqlExpressionBase.cs" />
+    <Compile Include="SqlBase\ISqlQuery.cs" />
     <Compile Include="SqlBase\ISqlSyntaxCustomizer.cs" />
     <Compile Include="SqlBase\IMethodChainGroup.cs" />
     <Compile Include="SqlBase\IQuery.cs" />
@@ -66,6 +69,7 @@
     <Compile Include="DbParam.cs" />
     <Compile Include="SqlBase\MethodGroupAttribute.cs" />
     <Compile Include="SqlBase\SqlExpression.cs" />
+    <Compile Include="SqlBase\SqlQuery.cs" />
     <Compile Include="SqlBase\SqlSyntaxAttribute.cs" />
     <Compile Include="SqlBase\Non.cs" />
     <Compile Include="Inside\SqlExpressionSingle.cs" />

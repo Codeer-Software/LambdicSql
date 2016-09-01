@@ -18,6 +18,7 @@ namespace LambdicSql
         }
     }
     
+    //TODO ★これはプロパティーに
     [SqlSyntax]
     public class Asterisk
     {
@@ -157,9 +158,9 @@ namespace LambdicSql
         public static bool Like(string target, string serachText) => InvalitContext.Throw<bool>(nameof(Like));
         public static bool Between<TTarget>(TTarget target, TTarget min, TTarget max) => InvalitContext.Throw<bool>(nameof(Between));
         public static bool In<TTarget>(TTarget target, params TTarget[] inArguments) => InvalitContext.Throw<bool>(nameof(In));
-        public static bool In(ISqlExpression exp) => InvalitContext.Throw<bool>(nameof(In));
+        public static bool In(ISqlExpressionBase exp) => InvalitContext.Throw<bool>(nameof(In));
         public static bool In(IQuery exp) => InvalitContext.Throw<bool>(nameof(In));
-        public static bool Exists(ISqlExpression exp) => InvalitContext.Throw<bool>(nameof(Exists));
+        public static bool Exists(ISqlExpressionBase exp) => InvalitContext.Throw<bool>(nameof(Exists));
         public static bool Exists(IQuery exp) => InvalitContext.Throw<bool>(nameof(Exists));
 
         public static IQuery<Non> Union() => InvalitContext.Throw<IQuery<Non>>(nameof(Union));

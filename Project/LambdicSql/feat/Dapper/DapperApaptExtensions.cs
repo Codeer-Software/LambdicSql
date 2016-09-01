@@ -7,10 +7,10 @@ namespace LambdicSql.feat.Dapper
 {
     public static class DapperApaptExtensions
     {
-        public static IEnumerable<T> Query<T>(this IDbConnection cnn, ISqlExpression<IQuery<T>> exp, IDbTransaction transaction = null, bool buffered = true, int? commandTimeout = default(int?), CommandType? commandType = default(CommandType?))
-            => Query<T>(cnn, (ISqlExpression)exp, transaction, buffered, commandTimeout, commandType);
+        public static IEnumerable<T> Query<T>(this IDbConnection cnn, ISqlExpressionBase<IQuery<T>> exp, IDbTransaction transaction = null, bool buffered = true, int? commandTimeout = default(int?), CommandType? commandType = default(CommandType?))
+            => Query<T>(cnn, (ISqlExpressionBase)exp, transaction, buffered, commandTimeout, commandType);
 
-        public static IEnumerable<T> Query<T>(this IDbConnection cnn, ISqlExpression exp, IDbTransaction transaction = null, bool buffered = true, int? commandTimeout = default(int?), CommandType? commandType = default(CommandType?))
+        public static IEnumerable<T> Query<T>(this IDbConnection cnn, ISqlExpressionBase exp, IDbTransaction transaction = null, bool buffered = true, int? commandTimeout = default(int?), CommandType? commandType = default(CommandType?))
         {
             var info = exp.ToSqlInfo(cnn.GetType());
             try
@@ -24,7 +24,7 @@ namespace LambdicSql.feat.Dapper
             }
         }
         
-        public static int Execute(this IDbConnection cnn, ISqlExpression exp, IDbTransaction transaction = null, int? commandTimeout = default(int?), CommandType? commandType = default(CommandType?))
+        public static int Execute(this IDbConnection cnn, ISqlExpressionBase exp, IDbTransaction transaction = null, int? commandTimeout = default(int?), CommandType? commandType = default(CommandType?))
         {
             try
             {

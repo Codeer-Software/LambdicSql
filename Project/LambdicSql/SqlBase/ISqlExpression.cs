@@ -1,10 +1,7 @@
 ﻿namespace LambdicSql.SqlBase
 {
-    public interface ISqlExpression
+    public interface ISqlExpression<out TReturn> : ISqlExpressionBase<TReturn>
     {
-        DbInfo DbInfo { get; }
-        string ToString(ISqlStringConverter decoder);
+        TReturn Body { get; }
     }
-    
-    public interface ISqlExpression<out TReturn> : ISqlExpression { }
 }

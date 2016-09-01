@@ -7,14 +7,12 @@ using System.Linq;
 
 namespace LambdicSql.feat.EntityFramework
 {
-    //TODO まあ、これは無理にDbContext引き継がんでもよかろう？
-    //文字列生成の前にインスタンスが必要になるのはなんだかなー
     public static class EFApaptExtensions
     {
-        public static IEnumerable<T> SqlQuery<T>(this ISqlExpression<IQuery<T>> exp, object dbContext)
-            => SqlQuery<T>((ISqlExpression)exp, dbContext);
+        public static IEnumerable<T> SqlQuery<T>(this ISqlExpressionBase<IQuery<T>> exp, object dbContext)
+            => SqlQuery<T>((ISqlExpressionBase)exp, dbContext);
 
-        public static IEnumerable<T> SqlQuery<T>(this ISqlExpression exp, object dbContext)
+        public static IEnumerable<T> SqlQuery<T>(this ISqlExpressionBase exp, object dbContext)
         {
             var cnn = EFWrapper.GetConnection(dbContext);
             var info = exp.ToSqlInfo(cnn.GetType());
@@ -36,7 +34,7 @@ namespace LambdicSql.feat.EntityFramework
             }
         }
 
-        public static int ExecuteSqlCommand(this ISqlExpression exp, object dbContext)
+        public static int ExecuteSqlCommand(this ISqlExpressionBase exp, object dbContext)
         {
             var cnn = EFWrapper.GetConnection(dbContext);
             var info = exp.ToSqlInfo(cnn.GetType());

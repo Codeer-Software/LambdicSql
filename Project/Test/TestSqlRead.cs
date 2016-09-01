@@ -225,7 +225,7 @@ namespace Test
                 {
                     id = db.tbl_staff.id,
                     rid = db.tbl_remuneration.id,
-                    type = caseExp.T(),
+                    type = caseExp.Body,
                     total = subQuery.Cast<decimal>()
                 }).
                 From(db.tbl_staff).
@@ -438,7 +438,7 @@ namespace Test
             Debug.Print(info.SqlText);
         }
 
-        public ISqlExpression GetExp()
+        public ISqlExpressionBase GetExp()
         {
             int a = 0;
             return Sql<Data>.Create(db => a == 2 && a == b);
@@ -630,14 +630,14 @@ FROM tbl_remuneration
                 Select(new
                 {
                     date = db.tbl_work.date,
-                    name1 = member1.T().name,
-                    name2 = member2.T().name,
-                    name3 = member3.T().name
+                    name1 = member1.Body.name,
+                    name2 = member2.Body.name,
+                    name3 = member3.Body.name
                 }).
                 From(db.tbl_work).
-                    Join(member1, db.tbl_work.member1_id == member1.T().id).
-                    Join(member2, db.tbl_work.member2_id == member2.T().id).
-                    Join(member3, db.tbl_work.member3_id == member3.T().id));
+                    Join(member1, db.tbl_work.member1_id == member1.Body.id).
+                    Join(member2, db.tbl_work.member2_id == member2.Body.id).
+                    Join(member3, db.tbl_work.member3_id == member3.Body.id));
 
             var ret = query.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Read();
         }
@@ -784,7 +784,7 @@ FROM tbl_remuneration
             var query = Sql<Data>.Create(db =>
                 Select(new
                 {
-                    money = MoneyExp(3, 10).T(),
+                    money = MoneyExp(3, 10).Body,
                 }).
                 From(db.tbl_remuneration).
                 Where(min < db.tbl_remuneration.money && db.tbl_remuneration.money < max));
