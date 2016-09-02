@@ -86,6 +86,17 @@ https://www.nuget.org/packages/LambdicSql/
 
 ## Supported Window Functions
 - AVG
+- SUN
+- COUNT
+- MAX
+- MIN
+- RANK
+- DENSE_RANK
+- PERCENT_RANK
+- CAM_DIST
+- NTIL
+- FIRST_VALUE
+- LAST_VALUE
 - LAG
 	- OVER
 	- PARTITION BY
