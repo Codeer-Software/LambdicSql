@@ -1,4 +1,6 @@
-﻿namespace LambdicSql.SqlBase
+﻿using LambdicSql.SqlBase;
+
+namespace LambdicSql
 {
     public interface ISqlExpression<out TReturn> : ISqlExpressionBase<TReturn>
     {

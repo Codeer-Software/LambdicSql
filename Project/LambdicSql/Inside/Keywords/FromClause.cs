@@ -38,6 +38,7 @@ namespace LambdicSql.Inside.Keywords
             return Environment.NewLine + "\t" + name.ToUpper() + " " + ExpressionToTableName(converter, method.Arguments[1]) + " ON " + argSrc[1];
         }
 
+        //TODO refactoring.
         internal static string ExpressionToTableName(ISqlStringConverter decoder, Expression exp)
         {
             var arry = exp as NewArrayExpression;
@@ -47,10 +48,10 @@ namespace LambdicSql.Inside.Keywords
             }
 
             var text = decoder.ToString(exp);
+
             var methodCall = exp as MethodCallExpression;
             if (methodCall != null)
             {
-                //TODO
                 var member = methodCall.Arguments[0] as MemberExpression;
                 if (member != null)
                 {
@@ -58,6 +59,12 @@ namespace LambdicSql.Inside.Keywords
                     return text + " " + x;
                 }
                 return text;
+            }
+
+            var body = GetSqlExpressionBody(exp);
+            if (body != null)
+            {
+                return text + " " + body;
             }
             if (typeof(ISqlExpressionBase).IsAssignableFrom(exp.Type))
             {
@@ -68,6 +75,20 @@ namespace LambdicSql.Inside.Keywords
                 }
             }
             return text;
+        }
+
+        static string GetSqlExpressionBody(Expression exp)
+        {
+            var member = exp as MemberExpression;
+            while (member != null)
+            {
+                if (typeof(ISqlExpressionBase).IsAssignableFrom(member.Type))
+                {
+                    return member.Member.Name;
+                }
+                member = member.Expression as MemberExpression;
+            }
+            return null;
         }
     }
 }

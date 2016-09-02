@@ -802,20 +802,36 @@ namespace TestCore
                 From(db.tbl_remuneration).
                     Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
                 Where(3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
-            
-            var query = Sql<DB>.Create(db => 
-                Select(new SelectData6
-                {
-                    Name = subQuery.Body.name_sub
-                }).
-                From(subQuery));
+            {
+                var query = Sql<DB>.Create(db =>
+                    Select(new SelectData6
+                    {
+                        Name = subQuery.Body.name_sub
+                    }).
+                    From(subQuery.Body));
 
-            //to string and params.
-            var info = query.ToSqlInfo(_connection.GetType());
-            Debug.Print(info.SqlText);
+                //to string and params.
+                var info = query.ToSqlInfo(_connection.GetType());
+                Debug.Print(info.SqlText);
 
-            //dapper
-            var datas = _connection.Query(query).ToList();
+                //dapper
+                var datas = _connection.Query(query).ToList();
+            }
+            {
+                var query = Sql<DB>.Create(db =>
+                    Select(new SelectData6
+                    {
+                        Name = subQuery.Body.name_sub
+                    }).
+                    From(subQuery));
+
+                //to string and params.
+                var info = query.ToSqlInfo(_connection.GetType());
+                Debug.Print(info.SqlText);
+
+                //dapper
+                var datas = _connection.Query(query).ToList();
+            }
         }
 
         //You can use text.

@@ -720,7 +720,7 @@ FROM tbl_remuneration
                     payment_date = db.tbl_remuneration.T().payment_date,
                     money = db.tbl_remuneration.T().money,
                 }).
-                From(db.tbl_remuneration.T()).
+                From(db.tbl_remuneration).
                     Join(db.tbl_staff, db.tbl_remuneration.T().staff_id == db.tbl_staff.T().id));
 
             var xxx = query.SqlQuery(m).ToArray();
@@ -728,7 +728,7 @@ FROM tbl_remuneration
 
             var queryDelete = Sql<ModelLambdicSqlTestDB>.Create(db =>
                 Delete().
-                From(db.tbl_data.T()));
+                From(db.tbl_data));
 
             int a = queryDelete.ExecuteSqlCommand(m);
 

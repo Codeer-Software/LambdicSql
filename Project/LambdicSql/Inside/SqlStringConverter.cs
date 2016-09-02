@@ -78,7 +78,7 @@ namespace LambdicSql.Inside
 
         DecodedInfo ToString(ConstantExpression constant)
         {
-            if (constant.Type.IsSqlSyntax()) return new DecodedInfo(constant.Type, constant.Value.ToString());
+            if (constant.Type.IsSqlSyntax()) return new DecodedInfo(constant.Type, constant.Value.ToString().ToUpper());
             if (SupportedTypeSpec.IsSupported(constant.Type)) return new DecodedInfo(constant.Type, ToString(constant.Value));
             throw new NotSupportedException();
         }

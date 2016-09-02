@@ -1,6 +1,7 @@
 ﻿using LambdicSql.Inside;
+using LambdicSql.SqlBase;
 
-namespace LambdicSql.SqlBase
+namespace LambdicSql
 {
     public class SqlQuery<TSelected> : ISqlQuery<TSelected>
     {

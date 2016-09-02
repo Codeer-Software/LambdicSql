@@ -11,9 +11,9 @@ namespace LambdicSql
     {
         public static T Sum<T>(T item) => InvalitContext.Throw<T>(nameof(Sum));
         public static T Sum<T>(AggregatePredicate aggregatePredicate, T item) => InvalitContext.Throw<T>(nameof(Sum));
-        public static T Count<T>(T item) => InvalitContext.Throw<T>(nameof(Count));
-        public static T Count<T>(Asterisk ast) => InvalitContext.Throw<T>(nameof(Count));
-        public static T Count<T>(AggregatePredicate aggregatePredicate, T item) => InvalitContext.Throw<T>(nameof(Count));
+        public static int Count(object item) => InvalitContext.Throw<int>(nameof(Count));
+        public static int Count(Asterisk ast) => InvalitContext.Throw<int>(nameof(Count));
+        public static int Count(AggregatePredicate aggregatePredicate, object item) => InvalitContext.Throw<int>(nameof(Count));
         public static T Avg<T>(T item) => InvalitContext.Throw<T>(nameof(Avg));
         public static T Min<T>(T item) => InvalitContext.Throw<T>(nameof(Min));
         public static T Max<T>(T item) => InvalitContext.Throw<T>(nameof(Max));
