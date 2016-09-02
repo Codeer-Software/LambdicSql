@@ -3,9 +3,44 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Linq;
 
 namespace LambdicSql.feat.Dapper
 {
+    static class DynamicParametersWrapper
+    {
+        internal delegate object CreateDelegate();
+        internal delegate void AddDelegate(object target, string name, object value, DbType? dbType, ParameterDirection? direction, int? size, byte? precision, byte? scale);
+
+        internal static CreateDelegate Create;
+        internal static AddDelegate Add;
+
+        static DynamicParametersWrapper()
+        {
+            Assembly asm = null;
+            try
+            {
+                asm = Assembly.LoadFrom("Dapper.dll");
+            }
+            catch { throw new PackageIsNotInstalledException("Dapper is not installed. Please install dapper of your faverit version."); }
+            if (asm == null) throw new PackageIsNotInstalledException("Dapper is not installed. Please install dapper of your faverit version.");
+
+            var dynamicParam = asm.GetType("Dapper.DynamicParameters");
+            Create = Expression.Lambda<CreateDelegate>(Expression.New(dynamicParam), new ParameterExpression[0]).Compile();
+
+            var target = Expression.Parameter(typeof(object), "target");
+            var name = Expression.Parameter(typeof(string), "name");
+            var value  = Expression.Parameter(typeof(object), "value");
+            var dbType = Expression.Parameter(typeof(DbType?), "dbType");
+            var direction = Expression.Parameter(typeof(ParameterDirection?), "direction");
+            var size = Expression.Parameter(typeof(int?), "size");
+            var precision = Expression.Parameter(typeof(byte?), "precision");
+            var scale = Expression.Parameter(typeof(byte?), "scale");
+            var executeArgs = new[] { name, value, dbType, direction, size, precision, scale };
+            Add = Expression.Lambda<AddDelegate>(Expression.Call(Expression.Convert(target, dynamicParam), "Add", new Type[0], executeArgs), new[] { target }.Concat(executeArgs).ToArray()).Compile();
+        }
+    }
+
     static class DapperWrapper
     {
         internal delegate int ExecuteDelegate(IDbConnection cnn, string sql, object param, IDbTransaction transaction, int? commandTimeout, CommandType? commandType);

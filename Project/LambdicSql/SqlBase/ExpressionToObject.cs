@@ -16,7 +16,6 @@ namespace LambdicSql.SqlBase
 
         static Dictionary<string, IGetter> _memberGet = new Dictionary<string, IGetter>();
 
-        //TODO これはISqlStringConverterにいれるか
         public static bool GetExpressionObject(Expression exp, out object obj)
         {
             while (true)

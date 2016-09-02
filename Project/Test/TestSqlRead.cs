@@ -14,6 +14,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Collections.Generic;
 using System.Data.Entity;
 using LambdicSql.feat.EntityFramework;
+using Dapper;
 
 namespace Test
 {
@@ -640,6 +641,8 @@ FROM tbl_remuneration
                     Join(member3, db.tbl_work.member3_id == member3.Body.id));
 
             var ret = query.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Read();
+
+            
         }
 
         //noraml type.

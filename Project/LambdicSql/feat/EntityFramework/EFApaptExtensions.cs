@@ -16,12 +16,11 @@ namespace LambdicSql.feat.EntityFramework
         {
             var cnn = EFWrapper.GetConnection(dbContext);
             var info = exp.ToSqlInfo(cnn.GetType());
-
-            //TODO params detail.
+            
             object[] args;
             using (var com = cnn.CreateCommand())
             {
-                args = info.Params.Select(e => CreateParameter(com, e.Key, e.Value)).ToArray();
+                args = info.DbParams.Select(e => CreateParameter(com, e.Key, e.Value)).ToArray();
             }
 
             try
@@ -38,15 +37,13 @@ namespace LambdicSql.feat.EntityFramework
         {
             var cnn = EFWrapper.GetConnection(dbContext);
             var info = exp.ToSqlInfo(cnn.GetType());
-
-            //TODO
+            
             Debug.Print(info.SqlText);
 
-            //TODO params detail.
             object[] args;
             using (var com = cnn.CreateCommand())
             {
-                args = info.Params.Select(e => CreateParameter(com, e.Key, e.Value)).ToArray();
+                args = info.DbParams.Select(e => CreateParameter(com, e.Key, e.Value)).ToArray();
             }
 
             try
@@ -67,12 +64,21 @@ namespace LambdicSql.feat.EntityFramework
                 e = e.InnerException;
             }
         }
-        static IDbDataParameter CreateParameter(IDbCommand com, string name, object obj)
+        static IDbDataParameter CreateParameter(IDbCommand com, string name, DbParam src)
         {
-            var param = com.CreateParameter();
-            param.ParameterName = name;
-            param.Value = obj;
-            return param;
+            var dst = com.CreateParameter();
+            dst.ParameterName = name;
+            dst.Value = src.Value;
+
+            if (src.DbType != null) dst.DbType = src.DbType.Value;
+            if (src.Direction != null) dst.Direction = src.Direction.Value;
+            if (src.SourceColumn != null) dst.SourceColumn = src.SourceColumn;
+            if (src.SourceVersion != null) dst.SourceVersion = src.SourceVersion.Value;
+            if (src.Precision != null) dst.Precision = src.Precision.Value;
+            if (src.Scale != null) dst.Scale = src.Scale.Value;
+            if (src.Size != null) dst.Size = src.Size.Value;
+
+            return dst;
         }
     }
 }

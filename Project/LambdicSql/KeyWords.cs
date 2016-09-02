@@ -124,17 +124,28 @@ namespace LambdicSql
         public static IQuery<Non> Having(bool condition) => InvalitContext.Throw<IQuery<Non>>(nameof(Having));
         public static IQuery<TSelected> Having<TSelected>(this IQuery<TSelected> words, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Having));
 
+        public interface InsertAll<TTable> { }
+        [MethodGroup(nameof(InsertInto))]
+        public static IQuery<Non, InsertAll<TTable>> InsertInto<TTable>(TTable table) => InvalitContext.Throw<IQuery<Non, InsertAll<TTable>>>(nameof(InsertInto));
+
         [MethodGroup(nameof(InsertInto))]
         public static IQuery<Non, TTable> InsertInto<TTable>(TTable table, params object[] targets) => InvalitContext.Throw<IQuery<Non, TTable>>(nameof(InsertInto));
      
         [MethodGroup(nameof(InsertInto))]
         public static IQuery<TSelected> Values<TSelected, TTable>(this IQuery<TSelected, TTable> words, params object[] targets)
              => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
+
         [MethodGroup(nameof(InsertInto))]
         public static IQuery<TSelected> Values<TSelected, TTable>(this IQuery<TSelected, TTable> words, TTable value)
              => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
         [MethodGroup(nameof(InsertInto))]
+        public static IQuery<TSelected> Values<TSelected, TTable>(this IQuery<TSelected, InsertAll<TTable>> words, TTable value)
+            => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
+        [MethodGroup(nameof(InsertInto))]
         public static IQuery<TSelected> Values<TSelected, TTable>(this IQuery<TSelected, TTable> words, IParamInfo value)
+             => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
+        [MethodGroup(nameof(InsertInto))]
+        public static IQuery<TSelected> Values<TSelected, TTable>(this IQuery<TSelected, InsertAll<TTable>> words, IParamInfo value)
              => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
 
         public static IQuery<Non> OrderBy(params IOrderElement[] elements) => InvalitContext.Throw<IQuery<Non>>(nameof(OrderBy));
