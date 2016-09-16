@@ -40,7 +40,7 @@ namespace LambdicSql.Inside.Keywords
                 {
                     converter.Context.SelectClauseInfo = select;
                 }
-                return Environment.NewLine + selectText + Environment.NewLine + 
+                return Environment.NewLine + selectText + Environment.NewLine + "\t" +
                     string.Join("," + Environment.NewLine + "\t", select.Elements.Select(e => ToString(converter, e)).ToArray());
             }
         }
