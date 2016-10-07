@@ -646,7 +646,7 @@ FROM tbl_remuneration
         }
 
         //noraml type.
-        [Table("tbl_staff")]
+        [Table("vvv.tbl_staff")]
         public class StaffX
         {
             [Column("id")]
@@ -655,7 +655,7 @@ FROM tbl_remuneration
             public string namex { get; set; }
         }
 
-        [Table("tbl_remuneration")]
+        [Table("vvv.tbl_remuneration")]
         public class RemunerationX
         {
             [Column("id")]
@@ -668,10 +668,15 @@ FROM tbl_remuneration
             public decimal moneyx { get; set; }
         }
 
+        public class DataAttrEF
+        {
+            public DbSet<StaffX> xxx { get; set; }
+            public DbSet<RemunerationX> yyy { get; set; }
+        }
         public class DataAttr
         {
             public StaffX xxx { get; set; }
-            public Remuneration tbl_remuneration { get; set; }
+            public RemunerationX yyy { get; set; }
         }
         public class DBO
         {
@@ -700,6 +705,42 @@ FROM tbl_remuneration
 
             var y = query.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Read();
         }
+
+
+        [TestMethod]
+        public void SelectAttr()
+        {
+            SqlOption.Log = l => Debug.Print(l);
+            var query = Sql<DataAttr>.Create(db =>
+                Select(new
+                {
+                    Name = db.xxx.namex,
+                    PaymentDate = db.yyy.payment_datex,
+                    Money = db.yyy.moneyx,
+                }).
+                From(db.yyy).
+                    Join(db.xxx, db.xxx.idx == db.yyy.staff_idx));
+
+            Debug.Print(query.ToSqlInfo().SqlText);
+        }
+
+        [TestMethod]
+        public void SelectAttrEF()
+        {
+            SqlOption.Log = l => Debug.Print(l);
+            var query = Sql<DataAttrEF>.Create(db =>
+                Select(new
+                {
+                    Name = db.xxx.T().namex,
+                    PaymentDate = db.yyy.T().payment_datex,
+                    Money = db.yyy.T().moneyx,
+                }).
+                From(db.yyy).
+                    Join(db.xxx, db.xxx.T().idx == db.yyy.T().staff_idx));
+
+            Debug.Print(query.ToSqlInfo().SqlText);
+        }
+
         public class SelectDataEF
         {
             public string name { get; set; }
@@ -899,6 +940,21 @@ FROM tbl_remuneration
             Debug.Print(info.SqlText);
 
             var data = _connection.Query(query);
+        }
+
+        public enum CheckEnum
+        {
+            A,
+            B
+        }
+
+        [TestMethod]
+        public void TestConditionEnum()
+        {
+            var A = CheckEnum.A;
+            var query = Sql<Data>.Create(db => Condition(A == CheckEnum.B, db.tbl_staff.id == 3));
+            Debug.Print(query.ToSqlInfo().SqlText);
+
         }
     }
 }

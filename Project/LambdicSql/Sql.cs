@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 
 namespace LambdicSql
 {
+    //TODO delete new() 
     public class Sql<TDB> where TDB : class, new()
     {
         public static SqlExpression<TResult> Create<TResult>(Expression<Func<TDB, TResult>> exp)

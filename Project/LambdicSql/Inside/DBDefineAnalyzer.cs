@@ -68,7 +68,12 @@ namespace LambdicSql.Inside
 
         static string GetSqlName(PropertyInfo p)
         {
-            var tableAttr = p.PropertyType.GetCustomAttributes(true).Where(e => e.GetType().FullName == "System.ComponentModel.DataAnnotations.Schema.TableAttribute").FirstOrDefault();
+            var type = p.PropertyType;
+
+            //for entity framework.
+            if (type.IsGenericType) type = type.GetGenericArguments()[0];
+
+            var tableAttr = type.GetCustomAttributes(true).Where(e => e.GetType().FullName == "System.ComponentModel.DataAnnotations.Schema.TableAttribute").FirstOrDefault();
             if (tableAttr != null)
             {
                 var name = tableAttr.GetType().GetProperty("Name").GetValue(tableAttr, new object[0]);

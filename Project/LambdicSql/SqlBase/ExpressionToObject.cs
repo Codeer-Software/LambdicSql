@@ -27,6 +27,11 @@ namespace LambdicSql.SqlBase
                 }
                 exp = unary.Operand;
             }
+            var binaryExp = exp as BinaryExpression;
+            if (binaryExp != null)
+            {
+                //TODO oh no...
+            }
 
             var constExp = exp as ConstantExpression;
             if (constExp != null)

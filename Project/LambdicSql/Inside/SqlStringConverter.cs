@@ -207,7 +207,20 @@ namespace LambdicSql.Inside
                 else text = "." + text + ".";
 
                 var mem2 = method.Arguments[0] as MemberExpression;
-                return new DecodedInfo(null, mem2.Member.Name + text + member.Member.Name);
+
+                //TODO
+                var memberName = mem2.Member.Name + text + member.Member.Name;
+                TableInfo table;
+                if (Context.DbInfo.GetLambdaNameAndTable().TryGetValue(memberName, out table))
+                {
+                    return new DecodedInfo(null, table.SqlFullName);
+                }
+                ColumnInfo col;
+                if (Context.DbInfo.GetLambdaNameAndColumn().TryGetValue(memberName, out col))
+                {
+                    return new DecodedInfo(col.Type, col.SqlFullName);
+                }
+                return new DecodedInfo(null, memberName);
             }
 
             //db element.
