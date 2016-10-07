@@ -202,6 +202,34 @@ namespace TestCore
             var datas = _connection.Query(query).ToList();
         }
 
+        public void TestJoin()
+        {
+            var min = 3000;
+
+            //make sql.
+            var query1 = Sql<DB>.Create(db =>
+                Select(new SelectData1()
+                {
+                    Name = db.tbl_staff.name,
+                    PaymentDate = db.tbl_remuneration.payment_date,
+                    Money = db.tbl_remuneration.money,
+                }).
+                From(db.tbl_remuneration));
+            
+            var query2 = Sql<DB>.Create(db =>
+                    Join(db.tbl_staff, db.tbl_staff.id == db.tbl_remuneration.staff_id).
+                Where(min < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
+
+            var query = query1.Concat(query2);
+
+            //to string and params.
+            var info = query.ToSqlInfo(_connection.GetType());
+            Debug.Print(info.SqlText);
+
+            //dapper
+            var datas = _connection.Query(query).ToList();
+        }
+
         //Group by.
         public void TestGroupBy()
         {

@@ -31,6 +31,9 @@ namespace Test
         public void SelectFrom() => _core.TestSelectFrom();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Join() => _core.TestJoin();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void GroupBy() => _core.TestGroupBy();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]

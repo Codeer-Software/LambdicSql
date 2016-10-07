@@ -21,11 +21,11 @@ namespace LambdicSql.Inside.Keywords
         static string MethodToString(ISqlStringConverter converter, MethodCallExpression method)
         {
             string name = method.Method.Name;
-            string[] argSrc = method.Arguments.Skip(1).Select(e => converter.ToString(e)).ToArray();
+            var startIndex = method.AdjustSqlSyntaxMethodArgumentIndex(0);
             switch (name)
             {
                 case nameof(LambdicSql.Keywords.From):
-                    return Environment.NewLine + "FROM " + ExpressionToTableName(converter, method.Arguments[method.AdjustSqlSyntaxMethodArgumentIndex(0)]);
+                    return Environment.NewLine + "FROM " + ExpressionToTableName(converter, method.Arguments[startIndex]);
                 case nameof(LambdicSql.Keywords.CrossJoin):
                     return Environment.NewLine + "\tCROSS JOIN " + ExpressionToTableName(converter, method.Arguments[1]);
                 case nameof(LambdicSql.Keywords.LeftJoin):
@@ -35,7 +35,8 @@ namespace LambdicSql.Inside.Keywords
                     name = "RIGHT JOIN";
                     break;
             }
-            return Environment.NewLine + "\t" + name.ToUpper() + " " + ExpressionToTableName(converter, method.Arguments[1]) + " ON " + argSrc[1];
+            string[] argSrc = method.Arguments.Skip(startIndex).Select(e => converter.ToString(e)).ToArray();
+            return Environment.NewLine + "\t" + name.ToUpper() + " " + ExpressionToTableName(converter, method.Arguments[startIndex]) + " ON " + argSrc[1];
         }
 
         //TODO refactoring.

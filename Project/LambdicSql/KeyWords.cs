@@ -97,18 +97,16 @@ namespace LambdicSql
 
         public static IQuery<Non> Delete() => InvalitContext.Throw<IQuery<Non>>(nameof(Delete));
         
-        [MethodGroup(nameof(From))]
         public static IQuery<TSelected> From<TSelected>(this IQuery<TSelected> words, params object[] tbale) => InvalitContext.Throw<IQuery<TSelected>>(nameof(From));
-        [MethodGroup(nameof(From))]
         public static IQuery<Non> From(params object[] tbale) => InvalitContext.Throw<IQuery<Non>>(nameof(From));
-        [MethodGroup(nameof(From))]
         public static IQuery<TSelected> Join<TSelected, T>(this IQuery<TSelected> words, T tbale, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Join));
-        [MethodGroup(nameof(From))]
+        public static IQuery<Non> Join<T>(T tbale, bool condition) => InvalitContext.Throw<IQuery<Non>>(nameof(Join));
         public static IQuery<TSelected> LeftJoin<TSelected, T>(this IQuery<TSelected> words, T tbale, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(LeftJoin));
-        [MethodGroup(nameof(From))]
+        public static IQuery<Non> LeftJoin<T>(T tbale, bool condition) => InvalitContext.Throw<IQuery<Non>>(nameof(LeftJoin));
         public static IQuery<TSelected> RightJoin<TSelected, T>(this IQuery<TSelected> words, T tbale, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(RightJoin));
-        [MethodGroup(nameof(From))]
+        public static IQuery<Non> RightJoin<T>(T tbale, bool condition) => InvalitContext.Throw<IQuery<Non>>(nameof(RightJoin));
         public static IQuery<TSelected> CrossJoin<TSelected, T>(this IQuery<TSelected> words, T tbale) => InvalitContext.Throw<IQuery<TSelected>>(nameof(CrossJoin));
+        public static IQuery<Non> CrossJoin<T>(T tbale) => InvalitContext.Throw<IQuery<Non>>(nameof(CrossJoin));
 
         public static IQuery<Non> GroupBy(params object[] target) => InvalitContext.Throw<IQuery<Non>>(nameof(GroupBy));
         public static IQuery<TSelected> GroupBy<TSelected>(this IQuery<TSelected> words, params object[] target) => InvalitContext.Throw<IQuery<TSelected>>(nameof(GroupBy));
@@ -212,6 +210,10 @@ namespace LambdicSql
                 case nameof(Delete):
                     return DeleteClause.ToString(converter, methods);
                 case nameof(From):
+                case nameof(Join):
+                case nameof(LeftJoin):
+                case nameof(RightJoin):
+                case nameof(CrossJoin):
                     return FromClause.ToString(converter, methods);
                 case nameof(GroupBy):
                 case nameof(GroupByRollup):
