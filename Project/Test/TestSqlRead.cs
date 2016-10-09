@@ -952,9 +952,26 @@ FROM tbl_remuneration
         public void TestConditionEnum()
         {
             var A = CheckEnum.A;
-            var query = Sql<Data>.Create(db => Condition(A == CheckEnum.B, db.tbl_staff.id == 3));
-            Debug.Print(query.ToSqlInfo().SqlText);
-
+            {
+                var query = Sql<Data>.Create(db => Condition(A == CheckEnum.B, db.tbl_staff.id == 3));
+                Debug.Print("1: " + query.ToSqlInfo().SqlText);
+            }
+            {
+                var query = Sql<Data>.Create(db => Condition(A != CheckEnum.B, db.tbl_staff.id == 3));
+                Debug.Print("2: " + query.ToSqlInfo().SqlText);
+            }
+            {
+                var query = Sql<Data>.Create(db => Condition(!(A == CheckEnum.B), db.tbl_staff.id == 3));
+                Debug.Print("3: " + query.ToSqlInfo().SqlText);
+            }
+            {
+                var query = Sql<Data>.Create(db => Condition(string.IsNullOrEmpty(null), db.tbl_staff.id == 3));
+                Debug.Print("4: " + query.ToSqlInfo().SqlText);
+            }
+            {
+                var query = Sql<Data>.Create(db => Condition(!string.IsNullOrEmpty(null), db.tbl_staff.id == 3));
+                Debug.Print("5: " + query.ToSqlInfo().SqlText);
+            }
         }
     }
 }

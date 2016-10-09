@@ -18,6 +18,7 @@ namespace LambdicSql.SqlBase
 
         public static bool GetExpressionObject(Expression exp, out object obj)
         {
+            bool not = false;
             while (true)
             {
                 var unary = exp as UnaryExpression;
@@ -25,12 +26,26 @@ namespace LambdicSql.SqlBase
                 {
                     break;
                 }
+                if (unary.NodeType == ExpressionType.Not)
+                {
+                    not = !not;
+                }
                 exp = unary.Operand;
             }
+            var ret = GetExpressionObjectCore(exp, out obj);
+            if (not)
+            {
+                obj = !((bool)obj);
+            }
+            return ret;
+        }
+
+        static bool GetExpressionObjectCore(Expression exp, out object obj)
+        {
             var binaryExp = exp as BinaryExpression;
             if (binaryExp != null)
             {
-                //TODO oh no...
+                return GetBinaryExpression(binaryExp, out obj);
             }
 
             var constExp = exp as ConstantExpression;
@@ -39,21 +54,25 @@ namespace LambdicSql.SqlBase
                 obj = constExp.Value;
                 return true;
             }
+
             var member = exp as MemberExpression;
             if (member != null)
             {
                 return GetMemberObject(member, out obj);
             }
+
             var method = exp as MethodCallExpression;
             if (method != null)
             {
                 return GetMethodObject(method, out obj);
             }
+
             var newExp = exp as NewExpression;
             if (newExp != null)
             {
                 return GetNewObject(newExp, out obj);
             }
+
             var memberInit = exp as MemberInitExpression;
             if (memberInit != null)
             {
@@ -62,6 +81,94 @@ namespace LambdicSql.SqlBase
 
             obj = null;
             return false;
+        }
+
+        public static bool GetBinaryExpression(BinaryExpression binaryExp, out object value)
+        {
+            value = null;
+
+            object objLeft, objRight;
+            if (!GetExpressionObject(binaryExp.Left, out objLeft) ||
+                !GetExpressionObject(binaryExp.Right, out objRight))
+            {
+                throw new NotSupportedException();
+            }
+
+            //arguments.
+            var left = Expression.Parameter(binaryExp.Left.Type, "left");
+            var right = Expression.Parameter(binaryExp.Right.Type, "right");
+            var args = new List<object>();
+            args.Add(objLeft);
+            args.Add(objRight);
+
+            //name.
+            var getterName = binaryExp.Left.Type.FullName + " " + binaryExp.NodeType + " " + binaryExp.Right.Type.FullName;
+
+            //getter.
+            IGetter getter;
+            lock (_memberGet)
+            {
+                if (!_memberGet.TryGetValue(getterName, out getter))
+                {
+                    Expression body = null;
+
+                    switch (binaryExp.NodeType)
+                    {
+                        case ExpressionType.Add: body = Expression.Convert(Expression.Add(left, right), typeof(object)); break;
+                        case ExpressionType.AddChecked: body = Expression.Convert(Expression.AddChecked(left, right), typeof(object)); break;
+                        case ExpressionType.And: body = Expression.Convert(Expression.And(left, right), typeof(object)); break;
+                        case ExpressionType.AndAlso: body = Expression.Convert(Expression.AndAlso(left, right), typeof(object)); break;
+                      //  case ExpressionType.ArrayLength: body = Expression.Convert(Expression.ArrayLength(left, right), typeof(object)); break;
+                        case ExpressionType.ArrayIndex: body = Expression.Convert(Expression.ArrayIndex(left, right), typeof(object)); break;
+                    //    case ExpressionType.Call: body = Expression.Convert(Expression.Call(left, right), typeof(object)); break;
+                        case ExpressionType.Coalesce: body = Expression.Convert(Expression.Coalesce(left, right), typeof(object)); break;
+                       // case ExpressionType.Conditional: body = Expression.Convert(Expression.Conditional(left, right), typeof(object)); break;
+                    //    case ExpressionType.Constant: body = Expression.Convert(Expression.Constant(left, right), typeof(object)); break;
+                     //   case ExpressionType.Convert: body = Expression.Convert(Expression.Convert(left, right), typeof(object)); break;
+                      //  case ExpressionType.ConvertChecked: body = Expression.Convert(Expression.ConvertChecked(left, right), typeof(object)); break;
+                        case ExpressionType.Divide: body = Expression.Convert(Expression.Divide(left, right), typeof(object)); break;
+                        case ExpressionType.Equal: body = Expression.Convert(Expression.Equal(left, right), typeof(object)); break;
+                        case ExpressionType.ExclusiveOr: body = Expression.Convert(Expression.ExclusiveOr(left, right), typeof(object)); break;
+                        case ExpressionType.GreaterThan: body = Expression.Convert(Expression.GreaterThan(left, right), typeof(object)); break;
+                        case ExpressionType.GreaterThanOrEqual: body = Expression.Convert(Expression.GreaterThanOrEqual(left, right), typeof(object)); break;
+                     //   case ExpressionType.Invoke: body = Expression.Convert(Expression.Invoke(left, right), typeof(object)); break;
+                     //   case ExpressionType.Lambda: body = Expression.Convert(Expression.Lambda(left, right), typeof(object)); break;
+                        case ExpressionType.LeftShift: body = Expression.Convert(Expression.LeftShift(left, right), typeof(object)); break;
+                        case ExpressionType.LessThan: body = Expression.Convert(Expression.LessThan(left, right), typeof(object)); break;
+                        case ExpressionType.LessThanOrEqual: body = Expression.Convert(Expression.LessThanOrEqual(left, right), typeof(object)); break;
+                      //  case ExpressionType.ListInit: body = Expression.Convert(Expression.ListInit(left, right), typeof(object)); break;
+                      //  case ExpressionType.MemberAccess: body = Expression.Convert(Expression.MemberAccess(left, right), typeof(object)); break;
+                      //  case ExpressionType.MemberInit: body = Expression.Convert(Expression.XXX(left, right), typeof(object)); break;
+                        case ExpressionType.Modulo: body = Expression.Convert(Expression.Modulo(left, right), typeof(object)); break;
+                        case ExpressionType.Multiply: body = Expression.Convert(Expression.Multiply(left, right), typeof(object)); break;
+                        case ExpressionType.MultiplyChecked: body = Expression.Convert(Expression.MultiplyChecked(left, right), typeof(object)); break;
+                       // case ExpressionType.Negate: body = Expression.Convert(Expression.Negate(left, right), typeof(object)); break;
+                       // case ExpressionType.UnaryPlus: body = Expression.Convert(Expression.UnaryPlus(left, right), typeof(object)); break;
+                    //    case ExpressionType.NegateChecked: body = Expression.Convert(Expression.NegateChecked(left, right), typeof(object)); break;
+                    //    case ExpressionType.New: body = Expression.Convert(Expression.XXX(left, right), typeof(object)); break;
+                    //    case ExpressionType.NewArrayInit: body = Expression.Convert(Expression.XXX(left, right), typeof(object)); break;
+                    //    case ExpressionType.NewArrayBounds: body = Expression.Convert(Expression.XXX(left, right), typeof(object)); break;
+                     //@@@   case ExpressionType.Not: body = Expression.Convert(Expression.Not(left, right), typeof(object)); break;
+                        case ExpressionType.NotEqual: body = Expression.Convert(Expression.NotEqual(left, right), typeof(object)); break;
+                        case ExpressionType.Or: body = Expression.Convert(Expression.Or(left, right), typeof(object)); break;
+                        case ExpressionType.OrElse: body = Expression.Convert(Expression.OrElse(left, right), typeof(object)); break;
+                    //    case ExpressionType.Parameter: body = Expression.Convert(Expression.Parameter(left, right), typeof(object)); break;
+                        case ExpressionType.Power: body = Expression.Convert(Expression.Power(left, right), typeof(object)); break;
+                  //      case ExpressionType.Quote: body = Expression.Convert(Expression.Quote(left, right), typeof(object)); break;
+                        case ExpressionType.RightShift: body = Expression.Convert(Expression.RightShift(left, right), typeof(object)); break;
+                        case ExpressionType.Subtract: body = Expression.Convert(Expression.Subtract(left, right), typeof(object)); break;
+                        case ExpressionType.SubtractChecked: body = Expression.Convert(Expression.SubtractChecked(left, right), typeof(object)); break;
+                     //   case ExpressionType.TypeAs: body = Expression.Convert(Expression.TypeAs(left, right), typeof(object)); break;
+                     //   case ExpressionType.TypeIs: body = Expression.Convert(Expression.XXX(left, right), typeof(object)); break;
+                    }
+
+                    getter = CreateGetter(new[] { binaryExp.Left.Type, binaryExp.Right.Type });
+                    getter.Init(body, new[] { left, right }.ToArray());
+                    _memberGet[getterName] = getter;
+                }
+            }
+            value = getter.GetMemberObject(args.ToArray());
+            return true;
         }
 
         //TODO refactoring.
