@@ -11,10 +11,12 @@ using static LambdicSql.Keywords;
 using static LambdicSql.Funcs;
 using static LambdicSql.Utils;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Collections.Generic;
 using System.Data.Entity;
 using LambdicSql.feat.EntityFramework;
 using Dapper;
+
+//TODO 基本的には、各キーワードを一回づつやる。
+//それとは別に、もっと内部的なことに着目したやつを作成
 
 namespace Test
 {

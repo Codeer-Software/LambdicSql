@@ -41,7 +41,6 @@ namespace LambdicSql
             return "TOP " + converter.Context.Parameters.ResolvePrepare(args[0]);
         }
     }
-    
 
     //Set operation
     [SqlSyntax]
@@ -64,12 +63,16 @@ namespace LambdicSql
 
         public static IQuery<TSelected> Select<TSrcSelected, TSelected>(this IQuery<TSrcSelected> words, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
         public static IQuery<TSelected> Select<TSrcSelected, TSelected>(this IQuery<TSrcSelected> words, Top top, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
-        public static IQuery<TSrcSelected> Select<TSrcSelected>(this IQuery<TSrcSelected> words, Asterisk asterisk) => InvalitContext.Throw<IQuery<TSrcSelected>>(nameof(Select));
-        public static IQuery<TSrcSelected> Select<TSrcSelected>(this IQuery<TSrcSelected> words, Top top, Asterisk asterisk) => InvalitContext.Throw<IQuery<TSrcSelected>>(nameof(Select));
+        public static IQuery<Non> Select<TSrcSelected>(this IQuery<TSrcSelected> words, Asterisk asterisk) => InvalitContext.Throw<IQuery<Non>>(nameof(Select));
+        public static IQuery<TSelected> Select<TSrcSelected, TSelected>(this IQuery<TSrcSelected> words, Asterisk<TSelected> asterisk) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
+        public static IQuery<Non> Select<TSrcSelected>(this IQuery<TSrcSelected> words, Top top, Asterisk asterisk) => InvalitContext.Throw<IQuery<Non>>(nameof(Select));
+        public static IQuery<TSelected> Select<TSrcSelected, TSelected>(this IQuery<TSrcSelected> words, Top top, Asterisk<TSelected> asterisk) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
         public static IQuery<TSelected> Select<TSrcSelected, TSelected>(this IQuery<TSrcSelected> words, AggregatePredicate predicate, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
         public static IQuery<TSelected> Select<TSrcSelected, TSelected>(this IQuery<TSrcSelected> words, AggregatePredicate predicate, Top top, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
-        public static IQuery<TSrcSelected> Select<TSrcSelected>(this IQuery<TSrcSelected> words, AggregatePredicate predicate, Asterisk asterisk) => InvalitContext.Throw<IQuery<TSrcSelected>>(nameof(Select));
-        public static IQuery<TSrcSelected> Select<TSrcSelected>(this IQuery<TSrcSelected> words, AggregatePredicate predicate, Top top, Asterisk asterisk) => InvalitContext.Throw<IQuery<TSrcSelected>>(nameof(Select));
+        public static IQuery<Non> Select<TSrcSelected>(this IQuery<TSrcSelected> words, AggregatePredicate predicate, Asterisk asterisk) => InvalitContext.Throw<IQuery<Non>>(nameof(Select));
+        public static IQuery<TSelected> Select<TSrcSelected, TSelected>(this IQuery<TSrcSelected> words, AggregatePredicate predicate, Asterisk<TSelected> asterisk) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
+        public static IQuery<Non> Select<TSrcSelected>(this IQuery<TSrcSelected> words, AggregatePredicate predicate, Top top, Asterisk asterisk) => InvalitContext.Throw<IQuery<Non>>(nameof(Select));
+        public static IQuery<TSelected> Select<TSrcSelected, TSelected>(this IQuery<TSrcSelected> words, AggregatePredicate predicate, Top top, Asterisk<TSelected> asterisk) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
 
         public interface ICaseAfter : IMethodChain { }
         public interface IWhenAfter : IMethodChain { }
@@ -96,26 +99,34 @@ namespace LambdicSql
         public static T End<T>(this IElseAfter<T> words) => InvalitContext.Throw<T>(nameof(End));
 
         public static IQuery<Non> Delete() => InvalitContext.Throw<IQuery<Non>>(nameof(Delete));
-        
-        public static IQuery<TSelected> From<TSelected>(this IQuery<TSelected> words, params object[] tbale) => InvalitContext.Throw<IQuery<TSelected>>(nameof(From));
+
         public static IQuery<Non> From(params object[] tbale) => InvalitContext.Throw<IQuery<Non>>(nameof(From));
-        public static IQuery<TSelected> Join<TSelected, T>(this IQuery<TSelected> words, T tbale, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Join));
+        public static IQuery<TSelected> From<TSelected>(this IQuery<TSelected> words, params object[] tbale) => InvalitContext.Throw<IQuery<TSelected>>(nameof(From));
+
         public static IQuery<Non> Join<T>(T tbale, bool condition) => InvalitContext.Throw<IQuery<Non>>(nameof(Join));
-        public static IQuery<TSelected> LeftJoin<TSelected, T>(this IQuery<TSelected> words, T tbale, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(LeftJoin));
+        public static IQuery<TSelected> Join<TSelected, T>(this IQuery<TSelected> words, T tbale, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Join));
+
         public static IQuery<Non> LeftJoin<T>(T tbale, bool condition) => InvalitContext.Throw<IQuery<Non>>(nameof(LeftJoin));
-        public static IQuery<TSelected> RightJoin<TSelected, T>(this IQuery<TSelected> words, T tbale, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(RightJoin));
+        public static IQuery<TSelected> LeftJoin<TSelected, T>(this IQuery<TSelected> words, T tbale, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(LeftJoin));
+
         public static IQuery<Non> RightJoin<T>(T tbale, bool condition) => InvalitContext.Throw<IQuery<Non>>(nameof(RightJoin));
-        public static IQuery<TSelected> CrossJoin<TSelected, T>(this IQuery<TSelected> words, T tbale) => InvalitContext.Throw<IQuery<TSelected>>(nameof(CrossJoin));
+        public static IQuery<TSelected> RightJoin<TSelected, T>(this IQuery<TSelected> words, T tbale, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(RightJoin));
+
         public static IQuery<Non> CrossJoin<T>(T tbale) => InvalitContext.Throw<IQuery<Non>>(nameof(CrossJoin));
+        public static IQuery<TSelected> CrossJoin<TSelected, T>(this IQuery<TSelected> words, T tbale) => InvalitContext.Throw<IQuery<TSelected>>(nameof(CrossJoin));
 
         public static IQuery<Non> GroupBy(params object[] target) => InvalitContext.Throw<IQuery<Non>>(nameof(GroupBy));
         public static IQuery<TSelected> GroupBy<TSelected>(this IQuery<TSelected> words, params object[] target) => InvalitContext.Throw<IQuery<TSelected>>(nameof(GroupBy));
+
         public static IQuery<Non> GroupByRollup(params object[] target) => InvalitContext.Throw<IQuery<Non>>(nameof(GroupByRollup));
         public static IQuery<TSelected> GroupByRollup<TSelected>(this IQuery<TSelected> words, params object[] target) => InvalitContext.Throw<IQuery<TSelected>>(nameof(GroupByRollup));
+
         public static IQuery<Non> GroupByWithRollup(params object[] target) => InvalitContext.Throw<IQuery<Non>>(nameof(GroupByRollup));
         public static IQuery<TSelected> GroupByWithRollup<TSelected>(this IQuery<TSelected> words, params object[] target) => InvalitContext.Throw<IQuery<TSelected>>(nameof(GroupByRollup));
+
         public static IQuery<Non> GroupByCube(params object[] target) => InvalitContext.Throw<IQuery<Non>>(nameof(GroupByCube));
         public static IQuery<TSelected> GroupByCube<TSelected>(this IQuery<TSelected> words, params object[] target) => InvalitContext.Throw<IQuery<TSelected>>(nameof(GroupByCube));
+
         public static IQuery<Non> GroupByGroupingSets(params object[] target) => InvalitContext.Throw<IQuery<Non>>(nameof(GroupByGroupingSets));
         public static IQuery<TSelected> GroupByGroupingSets<TSelected>(this IQuery<TSelected> words, params object[] target) => InvalitContext.Throw<IQuery<TSelected>>(nameof(GroupByGroupingSets));
 
@@ -151,6 +162,7 @@ namespace LambdicSql
 
         public static IQuery<Non> OffsetRows(long rowCount) => InvalitContext.Throw<IQuery<Non>>(nameof(OrderBy));
         public static IQuery<TSelected> OffsetRows<TSelected>(this IQuery<TSelected> words, long rowCount) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
+
         public static IQuery<Non> FetchNextRowsOnly(long rowCount) => InvalitContext.Throw<IQuery<Non>>(nameof(OrderBy));
         public static IQuery<TSelected> FetchNextRowsOnly<TSelected>(this IQuery<TSelected> words, long rowCount) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
 
