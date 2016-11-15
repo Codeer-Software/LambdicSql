@@ -141,34 +141,11 @@ namespace LambdicSql
         public static IQuery<Non> Having(bool condition) => InvalitContext.Throw<IQuery<Non>>(nameof(Having));
         public static IQuery<TSelected> Having<TSelected>(this IQuery<TSelected> words, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Having));
 
-        public static IQuery<Non> Delete() => InvalitContext.Throw<IQuery<Non>>(nameof(Delete));
-
-        public interface InsertAll<TTable> { }
-        [MethodGroup(nameof(InsertInto))]
-        public static IQuery<Non, InsertAll<TTable>> InsertInto<TTable>(TTable table) => InvalitContext.Throw<IQuery<Non, InsertAll<TTable>>>(nameof(InsertInto));
-
-        [MethodGroup(nameof(InsertInto))]
-        public static IQuery<Non, TTable> InsertInto<TTable>(TTable table, params object[] targets) => InvalitContext.Throw<IQuery<Non, TTable>>(nameof(InsertInto));
-     
-        [MethodGroup(nameof(InsertInto))]
-        public static IQuery<TSelected> Values<TSelected, TTable>(this IQuery<TSelected, TTable> words, params object[] targets)
-             => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
-
-        [MethodGroup(nameof(InsertInto))]
-        public static IQuery<TSelected> Values<TSelected, TTable>(this IQuery<TSelected, TTable> words, TTable value)
-             => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
-        [MethodGroup(nameof(InsertInto))]
-        public static IQuery<TSelected> Values<TSelected, TTable>(this IQuery<TSelected, InsertAll<TTable>> words, TTable value)
-            => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
-        [MethodGroup(nameof(InsertInto))]
-        public static IQuery<TSelected> Values<TSelected, TTable>(this IQuery<TSelected, TTable> words, IParamInfo value)
-             => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
-        [MethodGroup(nameof(InsertInto))]
-        public static IQuery<TSelected> Values<TSelected, TTable>(this IQuery<TSelected, InsertAll<TTable>> words, IParamInfo value)
-             => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
-
         public static IQuery<Non> OrderBy(params IOrderElement[] elements) => InvalitContext.Throw<IQuery<Non>>(nameof(OrderBy));
         public static IQuery<TSelected> OrderBy<TSelected>(this IQuery<TSelected> words, params IOrderElement[] elements) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
+
+        public static IQuery<Non> Where(bool condition) => InvalitContext.Throw<IQuery<Non>>(nameof(Where));
+        public static IQuery<TSelected> Where<TSelected>(this IQuery<TSelected> words, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Where));
 
         public static IQuery<Non> OffsetRows(long rowCount) => InvalitContext.Throw<IQuery<Non>>(nameof(OrderBy));
         public static IQuery<TSelected> OffsetRows<TSelected>(this IQuery<TSelected> words, long rowCount) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
@@ -188,9 +165,6 @@ namespace LambdicSql
         public static IQuery<Non, T> Update<T>(T table) => InvalitContext.Throw<IQuery<Non, T>>(nameof(Update));
         [MethodGroup(nameof(Update))]
         public static IQuery<TSelected> Set<TSelected, T>(this IQuery<TSelected, T> words, params Assign[] assigns) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Set));
-
-        public static IQuery<Non> Where(bool condition) => InvalitContext.Throw<IQuery<Non>>(nameof(Where));
-        public static IQuery<TSelected> Where<TSelected>(this IQuery<TSelected> words, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Where));
 
         public static bool Like(string target, string serachText) => InvalitContext.Throw<bool>(nameof(Like));
         public static bool Between<TTarget>(TTarget target, TTarget min, TTarget max) => InvalitContext.Throw<bool>(nameof(Between));
@@ -214,6 +188,32 @@ namespace LambdicSql
         public static IQuery<TSelected> Except<TSelected>(this IQuery<TSelected> words, bool isAll) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Except));
         public static IQuery<Non> Minus() => InvalitContext.Throw<IQuery<Non>>(nameof(Minus));
         public static IQuery<TSelected> Minus<TSelected>(this IQuery<TSelected> words) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Minus));
+
+        public static IQuery<Non> Delete() => InvalitContext.Throw<IQuery<Non>>(nameof(Delete));
+
+        public interface InsertAll<TTable> { }
+        [MethodGroup(nameof(InsertInto))]
+        public static IQuery<Non, InsertAll<TTable>> InsertInto<TTable>(TTable table) => InvalitContext.Throw<IQuery<Non, InsertAll<TTable>>>(nameof(InsertInto));
+
+        [MethodGroup(nameof(InsertInto))]
+        public static IQuery<Non, TTable> InsertInto<TTable>(TTable table, params object[] targets) => InvalitContext.Throw<IQuery<Non, TTable>>(nameof(InsertInto));
+
+        [MethodGroup(nameof(InsertInto))]
+        public static IQuery<TSelected> Values<TSelected, TTable>(this IQuery<TSelected, TTable> words, params object[] targets)
+             => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
+
+        [MethodGroup(nameof(InsertInto))]
+        public static IQuery<TSelected> Values<TSelected, TTable>(this IQuery<TSelected, TTable> words, TTable value)
+             => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
+        [MethodGroup(nameof(InsertInto))]
+        public static IQuery<TSelected> Values<TSelected, TTable>(this IQuery<TSelected, InsertAll<TTable>> words, TTable value)
+            => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
+        [MethodGroup(nameof(InsertInto))]
+        public static IQuery<TSelected> Values<TSelected, TTable>(this IQuery<TSelected, TTable> words, IParamInfo value)
+             => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
+        [MethodGroup(nameof(InsertInto))]
+        public static IQuery<TSelected> Values<TSelected, TTable>(this IQuery<TSelected, InsertAll<TTable>> words, IParamInfo value)
+             => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
 
         public static long RowNum { get; }
 

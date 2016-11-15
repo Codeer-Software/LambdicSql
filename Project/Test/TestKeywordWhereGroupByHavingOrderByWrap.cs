@@ -25,23 +25,26 @@ using static TestCheck35.TestSynatax;
 namespace Test
 {
     [TestClass]
-    public class TestKeywordGroupByHavingWrap
+    public class TestKeywordWhereGroupByHavingOrderByWrap
     {
         public TestContext TestContext { get; set; }
         public IDbConnection _connection;
-        TestKeywordGroupByHaving _core;
+        TestKeywordWhereGroupByHavingOrderBy _core;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _connection = TestEnvironment.CreateConnection(TestContext.DataRow[0]);
             _connection.Open();
-            _core = new TestKeywordGroupByHaving();
+            _core = new TestKeywordWhereGroupByHavingOrderBy();
             _core.TestInitialize(TestContext.TestName, _connection);
         }
 
         [TestCleanup]
         public void TestCleanup() => _connection.Dispose();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Test_Where() => _core.Test_Where();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void Test_GroupBy() => _core.Test_GroupBy();
@@ -60,5 +63,32 @@ namespace Test
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void Test_Having() => _core.Test_Having();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Test_OrderBy() => _core.Test_OrderBy();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Test_Continue_Where() => _core.Test_Continue_Where();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Test_Continue_GroupBy() => _core.Test_Continue_GroupBy();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Test_Continue_GroupByRollup() => _core.Test_Continue_GroupByRollup();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Test_Continue_GroupByWithRollup() => _core.Test_Continue_GroupByWithRollup();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Test_Continue_GroupByCube() => _core.Test_Continue_GroupByCube();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Test_Continue_GroupByGroupingSets() => _core.Test_Continue_GroupByGroupingSets();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Test_Continue_Having() => _core.Test_Continue_Having();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Test_Continue_OrderBy() => _core.Test_Continue_OrderBy();
     }
 }

@@ -154,8 +154,8 @@ FROM tbl_remuneration
                 }).
                 From(db.tbl_remuneration));
 
-            var join = Sql<DB>.Create(db => Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id));
-            query = query.Concat(join);
+            var target = Sql<DB>.Create(db => Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id));
+            query = query.Concat(target);
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -177,8 +177,8 @@ FROM tbl_remuneration
                 }).
                 From(db.tbl_remuneration));
 
-            var leftJoin = Sql<DB>.Create(db => LeftJoin(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id));
-            query = query.Concat(leftJoin);
+            var target = Sql<DB>.Create(db => LeftJoin(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id));
+            query = query.Concat(target);
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -202,8 +202,8 @@ FROM tbl_remuneration
                 }).
                 From(db.tbl_remuneration));
 
-            var rightJoin = Sql<DB>.Create(db => RightJoin(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id));
-            query = query.Concat(rightJoin);
+            var target = Sql<DB>.Create(db => RightJoin(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id));
+            query = query.Concat(target);
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -227,8 +227,8 @@ FROM tbl_remuneration
                 }).
                 From(db.tbl_remuneration));
 
-            var crossJoin = Sql<DB>.Create(db => CrossJoin(db.tbl_staff));
-            query = query.Concat(crossJoin);
+            var target = Sql<DB>.Create(db => CrossJoin(db.tbl_staff));
+            query = query.Concat(target);
             
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
