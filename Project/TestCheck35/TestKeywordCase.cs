@@ -8,9 +8,7 @@ using LambdicSql;
 using LambdicSql.feat.Dapper;
 using static LambdicSql.Keywords;
 using LambdicSql.SqlBase;
-using System.Data.SqlClient;
 using System.Linq.Expressions;
-using static TestCheck35.TestKeywordSelect.TestUtility;
 
 namespace TestCheck35
 {
@@ -22,14 +20,7 @@ namespace TestCheck35
         {
             _connection = connection;
         }
-
-        [SqlSyntax]
-        public static class TestUtility
-        {
-            public static IQuery<Non> Empty() => null;
-            static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods) => string.Empty;
-        }
-
+        
         public class Staff
         {
             public int id { get; set; }

@@ -10,6 +10,9 @@ namespace LambdicSql
         public static SqlExpression<TResult> Concat<TResult>(this ISqlExpressionBase<TResult> query, ISqlExpressionBase addExp)
           => new SqlExpressionCoupled<TResult>(query, addExp);
 
+        public static SqlQuery<TSelected> Concat<TSelected>(this ISqlQuery<TSelected> query, ISqlExpressionBase addExp)
+          => new SqlQuery<TSelected>(new SqlExpressionCoupled<TSelected>(query, addExp));
+
         public static SqlInfo<TSelected> ToSqlInfo<TSelected>(this ISqlExpressionBase<IQuery<TSelected>> exp, Type connectionType)
           => new SqlInfo<TSelected>(ToSqlInfo((ISqlExpressionBase)exp, connectionType));
 

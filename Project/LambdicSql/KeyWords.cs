@@ -98,8 +98,6 @@ namespace LambdicSql
         [MethodGroup(nameof(Case))]
         public static T End<T>(this IElseAfter<T> words) => InvalitContext.Throw<T>(nameof(End));
 
-        public static IQuery<Non> Delete() => InvalitContext.Throw<IQuery<Non>>(nameof(Delete));
-
         public static IQuery<Non> From(params object[] tbale) => InvalitContext.Throw<IQuery<Non>>(nameof(From));
         public static IQuery<TSelected> From<TSelected>(this IQuery<TSelected> words, params object[] tbale) => InvalitContext.Throw<IQuery<TSelected>>(nameof(From));
 
@@ -132,6 +130,8 @@ namespace LambdicSql
 
         public static IQuery<Non> Having(bool condition) => InvalitContext.Throw<IQuery<Non>>(nameof(Having));
         public static IQuery<TSelected> Having<TSelected>(this IQuery<TSelected> words, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Having));
+
+        public static IQuery<Non> Delete() => InvalitContext.Throw<IQuery<Non>>(nameof(Delete));
 
         public interface InsertAll<TTable> { }
         [MethodGroup(nameof(InsertInto))]

@@ -14,7 +14,7 @@ using System.Collections.Generic;
 using LambdicSql.SqlBase;
 using System.Data.SqlClient;
 using System.Linq.Expressions;
-using static TestCheck35.TestKeywordSelect.TestUtility;
+using static TestCheck35.TestSynatax;
 
 namespace TestCheck35
 {
@@ -25,13 +25,6 @@ namespace TestCheck35
         public void TestInitialize(string testName, IDbConnection connection)
         {
             _connection = connection;
-        }
-
-        [SqlSyntax]
-        public static class TestUtility
-        {
-            public static IQuery<Non> Empty() => null;
-            static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods) => string.Empty;
         }
 
         public class Staff
@@ -62,7 +55,7 @@ namespace TestCheck35
             public Data tbl_data { get; set; }
         }
 
-        public class SelectData1
+        public class SelectData
         {
             public DateTime PaymentDate { get; set; }
             public decimal Money { get; set; }
@@ -71,7 +64,7 @@ namespace TestCheck35
         public void Test_Select()
         {
             var query = Sql<DB>.Create(db =>
-                Select(new SelectData1
+                Select(new SelectData
                 {
                     PaymentDate = db.tbl_remuneration.payment_date,
                     Money = db.tbl_remuneration.money,
@@ -80,7 +73,7 @@ namespace TestCheck35
 
             var datas = _connection.Query(query).ToList();
             Assert.AreEqual(datas.Count, 8);
-            Assert.AreEqual(0, query.ToSqlInfo().SqlText.Replace(Environment.NewLine, " ").IndexOf("SELECT "));
+            Assert.AreEqual(0, query.ToSqlInfo().SqlText.Flat().IndexOf("SELECT "));
         }
 
         public void Test_Select_Top()
@@ -88,7 +81,7 @@ namespace TestCheck35
             if (_connection.GetType() != typeof(SqlConnection)) return;
 
             var query = Sql<DB>.Create(db =>
-                Select(new Top(1), new SelectData1
+                Select(new Top(1), new SelectData
                 {
                     PaymentDate = db.tbl_remuneration.payment_date,
                     Money = db.tbl_remuneration.money,
@@ -97,7 +90,7 @@ namespace TestCheck35
 
             var datas = _connection.Query(query).ToList();
             Assert.AreEqual(datas.Count, 1);
-            Assert.AreEqual(0, query.ToSqlInfo().SqlText.Replace(Environment.NewLine, " ").IndexOf("SELECT TOP "));
+            Assert.AreEqual(0, query.ToSqlInfo().SqlText.Flat().IndexOf("SELECT TOP "));
         }
 
         public void Test_Select_Asterisk_Non()
@@ -108,7 +101,7 @@ namespace TestCheck35
 
             var datas = _connection.Query<Remuneration>(query).ToList();
             Assert.AreEqual(datas.Count, 8);
-            Assert.AreEqual(0, query.ToSqlInfo().SqlText.Replace(Environment.NewLine, " ").IndexOf("SELECT * "));
+            Assert.AreEqual(0, query.ToSqlInfo().SqlText.Flat().IndexOf("SELECT * "));
         }
 
         public void Test_Select_Asterisk()
@@ -119,7 +112,7 @@ namespace TestCheck35
 
             var datas = _connection.Query(query).ToList();
             Assert.AreEqual(datas.Count, 8);
-            Assert.AreEqual(0, query.ToSqlInfo().SqlText.Replace(Environment.NewLine, " ").IndexOf("SELECT * "));
+            Assert.AreEqual(0, query.ToSqlInfo().SqlText.Flat().IndexOf("SELECT * "));
         }
 
         public void Test_Select_Asterisk_Helper()
@@ -130,7 +123,7 @@ namespace TestCheck35
 
             var datas = _connection.Query(query).ToList();
             Assert.AreEqual(datas.Count, 8);
-            Assert.AreEqual(0, query.ToSqlInfo().SqlText.Replace(Environment.NewLine, " ").IndexOf("SELECT * "));
+            Assert.AreEqual(0, query.ToSqlInfo().SqlText.Flat().IndexOf("SELECT * "));
         }
 
         public void Test_Select_Top_Asterisk_Non()
@@ -143,7 +136,7 @@ namespace TestCheck35
 
             var datas = _connection.Query<Remuneration>(query).ToList();
             Assert.AreEqual(datas.Count, 2);
-            Assert.AreEqual(0, query.ToSqlInfo().SqlText.Replace(Environment.NewLine, " ").IndexOf("SELECT TOP 2 * "));
+            Assert.AreEqual(0, query.ToSqlInfo().SqlText.Flat().IndexOf("SELECT TOP 2 * "));
         }
 
         public void Test_Select_Top_Asterisk()
@@ -156,13 +149,13 @@ namespace TestCheck35
 
             var datas = _connection.Query(query).ToList();
             Assert.AreEqual(datas.Count, 2);
-            Assert.AreEqual(0, query.ToSqlInfo().SqlText.Replace(Environment.NewLine, " ").IndexOf("SELECT TOP 2 * "));
+            Assert.AreEqual(0, query.ToSqlInfo().SqlText.Flat().IndexOf("SELECT TOP 2 * "));
         }
 
         public void Test_Select_All()
         {
             var query = Sql<DB>.Create(db =>
-                Select(AggregatePredicate.All, new SelectData1
+                Select(AggregatePredicate.All, new SelectData
                 {
                     PaymentDate = db.tbl_remuneration.payment_date,
                     Money = db.tbl_remuneration.money,
@@ -171,13 +164,13 @@ namespace TestCheck35
 
             var datas = _connection.Query(query).ToList();
             Assert.AreEqual(datas.Count, 8);
-            query.ToSqlInfo().SqlText.Replace(Environment.NewLine, " ").IndexOf("SELECT ALL ");
+            query.ToSqlInfo().SqlText.Flat().IndexOf("SELECT ALL ");
         }
 
         public void Test_Select_Distinct()
         {
             var query = Sql<DB>.Create(db =>
-                Select(AggregatePredicate.Distinct, new SelectData1
+                Select(AggregatePredicate.Distinct, new SelectData
                 {
                     PaymentDate = db.tbl_remuneration.payment_date,
                     Money = db.tbl_remuneration.money,
@@ -186,7 +179,7 @@ namespace TestCheck35
 
             var datas = _connection.Query(query).ToList();
             Assert.AreEqual(datas.Count, 8);
-            query.ToSqlInfo().SqlText.Replace(Environment.NewLine, " ").IndexOf("SELECT DISTINCT ");
+            query.ToSqlInfo().SqlText.Flat().IndexOf("SELECT DISTINCT ");
         }
 
         public void Test_Select_All_Asterisk_Non()
@@ -197,7 +190,7 @@ namespace TestCheck35
 
             var datas = _connection.Query<Remuneration>(query).ToList();
             Assert.AreEqual(datas.Count, 8);
-            query.ToSqlInfo().SqlText.Replace(Environment.NewLine, " ").IndexOf("SELECT ALL *");
+            query.ToSqlInfo().SqlText.Flat().IndexOf("SELECT ALL *");
         }
 
         public void Test_Select_Distinct_Asterisk_Non()
@@ -208,7 +201,7 @@ namespace TestCheck35
 
             var datas = _connection.Query<Remuneration>(query).ToList();
             Assert.AreEqual(datas.Count, 8);
-            query.ToSqlInfo().SqlText.Replace(Environment.NewLine, " ").IndexOf("SELECT DISTINCT *");
+            query.ToSqlInfo().SqlText.Flat().IndexOf("SELECT DISTINCT *");
         }
 
         public void Test_Select_All_Asterisk()
@@ -219,7 +212,7 @@ namespace TestCheck35
 
             var datas = _connection.Query(query).ToList();
             Assert.AreEqual(datas.Count, 8);
-            query.ToSqlInfo().SqlText.Replace(Environment.NewLine, " ").IndexOf("SELECT ALL *");
+            query.ToSqlInfo().SqlText.Flat().IndexOf("SELECT ALL *");
         }
 
         public void Test_Select_Distinct_Asterisk()
@@ -230,7 +223,7 @@ namespace TestCheck35
 
             var datas = _connection.Query(query).ToList();
             Assert.AreEqual(datas.Count, 8);
-            query.ToSqlInfo().SqlText.Replace(Environment.NewLine, " ").IndexOf("SELECT DISTINCT *");
+            query.ToSqlInfo().SqlText.Flat().IndexOf("SELECT DISTINCT *");
         }
 
         public void Test_Select_All_Top_Asterisk_Non()
@@ -243,7 +236,7 @@ namespace TestCheck35
 
             var datas = _connection.Query<Remuneration>(query).ToList();
             Assert.AreEqual(datas.Count, 2);
-            query.ToSqlInfo().SqlText.Replace(Environment.NewLine, " ").IndexOf("SELECT ALL TOP 2 *");
+            query.ToSqlInfo().SqlText.Flat().IndexOf("SELECT ALL TOP 2 *");
         }
 
         public void Test_Select_Distinct_Top_Asterisk_Non()
@@ -256,7 +249,7 @@ namespace TestCheck35
 
             var datas = _connection.Query<Remuneration>(query).ToList();
             Assert.AreEqual(datas.Count, 2);
-            query.ToSqlInfo().SqlText.Replace(Environment.NewLine, " ").IndexOf("SELECT DISTINCT TOP 2 *");
+            query.ToSqlInfo().SqlText.Flat().IndexOf("SELECT DISTINCT TOP 2 *");
         }
 
         public void Test_Select_All_Top_Asterisk()
@@ -269,7 +262,7 @@ namespace TestCheck35
 
             var datas = _connection.Query(query).ToList();
             Assert.AreEqual(datas.Count, 2);
-            query.ToSqlInfo().SqlText.Replace(Environment.NewLine, " ").IndexOf("SELECT ALL TOP 2 *");
+            query.ToSqlInfo().SqlText.Flat().IndexOf("SELECT ALL TOP 2 *");
         }
 
         public void Test_Select_Distinct_Top_Asterisk()
@@ -282,13 +275,13 @@ namespace TestCheck35
 
             var datas = _connection.Query(query).ToList();
             Assert.AreEqual(datas.Count, 2);
-            query.ToSqlInfo().SqlText.Replace(Environment.NewLine, " ").IndexOf("SELECT DISTINCT TOP 2 *");
+            query.ToSqlInfo().SqlText.Flat().IndexOf("SELECT DISTINCT TOP 2 *");
         }
 
         public void Test_Continue_Select()
         {
             var query = Sql<DB>.Create(db =>
-                Empty().Select(new SelectData1
+                Empty().Select(new SelectData
                 {
                     PaymentDate = db.tbl_remuneration.payment_date,
                     Money = db.tbl_remuneration.money,
@@ -297,7 +290,7 @@ namespace TestCheck35
 
             var datas = _connection.Query(query).ToList();
             Assert.AreEqual(datas.Count, 8);
-            Assert.AreEqual(0, query.ToSqlInfo().SqlText.Replace(Environment.NewLine, " ").IndexOf("SELECT "));
+            Assert.AreEqual(0, query.ToSqlInfo().SqlText.Flat().IndexOf("SELECT "));
         }
 
         public void Test_Continue_Select_Top()
@@ -305,7 +298,7 @@ namespace TestCheck35
             if (_connection.GetType() != typeof(SqlConnection)) return;
 
             var query = Sql<DB>.Create(db =>
-                Empty().Select(new Top(1), new SelectData1
+                Empty().Select(new Top(1), new SelectData
                 {
                     PaymentDate = db.tbl_remuneration.payment_date,
                     Money = db.tbl_remuneration.money,
@@ -314,7 +307,7 @@ namespace TestCheck35
 
             var datas = _connection.Query(query).ToList();
             Assert.AreEqual(datas.Count, 1);
-            Assert.AreEqual(0, query.ToSqlInfo().SqlText.Replace(Environment.NewLine, " ").IndexOf("SELECT TOP "));
+            Assert.AreEqual(0, query.ToSqlInfo().SqlText.Flat().IndexOf("SELECT TOP "));
         }
 
         public void Test_Continue_Select_Asterisk_Non()
@@ -325,7 +318,7 @@ namespace TestCheck35
 
             var datas = _connection.Query<Remuneration>(query).ToList();
             Assert.AreEqual(datas.Count, 8);
-            Assert.AreEqual(0, query.ToSqlInfo().SqlText.Replace(Environment.NewLine, " ").IndexOf("SELECT * "));
+            Assert.AreEqual(0, query.ToSqlInfo().SqlText.Flat().IndexOf("SELECT * "));
         }
 
         public void Test_Continue_Select_Asterisk()
@@ -336,7 +329,7 @@ namespace TestCheck35
 
             var datas = _connection.Query(query).ToList();
             Assert.AreEqual(datas.Count, 8);
-            Assert.AreEqual(0, query.ToSqlInfo().SqlText.Replace(Environment.NewLine, " ").IndexOf("SELECT * "));
+            Assert.AreEqual(0, query.ToSqlInfo().SqlText.Flat().IndexOf("SELECT * "));
         }
 
         public void Test_Continue_Select_Asterisk_Helper()
@@ -347,7 +340,7 @@ namespace TestCheck35
 
             var datas = _connection.Query(query).ToList();
             Assert.AreEqual(datas.Count, 8);
-            Assert.AreEqual(0, query.ToSqlInfo().SqlText.Replace(Environment.NewLine, " ").IndexOf("SELECT * "));
+            Assert.AreEqual(0, query.ToSqlInfo().SqlText.Flat().IndexOf("SELECT * "));
         }
 
         public void Test_Continue_Select_Top_Asterisk_Non()
@@ -360,7 +353,7 @@ namespace TestCheck35
 
             var datas = _connection.Query<Remuneration>(query).ToList();
             Assert.AreEqual(datas.Count, 2);
-            Assert.AreEqual(0, query.ToSqlInfo().SqlText.Replace(Environment.NewLine, " ").IndexOf("SELECT TOP 2 * "));
+            Assert.AreEqual(0, query.ToSqlInfo().SqlText.Flat().IndexOf("SELECT TOP 2 * "));
         }
 
         public void Test_Continue_Select_Top_Asterisk()
@@ -373,13 +366,13 @@ namespace TestCheck35
 
             var datas = _connection.Query(query).ToList();
             Assert.AreEqual(datas.Count, 2);
-            Assert.AreEqual(0, query.ToSqlInfo().SqlText.Replace(Environment.NewLine, " ").IndexOf("SELECT TOP 2 * "));
+            Assert.AreEqual(0, query.ToSqlInfo().SqlText.Flat().IndexOf("SELECT TOP 2 * "));
         }
 
         public void Test_Continue_Select_All()
         {
             var query = Sql<DB>.Create(db =>
-                Empty().Select(AggregatePredicate.All, new SelectData1
+                Empty().Select(AggregatePredicate.All, new SelectData
                 {
                     PaymentDate = db.tbl_remuneration.payment_date,
                     Money = db.tbl_remuneration.money,
@@ -388,13 +381,13 @@ namespace TestCheck35
 
             var datas = _connection.Query(query).ToList();
             Assert.AreEqual(datas.Count, 8);
-            query.ToSqlInfo().SqlText.Replace(Environment.NewLine, " ").IndexOf("SELECT ALL ");
+            query.ToSqlInfo().SqlText.Flat().IndexOf("SELECT ALL ");
         }
 
         public void Test_Continue_Select_Distinct()
         {
             var query = Sql<DB>.Create(db =>
-                Empty().Select(AggregatePredicate.Distinct, new SelectData1
+                Empty().Select(AggregatePredicate.Distinct, new SelectData
                 {
                     PaymentDate = db.tbl_remuneration.payment_date,
                     Money = db.tbl_remuneration.money,
@@ -403,7 +396,7 @@ namespace TestCheck35
 
             var datas = _connection.Query(query).ToList();
             Assert.AreEqual(datas.Count, 8);
-            query.ToSqlInfo().SqlText.Replace(Environment.NewLine, " ").IndexOf("SELECT DISTINCT ");
+            query.ToSqlInfo().SqlText.Flat().IndexOf("SELECT DISTINCT ");
         }
 
         public void Test_Continue_Select_All_Asterisk_Non()
@@ -414,7 +407,7 @@ namespace TestCheck35
 
             var datas = _connection.Query<Remuneration>(query).ToList();
             Assert.AreEqual(datas.Count, 8);
-            query.ToSqlInfo().SqlText.Replace(Environment.NewLine, " ").IndexOf("SELECT ALL *");
+            query.ToSqlInfo().SqlText.Flat().IndexOf("SELECT ALL *");
         }
 
         public void Test_Continue_Select_Distinct_Asterisk_Non()
@@ -425,7 +418,7 @@ namespace TestCheck35
 
             var datas = _connection.Query<Remuneration>(query).ToList();
             Assert.AreEqual(datas.Count, 8);
-            query.ToSqlInfo().SqlText.Replace(Environment.NewLine, " ").IndexOf("SELECT DISTINCT *");
+            query.ToSqlInfo().SqlText.Flat().IndexOf("SELECT DISTINCT *");
         }
 
         public void Test_Continue_Select_All_Asterisk()
@@ -436,7 +429,7 @@ namespace TestCheck35
 
             var datas = _connection.Query(query).ToList();
             Assert.AreEqual(datas.Count, 8);
-            query.ToSqlInfo().SqlText.Replace(Environment.NewLine, " ").IndexOf("SELECT ALL *");
+            query.ToSqlInfo().SqlText.Flat().IndexOf("SELECT ALL *");
         }
 
         public void Test_Continue_Select_Distinct_Asterisk()
@@ -447,7 +440,7 @@ namespace TestCheck35
 
             var datas = _connection.Query(query).ToList();
             Assert.AreEqual(datas.Count, 8);
-            query.ToSqlInfo().SqlText.Replace(Environment.NewLine, " ").IndexOf("SELECT DISTINCT *");
+            query.ToSqlInfo().SqlText.Flat().IndexOf("SELECT DISTINCT *");
         }
 
         public void Test_Continue_Select_All_Top_Asterisk_Non()
@@ -460,7 +453,7 @@ namespace TestCheck35
 
             var datas = _connection.Query<Remuneration>(query).ToList();
             Assert.AreEqual(datas.Count, 2);
-            query.ToSqlInfo().SqlText.Replace(Environment.NewLine, " ").IndexOf("SELECT ALL TOP 2 *");
+            query.ToSqlInfo().SqlText.Flat().IndexOf("SELECT ALL TOP 2 *");
         }
 
         public void Test_Continue_Select_Distinct_Top_Asterisk_Non()
@@ -473,7 +466,7 @@ namespace TestCheck35
 
             var datas = _connection.Query<Remuneration>(query).ToList();
             Assert.AreEqual(datas.Count, 2);
-            query.ToSqlInfo().SqlText.Replace(Environment.NewLine, " ").IndexOf("SELECT DISTINCT TOP 2 *");
+            query.ToSqlInfo().SqlText.Flat().IndexOf("SELECT DISTINCT TOP 2 *");
         }
 
         public void Test_Continue_Select_All_Top_Asterisk()
@@ -486,7 +479,7 @@ namespace TestCheck35
 
             var datas = _connection.Query(query).ToList();
             Assert.AreEqual(datas.Count, 2);
-            query.ToSqlInfo().SqlText.Replace(Environment.NewLine, " ").IndexOf("SELECT ALL TOP 2 *");
+            query.ToSqlInfo().SqlText.Flat().IndexOf("SELECT ALL TOP 2 *");
         }
 
         public void Test_Continue_Select_Distinct_Top_Asterisk()
@@ -499,7 +492,7 @@ namespace TestCheck35
 
             var datas = _connection.Query(query).ToList();
             Assert.AreEqual(datas.Count, 2);
-            query.ToSqlInfo().SqlText.Replace(Environment.NewLine, " ").IndexOf("SELECT DISTINCT TOP 2 *");
+            query.ToSqlInfo().SqlText.Flat().IndexOf("SELECT DISTINCT TOP 2 *");
         }
     }
 }

@@ -43,11 +43,13 @@
     <Compile Include="AssertHelper.cs" />
     <Compile Include="FakeDapper.cs" />
     <Compile Include="TestKeywordCase.cs" />
+    <Compile Include="TestKeywordFrom.cs" />
     <Compile Include="TestKeywordSelect.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Samples.cs" />
     <Compile Include="TestEnvironment.cs" />
+    <Compile Include="TestSynatax.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LambdicSql.ORM\LambdicSql.ORM.csproj">

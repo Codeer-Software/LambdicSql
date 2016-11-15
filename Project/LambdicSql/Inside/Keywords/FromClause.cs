@@ -27,7 +27,7 @@ namespace LambdicSql.Inside.Keywords
                 case nameof(LambdicSql.Keywords.From):
                     return Environment.NewLine + "FROM " + ExpressionToTableName(converter, method.Arguments[startIndex]);
                 case nameof(LambdicSql.Keywords.CrossJoin):
-                    return Environment.NewLine + "\tCROSS JOIN " + ExpressionToTableName(converter, method.Arguments[1]);
+                    return Environment.NewLine + "\tCROSS JOIN " + ExpressionToTableName(converter, method.Arguments[startIndex]);
                 case nameof(LambdicSql.Keywords.LeftJoin):
                     name = "LEFT JOIN";
                     break;
