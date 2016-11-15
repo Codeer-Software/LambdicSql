@@ -21,7 +21,7 @@ namespace TestCheck35
 
         public static void Gen(this ISqlExpressionBase query, IDbConnection con)
         {
-            if (con.GetType() != typeof(SqlConnection)) return;
+          //  if (con.GetType() != typeof(SqlConnection)) return;
             Debug.Print("AssertEx.AreEqual(query, _connection," + 
                 Environment.NewLine + "@\"" + query.ToSqlInfo(con.GetType()).SqlText + "\");");
         }

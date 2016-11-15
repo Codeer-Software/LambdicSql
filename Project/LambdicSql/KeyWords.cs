@@ -123,6 +123,9 @@ namespace LambdicSql
         public static IQuery<Non> CrossJoin<T>(T tbale) => InvalitContext.Throw<IQuery<Non>>(nameof(CrossJoin));
         public static IQuery<TSelected> CrossJoin<TSelected, T>(this IQuery<TSelected> words, T tbale) => InvalitContext.Throw<IQuery<TSelected>>(nameof(CrossJoin));
 
+        public static IQuery<Non> Where(bool condition) => InvalitContext.Throw<IQuery<Non>>(nameof(Where));
+        public static IQuery<TSelected> Where<TSelected>(this IQuery<TSelected> words, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Where));
+
         public static IQuery<Non> GroupBy(params object[] target) => InvalitContext.Throw<IQuery<Non>>(nameof(GroupBy));
         public static IQuery<TSelected> GroupBy<TSelected>(this IQuery<TSelected> words, params object[] target) => InvalitContext.Throw<IQuery<TSelected>>(nameof(GroupBy));
 
@@ -144,27 +147,20 @@ namespace LambdicSql
         public static IQuery<Non> OrderBy(params IOrderElement[] elements) => InvalitContext.Throw<IQuery<Non>>(nameof(OrderBy));
         public static IQuery<TSelected> OrderBy<TSelected>(this IQuery<TSelected> words, params IOrderElement[] elements) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
 
-        public static IQuery<Non> Where(bool condition) => InvalitContext.Throw<IQuery<Non>>(nameof(Where));
-        public static IQuery<TSelected> Where<TSelected>(this IQuery<TSelected> words, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Where));
+        public static IQuery<Non> Limit(long count) => InvalitContext.Throw<IQuery<Non>>(nameof(OrderBy));
+        public static IQuery<TSelected> Limit<TSelected>(this IQuery<TSelected> words, long count) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
+
+        public static IQuery<Non> Limit(long offset, long count) => InvalitContext.Throw<IQuery<Non>>(nameof(OrderBy));
+        public static IQuery<TSelected> Limit<TSelected>(this IQuery<TSelected> words, long offset, long count) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
+
+        public static IQuery<Non> Offset(long offset) => InvalitContext.Throw<IQuery<Non>>(nameof(OrderBy));
+        public static IQuery<TSelected> Offset<TSelected>(this IQuery<TSelected> words, long offset) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
 
         public static IQuery<Non> OffsetRows(long rowCount) => InvalitContext.Throw<IQuery<Non>>(nameof(OrderBy));
         public static IQuery<TSelected> OffsetRows<TSelected>(this IQuery<TSelected> words, long rowCount) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
 
         public static IQuery<Non> FetchNextRowsOnly(long rowCount) => InvalitContext.Throw<IQuery<Non>>(nameof(OrderBy));
         public static IQuery<TSelected> FetchNextRowsOnly<TSelected>(this IQuery<TSelected> words, long rowCount) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
-
-        public static IQuery<Non> Limit(long count) => InvalitContext.Throw<IQuery<Non>>(nameof(OrderBy));
-        public static IQuery<Non> Limit(long offset, long count) => InvalitContext.Throw<IQuery<Non>>(nameof(OrderBy));
-        public static IQuery<TSelected> Limit<TSelected>(this IQuery<TSelected> words, long count) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
-        public static IQuery<TSelected> Limit<TSelected>(this IQuery<TSelected> words, long offset, long count) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
-
-        public static IQuery<Non> Offset(long offset) => InvalitContext.Throw<IQuery<Non>>(nameof(OrderBy));
-        public static IQuery<TSelected> Offset<TSelected>(this IQuery<TSelected> words, long offset) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
-
-        [MethodGroup(nameof(Update))]
-        public static IQuery<Non, T> Update<T>(T table) => InvalitContext.Throw<IQuery<Non, T>>(nameof(Update));
-        [MethodGroup(nameof(Update))]
-        public static IQuery<TSelected> Set<TSelected, T>(this IQuery<TSelected, T> words, params Assign[] assigns) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Set));
 
         public static bool Like(string target, string serachText) => InvalitContext.Throw<bool>(nameof(Like));
         public static bool Between<TTarget>(TTarget target, TTarget min, TTarget max) => InvalitContext.Throw<bool>(nameof(Between));
@@ -188,6 +184,11 @@ namespace LambdicSql
         public static IQuery<TSelected> Except<TSelected>(this IQuery<TSelected> words, bool isAll) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Except));
         public static IQuery<Non> Minus() => InvalitContext.Throw<IQuery<Non>>(nameof(Minus));
         public static IQuery<TSelected> Minus<TSelected>(this IQuery<TSelected> words) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Minus));
+
+        [MethodGroup(nameof(Update))]
+        public static IQuery<Non, T> Update<T>(T table) => InvalitContext.Throw<IQuery<Non, T>>(nameof(Update));
+        [MethodGroup(nameof(Update))]
+        public static IQuery<TSelected> Set<TSelected, T>(this IQuery<TSelected, T> words, params Assign[] assigns) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Set));
 
         public static IQuery<Non> Delete() => InvalitContext.Throw<IQuery<Non>>(nameof(Delete));
 
