@@ -9,6 +9,7 @@ using LambdicSql.feat.Dapper;
 using static LambdicSql.Keywords;
 using LambdicSql.SqlBase;
 using System.Linq.Expressions;
+using System.Diagnostics;
 
 namespace TestCheck35
 {
@@ -67,8 +68,13 @@ namespace TestCheck35
                     Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id));
 
             var datas = _connection.Query(query).ToList();
-            Assert.AreEqual(datas.Count, 7);
-            Assert.AreNotEqual(-1, query.ToSqlInfo().SqlText.Flat().IndexOf(" JOIN "));
+            Assert.IsTrue(0 < datas.Count);
+            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+@"SELECT
+	tbl_remuneration.payment_date AS PaymentDate,
+	tbl_remuneration.money AS Money
+FROM tbl_remuneration
+	JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)");
         }
 
         public void Test_LeftJoin()
@@ -83,8 +89,13 @@ namespace TestCheck35
                     LeftJoin(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id));
 
             var datas = _connection.Query(query).ToList();
-            Assert.AreEqual(datas.Count, 8);
-            Assert.AreNotEqual(-1, query.ToSqlInfo().SqlText.Flat().IndexOf(" LEFT JOIN "));
+            Assert.IsTrue(0 < datas.Count);
+            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+@"SELECT
+	tbl_remuneration.payment_date AS PaymentDate,
+	tbl_remuneration.money AS Money
+FROM tbl_remuneration
+	LEFT JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)");
         }
 
         public void Test_RightJoin()
@@ -101,8 +112,13 @@ namespace TestCheck35
                     RightJoin(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id));
 
             var datas = _connection.Query(query).ToList();
-            Assert.AreEqual(datas.Count, 7);
-            Assert.AreNotEqual(-1, query.ToSqlInfo().SqlText.Flat().IndexOf(" RIGHT JOIN "));
+            Assert.IsTrue(0 < datas.Count);
+            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+@"SELECT
+	tbl_remuneration.payment_date AS PaymentDate,
+	tbl_remuneration.money AS Money
+FROM tbl_remuneration
+	RIGHT JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)");
         }
 
         public void Test_CrossJoin()
@@ -119,8 +135,13 @@ namespace TestCheck35
                     CrossJoin(db.tbl_staff));
 
             var datas = _connection.Query(query).ToList();
-            Assert.AreEqual(datas.Count, 32);
-            Assert.AreNotEqual(-1, query.ToSqlInfo().SqlText.Flat().IndexOf(" CROSS JOIN "));
+            Assert.IsTrue(0 < datas.Count);
+            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+@"SELECT
+	tbl_remuneration.payment_date AS PaymentDate,
+	tbl_remuneration.money AS Money
+FROM tbl_remuneration
+	CROSS JOIN tbl_staff");
         }
         
         public void Test_Continue_Join()
@@ -137,8 +158,13 @@ namespace TestCheck35
             query = query.Concat(join);
 
             var datas = _connection.Query(query).ToList();
-            Assert.AreEqual(datas.Count, 7);
-            Assert.AreNotEqual(-1, query.ToSqlInfo().SqlText.Flat().IndexOf(" JOIN "));
+            Assert.IsTrue(0 < datas.Count);
+            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+@"SELECT
+	tbl_remuneration.payment_date AS PaymentDate,
+	tbl_remuneration.money AS Money
+FROM tbl_remuneration
+	JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)");
         }
 
         public void Test_Continue_LeftJoin()
@@ -155,8 +181,13 @@ namespace TestCheck35
             query = query.Concat(leftJoin);
 
             var datas = _connection.Query(query).ToList();
-            Assert.AreEqual(datas.Count, 8);
-            Assert.AreNotEqual(-1, query.ToSqlInfo().SqlText.Flat().IndexOf(" LEFT JOIN "));
+            Assert.IsTrue(0 < datas.Count);
+            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+@"SELECT
+	tbl_remuneration.payment_date AS PaymentDate,
+	tbl_remuneration.money AS Money
+FROM tbl_remuneration
+	LEFT JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)");
         }
 
         public void Test_Continue_RightJoin()
@@ -175,8 +206,13 @@ namespace TestCheck35
             query = query.Concat(rightJoin);
 
             var datas = _connection.Query(query).ToList();
-            Assert.AreEqual(datas.Count, 7);
-            Assert.AreNotEqual(-1, query.ToSqlInfo().SqlText.Flat().IndexOf(" RIGHT JOIN "));
+            Assert.IsTrue(0 < datas.Count);
+            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+@"SELECT
+	tbl_remuneration.payment_date AS PaymentDate,
+	tbl_remuneration.money AS Money
+FROM tbl_remuneration
+	RIGHT JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)");
         }
 
         public void Test_Continue_CrossJoin()
@@ -195,8 +231,13 @@ namespace TestCheck35
             query = query.Concat(crossJoin);
             
             var datas = _connection.Query(query).ToList();
-            Assert.AreEqual(datas.Count, 32);
-            Assert.AreNotEqual(-1, query.ToSqlInfo().SqlText.Flat().IndexOf(" CROSS JOIN "));
+            Assert.IsTrue(0 < datas.Count);
+            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+@"SELECT
+	tbl_remuneration.payment_date AS PaymentDate,
+	tbl_remuneration.money AS Money
+FROM tbl_remuneration
+	CROSS JOIN tbl_staff");
         }
     }
 }

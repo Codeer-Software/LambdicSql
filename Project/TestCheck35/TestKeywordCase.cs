@@ -67,9 +67,15 @@ namespace TestCheck35
                 }).
                 From(db.tbl_staff));
             var datas = _connection.Query(query).ToList();
-            Assert.IsTrue(datas.Any(e => e.Type == "x"));
-            Assert.IsTrue(datas.Any(e => e.Type == "y"));
-            Assert.IsTrue(datas.Any(e => e.Type == "z"));
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+ @"SELECT
+	CASE
+		WHEN (tbl_staff.id) = (@p_0) THEN @p_1
+		WHEN (tbl_staff.id) = (@p_2) THEN @p_3
+		ELSE @p_4
+	END AS Type
+FROM tbl_staff");
         }
 
         public void Test_Case2()
@@ -84,9 +90,14 @@ namespace TestCheck35
                 }).
                 From(db.tbl_staff));
             var datas = _connection.Query(query).ToList();
-            Assert.IsTrue(datas.Any(e => e.Type == "x"));
-            Assert.IsTrue(datas.Any(e => e.Type == "y"));
-            Assert.IsFalse(datas.Any(e => e.Type == "z"));
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	CASE
+		WHEN (tbl_staff.id) = (@p_0) THEN @p_1
+		WHEN (tbl_staff.id) = (@p_2) THEN @p_3
+	END AS Type
+FROM tbl_staff");
         }
 
         public void Test_Case3()
@@ -102,9 +113,15 @@ namespace TestCheck35
                 }).
                 From(db.tbl_staff));
             var datas = _connection.Query(query).ToList();
-            Assert.IsTrue(datas.Any(e => e.Type == "x"));
-            Assert.IsTrue(datas.Any(e => e.Type == "y"));
-            Assert.IsTrue(datas.Any(e => e.Type == "z"));
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	CASE tbl_staff.id
+		WHEN @p_0 THEN @p_1
+		WHEN @p_2 THEN @p_3
+		ELSE @p_4
+	END AS Type
+FROM tbl_staff");
         }
     }
 }

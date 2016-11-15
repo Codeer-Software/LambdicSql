@@ -1,0 +1,64 @@
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Data;
+using TestCheck35;
+using TestCore;
+using static Test.Helper.DBProviderInfo;
+
+
+
+
+using System.Diagnostics;
+using System.Linq;
+
+//important
+using LambdicSql;
+using LambdicSql.feat.Dapper;
+using static LambdicSql.Keywords;
+using static LambdicSql.Funcs;
+using static LambdicSql.Utils;
+using System.Collections.Generic;
+using LambdicSql.SqlBase;
+using System.Data.SqlClient;
+using System.Linq.Expressions;
+using static TestCheck35.TestSynatax;
+
+namespace Test
+{
+    [TestClass]
+    public class TestKeywordGroupByHavingWrap
+    {
+        public TestContext TestContext { get; set; }
+        public IDbConnection _connection;
+        TestKeywordGroupByHaving _core;
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            _connection = TestEnvironment.CreateConnection(TestContext.DataRow[0]);
+            _connection.Open();
+            _core = new TestKeywordGroupByHaving();
+            _core.TestInitialize(TestContext.TestName, _connection);
+        }
+
+        [TestCleanup]
+        public void TestCleanup() => _connection.Dispose();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Test_GroupBy() => _core.Test_GroupBy();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Test_GroupByRollup() => _core.Test_GroupByRollup();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Test_GroupByWithRollup() => _core.Test_GroupByWithRollup();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Test_GroupByCube() => _core.Test_GroupByCube();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Test_GroupByGroupingSets() => _core.Test_GroupByGroupingSets();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Test_Having() => _core.Test_Having();
+    }
+}

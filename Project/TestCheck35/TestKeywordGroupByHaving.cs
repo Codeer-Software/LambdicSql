@@ -1,0 +1,204 @@
+﻿using System;
+using System.Data;
+using System.Diagnostics;
+using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+//important
+using LambdicSql;
+using LambdicSql.feat.Dapper;
+using static LambdicSql.Keywords;
+using static LambdicSql.Funcs;
+using static LambdicSql.Utils;
+using System.Collections.Generic;
+using LambdicSql.SqlBase;
+using System.Data.SqlClient;
+using System.Linq.Expressions;
+using static TestCheck35.TestSynatax;
+
+namespace TestCheck35
+{
+    public class TestKeywordGroupByHaving
+    {
+        public IDbConnection _connection;
+
+        public void TestInitialize(string testName, IDbConnection connection)
+        {
+            _connection = connection;
+        }
+
+        public class Staff
+        {
+            public int id { get; set; }
+            public string name { get; set; }
+        }
+
+        public class Remuneration
+        {
+            public int id { get; set; }
+            public int staff_id { get; set; }
+            public DateTime payment_date { get; set; }
+            public decimal money { get; set; }
+        }
+
+        public class Data
+        {
+            public int id { get; set; }
+            public int val1 { get; set; }
+            public string val2 { get; set; }
+        }
+
+        public class DB
+        {
+            public Staff tbl_staff { get; set; }
+            public Remuneration tbl_remuneration { get; set; }
+            public Data tbl_data { get; set; }
+        }
+
+        public class SelectData1
+        {
+            public string Name { get; set; }
+            public decimal Count { get; set; }
+        }
+
+        public class SelectedData2
+        {
+            public int Id { get; set; }
+        }
+
+        public void Test_GroupBy()
+        {
+            var query = Sql<DB>.Create(db =>
+               Select(new SelectData1
+               {
+                   Count = Count(db.tbl_remuneration.money)
+               }).
+               From(db.tbl_remuneration).
+               GroupBy(db.tbl_remuneration.id, db.tbl_remuneration.staff_id));
+
+            var datas = _connection.Query(query).ToList();
+
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	COUNT(tbl_remuneration.money) AS Count
+FROM tbl_remuneration
+GROUP BY tbl_remuneration.id, tbl_remuneration.staff_id");
+        }
+
+        public void Test_GroupByRollup()
+        {
+            var name = _connection.GetType().Name;
+            if (name == "SQLiteConnection") return;
+            if (name == "MySqlConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+               Select(new SelectData1
+               {
+                   Count = Count(db.tbl_remuneration.money)
+               }).
+               From(db.tbl_remuneration).
+               GroupByRollup(db.tbl_remuneration.id, db.tbl_remuneration.staff_id));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	COUNT(tbl_remuneration.money) AS Count
+FROM tbl_remuneration
+GROUP BY ROLLUP(tbl_remuneration.id, tbl_remuneration.staff_id)");
+        }
+
+        public void Test_GroupByWithRollup()
+        {
+            var name = _connection.GetType().Name;
+            if (name != "MySqlConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+               Select(new SelectData1
+               {
+                   Count = Count(db.tbl_remuneration.money)
+               }).
+               From(db.tbl_remuneration).
+               GroupByWithRollup(db.tbl_remuneration.id, db.tbl_remuneration.staff_id));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	COUNT(tbl_remuneration.money) AS Count
+FROM tbl_remuneration
+GROUP BY tbl_remuneration.id, tbl_remuneration.staff_id WITH ROLLUP");
+        }
+
+        public void Test_GroupByCube()
+        {
+            var name = _connection.GetType().Name;
+            if (name == "SQLiteConnection") return;
+            if (name == "MySqlConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+               Select(new SelectData1
+               {
+                   Count = Count(db.tbl_remuneration.money)
+               }).
+               From(db.tbl_remuneration).
+               GroupByCube(db.tbl_remuneration.id, db.tbl_remuneration.staff_id));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	COUNT(tbl_remuneration.money) AS Count
+FROM tbl_remuneration
+GROUP BY CUBE(tbl_remuneration.id, tbl_remuneration.staff_id)");
+        }
+
+        public void Test_GroupByGroupingSets()
+        {
+            var name = _connection.GetType().Name;
+            if (name == "SQLiteConnection") return;
+            if (name == "MySqlConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+               Select(new SelectData1
+               {
+                   Count = Count(db.tbl_remuneration.money)
+               }).
+               From(db.tbl_remuneration).
+               GroupByGroupingSets(db.tbl_remuneration.id, db.tbl_remuneration.staff_id));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	COUNT(tbl_remuneration.money) AS Count
+FROM tbl_remuneration
+GROUP BY GROUPING SETS(tbl_remuneration.id, tbl_remuneration.staff_id)");
+        }
+
+        public void Test_Having()
+        {
+            var name = _connection.GetType().Name;
+            if (name == "SQLiteConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectedData2
+                {
+                    Id = db.tbl_remuneration.staff_id
+                }).
+                From(db.tbl_remuneration).
+                GroupBy(db.tbl_remuneration.staff_id).
+                Having(100 < Sum(db.tbl_remuneration.money)));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	tbl_remuneration.staff_id AS Id
+FROM tbl_remuneration
+GROUP BY tbl_remuneration.staff_id
+HAVING (@p_0) < (SUM(tbl_remuneration.money))");
+        }
+    }
+}

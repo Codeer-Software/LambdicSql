@@ -44,6 +44,7 @@
     <Compile Include="FakeDapper.cs" />
     <Compile Include="TestKeywordCase.cs" />
     <Compile Include="TestKeywordFrom.cs" />
+    <Compile Include="TestKeywordGroupByHaving.cs" />
     <Compile Include="TestKeywordSelect.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
