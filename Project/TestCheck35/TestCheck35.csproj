@@ -42,7 +42,8 @@
   <ItemGroup>
     <Compile Include="AssertHelper.cs" />
     <Compile Include="FakeDapper.cs" />
-    <Compile Include="TestSelect.cs" />
+    <Compile Include="TestKeywordCase.cs" />
+    <Compile Include="TestKeywordSelect.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Samples.cs" />

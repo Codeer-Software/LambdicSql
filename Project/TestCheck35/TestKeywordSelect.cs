@@ -14,11 +14,11 @@ using System.Collections.Generic;
 using LambdicSql.SqlBase;
 using System.Data.SqlClient;
 using System.Linq.Expressions;
-using static TestCheck35.TestSelect.TestUtility;
+using static TestCheck35.TestKeywordSelect.TestUtility;
 
 namespace TestCheck35
 {
-    public class TestSelect
+    public class TestKeywordSelect
     {
         public IDbConnection _connection;
 
@@ -77,7 +77,7 @@ namespace TestCheck35
                     Money = db.tbl_remuneration.money,
                 }).
                 From(db.tbl_remuneration));
-            
+
             var datas = _connection.Query(query).ToList();
             Assert.AreEqual(datas.Count, 8);
             Assert.AreEqual(0, query.ToSqlInfo().SqlText.Replace(Environment.NewLine, " ").IndexOf("SELECT "));
@@ -110,7 +110,7 @@ namespace TestCheck35
             Assert.AreEqual(datas.Count, 8);
             Assert.AreEqual(0, query.ToSqlInfo().SqlText.Replace(Environment.NewLine, " ").IndexOf("SELECT * "));
         }
-        
+
         public void Test_Select_Asterisk()
         {
             var query = Sql<DB>.Create(db =>
@@ -284,7 +284,7 @@ namespace TestCheck35
             Assert.AreEqual(datas.Count, 2);
             query.ToSqlInfo().SqlText.Replace(Environment.NewLine, " ").IndexOf("SELECT DISTINCT TOP 2 *");
         }
-        
+
         public void Test_Continue_Select()
         {
             var query = Sql<DB>.Create(db =>

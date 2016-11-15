@@ -10,5 +10,15 @@ namespace Microsoft.VisualStudio.TestTools.UnitTesting
             if (lhs == null || rhs == null) throw new InvalidProgramException();
             if (!lhs.Equals(rhs)) throw new InvalidProgramException();
         }
+
+        public static void IsTrue(bool condition)
+        {
+            if (!condition) throw new InvalidProgramException();
+        }
+
+        public static void IsFalse(bool condition)
+        {
+            if (condition) throw new InvalidProgramException();
+        }
     }
 }

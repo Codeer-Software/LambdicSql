@@ -7,18 +7,18 @@ using static Test.Helper.DBProviderInfo;
 namespace Test
 {
     [TestClass]
-    public class TestSelectWrap
+    public class TestKeywordSelectWrap
     {
         public TestContext TestContext { get; set; }
         public IDbConnection _connection;
-        TestSelect _core;
+        TestKeywordSelect _core;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _connection = TestEnvironment.CreateConnection(TestContext.DataRow[0]);
             _connection.Open();
-            _core = new TestSelect();
+            _core = new TestKeywordSelect();
             _core.TestInitialize(TestContext.TestName, _connection);
         }
 
