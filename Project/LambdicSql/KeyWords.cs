@@ -198,30 +198,13 @@ namespace LambdicSql
 
         public static IQuery<Non> Delete() => InvalitContext.Throw<IQuery<Non>>(nameof(Delete));
 
-        public interface InsertAll<TTable> { }
-        [MethodGroup(nameof(InsertInto))]
-        public static IQuery<Non, InsertAll<TTable>> InsertInto<TTable>(TTable table) => InvalitContext.Throw<IQuery<Non, InsertAll<TTable>>>(nameof(InsertInto));
-
         [MethodGroup(nameof(InsertInto))]
         public static IQuery<Non, TTable> InsertInto<TTable>(TTable table, params object[] targets) => InvalitContext.Throw<IQuery<Non, TTable>>(nameof(InsertInto));
 
         [MethodGroup(nameof(InsertInto))]
         public static IQuery<TSelected> Values<TSelected, TTable>(this IQuery<TSelected, TTable> words, params object[] targets)
              => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
-
-        [MethodGroup(nameof(InsertInto))]
-        public static IQuery<TSelected> Values<TSelected, TTable>(this IQuery<TSelected, TTable> words, TTable value)
-             => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
-        [MethodGroup(nameof(InsertInto))]
-        public static IQuery<TSelected> Values<TSelected, TTable>(this IQuery<TSelected, InsertAll<TTable>> words, TTable value)
-            => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
-        [MethodGroup(nameof(InsertInto))]
-        public static IQuery<TSelected> Values<TSelected, TTable>(this IQuery<TSelected, TTable> words, IParamInfo value)
-             => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
-        [MethodGroup(nameof(InsertInto))]
-        public static IQuery<TSelected> Values<TSelected, TTable>(this IQuery<TSelected, InsertAll<TTable>> words, IParamInfo value)
-             => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
-
+        
         public static long RowNum { get; }
 
         static string ToString(ISqlStringConverter converter, MemberExpression member)

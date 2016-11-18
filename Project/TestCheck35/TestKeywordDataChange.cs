@@ -23,6 +23,8 @@ namespace TestCheck35
 
         public void Test_Update_Set()
         {
+            Test_InsertInto_Values();
+
             var query = Sql<DB>.Create(db =>
                 Update(db.tbl_data).Set(new Assign(db.tbl_data.val1, 100), new Assign(db.tbl_data.val2, "200")).
                 Where(db.tbl_data.id == 1));
@@ -76,3 +78,8 @@ FROM tbl_data");
         }
     }
 }
+
+//TODO テスト残件
+//Inで配列で渡す
+//InsertInto時の型情報
+//InsertInto + Select

@@ -253,22 +253,7 @@ namespace Test
 
             query.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Write();
         }
-
-        [TestMethod]
-        public void InsertEx2()
-        {
-            SqlOption.Log = l => Debug.Print(l);
-
-            var data = new tbl_data() { id = 1, val1 = 10, val2 = "a" };
-
-            DeleteX();
-
-            var query = Sql<DataChangeTest>.Create(db =>
-                InsertInto(db.tbl_data, db.tbl_data.id, db.tbl_data.val2).Values(data));
-
-            query.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Write();
-        }
-
+        
         public class Types
         {
             public string ntext { get; set; }
@@ -322,33 +307,7 @@ namespace Test
             DeleteX();
         }
 
-        [TestMethod]
-        public void InsertEx4()
-        {
-            SqlOption.Log = l => Debug.Print(l);
-
-            var data = new Types()
-            {
-                id = 1,
-                text = "text",
-                ntext = "ntext",
-                @char = "char",
-                nchar = "nchar",
-                varchar = "varchar",
-                nvarchar = "nvarchar",
-                datetime = new DateTime(1999, 1, 1),
-                datetime2 = new DateTime(2000, 1, 1)
-            };
-
-            DeleteX();
-
-            var query = Sql<DataChangeTest>.Create(db =>
-                InsertInto(db.tbl_types, db.tbl_types.id).Values(data));
-            var info = query.ToSqlInfo(typeof(SqlConnection));
-            var detail = info.DbParams;
-            Debug.Print(info.SqlText);
-        }
-
+        /*
         [TestMethod]
         public void InsertAll()
         {
@@ -362,7 +321,7 @@ namespace Test
                 InsertInto(db.tbl_data).Values(data));
 
             query.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Write();
-        }
+        }*/
 
         [TestMethod]
         public void UpdateEx()

@@ -36,6 +36,5 @@ namespace Test
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void Test_InsertInto_Values() => _core.Test_InsertInto_Values();
-
     }
 }
