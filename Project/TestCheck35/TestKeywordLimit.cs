@@ -22,34 +22,6 @@ namespace TestCheck35
             _connection = connection;
         }
 
-        public class Staff
-        {
-            public int id { get; set; }
-            public string name { get; set; }
-        }
-
-        public class Remuneration
-        {
-            public int id { get; set; }
-            public int staff_id { get; set; }
-            public DateTime payment_date { get; set; }
-            public decimal money { get; set; }
-        }
-
-        public class Data
-        {
-            public int id { get; set; }
-            public int val1 { get; set; }
-            public string val2 { get; set; }
-        }
-
-        public class DB
-        {
-            public Staff tbl_staff { get; set; }
-            public Remuneration tbl_remuneration { get; set; }
-            public Data tbl_data { get; set; }
-        }
-
         public void Test_Limit_Offset()
         {
             var name = _connection.GetType().FullName;
@@ -148,6 +120,23 @@ ORDER BY
 	tbl_remuneration.id ASC
 OFFSET @p_0 ROWS
 FETCH NEXT @p_1 ROWS ONLY");
+        }
+
+        public void Test_RowNum()
+        {
+            var name = _connection.GetType().FullName;
+            if (name != "Oracle.ManagedDataAccess.Client.OracleConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+                 Select(Asterisk(db.tbl_remuneration)).
+                 From(db.tbl_remuneration).
+                 Where(Between(RowNum, 1, 3)).
+                 OrderBy(new Asc(db.tbl_remuneration.id))
+                 );
+
+            var datas = _connection.Query(query).ToList();
+            Assert.AreEqual(3, datas.Count);
+            query.Gen(_connection);
         }
     }
 }

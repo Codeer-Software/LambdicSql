@@ -7,18 +7,18 @@ using static Test.Helper.DBProviderInfo;
 namespace Test
 {
     [TestClass]
-    public class TestKeywordLimitWrap
+    public class TestKeywordDataChangeWrap
     {
         public TestContext TestContext { get; set; }
         public IDbConnection _connection;
-        TestKeywordLimit _core;
+        TestKeywordDataChange _core;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _connection = TestEnvironment.CreateConnection(TestContext.DataRow[0]);
             _connection.Open();
-            _core = new TestKeywordLimit();
+            _core = new TestKeywordDataChange();
             _core.TestInitialize(TestContext.TestName, _connection);
         }
 
@@ -26,18 +26,16 @@ namespace Test
         public void TestCleanup() => _connection.Dispose();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void Test_Limit_Offset() => _core.Test_Limit_Offset();
+        public void Test_Update_Set() => _core.Test_Update_Set();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void Test_OffsetRows_FetchNext() => _core.Test_OffsetRows_FetchNext();
+        public void Test_Delete() => _core.Test_Delete();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void Test_Continue_Limit_Offset() => _core.Test_Continue_Limit_Offset();
+        public void Test_Delete_All() => _core.Test_Delete_All();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void Test_Continue_OffsetRows_FetchNext() => _core.Test_Continue_OffsetRows_FetchNext();
+        public void Test_InsertInto_Values() => _core.Test_InsertInto_Values();
 
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void Test_RowNum() => _core.Test_RowNum();
     }
 }

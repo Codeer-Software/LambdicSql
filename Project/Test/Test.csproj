@@ -96,6 +96,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="..\TestCheck35\DB.cs">
+      <Link>DB.cs</Link>
+    </Compile>
     <Compile Include="..\TestCheck35\Samples.cs">
       <Link>Samples.cs</Link>
     </Compile>
@@ -104,6 +107,9 @@
     </Compile>
     <Compile Include="..\TestCheck35\TestKeywordCondition.cs">
       <Link>TestKeywordCondition.cs</Link>
+    </Compile>
+    <Compile Include="..\TestCheck35\TestKeywordDataChange.cs">
+      <Link>TestKeywordDataChange.cs</Link>
     </Compile>
     <Compile Include="..\TestCheck35\TestKeywordFrom.cs">
       <Link>TestKeywordFrom.cs</Link>
@@ -127,6 +133,7 @@
     <Compile Include="Helper\DBProviderInfo.cs" />
     <Compile Include="TestKeywordCasetWrap.cs" />
     <Compile Include="TestKeywordConditionWrap.cs" />
+    <Compile Include="TestKeywordDataChangeWrap.cs" />
     <Compile Include="TestKeywordFromWrap.cs" />
     <Compile Include="TestKeywordLimitWrap.cs" />
     <Compile Include="TestKeywordSetOperatorWrap.cs" />
