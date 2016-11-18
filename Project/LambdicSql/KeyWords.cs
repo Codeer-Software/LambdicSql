@@ -165,23 +165,29 @@ namespace LambdicSql
         public static bool Like(string target, string serachText) => InvalitContext.Throw<bool>(nameof(Like));
         public static bool Between<TTarget>(TTarget target, TTarget min, TTarget max) => InvalitContext.Throw<bool>(nameof(Between));
         public static bool In<TTarget>(TTarget target, params TTarget[] inArguments) => InvalitContext.Throw<bool>(nameof(In));
-        public static bool In(ISqlExpressionBase exp) => InvalitContext.Throw<bool>(nameof(In));
-        public static bool In(IQuery exp) => InvalitContext.Throw<bool>(nameof(In));
+        public static bool In<TTarget>(TTarget target, ISqlExpressionBase exp) => InvalitContext.Throw<bool>(nameof(In));
+        public static bool In<TTarget>(TTarget target, IQuery exp) => InvalitContext.Throw<bool>(nameof(In));
         public static bool Exists(ISqlExpressionBase exp) => InvalitContext.Throw<bool>(nameof(Exists));
         public static bool Exists(IQuery exp) => InvalitContext.Throw<bool>(nameof(Exists));
 
         public static IQuery<Non> Union() => InvalitContext.Throw<IQuery<Non>>(nameof(Union));
-        public static IQuery<Non> Union(bool isAll) => InvalitContext.Throw<IQuery<Non>>(nameof(Union));
         public static IQuery<TSelected> Union<TSelected>(this IQuery<TSelected> words) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Union));
+
+        public static IQuery<Non> Union(bool isAll) => InvalitContext.Throw<IQuery<Non>>(nameof(Union));
         public static IQuery<TSelected> Union<TSelected>(this IQuery<TSelected> words, bool isAll) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Union));
+
         public static IQuery<Non> Intersect() => InvalitContext.Throw<IQuery<Non>>(nameof(Intersect));
-        public static IQuery<Non> Intersect(bool isAll) => InvalitContext.Throw<IQuery<Non>>(nameof(Intersect));
         public static IQuery<TSelected> Intersect<TSelected>(this IQuery<TSelected> words) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Intersect));
+
+        public static IQuery<Non> Intersect(bool isAll) => InvalitContext.Throw<IQuery<Non>>(nameof(Intersect));
         public static IQuery<TSelected> Intersect<TSelected>(this IQuery<TSelected> words, bool isAll) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Intersect));
+
         public static IQuery<Non> Except() => InvalitContext.Throw<IQuery<Non>>(nameof(Except));
-        public static IQuery<Non> Except(bool isAll) => InvalitContext.Throw<IQuery<Non>>(nameof(Except));
         public static IQuery<TSelected> Except<TSelected>(this IQuery<TSelected> words) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Except));
+
+        public static IQuery<Non> Except(bool isAll) => InvalitContext.Throw<IQuery<Non>>(nameof(Except));
         public static IQuery<TSelected> Except<TSelected>(this IQuery<TSelected> words, bool isAll) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Except));
+
         public static IQuery<Non> Minus() => InvalitContext.Throw<IQuery<Non>>(nameof(Minus));
         public static IQuery<TSelected> Minus<TSelected>(this IQuery<TSelected> words) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Minus));
 

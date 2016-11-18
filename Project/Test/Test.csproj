@@ -102,6 +102,9 @@
     <Compile Include="..\TestCheck35\TestKeywordCase.cs">
       <Link>TestKeywordCase.cs</Link>
     </Compile>
+    <Compile Include="..\TestCheck35\TestKeywordCondition.cs">
+      <Link>TestKeywordCondition.cs</Link>
+    </Compile>
     <Compile Include="..\TestCheck35\TestKeywordFrom.cs">
       <Link>TestKeywordFrom.cs</Link>
     </Compile>
@@ -110,6 +113,9 @@
     </Compile>
     <Compile Include="..\TestCheck35\TestKeywordSelect.cs">
       <Link>TestKeywordSelect.cs</Link>
+    </Compile>
+    <Compile Include="..\TestCheck35\TestKeywordSetOperator.cs">
+      <Link>TestKeywordSetOperator.cs</Link>
     </Compile>
     <Compile Include="..\TestCheck35\TestKeywordWhereGroupByHavingOrderBy.cs">
       <Link>TestKeywordWhereGroupByHavingOrderBy.cs</Link>
@@ -120,8 +126,10 @@
     <Compile Include="Helper\CodeGenerate.cs" />
     <Compile Include="Helper\DBProviderInfo.cs" />
     <Compile Include="TestKeywordCasetWrap.cs" />
+    <Compile Include="TestKeywordConditionWrap.cs" />
     <Compile Include="TestKeywordFromWrap.cs" />
     <Compile Include="TestKeywordLimitWrap.cs" />
+    <Compile Include="TestKeywordSetOperatorWrap.cs" />
     <Compile Include="TestKeywordWhereGroupByHavingOrderByWrap.cs" />
     <Compile Include="TestKeywordSelectWrap.cs" />
     <Compile Include="ModelLambdicSqlTestDB.cs" />
