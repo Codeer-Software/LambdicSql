@@ -55,13 +55,7 @@ namespace TestCheck35
             public Remuneration tbl_remuneration { get; set; }
             public Data tbl_data { get; set; }
         }
-
-        public class SelectData
-        {
-            public DateTime PaymentDate { get; set; }
-            public decimal Money { get; set; }
-        }
-
+        
         public void Test_Union()
         {
             var query = Sql<DB>.Create(db =>
@@ -207,6 +201,183 @@ WHERE (tbl_staff.id) = (@p_0)");
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff).
                 Minus().
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff).Where(db.tbl_staff.id == 1));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT *
+FROM tbl_staff
+MINUS
+SELECT *
+FROM tbl_staff
+WHERE (tbl_staff.id) = (@p_0)");
+        }
+
+        public void Test_Continue_Union()
+        {
+            var query = Sql<DB>.Create(db =>
+                Select(Asterisk(db.tbl_staff)).From(db.tbl_staff));
+
+            var target = Sql<DB>.Create(db =>
+                Union().Select(Asterisk(db.tbl_staff)).From(db.tbl_staff));
+            query = query.Concat(target);
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT *
+FROM tbl_staff
+UNION
+SELECT *
+FROM tbl_staff");
+        }
+
+        public void Test_Continue_Union_All()
+        {
+            var query = Sql<DB>.Create(db =>
+                Select(Asterisk(db.tbl_staff)).From(db.tbl_staff));
+
+            var target = Sql<DB>.Create(db =>
+                Union(true).Select(Asterisk(db.tbl_staff)).From(db.tbl_staff));
+            query = query.Concat(target);
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT *
+FROM tbl_staff
+UNION ALL
+SELECT *
+FROM tbl_staff");
+        }
+
+        public void Test_Continue_Union_All_False()
+        {
+            var query = Sql<DB>.Create(db =>
+                Select(Asterisk(db.tbl_staff)).From(db.tbl_staff));
+
+            var target = Sql<DB>.Create(db =>
+                Union(false).Select(Asterisk(db.tbl_staff)).From(db.tbl_staff));
+            query = query.Concat(target);
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT *
+FROM tbl_staff
+UNION
+SELECT *
+FROM tbl_staff");
+        }
+
+        public void Test_Continue_Intersect()
+        {
+            if (_connection.GetType().Name == "MySqlConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+                Select(Asterisk(db.tbl_staff)).From(db.tbl_staff));
+
+            var target = Sql<DB>.Create(db =>
+                Intersect().Select(Asterisk(db.tbl_staff)).From(db.tbl_staff));
+            query = query.Concat(target);
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT *
+FROM tbl_staff
+INTERSECT
+SELECT *
+FROM tbl_staff");
+        }
+
+        public void Test_Continue_Except()
+        {
+            if (_connection.GetType().Name == "MySqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+                Select(Asterisk(db.tbl_staff)).From(db.tbl_staff));
+
+            var target = Sql<DB>.Create(db =>
+                Except().
+                Select(Asterisk(db.tbl_staff)).From(db.tbl_staff).Where(db.tbl_staff.id == 1));
+            query = query.Concat(target);
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT *
+FROM tbl_staff
+EXCEPT
+SELECT *
+FROM tbl_staff
+WHERE (tbl_staff.id) = (@p_0)");
+        }
+
+        public void Test_Continue_Except_All()
+        {
+            if (_connection.GetType().Name == "SqlConnection") return;
+            if (_connection.GetType().Name == "SQLiteConnection") return;
+            if (_connection.GetType().Name == "MySqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+                Select(Asterisk(db.tbl_staff)).From(db.tbl_staff));
+
+            var target = Sql<DB>.Create(db =>
+                Except(true).
+                Select(Asterisk(db.tbl_staff)).From(db.tbl_staff).Where(db.tbl_staff.id == 1));
+            query = query.Concat(target);
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT *
+FROM tbl_staff
+EXCEPT ALL
+SELECT *
+FROM tbl_staff
+WHERE (tbl_staff.id) = (@p_0)");
+        }
+
+        public void Test_Continue_Except_All_False()
+        {
+            if (_connection.GetType().Name == "MySqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+                Select(Asterisk(db.tbl_staff)).From(db.tbl_staff));
+
+            var target = Sql<DB>.Create(db =>
+                Except(false).
+                Select(Asterisk(db.tbl_staff)).From(db.tbl_staff).Where(db.tbl_staff.id == 1));
+            query = query.Concat(target);
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT *
+FROM tbl_staff
+EXCEPT
+SELECT *
+FROM tbl_staff
+WHERE (tbl_staff.id) = (@p_0)");
+        }
+
+        public void Test_Continue_Minus()
+        {
+            if (_connection.GetType().Name == "SQLiteConnection") return;
+            if (_connection.GetType().Name == "MySqlConnection") return;
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+                Select(Asterisk(db.tbl_staff)).From(db.tbl_staff));
+
+            var target = Sql<DB>.Create(db =>
+                Minus().
+                Select(Asterisk(db.tbl_staff)).From(db.tbl_staff).Where(db.tbl_staff.id == 1));
+            query = query.Concat(target);
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);

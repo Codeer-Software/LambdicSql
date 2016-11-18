@@ -45,5 +45,26 @@ namespace Test
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void Test_Minus() => _core.Test_Minus();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Test_Continue_Union() => _core.Test_Continue_Union();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Test_Continue_Union_All() => _core.Test_Continue_Union_All();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Test_Continue_Union_All_False() => _core.Test_Continue_Union_All_False();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Test_Continue_Intersect() => _core.Test_Continue_Intersect();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Test_Continue_Except() => _core.Test_Continue_Except();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Test_Continue_Except_All() => _core.Test_Continue_Except_All();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Test_Continue_Minus() => _core.Test_Continue_Minus();
     }
 }
