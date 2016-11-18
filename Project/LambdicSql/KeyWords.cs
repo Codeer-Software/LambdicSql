@@ -108,6 +108,15 @@ namespace LambdicSql
         [MethodGroup(nameof(Case))]
         public static T End<T>(this IElseAfter<T> words) => InvalitContext.Throw<T>(nameof(End));
 
+
+        //TODO Correspond Subquery of From clause
+        //Also direct description
+        //あー、これ対応やめるかなー
+
+        //ていうか、サブクエリの直書きを対応きるかやな。
+        //どっちにしろ、読みにくいし、非推奨やろ。
+
+
         public static IQuery<Non> From(params object[] tbale) => InvalitContext.Throw<IQuery<Non>>(nameof(From));
         public static IQuery<TSelected> From<TSelected>(this IQuery<TSelected> words, params object[] tbale) => InvalitContext.Throw<IQuery<TSelected>>(nameof(From));
 

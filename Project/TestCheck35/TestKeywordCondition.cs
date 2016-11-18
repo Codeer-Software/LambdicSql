@@ -171,8 +171,7 @@ WHERE EXISTS
 		JOIN tbl_staff ON (tbl_staff.id) = (tbl_staff.id)
 	WHERE (@p_0) < (tbl_remuneration.money))");
         }
-
-        //TODO バグってます。
+        
         public void Test_Exists2()
         {
             var query = Sql<DB>.Create(db =>

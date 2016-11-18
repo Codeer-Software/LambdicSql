@@ -1,6 +1,7 @@
 ﻿using LambdicSql.SqlBase;
 using System.Linq;
 using System.Linq.Expressions;
+using System;
 
 namespace LambdicSql.Inside.Keywords
 {
@@ -9,7 +10,7 @@ namespace LambdicSql.Inside.Keywords
         internal static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
-            var args = method.Arguments.Select(e => converter.ToString(e)).ToArray();
+            var args = method.Arguments.Select(e => AdjustSubQuery(e, converter.ToString(e))).ToArray();
             switch (method.Method.Name)
             {
                 case nameof(LambdicSql.Keywords.Like): return args[0] + " LIKE " + args[1];
@@ -18,6 +19,16 @@ namespace LambdicSql.Inside.Keywords
                 case nameof(LambdicSql.Keywords.Exists): return "EXISTS" + args[0];
             }
             return null;
+        }
+
+        //TODO refactoring.
+        static string AdjustSubQuery(Expression e, string v)
+        {
+            if (typeof(IQuery).IsAssignableFrom(e.Type))
+            {
+                return SqlStringConverter.AdjustSubQueryString(v);
+            }
+            return v;
         }
     }
 }

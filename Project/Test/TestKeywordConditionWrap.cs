@@ -38,7 +38,7 @@ namespace Test
         public void Test_In2() => _core.Test_In2();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void Test_In3() => _core.Test_In2();
+        public void Test_In3() => _core.Test_In3();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void Test_Exists1() => _core.Test_Exists1();

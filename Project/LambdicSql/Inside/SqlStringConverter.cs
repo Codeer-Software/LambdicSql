@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 
 namespace LambdicSql.Inside
 {
@@ -129,6 +130,7 @@ namespace LambdicSql.Inside
             return new DecodedInfo(nodeType.Type, "(" + left.Text + ") " + nodeType.Text + " (" + right.Text + ")");
         }
 
+        //TODO bad name!
         DecodedInfo IsSqlExpressionBody(MemberExpression member)
         {
             var type = member.Type;
@@ -278,6 +280,9 @@ namespace LambdicSql.Inside
                 ret.Add(chain[0].GetMethodsToString()(this, chain));
             }
 
+            //TODO ★ああああ！　ここで直接サブクエリを解決すればいいかも！
+
+
             //Cast for IMethodChain.
             var text = string.Join(string.Empty, ret.ToArray());
             if (method.Method.Name == "Cast" || method.Method.Name == "T") text = AdjustSubQueryString(text);
@@ -353,6 +358,11 @@ namespace LambdicSql.Inside
                 return new DecodedInfo(type, AdjustSubQueryString(sqlExp.ToString(this)));
             }
 
+            //ここでできたら一番いいんだよ！
+            if (obj is IQuery)
+            {
+                int dmy = 0;
+            }
             throw new NotSupportedException("Invalid object.");
         }
 
@@ -437,7 +447,8 @@ namespace LambdicSql.Inside
             return false;
         }
 
-        static string AdjustSubQueryString(string text)
+        //TODO Can I define it here?
+        internal static string AdjustSubQueryString(string text)
         {
             if (text.Replace(Environment.NewLine, string.Empty).Trim().IndexOf("SELECT") != 0) return text;
 
@@ -481,7 +492,7 @@ namespace LambdicSql.Inside
 
                     group.Add(curent);
                     var ps = curent.Method.GetParameters();
-                    bool isSqlSyntax = 0 < ps.Length && typeof(IMethodChain).IsAssignableFrom(ps[0].ParameterType);
+                    bool isSqlSyntax = curent.Method.IsDefined(typeof(ExtensionAttribute), false) && 0 < ps.Length && typeof(IMethodChain).IsAssignableFrom(ps[0].ParameterType);
                     var next = isSqlSyntax ? curent.Arguments[0] as MethodCallExpression : null;
 
                     //end of syntax

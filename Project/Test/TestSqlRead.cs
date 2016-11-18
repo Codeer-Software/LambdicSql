@@ -177,8 +177,7 @@ namespace Test
 
             var y = query.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Read();
         }
-
-
+        
         [TestMethod]
         public void SubEx()
         {
