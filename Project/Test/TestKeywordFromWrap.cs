@@ -32,6 +32,9 @@ namespace Test
         public void Test_From2() => _core.Test_From2();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Test_From3() => _core.Test_From3();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void Test_Join() => _core.Test_Join();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]

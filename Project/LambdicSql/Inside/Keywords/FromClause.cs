@@ -42,6 +42,11 @@ namespace LambdicSql.Inside.Keywords
         //TODO refactoring.
         internal static string ExpressionToTableName(ISqlStringConverter decoder, Expression exp)
         {
+            return AdjustSubQuery(exp, ExpressionToTableNameCore(decoder, exp));
+        }
+
+        static string ExpressionToTableNameCore(ISqlStringConverter decoder, Expression exp)
+        {
             var arry = exp as NewArrayExpression;
             if (arry != null)
             {
@@ -76,6 +81,17 @@ namespace LambdicSql.Inside.Keywords
                 }
             }
             return text;
+        }
+
+
+        //TODO refactoring.
+        static string AdjustSubQuery(Expression e, string v)
+        {
+            if (typeof(IQuery).IsAssignableFrom(e.Type))
+            {
+                return SqlStringConverter.AdjustSubQueryString(v);
+            }
+            return v;
         }
 
         static string GetSqlExpressionBody(Expression exp)

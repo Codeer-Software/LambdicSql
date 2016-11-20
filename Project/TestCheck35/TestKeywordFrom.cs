@@ -71,7 +71,30 @@ FROM
 	(SELECT *
 	FROM tbl_remuneration) sub");
         }
-        
+
+        public void Test_From3()
+        {
+            var name = _connection.GetType().Name;
+            if (name == "SqlConnection") return;
+            if (name == "NpgsqlConnection") return;
+            if (name == "MySqlConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+                Select(Asterisk(db.tbl_remuneration)).
+                From(
+                    Select(Asterisk(db.tbl_remuneration)).
+                        From(db.tbl_remuneration)
+                    ));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT *
+FROM 
+	(SELECT *
+	FROM tbl_remuneration)");
+        }
+
         public void Test_Join()
         {
             var query = Sql<DB>.Create(db =>

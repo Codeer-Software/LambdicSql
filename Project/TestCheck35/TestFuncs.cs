@@ -227,7 +227,7 @@ FROM tbl_staff");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	UPPER(tbl_staff.name) AS Val
+	REPLACE(tbl_staff.name, @p_2, @p_3) AS Val
 FROM tbl_staff");
         }
 
