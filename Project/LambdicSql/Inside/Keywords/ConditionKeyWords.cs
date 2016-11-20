@@ -20,7 +20,7 @@ namespace LambdicSql.Inside.Keywords
             }
             return null;
         }
-
+        
         //TODO refactoring.
         static string AdjustSubQuery(Expression e, string v)
         {

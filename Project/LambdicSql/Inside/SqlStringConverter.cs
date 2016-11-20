@@ -280,9 +280,6 @@ namespace LambdicSql.Inside
                 ret.Add(chain[0].GetMethodsToString()(this, chain));
             }
 
-            //TODO ★ああああ！　ここで直接サブクエリを解決すればいいかも！
-
-
             //Cast for IMethodChain.
             var text = string.Join(string.Empty, ret.ToArray());
             if (method.Method.Name == "Cast" || method.Method.Name == "T") text = AdjustSubQueryString(text);

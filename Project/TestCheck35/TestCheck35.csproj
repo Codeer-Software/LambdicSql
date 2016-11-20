@@ -43,6 +43,7 @@
     <Compile Include="AssertHelper.cs" />
     <Compile Include="DB.cs" />
     <Compile Include="FakeDapper.cs" />
+    <Compile Include="TestFuncs.cs" />
     <Compile Include="TestKeywordCase.cs" />
     <Compile Include="TestKeywordCondition.cs" />
     <Compile Include="TestKeywordDataChange.cs" />

@@ -28,6 +28,50 @@ namespace TestCheck35
             public decimal Money { get; set; }
         }
 
+        public void Test_From1()
+        {
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData
+                {
+                    PaymentDate = db.tbl_remuneration.payment_date,
+                    Money = db.tbl_remuneration.money,
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+@"SELECT
+	tbl_remuneration.payment_date AS PaymentDate,
+	tbl_remuneration.money AS Money
+FROM tbl_remuneration");
+        }
+
+        public void Test_From2()
+        {
+            var sub = Sql<DB>.Create(db =>
+                Select(Asterisk(db.tbl_remuneration)).
+                From(db.tbl_remuneration));
+
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData
+                {
+                    PaymentDate = sub.Body.payment_date,
+                    Money = sub.Body.money,
+                }).
+                From(sub));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	sub.payment_date AS PaymentDate,
+	sub.money AS Money
+FROM 
+	(SELECT *
+	FROM tbl_remuneration) sub");
+        }
+        
         public void Test_Join()
         {
             var query = Sql<DB>.Create(db =>

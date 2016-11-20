@@ -102,6 +102,9 @@
     <Compile Include="..\TestCheck35\Samples.cs">
       <Link>Samples.cs</Link>
     </Compile>
+    <Compile Include="..\TestCheck35\TestFuncs.cs">
+      <Link>TestFuncs.cs</Link>
+    </Compile>
     <Compile Include="..\TestCheck35\TestKeywordCase.cs">
       <Link>TestKeywordCase.cs</Link>
     </Compile>
@@ -131,6 +134,7 @@
     </Compile>
     <Compile Include="Helper\CodeGenerate.cs" />
     <Compile Include="Helper\DBProviderInfo.cs" />
+    <Compile Include="TestFuncsWrap.cs" />
     <Compile Include="TestKeywordCasetWrap.cs" />
     <Compile Include="TestKeywordConditionWrap.cs" />
     <Compile Include="TestKeywordDataChangeWrap.cs" />
