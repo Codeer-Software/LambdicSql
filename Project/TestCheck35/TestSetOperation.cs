@@ -295,5 +295,32 @@ SELECT * FROM tbl_staff WHERE (tbl_staff.id) = (1)");
 MINUS
 SELECT * FROM tbl_staff WHERE (tbl_staff.id) = (1)");
         }
+
+        public void Test_Concat()
+        {
+            var select = Sql<DB>.Create(db => Select(new { name = db.tbl_staff.name}));
+            var from = Sql<DB>.Create(db => From(db.tbl_staff));
+            var query = select.Concat(from);
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	tbl_staff.name AS name
+FROM tbl_staff");
+        }
+
+        public void Test_Concat_Exp()
+        {
+            var select = Sql<DB>.Create(db => Text("SELECT tbl_staff.name AS name"));
+            var from = Sql<DB>.Create(db => Text("FROM tbl_staff"));
+            var query = select.Concat(from);
+
+            var datas = _connection.Query<Staff>(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT tbl_staff.name AS name
+FROM tbl_staff");
+        }
     }
 }

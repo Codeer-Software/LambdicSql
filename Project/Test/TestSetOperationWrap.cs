@@ -67,5 +67,10 @@ namespace Test
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void Test_Minus_Exp() => _core.Test_Minus_Exp();
 
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Test_Concat() => _core.Test_Concat();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Test_Concat_Exp() => _core.Test_Concat_Exp();
     }
 }

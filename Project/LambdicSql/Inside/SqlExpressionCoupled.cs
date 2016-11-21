@@ -1,4 +1,5 @@
 ﻿using LambdicSql.SqlBase;
+using System;
 
 namespace LambdicSql.Inside
 {
@@ -23,6 +24,6 @@ namespace LambdicSql.Inside
         }
 
         public override string ToString(ISqlStringConverter converter)
-            => _before.ToString(converter) + _after.ToString(converter);
+            => _before.ToString(converter) + Environment.NewLine + _after.ToString(converter);
     }
 }
