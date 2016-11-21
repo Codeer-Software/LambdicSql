@@ -129,6 +129,9 @@
     <Compile Include="..\TestCheck35\TestKeywordWhereGroupByHavingOrderBy.cs">
       <Link>TestKeywordWhereGroupByHavingOrderBy.cs</Link>
     </Compile>
+    <Compile Include="..\TestCheck35\TestSetOperation.cs">
+      <Link>TestSetOperation.cs</Link>
+    </Compile>
     <Compile Include="..\TestCheck35\TestSynatax.cs">
       <Link>TestSynatax.cs</Link>
     </Compile>
@@ -159,6 +162,7 @@
     <Compile Include="tbl_staff.cs" />
     <Compile Include="TestExpressionToStringcs.cs" />
     <Compile Include="Helper\TestResult.cs" />
+    <Compile Include="TestSetOperationWrap.cs" />
     <Compile Include="TestSqlRead.cs" />
     <Compile Include="TestDbInfoLambda.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

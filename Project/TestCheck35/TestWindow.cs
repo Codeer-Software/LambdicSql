@@ -14,7 +14,7 @@ using System.Linq.Expressions;
 
 namespace TestCheck35
 {
-    class TestWindow
+    public class TestWindow
     {
         public IDbConnection _connection;
 
@@ -439,7 +439,64 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             query.Gen(_connection);
         }
+
+        public void Test_Rows()
+        {
+            if (_connection.GetType().Name == "SqlConnection") return;
+            if (_connection.GetType().Name == "SQLiteConnection") return;
+            if (_connection.GetType().Name == "MySqlConnection") return;
+            if (_connection.GetType().Name == "DB2Connection") return;
+
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData()
+                {
+                    Val = Window.Count(db.tbl_remuneration.money).
+                            Over<decimal>(new PartitionBy(db.tbl_remuneration.payment_date),
+                                new OrderBy(new Asc(db.tbl_remuneration.money)),
+                                new Rows(1))
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	COUNT(tbl_remuneration.money)OVER(
+	PARTITION BY
+		tbl_remuneration.payment_date 
+	ORDER BY
+		tbl_remuneration.money ASC 
+	ROWS @p_0 PRECEDING) AS Val
+FROM tbl_remuneration");
+        }
+
+        public void Test_OrderBy()
+        {
+            if (_connection.GetType().Name == "SQLiteConnection") return;
+            if (_connection.GetType().Name == "MySqlConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData()
+                {
+                    Val = Window.Count(db.tbl_remuneration.money).
+                            Over<decimal>(new PartitionBy(db.tbl_remuneration.payment_date),
+                                new OrderBy(new Asc(db.tbl_remuneration.money), new Desc(db.tbl_remuneration.payment_date)),
+                                new Rows(1, 5))
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	COUNT(tbl_remuneration.money)OVER(
+	PARTITION BY
+		tbl_remuneration.payment_date 
+	ORDER BY
+		tbl_remuneration.money ASC,
+		tbl_remuneration.payment_date DESC 
+	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+FROM tbl_remuneration");
+        }
     }
 }
-
-//TODO PARTITION BY　と　ORDER BY　の最後にスペースが入ってるなー。問題ないけど意図はしていない。

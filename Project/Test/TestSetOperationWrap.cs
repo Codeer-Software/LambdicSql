@@ -7,18 +7,18 @@ using static Test.Helper.DBProviderInfo;
 namespace Test
 {
     [TestClass]
-    public class TestWindowWrap
+    public class TestSetOperationWrap
     {
         public TestContext TestContext { get; set; }
         public IDbConnection _connection;
-        TestWindow _core;
+        TestSetOperation _core;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _connection = TestEnvironment.CreateConnection(TestContext.DataRow[0]);
             _connection.Open();
-            _core = new TestWindow();
+            _core = new TestSetOperation();
             _core.TestInitialize(TestContext.TestName, _connection);
         }
 
@@ -26,57 +26,46 @@ namespace Test
         public void TestCleanup() => _connection.Dispose();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void Test_Avg() => _core.Test_Avg();
+        public void Test_Union() => _core.Test_Union();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void Test_Sum() => _core.Test_Sum();
+        public void Test_Union_All() => _core.Test_Union_All();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void Test_Count() => _core.Test_Count();
+        public void Test_Union_All_False() => _core.Test_Union_All_False();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void Test_Max() => _core.Test_Max();
+        public void Test_Intersect() => _core.Test_Intersect();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void Test_Min() => _core.Test_Min();
+        public void Test_Except() => _core.Test_Except();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void Test_First_Value() => _core.Test_First_Value();
+        public void Test_Except_All() => _core.Test_Except_All();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void Test_Last_Value() => _core.Test_Last_Value();
+        public void Test_Minus() => _core.Test_Minus();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void Test_Rank() => _core.Test_Rank();
+        public void Test_Union_Exp() => _core.Test_Union_Exp();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void Test_Dense_Rank() => _core.Test_Dense_Rank();
+        public void Test_Union_All_Exp() => _core.Test_Union_All_Exp();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void Test_Percent_Rank() => _core.Test_Percent_Rank();
+        public void Test_Union_All_False_Exp() => _core.Test_Union_All_False_Exp();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void Test_Cume_Dist() => _core.Test_Cume_Dist();
+        public void Test_Intersect_Exp() => _core.Test_Intersect_Exp();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void Test_Ntile() => _core.Test_Ntile();
+        public void Test_Except_Exp() => _core.Test_Except_Exp();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void TestNth_Value() => _core.TestNth_Value();
+        public void Test_Except_All_Exp() => _core.Test_Except_All_Exp();
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void Test_Lag1() => _core.Test_Lag1();
+        public void Test_Minus_Exp() => _core.Test_Minus_Exp();
 
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void Test_Lag2() => _core.Test_Lag2();
-
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void Test_Lag3() => _core.Test_Lag3();
-
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void Test_Rows() => _core.Test_Rows();
-
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
-        public void Test_OrderBy() => _core.Test_OrderBy();
     }
 }

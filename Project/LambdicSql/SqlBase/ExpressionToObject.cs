@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Linq;
+using System.Reflection;
 
 namespace LambdicSql.SqlBase
 {
@@ -331,6 +332,13 @@ namespace LambdicSql.SqlBase
             while (member != null)
             {
                 names.Add(member.Member.Name);
+              
+                if (member.Expression == null)
+                {
+                    //static
+                    type = member.Member.DeclaringType;
+                    break;
+                }
                 var constant = member.Expression as ConstantExpression;
                 if (constant != null)
                 {
@@ -346,7 +354,7 @@ namespace LambdicSql.SqlBase
                 }
                 member = member.Expression as MemberExpression;
             }
-            if (targt == null)
+            if (type == null)
             {
                 return false;
             }
@@ -364,6 +372,11 @@ namespace LambdicSql.SqlBase
                 var param = Expression.Parameter(type, "param");
                 Expression target = param;
                 names.Reverse();
+                if (targt == null)
+                {
+                    target = StaticPropertyOrField(type, names[0]);
+                    names.RemoveAt(0);
+                }
                 names.ForEach(e => target = Expression.PropertyOrField(target, e));
                 getter = Activator.CreateInstance(typeof(GetterCore<>).MakeGenericType(type), true) as IGetter;
                 getter.Init(Expression.Convert(target, typeof(object)), new[] { param });
@@ -372,5 +385,31 @@ namespace LambdicSql.SqlBase
             value = getter.GetMemberObject(new object[] { targt });
             return true;
         }
+
+
+        public static MemberExpression StaticPropertyOrField(Type type, string propertyOrFieldName)
+        {
+            PropertyInfo property = type.GetProperty(propertyOrFieldName, BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.IgnoreCase | BindingFlags.Static);
+            if (property != null)
+            {
+                return Expression.Property(null, property);
+            }
+            FieldInfo field = type.GetField(propertyOrFieldName, BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.IgnoreCase | BindingFlags.Static);
+            if (field == null)
+            {
+                property = type.GetProperty(propertyOrFieldName, BindingFlags.FlattenHierarchy | BindingFlags.NonPublic | BindingFlags.IgnoreCase | BindingFlags.Static);
+                if (property != null)
+                {
+                    return Expression.Property(null, property);
+                }
+                field = type.GetField(propertyOrFieldName, BindingFlags.FlattenHierarchy | BindingFlags.NonPublic | BindingFlags.IgnoreCase | BindingFlags.Static);
+                if (field == null)
+                {
+                    throw new ArgumentException(string.Format("{0} NotAMemberOfType {1}", propertyOrFieldName, type));
+                }
+            }
+            return Expression.Field(null, field);
+        }
+        //TODO static考慮漏れは他のところでも
     }
 }
