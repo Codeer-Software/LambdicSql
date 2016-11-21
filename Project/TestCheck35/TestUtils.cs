@@ -238,5 +238,26 @@ FROM tbl_remuneration
     JOIN tbl_staff ON tbl_staff.id = tbl_remuneration.staff_id
 WHERE (@p_0) < (tbl_remuneration.money)");
         }
+
+        //おっとテキストのフォーマット
+        /*
+        [TestMethod]
+        public void TestFormatText2()
+        {
+            SqlOption.Log = l => Debug.Print(l);
+            var query = Sql<Data>.Create(db =>
+                Select(new
+                {
+                    name = db.tbl_staff.name,
+                    payment_date = db.tbl_remuneration.payment_date,
+                    money = Text<decimal>("{0} + 1000", db.tbl_remuneration.money),
+                }).
+                From(db.tbl_remuneration).
+                    Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
+                Where(3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
+
+            var y = query.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Read();
+        }
+        */
     }
 }

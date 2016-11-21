@@ -81,5 +81,5 @@ FROM tbl_data");
 
 //TODO テスト残件
 //Inで配列で渡す
-//InsertInto時の型情報
 //InsertInto + Select
+//これはここに書いた方がいいな

@@ -12,6 +12,8 @@ using static LambdicSql.Utils;
 using System.Collections.Generic;
 using LambdicSql.SqlBase;
 
+//TODO Make this a more practical sample.
+//TODO Add better data for sample
 namespace TestCore
 {
     public class Samples
@@ -120,6 +122,7 @@ namespace TestCore
         }
 
 
+        
 
         static IDbDataParameter CreateParameter(IDbCommand com, string name, object obj)
         {
@@ -1433,5 +1436,35 @@ FROM tbl_remuneration
             Debug.Print(info.SqlText);
             return _connection.Query<T>(exp).ToList();
         }
+
+
+
+        /*
+        [TestMethod]
+        public void TestAlias()
+        {
+            SqlOption.Log = l => Debug.Print(l);
+
+            var member1 = Sql<Data>.Create(db => db.tbl_staff);
+            var member2 = Sql<Data>.Create(db => db.tbl_staff);
+            var member3 = Sql<Data>.Create(db => db.tbl_staff);
+
+            var query = Sql<Data>.Create(db =>
+                Select(new
+                {
+                    date = db.tbl_work.date,
+                    name1 = member1.Body.name,
+                    name2 = member2.Body.name,
+                    name3 = member3.Body.name
+                }).
+                From(db.tbl_work).
+                    Join(member1, db.tbl_work.member1_id == member1.Body.id).
+                    Join(member2, db.tbl_work.member2_id == member2.Body.id).
+                    Join(member3, db.tbl_work.member3_id == member3.Body.id));
+
+            var ret = query.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Read();
+        }
+        */
+
     }
 }
