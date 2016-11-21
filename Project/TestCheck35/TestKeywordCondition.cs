@@ -12,11 +12,11 @@ using System.Linq.Expressions;
 
 namespace TestCheck35
 {
-    public class TestKeywordCondition
+    public class TestKeywordCondition : ITest
     {
         public IDbConnection _connection;
 
-        public void TestInitialize(string testName, IDbConnection connection)
+        public void TestInitialize(IDbConnection connection)
         {
             _connection = connection;
         }

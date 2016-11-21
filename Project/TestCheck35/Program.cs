@@ -12,32 +12,7 @@ namespace TestCheck35
         {
             Test35();
         }
-
-        static void NotRoadTest()
-        {
-            var samples = new Samples();
-            try
-            {
-                using (var con = new SqlConnection(TestEnvironment.ConnectionString))
-                {
-                    con.Open();
-                    samples.TestInitialize(nameof(Samples.TestStandard), con);
-                    samples.TestStandard();
-                }
-            }
-            catch (PackageIsNotInstalledException)
-            {
-                Console.WriteLine("OK");
-            }
-            catch
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("NG");
-                Console.ResetColor();
-            }
-            Console.ReadKey();
-        }
-
+        
         static void Test35()
         { 
             var samples = new Samples();

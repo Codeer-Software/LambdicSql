@@ -16,7 +16,7 @@ namespace TestCheck35
 		クラスのプロパティにした場合
 		関数が違って、同名だった場合*/
 
-    class TestExpression
+    public class TestExpression
     {
     }
 }

@@ -19,11 +19,11 @@ using static TestCheck35.TestSynatax;
 
 namespace TestCheck35
 {
-    class TestKeywordSetOperator
+    class TestKeywordSetOperator : ITest
     {
         public IDbConnection _connection;
 
-        public void TestInitialize(string testName, IDbConnection connection)
+        public void TestInitialize(IDbConnection connection)
         {
             _connection = connection;
         }

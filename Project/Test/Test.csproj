@@ -102,6 +102,9 @@
     <Compile Include="..\TestCheck35\HelperForTest.cs">
       <Link>HelperForTest.cs</Link>
     </Compile>
+    <Compile Include="..\TestCheck35\ITest.cs">
+      <Link>ITest.cs</Link>
+    </Compile>
     <Compile Include="..\TestCheck35\Samples.cs">
       <Link>Samples.cs</Link>
     </Compile>

@@ -19,7 +19,7 @@ namespace Test
             _connection = TestEnvironment.CreateConnection(TestContext.DataRow[0]);
             _connection.Open();
             _core = new TestKeywordFrom();
-            _core.TestInitialize(TestContext.TestName, _connection);
+            _core.TestInitialize(_connection);
         }
 
         [TestCleanup]

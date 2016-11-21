@@ -13,11 +13,11 @@ using System.Diagnostics;
 
 namespace TestCheck35
 {
-    public class TestKeywordLimit
+    public class TestKeywordLimit : ITest
     {
         public IDbConnection _connection;
 
-        public void TestInitialize(string testName, IDbConnection connection)
+        public void TestInitialize(IDbConnection connection)
         {
             _connection = connection;
         }
