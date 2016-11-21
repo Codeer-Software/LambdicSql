@@ -43,6 +43,10 @@
     <Compile Include="AssertHelper.cs" />
     <Compile Include="DB.cs" />
     <Compile Include="FakeDapper.cs" />
+    <Compile Include="TestDbDefine.cs" />
+    <Compile Include="TestDbParam.cs" />
+    <Compile Include="TestExpression.cs" />
+    <Compile Include="TestFormatDifferenceForEachDB.cs" />
     <Compile Include="TestFuncs.cs" />
     <Compile Include="TestKeywordCase.cs" />
     <Compile Include="TestKeywordCondition.cs" />
@@ -57,7 +61,8 @@
     <Compile Include="Samples.cs" />
     <Compile Include="TestEnvironment.cs" />
     <Compile Include="TestSetOperation.cs" />
-    <Compile Include="TestSynatax.cs" />
+    <Compile Include="TestSubQuery.cs" />
+    <Compile Include="HelperForTest.cs" />
     <Compile Include="TestUtils.cs" />
     <Compile Include="TestWindow.cs" />
   </ItemGroup>

@@ -99,6 +99,9 @@
     <Compile Include="..\TestCheck35\DB.cs">
       <Link>DB.cs</Link>
     </Compile>
+    <Compile Include="..\TestCheck35\HelperForTest.cs">
+      <Link>HelperForTest.cs</Link>
+    </Compile>
     <Compile Include="..\TestCheck35\Samples.cs">
       <Link>Samples.cs</Link>
     </Compile>
@@ -132,9 +135,6 @@
     <Compile Include="..\TestCheck35\TestSetOperation.cs">
       <Link>TestSetOperation.cs</Link>
     </Compile>
-    <Compile Include="..\TestCheck35\TestSynatax.cs">
-      <Link>TestSynatax.cs</Link>
-    </Compile>
     <Compile Include="..\TestCheck35\TestUtils.cs">
       <Link>TestUtils.cs</Link>
     </Compile>
@@ -143,6 +143,7 @@
     </Compile>
     <Compile Include="Helper\CodeGenerate.cs" />
     <Compile Include="Helper\DBProviderInfo.cs" />
+    <Compile Include="TestEF.cs" />
     <Compile Include="TestFuncsWrap.cs" />
     <Compile Include="TestKeywordCasetWrap.cs" />
     <Compile Include="TestKeywordConditionWrap.cs" />

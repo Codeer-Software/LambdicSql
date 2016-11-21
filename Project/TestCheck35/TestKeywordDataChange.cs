@@ -82,4 +82,6 @@ FROM tbl_data");
 //TODO テスト残件
 //Inで配列で渡す
 //InsertInto + Select
+//Insert時にDBParamを型から推論してくるやつ
 //これはここに書いた方がいいな
+
