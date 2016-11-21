@@ -132,6 +132,9 @@
     <Compile Include="..\TestCheck35\TestSynatax.cs">
       <Link>TestSynatax.cs</Link>
     </Compile>
+    <Compile Include="..\TestCheck35\TestWindow.cs">
+      <Link>TestWindow.cs</Link>
+    </Compile>
     <Compile Include="Helper\CodeGenerate.cs" />
     <Compile Include="Helper\DBProviderInfo.cs" />
     <Compile Include="TestFuncsWrap.cs" />
@@ -160,6 +163,7 @@
     <Compile Include="TestDbInfoLambda.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestDbInfoNormalType.cs" />
+    <Compile Include="TestWindowWrap.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LambdicSql.ORM\LambdicSql.ORM.csproj">

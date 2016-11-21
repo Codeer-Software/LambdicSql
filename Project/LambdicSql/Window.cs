@@ -68,6 +68,10 @@ namespace LambdicSql
         [MethodGroup(nameof(Window))]
         public static IFuncAfter Min<T>(T t) => InvalitContext.Throw<IFuncAfter>(nameof(Min));
         [MethodGroup(nameof(Window))]
+        public static IFuncAfter First_Value<T>(T t) => InvalitContext.Throw<IFuncAfter>(nameof(Min));
+        [MethodGroup(nameof(Window))]
+        public static IFuncAfter Last_Value<T>(T t) => InvalitContext.Throw<IFuncAfter>(nameof(Min));
+        [MethodGroup(nameof(Window))]
         public static IFuncAfter Rank() => InvalitContext.Throw<IFuncAfter>(nameof(Min));
         [MethodGroup(nameof(Window))]
         public static IFuncAfter Dense_Rank() => InvalitContext.Throw<IFuncAfter>(nameof(Min));
@@ -78,10 +82,6 @@ namespace LambdicSql
         [MethodGroup(nameof(Window))]
         public static IFuncAfter Ntile(long groupCount) => InvalitContext.Throw<IFuncAfter>(nameof(Min));
         [MethodGroup(nameof(Window))]
-        public static IFuncAfter First_Value<T>(T t) => InvalitContext.Throw<IFuncAfter>(nameof(Min));
-        [MethodGroup(nameof(Window))]
-        public static IFuncAfter Last_Value<T>(T t) => InvalitContext.Throw<IFuncAfter>(nameof(Min));
-        [MethodGroup(nameof(Window))]
         public static IFuncAfter Nth_Value<T>(T t, long offset) => InvalitContext.Throw<IFuncAfter>(nameof(Min));
         [MethodGroup(nameof(Window))]
         public static IFuncAfter Lag<T>(T t) => InvalitContext.Throw<IFuncAfter>(nameof(Lag));
@@ -89,6 +89,8 @@ namespace LambdicSql
         public static IFuncAfter Lag<T>(T t, object offset) => InvalitContext.Throw<IFuncAfter>(nameof(Lag));
         [MethodGroup(nameof(Window))]
         public static IFuncAfter Lag<T>(T t, object offset, object @default) => InvalitContext.Throw<IFuncAfter>(nameof(Lag));
+
+        //TODO いくつかのパターンをオーバーロードした方がよいよな
         [MethodGroup(nameof(Window))]
         public static T Over<T>(this IFuncAfter words, PartitionBy partitionBy, OrderBy orderBy, Rows rows) => InvalitContext.Throw<T>(nameof(Over));
 
