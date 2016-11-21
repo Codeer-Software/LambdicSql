@@ -29,6 +29,7 @@ namespace TestCheck35
 
     public static class AssertEx
     {
+        //TODO パラメータのチェックもやっておく
         public static void AreEqual(ISqlExpressionBase query, IDbConnection con, string expected)
         {
             var actual = query.ToSqlInfo(con.GetType()).SqlText;

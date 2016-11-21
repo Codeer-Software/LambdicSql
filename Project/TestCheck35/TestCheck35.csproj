@@ -58,6 +58,7 @@
     <Compile Include="TestEnvironment.cs" />
     <Compile Include="TestSetOperation.cs" />
     <Compile Include="TestSynatax.cs" />
+    <Compile Include="TestUtils.cs" />
     <Compile Include="TestWindow.cs" />
   </ItemGroup>
   <ItemGroup>
