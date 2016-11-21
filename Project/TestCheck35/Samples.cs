@@ -983,7 +983,7 @@ FROM tbl_remuneration
                 var query = Sql<DB>.Create(db =>
                     Select(new
                     {
-                        id = Cast<int, int>(db.tbl_staff.id, "int")
+                        id = Cast<int>(db.tbl_staff.id, "int")
                     }).
                     From(db.tbl_staff));
 

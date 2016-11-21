@@ -51,5 +51,47 @@ namespace Test
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void Test_Substring() => _core.Test_Substring();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Test_CurrentDate1() => _core.Test_CurrentDate1();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Test_CurrentDate2() => _core.Test_CurrentDate2();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Test_CurrentTime() => _core.Test_CurrentTime();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Test_CurrentTimeStamp1() => _core.Test_CurrentTimeStamp1();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Test_CurrentTimeStamp2() => _core.Test_CurrentTimeStamp2();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Test_CurrentSpaceDate() => _core.Test_CurrentSpaceDate();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Test_CurrentSpaceTime() => _core.Test_CurrentSpaceTime();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Test_CurrentSpaceTimeStamp() => _core.Test_CurrentSpaceTimeStamp();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Test_Extract1() => _core.Test_Extract1();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Test_Extract2() => _core.Test_Extract2();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Test_DatePart() => _core.Test_DatePart();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Test_Cast() => _core.Test_Cast();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Test_Coalesce() => _core.Test_Coalesce();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Test_NVL() => _core.Test_NVL();
     }
 }

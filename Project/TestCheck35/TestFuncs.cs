@@ -8,6 +8,7 @@ using LambdicSql;
 using LambdicSql.feat.Dapper;
 using static LambdicSql.Keywords;
 using static LambdicSql.Funcs;
+using static LambdicSql.Utils;
 using LambdicSql.SqlBase;
 using System.Linq.Expressions;
 using System.Diagnostics;
@@ -249,6 +250,333 @@ FROM tbl_staff");
             AssertEx.AreEqual(query, _connection,
 @"SELECT
 	SUBSTRING(tbl_staff.name, @p_2, @p_3) AS Val
+FROM tbl_staff");
+        }
+
+        public void Test_CurrentDate1()
+        {
+            var name = _connection.GetType().Name;
+            if (name != "NpgsqlConnection" &&
+                name != "MySqlConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+                Select(new
+                {
+                    Val = CurrentDate()
+                }));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	CURRENT_DATE AS Val");
+        }
+
+        public void Test_CurrentDate2()
+        {
+            var name = _connection.GetType().Name;
+            if (name != "OracleConnection") return;
+
+
+            var query = Sql<DB>.Create(db =>
+                Select(new
+                {
+                    Val = CurrentDate()
+                }).From(Dual));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	CURRENT_DATE AS Val
+FROM DUAL");
+        }
+
+        public void Test_CurrentTime()
+        {
+            var name = _connection.GetType().Name;
+            if (name != "MySqlConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+                Select(new
+                {
+                    Val = CurrentTime<TimeSpan>()
+                }));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	CURRENT_TIME AS Val");
+        }
+
+        public void Test_CurrentTimeStamp1()
+        {
+            var name = _connection.GetType().Name;
+            if (name != "SqlConnection" &&
+                 name != "NpgsqlConnection" &&
+                 name != "MySqlConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+            Select(new
+            {
+                Val = CurrentTimeStamp()
+            }));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	CURRENT_TIMESTAMP AS Val");
+        }
+
+        public void Test_CurrentTimeStamp2()
+        {
+            var name = _connection.GetType().Name;
+            if (name != "MySqlConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+                Select(new
+                {
+                    Val = CurrentTimeStamp()
+                }).
+                From(Dual));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	CURRENT_TIMESTAMP AS Val
+FROM DUAL");
+        }
+
+        public void Test_CurrentSpaceDate()
+        {
+            var name = _connection.GetType().Name;
+            if (name != "DB2Connection") return;
+
+            var query = Sql<DB>.Create(db =>
+                Select(new
+                {
+                    Val = CurrentSpaceDate()
+                }).
+                From(Sysibm.Sysdummy1));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	CURRENT DATE AS Val
+FROM SYSIBM.SYSDUMMY1");
+        }
+
+        public void Test_CurrentSpaceTime()
+        {
+            var name = _connection.GetType().Name;
+            if (name != "DB2Connection") return;
+
+            var query = Sql<DB>.Create(db =>
+                Select(new
+                {
+                    Val = CurrentSpaceTime()
+                }).
+                From(Sysibm.Sysdummy1));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	CURRENT TIME AS Val
+FROM SYSIBM.SYSDUMMY1");
+        }
+
+        public void Test_CurrentSpaceTimeStamp()
+        {
+            var name = _connection.GetType().Name;
+            if (name != "DB2Connection") return;
+
+            var query = Sql<DB>.Create(db =>
+                Select(new
+                {
+                    Val = CurrentSpaceTimeStamp()
+                }).
+                From(Sysibm.Sysdummy1));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	CURRENT TIMESTAMP AS Val
+FROM SYSIBM.SYSDUMMY1");
+        }
+
+        public void Test_Extract1()
+        {
+            var name = _connection.GetType().Name;
+            if (name != "NpgsqlConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+                Select(new
+                {
+                    Val1 = Extract<double>(DateTiemElement.Year, CurrentTimeStamp()),
+                    Val2 = Extract<double>(DateTiemElement.Month, CurrentTimeStamp()),
+                    Val3 = Extract<double>(DateTiemElement.Day, CurrentTimeStamp()),
+                    Val4 = Extract<double>(DateTiemElement.Hour, CurrentTimeStamp()),
+                    Val5 = Extract<double>(DateTiemElement.Minute, CurrentTimeStamp()),
+                    Val6 = Extract<double>(DateTiemElement.Second, CurrentTimeStamp()),
+                    Val7 = Extract<double>(DateTiemElement.Millisecond, CurrentTimeStamp()),
+                    Val8 = Extract<double>(DateTiemElement.Microsecond, CurrentTimeStamp()),
+                    Val9 = Extract<double>(DateTiemElement.Quarter, CurrentTimeStamp()),
+                    Val10 = Extract<double>(DateTiemElement.Week, CurrentTimeStamp())
+                }));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	EXTRACT(YEAR FROM CURRENT_TIMESTAMP) AS Val1,
+	EXTRACT(MONTH FROM CURRENT_TIMESTAMP) AS Val2,
+	EXTRACT(DAY FROM CURRENT_TIMESTAMP) AS Val3,
+	EXTRACT(HOUR FROM CURRENT_TIMESTAMP) AS Val4,
+	EXTRACT(MINUTE FROM CURRENT_TIMESTAMP) AS Val5,
+	EXTRACT(SECOND FROM CURRENT_TIMESTAMP) AS Val6,
+	EXTRACT(MILLISECOND FROM CURRENT_TIMESTAMP) AS Val7,
+	EXTRACT(MICROSECOND FROM CURRENT_TIMESTAMP) AS Val8,
+	EXTRACT(QUARTER FROM CURRENT_TIMESTAMP) AS Val9,
+	EXTRACT(WEEK FROM CURRENT_TIMESTAMP) AS Val10");
+        }
+
+        public void Test_Extract2()
+        {
+            var name = _connection.GetType().Name;
+            if (name != "MySqlConnection") return;
+            var query = Sql<DB>.Create(db =>
+            Select(new
+            {
+                Val1 = Extract<long>(DateTiemElement.Year, CurrentTimeStamp()),
+                Val2 = Extract<long>(DateTiemElement.Month, CurrentTimeStamp()),
+                Val3 = Extract<long>(DateTiemElement.Day, CurrentTimeStamp()),
+                Val4 = Extract<long>(DateTiemElement.Hour, CurrentTimeStamp()),
+                Val5 = Extract<long>(DateTiemElement.Minute, CurrentTimeStamp()),
+                Val6 = Extract<long>(DateTiemElement.Second, CurrentTimeStamp()),
+                Val7 = Extract<long>(DateTiemElement.Quarter, CurrentTimeStamp()),
+                Val8 = Extract<long>(DateTiemElement.Week, CurrentTimeStamp())
+            }));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	EXTRACT(YEAR FROM CURRENT_TIMESTAMP) AS Val1,
+	EXTRACT(MONTH FROM CURRENT_TIMESTAMP) AS Val2,
+	EXTRACT(DAY FROM CURRENT_TIMESTAMP) AS Val3,
+	EXTRACT(HOUR FROM CURRENT_TIMESTAMP) AS Val4,
+	EXTRACT(MINUTE FROM CURRENT_TIMESTAMP) AS Val5,
+	EXTRACT(SECOND FROM CURRENT_TIMESTAMP) AS Val6,
+	EXTRACT(QUARTER FROM CURRENT_TIMESTAMP) AS Val7,
+	EXTRACT(WEEK FROM CURRENT_TIMESTAMP) AS Val8");
+        }
+
+        public void Test_DatePart()
+        {
+            var name = _connection.GetType().Name;
+            if (name != "SqlConnection") return;
+            var query = Sql<DB>.Create(db =>
+                Select(new
+                {
+                    Val1 = DatePart(DateTiemElement.Year, CurrentTimeStamp()),
+                    Val2 = DatePart(DateTiemElement.Quarter, CurrentTimeStamp()),
+                    Val3 = DatePart(DateTiemElement.Month, CurrentTimeStamp()),
+                    Val4 = DatePart(DateTiemElement.Dayofyear, CurrentTimeStamp()),
+                    Val5 = DatePart(DateTiemElement.Day, CurrentTimeStamp()),
+                    Val6 = DatePart(DateTiemElement.Week, CurrentTimeStamp()),
+                    Val7 = DatePart(DateTiemElement.Weekday, CurrentTimeStamp()),
+                    Val8 = DatePart(DateTiemElement.Hour, CurrentTimeStamp()),
+                    Val9 = DatePart(DateTiemElement.Minute, CurrentTimeStamp()),
+                    Val10 = DatePart(DateTiemElement.Second, CurrentTimeStamp()),
+                    Val11 = DatePart(DateTiemElement.Millisecond, CurrentTimeStamp()),
+                    Val12 = DatePart(DateTiemElement.Microsecond, CurrentTimeStamp()),
+                    Val13 = DatePart(DateTiemElement.Nanosecond, CurrentTimeStamp()),
+                    Val14 = DatePart(DateTiemElement.ISO_WEEK, CurrentTimeStamp())
+                }));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	DATEPART(YEAR, CURRENT_TIMESTAMP) AS Val1,
+	DATEPART(QUARTER, CURRENT_TIMESTAMP) AS Val2,
+	DATEPART(MONTH, CURRENT_TIMESTAMP) AS Val3,
+	DATEPART(DAYOFYEAR, CURRENT_TIMESTAMP) AS Val4,
+	DATEPART(DAY, CURRENT_TIMESTAMP) AS Val5,
+	DATEPART(WEEK, CURRENT_TIMESTAMP) AS Val6,
+	DATEPART(WEEKDAY, CURRENT_TIMESTAMP) AS Val7,
+	DATEPART(HOUR, CURRENT_TIMESTAMP) AS Val8,
+	DATEPART(MINUTE, CURRENT_TIMESTAMP) AS Val9,
+	DATEPART(SECOND, CURRENT_TIMESTAMP) AS Val10,
+	DATEPART(MILLISECOND, CURRENT_TIMESTAMP) AS Val11,
+	DATEPART(MICROSECOND, CURRENT_TIMESTAMP) AS Val12,
+	DATEPART(NANOSECOND, CURRENT_TIMESTAMP) AS Val13,
+	DATEPART(ISO_WEEK, CURRENT_TIMESTAMP) AS Val14");
+        }
+
+        public void Test_Cast()
+        {
+            var name = _connection.GetType().Name;
+            if (name != "DB2Connection" &&
+                name != "SqlConnection" &&
+                name != "NpgsqlConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+                Select(new
+                {
+                    id = Cast<int>(db.tbl_remuneration.money, "int")
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	CAST(tbl_remuneration.money AS int) AS id
+FROM tbl_remuneration");
+        }
+
+        public void Test_Coalesce()
+        {
+            var query = Sql<DB>.Create(db =>
+               Select(new
+               {
+                   id = Coalesce(db.tbl_staff.name, "a")
+               }).
+               From(db.tbl_staff));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	COALESCE(tbl_staff.name, @p_1) AS id
+FROM tbl_staff");
+        }
+
+        public void Test_NVL()
+        {
+            var name = _connection.GetType().Name;
+            if (name != "DB2Connection" &&
+                name != "OracleConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+               Select(new
+               {
+                   id = NVL(db.tbl_staff.name, "a")
+               }).
+               From(db.tbl_staff));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+            @"SELECT
+	NVL(tbl_staff.name, @p_1) AS id
 FROM tbl_staff");
         }
     }

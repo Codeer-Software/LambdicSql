@@ -42,6 +42,14 @@ namespace LambdicSql
         }
     }
 
+    [SqlSyntax]
+    public class SysibmType
+    {
+        public object Sysdummy1 => InvalitContext.Throw<long>(nameof(Sysdummy1));
+        static string ToString(ISqlStringConverter converter, MemberExpression member)
+            => "SYSIBM." + member.Member.Name.ToUpper();
+    }
+
     //Set operation
     [SqlSyntax]
     public static class Keywords
@@ -107,16 +115,7 @@ namespace LambdicSql
         public static T End<T>(this IThenAfter<T> words) => InvalitContext.Throw<T>(nameof(End));
         [MethodGroup(nameof(Case))]
         public static T End<T>(this IElseAfter<T> words) => InvalitContext.Throw<T>(nameof(End));
-
-
-        //TODO Correspond Subquery of From clause
-        //Also direct description
-        //あー、これ対応やめるかなー
-
-        //ていうか、サブクエリの直書きを対応きるかやな。
-        //どっちにしろ、読みにくいし、非推奨やろ。
-
-
+        
         public static IQuery<Non> From(params object[] tbale) => InvalitContext.Throw<IQuery<Non>>(nameof(From));
         public static IQuery<TSelected> From<TSelected>(this IQuery<TSelected> words, params object[] tbale) => InvalitContext.Throw<IQuery<TSelected>>(nameof(From));
 
@@ -213,8 +212,15 @@ namespace LambdicSql
         [MethodGroup(nameof(InsertInto))]
         public static IQuery<TSelected> Values<TSelected, TTable>(this IQuery<TSelected, TTable> words, params object[] targets)
              => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
-        
-        public static long RowNum { get; }
+
+        public static bool IsNull<T>(T target) => InvalitContext.Throw<bool>(nameof(IsNull));
+        public static bool IsNotNull<T>(T target) => InvalitContext.Throw<bool>(nameof(IsNotNull));
+
+        public static long RowNum => InvalitContext.Throw<long>(nameof(RowNum));
+
+        public static object Dual => InvalitContext.Throw<object>(nameof(Dual));
+
+        public static SysibmType Sysibm => InvalitContext.Throw<SysibmType>(nameof(Sysibm));
 
         static string ToString(ISqlStringConverter converter, MemberExpression member)
             => member.Member.Name.ToUpper();
@@ -270,7 +276,9 @@ namespace LambdicSql
                 case nameof(Except):
                 case nameof(Minus):
                     return SetOperation.ToString(converter, methods);
-
+                case nameof(IsNull):
+                case nameof(IsNotNull):
+                    return NullCheck.ToString(converter, methods);
             }
             throw new NotSupportedException();
         }

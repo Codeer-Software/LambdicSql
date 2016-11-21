@@ -53,6 +53,7 @@
     <Compile Include="Inside\DecodingParameterInfo.cs" />
     <Compile Include="Inside\Keywords\FetchNextRowsOnlyClause.cs" />
     <Compile Include="Inside\Keywords\LimitClause.cs" />
+    <Compile Include="Inside\Keywords\NullCheck.cs" />
     <Compile Include="Inside\Keywords\OffsetClause.cs" />
     <Compile Include="Inside\Keywords\OffsetRowsClause.cs" />
     <Compile Include="Inside\Keywords\SetOperation.cs" />

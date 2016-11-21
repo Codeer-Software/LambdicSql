@@ -45,5 +45,11 @@ namespace Test
 
         [TestMethod, DataSource(Type, Connection, Sheet, Method)]
         public void Test_Exists2() => _core.Test_Exists2();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Test_IsNull() => _core.Test_IsNull();
+
+        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        public void Test_IsNotNull() => _core.Test_IsNotNull();
     }
 }

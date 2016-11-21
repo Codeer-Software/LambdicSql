@@ -354,12 +354,7 @@ namespace LambdicSql.Inside
                 if (0 < types.Length) type = types[0];
                 return new DecodedInfo(type, AdjustSubQueryString(sqlExp.ToString(this)));
             }
-
-            //ここでできたら一番いいんだよ！
-            if (obj is IQuery)
-            {
-                int dmy = 0;
-            }
+            
             throw new NotSupportedException("Invalid object.");
         }
 

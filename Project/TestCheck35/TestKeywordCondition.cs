@@ -186,8 +186,7 @@ WHERE EXISTS
                         Join(db.tbl_staff, db.tbl_staff.id == db.tbl_staff.id).
                         Where(1000 < db.tbl_remuneration.money)
                    )));
-
-            query.Gen(_connection);
+            
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
@@ -200,6 +199,44 @@ WHERE EXISTS
 	FROM tbl_remuneration
 		JOIN tbl_staff ON (tbl_staff.id) = (tbl_staff.id)
 	WHERE (@p_0) < (tbl_remuneration.money))");
+        }
+
+        public void Test_IsNull()
+        {
+            var query = Sql<DB>.Create(db =>
+               Select(new SelectData
+               {
+                   Id = db.tbl_staff.id
+               }).
+               From(db.tbl_staff).
+               Where(!IsNull(db.tbl_staff.name)));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+ @"SELECT
+	tbl_staff.id AS Id
+FROM tbl_staff
+WHERE NOT (tbl_staff.name IS NULL)");
+        }
+
+        public void Test_IsNotNull()
+        {
+            var query = Sql<DB>.Create(db =>
+               Select(new SelectData
+               {
+                   Id = db.tbl_staff.id
+               }).
+               From(db.tbl_staff).
+               Where(IsNotNull(db.tbl_staff.name)));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+ @"SELECT
+	tbl_staff.id AS Id
+FROM tbl_staff
+WHERE tbl_staff.name IS NOT NULL");
         }
     }
 }
