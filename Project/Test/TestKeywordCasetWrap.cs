@@ -25,13 +25,13 @@ namespace Test
         [TestCleanup]
         public void TestCleanup() => _connection.Dispose();
 
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Case1() => _core.Test_Case1();
 
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Case2() => _core.Test_Case2();
 
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Case3() => _core.Test_Case3();
     }
 }

@@ -43,52 +43,52 @@ namespace Test
         [TestCleanup]
         public void TestCleanup() => _connection.Dispose();
 
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Where() => _core.Test_Where();
 
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_GroupBy() => _core.Test_GroupBy();
 
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_GroupByRollup() => _core.Test_GroupByRollup();
 
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_GroupByWithRollup() => _core.Test_GroupByWithRollup();
 
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_GroupByCube() => _core.Test_GroupByCube();
 
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_GroupByGroupingSets() => _core.Test_GroupByGroupingSets();
 
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Having() => _core.Test_Having();
 
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_OrderBy() => _core.Test_OrderBy();
 
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Where() => _core.Test_Continue_Where();
 
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_GroupBy() => _core.Test_Continue_GroupBy();
 
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_GroupByRollup() => _core.Test_Continue_GroupByRollup();
 
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_GroupByWithRollup() => _core.Test_Continue_GroupByWithRollup();
 
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_GroupByCube() => _core.Test_Continue_GroupByCube();
 
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_GroupByGroupingSets() => _core.Test_Continue_GroupByGroupingSets();
 
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Having() => _core.Test_Continue_Having();
 
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_OrderBy() => _core.Test_Continue_OrderBy();
     }
 }

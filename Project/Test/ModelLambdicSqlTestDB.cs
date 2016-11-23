@@ -4,6 +4,7 @@ namespace Test
     using System.Data.Entity;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
+    using TestCheck35;
 
     public partial class ModelLambdicSqlTestDB : DbContext
     {

@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="AssertHelper.cs" />
     <Compile Include="DB.cs" />
+    <Compile Include="DBProviderInfo.cs" />
     <Compile Include="FakeDapper.cs" />
     <Compile Include="ITest.cs" />
     <Compile Include="TestDbDefine.cs" />

@@ -11,7 +11,7 @@ using Oracle.ManagedDataAccess.Client;
 using IBM.Data.DB2;
 using System.Text;
 
-namespace Test
+namespace TestCheck35
 {
     static class TestEnvironment
     {
@@ -35,6 +35,9 @@ namespace Test
             }
             throw new NotSupportedException();
         }
+
+        internal static IDbConnection CreateConnection(TestContext context)
+            => CreateConnection(context.DataRow[0]);
 
         internal static IDbConnection CreateConnection(object db)
         {

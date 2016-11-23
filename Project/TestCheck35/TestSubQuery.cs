@@ -5,6 +5,7 @@ using System.Text;
 
 namespace TestCheck35
 {
+    //TODO サブクエリ
     class TestSubQuery
     {
     }

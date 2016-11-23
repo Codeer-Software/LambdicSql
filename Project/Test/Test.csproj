@@ -108,6 +108,15 @@
     <Compile Include="..\TestCheck35\Samples.cs">
       <Link>Samples.cs</Link>
     </Compile>
+    <Compile Include="..\TestCheck35\TestDbDefine.cs">
+      <Link>TestDbDefine.cs</Link>
+    </Compile>
+    <Compile Include="..\TestCheck35\TestDbParam.cs">
+      <Link>TestDbParam.cs</Link>
+    </Compile>
+    <Compile Include="..\TestCheck35\TestExpression.cs">
+      <Link>TestExpression.cs</Link>
+    </Compile>
     <Compile Include="..\TestCheck35\TestFuncs.cs">
       <Link>TestFuncs.cs</Link>
     </Compile>
@@ -167,12 +176,9 @@
     <Compile Include="tbl_data.cs" />
     <Compile Include="tbl_remuneration.cs" />
     <Compile Include="tbl_staff.cs" />
-    <Compile Include="TestExpressionToStringcs.cs" />
     <Compile Include="Helper\TestResult.cs" />
     <Compile Include="TestSetOperationWrap.cs" />
-    <Compile Include="TestDbInfoLambda.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestDbInfoNormalType.cs" />
     <Compile Include="TestUtilsWrap.cs" />
     <Compile Include="TestWindowWrap.cs" />
   </ItemGroup>

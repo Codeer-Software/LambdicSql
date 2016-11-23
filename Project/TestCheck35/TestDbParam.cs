@@ -1,12 +1,94 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Data;
 using System.Linq;
-using System.Text;
+
+//important
+using LambdicSql;
+using LambdicSql.feat.Dapper;
+using static LambdicSql.Keywords;
+using static LambdicSql.Funcs;
+using static LambdicSql.Utils;
+using LambdicSql.SqlBase;
+using System.Linq.Expressions;
+using System.Diagnostics;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using static Test.Helper.DBProviderInfo;
 
 namespace TestCheck35
 {
-    //TODO DBParamのテスト
-    class TestDbParam
+    [TestClass]
+    public class TestDbParam
     {
+        public TestContext TestContext { get; set; }
+        public IDbConnection _connection;
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            _connection = TestEnvironment.CreateConnection(TestContext);
+            _connection.Open();
+        }
+
+        [TestCleanup]
+        public void TestCleanup() => _connection.Dispose();
+
+        public class SelectData
+        {
+            public string Name { get; set; }
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Param()
+        {
+            var text = new DbParam<string>() { Value = "xxx" };
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData
+                {
+                    Name = db.tbl_staff.name + text,
+                }).
+                From(db.tbl_staff));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+
+            //TODO
+            query.Gen(_connection);
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Param_Direct()
+        {
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData
+                {
+                    Name = db.tbl_staff.name
+                        + new DbParam<string>() { Value = "xxx", DbType = DbType.AnsiStringFixedLength, Size = 10 },
+                }).
+                From(db.tbl_staff));
+            //TODO
+        }
+
+        //TODO 時間はいるよね
+        
+        //TODO あれ？正しくDBに伝わったことってどうやってみる？→設計を変更するか？
+
+            /*
+        public void Test_Param_Detail()
+        {
+            var a = TestParamCore("a", DbType.AnsiString).DbParams.First().Value;
+            Assert.AreEqual(a.DbType, DbType.AnsiString);
+            Assert.AreEqual(a.Value, "a");
+            var b = TestParamCore("b", DbType.String).DbParams.First().Value;
+            Assert.AreEqual(b.DbType, DbType.String);
+            Assert.AreEqual(b.Value, "b");
+        }
+
+        public SqlInfo TestParamCore(string value, DbType type)
+        {
+            var query = Sql<Data>.Create(db => new DbParam<string>() { Value = value, DbType = type });
+            var info = query.ToSqlInfo(typeof(SqlConnection));//いやいや。
+            Debug.Print(info.SqlText);
+            return info;
+        }*/
     }
 }

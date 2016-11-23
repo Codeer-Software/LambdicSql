@@ -25,16 +25,16 @@ namespace Test
         [TestCleanup]
         public void TestCleanup() => _connection.Dispose();
 
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Update_Set() => _core.Test_Update_Set();
 
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Delete() => _core.Test_Delete();
 
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Delete_All() => _core.Test_Delete_All();
 
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_InsertInto_Values() => _core.Test_InsertInto_Values();
     }
 }

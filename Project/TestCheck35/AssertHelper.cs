@@ -31,4 +31,19 @@ namespace Microsoft.VisualStudio.TestTools.UnitTesting
             if (condition) throw new InvalidProgramException();
         }
     }
+
+    public enum DataAccessMethod
+    {
+        Sequential
+    }
+    public class TestContext { }
+    public class TestClassAttribute : Attribute { }
+    public class TestInitializeAttribute : Attribute { }
+    public class TestCleanupAttribute : Attribute { }
+    public class TestMethodAttribute : Attribute { }
+    public class DataSourceAttribute : Attribute
+    {
+        internal DataSourceAttribute(string providerInvariantName, string connectionString, string tableName, DataAccessMethod dataAccessMethod) { }
+    }
 }
+

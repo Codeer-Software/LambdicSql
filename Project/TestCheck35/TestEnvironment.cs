@@ -1,7 +1,10 @@
 ﻿using System;
 using System.IO;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Data;
+using System.Data.SqlClient;
 
-namespace TestCore
+namespace TestCheck35
 {
     static class TestEnvironment
     {
@@ -21,5 +24,8 @@ namespace TestCore
             }
             throw new NotSupportedException();
         }
+
+        internal static IDbConnection CreateConnection(TestContext context)
+            => new SqlConnection(ConnectionString);
     }
 }

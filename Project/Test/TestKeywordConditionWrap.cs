@@ -25,31 +25,31 @@ namespace Test
         [TestCleanup]
         public void TestCleanup() => _connection.Dispose();
 
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Like() => _core.Test_Like();
 
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Between() => _core.Test_Between();
 
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_In1() => _core.Test_In1();
 
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_In2() => _core.Test_In2();
 
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_In3() => _core.Test_In3();
 
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Exists1() => _core.Test_Exists1();
 
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Exists2() => _core.Test_Exists2();
 
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_IsNull() => _core.Test_IsNull();
 
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_IsNotNull() => _core.Test_IsNotNull();
     }
 }

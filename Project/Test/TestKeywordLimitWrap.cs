@@ -25,19 +25,19 @@ namespace Test
         [TestCleanup]
         public void TestCleanup() => _connection.Dispose();
 
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Limit_Offset() => _core.Test_Limit_Offset();
 
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_OffsetRows_FetchNext() => _core.Test_OffsetRows_FetchNext();
 
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Limit_Offset() => _core.Test_Continue_Limit_Offset();
 
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_OffsetRows_FetchNext() => _core.Test_Continue_OffsetRows_FetchNext();
 
-        [TestMethod, DataSource(Type, Connection, Sheet, Method)]
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_RowNum() => _core.Test_RowNum();
     }
 }

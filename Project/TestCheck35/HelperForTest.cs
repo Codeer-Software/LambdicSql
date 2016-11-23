@@ -5,6 +5,7 @@ using LambdicSql;
 using System.Diagnostics;
 using System.Data;
 using System.Data.SqlClient;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TestCheck35
 {
@@ -29,12 +30,12 @@ namespace TestCheck35
 
     public static class AssertEx
     {
-        //TODO パラメータのチェックもやっておく
+        //TODO ★パラメータのチェックもやっておく　先にこれやな
         public static void AreEqual(ISqlExpressionBase query, IDbConnection con, string expected)
         {
             var actual = query.ToSqlInfo(con.GetType()).SqlText;
             if (con.GetType().Name == "OracleConnection") expected = expected.Replace("@", ":");
-            if (actual != expected) throw new InvalidProgramException();
+            Assert.AreEqual(expected, actual);
         }
     }
 }
