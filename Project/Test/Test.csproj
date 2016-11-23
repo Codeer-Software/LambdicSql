@@ -96,11 +96,11 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="..\TestCheck35\DB.cs">
-      <Link>DB.cs</Link>
+    <Compile Include="..\TestCheck35\Helper\DB.cs">
+      <Link>Helper\DB.cs</Link>
     </Compile>
-    <Compile Include="..\TestCheck35\HelperForTest.cs">
-      <Link>HelperForTest.cs</Link>
+    <Compile Include="..\TestCheck35\Helper\HelperForTest.cs">
+      <Link>Helper\HelperForTest.cs</Link>
     </Compile>
     <Compile Include="..\TestCheck35\Samples.cs">
       <Link>Samples.cs</Link>
@@ -163,7 +163,6 @@
     <Compile Include="tbl_data.cs" />
     <Compile Include="tbl_remuneration.cs" />
     <Compile Include="tbl_staff.cs" />
-    <Compile Include="Helper\TestResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
