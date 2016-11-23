@@ -656,8 +656,7 @@ namespace TestCheck35
             TestWhereEx(false, true);
             TestWhereEx(false, false);
         }
-
-        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        
         public void TestWhereEx(bool minCondition, bool maxCondition)
         {
             //make sql.
@@ -938,8 +937,7 @@ namespace TestCheck35
             TestFormat2WaySql(false, true, 3000);
             TestFormat2WaySql(false, false, 4000);
         }
-
-        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        
         public void TestFormat2WaySql(bool minCondition, bool maxCondition, decimal bonus)
         {
             //make sql.
@@ -1481,16 +1479,14 @@ FROM tbl_remuneration
                 _connection.Query(query);
             }
         }
-
-        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        
         public IEnumerable<T> ExecuteRead<T>(ISqlExpressionBase<IQuery<T>> exp)
         {
             var info = exp.ToSqlInfo(_connection.GetType());
             Debug.Print(info.SqlText);
             return _connection.Query(exp).ToList();
         }
-
-        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        
         public IEnumerable<T> ExecuteRead<T>(ISqlExpressionBase exp)
         {
             var info = exp.ToSqlInfo(_connection.GetType());
