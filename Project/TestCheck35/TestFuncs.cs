@@ -114,8 +114,8 @@ GROUP BY tbl_staff.id, tbl_staff.name");
             AssertEx.AreEqual(query, _connection,
 @"SELECT
 	ABS(tbl_remuneration.money) AS Val1,
-	ROUND(tbl_remuneration.money, @p_1) AS Val2
-FROM tbl_remuneration");
+	ROUND(tbl_remuneration.money, @p_0) AS Val2
+FROM tbl_remuneration", 2);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -137,7 +137,7 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	MOD(tbl_remuneration.money, @p_1) AS Val
+	MOD(tbl_remuneration.money, @p_0) AS Val
 FROM tbl_remuneration");
         }
 
@@ -251,7 +251,7 @@ FROM tbl_staff");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	REPLACE(tbl_staff.name, @p_2, @p_3) AS Val
+	REPLACE(tbl_staff.name, @p_0, @p_1) AS Val
 FROM tbl_staff");
         }
 
@@ -273,7 +273,7 @@ FROM tbl_staff");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	SUBSTRING(tbl_staff.name, @p_2, @p_3) AS Val
+	SUBSTRING(tbl_staff.name, @p_0, @p_1) AS Val
 FROM tbl_staff");
         }
 
@@ -592,7 +592,7 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	COALESCE(tbl_staff.name, @p_1) AS id
+	COALESCE(tbl_staff.name, @p_0) AS id
 FROM tbl_staff");
         }
 
@@ -614,7 +614,7 @@ FROM tbl_staff");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
             @"SELECT
-	NVL(tbl_staff.name, @p_1) AS id
+	NVL(tbl_staff.name, @p_0) AS id
 FROM tbl_staff");
         }
     }

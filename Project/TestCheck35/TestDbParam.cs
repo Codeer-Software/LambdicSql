@@ -51,9 +51,10 @@ namespace TestCheck35
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
-
-            //TODO
-            query.Gen(_connection);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	(tbl_staff.name) " + _connection.GetStringAddExp() + @" (@text) AS Name
+FROM tbl_staff");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -66,30 +67,39 @@ namespace TestCheck35
                         + new DbParam<string>() { Value = "xxx", DbType = DbType.AnsiStringFixedLength, Size = 10 },
                 }).
                 From(db.tbl_staff));
-            //TODO
+
+
+            query.Gen(_connection);
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+ @"SELECT
+	(tbl_staff.name) " + _connection.GetStringAddExp() + @" (@p_0) AS Name
+FROM tbl_staff");
         }
 
         //TODO 時間はいるよね
-        
+
         //TODO あれ？正しくDBに伝わったことってどうやってみる？→設計を変更するか？
 
-            /*
-        public void Test_Param_Detail()
-        {
-            var a = TestParamCore("a", DbType.AnsiString).DbParams.First().Value;
-            Assert.AreEqual(a.DbType, DbType.AnsiString);
-            Assert.AreEqual(a.Value, "a");
-            var b = TestParamCore("b", DbType.String).DbParams.First().Value;
-            Assert.AreEqual(b.DbType, DbType.String);
-            Assert.AreEqual(b.Value, "b");
-        }
+        /*
+    public void Test_Param_Detail()
+    {
+        var a = TestParamCore("a", DbType.AnsiString).DbParams.First().Value;
+        Assert.AreEqual(a.DbType, DbType.AnsiString);
+        Assert.AreEqual(a.Value, "a");
+        var b = TestParamCore("b", DbType.String).DbParams.First().Value;
+        Assert.AreEqual(b.DbType, DbType.String);
+        Assert.AreEqual(b.Value, "b");
+    }
 
-        public SqlInfo TestParamCore(string value, DbType type)
-        {
-            var query = Sql<Data>.Create(db => new DbParam<string>() { Value = value, DbType = type });
-            var info = query.ToSqlInfo(typeof(SqlConnection));//いやいや。
-            Debug.Print(info.SqlText);
-            return info;
-        }*/
+    public SqlInfo TestParamCore(string value, DbType type)
+    {
+        var query = Sql<Data>.Create(db => new DbParam<string>() { Value = value, DbType = type });
+        var info = query.ToSqlInfo(typeof(SqlConnection));//いやいや。
+        Debug.Print(info.SqlText);
+        return info;
+    }*/
     }
 }

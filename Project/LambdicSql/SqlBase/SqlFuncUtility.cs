@@ -3,6 +3,7 @@ using System.Linq;
 
 namespace LambdicSql.SqlBase
 {
+    //TODO
     public static class SqlFuncUtility
     {
         public static string MakeNormalSqlFunctionString(this ISqlStringConverter convertor, MethodCallExpression method)

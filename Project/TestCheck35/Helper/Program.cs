@@ -27,7 +27,7 @@ namespace TestCheck35
 #if DEBUG
                     Execute(test, m);
 #else
-                    else ExecuteCatch(test, m);
+                    ExecuteCatch(test, m);
 #endif
                 }
                 var cleanup = type.GetMethods().Where(e => e.IsDefined(typeof(TestCleanupAttribute), false)).FirstOrDefault();

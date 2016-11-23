@@ -74,7 +74,7 @@ namespace LambdicSql
                 case nameof(Cast):
                     return "CAST(" + args[0] + " AS " + converter.Context.Parameters.ResolvePrepare(args[1]) + ")";
             }
-            return converter.MakeNormalSqlFunctionString(method);
+            return method.Method.Name.ToUpper() + "(" + string.Join(", ", args.Skip(method.AdjustSqlSyntaxMethodArgumentIndex(0)).ToArray()) + ")";
         }
     }
 }

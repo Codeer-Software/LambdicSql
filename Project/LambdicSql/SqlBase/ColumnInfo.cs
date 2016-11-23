@@ -11,6 +11,7 @@ namespace LambdicSql.SqlBase
 
         public ColumnInfo(Type type, string lambdaFullName, string sqlFullName, string sqlColumnName)
         {
+            Type = type;
             LambdaFullName = lambdaFullName;
             SqlFullName = sqlFullName;
             SqlColumnName = sqlColumnName;
