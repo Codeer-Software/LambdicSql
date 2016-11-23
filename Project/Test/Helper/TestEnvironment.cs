@@ -11,7 +11,7 @@ using Oracle.ManagedDataAccess.Client;
 using IBM.Data.DB2;
 using System.Text;
 
-namespace TestCheck35
+namespace Test.Helper
 {
     static class TestEnvironment
     {

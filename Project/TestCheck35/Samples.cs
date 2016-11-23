@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using static Test.Helper.DBProviderInfo;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Test.Helper;
 
 //important
 using LambdicSql;
@@ -13,11 +14,10 @@ using static LambdicSql.Funcs;
 using static LambdicSql.Utils;
 using System.Collections.Generic;
 using LambdicSql.SqlBase;
-using TestCheck35;
 
 //TODO Make this a more practical sample.
 //TODO Add better data for sample
-namespace TestCore
+namespace TestCheck35
 {
     [TestClass]
     public class Samples

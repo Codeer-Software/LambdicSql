@@ -1,10 +1,10 @@
-namespace Test
+namespace Test.Model
 {
     using System;
     using System.Data.Entity;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
-    using TestCheck35;
+    using Test.Helper;
 
     public partial class ModelLambdicSqlTestDB : DbContext
     {

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using static Test.Helper.DBProviderInfo;
+using Test.Helper;
 
 //important
 using LambdicSql;
@@ -21,7 +22,7 @@ using static TestCheck35.TestSynatax;
 namespace TestCheck35
 {
     [TestClass]
-    class TestKeywordSetOperator
+    public class TestKeywordSetOperator
     {
         public TestContext TestContext { get; set; }
         public IDbConnection _connection;

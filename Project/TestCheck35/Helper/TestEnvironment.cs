@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Data;
 using System.Data.SqlClient;
 
-namespace TestCheck35
+namespace Test.Helper
 {
     static class TestEnvironment
     {

@@ -153,16 +153,16 @@
     <Compile Include="Helper\CodeGenerate.cs" />
     <Compile Include="Helper\DBProviderInfo.cs" />
     <Compile Include="TestEF.cs" />
-    <Compile Include="ModelLambdicSqlTestDB.cs" />
+    <Compile Include="Model\ModelLambdicSqlTestDB.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Helper\TestEnvironment.cs" />
-    <Compile Include="tbl_data.cs" />
-    <Compile Include="tbl_remuneration.cs" />
-    <Compile Include="tbl_staff.cs" />
+    <Compile Include="Model\tbl_data.cs" />
+    <Compile Include="Model\tbl_remuneration.cs" />
+    <Compile Include="Model\tbl_staff.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

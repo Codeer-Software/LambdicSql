@@ -60,7 +60,7 @@
     <Compile Include="Helper\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Samples.cs" />
-    <Compile Include="TestEnvironment.cs" />
+    <Compile Include="Helper\TestEnvironment.cs" />
     <Compile Include="TestSetOperation.cs" />
     <Compile Include="TestSubQuery.cs" />
     <Compile Include="Helper\HelperForTest.cs" />
