@@ -2,6 +2,7 @@
 using System.Data;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using static Test.Helper.DBProviderInfo;
 
 //important
 using LambdicSql;
@@ -15,14 +16,21 @@ using System.Diagnostics;
 
 namespace TestCheck35
 {
-    public class TestFuncs : ITest
+    [TestClass]
+    public class TestFuncs
     {
+        public TestContext TestContext { get; set; }
         public IDbConnection _connection;
 
-        public void TestInitialize(IDbConnection connection)
+        [TestInitialize]
+        public void TestInitialize()
         {
-            _connection = connection;
+            _connection = TestEnvironment.CreateConnection(TestContext);
+            _connection.Open();
         }
+
+        [TestCleanup]
+        public void TestCleanup() => _connection.Dispose();
 
         public class SelectData1
         {
@@ -49,6 +57,7 @@ namespace TestCheck35
             public decimal Val { get; set; }
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Aggregate()
         {
             var query = Sql<DB>.Create(db =>
@@ -88,6 +97,7 @@ FROM tbl_remuneration
 GROUP BY tbl_staff.id, tbl_staff.name");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Abs_Round()
         {
             var query = Sql<DB>.Create(db =>
@@ -107,6 +117,7 @@ GROUP BY tbl_staff.id, tbl_staff.name");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Mod()
         {
             var name = _connection.GetType().Name;
@@ -129,8 +140,14 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Concat()
         {
+            var name = _connection.GetType().Name;
+            if (name == "SQLiteConnection") return;
+            if (name == "OracleConnection") return;
+            if (name == "DB2Connection") return;
+
             var query = Sql<DB>.Create(db =>
                Select(new
                {
@@ -143,6 +160,7 @@ FROM tbl_remuneration");
             query.Gen(_connection);
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Length()
         {
             var name = _connection.GetType().Name;
@@ -164,6 +182,7 @@ FROM tbl_remuneration");
 FROM tbl_staff");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Len()
         {
             var name = _connection.GetType().Name;
@@ -184,6 +203,7 @@ FROM tbl_staff");
 FROM tbl_staff");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Lower()
         {
             var query = Sql<DB>.Create(db =>
@@ -201,6 +221,7 @@ FROM tbl_staff");
 FROM tbl_staff");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Upper()
         {
             var query = Sql<DB>.Create(db =>
@@ -215,6 +236,7 @@ FROM tbl_staff");
             query.Gen(_connection);
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Replace()
         {
             var query = Sql<DB>.Create(db =>
@@ -232,6 +254,7 @@ FROM tbl_staff");
 FROM tbl_staff");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Substring()
         {
             var name = _connection.GetType().Name;
@@ -253,6 +276,7 @@ FROM tbl_staff");
 FROM tbl_staff");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_CurrentDate1()
         {
             var name = _connection.GetType().Name;
@@ -272,6 +296,7 @@ FROM tbl_staff");
 	CURRENT_DATE AS Val");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_CurrentDate2()
         {
             var name = _connection.GetType().Name;
@@ -292,6 +317,7 @@ FROM tbl_staff");
 FROM DUAL");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_CurrentTime()
         {
             var name = _connection.GetType().Name;
@@ -310,6 +336,7 @@ FROM DUAL");
 	CURRENT_TIME AS Val");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_CurrentTimeStamp1()
         {
             var name = _connection.GetType().Name;
@@ -330,6 +357,7 @@ FROM DUAL");
 	CURRENT_TIMESTAMP AS Val");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_CurrentTimeStamp2()
         {
             var name = _connection.GetType().Name;
@@ -350,6 +378,7 @@ FROM DUAL");
 FROM DUAL");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_CurrentSpaceDate()
         {
             var name = _connection.GetType().Name;
@@ -370,6 +399,7 @@ FROM DUAL");
 FROM SYSIBM.SYSDUMMY1");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_CurrentSpaceTime()
         {
             var name = _connection.GetType().Name;
@@ -390,6 +420,7 @@ FROM SYSIBM.SYSDUMMY1");
 FROM SYSIBM.SYSDUMMY1");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_CurrentSpaceTimeStamp()
         {
             var name = _connection.GetType().Name;
@@ -410,6 +441,7 @@ FROM SYSIBM.SYSDUMMY1");
 FROM SYSIBM.SYSDUMMY1");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Extract1()
         {
             var name = _connection.GetType().Name;
@@ -446,6 +478,7 @@ FROM SYSIBM.SYSDUMMY1");
 	EXTRACT(WEEK FROM CURRENT_TIMESTAMP) AS Val10");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Extract2()
         {
             var name = _connection.GetType().Name;
@@ -477,6 +510,7 @@ FROM SYSIBM.SYSDUMMY1");
 	EXTRACT(WEEK FROM CURRENT_TIMESTAMP) AS Val8");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_DatePart()
         {
             var name = _connection.GetType().Name;
@@ -520,6 +554,7 @@ FROM SYSIBM.SYSDUMMY1");
 	DATEPART(ISO_WEEK, CURRENT_TIMESTAMP) AS Val14");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Cast()
         {
             var name = _connection.GetType().Name;
@@ -542,6 +577,7 @@ FROM SYSIBM.SYSDUMMY1");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Coalesce()
         {
             var query = Sql<DB>.Create(db =>
@@ -559,6 +595,7 @@ FROM tbl_remuneration");
 FROM tbl_staff");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_NVL()
         {
             var name = _connection.GetType().Name;

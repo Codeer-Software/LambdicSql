@@ -15,6 +15,7 @@ namespace TestCheck35
         
         static void Test35()
         { 
+            /*
             var samples = new Samples();
             foreach (var m in samples.GetType().GetMethods().
                 Where(e => e.DeclaringType == samples.GetType()).
@@ -46,7 +47,7 @@ namespace TestCheck35
                     Console.WriteLine("NG - " + m.Name);
                     Console.ResetColor();
                 }
-            }
+            }*/
             Console.ReadKey();
         }
     }

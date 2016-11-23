@@ -44,7 +44,6 @@
     <Compile Include="DB.cs" />
     <Compile Include="DBProviderInfo.cs" />
     <Compile Include="FakeDapper.cs" />
-    <Compile Include="ITest.cs" />
     <Compile Include="TestDbDefine.cs" />
     <Compile Include="TestDbParam.cs" />
     <Compile Include="TestExpression.cs" />

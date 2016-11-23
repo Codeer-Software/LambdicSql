@@ -2,6 +2,7 @@
 using System.Data;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using static Test.Helper.DBProviderInfo;
 
 //important
 using LambdicSql;
@@ -12,15 +13,23 @@ using System.Linq.Expressions;
 
 namespace TestCheck35
 {
-    public class TestKeywordDataChange : ITest
+    [TestClass]
+    public class TestKeywordDataChange
     {
+        public TestContext TestContext { get; set; }
         public IDbConnection _connection;
 
-        public void TestInitialize(IDbConnection connection)
+        [TestInitialize]
+        public void TestInitialize()
         {
-            _connection = connection;
+            _connection = TestEnvironment.CreateConnection(TestContext);
+            _connection.Open();
         }
 
+        [TestCleanup]
+        public void TestCleanup() => _connection.Dispose();
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Update_Set()
         {
             Test_InsertInto_Values();
@@ -38,6 +47,7 @@ SET
 WHERE (tbl_data.id) = (@p_2)");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Delete()
         {
             var query = Sql<DB>.Create(db =>
@@ -52,6 +62,7 @@ FROM tbl_data
 WHERE (tbl_data.id) = (@p_0)");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Delete_All()
         {
             var query = Sql<DB>.Create(db =>
@@ -64,6 +75,7 @@ WHERE (tbl_data.id) = (@p_0)");
 FROM tbl_data");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_InsertInto_Values()
         {
             Test_Delete_All();

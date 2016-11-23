@@ -3,6 +3,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using static Test.Helper.DBProviderInfo;
 
 //important
 using LambdicSql;
@@ -19,15 +20,23 @@ using static TestCheck35.TestSynatax;
 
 namespace TestCheck35
 {
-    class TestKeywordSetOperator : ITest
+    [TestClass]
+    class TestKeywordSetOperator
     {
+        public TestContext TestContext { get; set; }
         public IDbConnection _connection;
 
-        public void TestInitialize(IDbConnection connection)
+        [TestInitialize]
+        public void TestInitialize()
         {
-            _connection = connection;
+            _connection = TestEnvironment.CreateConnection(TestContext);
+            _connection.Open();
         }
 
+        [TestCleanup]
+        public void TestCleanup() => _connection.Dispose();
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Union()
         {
             var query = Sql<DB>.Create(db =>
@@ -45,6 +54,7 @@ SELECT *
 FROM tbl_staff");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Union_All()
         {
             var query = Sql<DB>.Create(db =>
@@ -62,6 +72,7 @@ SELECT *
 FROM tbl_staff");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Union_All_False()
         {
             var query = Sql<DB>.Create(db =>
@@ -79,6 +90,7 @@ SELECT *
 FROM tbl_staff");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Intersect()
         {
             if (_connection.GetType().Name == "MySqlConnection") return;
@@ -98,6 +110,7 @@ SELECT *
 FROM tbl_staff");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Except()
         {
             if (_connection.GetType().Name == "MySqlConnection") return;
@@ -119,6 +132,7 @@ FROM tbl_staff
 WHERE (tbl_staff.id) = (@p_0)");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Except_All()
         {
             if (_connection.GetType().Name == "SqlConnection") return;
@@ -142,6 +156,7 @@ FROM tbl_staff
 WHERE (tbl_staff.id) = (@p_0)");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Except_All_False()
         {
             if (_connection.GetType().Name == "MySqlConnection") return;
@@ -163,6 +178,7 @@ FROM tbl_staff
 WHERE (tbl_staff.id) = (@p_0)");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Minus()
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
@@ -185,6 +201,7 @@ FROM tbl_staff
 WHERE (tbl_staff.id) = (@p_0)");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Union()
         {
             var query = Sql<DB>.Create(db =>
@@ -204,6 +221,7 @@ SELECT *
 FROM tbl_staff");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Union_All()
         {
             var query = Sql<DB>.Create(db =>
@@ -223,6 +241,7 @@ SELECT *
 FROM tbl_staff");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Union_All_False()
         {
             var query = Sql<DB>.Create(db =>
@@ -242,6 +261,7 @@ SELECT *
 FROM tbl_staff");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Intersect()
         {
             if (_connection.GetType().Name == "MySqlConnection") return;
@@ -263,6 +283,7 @@ SELECT *
 FROM tbl_staff");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Except()
         {
             if (_connection.GetType().Name == "MySqlConnection") return;
@@ -287,6 +308,7 @@ FROM tbl_staff
 WHERE (tbl_staff.id) = (@p_0)");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Except_All()
         {
             if (_connection.GetType().Name == "SqlConnection") return;
@@ -313,6 +335,7 @@ FROM tbl_staff
 WHERE (tbl_staff.id) = (@p_0)");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Except_All_False()
         {
             if (_connection.GetType().Name == "MySqlConnection") return;
@@ -337,6 +360,7 @@ FROM tbl_staff
 WHERE (tbl_staff.id) = (@p_0)");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Minus()
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
@@ -361,6 +385,5 @@ SELECT *
 FROM tbl_staff
 WHERE (tbl_staff.id) = (@p_0)");
         }
-
     }
 }

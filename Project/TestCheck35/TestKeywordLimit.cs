@@ -2,6 +2,7 @@
 using System.Data;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using static Test.Helper.DBProviderInfo;
 
 //important
 using LambdicSql;
@@ -13,15 +14,23 @@ using System.Diagnostics;
 
 namespace TestCheck35
 {
-    public class TestKeywordLimit : ITest
+    [TestClass]
+    public class TestKeywordLimit
     {
+        public TestContext TestContext { get; set; }
         public IDbConnection _connection;
 
-        public void TestInitialize(IDbConnection connection)
+        [TestInitialize]
+        public void TestInitialize()
         {
-            _connection = connection;
+            _connection = TestEnvironment.CreateConnection(TestContext);
+            _connection.Open();
         }
 
+        [TestCleanup]
+        public void TestCleanup() => _connection.Dispose();
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Limit_Offset()
         {
             var name = _connection.GetType().FullName;
@@ -47,6 +56,7 @@ LIMIT @p_0
 OFFSET @p_1");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_OffsetRows_FetchNext()
         {
             var name = _connection.GetType().FullName;
@@ -71,7 +81,8 @@ ORDER BY
 OFFSET @p_0 ROWS
 FETCH NEXT @p_1 ROWS ONLY");
         }
-        
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Limit_Offset()
         {
             var name = _connection.GetType().FullName;
@@ -97,6 +108,7 @@ LIMIT @p_0
 OFFSET @p_1");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_OffsetRows_FetchNext()
         {
             var name = _connection.GetType().FullName;
@@ -122,6 +134,7 @@ OFFSET @p_0 ROWS
 FETCH NEXT @p_1 ROWS ONLY");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_RowNum()
         {
             var name = _connection.GetType().FullName;

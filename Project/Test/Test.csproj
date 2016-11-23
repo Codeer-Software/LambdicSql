@@ -102,9 +102,6 @@
     <Compile Include="..\TestCheck35\HelperForTest.cs">
       <Link>HelperForTest.cs</Link>
     </Compile>
-    <Compile Include="..\TestCheck35\ITest.cs">
-      <Link>ITest.cs</Link>
-    </Compile>
     <Compile Include="..\TestCheck35\Samples.cs">
       <Link>Samples.cs</Link>
     </Compile>
@@ -156,31 +153,18 @@
     <Compile Include="Helper\CodeGenerate.cs" />
     <Compile Include="Helper\DBProviderInfo.cs" />
     <Compile Include="TestEF.cs" />
-    <Compile Include="TestFuncsWrap.cs" />
-    <Compile Include="TestKeywordCasetWrap.cs" />
-    <Compile Include="TestKeywordConditionWrap.cs" />
-    <Compile Include="TestKeywordDataChangeWrap.cs" />
-    <Compile Include="TestKeywordFromWrap.cs" />
-    <Compile Include="TestKeywordLimitWrap.cs" />
-    <Compile Include="TestKeywordSetOperatorWrap.cs" />
-    <Compile Include="TestKeywordWhereGroupByHavingOrderByWrap.cs" />
-    <Compile Include="TestKeywordSelectWrap.cs" />
     <Compile Include="ModelLambdicSqlTestDB.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="SamplesWrap.cs" />
     <Compile Include="Helper\TestEnvironment.cs" />
     <Compile Include="tbl_data.cs" />
     <Compile Include="tbl_remuneration.cs" />
     <Compile Include="tbl_staff.cs" />
     <Compile Include="Helper\TestResult.cs" />
-    <Compile Include="TestSetOperationWrap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestUtilsWrap.cs" />
-    <Compile Include="TestWindowWrap.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LambdicSql.ORM\LambdicSql.ORM.csproj">

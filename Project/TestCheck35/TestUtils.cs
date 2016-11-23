@@ -2,6 +2,7 @@
 using System.Data;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using static Test.Helper.DBProviderInfo;
 
 //important
 using LambdicSql;
@@ -14,14 +15,21 @@ using System.Linq.Expressions;
 
 namespace TestCheck35
 {
-    public class TestUtils : ITest
+    [TestClass]
+    public class TestUtils
     {
+        public TestContext TestContext { get; set; }
         public IDbConnection _connection;
 
-        public void TestInitialize(IDbConnection connection)
+        [TestInitialize]
+        public void TestInitialize()
         {
-            _connection = connection;
+            _connection = TestEnvironment.CreateConnection(TestContext);
+            _connection.Open();
         }
+
+        [TestCleanup]
+        public void TestCleanup() => _connection.Dispose();
 
         public class SelectData
         {
@@ -32,7 +40,8 @@ namespace TestCheck35
         {
             public int Id { get; set; }
         }
-        
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Cast1()
         {
             var sub = Sql<DB>.Create(db =>
@@ -53,6 +62,7 @@ namespace TestCheck35
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Cast2()
         {
             var query = Sql<DB>.Create(db =>
@@ -73,6 +83,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Condition1()
         {
             var condition = Sql<DB>.Create(db => Condition(true, db.tbl_staff.id == 1) || (Condition(true, db.tbl_staff.id == 2) && Condition(false, db.tbl_staff.id == 3) && Condition(true, db.tbl_staff.id == 4)));
@@ -93,6 +104,7 @@ FROM tbl_staff
 WHERE ((tbl_staff.id) = (@p_0)) OR (((tbl_staff.id) = (@p_1)) AND ((tbl_staff.id) = (@p_2)))");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Condition2()
         {
             var condition = Sql<DB>.Create(db => Condition(false, db.tbl_staff.id == 2) && Condition(false, db.tbl_staff.id == 3) && Condition(false, db.tbl_staff.id == 4));
@@ -112,6 +124,7 @@ WHERE ((tbl_staff.id) = (@p_0)) OR (((tbl_staff.id) = (@p_1)) AND ((tbl_staff.id
 FROM tbl_staff");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Condition3()
         {
             var name = _connection.GetType().Name;
@@ -138,6 +151,7 @@ GROUP BY tbl_remuneration.staff_id
 HAVING (@p_0) < (SUM(tbl_remuneration.money))");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Condition4()
         {
             var name = _connection.GetType().Name;
@@ -163,6 +177,7 @@ FROM tbl_remuneration
 GROUP BY tbl_remuneration.staff_id");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Text()
         {
             var query = Sql<DB>.Create(db =>
@@ -182,6 +197,7 @@ GROUP BY tbl_remuneration.staff_id");
 FROM tbl_staff");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Format2WaySql()
         {
             var sql = @"
@@ -210,6 +226,7 @@ FROM tbl_remuneration
 WHERE (@p_1) < (tbl_remuneration.money)");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_ColumnOnly()
         {
             var sql = @"

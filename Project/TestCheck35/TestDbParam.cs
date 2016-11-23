@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Linq;
+using static Test.Helper.DBProviderInfo;
 
 //important
 using LambdicSql;
@@ -12,7 +13,6 @@ using LambdicSql.SqlBase;
 using System.Linq.Expressions;
 using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using static Test.Helper.DBProviderInfo;
 
 namespace TestCheck35
 {

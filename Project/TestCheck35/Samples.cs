@@ -2,6 +2,8 @@
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
+using static Test.Helper.DBProviderInfo;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 //important
 using LambdicSql;
@@ -11,19 +13,27 @@ using static LambdicSql.Funcs;
 using static LambdicSql.Utils;
 using System.Collections.Generic;
 using LambdicSql.SqlBase;
+using TestCheck35;
 
 //TODO Make this a more practical sample.
 //TODO Add better data for sample
 namespace TestCore
 {
+    [TestClass]
     public class Samples
     {
+        public TestContext TestContext { get; set; }
         public IDbConnection _connection;
 
-        public void TestInitialize(string testName, IDbConnection connection)
+        [TestInitialize]
+        public void TestInitialize()
         {
-            _connection = connection;
+            _connection = TestEnvironment.CreateConnection(TestContext);
+            _connection.Open();
         }
+
+        [TestCleanup]
+        public void TestCleanup() => _connection.Dispose();
 
         public class Staff
         {
@@ -120,10 +130,7 @@ namespace TestCore
             public DateTime PaymentDate { get; set; }
             public decimal Money { get; set; }
         }
-
-
         
-
         static IDbDataParameter CreateParameter(IDbCommand com, string name, object obj)
         {
             var param = com.CreateParameter();
@@ -131,6 +138,7 @@ namespace TestCore
             param.Value = obj;
             return param;
         }
+
         public void Read(string text, Dictionary<string, object> param)
         {
             bool openNow = false;
@@ -167,6 +175,7 @@ namespace TestCore
             }
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestStandard()
         {
             var min = 3000;
@@ -192,6 +201,7 @@ namespace TestCore
         }
 
         //Select one table.
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestSelectFrom()
         {
             //make sql.
@@ -205,6 +215,7 @@ namespace TestCore
             var datas = _connection.Query(query).ToList();
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestJoin()
         {
             var min = 3000;
@@ -234,6 +245,7 @@ namespace TestCore
         }
 
         //Group by.
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestGroupBy()
         {
             //make sql.
@@ -260,6 +272,7 @@ namespace TestCore
         }
 
         //Group by using Distinct.
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestGroupByPredicateDistinct()
         {
             var distinct = AggregatePredicate.Distinct;
@@ -284,6 +297,7 @@ namespace TestCore
         }
 
         //Group by using All.
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestGroupByPredicateAll()
         {
             //make sql.
@@ -307,6 +321,7 @@ namespace TestCore
         }
 
         //Having
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestHaving()
         {
             //make sql.
@@ -331,6 +346,7 @@ namespace TestCore
         }
 
         //Like, In, Between, Exsists
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestLike()
         {
             //make sql.
@@ -345,7 +361,8 @@ namespace TestCore
             //dapper
             var datas = _connection.Query(query).ToList();
         }
-        
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestIn()
         {
             //make sql.
@@ -360,7 +377,8 @@ namespace TestCore
             //dapper
             var datas = _connection.Query(query).ToList();
         }
-        
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestBetween()
         {
             //make sql.
@@ -376,6 +394,7 @@ namespace TestCore
             var datas = _connection.Query(query).ToList();
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestExists()
         {
             //make sql.
@@ -399,6 +418,7 @@ namespace TestCore
 
         //Distinct
         //```cs
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestSelectPredicateDistinct()
         {
             //make sql.
@@ -420,6 +440,7 @@ namespace TestCore
 
         //All
         //```cs
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestSelectPredicateAll()
         {
             //make sql.
@@ -441,6 +462,7 @@ namespace TestCore
 
         //Delete all.
         //```cs
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestDelete()
         {
             //make sql.
@@ -459,6 +481,7 @@ namespace TestCore
 
         //Delete condition matching row. 
         //```cs
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestDeleteWhere()
         {
             //make sql.
@@ -478,6 +501,7 @@ namespace TestCore
 
         //Insert.
         //```cs
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestInsert()
         {
             TestDelete();
@@ -496,6 +520,7 @@ namespace TestCore
 
         //Update
         //```cs
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestUpdate()
         {
             //make sql.
@@ -514,6 +539,7 @@ namespace TestCore
 
         //Update using table value.
         //```cs
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestUpdateUsingTableValue()
         {
             //make sql.
@@ -530,6 +556,7 @@ namespace TestCore
         }
         //```
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestIsNull()
         {
             decimal? val = null;
@@ -553,7 +580,8 @@ namespace TestCore
             //dapper
             var datas = _connection.Query(query).ToList();
         }
-        
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestIsNotNull()
         {
             decimal? val = null;
@@ -578,6 +606,7 @@ namespace TestCore
             var datas = _connection.Query(query).ToList();
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestNullable()
         {
             //make sql.
@@ -599,7 +628,8 @@ namespace TestCore
             //dapper
             var datas = _connection.Query(query).ToList();
         }
-        
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestStringCalc()
         {
             //make sql.
@@ -617,7 +647,8 @@ namespace TestCore
             //dapper
             var datas = _connection.Query(query).ToList();
         }
-        
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestWhereEx()
         {
             TestWhereEx(true, true);
@@ -626,6 +657,7 @@ namespace TestCore
             TestWhereEx(false, false);
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestWhereEx(bool minCondition, bool maxCondition)
         {
             //make sql.
@@ -643,6 +675,7 @@ namespace TestCore
             var datas = _connection.Query(query).ToList();
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestCase1()
         {
             //make sql.
@@ -664,7 +697,8 @@ namespace TestCore
             //dapper
             var datas = _connection.Query(query).ToList();
         }
-        
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestCase2()
         {
             //make sql.
@@ -688,6 +722,7 @@ namespace TestCore
         }
 
         //window functions.
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestWindow()
         {
             //not supported db.
@@ -718,6 +753,7 @@ namespace TestCore
 
         //Building Query
         //Concat query.
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestQueryConcat()
         {
             //make sql.
@@ -749,6 +785,7 @@ namespace TestCore
             var datas = _connection.Query(query).ToList();
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestSqlExpression()
         {
             //make sql.
@@ -777,6 +814,7 @@ namespace TestCore
         }
 
         //You can use sub query.
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestSubQueryAtWhere()
         {
             //make sql.
@@ -797,6 +835,7 @@ namespace TestCore
             var datas = _connection.Query(query).ToList();
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestSubQuerySelect()
         {
             //make sql.
@@ -820,6 +859,7 @@ namespace TestCore
             var datas = _connection.Query(query).ToList();
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestSubQueryAtFrom()
         {
             //make sql.
@@ -866,6 +906,7 @@ namespace TestCore
         }
 
         //You can use text.
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestFormatText()
         {
             //make sql.
@@ -889,6 +930,7 @@ namespace TestCore
         }
 
         //2 way sql
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestFormat2WaySql()
         {
             TestFormat2WaySql(true, true, 1000);
@@ -896,6 +938,8 @@ namespace TestCore
             TestFormat2WaySql(false, true, 3000);
             TestFormat2WaySql(false, false, 4000);
         }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestFormat2WaySql(bool minCondition, bool maxCondition, decimal bonus)
         {
             //make sql.
@@ -935,6 +979,7 @@ FROM tbl_remuneration
             datas = _connection.Query(query2).ToList();
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void CheckOperatior()
         {
             //make sql.
@@ -957,6 +1002,7 @@ FROM tbl_remuneration
             var datas = _connection.Query(query).ToList();
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void FromMany()
         {
             //make sql.
@@ -976,6 +1022,7 @@ FROM tbl_remuneration
             var datas = _connection.Query(query).ToList();
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Funcs()
         {
             var name = _connection.GetType().FullName;
@@ -1238,6 +1285,7 @@ FROM tbl_remuneration
 
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestUnion()
         {
             var query = Sql<DB>.Create(db => Select(new Asterisk()).From(db.tbl_staff).Union().Select(new Asterisk()).From(db.tbl_staff));
@@ -1246,6 +1294,7 @@ FROM tbl_remuneration
             ExecuteRead<Staff>(query);
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestIntersect()
         {
             var name = _connection.GetType().FullName;
@@ -1259,6 +1308,7 @@ FROM tbl_remuneration
             ExecuteRead<Staff>(query);
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestExcept()
         {
             var name = _connection.GetType().FullName;
@@ -1272,6 +1322,7 @@ FROM tbl_remuneration
             ExecuteRead<Staff>(query);
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestMinus()
         {
             var name = _connection.GetType().FullName;
@@ -1280,6 +1331,7 @@ FROM tbl_remuneration
             ExecuteRead<Staff>(query);
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestGroupByEx()
         {           
             //make sql.
@@ -1309,6 +1361,7 @@ FROM tbl_remuneration
             ExecuteRead(query);
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestOffsetFetchNext()
         {
             var name = _connection.GetType().FullName;
@@ -1326,6 +1379,7 @@ FROM tbl_remuneration
             _connection.Query(query);
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestLimit()
         {
             var name = _connection.GetType().FullName;
@@ -1343,6 +1397,7 @@ FROM tbl_remuneration
             _connection.Query(query);
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestLimitOffset()
         {
             var name = _connection.GetType().FullName;
@@ -1360,6 +1415,7 @@ FROM tbl_remuneration
             _connection.Query(query);
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestRowNum()
         {
             var name = _connection.GetType().FullName;
@@ -1374,6 +1430,8 @@ FROM tbl_remuneration
             Debug.Print(query.ToSqlInfo().SqlText);
             _connection.Query(query);
         }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestTop()
         {
             var name = _connection.GetType().FullName;
@@ -1424,12 +1482,15 @@ FROM tbl_remuneration
             }
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public IEnumerable<T> ExecuteRead<T>(ISqlExpressionBase<IQuery<T>> exp)
         {
             var info = exp.ToSqlInfo(_connection.GetType());
             Debug.Print(info.SqlText);
             return _connection.Query(exp).ToList();
         }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public IEnumerable<T> ExecuteRead<T>(ISqlExpressionBase exp)
         {
             var info = exp.ToSqlInfo(_connection.GetType());

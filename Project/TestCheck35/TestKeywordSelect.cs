@@ -3,6 +3,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using static Test.Helper.DBProviderInfo;
 
 //important
 using LambdicSql;
@@ -18,14 +19,21 @@ using static TestCheck35.TestSynatax;
 
 namespace TestCheck35
 {
-    public class TestKeywordSelect : ITest
+    [TestClass]
+    public class TestKeywordSelect
     {
+        public TestContext TestContext { get; set; }
         public IDbConnection _connection;
 
-        public void TestInitialize(IDbConnection connection)
+        [TestInitialize]
+        public void TestInitialize()
         {
-            _connection = connection;
+            _connection = TestEnvironment.CreateConnection(TestContext);
+            _connection.Open();
         }
+
+        [TestCleanup]
+        public void TestCleanup() => _connection.Dispose();
 
         public class SelectData
         {
@@ -33,6 +41,7 @@ namespace TestCheck35
             public decimal Money { get; set; }
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Select()
         {
             var query = Sql<DB>.Create(db =>
@@ -52,6 +61,7 @@ namespace TestCheck35
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Select_Top()
         {
             if (_connection.GetType() != typeof(SqlConnection)) return;
@@ -73,6 +83,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Select_Asterisk_Non()
         {
             var query = Sql<DB>.Create(db =>
@@ -86,6 +97,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Select_Asterisk()
         {
             var query = Sql<DB>.Create(db =>
@@ -99,6 +111,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Select_Asterisk_Helper()
         {
             var query = Sql<DB>.Create(db =>
@@ -112,6 +125,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Select_Top_Asterisk_Non()
         {
             if (_connection.GetType() != typeof(SqlConnection)) return;
@@ -127,6 +141,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Select_Top_Asterisk()
         {
             if (_connection.GetType() != typeof(SqlConnection)) return;
@@ -142,6 +157,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Select_All()
         {
             var query = Sql<DB>.Create(db =>
@@ -161,6 +177,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Select_Distinct()
         {
             var query = Sql<DB>.Create(db =>
@@ -180,6 +197,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Select_All_Asterisk_Non()
         {
             var query = Sql<DB>.Create(db =>
@@ -193,6 +211,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Select_Distinct_Asterisk_Non()
         {
             var query = Sql<DB>.Create(db =>
@@ -206,6 +225,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Select_All_Asterisk()
         {
             var query = Sql<DB>.Create(db =>
@@ -219,6 +239,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Select_Distinct_Asterisk()
         {
             var query = Sql<DB>.Create(db =>
@@ -232,6 +253,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Select_All_Top_Asterisk_Non()
         {
             if (_connection.GetType() != typeof(SqlConnection)) return;
@@ -247,6 +269,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Select_Distinct_Top_Asterisk_Non()
         {
             if (_connection.GetType() != typeof(SqlConnection)) return;
@@ -262,6 +285,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Select_All_Top_Asterisk()
         {
             if (_connection.GetType() != typeof(SqlConnection)) return;
@@ -277,6 +301,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Select_Distinct_Top_Asterisk()
         {
             if (_connection.GetType() != typeof(SqlConnection)) return;
@@ -292,6 +317,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Select()
         {
             var query = Sql<DB>.Create(db =>
@@ -311,6 +337,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Select_Top()
         {
             if (_connection.GetType() != typeof(SqlConnection)) return;
@@ -332,6 +359,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Select_Asterisk_Non()
         {
             var query = Sql<DB>.Create(db =>
@@ -345,6 +373,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Select_Asterisk()
         {
             var query = Sql<DB>.Create(db =>
@@ -358,6 +387,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Select_Asterisk_Helper()
         {
             var query = Sql<DB>.Create(db =>
@@ -371,6 +401,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Select_Top_Asterisk_Non()
         {
             if (_connection.GetType() != typeof(SqlConnection)) return;
@@ -386,6 +417,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Select_Top_Asterisk()
         {
             if (_connection.GetType() != typeof(SqlConnection)) return;
@@ -401,6 +433,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Select_All()
         {
             var query = Sql<DB>.Create(db =>
@@ -420,6 +453,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Select_Distinct()
         {
             var query = Sql<DB>.Create(db =>
@@ -439,6 +473,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Select_All_Asterisk_Non()
         {
             var query = Sql<DB>.Create(db =>
@@ -452,6 +487,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Select_Distinct_Asterisk_Non()
         {
             var query = Sql<DB>.Create(db =>
@@ -465,6 +501,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Select_All_Asterisk()
         {
             var query = Sql<DB>.Create(db =>
@@ -478,6 +515,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Select_Distinct_Asterisk()
         {
             var query = Sql<DB>.Create(db =>
@@ -491,6 +529,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Select_All_Top_Asterisk_Non()
         {
             if (_connection.GetType() != typeof(SqlConnection)) return;
@@ -506,6 +545,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Select_Distinct_Top_Asterisk_Non()
         {
             if (_connection.GetType() != typeof(SqlConnection)) return;
@@ -521,6 +561,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Select_All_Top_Asterisk()
         {
             if (_connection.GetType() != typeof(SqlConnection)) return;
@@ -536,6 +577,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Select_Distinct_Top_Asterisk()
         {
             if (_connection.GetType() != typeof(SqlConnection)) return;

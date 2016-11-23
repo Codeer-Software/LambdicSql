@@ -2,6 +2,7 @@
 using System.Data;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using static Test.Helper.DBProviderInfo;
 
 //important
 using LambdicSql;
@@ -14,20 +15,28 @@ using System.Linq.Expressions;
 
 namespace TestCheck35
 {
-    public class TestWindow : ITest
+    [TestClass]
+    public class TestWindow
     {
+        public TestContext TestContext { get; set; }
         public IDbConnection _connection;
 
-        public void TestInitialize(IDbConnection connection)
+        [TestInitialize]
+        public void TestInitialize()
         {
-            _connection = connection;
+            _connection = TestEnvironment.CreateConnection(TestContext);
+            _connection.Open();
         }
+
+        [TestCleanup]
+        public void TestCleanup() => _connection.Dispose();
 
         public class SelectData
         {
             public decimal Val { get; set; }
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Avg()
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
@@ -56,6 +65,7 @@ namespace TestCheck35
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Sum()
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
@@ -84,6 +94,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Count()
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
@@ -112,6 +123,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Max()
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
@@ -140,6 +152,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Min()
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
@@ -168,6 +181,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_First_Value()
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
@@ -196,6 +210,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Last_Value()
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
@@ -224,6 +239,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Rank()
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
@@ -249,6 +265,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Dense_Rank()
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
@@ -274,6 +291,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Percent_Rank()
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
@@ -300,6 +318,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Cume_Dist()
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
@@ -325,6 +344,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Ntile()
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
@@ -351,6 +371,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestNth_Value()
         {
             if (_connection.GetType().Name != "OracleConnection" &&
@@ -377,6 +398,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Lag1()
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
@@ -397,6 +419,7 @@ FROM tbl_remuneration");
             query.Gen(_connection);
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Lag2()
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
@@ -418,6 +441,7 @@ FROM tbl_remuneration");
             query.Gen(_connection);
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Lag3()
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
@@ -440,6 +464,7 @@ FROM tbl_remuneration");
             query.Gen(_connection);
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Rows()
         {
             if (_connection.GetType().Name == "SqlConnection") return;
@@ -470,6 +495,7 @@ FROM tbl_remuneration");
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_OrderBy()
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;

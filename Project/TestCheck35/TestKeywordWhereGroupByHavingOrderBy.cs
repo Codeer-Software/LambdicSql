@@ -3,6 +3,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using static Test.Helper.DBProviderInfo;
 
 //important
 using LambdicSql;
@@ -18,14 +19,21 @@ using static TestCheck35.TestSynatax;
 
 namespace TestCheck35
 {
-    public class TestKeywordWhereGroupByHavingOrderBy : ITest
+    [TestClass]
+    public class TestKeywordWhereGroupByHavingOrderBy
     {
+        public TestContext TestContext { get; set; }
         public IDbConnection _connection;
 
-        public void TestInitialize(IDbConnection connection)
+        [TestInitialize]
+        public void TestInitialize()
         {
-            _connection = connection;
+            _connection = TestEnvironment.CreateConnection(TestContext);
+            _connection.Open();
         }
+
+        [TestCleanup]
+        public void TestCleanup() => _connection.Dispose();
 
         public class SelectData1
         {
@@ -38,6 +46,7 @@ namespace TestCheck35
             public int Id { get; set; }
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Where()
         {
             var query = Sql<DB>.Create(db =>
@@ -58,6 +67,7 @@ FROM tbl_remuneration
 WHERE (tbl_remuneration.id) = (@p_0)");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_GroupBy()
         {
             var query = Sql<DB>.Create(db =>
@@ -78,6 +88,7 @@ FROM tbl_remuneration
 GROUP BY tbl_remuneration.id, tbl_remuneration.staff_id");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_GroupByRollup()
         {
             var name = _connection.GetType().Name;
@@ -101,6 +112,7 @@ FROM tbl_remuneration
 GROUP BY ROLLUP(tbl_remuneration.id, tbl_remuneration.staff_id)");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_GroupByWithRollup()
         {
             var name = _connection.GetType().Name;
@@ -123,6 +135,7 @@ FROM tbl_remuneration
 GROUP BY tbl_remuneration.id, tbl_remuneration.staff_id WITH ROLLUP");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_GroupByCube()
         {
             var name = _connection.GetType().Name;
@@ -146,6 +159,7 @@ FROM tbl_remuneration
 GROUP BY CUBE(tbl_remuneration.id, tbl_remuneration.staff_id)");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_GroupByGroupingSets()
         {
             var name = _connection.GetType().Name;
@@ -169,6 +183,7 @@ FROM tbl_remuneration
 GROUP BY GROUPING SETS(tbl_remuneration.id, tbl_remuneration.staff_id)");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Having()
         {
             var name = _connection.GetType().Name;
@@ -193,6 +208,7 @@ GROUP BY tbl_remuneration.staff_id
 HAVING (@p_0) < (SUM(tbl_remuneration.money))");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_OrderBy()
         {
             var name = _connection.GetType().Name;
@@ -216,7 +232,8 @@ ORDER BY
 	tbl_remuneration.money ASC,
 	tbl_remuneration.staff_id DESC");
         }
-        
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Where()
         {
             var query = Sql<DB>.Create(db =>
@@ -239,6 +256,7 @@ FROM tbl_remuneration
 WHERE (tbl_remuneration.id) = (@p_0)");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_GroupBy()
         {
             var query = Sql<DB>.Create(db =>
@@ -261,6 +279,7 @@ FROM tbl_remuneration
 GROUP BY tbl_remuneration.id, tbl_remuneration.staff_id");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_GroupByRollup()
         {
             var name = _connection.GetType().Name;
@@ -286,6 +305,7 @@ FROM tbl_remuneration
 GROUP BY ROLLUP(tbl_remuneration.id, tbl_remuneration.staff_id)");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_GroupByWithRollup()
         {
             var name = _connection.GetType().Name;
@@ -310,6 +330,7 @@ FROM tbl_remuneration
 GROUP BY tbl_remuneration.id, tbl_remuneration.staff_id WITH ROLLUP");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_GroupByCube()
         {
             var name = _connection.GetType().Name;
@@ -335,6 +356,7 @@ FROM tbl_remuneration
 GROUP BY CUBE(tbl_remuneration.id, tbl_remuneration.staff_id)");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_GroupByGroupingSets()
         {
             var name = _connection.GetType().Name;
@@ -360,6 +382,7 @@ FROM tbl_remuneration
 GROUP BY GROUPING SETS(tbl_remuneration.id, tbl_remuneration.staff_id)");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Having()
         {
             var name = _connection.GetType().Name;
@@ -386,6 +409,7 @@ GROUP BY tbl_remuneration.staff_id
 HAVING (@p_0) < (SUM(tbl_remuneration.money))");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_OrderBy()
         {
             var name = _connection.GetType().Name;

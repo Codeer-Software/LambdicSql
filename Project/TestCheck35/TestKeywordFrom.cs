@@ -2,6 +2,7 @@
 using System.Data;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using static Test.Helper.DBProviderInfo;
 
 //important
 using LambdicSql;
@@ -13,14 +14,21 @@ using System.Diagnostics;
 
 namespace TestCheck35
 {
-    public class TestKeywordFrom : ITest
+    [TestClass]
+    public class TestKeywordFrom
     {
+        public TestContext TestContext { get; set; }
         public IDbConnection _connection;
 
-        public void TestInitialize(IDbConnection connection)
+        [TestInitialize]
+        public void TestInitialize()
         {
-            _connection = connection;
+            _connection = TestEnvironment.CreateConnection(TestContext);
+            _connection.Open();
         }
+
+        [TestCleanup]
+        public void TestCleanup() => _connection.Dispose();
 
         public class SelectData
         {
@@ -28,6 +36,7 @@ namespace TestCheck35
             public decimal Money { get; set; }
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_From1()
         {
             var query = Sql<DB>.Create(db =>
@@ -47,6 +56,7 @@ namespace TestCheck35
 FROM tbl_remuneration");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_From2()
         {
             var sub = Sql<DB>.Create(db =>
@@ -72,6 +82,7 @@ FROM
 	FROM tbl_remuneration) sub");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_From3()
         {
             var name = _connection.GetType().Name;
@@ -95,6 +106,7 @@ FROM
 	FROM tbl_remuneration)");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Join()
         {
             var query = Sql<DB>.Create(db =>
@@ -116,6 +128,7 @@ FROM tbl_remuneration
 	JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_LeftJoin()
         {
             var query = Sql<DB>.Create(db =>
@@ -137,6 +150,7 @@ FROM tbl_remuneration
 	LEFT JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_RightJoin()
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
@@ -160,6 +174,7 @@ FROM tbl_remuneration
 	RIGHT JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_CrossJoin()
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
@@ -182,7 +197,8 @@ FROM tbl_remuneration
 FROM tbl_remuneration
 	CROSS JOIN tbl_staff");
         }
-        
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Join()
         {
             var query = Sql<DB>.Create(db =>
@@ -206,6 +222,7 @@ FROM tbl_remuneration
 	JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_LeftJoin()
         {
             var query = Sql<DB>.Create(db =>
@@ -229,6 +246,7 @@ FROM tbl_remuneration
 	LEFT JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_RightJoin()
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
@@ -254,6 +272,7 @@ FROM tbl_remuneration
 	RIGHT JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_CrossJoin()
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;

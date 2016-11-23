@@ -2,6 +2,7 @@
 using System.Data;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using static Test.Helper.DBProviderInfo;
 
 //important
 using LambdicSql;
@@ -12,20 +13,28 @@ using System.Linq.Expressions;
 
 namespace TestCheck35
 {
-    public class TestKeywordCondition : ITest
+    [TestClass]
+    public class TestKeywordCondition
     {
+        public TestContext TestContext { get; set; }
         public IDbConnection _connection;
 
-        public void TestInitialize(IDbConnection connection)
+        [TestInitialize]
+        public void TestInitialize()
         {
-            _connection = connection;
+            _connection = TestEnvironment.CreateConnection(TestContext);
+            _connection.Open();
         }
+
+        [TestCleanup]
+        public void TestCleanup() => _connection.Dispose();
 
         public class SelectData
         {
             public int Id { get; set; }
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Like()
         {
             var query = Sql<DB>.Create(db =>
@@ -45,6 +54,7 @@ FROM tbl_staff
 WHERE tbl_staff.name LIKE @p_0");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Between()
         {
             var query = Sql<DB>.Create(db =>
@@ -64,6 +74,7 @@ FROM tbl_staff
 WHERE tbl_staff.id BETWEEN @p_0 AND @p_1");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_In1()
         {
             var query = Sql<DB>.Create(db =>
@@ -83,6 +94,7 @@ FROM tbl_staff
 WHERE tbl_staff.id IN(@p_0, @p_1, @p_2, @p_3, @p_4)");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_In2()
         {
             var sub = Sql<DB>.Create(db =>
@@ -113,6 +125,7 @@ WHERE tbl_staff.id IN(
 	WHERE (@p_0) < (tbl_remuneration.money)))");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_In3()
         {
             var query = Sql<DB>.Create(db =>
@@ -142,6 +155,7 @@ WHERE tbl_staff.id IN(
 	WHERE (@p_0) < (tbl_remuneration.money)))");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Exists1()
         {
             var sub = Sql<DB>.Create(db =>
@@ -171,7 +185,8 @@ WHERE EXISTS
 		JOIN tbl_staff ON (tbl_staff.id) = (tbl_staff.id)
 	WHERE (@p_0) < (tbl_remuneration.money))");
         }
-        
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Exists2()
         {
             var query = Sql<DB>.Create(db =>
@@ -201,6 +216,7 @@ WHERE EXISTS
 	WHERE (@p_0) < (tbl_remuneration.money))");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_IsNull()
         {
             var query = Sql<DB>.Create(db =>
@@ -220,6 +236,7 @@ FROM tbl_staff
 WHERE NOT (tbl_staff.name IS NULL)");
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_IsNotNull()
         {
             var query = Sql<DB>.Create(db =>
