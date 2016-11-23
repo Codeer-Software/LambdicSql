@@ -2,10 +2,15 @@
 using System;
 using System.Data.SqlClient;
 using LambdicSql.feat;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using LambdicSql.feat.Dapper;
+using System.Reflection;
+using LambdicSql;
+using System.Data;
 
 namespace TestCheck35
 {
-    class Program
+    static class Program
     {
         static void Main(string[] args)
         {
@@ -13,41 +18,55 @@ namespace TestCheck35
         }
         
         static void Test35()
-        { 
-            /*
-            var samples = new Samples();
-            foreach (var m in samples.GetType().GetMethods().
-                Where(e => e.DeclaringType == samples.GetType()).
-                Where(e => e.GetParameters().Length == 0))
+        {
+            DapperApaptExtensionsForTest.Query = QueryForTest;
+            DapperApaptExtensionsForTest.Execute = ExecuteForTest;
+
+            foreach (var type in typeof(Program).Assembly.GetTypes().Where(e=>e.IsDefined(typeof(TestClassAttribute), false)))
             {
-                try
+                var test = Activator.CreateInstance(type);
+                var init = type.GetMethods().Where(e => e.IsDefined(typeof(TestInitializeAttribute), false)).FirstOrDefault();
+                init?.Invoke(test, new object[0]);
+                foreach (var m in type.GetMethods().Where(e => e.IsDefined(typeof(TestMethodAttribute), false)))
                 {
-                    using (var con = new SqlConnection(TestEnvironment.ConnectionString))
+                    try
                     {
-                        con.Open();
-                        samples.TestInitialize(m.Name, con);
-                        try
-                        {
-                            m.Invoke(samples, new object[0]);
-                        }
-                        catch (Exception e)
-                        {
-                            if (!(e.InnerException is PackageIsNotInstalledException))
-                            {
-                                throw e.InnerException;
-                            }
-                        }
+                        m.Invoke(test, new object[0]);
                         Console.WriteLine("OK - " + m.Name);
                     }
+                    catch(Exception e)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("NG - " + m.Name);
+                        Console.WriteLine(e.Message);
+                        Console.ResetColor();
+                    }
                 }
-                catch
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("NG - " + m.Name);
-                    Console.ResetColor();
-                }
-            }*/
+                var cleanup = type.GetMethods().Where(e => e.IsDefined(typeof(TestCleanupAttribute), false)).FirstOrDefault();
+                cleanup?.Invoke(test, new object[0]);
+            }
             Console.ReadKey();
+        }
+
+        static string GetMessage(this Exception e)
+        {
+            while (true)
+            {
+                if (e.InnerException == null) return e.Message;
+                e = e.InnerException;
+            }
+        }
+
+        static int QueryForTest(IDbConnection cnn, SqlInfo info)
+        {
+            //TODO
+            return 1;
+        }
+
+        static int ExecuteForTest(IDbConnection cnn, SqlInfo info)
+        {
+            //TODO
+            return 1;
         }
     }
 }
