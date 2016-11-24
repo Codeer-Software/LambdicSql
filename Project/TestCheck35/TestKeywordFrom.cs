@@ -2,16 +2,13 @@
 using System.Data;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using static Test.Helper.DBProviderInfo;
 using Test.Helper;
+using static Test.Helper.DBProviderInfo;
 
 //important
 using LambdicSql;
 using LambdicSql.feat.Dapper;
 using static LambdicSql.Keywords;
-using LambdicSql.SqlBase;
-using System.Linq.Expressions;
-using System.Diagnostics;
 
 namespace TestCheck35
 {

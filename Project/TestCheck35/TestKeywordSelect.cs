@@ -2,8 +2,8 @@
 using System.Data;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using static Test.Helper.DBProviderInfo;
 using Test.Helper;
+using static Test.Helper.DBProviderInfo;
 
 //important
 using LambdicSql;

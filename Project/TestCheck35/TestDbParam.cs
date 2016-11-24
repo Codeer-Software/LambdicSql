@@ -1,19 +1,13 @@
-﻿using System;
-using System.Data;
+﻿using System.Data;
 using System.Linq;
 using Test.Helper;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using static Test.Helper.DBProviderInfo;
 
 //important
 using LambdicSql;
 using LambdicSql.feat.Dapper;
 using static LambdicSql.Keywords;
-using static LambdicSql.Funcs;
-using static LambdicSql.Utils;
-using LambdicSql.SqlBase;
-using System.Linq.Expressions;
-using System.Diagnostics;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TestCheck35
 {
@@ -81,27 +75,44 @@ FROM tbl_staff",
  new DbParams() { { "@p_0", new DbParam() { Value = "xxx", DbType = DbType.AnsiStringFixedLength, Size = 10 } } });
         }
 
-        //TODO 時間はいるよね
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Param_Setting()
+        {
+            var param = new DbParam<string>()
+            {        
+                Value = "xxx",
+                DbType = DbType.AnsiString,
+                Direction = ParameterDirection.InputOutput,
+                SourceColumn = "aaa",
+                SourceVersion = DataRowVersion.Original,
+                Precision = 10,
+                Scale = 20,
+                Size = 30,
+            };
 
-        //TODO あれ？正しくDBに伝わったことってどうやってみる？→設計を変更するか？
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData
+                {
+                    Name = db.tbl_staff.name + param,
+                }).
+                From(db.tbl_staff));
 
-        /*
-    public void Test_Param_Detail()
-    {
-        var a = TestParamCore("a", DbType.AnsiString).DbParams.First().Value;
-        Assert.AreEqual(a.DbType, DbType.AnsiString);
-        Assert.AreEqual(a.Value, "a");
-        var b = TestParamCore("b", DbType.String).DbParams.First().Value;
-        Assert.AreEqual(b.DbType, DbType.String);
-        Assert.AreEqual(b.Value, "b");
-    }
-
-    public SqlInfo TestParamCore(string value, DbType type)
-    {
-        var query = Sql<Data>.Create(db => new DbParam<string>() { Value = value, DbType = type });
-        var info = query.ToSqlInfo(typeof(SqlConnection));//いやいや。
-        Debug.Print(info.SqlText);
-        return info;
-    }*/
+            //check parameter only.
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	(tbl_staff.name) " + _connection.GetStringAddExp() + @" (@param) AS Name
+FROM tbl_staff",
+ new DbParams() { { "@param", new DbParam()
+ {
+    Value = "xxx",
+    DbType = DbType.AnsiString,
+    Direction = ParameterDirection.InputOutput,
+    SourceColumn = "aaa",
+    SourceVersion = DataRowVersion.Original,
+    Precision = 10,
+    Scale = 20,
+    Size = 30,
+ } } });
+        }
     }
 }
