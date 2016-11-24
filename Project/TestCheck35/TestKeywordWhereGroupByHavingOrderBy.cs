@@ -1,6 +1,4 @@
-﻿using System;
-using System.Data;
-using System.Diagnostics;
+﻿using System.Data;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using static Test.Helper.DBProviderInfo;
@@ -11,12 +9,6 @@ using LambdicSql;
 using LambdicSql.feat.Dapper;
 using static LambdicSql.Keywords;
 using static LambdicSql.Funcs;
-using static LambdicSql.Utils;
-using System.Collections.Generic;
-using LambdicSql.SqlBase;
-using System.Data.SqlClient;
-using System.Linq.Expressions;
-using static TestCheck35.TestSynatax;
 
 namespace TestCheck35
 {
@@ -65,7 +57,8 @@ namespace TestCheck35
 @"SELECT
 	COUNT(tbl_remuneration.money) AS Count
 FROM tbl_remuneration
-WHERE (tbl_remuneration.id) = (@p_0)");
+WHERE (tbl_remuneration.id) = (@p_0)",
+1);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -206,7 +199,8 @@ GROUP BY GROUPING SETS(tbl_remuneration.id, tbl_remuneration.staff_id)");
 	tbl_remuneration.staff_id AS Id
 FROM tbl_remuneration
 GROUP BY tbl_remuneration.staff_id
-HAVING (@p_0) < (SUM(tbl_remuneration.money))");
+HAVING (@p_0) < (SUM(tbl_remuneration.money))",
+(decimal)100);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -254,7 +248,8 @@ ORDER BY
 @"SELECT
 	COUNT(tbl_remuneration.money) AS Count
 FROM tbl_remuneration
-WHERE (tbl_remuneration.id) = (@p_0)");
+WHERE (tbl_remuneration.id) = (@p_0)",
+1);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -407,7 +402,8 @@ GROUP BY GROUPING SETS(tbl_remuneration.id, tbl_remuneration.staff_id)");
 	tbl_remuneration.staff_id AS Id
 FROM tbl_remuneration
 GROUP BY tbl_remuneration.staff_id
-HAVING (@p_0) < (SUM(tbl_remuneration.money))");
+HAVING (@p_0) < (SUM(tbl_remuneration.money))",
+(decimal)100);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]

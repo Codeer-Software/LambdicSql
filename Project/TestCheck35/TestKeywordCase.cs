@@ -1,5 +1,4 @@
-﻿using System;
-using System.Data;
+﻿using System.Data;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using static Test.Helper.DBProviderInfo;
@@ -9,8 +8,6 @@ using Test.Helper;
 using LambdicSql;
 using LambdicSql.feat.Dapper;
 using static LambdicSql.Keywords;
-using LambdicSql.SqlBase;
-using System.Linq.Expressions;
 
 namespace TestCheck35
 {
@@ -57,7 +54,8 @@ namespace TestCheck35
 		WHEN (tbl_staff.id) = (@p_2) THEN @p_3
 		ELSE @p_4
 	END AS Type
-FROM tbl_staff");
+FROM tbl_staff",
+ 3, "x", 4, "y", "z");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -80,7 +78,8 @@ FROM tbl_staff");
 		WHEN (tbl_staff.id) = (@p_0) THEN @p_1
 		WHEN (tbl_staff.id) = (@p_2) THEN @p_3
 	END AS Type
-FROM tbl_staff");
+FROM tbl_staff",
+3, "x", 4, "y");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -105,7 +104,8 @@ FROM tbl_staff");
 		WHEN @p_2 THEN @p_3
 		ELSE @p_4
 	END AS Type
-FROM tbl_staff");
+FROM tbl_staff",
+3, "x", 4, "y", "z");
         }
     }
 }

@@ -54,7 +54,8 @@ namespace TestCheck35
             AssertEx.AreEqual(query, _connection,
 @"SELECT
 	(tbl_staff.name) " + _connection.GetStringAddExp() + @" (@text) AS Name
-FROM tbl_staff");
+FROM tbl_staff",
+ new DbParams() { { "@text", new DbParam() { Value = "xxx" } } });
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -76,7 +77,8 @@ FROM tbl_staff");
             AssertEx.AreEqual(query, _connection,
  @"SELECT
 	(tbl_staff.name) " + _connection.GetStringAddExp() + @" (@p_0) AS Name
-FROM tbl_staff");
+FROM tbl_staff",
+ new DbParams() { { "@p_0", new DbParam() { Value = "xxx", DbType = DbType.AnsiStringFixedLength, Size = 10 } } });
         }
 
         //TODO 時間はいるよね

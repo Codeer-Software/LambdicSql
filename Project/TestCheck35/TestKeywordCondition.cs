@@ -1,5 +1,4 @@
-﻿using System;
-using System.Data;
+﻿using System.Data;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using static Test.Helper.DBProviderInfo;
@@ -9,8 +8,6 @@ using Test.Helper;
 using LambdicSql;
 using LambdicSql.feat.Dapper;
 using static LambdicSql.Keywords;
-using LambdicSql.SqlBase;
-using System.Linq.Expressions;
 
 namespace TestCheck35
 {
@@ -52,7 +49,8 @@ namespace TestCheck35
 @"SELECT
 	tbl_staff.id AS Id
 FROM tbl_staff
-WHERE tbl_staff.name LIKE @p_0");
+WHERE tbl_staff.name LIKE @p_0",
+"%a%");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -72,7 +70,8 @@ WHERE tbl_staff.name LIKE @p_0");
 @"SELECT
 	tbl_staff.id AS Id
 FROM tbl_staff
-WHERE tbl_staff.id BETWEEN @p_0 AND @p_1");
+WHERE tbl_staff.id BETWEEN @p_0 AND @p_1",
+0, 100);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -92,7 +91,8 @@ WHERE tbl_staff.id BETWEEN @p_0 AND @p_1");
 @"SELECT
 	tbl_staff.id AS Id
 FROM tbl_staff
-WHERE tbl_staff.id IN(@p_0, @p_1, @p_2, @p_3, @p_4)");
+WHERE tbl_staff.id IN(@p_0, @p_1, @p_2, @p_3, @p_4)",
+1, 2, 3, 4, 5);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -123,7 +123,8 @@ WHERE tbl_staff.id IN(
 		tbl_remuneration.staff_id AS id
 	FROM tbl_remuneration
 		JOIN tbl_staff ON (tbl_staff.id) = (tbl_staff.id)
-	WHERE (@p_0) < (tbl_remuneration.money)))");
+	WHERE (@p_0) < (tbl_remuneration.money)))",
+(decimal)1000);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -153,7 +154,8 @@ WHERE tbl_staff.id IN(
 		tbl_remuneration.staff_id AS id
 	FROM tbl_remuneration
 		JOIN tbl_staff ON (tbl_staff.id) = (tbl_staff.id)
-	WHERE (@p_0) < (tbl_remuneration.money)))");
+	WHERE (@p_0) < (tbl_remuneration.money)))",
+(decimal)1000);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -184,7 +186,8 @@ WHERE EXISTS
 		tbl_remuneration.staff_id AS id
 	FROM tbl_remuneration
 		JOIN tbl_staff ON (tbl_staff.id) = (tbl_staff.id)
-	WHERE (@p_0) < (tbl_remuneration.money))");
+	WHERE (@p_0) < (tbl_remuneration.money))",
+(decimal)1000);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -214,7 +217,8 @@ WHERE EXISTS
 		tbl_remuneration.staff_id AS id
 	FROM tbl_remuneration
 		JOIN tbl_staff ON (tbl_staff.id) = (tbl_staff.id)
-	WHERE (@p_0) < (tbl_remuneration.money))");
+	WHERE (@p_0) < (tbl_remuneration.money))",
+(decimal)1000);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]

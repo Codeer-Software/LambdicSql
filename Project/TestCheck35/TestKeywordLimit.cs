@@ -1,5 +1,4 @@
-﻿using System;
-using System.Data;
+﻿using System.Data;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using static Test.Helper.DBProviderInfo;
@@ -9,9 +8,6 @@ using Test.Helper;
 using LambdicSql;
 using LambdicSql.feat.Dapper;
 using static LambdicSql.Keywords;
-using LambdicSql.SqlBase;
-using System.Linq.Expressions;
-using System.Diagnostics;
 
 namespace TestCheck35
 {
@@ -54,7 +50,8 @@ FROM tbl_remuneration
 ORDER BY
 	tbl_remuneration.id ASC
 LIMIT @p_0
-OFFSET @p_1");
+OFFSET @p_1",
+(long)1, (long)3);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -75,12 +72,13 @@ OFFSET @p_1");
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
-   @"SELECT *
+@"SELECT *
 FROM tbl_remuneration
 ORDER BY
 	tbl_remuneration.id ASC
 OFFSET @p_0 ROWS
-FETCH NEXT @p_1 ROWS ONLY");
+FETCH NEXT @p_1 ROWS ONLY",
+(long)1, (long)3);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -106,7 +104,8 @@ FROM tbl_remuneration
 ORDER BY
 	tbl_remuneration.id ASC
 LIMIT @p_0
-OFFSET @p_1");
+OFFSET @p_1",
+(long)1, (long)3);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -127,12 +126,13 @@ OFFSET @p_1");
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
-   @"SELECT *
+@"SELECT *
 FROM tbl_remuneration
 ORDER BY
 	tbl_remuneration.id ASC
 OFFSET @p_0 ROWS
-FETCH NEXT @p_1 ROWS ONLY");
+FETCH NEXT @p_1 ROWS ONLY",
+(long)1, (long)3);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]

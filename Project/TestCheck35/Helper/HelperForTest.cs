@@ -54,7 +54,7 @@ namespace TestCheck35
             => AreEqual(query, con, expected, args.ToDictionary(e => e.Key, e => new DbParam { Value = e.Value }));
 
         public static void AreEqual(ISqlExpressionBase query, IDbConnection con, string expected, DbParams args)
-            => AreEqual(query, con, expected, args);
+            => AreEqual(query, con, expected, (Dictionary<string, DbParam>)args);
 
         static void AreEqual(ISqlExpressionBase query, IDbConnection con, string expected, Dictionary<string, DbParam> args)
         {
@@ -65,9 +65,7 @@ namespace TestCheck35
                 args = args.ToDictionary(e => e.Key.Replace("@", ":"), e => e.Value);
             }
             Assert.AreEqual(expected, info.SqlText);
-
-            //TODO
-            if (args.Count == 0) return;
+            
             var dbParams = info.DbParams;
             Assert.AreEqual(args.Count, dbParams.Count);
             for (int i = 0; i < dbParams.Count; i++)

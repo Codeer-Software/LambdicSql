@@ -1,5 +1,4 @@
-﻿using System;
-using System.Data;
+﻿using System.Data;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using static Test.Helper.DBProviderInfo;
@@ -11,8 +10,6 @@ using LambdicSql.feat.Dapper;
 using static LambdicSql.Keywords;
 using static LambdicSql.Utils;
 using static LambdicSql.Funcs;
-using LambdicSql.SqlBase;
-using System.Linq.Expressions;
 
 namespace TestCheck35
 {
@@ -102,7 +99,8 @@ FROM tbl_remuneration");
 @"SELECT
 	tbl_staff.name AS name
 FROM tbl_staff
-WHERE ((tbl_staff.id) = (@p_0)) OR (((tbl_staff.id) = (@p_1)) AND ((tbl_staff.id) = (@p_2)))");
+WHERE ((tbl_staff.id) = (@p_0)) OR (((tbl_staff.id) = (@p_1)) AND ((tbl_staff.id) = (@p_2)))",
+1, 2, 4);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -149,7 +147,8 @@ FROM tbl_staff");
 	tbl_remuneration.staff_id AS Id
 FROM tbl_remuneration
 GROUP BY tbl_remuneration.staff_id
-HAVING (@p_0) < (SUM(tbl_remuneration.money))");
+HAVING (@p_0) < (SUM(tbl_remuneration.money))",
+(decimal)100);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -224,7 +223,8 @@ FROM tbl_remuneration
 	tbl_remuneration.money + @p_0 AS money
 FROM tbl_remuneration 
     JOIN tbl_staff ON tbl_staff.id = tbl_remuneration.staff_id
-WHERE (@p_1) < (tbl_remuneration.money)");
+WHERE (@p_1) < (tbl_remuneration.money)",
+100, (decimal)3000);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -254,7 +254,8 @@ FROM tbl_remuneration
 	tbl_remuneration.money AS money
 FROM tbl_remuneration 
     JOIN tbl_staff ON tbl_staff.id = tbl_remuneration.staff_id
-WHERE (@p_0) < (tbl_remuneration.money)");
+WHERE (@p_0) < (tbl_remuneration.money)",
+(decimal)3000);
         }
 
         //おっとテキストのフォーマット

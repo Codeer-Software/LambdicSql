@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data;
-using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using static Test.Helper.DBProviderInfo;
@@ -10,12 +9,7 @@ using Test.Helper;
 using LambdicSql;
 using LambdicSql.feat.Dapper;
 using static LambdicSql.Keywords;
-using static LambdicSql.Funcs;
-using static LambdicSql.Utils;
-using System.Collections.Generic;
-using LambdicSql.SqlBase;
 using System.Data.SqlClient;
-using System.Linq.Expressions;
 using static TestCheck35.TestSynatax;
 
 namespace TestCheck35

@@ -10,10 +10,6 @@ using LambdicSql;
 using LambdicSql.feat.Dapper;
 using static LambdicSql.Keywords;
 using static LambdicSql.Funcs;
-using static LambdicSql.Utils;
-using LambdicSql.SqlBase;
-using System.Linq.Expressions;
-using System.Diagnostics;
 
 namespace TestCheck35
 {
@@ -115,7 +111,8 @@ GROUP BY tbl_staff.id, tbl_staff.name");
 @"SELECT
 	ABS(tbl_remuneration.money) AS Val1,
 	ROUND(tbl_remuneration.money, @p_0) AS Val2
-FROM tbl_remuneration", 2);
+FROM tbl_remuneration",
+2);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -138,7 +135,8 @@ FROM tbl_remuneration", 2);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
 	MOD(tbl_remuneration.money, @p_0) AS Val
-FROM tbl_remuneration");
+FROM tbl_remuneration", 
+2);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -252,7 +250,8 @@ FROM tbl_staff");
             AssertEx.AreEqual(query, _connection,
 @"SELECT
 	REPLACE(tbl_staff.name, @p_0, @p_1) AS Val
-FROM tbl_staff");
+FROM tbl_staff",
+"a", "b");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -274,7 +273,8 @@ FROM tbl_staff");
             AssertEx.AreEqual(query, _connection,
 @"SELECT
 	SUBSTRING(tbl_staff.name, @p_0, @p_1) AS Val
-FROM tbl_staff");
+FROM tbl_staff",
+0, 1);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -593,7 +593,8 @@ FROM tbl_remuneration");
             AssertEx.AreEqual(query, _connection,
 @"SELECT
 	COALESCE(tbl_staff.name, @p_0) AS id
-FROM tbl_staff");
+FROM tbl_staff",
+"a");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -613,9 +614,10 @@ FROM tbl_staff");
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
-            @"SELECT
+@"SELECT
 	NVL(tbl_staff.name, @p_0) AS id
-FROM tbl_staff");
+FROM tbl_staff",
+"a");
         }
     }
 }

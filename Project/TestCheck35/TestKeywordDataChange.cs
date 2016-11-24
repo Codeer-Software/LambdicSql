@@ -1,5 +1,4 @@
-﻿using System;
-using System.Data;
+﻿using System.Data;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using static Test.Helper.DBProviderInfo;
@@ -9,8 +8,6 @@ using Test.Helper;
 using LambdicSql;
 using LambdicSql.feat.Dapper;
 using static LambdicSql.Keywords;
-using LambdicSql.SqlBase;
-using System.Linq.Expressions;
 
 namespace TestCheck35
 {
@@ -45,7 +42,8 @@ namespace TestCheck35
 SET
 	val1 = @p_0,
 	val2 = @p_1
-WHERE (tbl_data.id) = (@p_2)");
+WHERE (tbl_data.id) = (@p_2)",
+100, "200", 1);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -60,7 +58,8 @@ WHERE (tbl_data.id) = (@p_2)");
             AssertEx.AreEqual(query, _connection,
 @"DELETE
 FROM tbl_data
-WHERE (tbl_data.id) = (@p_0)");
+WHERE (tbl_data.id) = (@p_0)",
+3);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -87,7 +86,8 @@ FROM tbl_data");
             Assert.AreEqual(1, _connection.Execute(query));
             AssertEx.AreEqual(query, _connection,
 @"INSERT INTO tbl_data(id, val2)
-	VALUES (@p_0, @p_1)");
+	VALUES (@p_0, @p_1)",
+1, "val2");
         }
     }
 }

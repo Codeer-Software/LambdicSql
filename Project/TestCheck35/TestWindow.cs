@@ -1,5 +1,4 @@
-﻿using System;
-using System.Data;
+﻿using System.Data;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using static Test.Helper.DBProviderInfo;
@@ -10,9 +9,6 @@ using LambdicSql;
 using LambdicSql.feat.Dapper;
 using static LambdicSql.Keywords;
 using static LambdicSql.Window;
-using LambdicSql.SqlBase;
-using System.Linq.Expressions;
-
 
 namespace TestCheck35
 {
@@ -369,7 +365,8 @@ FROM tbl_remuneration");
 	NTILE(@p_0)OVER(
 	ORDER BY
 		tbl_remuneration.money ASC) AS Val
-FROM tbl_remuneration");
+FROM tbl_remuneration",
+(long)2);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -396,7 +393,8 @@ FROM tbl_remuneration");
 	ORDER BY
 		tbl_remuneration.money ASC 
 	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
-FROM tbl_remuneration");
+FROM tbl_remuneration",
+(long)2);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -493,7 +491,8 @@ FROM tbl_remuneration");
 	ORDER BY
 		tbl_remuneration.money ASC 
 	ROWS @p_0 PRECEDING) AS Val
-FROM tbl_remuneration");
+FROM tbl_remuneration",
+1);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
