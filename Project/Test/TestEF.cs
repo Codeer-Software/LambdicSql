@@ -1,13 +1,66 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Test.Helper;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using static Test.Helper.DBProviderInfo;
+
+//important
+using LambdicSql;
+using LambdicSql.feat.EntityFramework;
+using static LambdicSql.Keywords;
+using TestCheck35;
+using Test.Model;
 
 namespace Test
 {
-    //TODO EntityFramework.
-    class TestEF
+    [TestClass]
+    public class TestEF
     {
+        public TestContext TestContext { get; set; }
+        public IDbConnection _connection;
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            _connection = TestEnvironment.CreateConnection(TestContext);
+            _connection.Open();
+        }
+
+        [TestCleanup]
+        public void TestCleanup() => _connection.Dispose();
+
+        public class SelectData
+        {
+            public string name { get; set; }
+            public string payment_date { get; set; }
+            public decimal? money { get; set; }
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test()
+        {
+            var name = _connection.GetType().Name;
+            if (name != "SqlConnection") return;
+
+            var query = Sql<ModelLambdicSqlTestDB>.Create(db =>
+                Select(new SelectData
+                {
+                    name = db.tbl_staff.T().name,
+                    payment_date = db.tbl_remuneration.T().payment_date,
+                    money = db.tbl_remuneration.T().money
+                }).
+                From(db.tbl_remuneration).
+                Join(db.tbl_staff, db.tbl_staff.T().id == db.tbl_remuneration.T().staff_id));
+
+            var datas = query.SqlQuery(new ModelLambdicSqlTestDB()).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+ @"SELECT
+	tbl_staff.name AS name,
+	tbl_remuneration.payment_date AS payment_date,
+	tbl_remuneration.money AS money
+FROM tbl_remuneration
+	JOIN tbl_staff ON (tbl_staff.id) = (tbl_remuneration.staff_id)");
+        }
     }
 }

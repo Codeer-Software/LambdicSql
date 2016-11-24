@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace TestCheck35
 {
@@ -31,5 +28,10 @@ namespace TestCheck35
         public Staff tbl_staff { get; set; }
         public Remuneration tbl_remuneration { get; set; }
         public Data tbl_data { get; set; }
+    }
+
+    public class DBEX
+    {
+        public DB dbo { get; set; }
     }
 }
