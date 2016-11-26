@@ -260,5 +260,8 @@ WHERE NOT (tbl_staff.name IS NULL)");
 FROM tbl_staff
 WHERE tbl_staff.name IS NOT NULL");
         }
+
+        //TODO それぞれExpressionはいるな
+        //TODO  Inで配列で渡す
     }
 }

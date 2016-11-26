@@ -49,7 +49,6 @@
     <Compile Include="TestDbParam.cs" />
     <Compile Include="TestExpression.cs" />
     <Compile Include="TestOperator.cs" />
-    <Compile Include="TestFormatDifferenceForEachDB.cs" />
     <Compile Include="TestFuncs.cs" />
     <Compile Include="TestKeywordCase.cs" />
     <Compile Include="TestKeywordCondition.cs" />
@@ -65,7 +64,6 @@
     <Compile Include="Helper\TestEnvironment.cs" />
     <Compile Include="TestParameterName.cs" />
     <Compile Include="TestSetOperation.cs" />
-    <Compile Include="TestSubQuery.cs" />
     <Compile Include="Helper\HelperForTest.cs" />
     <Compile Include="TestUtils.cs" />
     <Compile Include="TestWindow.cs" />

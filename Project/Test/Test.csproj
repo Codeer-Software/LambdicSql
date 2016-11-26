@@ -153,9 +153,6 @@
     <Compile Include="..\TestCheck35\TestSetOperation.cs">
       <Link>TestSetOperation.cs</Link>
     </Compile>
-    <Compile Include="..\TestCheck35\TestSubQuery.cs">
-      <Link>TestSubQuery.cs</Link>
-    </Compile>
     <Compile Include="..\TestCheck35\TestUtils.cs">
       <Link>TestUtils.cs</Link>
     </Compile>

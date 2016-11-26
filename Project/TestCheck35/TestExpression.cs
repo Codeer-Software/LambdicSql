@@ -141,6 +141,7 @@ new Params()
             var datas = _connection.Query(query).ToList();
         }
 
+        //TODO Sql<Data>.Create(db => new DateTime(1999, 1, 1)).ToSqlInfo(typeof(SqlConnection));
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         [Ignore]
         public void Test_New()

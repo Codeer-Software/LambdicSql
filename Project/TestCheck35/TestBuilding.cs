@@ -57,5 +57,7 @@ namespace TestCheck35
 	tbl_remuneration.money AS Money
 FROM tbl_remuneration");
         }
+
+        //TODO サブクエリ
     }
 }

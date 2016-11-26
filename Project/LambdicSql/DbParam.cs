@@ -48,6 +48,4 @@ namespace LambdicSql
     {
         public static implicit operator T(DbParam<T> src) => InvalitContext.Throw<T>("new DbParameter<T>");
     }
-
-    //TODO 良く使う DbStringとDbTimeは別クラスにしておくか
 }

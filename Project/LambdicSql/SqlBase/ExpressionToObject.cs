@@ -386,7 +386,6 @@ namespace LambdicSql.SqlBase
             return true;
         }
 
-
         public static MemberExpression StaticPropertyOrField(Type type, string propertyOrFieldName)
         {
             PropertyInfo property = type.GetProperty(propertyOrFieldName, BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.IgnoreCase | BindingFlags.Static);
@@ -410,6 +409,5 @@ namespace LambdicSql.SqlBase
             }
             return Expression.Field(null, field);
         }
-        //TODO static考慮漏れは他のところでも
     }
 }
