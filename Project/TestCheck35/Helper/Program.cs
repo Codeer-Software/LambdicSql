@@ -22,7 +22,9 @@ namespace TestCheck35
                 var test = Activator.CreateInstance(type);
                 var init = type.GetMethods().Where(e => e.IsDefined(typeof(TestInitializeAttribute), false)).FirstOrDefault();
                 init?.Invoke(test, new object[0]);
-                foreach (var m in type.GetMethods().Where(e => e.IsDefined(typeof(TestMethodAttribute), false)))
+                foreach (var m in type.GetMethods().
+                    Where(e => e.IsDefined(typeof(TestMethodAttribute), false)).
+                    Where(e => !e.IsDefined(typeof(IgnoreAttribute), false)))
                 {
 #if DEBUG
                     Execute(test, m);
@@ -33,6 +35,7 @@ namespace TestCheck35
                 var cleanup = type.GetMethods().Where(e => e.IsDefined(typeof(TestCleanupAttribute), false)).FirstOrDefault();
                 cleanup?.Invoke(test, new object[0]);
             }
+            Console.WriteLine("Finish!");
             Console.ReadKey();
         }
 

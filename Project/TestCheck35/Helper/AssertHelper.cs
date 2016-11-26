@@ -41,6 +41,7 @@ namespace Microsoft.VisualStudio.TestTools.UnitTesting
     public class TestInitializeAttribute : Attribute { }
     public class TestCleanupAttribute : Attribute { }
     public class TestMethodAttribute : Attribute { }
+    public class IgnoreAttribute : Attribute { }
     public class DataSourceAttribute : Attribute
     {
         internal DataSourceAttribute(string providerInvariantName, string connectionString, string tableName, DataAccessMethod dataAccessMethod) { }
