@@ -44,9 +44,11 @@
     <Compile Include="Helper\DB.cs" />
     <Compile Include="Helper\DBProviderInfo.cs" />
     <Compile Include="Helper\FakeDapper.cs" />
+    <Compile Include="TestBuilding.cs" />
     <Compile Include="TestDbDefine.cs" />
     <Compile Include="TestDbParam.cs" />
     <Compile Include="TestExpression.cs" />
+    <Compile Include="TestOperator.cs" />
     <Compile Include="TestFormatDifferenceForEachDB.cs" />
     <Compile Include="TestFuncs.cs" />
     <Compile Include="TestKeywordCase.cs" />
@@ -61,6 +63,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Samples.cs" />
     <Compile Include="Helper\TestEnvironment.cs" />
+    <Compile Include="TestParameterName.cs" />
     <Compile Include="TestSetOperation.cs" />
     <Compile Include="TestSubQuery.cs" />
     <Compile Include="Helper\HelperForTest.cs" />

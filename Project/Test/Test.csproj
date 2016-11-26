@@ -105,6 +105,9 @@
     <Compile Include="..\TestCheck35\Samples.cs">
       <Link>Samples.cs</Link>
     </Compile>
+    <Compile Include="..\TestCheck35\TestBuilding.cs">
+      <Link>TestBuilding.cs</Link>
+    </Compile>
     <Compile Include="..\TestCheck35\TestDbDefine.cs">
       <Link>TestDbDefine.cs</Link>
     </Compile>
@@ -140,6 +143,12 @@
     </Compile>
     <Compile Include="..\TestCheck35\TestKeywordWhereGroupByHavingOrderBy.cs">
       <Link>TestKeywordWhereGroupByHavingOrderBy.cs</Link>
+    </Compile>
+    <Compile Include="..\TestCheck35\TestOperator.cs">
+      <Link>TestOperator.cs</Link>
+    </Compile>
+    <Compile Include="..\TestCheck35\TestParameterName.cs">
+      <Link>TestParameterName.cs</Link>
     </Compile>
     <Compile Include="..\TestCheck35\TestSetOperation.cs">
       <Link>TestSetOperation.cs</Link>

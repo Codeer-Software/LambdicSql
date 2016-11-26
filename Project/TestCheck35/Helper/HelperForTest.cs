@@ -51,10 +51,13 @@ namespace TestCheck35
         }
 
         public static void AreEqual(ISqlExpressionBase query, IDbConnection con, string expected, Params args)
-            => AreEqual(query, con, expected, args.ToDictionary(e => e.Key, e => new DbParam { Value = e.Value }));
+            => AreEqual(query, con, expected, (Dictionary<string, object>)args);
 
         public static void AreEqual(ISqlExpressionBase query, IDbConnection con, string expected, DbParams args)
             => AreEqual(query, con, expected, (Dictionary<string, DbParam>)args);
+
+        public static void AreEqual(ISqlExpressionBase query, IDbConnection con, string expected, Dictionary<string, object> args)
+            => AreEqual(query, con, expected, args.ToDictionary(e => e.Key, e => new DbParam { Value = e.Value }));
 
         static void AreEqual(ISqlExpressionBase query, IDbConnection con, string expected, Dictionary<string, DbParam> args)
         {
@@ -70,8 +73,8 @@ namespace TestCheck35
             Assert.AreEqual(args.Count, dbParams.Count);
             for (int i = 0; i < dbParams.Count; i++)
             {
-                Assert.AreEqual(args.Keys.ToArray()[i], dbParams.Keys.ToArray()[i]);
-                var paramExprected = args.Values.ToArray()[i];
+                DbParam paramExprected;
+                Assert.IsTrue(args.TryGetValue(dbParams.Keys.ToArray()[i], out paramExprected));
                 var paramActural = dbParams.Values.ToArray()[i];
                 Assert.AreEqual(paramExprected.Value, paramActural.Value);
                 Assert.AreEqual(paramExprected.DbType, paramActural.DbType);

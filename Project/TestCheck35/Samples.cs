@@ -17,6 +17,7 @@ using LambdicSql.SqlBase;
 
 //TODO Make this a more practical sample.
 //TODO Add better data for sample
+//TODO Separate into separate projects.
 namespace TestCheck35
 {
     [TestClass]
