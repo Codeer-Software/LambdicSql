@@ -3,8 +3,6 @@ using System.Linq;
 using Test.Helper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using static Test.Helper.DBProviderInfo;
-
-//important
 using LambdicSql;
 using LambdicSql.feat.Dapper;
 using static LambdicSql.Keywords;

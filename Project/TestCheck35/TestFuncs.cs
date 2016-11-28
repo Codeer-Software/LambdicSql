@@ -4,8 +4,6 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Test.Helper;
 using static Test.Helper.DBProviderInfo;
-
-//important
 using LambdicSql;
 using LambdicSql.feat.Dapper;
 using static LambdicSql.Keywords;
@@ -54,8 +52,18 @@ namespace TestCheck35
             public decimal Val { get; set; }
         }
 
+        public class SelectData4
+        {
+            public int Val { get; set; }
+        }
+
+        public class SelectData5
+        {
+            public string Val { get; set; }
+        }
+
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_Aggregate()
+        public void Test_Aggregate1()
         {
             var query = Sql<DB>.Create(db =>
                Select(new SelectData1
@@ -95,7 +103,89 @@ GROUP BY tbl_staff.id, tbl_staff.name");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_Abs_Round()
+        public void Test_Aggregate2()
+        {
+            var query = Sql<DB>.Create(db =>
+               Select(new SelectData1
+               {
+                   Val1 = Sum(1),
+                   Val2 = Sum(AggregatePredicate.All, 2),
+                   Val3 = Sum(AggregatePredicate.Distinct, 3),
+                   Val4 = Count(4),
+                   Val5 = Count(new Asterisk()),
+                   Val6 = Count(AggregatePredicate.All, 5),
+                   Val7 = Count(AggregatePredicate.Distinct, 6),
+                   Val8 = Avg(7),
+                   Val9 = Min(8),
+                   Val10 = Max(9),
+               }).
+               From(db.tbl_remuneration).
+                   Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
+               GroupBy(db.tbl_staff.id, db.tbl_staff.name));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	SUM(@p_0) AS Val1,
+	SUM(ALL @p_1) AS Val2,
+	SUM(DISTINCT @p_2) AS Val3,
+	COUNT(@p_3) AS Val4,
+	COUNT(*) AS Val5,
+	COUNT(ALL @p_4) AS Val6,
+	COUNT(DISTINCT @p_5) AS Val7,
+	AVG(@p_6) AS Val8,
+	MIN(@p_7) AS Val9,
+	MAX(@p_8) AS Val10
+FROM tbl_remuneration
+	JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)
+GROUP BY tbl_staff.id, tbl_staff.name", 1, 2, 3, 4, 5, 6, 7, 8, 9);
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Aggregate3()
+        {
+            var exp = Sql<DB>.Create(db => db.tbl_remuneration.money);
+            var query = Sql<DB>.Create(db =>
+               Select(new SelectData1
+               {
+                   Val1 = Sum(exp),
+                   Val2 = Sum(AggregatePredicate.All, exp),
+                   Val3 = Sum(AggregatePredicate.Distinct, exp),
+                   Val4 = Count(exp),
+                   Val5 = Count(new Asterisk()),
+                   Val6 = Count(AggregatePredicate.All, exp),
+                   Val7 = Count(AggregatePredicate.Distinct, exp),
+                   Val8 = Avg(exp),
+                   Val9 = Min(exp),
+                   Val10 = Max(exp),
+               }).
+               From(db.tbl_remuneration).
+                   Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
+               GroupBy(db.tbl_staff.id, db.tbl_staff.name));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	SUM(tbl_remuneration.money) AS Val1,
+	SUM(ALL tbl_remuneration.money) AS Val2,
+	SUM(DISTINCT tbl_remuneration.money) AS Val3,
+	COUNT(tbl_remuneration.money) AS Val4,
+	COUNT(*) AS Val5,
+	COUNT(ALL tbl_remuneration.money) AS Val6,
+	COUNT(DISTINCT tbl_remuneration.money) AS Val7,
+	AVG(tbl_remuneration.money) AS Val8,
+	MIN(tbl_remuneration.money) AS Val9,
+	MAX(tbl_remuneration.money) AS Val10
+FROM tbl_remuneration
+	JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)
+GROUP BY tbl_staff.id, tbl_staff.name");
+        }
+
+        //TODO むしろ、Absの後ろの引数にDBの値とか入れられたときとかね。
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Abs_Round1()
         {
             var query = Sql<DB>.Create(db =>
                Select(new SelectData2
@@ -116,7 +206,50 @@ FROM tbl_remuneration",
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_Mod()
+        public void Test_Abs_Round2()
+        {
+            var query = Sql<DB>.Create(db =>
+               Select(new SelectData2
+               {
+                   Val1 = Abs(1),
+                   Val2 = Round(2, db.tbl_remuneration.staff_id)
+               }).
+               From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	ABS(@p_0) AS Val1,
+	ROUND(@p_1, tbl_remuneration.staff_id) AS Val2
+FROM tbl_remuneration", 1, 2);
+        }
+        
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Abs_Round3()
+        {
+            var exp1 = Sql<DB>.Create(db => db.tbl_remuneration.money);
+            var exp2 = Sql<DB>.Create(db => 2);
+            var query = Sql<DB>.Create(db =>
+               Select(new SelectData2
+               {
+                   Val1 = Abs(exp1),
+                   Val2 = Round(exp1, exp2)
+               }).
+               From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	ABS(tbl_remuneration.money) AS Val1,
+	ROUND(tbl_remuneration.money, @p_0) AS Val2
+FROM tbl_remuneration",
+2);
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Mod1()
         {
             var name = _connection.GetType().Name;
             if (name == "SqlConnection") return;
@@ -140,7 +273,57 @@ FROM tbl_remuneration",
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_Concat()
+        public void Test_Mod2()
+        {
+            var name = _connection.GetType().Name;
+            if (name == "SqlConnection") return;
+            if (name == "SQLiteConnection") return;
+            if (name == "MySqlConnection") return;
+            
+            var query = Sql<DB>.Create(db =>
+               Select(new SelectData3
+               {
+                   Val = Mod(1, db.tbl_remuneration.staff_id)
+               }).
+               From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	MOD(@p_0, tbl_remuneration.staff_id) AS Val
+FROM tbl_remuneration", 1);
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Mod3()
+        {
+            var name = _connection.GetType().Name;
+            if (name == "SqlConnection") return;
+            if (name == "SQLiteConnection") return;
+            if (name == "MySqlConnection") return;
+
+            var exp1 = Sql<DB>.Create(db => db.tbl_remuneration.money);
+            var exp2 = Sql<DB>.Create(db => 2);
+            var query = Sql<DB>.Create(db =>
+               Select(new SelectData3
+               {
+                   Val = Mod(exp1, exp2)
+               }).
+               From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	MOD(tbl_remuneration.money, @p_0) AS Val
+FROM tbl_remuneration",
+2);
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Concat1()
         {
             var name = _connection.GetType().Name;
             if (name == "SQLiteConnection") return;
@@ -156,11 +339,63 @@ FROM tbl_remuneration",
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
-            query.Gen(_connection);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	CONCAT(tbl_staff.name, @p_0, @p_1) AS Val
+FROM tbl_staff", "a", "b");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_Length()
+        public void Test_Concat2()
+        {
+            var name = _connection.GetType().Name;
+            if (name == "SQLiteConnection") return;
+            if (name == "OracleConnection") return;
+            if (name == "DB2Connection") return;
+
+            var query = Sql<DB>.Create(db =>
+               Select(new
+               {
+                   Val = Concat("a", db.tbl_staff.name, "b")
+               }).
+               From(db.tbl_staff));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	CONCAT(@p_0, tbl_staff.name, @p_1) AS Val
+FROM tbl_staff", "a", "b");
+        }
+        
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Concat3()
+        {
+            var name = _connection.GetType().Name;
+            if (name == "SQLiteConnection") return;
+            if (name == "OracleConnection") return;
+            if (name == "DB2Connection") return;
+
+            var exp1 = Sql<DB>.Create(db => db.tbl_staff.name);
+            var exp2 = Sql<DB>.Create(db => "a");
+            var exp3 = Sql<DB>.Create(db => "b");
+            var query = Sql<DB>.Create(db =>
+               Select(new
+               {
+                   Val = Concat(exp1, exp2, exp3)
+               }).
+               From(db.tbl_staff));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	CONCAT(tbl_staff.name, @p_0, @p_1) AS Val
+FROM tbl_staff", "a", "b");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Length1()
         {
             var name = _connection.GetType().Name;
             if (name != "NpgsqlConnection" &&
@@ -182,7 +417,52 @@ FROM tbl_staff");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_Len()
+        public void Test_Length2()
+        {
+            var name = _connection.GetType().Name;
+            if (name != "NpgsqlConnection" &&
+                name != "DB2Connection") return;
+
+            var query = Sql<DB>.Create(db =>
+               Select(new
+               {
+                   Val = Length("a")
+               }).
+               From(db.tbl_staff));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+ @"SELECT
+	LENGTH(@p_0) AS Val
+FROM tbl_staff", "a");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Length3()
+        {
+            var name = _connection.GetType().Name;
+            if (name != "NpgsqlConnection" &&
+                name != "DB2Connection") return;
+
+            var exp = Sql<DB>.Create(db => db.tbl_staff.name);
+            var query = Sql<DB>.Create(db =>
+               Select(new
+               {
+                   Val = Length(exp)
+               }).
+               From(db.tbl_staff));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+ @"SELECT
+	LENGTH(tbl_staff.name) AS Val
+FROM tbl_staff");
+        }
+        
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Len1()
         {
             var name = _connection.GetType().Name;
             if (name != "SqlConnection") return;
@@ -203,7 +483,50 @@ FROM tbl_staff");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_Lower()
+        public void Test_Len2()
+        {
+            var name = _connection.GetType().Name;
+            if (name != "SqlConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+               Select(new
+               {
+                   Val = Len("a")
+               }).
+               From(db.tbl_staff));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+ @"SELECT
+	LEN(@p_0) AS Val
+FROM tbl_staff", "a");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Len3()
+        {
+            var name = _connection.GetType().Name;
+            if (name != "SqlConnection") return;
+
+            var exp = Sql<DB>.Create(db => db.tbl_staff.name);
+            var query = Sql<DB>.Create(db =>
+               Select(new
+               {
+                   Val = Len(exp)
+               }).
+               From(db.tbl_staff));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+ @"SELECT
+	LEN(tbl_staff.name) AS Val
+FROM tbl_staff");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Lower1()
         {
             var query = Sql<DB>.Create(db =>
                Select(new
@@ -221,7 +544,44 @@ FROM tbl_staff");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_Upper()
+        public void Test_Lower2()
+        {
+            var query = Sql<DB>.Create(db =>
+               Select(new
+               {
+                   Val = Lower("a")
+               }).
+               From(db.tbl_staff));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	LOWER(@p_0) AS Val
+FROM tbl_staff", "a");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Lower3()
+        {
+            var exp = Sql<DB>.Create(db => db.tbl_staff.name);
+            var query = Sql<DB>.Create(db =>
+               Select(new
+               {
+                   Val = Lower(db.tbl_staff.name)
+               }).
+               From(db.tbl_staff));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	LOWER(tbl_staff.name) AS Val
+FROM tbl_staff");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Upper1()
         {
             var query = Sql<DB>.Create(db =>
                Select(new
@@ -232,7 +592,47 @@ FROM tbl_staff");
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
-            query.Gen(_connection);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	UPPER(tbl_staff.name) AS Val
+FROM tbl_staff");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Upper2()
+        {
+            var query = Sql<DB>.Create(db =>
+               Select(new
+               {
+                   Val = Upper("a")
+               }).
+               From(db.tbl_staff));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	UPPER(@p_0) AS Val
+FROM tbl_staff", "a");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Upper3()
+        {
+            var exp = Sql<DB>.Create(db => db.tbl_staff.name);
+            var query = Sql<DB>.Create(db =>
+               Select(new
+               {
+                   Val = Upper(exp)
+               }).
+               From(db.tbl_staff));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	UPPER(tbl_staff.name) AS Val
+FROM tbl_staff");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -242,6 +642,48 @@ FROM tbl_staff");
                Select(new
                {
                    Val = Replace(db.tbl_staff.name, "a", "b")
+               }).
+               From(db.tbl_staff));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	REPLACE(tbl_staff.name, @p_0, @p_1) AS Val
+FROM tbl_staff",
+"a", "b");
+        }
+
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Replace2()
+        {
+            var query = Sql<DB>.Create(db =>
+               Select(new
+               {
+                   Val = Replace("a", db.tbl_staff.name, "b")
+               }).
+               From(db.tbl_staff));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	REPLACE(@p_0, tbl_staff.name, @p_1) AS Val
+FROM tbl_staff",
+"a", "b");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Replace3()
+        {
+            var exp1 = Sql<DB>.Create(db => db.tbl_staff.name);
+            var exp2 = Sql<DB>.Create(db => "a");
+            var exp3 = Sql<DB>.Create(db => "b");
+            var query = Sql<DB>.Create(db =>
+               Select(new
+               {
+                   Val = Replace(exp1, exp2, exp3)
                }).
                From(db.tbl_staff));
 
@@ -265,6 +707,53 @@ FROM tbl_staff",
                Select(new
                {
                    Val = Substring(db.tbl_staff.name, 0, 1)
+               }).
+               From(db.tbl_staff));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	SUBSTRING(tbl_staff.name, @p_0, @p_1) AS Val
+FROM tbl_staff",
+0, 1);
+        }
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Substring2()
+        {
+            var name = _connection.GetType().Name;
+            if (name == "SQLiteConnection") return;
+            if (name == "OracleConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+               Select(new
+               {
+                   Val = Substring("a", db.tbl_staff.id, db.tbl_staff.id)
+               }).
+               From(db.tbl_staff));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	SUBSTRING(@p_0, tbl_staff.id, tbl_staff.id) AS Val
+FROM tbl_staff", "a");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Substring3()
+        {
+            var name = _connection.GetType().Name;
+            if (name == "SQLiteConnection") return;
+            if (name == "OracleConnection") return;
+
+            var exp1 = Sql<DB>.Create(db => db.tbl_staff.name);
+            var exp2 = Sql<DB>.Create(db => 0);
+            var exp3 = Sql<DB>.Create(db => 1);
+            var query = Sql<DB>.Create(db =>
+               Select(new
+               {
+                   Val = Substring(exp1, exp2, exp3)
                }).
                From(db.tbl_staff));
 
@@ -556,7 +1045,7 @@ FROM SYSIBM.SYSDUMMY1");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_Cast()
+        public void Test_Cast1()
         {
             var name = _connection.GetType().Name;
             if (name != "DB2Connection" &&
@@ -574,12 +1063,37 @@ FROM SYSIBM.SYSDUMMY1");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	CAST(tbl_remuneration.money AS int) AS id
+	CAST((tbl_remuneration.money) AS int) AS id
 FROM tbl_remuneration");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_Coalesce()
+        public void Test_Cast2()
+        {
+            var name = _connection.GetType().Name;
+            if (name != "DB2Connection" &&
+                name != "SqlConnection" &&
+                name != "NpgsqlConnection") return;
+
+            var exp1 = Sql<DB>.Create(db => db.tbl_remuneration.money);
+            var exp2 = Sql<DB>.Create(db => "int");
+            var query = Sql<DB>.Create(db =>
+                Select(new
+                {
+                    id = Cast<int>(exp1, exp2)
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	CAST((tbl_remuneration.money) AS int) AS id
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Coalesce1()
         {
             var query = Sql<DB>.Create(db =>
                Select(new
@@ -598,14 +1112,54 @@ FROM tbl_staff",
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_NVL()
+        public void Test_Coalesce2()
+        {
+            var query = Sql<DB>.Create(db =>
+               Select(new
+               {
+                   id = Coalesce("a", db.tbl_staff.name)
+               }).
+               From(db.tbl_staff));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	COALESCE(@p_0, tbl_staff.name) AS id
+FROM tbl_staff",
+"a");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Coalesce3()
+        {
+            var exp1 = Sql<DB>.Create(db => db.tbl_staff.name);
+            var exp2 = Sql<DB>.Create(db => "a");
+            var query = Sql<DB>.Create(db =>
+               Select(new SelectData5
+               {
+                   Val = Coalesce(exp1, exp2)
+               }).
+               From(db.tbl_staff));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	COALESCE(tbl_staff.name, @p_0) AS Val
+FROM tbl_staff",
+"a");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_NVL1()
         {
             var name = _connection.GetType().Name;
             if (name != "DB2Connection" &&
                 name != "OracleConnection") return;
 
             var query = Sql<DB>.Create(db =>
-               Select(new
+               Select(new 
                {
                    id = NVL(db.tbl_staff.name, "a")
                }).
@@ -619,7 +1173,53 @@ FROM tbl_staff",
 FROM tbl_staff",
 "a");
         }
+        
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_NVL2()
+        {
+            var name = _connection.GetType().Name;
+            if (name != "DB2Connection" &&
+                name != "OracleConnection") return;
 
-        //TODO あえてExpressionをぶっこんで見るとか
+            var query = Sql<DB>.Create(db =>
+               Select(new
+               {
+                   id = NVL("a", db.tbl_staff.name)
+               }).
+               From(db.tbl_staff));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	NVL(@p_0, tbl_staff.name) AS id
+FROM tbl_staff",
+"a");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_NVL3()
+        {
+            var name = _connection.GetType().Name;
+            if (name != "DB2Connection" &&
+                name != "OracleConnection") return;
+
+            var exp1 = Sql<DB>.Create(db => db.tbl_staff.name);
+            var exp2 = Sql<DB>.Create(db => "a");
+            var query = Sql<DB>.Create(db =>
+               Select(new SelectData5
+               {
+                   Val = NVL(exp1, exp2)
+               }).
+               From(db.tbl_staff));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	NVL(tbl_staff.name, @p_0) AS Val
+FROM tbl_staff",
+"a");
+        }
     }
 }

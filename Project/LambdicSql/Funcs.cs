@@ -72,7 +72,7 @@ namespace LambdicSql
                 case nameof(DatePart):
                     return method.Method.Name.ToUpper() + "(" + args[0].ToUpper() + ", " + args[1] + ")";
                 case nameof(Cast):
-                    return "CAST(" + args[0] + " AS " + converter.Context.Parameters.ResolvePrepare(args[1]) + ")";
+                    return "CAST((" + args[0] + ") AS " + converter.Context.Parameters.ResolvePrepare(args[1]) + ")";
             }
             return method.Method.Name.ToUpper() + "(" + string.Join(", ", args.Skip(method.AdjustSqlSyntaxMethodArgumentIndex(0)).ToArray()) + ")";
         }

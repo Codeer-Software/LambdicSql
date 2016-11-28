@@ -7,6 +7,8 @@ using System.Runtime.CompilerServices;
 
 namespace LambdicSql.Inside
 {
+    //TODO 入れ子フラグ持ってたら、AdjustSubQueryStringがもう少しきれいに書けるかも！
+    //それで外から呼ばなくてもいいかも
     class SqlStringConverter : ISqlStringConverter
     {
         SqlConvertOption _option;
