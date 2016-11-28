@@ -201,5 +201,22 @@ new Params()
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
         }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void TestNull1()
+        {
+            var query = Sql<DB>.Create(db => (string)null);
+            AssertEx.AreEqual(query, _connection, @"@p_0", new Params { { @"@p_0", null } });
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void TestNull2()
+        {
+            string val = null;
+            var query = Sql<DB>.Create(db => val);
+            AssertEx.AreEqual(query, _connection, @"@val", new Params { { @"@val", null } });
+        }
+
+        //TODO 拡張メソッドとか、引数を取るメソッドとか、さらにその引数の中で関数呼び出しとか
     }
 }

@@ -28,14 +28,39 @@ namespace TestCheck35
         public void TestCleanup() => _connection.Dispose();
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_Update_Set()
+        public void Test_Update_Set1()
         {
-            Test_InsertInto_Values();
+            Test_InsertInto_Values1();
 
             var query = Sql<DB>.Create(db =>
                 Update(db.tbl_data).Set(new Assign(db.tbl_data.val1, 100), new Assign(db.tbl_data.val2, "200")).
                 Where(db.tbl_data.id == 1));
             
+            Assert.AreEqual(1, _connection.Execute(query));
+            AssertEx.AreEqual(query, _connection,
+@"UPDATE tbl_data
+SET
+	val1 = @p_0,
+	val2 = @p_1
+WHERE (tbl_data.id) = (@p_2)",
+100, "200", 1);
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        [Ignore]
+        public void Test_Update_Set2()
+        {
+            Test_InsertInto_Values1();
+
+            var exp1 = Sql<DB>.Create(db => db.tbl_data);
+            var exp2 = Sql<DB>.Create(db => new Assign(db.tbl_data.val1, 100));
+            var exp3 = Sql<DB>.Create(db => new Assign(db.tbl_data.val2, "200"));
+            var query = Sql<DB>.Create(db =>
+                Update(exp1).Set(exp2, exp3).
+                Where(db.tbl_data.id == 1));
+
+            query.Gen(_connection);
+
             Assert.AreEqual(1, _connection.Execute(query));
             AssertEx.AreEqual(query, _connection,
 @"UPDATE tbl_data
@@ -76,7 +101,7 @@ FROM tbl_data");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_InsertInto_Values()
+        public void Test_InsertInto_Values1()
         {
             Test_Delete_All();
             
@@ -89,8 +114,44 @@ FROM tbl_data");
 	VALUES (@p_0, @p_1)",
 1, "val2");
         }
+        
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        [Ignore]
+        public void Test_InsertInto_Values2()
+        {
+            Test_Delete_All();
+
+            var exp1 = Sql<DB>.Create(db => db.tbl_data);
+            var exp2 = Sql<DB>.Create(db => db.tbl_data.id);
+            var exp3 = Sql<DB>.Create(db => db.tbl_data.val2);
+            var exp4 = Sql<DB>.Create(db =>1);
+            var exp5 = Sql<DB>.Create(db => "val2");
+            var query = Sql<DB>.Create(db =>
+                   InsertInto(exp1, exp2, exp3).Values(exp4, exp5));
+
+            Assert.AreEqual(1, _connection.Execute(query));
+            AssertEx.AreEqual(query, _connection,
+@"INSERT INTO tbl_data(id, val2)
+	VALUES (@p_0, @p_1)",
+1, "val2");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_InsertInto_Values_Select()
+        {
+            Test_InsertInto_Values1();
+            var query = Sql<DB>.Create(db =>
+                   InsertInto(db.tbl_data, db.tbl_data.id, db.tbl_data.val1, db.tbl_data.val2).
+                   Select(new
+                   {
+                       id = db.tbl_data.id + 10,
+                       val1 = db.tbl_data.val1,
+                       val2 = db.tbl_data.val2
+                   }).
+                   From(db.tbl_data));
+
+            Assert.AreEqual(1, _connection.Execute(query));
+            query.Gen(_connection);
+        }
     }
 }
-
-//TODO InsertInto + Select
-//TODO Insert時にDBParamを型から推論してくるやつ

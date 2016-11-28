@@ -105,7 +105,7 @@ FROM
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_Join()
+        public void Test_Join1()
         {
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData
@@ -127,7 +127,33 @@ FROM tbl_remuneration
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_LeftJoin()
+        [Ignore]
+        public void Test_Join2()
+        {
+            var exp1 = Sql<DB>.Create(db => db.tbl_staff);
+            var exp2 = Sql<DB>.Create(db => db.tbl_remuneration.staff_id == db.tbl_staff.id);
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData
+                {
+                    PaymentDate = db.tbl_remuneration.payment_date,
+                    Money = db.tbl_remuneration.money,
+                }).
+                From(db.tbl_remuneration).
+                    Join(exp1, exp2));
+
+            query.Gen(_connection);
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+@"SELECT
+	tbl_remuneration.payment_date AS PaymentDate,
+	tbl_remuneration.money AS Money
+FROM tbl_remuneration
+	JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_LeftJoin1()
         {
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData
@@ -149,7 +175,32 @@ FROM tbl_remuneration
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_RightJoin()
+        [Ignore]
+        public void Test_LeftJoin2()
+        {
+            var exp1 = Sql<DB>.Create(db => db.tbl_staff);
+            var exp2 = Sql<DB>.Create(db => db.tbl_remuneration.staff_id == db.tbl_staff.id);
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData
+                {
+                    PaymentDate = db.tbl_remuneration.payment_date,
+                    Money = db.tbl_remuneration.money,
+                }).
+                From(db.tbl_remuneration).
+                    LeftJoin(exp1, exp2));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+@"SELECT
+	tbl_remuneration.payment_date AS PaymentDate,
+	tbl_remuneration.money AS Money
+FROM tbl_remuneration
+	LEFT JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_RightJoin1()
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
 
@@ -173,7 +224,34 @@ FROM tbl_remuneration
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_CrossJoin()
+        [Ignore]
+        public void Test_RightJoin2()
+        {
+            if (_connection.GetType().Name == "SQLiteConnection") return;
+
+            var exp1 = Sql<DB>.Create(db => db.tbl_staff);
+            var exp2 = Sql<DB>.Create(db => db.tbl_remuneration.staff_id == db.tbl_staff.id);
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData
+                {
+                    PaymentDate = db.tbl_remuneration.payment_date,
+                    Money = db.tbl_remuneration.money,
+                }).
+                From(db.tbl_remuneration).
+                    RightJoin(exp1, exp2));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+@"SELECT
+	tbl_remuneration.payment_date AS PaymentDate,
+	tbl_remuneration.money AS Money
+FROM tbl_remuneration
+	RIGHT JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_CrossJoin1()
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
 
@@ -197,7 +275,33 @@ FROM tbl_remuneration
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_Continue_Join()
+        [Ignore]
+        public void Test_CrossJoin2()
+        {
+            if (_connection.GetType().Name == "SQLiteConnection") return;
+
+            var exp = Sql<DB>.Create(db => db.tbl_staff);
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData
+                {
+                    PaymentDate = db.tbl_remuneration.payment_date,
+                    Money = db.tbl_remuneration.money,
+                }).
+                From(db.tbl_remuneration).
+                    CrossJoin(exp));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+@"SELECT
+	tbl_remuneration.payment_date AS PaymentDate,
+	tbl_remuneration.money AS Money
+FROM tbl_remuneration
+	CROSS JOIN tbl_staff");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Continue_Join1()
         {
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData
@@ -221,7 +325,34 @@ FROM tbl_remuneration
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_Continue_LeftJoin()
+        [Ignore]
+        public void Test_Continue_Join2()
+        {
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData
+                {
+                    PaymentDate = db.tbl_remuneration.payment_date,
+                    Money = db.tbl_remuneration.money,
+                }).
+                From(db.tbl_remuneration));
+
+            var exp1 = Sql<DB>.Create(db => db.tbl_staff);
+            var exp2 = Sql<DB>.Create(db => db.tbl_remuneration.staff_id == db.tbl_staff.id);
+            var target = Sql<DB>.Create(db => Join(exp1, exp2));
+            query = query.Concat(target);
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+@"SELECT
+	tbl_remuneration.payment_date AS PaymentDate,
+	tbl_remuneration.money AS Money
+FROM tbl_remuneration
+	JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Continue_LeftJoin1()
         {
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData
@@ -245,7 +376,34 @@ FROM tbl_remuneration
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_Continue_RightJoin()
+        [Ignore]
+        public void Test_Continue_LeftJoin2()
+        {
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData
+                {
+                    PaymentDate = db.tbl_remuneration.payment_date,
+                    Money = db.tbl_remuneration.money,
+                }).
+                From(db.tbl_remuneration));
+
+            var exp1 = Sql<DB>.Create(db => db.tbl_staff);
+            var exp2 = Sql<DB>.Create(db => db.tbl_remuneration.staff_id == db.tbl_staff.id);
+            var target = Sql<DB>.Create(db => LeftJoin(exp1, exp2));
+            query = query.Concat(target);
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+@"SELECT
+	tbl_remuneration.payment_date AS PaymentDate,
+	tbl_remuneration.money AS Money
+FROM tbl_remuneration
+	LEFT JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Continue_RightJoin1()
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
 
@@ -271,7 +429,36 @@ FROM tbl_remuneration
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_Continue_CrossJoin()
+        [Ignore]
+        public void Test_Continue_RightJoin2()
+        {
+            if (_connection.GetType().Name == "SQLiteConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData
+                {
+                    PaymentDate = db.tbl_remuneration.payment_date,
+                    Money = db.tbl_remuneration.money,
+                }).
+                From(db.tbl_remuneration));
+
+            var exp1 = Sql<DB>.Create(db => db.tbl_staff);
+            var exp2 = Sql<DB>.Create(db => db.tbl_remuneration.staff_id == db.tbl_staff.id);
+            var target = Sql<DB>.Create(db => RightJoin(exp1, exp2));
+            query = query.Concat(target);
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+@"SELECT
+	tbl_remuneration.payment_date AS PaymentDate,
+	tbl_remuneration.money AS Money
+FROM tbl_remuneration
+	RIGHT JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Continue_CrossJoin1()
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
 
@@ -285,7 +472,7 @@ FROM tbl_remuneration
 
             var target = Sql<DB>.Create(db => CrossJoin(db.tbl_staff));
             query = query.Concat(target);
-            
+
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
@@ -296,6 +483,32 @@ FROM tbl_remuneration
 	CROSS JOIN tbl_staff");
         }
 
-        //TODO Expressionはそれぞれいる
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        [Ignore]
+        public void Test_Continue_CrossJoin2()
+        {
+            if (_connection.GetType().Name == "SQLiteConnection") return;
+
+            var exp = Sql<DB>.Create(db => db.tbl_staff);
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData
+                {
+                    PaymentDate = db.tbl_remuneration.payment_date,
+                    Money = db.tbl_remuneration.money,
+                }).
+                From(db.tbl_remuneration));
+
+            var target = Sql<DB>.Create(db => CrossJoin(exp));
+            query = query.Concat(target);
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+@"SELECT
+	tbl_remuneration.payment_date AS PaymentDate,
+	tbl_remuneration.money AS Money
+FROM tbl_remuneration
+	CROSS JOIN tbl_staff");
+        }
     }
 }

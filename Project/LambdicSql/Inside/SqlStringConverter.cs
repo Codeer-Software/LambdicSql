@@ -32,7 +32,7 @@ namespace LambdicSql.Inside
 
         public string ToString(object obj)
         {
-            if (obj == null) return "NULL";
+          //  if (obj == null) return "NULL";
 
             var exp = obj as Expression;
             if (exp != null) return ToString(exp).Text;
@@ -307,13 +307,7 @@ namespace LambdicSql.Inside
                 }
                 return new DecodedInfo(exp.Type, obj.ToString());
             }
-
-            //null → IS NULL, IS NOT NULL
-            if (obj == null)
-            {
-                return new DecodedInfo(exp.Type, ToString((object)null));
-            }
-
+            
             if (SupportedTypeSpec.IsSupported(exp.Type))
             {
                 string name = string.Empty;
