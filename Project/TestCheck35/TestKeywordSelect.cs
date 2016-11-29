@@ -4,11 +4,10 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Test.Helper;
 using static Test.Helper.DBProviderInfo;
-
-//important
 using LambdicSql;
 using LambdicSql.feat.Dapper;
 using static LambdicSql.Keywords;
+using static LambdicSql.Funcs;
 using System.Data.SqlClient;
 using static TestCheck35.TestSynatax;
 
@@ -587,8 +586,33 @@ FROM tbl_remuneration");
 @"SELECT DISTINCT TOP 2 *
 FROM tbl_remuneration");
         }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_SubQuery_Exp()
+        {
+            var sub = Sql<DB>.Create(db =>
+                Select(new { Total = Sum(db.tbl_remuneration.money) }).
+                From(db.tbl_remuneration));
+
+            var exp = Sql<DB>.Create(db => db.tbl_remuneration.payment_date);
+
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData
+                {
+                    PaymentDate = exp,
+                    Money = sub.Cast<decimal>()
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	tbl_remuneration.payment_date AS PaymentDate,
+	(SELECT
+		SUM(tbl_remuneration.money) AS Total
+	FROM tbl_remuneration) AS Money
+FROM tbl_remuneration");
+        }
     }
 }
-
-//TODO Expressionはそれぞれいる
-//TODO サブクエリ

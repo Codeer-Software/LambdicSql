@@ -3,8 +3,6 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Test.Helper;
 using static Test.Helper.DBProviderInfo;
-
-//important
 using LambdicSql;
 using LambdicSql.feat.Dapper;
 using static LambdicSql.Keywords;
@@ -350,7 +348,3 @@ FROM tbl_staff");
         }
     }
 }
-
-//TODO Expressionはそれぞれいる
-//TODO サブクエリ
-//やってるかも

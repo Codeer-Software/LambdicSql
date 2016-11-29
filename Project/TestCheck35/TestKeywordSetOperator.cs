@@ -3,8 +3,6 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Test.Helper;
 using static Test.Helper.DBProviderInfo;
-
-//important
 using LambdicSql;
 using LambdicSql.feat.Dapper;
 using static LambdicSql.Keywords;
@@ -77,6 +75,26 @@ FROM tbl_staff");
 @"SELECT *
 FROM tbl_staff
 UNION
+SELECT *
+FROM tbl_staff");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        [Ignore]
+        public void Test_Union_All_Exp()
+        {
+            var exp = Sql<DB>.Create(db =>true);
+            var query = Sql<DB>.Create(db =>
+                Select(Asterisk(db.tbl_staff)).From(db.tbl_staff).
+                Union(exp).
+                Select(Asterisk(db.tbl_staff)).From(db.tbl_staff));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT *
+FROM tbl_staff
+UNION ALL
 SELECT *
 FROM tbl_staff");
         }
@@ -173,6 +191,33 @@ WHERE (tbl_staff.id) = (@p_0)",
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        [Ignore]
+        public void Test_Except_All_Exp()
+        {
+            if (_connection.GetType().Name == "SqlConnection") return;
+            if (_connection.GetType().Name == "SQLiteConnection") return;
+            if (_connection.GetType().Name == "MySqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
+
+            var exp = Sql<DB>.Create(db => true);
+            var query = Sql<DB>.Create(db =>
+                Select(Asterisk(db.tbl_staff)).From(db.tbl_staff).
+                Except(exp).
+                Select(Asterisk(db.tbl_staff)).From(db.tbl_staff).Where(db.tbl_staff.id == 1));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT *
+FROM tbl_staff
+EXCEPT ALL
+SELECT *
+FROM tbl_staff
+WHERE (tbl_staff.id) = (@p_0)",
+1);
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Minus()
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
@@ -252,6 +297,28 @@ FROM tbl_staff");
 @"SELECT *
 FROM tbl_staff
 UNION
+SELECT *
+FROM tbl_staff");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        [Ignore]
+        public void Test_Continue_Union_All_Exp()
+        {
+            var query = Sql<DB>.Create(db =>
+                Select(Asterisk(db.tbl_staff)).From(db.tbl_staff));
+
+            var exp = Sql<DB>.Create(db => true);
+            var target = Sql<DB>.Create(db =>
+                Union(exp).Select(Asterisk(db.tbl_staff)).From(db.tbl_staff));
+            query = query.Concat(target);
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT *
+FROM tbl_staff
+UNION ALL
 SELECT *
 FROM tbl_staff");
         }
@@ -359,6 +426,36 @@ WHERE (tbl_staff.id) = (@p_0)",
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        [Ignore]
+        public void Test_Continue_Except_All_Exp()
+        {
+            if (_connection.GetType().Name == "SqlConnection") return;
+            if (_connection.GetType().Name == "SQLiteConnection") return;
+            if (_connection.GetType().Name == "MySqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+                Select(Asterisk(db.tbl_staff)).From(db.tbl_staff));
+
+            var exp = Sql<DB>.Create(db => true);
+            var target = Sql<DB>.Create(db =>
+                Except(exp).
+                Select(Asterisk(db.tbl_staff)).From(db.tbl_staff).Where(db.tbl_staff.id == 1));
+            query = query.Concat(target);
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT *
+FROM tbl_staff
+EXCEPT ALL
+SELECT *
+FROM tbl_staff
+WHERE (tbl_staff.id) = (@p_0)",
+1);
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Minus()
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
@@ -386,6 +483,3 @@ WHERE (tbl_staff.id) = (@p_0)",
         }
     }
 }
-
-//TODO Expressionはそれぞれいる
-//TODO サブクエリ
