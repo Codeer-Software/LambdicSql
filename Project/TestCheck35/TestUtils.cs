@@ -3,8 +3,6 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Test.Helper;
 using static Test.Helper.DBProviderInfo;
-
-//important
 using LambdicSql;
 using LambdicSql.feat.Dapper;
 using static LambdicSql.Keywords;
@@ -176,11 +174,36 @@ HAVING (@p_0) < (SUM(tbl_remuneration.money))",
 FROM tbl_remuneration
 GROUP BY tbl_remuneration.staff_id");
         }
+        
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Condition5()
+        {
+            var name = _connection.GetType().Name;
+            if (name == "SQLiteConnection") return;
 
-        //TODO ↑Conditionの第二引数にexpを入れる
+            var exp = Sql<DB>.Create(db => 100 < Sum(db.tbl_remuneration.money));
+            var condition = Sql<DB>.Create(db => Condition(false, exp));
+
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData2
+                {
+                    Id = db.tbl_remuneration.staff_id
+                }).
+                From(db.tbl_remuneration).
+                GroupBy(db.tbl_remuneration.staff_id).
+                Having(condition));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	tbl_remuneration.staff_id AS Id
+FROM tbl_remuneration
+GROUP BY tbl_remuneration.staff_id");
+        }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_Text()
+        public void Test_Text1()
         {
             var query = Sql<DB>.Create(db =>
                 Select(new Staff
@@ -199,31 +222,50 @@ GROUP BY tbl_remuneration.staff_id");
 FROM tbl_staff");
         }
 
-        //TODO Textの引数ありバージョン
-        //TODO Textの引数ありバージョン そしてそこにexpを入れる
-        /*
-        [TestMethod]
-        public void TestFormatText2()
-        {
-            SqlOption.Log = l => Debug.Print(l);
-            var query = Sql<Data>.Create(db =>
-                Select(new
-                {
-                    name = db.tbl_staff.name,
-                    payment_date = db.tbl_remuneration.payment_date,
-                    money = Text<decimal>("{0} + 1000", db.tbl_remuneration.money),
-                }).
-                From(db.tbl_remuneration).
-                    Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
-                Where(3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
-
-            var y = query.ToExecutor(new SqlConnection(TestEnvironment.SqlServerConnectionString)).Read();
-        }
-        */
-
-            //TODO expも入れる
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_Format2WaySql()
+        public void Test_Text2()
+        {
+            var query = Sql<DB>.Create(db =>
+                Select(new Staff
+                {
+                    id = (int)Text("{0}", db.tbl_staff.id),
+                    name = Text<string>("{0}", db.tbl_staff.name),
+                }).
+                From(db.tbl_staff));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	tbl_staff.id AS id,
+	tbl_staff.name AS name
+FROM tbl_staff");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Text3()
+        {
+            var exp1 = Sql<DB>.Create(db => db.tbl_staff.id);
+            var exp2 = Sql<DB>.Create(db => db.tbl_staff.name);
+            var query = Sql<DB>.Create(db =>
+                Select(new Staff
+                {
+                    id = (int)Text("{0}", exp1),
+                    name = Text<string>("{0}", exp2),
+                }).
+                From(db.tbl_staff));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	tbl_staff.id AS id,
+	tbl_staff.name AS name
+FROM tbl_staff");
+        }
+        
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Format2WaySql1()
         {
             var sql = @"
 SELECT
@@ -237,6 +279,38 @@ FROM tbl_remuneration
             var query = Sql<DB>.Create(db => TwoWaySql(sql,
                 100,
                 Where(3000 < db.tbl_remuneration.money)
+                ));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	tbl_staff.name AS name,
+    tbl_remuneration.payment_date AS payment_date,
+	tbl_remuneration.money + @p_0 AS money
+FROM tbl_remuneration 
+    JOIN tbl_staff ON tbl_staff.id = tbl_remuneration.staff_id
+WHERE (@p_1) < (tbl_remuneration.money)",
+100, (decimal)3000);
+        }
+        
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Format2WaySql2()
+        {
+            var exp1 = Sql<DB>.Create(db => 100);
+            var exp2 = Sql<DB>.Create(db => Where(3000 < db.tbl_remuneration.money));
+            var sql = @"
+SELECT
+	tbl_staff.name AS name,
+    tbl_remuneration.payment_date AS payment_date,
+	tbl_remuneration.money + /*0*/1000/**/ AS money
+FROM tbl_remuneration 
+    JOIN tbl_staff ON tbl_staff.id = tbl_remuneration.staff_id
+/*1*/WHERE tbl_remuneration.money = 100/**/";
+
+            var query = Sql<DB>.Create(db => TwoWaySql(sql,
+                exp1,
+                exp2
                 ));
 
             var datas = _connection.Query(query).ToList();

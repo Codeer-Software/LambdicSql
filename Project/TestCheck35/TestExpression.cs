@@ -110,8 +110,7 @@ new Params()
     { "@p_3", 30 },
 });
         }
-
-        //TODO Under consideration
+        
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         [Ignore]
         public void Test_ImplicitConvertOperator()

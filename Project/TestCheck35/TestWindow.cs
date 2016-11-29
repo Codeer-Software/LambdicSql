@@ -3,13 +3,12 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Test.Helper;
 using static Test.Helper.DBProviderInfo;
-
-//important
 using LambdicSql;
 using LambdicSql.feat.Dapper;
 using static LambdicSql.Keywords;
 using static LambdicSql.Window;
 
+//TODO last
 namespace TestCheck35
 {
     [TestClass]
