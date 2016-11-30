@@ -182,8 +182,7 @@ FROM tbl_remuneration
 	JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)
 GROUP BY tbl_staff.id, tbl_staff.name");
         }
-
-        //TODO むしろ、Absの後ろの引数にDBの値とか入れられたときとかね。
+        
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Abs_Round1()
         {

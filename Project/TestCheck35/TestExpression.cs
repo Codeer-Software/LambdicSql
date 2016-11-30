@@ -6,6 +6,7 @@ using static Test.Helper.DBProviderInfo;
 using LambdicSql;
 using LambdicSql.feat.Dapper;
 using static LambdicSql.Keywords;
+using System;
 
 namespace TestCheck35
 {
@@ -30,6 +31,9 @@ namespace TestCheck35
             internal int field = 1;
             internal int Property => 2;
             internal int Method() => 3;
+
+            internal int GetValue(int value) => value;
+            internal int GetValue() => 1;
         }
 
         class ValuesStatic
@@ -137,8 +141,7 @@ new Params()
             query.Gen(_connection);
             var datas = _connection.Query(query).ToList();
         }
-
-        //TODO Sql<Data>.Create(db => new DateTime(1999, 1, 1)).ToSqlInfo(typeof(SqlConnection));
+        
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         [Ignore]
         public void Test_New()
@@ -215,7 +218,33 @@ new Params()
             var query = Sql<DB>.Create(db => val);
             AssertEx.AreEqual(query, _connection, @"@val", new Params { { @"@val", null } });
         }
+        
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_New_Object()
+        {
+            var query = Sql<Data>.Create(db => new DateTime(1999, 1, 1));
+            AssertEx.AreEqual(query, _connection, @"@p_0", new DateTime(1999, 1, 1));
+        }
 
-        //TODO 拡張メソッドとか、引数を取るメソッドとか、さらにその引数の中で関数呼び出しとか
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_NestMethods_Static()
+        {
+            var query = Sql<Data>.Create(db => this.GetValue(TestExpressionEx.GetValue()));
+            AssertEx.AreEqual(query, _connection, @"@p_0", 1);
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_NestMethods_Instance()
+        {
+            var instance = new ValuesInstance();
+            var query = Sql<Data>.Create(db => instance.GetValue(instance.GetValue()));
+            AssertEx.AreEqual(query, _connection, @"@p_0", 1);
+        }
+    }
+
+    public static class TestExpressionEx
+    {
+        public static int GetValue(this TestExpression exp, int value) => value;
+        public static int GetValue() => 1;
     }
 }

@@ -824,16 +824,17 @@ ORDER BY
 	tbl_remuneration.money ASC,
 	tbl_remuneration.staff_id DESC");
         }
-
-        //TODO Ascの中にさらにexpを入れる
+        
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_OrderBy2()
         {
             var name = _connection.GetType().Name;
             if (name == "SQLiteConnection") return;
 
-            var exp1 = Sql<DB>.Create(db => new Asc(db.tbl_remuneration.money));
-            var exp2 = Sql<DB>.Create(db => new Desc(db.tbl_remuneration.staff_id));
+            var exp1 = Sql<DB>.Create(db => db.tbl_remuneration.money);
+            var exp2 = Sql<DB>.Create(db => db.tbl_remuneration.staff_id);
+            var exp3 = Sql<DB>.Create(db => new Asc(exp1));
+            var exp4 = Sql<DB>.Create(db => new Desc(exp2));
             var query = Sql<DB>.Create(db =>
                 Select(new SelectedData2
                 {
@@ -841,7 +842,7 @@ ORDER BY
                 }).
                 From(db.tbl_remuneration));
 
-            var target = Sql<DB>.Create(db => OrderBy(exp1.Cast<IOrderElement>(), exp2.Cast<IOrderElement>()));
+            var target = Sql<DB>.Create(db => OrderBy(exp3.Cast<IOrderElement>(), exp4.Cast<IOrderElement>()));
             query = query.Concat(target);
 
             var datas = _connection.Query(query).ToList();
