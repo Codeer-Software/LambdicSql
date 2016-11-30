@@ -67,18 +67,11 @@ namespace LambdicSql.Inside.Keywords
                 return text;
             }
 
+            //From clause only
             var body = GetSqlExpressionBody(exp);
             if (body != null)
             {
                 return text + " " + body;
-            }
-            if (typeof(ISqlExpressionBase).IsAssignableFrom(exp.Type))
-            {
-                var member = exp as MemberExpression;
-                if (member != null)
-                {
-                    return text + " " + member.Member.Name;
-                }
             }
             return text;
         }
@@ -99,13 +92,30 @@ namespace LambdicSql.Inside.Keywords
             var member = exp as MemberExpression;
             while (member != null)
             {
-                if (typeof(ISqlExpressionBase).IsAssignableFrom(member.Type))
+                if (IsSqlQuery(member.Type))
                 {
                     return member.Member.Name;
                 }
                 member = member.Expression as MemberExpression;
             }
             return null;
+        }
+
+        static bool IsSqlQuery(Type type)
+        {
+            while (type != null)
+            {
+                if (type.IsGenericType)
+                {
+                    //TODO 本当はISqlQuery<>だったらなんだけど
+                    if (typeof(SqlQuery<>).IsAssignableFrom(type.GetGenericTypeDefinition()))
+                    {
+                        return true;
+                    }
+                }
+                type = type.BaseType;
+            }
+            return false;
         }
     }
 }

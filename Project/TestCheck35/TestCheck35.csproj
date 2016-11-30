@@ -48,6 +48,7 @@
     <Compile Include="TestDbDefine.cs" />
     <Compile Include="TestDbParam.cs" />
     <Compile Include="TestExpression.cs" />
+    <Compile Include="TestExceptionMessage.cs" />
     <Compile Include="TestOperator.cs" />
     <Compile Include="TestFuncs.cs" />
     <Compile Include="TestKeywordCase.cs" />

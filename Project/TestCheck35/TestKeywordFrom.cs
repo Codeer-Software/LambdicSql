@@ -127,7 +127,6 @@ FROM tbl_remuneration
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        [Ignore]
         public void Test_Join2()
         {
             var exp1 = Sql<DB>.Create(db => db.tbl_staff);
@@ -175,7 +174,6 @@ FROM tbl_remuneration
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        [Ignore]
         public void Test_LeftJoin2()
         {
             var exp1 = Sql<DB>.Create(db => db.tbl_staff);
@@ -224,7 +222,6 @@ FROM tbl_remuneration
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        [Ignore]
         public void Test_RightJoin2()
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
@@ -275,7 +272,6 @@ FROM tbl_remuneration
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        [Ignore]
         public void Test_CrossJoin2()
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
@@ -325,7 +321,6 @@ FROM tbl_remuneration
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        [Ignore]
         public void Test_Continue_Join2()
         {
             var query = Sql<DB>.Create(db =>
@@ -376,7 +371,6 @@ FROM tbl_remuneration
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        [Ignore]
         public void Test_Continue_LeftJoin2()
         {
             var query = Sql<DB>.Create(db =>
@@ -429,7 +423,6 @@ FROM tbl_remuneration
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        [Ignore]
         public void Test_Continue_RightJoin2()
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
@@ -484,7 +477,6 @@ FROM tbl_remuneration
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        [Ignore]
         public void Test_Continue_CrossJoin2()
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
