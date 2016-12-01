@@ -1,5 +1,6 @@
 ﻿using LambdicSql.SqlBase;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -321,6 +322,20 @@ namespace LambdicSql.Inside
 
                 //use field name.
                 return new DecodedInfo(exp.Type, Context.Parameters.Push(obj, name, metadataToken));
+            }
+            
+            if (obj != null)
+            {
+                var type = obj.GetType();
+                if (type.IsArray && SupportedTypeSpec.IsSupported(type.GetElementType()))
+                {
+                    var list = new List<string>();
+                    foreach (var e in (IEnumerable)obj)
+                    {
+                        list.Add(Context.Parameters.Push(e, null, null));
+                    }
+                    return new DecodedInfo(exp.Type, string.Join(", ", list.ToArray()));
+                }
             }
 
             //TODO refactoring.

@@ -229,10 +229,9 @@ WHERE tbl_staff.id IN(@p_0, @p_1)",
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        [Ignore]
         public void Test_In1_3()
         {
-            var vals = new int[] { 1, 2, 3, 4, 5 };
+            var vals = new int[] { 1, 2 };
             var query = Sql<DB>.Create(db =>
                Select(new SelectData
                {
@@ -241,16 +240,14 @@ WHERE tbl_staff.id IN(@p_0, @p_1)",
                From(db.tbl_staff).
                Where(In(db.tbl_staff.id, vals)));
 
-            query.Gen(_connection);
-
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
 	tbl_staff.id AS Id
 FROM tbl_staff
-WHERE tbl_staff.id IN(@p_0, @p_1, @p_2, @p_3, @p_4)",
-1, 2, 3, 4, 5);
+WHERE tbl_staff.id IN(@p_0, @p_1)",
+1, 2);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
