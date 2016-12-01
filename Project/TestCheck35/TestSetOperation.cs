@@ -189,8 +189,6 @@ WHERE (tbl_staff.id) = (@p_0)",
             var query = Sql<DB>.Create(db => Text("SELECT * FROM tbl_staff"));
             query = query.Union(query);
 
-            query.Gen(_connection);
-
             var datas = _connection.Query<Staff>(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,

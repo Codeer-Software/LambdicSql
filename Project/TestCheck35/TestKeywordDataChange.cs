@@ -47,7 +47,6 @@ WHERE (tbl_data.id) = (@p_2)",
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        [Ignore]
         public void Test_Update_Set2()
         {
             Test_InsertInto_Values1();
@@ -58,8 +57,6 @@ WHERE (tbl_data.id) = (@p_2)",
             var query = Sql<DB>.Create(db =>
                 Update(exp1).Set(exp2, exp3).
                 Where(db.tbl_data.id == 1));
-
-            query.Gen(_connection);
 
             Assert.AreEqual(1, _connection.Execute(query));
             AssertEx.AreEqual(query, _connection,
@@ -116,7 +113,6 @@ FROM tbl_data");
         }
         
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        [Ignore]
         public void Test_InsertInto_Values2()
         {
             Test_Delete_All();
@@ -151,7 +147,13 @@ FROM tbl_data");
                    From(db.tbl_data));
 
             Assert.AreEqual(1, _connection.Execute(query));
-            query.Gen(_connection);
+            AssertEx.AreEqual(query, _connection,
+@"INSERT INTO tbl_data(id, val1, val2)
+SELECT
+	(tbl_data.id) + (@p_0) AS id,
+	tbl_data.val1 AS val1,
+	tbl_data.val2 AS val2
+FROM tbl_data", 10);
         }
     }
 }

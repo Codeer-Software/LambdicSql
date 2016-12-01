@@ -210,7 +210,14 @@ FROM tbl_staff",
                 From(db.tbl_staff));
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
-            query.Gen(_connection);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	CASE @val
+		WHEN tbl_staff.id THEN tbl_staff.name
+		WHEN tbl_staff.id THEN tbl_staff.name
+		ELSE tbl_staff.name
+	END AS Type
+FROM tbl_staff");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
