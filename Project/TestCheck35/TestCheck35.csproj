@@ -43,7 +43,6 @@
     <Compile Include="Helper\AssertHelper.cs" />
     <Compile Include="Helper\DB.cs" />
     <Compile Include="Helper\DBProviderInfo.cs" />
-    <Compile Include="Helper\FakeDapper.cs" />
     <Compile Include="TestBuilding.cs" />
     <Compile Include="TestDbDefine.cs" />
     <Compile Include="TestDbParam.cs" />

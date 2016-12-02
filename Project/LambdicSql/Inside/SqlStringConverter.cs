@@ -382,8 +382,21 @@ namespace LambdicSql.Inside
                 if (0 < types.Length) type = types[0];
                 return new DecodedInfo(type, AdjustSubQueryString(sqlExp.ToString(this)));
             }
-            
-            throw new NotSupportedException("Invalid object.");
+
+            //TODO casting case.
+            {
+                string name = string.Empty;
+                int? metadataToken = null;
+                var member = exp as MemberExpression;
+                if (member != null)
+                {
+                    name = member.Member.Name;
+                    metadataToken = member.Member.MetadataToken;
+                }
+
+                //use field name.
+                return new DecodedInfo(exp.Type, Context.Parameters.Push(obj, name, metadataToken));
+            }
         }
 
         DecodedInfo ToString(DecodedInfo left, ExpressionType nodeType, DecodedInfo right)

@@ -42,7 +42,7 @@ namespace LambdicSql
 
     public static class SetOperationExtensions
     {
-        public class Dummy { }
+        class Dummy { }
 
         public static SqlExpression<TResult> Union<TResult>(this ISqlExpressionBase<TResult> lhs, ISqlExpressionBase rhs)
             => lhs.Concat(Sql<Dummy>.Create(db => Keywords.Union())).Concat(rhs);
