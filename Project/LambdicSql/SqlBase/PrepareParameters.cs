@@ -92,5 +92,8 @@ namespace LambdicSql.SqlBase
             _parameters.Remove(key);
             return val.Detail.Value.ToString();
         }
+
+        public void ChangeObject(string key, object value)
+            => _parameters[key].Detail.Value = value;
     }
 }

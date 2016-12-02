@@ -48,7 +48,7 @@ namespace TestCheck35
             internal ValuesInstance fieldValue = new ValuesInstance();
             internal ValuesInstance PropertyValue => new ValuesInstance();
             internal ValuesInstance MethodValue() => new ValuesInstance();
-            internal Objects fieldObject = new Objects();
+            internal Objects fieldObject;
             internal Objects PropertyObject => new Objects();
             internal Objects MethodObject() => new Objects();
         }
@@ -116,34 +116,35 @@ new Params()
         }
         
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        [Ignore]
         public void Test_ImplicitConvertOperator()
         {
             var query = Sql<DB>.Create(db =>
                 Select(Asterisk(db.tbl_staff)).
                 From(db.tbl_staff).
-                Where(1 == (int)new IntObjectImplicit()));
+                Where(1 == new IntObjectImplicit()));
 
-            query.Gen(_connection);
             var datas = _connection.Query(query).ToList();
-
+            AssertEx.AreEqual(query, _connection,
+@"SELECT *
+FROM tbl_staff
+WHERE (@p_0) = (@p_1)", 1, 1);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        [Ignore]
         public void Test_ExplicitConvertOperator()
         {
             var query = Sql<DB>.Create(db =>
                 Select(Asterisk(db.tbl_staff)).
                 From(db.tbl_staff).
                 Where(1 == (int)new IntObjectExplicit()));
-
-            query.Gen(_connection);
             var datas = _connection.Query(query).ToList();
+            AssertEx.AreEqual(query, _connection,
+@"SELECT *
+FROM tbl_staff
+WHERE (@p_0) = (@p_1)", 1, 1);
         }
         
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        [Ignore]
         public void Test_New()
         {
             var query = Sql<DB>.Create(db =>
@@ -151,29 +152,33 @@ new Params()
                 From(db.tbl_staff).
                 Where(new ValuesInstance().field == 1));
 
-            query.Gen(_connection);
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT *
+FROM tbl_staff
+WHERE (@field) = (@p_0)", new Params { { "@field", 1 }, { "@p_0", 1 } });
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        [Ignore]
         public void Test_Nest_Field()
         {
             var obj = new Objects();
-
+            obj.fieldObject = new Objects();
             var query = Sql<DB>.Create(db =>
                 Select(Asterisk(db.tbl_staff)).
                 From(db.tbl_staff).
                 Where(obj.fieldObject.fieldValue.field == 1));
 
-            query.Gen(_connection);
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT *
+FROM tbl_staff
+WHERE (@field) = (@p_0)", new Params { { "@field", 1}, { "@p_0", 1} });
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        [Ignore]
         public void Test_Nest_Property()
         {
             var obj = new Objects();
@@ -181,15 +186,17 @@ new Params()
             var query = Sql<DB>.Create(db =>
                 Select(Asterisk(db.tbl_staff)).
                 From(db.tbl_staff).
-                Where(obj.PropertyObject.PropertyValue.Property == 1));
+                Where(obj.PropertyObject.PropertyValue.Property != 1));
 
-            query.Gen(_connection);
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+            @"SELECT *
+FROM tbl_staff
+WHERE (@Property) <> (@p_0)", new Params { { "@Property", 2 }, { "@p_0", 1 } });
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        [Ignore]
         public void Test_Nest_Method()
         {
             var obj = new Objects();
@@ -197,11 +204,14 @@ new Params()
             var query = Sql<DB>.Create(db =>
                 Select(Asterisk(db.tbl_staff)).
                 From(db.tbl_staff).
-                Where(obj.MethodObject().MethodValue().Method() == 1));
+                Where(obj.MethodObject().MethodValue().Method() != 1));
 
-            query.Gen(_connection);
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT *
+FROM tbl_staff
+WHERE (@p_0) <> (@p_1)", 3, 1);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]

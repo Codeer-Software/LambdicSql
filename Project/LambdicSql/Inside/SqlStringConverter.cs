@@ -112,9 +112,26 @@ namespace LambdicSql.Inside
         }
 
         DecodedInfo ToString(UnaryExpression unary)
-            => unary.NodeType == ExpressionType.Not ?
-                new DecodedInfo(typeof(bool), "NOT (" + ToString(unary.Operand) + ")") :
-                ToString(unary.Operand);
+        {
+            switch (unary.NodeType)
+            {
+                case ExpressionType.Not:
+                    return new DecodedInfo(typeof(bool), "NOT (" + ToString(unary.Operand) + ")");
+                case ExpressionType.Convert:
+                    var ret = ToString(unary.Operand);
+                    object obj;
+                    if (Context.Parameters.TryGetParam(ret.Text, out obj))
+                    {
+                        if (obj != null && !SupportedTypeSpec.IsSupported(obj.GetType()))
+                        {
+                            Context.Parameters.ChangeObject(ret.Text, ExpressionToObject.ConvertObject(unary.Type, obj));
+                        }
+                    }
+                    return ret;
+                default:
+                    return ToString(unary.Operand);
+            }
+        }
 
         DecodedInfo ToString(BinaryExpression binary)
         {

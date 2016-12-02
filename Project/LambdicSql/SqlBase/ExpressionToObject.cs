@@ -352,6 +352,12 @@ namespace LambdicSql.SqlBase
                     type = method.Type;
                     if (!GetMethodObject(method, out targt)) return false;
                 }
+                var newExp = member.Expression as NewExpression;
+                if (newExp != null)
+                {
+                    type = newExp.Type;
+                    if (!GetNewObject(newExp, out targt)) return false;
+                }
                 member = member.Expression as MemberExpression;
             }
             if (type == null)
@@ -386,7 +392,27 @@ namespace LambdicSql.SqlBase
             return true;
         }
 
-        public static MemberExpression StaticPropertyOrField(Type type, string propertyOrFieldName)
+        public static object ConvertObject(Type dstType, object src)
+        {
+            var srcType = src.GetType();
+            var getterName = srcType.FullName + "@-@" + dstType.FullName;
+            IGetter getter;
+            lock (_memberGet)
+            {
+                if (_memberGet.TryGetValue(getterName, out getter))
+                {
+                    return getter.GetMemberObject(new object[] { src });
+                }
+                var param = Expression.Parameter(srcType, "src");
+                var body = Expression.Convert(Expression.Convert(param, dstType), typeof(object));
+                getter = ExpressionToObject.CreateGetter(new Type[] { srcType });
+                getter.Init(body, new[] { param });
+                _memberGet.Add(getterName, getter);
+                return getter.GetMemberObject(new[] { src });
+            }
+        }
+
+        static MemberExpression StaticPropertyOrField(Type type, string propertyOrFieldName)
         {
             PropertyInfo property = type.GetProperty(propertyOrFieldName, BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.IgnoreCase | BindingFlags.Static);
             if (property != null)

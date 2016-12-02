@@ -217,7 +217,7 @@ FROM tbl_staff",
 		WHEN tbl_staff.id THEN tbl_staff.name
 		ELSE tbl_staff.name
 	END AS Type
-FROM tbl_staff");
+FROM tbl_staff", new Params { { "@val", 0 } });
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
