@@ -815,7 +815,7 @@ FROM DUAL");
             var query = Sql<DB>.Create(db =>
                 Select(new
                 {
-                    Val = CurrentTime<TimeSpan>()
+                    Val = CurrentTime()
                 }));
 
             var datas = _connection.Query(query).ToList();
@@ -939,16 +939,16 @@ FROM SYSIBM.SYSDUMMY1");
             var query = Sql<DB>.Create(db =>
                 Select(new
                 {
-                    Val1 = Extract<double>(DateTiemElement.Year, CurrentTimeStamp()),
-                    Val2 = Extract<double>(DateTiemElement.Month, CurrentTimeStamp()),
-                    Val3 = Extract<double>(DateTiemElement.Day, CurrentTimeStamp()),
-                    Val4 = Extract<double>(DateTiemElement.Hour, CurrentTimeStamp()),
-                    Val5 = Extract<double>(DateTiemElement.Minute, CurrentTimeStamp()),
-                    Val6 = Extract<double>(DateTiemElement.Second, CurrentTimeStamp()),
-                    Val7 = Extract<double>(DateTiemElement.Millisecond, CurrentTimeStamp()),
-                    Val8 = Extract<double>(DateTiemElement.Microsecond, CurrentTimeStamp()),
-                    Val9 = Extract<double>(DateTiemElement.Quarter, CurrentTimeStamp()),
-                    Val10 = Extract<double>(DateTiemElement.Week, CurrentTimeStamp())
+                    Val1 = Extract(DateTimeElement.Year, CurrentTimeStamp()),
+                    Val2 = Extract(DateTimeElement.Month, CurrentTimeStamp()),
+                    Val3 = Extract(DateTimeElement.Day, CurrentTimeStamp()),
+                    Val4 = Extract(DateTimeElement.Hour, CurrentTimeStamp()),
+                    Val5 = Extract(DateTimeElement.Minute, CurrentTimeStamp()),
+                    Val6 = Extract(DateTimeElement.Second, CurrentTimeStamp()),
+                    Val7 = Extract(DateTimeElement.Millisecond, CurrentTimeStamp()),
+                    Val8 = Extract(DateTimeElement.Microsecond, CurrentTimeStamp()),
+                    Val9 = Extract(DateTimeElement.Quarter, CurrentTimeStamp()),
+                    Val10 = Extract(DateTimeElement.Week, CurrentTimeStamp())
                 }));
 
             var datas = _connection.Query(query).ToList();
@@ -975,14 +975,14 @@ FROM SYSIBM.SYSDUMMY1");
             var query = Sql<DB>.Create(db =>
             Select(new
             {
-                Val1 = Extract<long>(DateTiemElement.Year, CurrentTimeStamp()),
-                Val2 = Extract<long>(DateTiemElement.Month, CurrentTimeStamp()),
-                Val3 = Extract<long>(DateTiemElement.Day, CurrentTimeStamp()),
-                Val4 = Extract<long>(DateTiemElement.Hour, CurrentTimeStamp()),
-                Val5 = Extract<long>(DateTiemElement.Minute, CurrentTimeStamp()),
-                Val6 = Extract<long>(DateTiemElement.Second, CurrentTimeStamp()),
-                Val7 = Extract<long>(DateTiemElement.Quarter, CurrentTimeStamp()),
-                Val8 = Extract<long>(DateTiemElement.Week, CurrentTimeStamp())
+                Val1 = (long)Extract(DateTimeElement.Year, CurrentTimeStamp()),
+                Val2 = (long)Extract(DateTimeElement.Month, CurrentTimeStamp()),
+                Val3 = (long)Extract(DateTimeElement.Day, CurrentTimeStamp()),
+                Val4 = (long)Extract(DateTimeElement.Hour, CurrentTimeStamp()),
+                Val5 = (long)Extract(DateTimeElement.Minute, CurrentTimeStamp()),
+                Val6 = (long)Extract(DateTimeElement.Second, CurrentTimeStamp()),
+                Val7 = (long)Extract(DateTimeElement.Quarter, CurrentTimeStamp()),
+                Val8 = (long)Extract(DateTimeElement.Week, CurrentTimeStamp())
             }));
 
             var datas = _connection.Query(query).ToList();
@@ -1007,20 +1007,20 @@ FROM SYSIBM.SYSDUMMY1");
             var query = Sql<DB>.Create(db =>
                 Select(new
                 {
-                    Val1 = DatePart(DateTiemElement.Year, CurrentTimeStamp()),
-                    Val2 = DatePart(DateTiemElement.Quarter, CurrentTimeStamp()),
-                    Val3 = DatePart(DateTiemElement.Month, CurrentTimeStamp()),
-                    Val4 = DatePart(DateTiemElement.Dayofyear, CurrentTimeStamp()),
-                    Val5 = DatePart(DateTiemElement.Day, CurrentTimeStamp()),
-                    Val6 = DatePart(DateTiemElement.Week, CurrentTimeStamp()),
-                    Val7 = DatePart(DateTiemElement.Weekday, CurrentTimeStamp()),
-                    Val8 = DatePart(DateTiemElement.Hour, CurrentTimeStamp()),
-                    Val9 = DatePart(DateTiemElement.Minute, CurrentTimeStamp()),
-                    Val10 = DatePart(DateTiemElement.Second, CurrentTimeStamp()),
-                    Val11 = DatePart(DateTiemElement.Millisecond, CurrentTimeStamp()),
-                    Val12 = DatePart(DateTiemElement.Microsecond, CurrentTimeStamp()),
-                    Val13 = DatePart(DateTiemElement.Nanosecond, CurrentTimeStamp()),
-                    Val14 = DatePart(DateTiemElement.ISO_WEEK, CurrentTimeStamp())
+                    Val1 = DatePart(DateTimeElement.Year, CurrentTimeStamp()),
+                    Val2 = DatePart(DateTimeElement.Quarter, CurrentTimeStamp()),
+                    Val3 = DatePart(DateTimeElement.Month, CurrentTimeStamp()),
+                    Val4 = DatePart(DateTimeElement.Dayofyear, CurrentTimeStamp()),
+                    Val5 = DatePart(DateTimeElement.Day, CurrentTimeStamp()),
+                    Val6 = DatePart(DateTimeElement.Week, CurrentTimeStamp()),
+                    Val7 = DatePart(DateTimeElement.Weekday, CurrentTimeStamp()),
+                    Val8 = DatePart(DateTimeElement.Hour, CurrentTimeStamp()),
+                    Val9 = DatePart(DateTimeElement.Minute, CurrentTimeStamp()),
+                    Val10 = DatePart(DateTimeElement.Second, CurrentTimeStamp()),
+                    Val11 = DatePart(DateTimeElement.Millisecond, CurrentTimeStamp()),
+                    Val12 = DatePart(DateTimeElement.Microsecond, CurrentTimeStamp()),
+                    Val13 = DatePart(DateTimeElement.Nanosecond, CurrentTimeStamp()),
+                    Val14 = DatePart(DateTimeElement.ISO_WEEK, CurrentTimeStamp())
                 }));
 
             var datas = _connection.Query(query).ToList();

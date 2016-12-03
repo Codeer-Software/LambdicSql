@@ -1144,22 +1144,12 @@ FROM tbl_remuneration
             }
 
             //CurrentTime
-            /* error
-            if (name == "Npgsql.NpgsqlConnection")
-            {
-                var query = Sql<DB>.Create(db =>
-                    Select(new
-                    {
-                        Dst = CurrentTime<DateTimeOffset>()
-                    }));
-                var x = ExecuteRead(query);
-            }*/
             if (name == "MySql.Data.MySqlClient.MySqlConnection")
             {
                 var query = Sql<DB>.Create(db =>
                     Select(new
                     {
-                        Dst = CurrentTime<TimeSpan>()
+                        Dst = CurrentTime()
                     }));
                 var x = ExecuteRead(query);
             }
@@ -1229,16 +1219,16 @@ FROM tbl_remuneration
                 var query = Sql<DB>.Create(db =>
                     Select(new
                     {
-                        Dst1 = Extract<double>(DateTiemElement.Year, CurrentTimeStamp()),
-                        Dst2 = Extract<double>(DateTiemElement.Month, CurrentTimeStamp()),
-                        Dst3 = Extract<double>(DateTiemElement.Day, CurrentTimeStamp()),
-                        Dst4 = Extract<double>(DateTiemElement.Hour, CurrentTimeStamp()),
-                        Dst5 = Extract<double>(DateTiemElement.Minute, CurrentTimeStamp()),
-                        Dst6 = Extract<double>(DateTiemElement.Second, CurrentTimeStamp()),
-                        Dst7 = Extract<double>(DateTiemElement.Millisecond, CurrentTimeStamp()),
-                        Dst8 = Extract<double>(DateTiemElement.Microsecond, CurrentTimeStamp()),
-                        Dst9 = Extract<double>(DateTiemElement.Quarter, CurrentTimeStamp()),
-                        Dst10 = Extract<double>(DateTiemElement.Week, CurrentTimeStamp())
+                        Dst1 = Extract(DateTimeElement.Year, CurrentTimeStamp()),
+                        Dst2 = Extract(DateTimeElement.Month, CurrentTimeStamp()),
+                        Dst3 = Extract(DateTimeElement.Day, CurrentTimeStamp()),
+                        Dst4 = Extract(DateTimeElement.Hour, CurrentTimeStamp()),
+                        Dst5 = Extract(DateTimeElement.Minute, CurrentTimeStamp()),
+                        Dst6 = Extract(DateTimeElement.Second, CurrentTimeStamp()),
+                        Dst7 = Extract(DateTimeElement.Millisecond, CurrentTimeStamp()),
+                        Dst8 = Extract(DateTimeElement.Microsecond, CurrentTimeStamp()),
+                        Dst9 = Extract(DateTimeElement.Quarter, CurrentTimeStamp()),
+                        Dst10 = Extract(DateTimeElement.Week, CurrentTimeStamp())
                     }));
                 var x = ExecuteRead(query);
             }
@@ -1247,14 +1237,14 @@ FROM tbl_remuneration
                 var query = Sql<DB>.Create(db =>
                     Select(new
                     {
-                        Dst1 = Extract<long>(DateTiemElement.Year, CurrentTimeStamp()),
-                        Dst2 = Extract<long>(DateTiemElement.Month, CurrentTimeStamp()),
-                        Dst3 = Extract<long>(DateTiemElement.Day, CurrentTimeStamp()),
-                        Dst4 = Extract<long>(DateTiemElement.Hour, CurrentTimeStamp()),
-                        Dst5 = Extract<long>(DateTiemElement.Minute, CurrentTimeStamp()),
-                        Dst6 = Extract<long>(DateTiemElement.Second, CurrentTimeStamp()),
-                        Dst9 = Extract<long>(DateTiemElement.Quarter, CurrentTimeStamp()),
-                        Dst10 = Extract<long>(DateTiemElement.Week, CurrentTimeStamp())
+                        Dst1 = (long)Extract(DateTimeElement.Year, CurrentTimeStamp()),
+                        Dst2 = (long)Extract(DateTimeElement.Month, CurrentTimeStamp()),
+                        Dst3 = (long)Extract(DateTimeElement.Day, CurrentTimeStamp()),
+                        Dst4 = (long)Extract(DateTimeElement.Hour, CurrentTimeStamp()),
+                        Dst5 = (long)Extract(DateTimeElement.Minute, CurrentTimeStamp()),
+                        Dst6 = (long)Extract(DateTimeElement.Second, CurrentTimeStamp()),
+                        Dst9 = (long)Extract(DateTimeElement.Quarter, CurrentTimeStamp()),
+                        Dst10 = (long)Extract(DateTimeElement.Week, CurrentTimeStamp())
                     }));
                 var x = ExecuteRead(query);
             }
@@ -1263,20 +1253,20 @@ FROM tbl_remuneration
                 var query = Sql<DB>.Create(db =>
                     Select(new
                     {
-                        Year = DatePart(DateTiemElement.Year, CurrentTimeStamp()),
-                        Quarter = DatePart(DateTiemElement.Quarter, CurrentTimeStamp()),
-                        Month = DatePart(DateTiemElement.Month, CurrentTimeStamp()),
-                        Dayofyear = DatePart(DateTiemElement.Dayofyear, CurrentTimeStamp()),
-                        Day = DatePart(DateTiemElement.Day, CurrentTimeStamp()),
-                        Week = DatePart(DateTiemElement.Week, CurrentTimeStamp()),
-                        Weekday = DatePart(DateTiemElement.Weekday, CurrentTimeStamp()),
-                        Hour = DatePart(DateTiemElement.Hour, CurrentTimeStamp()),
-                        Minute = DatePart(DateTiemElement.Minute, CurrentTimeStamp()),
-                        Second = DatePart(DateTiemElement.Second, CurrentTimeStamp()),
-                        Millisecond = DatePart(DateTiemElement.Millisecond, CurrentTimeStamp()),
-                        Microsecond = DatePart(DateTiemElement.Microsecond, CurrentTimeStamp()),
-                        Nanosecond = DatePart(DateTiemElement.Nanosecond, CurrentTimeStamp()),
-                        ISO_WEEK = DatePart(DateTiemElement.ISO_WEEK, CurrentTimeStamp())
+                        Year = DatePart(DateTimeElement.Year, CurrentTimeStamp()),
+                        Quarter = DatePart(DateTimeElement.Quarter, CurrentTimeStamp()),
+                        Month = DatePart(DateTimeElement.Month, CurrentTimeStamp()),
+                        Dayofyear = DatePart(DateTimeElement.Dayofyear, CurrentTimeStamp()),
+                        Day = DatePart(DateTimeElement.Day, CurrentTimeStamp()),
+                        Week = DatePart(DateTimeElement.Week, CurrentTimeStamp()),
+                        Weekday = DatePart(DateTimeElement.Weekday, CurrentTimeStamp()),
+                        Hour = DatePart(DateTimeElement.Hour, CurrentTimeStamp()),
+                        Minute = DatePart(DateTimeElement.Minute, CurrentTimeStamp()),
+                        Second = DatePart(DateTimeElement.Second, CurrentTimeStamp()),
+                        Millisecond = DatePart(DateTimeElement.Millisecond, CurrentTimeStamp()),
+                        Microsecond = DatePart(DateTimeElement.Microsecond, CurrentTimeStamp()),
+                        Nanosecond = DatePart(DateTimeElement.Nanosecond, CurrentTimeStamp()),
+                        ISO_WEEK = DatePart(DateTimeElement.ISO_WEEK, CurrentTimeStamp())
                     }));
                 var x = ExecuteRead(query);
             }

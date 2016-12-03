@@ -6,7 +6,7 @@ namespace LambdicSql
     /// Element of DateTime.
     /// </summary>
     [SqlSyntax]
-    public enum DateTiemElement
+    public enum DateTimeElement
     {
         /// <summary>
         /// Year.
