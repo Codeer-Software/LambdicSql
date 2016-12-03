@@ -22,7 +22,7 @@ namespace LambdicSql
     [SqlSyntax]
     public class OrderBy
     {
-        public OrderBy(params IOrderElement[] elements) { InvalitContext.Throw("new " + nameof(OrderBy)); }
+        public OrderBy(params ISortedBy[] elements) { InvalitContext.Throw("new " + nameof(OrderBy)); }
         public static string ToString(ISqlStringConverter converter, NewExpression exp)
         {
             var arg = exp.Arguments[0];

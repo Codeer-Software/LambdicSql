@@ -1372,7 +1372,7 @@ FROM tbl_remuneration");
                 {
                     Val = Window.Count(db.tbl_remuneration.money).
                             Over<decimal>(new PartitionBy(db.tbl_remuneration.payment_date),
-                                new OrderBy(exp1.Cast<IOrderElement>(), exp2.Cast<IOrderElement>()),
+                                new OrderBy(exp1.Cast<ISortedBy>(), exp2.Cast<ISortedBy>()),
                                 new Rows(1, 5))
                 }).
                 From(db.tbl_remuneration));

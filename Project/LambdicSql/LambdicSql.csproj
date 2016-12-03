@@ -42,6 +42,8 @@
     <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assign.cs" />
+    <Compile Include="Asterisk.cs" />
     <Compile Include="DateTimeElement.cs" />
     <Compile Include="feat\Dapper\DapperApaptExtensions.cs" />
     <Compile Include="feat\Dapper\DapperWrapper.cs" />
@@ -60,7 +62,7 @@
     <Compile Include="Inside\RefrectionUtility.cs" />
     <Compile Include="Inside\TowWaySqlSpec.cs" />
     <Compile Include="Keywords.cs" />
-    <Compile Include="IOrderElement.cs" />
+    <Compile Include="ISortedBy.cs" />
     <Compile Include="SqlBase\ExpressionToObject.CreateGetter.cs" />
     <Compile Include="SqlBase\ExpressionToObject.Getter.cs" />
     <Compile Include="Inside\SqlExpressionCoupled.cs" />
@@ -85,6 +87,8 @@
     <Compile Include="SqlInfo.cs" />
     <Compile Include="SqlExpressionExtensions.cs" />
     <Compile Include="Funcs.cs" />
+    <Compile Include="SysibmType.cs" />
+    <Compile Include="Top.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="Window.cs" />
     <Compile Include="Inside\Keywords\FromClause.cs" />

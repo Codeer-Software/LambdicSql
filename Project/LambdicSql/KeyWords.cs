@@ -2,95 +2,59 @@
 using LambdicSql.Inside.Keywords;
 using LambdicSql.SqlBase;
 using System;
-using System.Linq;
 using System.Linq.Expressions;
 
 namespace LambdicSql
 {
-    [SqlSyntax]
-    public class Assign
-    {
-        public Assign(object target, object value) { InvalitContext.Throw("new " + nameof(Assign)); }
-        public static string ToString(ISqlStringConverter converter, NewExpression exp)
-        {
-            var args = exp.Arguments.Select(e => converter.ToString(e)).ToArray();
-            return args[0] + " = " + args[1];
-        }
-    }
-
-    [SqlSyntax]
-    public class Asterisk
-    {
-        public Asterisk() { InvalitContext.Throw("new " + nameof(Asterisk)); }
-        public static string ToString(ISqlStringConverter converter, NewExpression exp)
-        {
-            return "*";
-        }
-    }
-
-    [SqlSyntax]
-    public class Asterisk<T> : Asterisk { }
-
-    [SqlSyntax]
-    public class Top
-    {
-        public Top(long count) { InvalitContext.Throw("new " + nameof(Assign)); }
-        public static string ToString(ISqlStringConverter converter, NewExpression exp)
-        {
-            var args = exp.Arguments.Select(e => converter.ToString(e)).ToArray();
-            return "TOP " + converter.Context.Parameters.ResolvePrepare(args[0]);
-        }
-    }
-
-    [SqlSyntax]
-    public class SysibmType
-    {
-        public object Sysdummy1 => InvalitContext.Throw<long>(nameof(Sysdummy1));
-        static string ToString(ISqlStringConverter converter, MemberExpression member)
-            => "SYSIBM." + member.Member.Name.ToUpper();
-    }
-
-    //Set operation
+    /// <summary>
+    /// 
+    /// </summary>
     [SqlSyntax]
     public static class Keywords
     {
-        public static Asterisk<T> Asterisk<T>(T t) => new Asterisk<T>();
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="selected"></param>
+        /// <returns></returns>
+        public static Asterisk<T> Asterisk<T>(T selected) => new Asterisk<T>();
 
         public static IQuery<TSelected> Select<TSelected>(TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
-        public static IQuery<TSelected> Select<TSrcSelected, TSelected>(this IQuery<TSrcSelected> words, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
+        public static IQuery<TSelected> Select<TSrcSelected, TSelected>(this IQuery<TSrcSelected> before, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
 
         public static IQuery<TSelected> Select<TSelected>(Top top, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
-        public static IQuery<TSelected> Select<TSrcSelected, TSelected>(this IQuery<TSrcSelected> words, Top top, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
+        public static IQuery<TSelected> Select<TSrcSelected, TSelected>(this IQuery<TSrcSelected> before, Top top, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
 
         public static IQuery<Non> Select(Asterisk asterisk) => InvalitContext.Throw<IQuery<Non>>(nameof(Select));
-        public static IQuery<Non> Select<TSrcSelected>(this IQuery<TSrcSelected> words, Asterisk asterisk) => InvalitContext.Throw<IQuery<Non>>(nameof(Select));
+        public static IQuery<Non> Select<TSrcSelected>(this IQuery<TSrcSelected> before, Asterisk asterisk) => InvalitContext.Throw<IQuery<Non>>(nameof(Select));
 
         public static IQuery<TSelected> Select<TSelected>(Asterisk<TSelected> asterisk) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
-        public static IQuery<TSelected> Select<TSrcSelected, TSelected>(this IQuery<TSrcSelected> words, Asterisk<TSelected> asterisk) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
+        public static IQuery<TSelected> Select<TSrcSelected, TSelected>(this IQuery<TSrcSelected> before, Asterisk<TSelected> asterisk) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
 
         public static IQuery<Non> Select(Top top, Asterisk asterisk) => InvalitContext.Throw<IQuery<Non>>(nameof(Select));
-        public static IQuery<Non> Select<TSrcSelected>(this IQuery<TSrcSelected> words, Top top, Asterisk asterisk) => InvalitContext.Throw<IQuery<Non>>(nameof(Select));
+        public static IQuery<Non> Select<TSrcSelected>(this IQuery<TSrcSelected> before, Top top, Asterisk asterisk) => InvalitContext.Throw<IQuery<Non>>(nameof(Select));
 
         public static IQuery<TSelected> Select<TSelected>(Top top, Asterisk<TSelected> asterisk) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
-        public static IQuery<TSelected> Select<TSrcSelected, TSelected>(this IQuery<TSrcSelected> words, Top top, Asterisk<TSelected> asterisk) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
+        public static IQuery<TSelected> Select<TSrcSelected, TSelected>(this IQuery<TSrcSelected> before, Top top, Asterisk<TSelected> asterisk) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
 
         public static IQuery<TSelected> Select<TSelected>(AggregatePredicate predicate, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
-        public static IQuery<TSelected> Select<TSrcSelected, TSelected>(this IQuery<TSrcSelected> words, AggregatePredicate predicate, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
+        public static IQuery<TSelected> Select<TSrcSelected, TSelected>(this IQuery<TSrcSelected> before, AggregatePredicate predicate, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
 
         public static IQuery<TSelected> Select<TSelected>(AggregatePredicate predicate, Top top, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
-        public static IQuery<TSelected> Select<TSrcSelected, TSelected>(this IQuery<TSrcSelected> words, AggregatePredicate predicate, Top top, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
+        public static IQuery<TSelected> Select<TSrcSelected, TSelected>(this IQuery<TSrcSelected> before, AggregatePredicate predicate, Top top, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
 
         public static IQuery<Non> Select(AggregatePredicate predicate, Asterisk asterisk) => InvalitContext.Throw<IQuery<Non>>(nameof(Select));
-        public static IQuery<Non> Select<TSrcSelected>(this IQuery<TSrcSelected> words, AggregatePredicate predicate, Asterisk asterisk) => InvalitContext.Throw<IQuery<Non>>(nameof(Select));
+        public static IQuery<Non> Select<TSrcSelected>(this IQuery<TSrcSelected> before, AggregatePredicate predicate, Asterisk asterisk) => InvalitContext.Throw<IQuery<Non>>(nameof(Select));
 
         public static IQuery<TSelected> Select<TSelected>(AggregatePredicate predicate, Asterisk<TSelected> asterisk) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
-        public static IQuery<TSelected> Select<TSrcSelected, TSelected>(this IQuery<TSrcSelected> words, AggregatePredicate predicate, Asterisk<TSelected> asterisk) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
+        public static IQuery<TSelected> Select<TSrcSelected, TSelected>(this IQuery<TSrcSelected> before, AggregatePredicate predicate, Asterisk<TSelected> asterisk) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
 
         public static IQuery<Non> Select(AggregatePredicate predicate, Top top, Asterisk asterisk) => InvalitContext.Throw<IQuery<Non>>(nameof(Select));
-        public static IQuery<Non> Select<TSrcSelected>(this IQuery<TSrcSelected> words, AggregatePredicate predicate, Top top, Asterisk asterisk) => InvalitContext.Throw<IQuery<Non>>(nameof(Select));
+        public static IQuery<Non> Select<TSrcSelected>(this IQuery<TSrcSelected> before, AggregatePredicate predicate, Top top, Asterisk asterisk) => InvalitContext.Throw<IQuery<Non>>(nameof(Select));
 
         public static IQuery<TSelected> Select<TSelected>(AggregatePredicate predicate, Top top, Asterisk<TSelected> asterisk) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
-        public static IQuery<TSelected> Select<TSrcSelected, TSelected>(this IQuery<TSrcSelected> words, AggregatePredicate predicate, Top top, Asterisk<TSelected> asterisk) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
+        public static IQuery<TSelected> Select<TSrcSelected, TSelected>(this IQuery<TSrcSelected> before, AggregatePredicate predicate, Top top, Asterisk<TSelected> asterisk) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
 
         public interface ICaseAfter : IMethodChain { }
         public interface IWhenAfter : IMethodChain { }
@@ -102,73 +66,73 @@ namespace LambdicSql
         [MethodGroup(nameof(Case))]
         public static ICaseAfter Case<T>(T t) => InvalitContext.Throw<ICaseAfter>(nameof(Case));
         [MethodGroup(nameof(Case))]
-        public static IWhenAfter When<T>(this ICaseAfter words, T t) => InvalitContext.Throw<IWhenAfter>(nameof(When));
+        public static IWhenAfter When<T>(this ICaseAfter before, T t) => InvalitContext.Throw<IWhenAfter>(nameof(When));
         [MethodGroup(nameof(Case))]
-        public static IWhenAfter<T1> When<T1, T2>(this IThenAfter<T1> words, T2 t) => InvalitContext.Throw<IWhenAfter<T1>>(nameof(When));
+        public static IWhenAfter<T1> When<T1, T2>(this IThenAfter<T1> before, T2 t) => InvalitContext.Throw<IWhenAfter<T1>>(nameof(When));
         [MethodGroup(nameof(Case))]
-        public static IThenAfter<T> Then<T>(this IWhenAfter words, T t) => InvalitContext.Throw<IThenAfter<T>>(nameof(Then));
+        public static IThenAfter<T> Then<T>(this IWhenAfter before, T t) => InvalitContext.Throw<IThenAfter<T>>(nameof(Then));
         [MethodGroup(nameof(Case))]
-        public static IThenAfter<T> Then<T>(this IWhenAfter<T> words, T t) => InvalitContext.Throw<IThenAfter<T>>(nameof(Then));
+        public static IThenAfter<T> Then<T>(this IWhenAfter<T> before, T t) => InvalitContext.Throw<IThenAfter<T>>(nameof(Then));
         [MethodGroup(nameof(Case))]
-        public static IElseAfter<T> Else<T>(this IThenAfter<T> words, T t) => InvalitContext.Throw<IElseAfter<T>>(nameof(Then));
+        public static IElseAfter<T> Else<T>(this IThenAfter<T> before, T t) => InvalitContext.Throw<IElseAfter<T>>(nameof(Then));
         [MethodGroup(nameof(Case))]
-        public static T End<T>(this IThenAfter<T> words) => InvalitContext.Throw<T>(nameof(End));
+        public static T End<T>(this IThenAfter<T> before) => InvalitContext.Throw<T>(nameof(End));
         [MethodGroup(nameof(Case))]
-        public static T End<T>(this IElseAfter<T> words) => InvalitContext.Throw<T>(nameof(End));
+        public static T End<T>(this IElseAfter<T> before) => InvalitContext.Throw<T>(nameof(End));
         
         public static IQuery<Non> From(params object[] tbale) => InvalitContext.Throw<IQuery<Non>>(nameof(From));
-        public static IQuery<TSelected> From<TSelected>(this IQuery<TSelected> words, params object[] tbale) => InvalitContext.Throw<IQuery<TSelected>>(nameof(From));
+        public static IQuery<TSelected> From<TSelected>(this IQuery<TSelected> before, params object[] tbale) => InvalitContext.Throw<IQuery<TSelected>>(nameof(From));
 
         public static IQuery<Non> Join<T>(T tbale, bool condition) => InvalitContext.Throw<IQuery<Non>>(nameof(Join));
-        public static IQuery<TSelected> Join<TSelected, T>(this IQuery<TSelected> words, T tbale, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Join));
+        public static IQuery<TSelected> Join<TSelected, T>(this IQuery<TSelected> before, T tbale, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Join));
 
         public static IQuery<Non> LeftJoin<T>(T tbale, bool condition) => InvalitContext.Throw<IQuery<Non>>(nameof(LeftJoin));
-        public static IQuery<TSelected> LeftJoin<TSelected, T>(this IQuery<TSelected> words, T tbale, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(LeftJoin));
+        public static IQuery<TSelected> LeftJoin<TSelected, T>(this IQuery<TSelected> before, T tbale, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(LeftJoin));
 
         public static IQuery<Non> RightJoin<T>(T tbale, bool condition) => InvalitContext.Throw<IQuery<Non>>(nameof(RightJoin));
-        public static IQuery<TSelected> RightJoin<TSelected, T>(this IQuery<TSelected> words, T tbale, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(RightJoin));
+        public static IQuery<TSelected> RightJoin<TSelected, T>(this IQuery<TSelected> before, T tbale, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(RightJoin));
 
         public static IQuery<Non> CrossJoin<T>(T tbale) => InvalitContext.Throw<IQuery<Non>>(nameof(CrossJoin));
-        public static IQuery<TSelected> CrossJoin<TSelected, T>(this IQuery<TSelected> words, T tbale) => InvalitContext.Throw<IQuery<TSelected>>(nameof(CrossJoin));
+        public static IQuery<TSelected> CrossJoin<TSelected, T>(this IQuery<TSelected> before, T tbale) => InvalitContext.Throw<IQuery<TSelected>>(nameof(CrossJoin));
 
         public static IQuery<Non> Where(bool condition) => InvalitContext.Throw<IQuery<Non>>(nameof(Where));
-        public static IQuery<TSelected> Where<TSelected>(this IQuery<TSelected> words, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Where));
+        public static IQuery<TSelected> Where<TSelected>(this IQuery<TSelected> before, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Where));
 
         public static IQuery<Non> GroupBy(params object[] target) => InvalitContext.Throw<IQuery<Non>>(nameof(GroupBy));
-        public static IQuery<TSelected> GroupBy<TSelected>(this IQuery<TSelected> words, params object[] target) => InvalitContext.Throw<IQuery<TSelected>>(nameof(GroupBy));
+        public static IQuery<TSelected> GroupBy<TSelected>(this IQuery<TSelected> before, params object[] target) => InvalitContext.Throw<IQuery<TSelected>>(nameof(GroupBy));
 
         public static IQuery<Non> GroupByRollup(params object[] target) => InvalitContext.Throw<IQuery<Non>>(nameof(GroupByRollup));
-        public static IQuery<TSelected> GroupByRollup<TSelected>(this IQuery<TSelected> words, params object[] target) => InvalitContext.Throw<IQuery<TSelected>>(nameof(GroupByRollup));
+        public static IQuery<TSelected> GroupByRollup<TSelected>(this IQuery<TSelected> before, params object[] target) => InvalitContext.Throw<IQuery<TSelected>>(nameof(GroupByRollup));
 
         public static IQuery<Non> GroupByWithRollup(params object[] target) => InvalitContext.Throw<IQuery<Non>>(nameof(GroupByRollup));
-        public static IQuery<TSelected> GroupByWithRollup<TSelected>(this IQuery<TSelected> words, params object[] target) => InvalitContext.Throw<IQuery<TSelected>>(nameof(GroupByRollup));
+        public static IQuery<TSelected> GroupByWithRollup<TSelected>(this IQuery<TSelected> before, params object[] target) => InvalitContext.Throw<IQuery<TSelected>>(nameof(GroupByRollup));
 
         public static IQuery<Non> GroupByCube(params object[] target) => InvalitContext.Throw<IQuery<Non>>(nameof(GroupByCube));
-        public static IQuery<TSelected> GroupByCube<TSelected>(this IQuery<TSelected> words, params object[] target) => InvalitContext.Throw<IQuery<TSelected>>(nameof(GroupByCube));
+        public static IQuery<TSelected> GroupByCube<TSelected>(this IQuery<TSelected> before, params object[] target) => InvalitContext.Throw<IQuery<TSelected>>(nameof(GroupByCube));
 
         public static IQuery<Non> GroupByGroupingSets(params object[] target) => InvalitContext.Throw<IQuery<Non>>(nameof(GroupByGroupingSets));
-        public static IQuery<TSelected> GroupByGroupingSets<TSelected>(this IQuery<TSelected> words, params object[] target) => InvalitContext.Throw<IQuery<TSelected>>(nameof(GroupByGroupingSets));
+        public static IQuery<TSelected> GroupByGroupingSets<TSelected>(this IQuery<TSelected> before, params object[] target) => InvalitContext.Throw<IQuery<TSelected>>(nameof(GroupByGroupingSets));
 
         public static IQuery<Non> Having(bool condition) => InvalitContext.Throw<IQuery<Non>>(nameof(Having));
-        public static IQuery<TSelected> Having<TSelected>(this IQuery<TSelected> words, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Having));
+        public static IQuery<TSelected> Having<TSelected>(this IQuery<TSelected> before, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Having));
 
-        public static IQuery<Non> OrderBy(params IOrderElement[] elements) => InvalitContext.Throw<IQuery<Non>>(nameof(OrderBy));
-        public static IQuery<TSelected> OrderBy<TSelected>(this IQuery<TSelected> words, params IOrderElement[] elements) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
+        public static IQuery<Non> OrderBy(params ISortedBy[] elements) => InvalitContext.Throw<IQuery<Non>>(nameof(OrderBy));
+        public static IQuery<TSelected> OrderBy<TSelected>(this IQuery<TSelected> before, params ISortedBy[] elements) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
 
         public static IQuery<Non> Limit(long count) => InvalitContext.Throw<IQuery<Non>>(nameof(OrderBy));
-        public static IQuery<TSelected> Limit<TSelected>(this IQuery<TSelected> words, long count) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
+        public static IQuery<TSelected> Limit<TSelected>(this IQuery<TSelected> before, long count) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
 
         public static IQuery<Non> Limit(long offset, long count) => InvalitContext.Throw<IQuery<Non>>(nameof(OrderBy));
-        public static IQuery<TSelected> Limit<TSelected>(this IQuery<TSelected> words, long offset, long count) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
+        public static IQuery<TSelected> Limit<TSelected>(this IQuery<TSelected> before, long offset, long count) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
 
         public static IQuery<Non> Offset(long offset) => InvalitContext.Throw<IQuery<Non>>(nameof(OrderBy));
-        public static IQuery<TSelected> Offset<TSelected>(this IQuery<TSelected> words, long offset) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
+        public static IQuery<TSelected> Offset<TSelected>(this IQuery<TSelected> before, long offset) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
 
         public static IQuery<Non> OffsetRows(long rowCount) => InvalitContext.Throw<IQuery<Non>>(nameof(OrderBy));
-        public static IQuery<TSelected> OffsetRows<TSelected>(this IQuery<TSelected> words, long rowCount) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
+        public static IQuery<TSelected> OffsetRows<TSelected>(this IQuery<TSelected> before, long rowCount) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
 
         public static IQuery<Non> FetchNextRowsOnly(long rowCount) => InvalitContext.Throw<IQuery<Non>>(nameof(OrderBy));
-        public static IQuery<TSelected> FetchNextRowsOnly<TSelected>(this IQuery<TSelected> words, long rowCount) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
+        public static IQuery<TSelected> FetchNextRowsOnly<TSelected>(this IQuery<TSelected> before, long rowCount) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
 
         public static bool Like(string target, string serachText) => InvalitContext.Throw<bool>(nameof(Like));
         public static bool Between<TTarget>(TTarget target, TTarget min, TTarget max) => InvalitContext.Throw<bool>(nameof(Between));
@@ -179,30 +143,30 @@ namespace LambdicSql
         public static bool Exists(IQuery exp) => InvalitContext.Throw<bool>(nameof(Exists));
 
         public static IQuery<Non> Union() => InvalitContext.Throw<IQuery<Non>>(nameof(Union));
-        public static IQuery<TSelected> Union<TSelected>(this IQuery<TSelected> words) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Union));
+        public static IQuery<TSelected> Union<TSelected>(this IQuery<TSelected> before) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Union));
 
         public static IQuery<Non> Union(bool isAll) => InvalitContext.Throw<IQuery<Non>>(nameof(Union));
-        public static IQuery<TSelected> Union<TSelected>(this IQuery<TSelected> words, bool isAll) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Union));
+        public static IQuery<TSelected> Union<TSelected>(this IQuery<TSelected> before, bool isAll) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Union));
 
         public static IQuery<Non> Intersect() => InvalitContext.Throw<IQuery<Non>>(nameof(Intersect));
-        public static IQuery<TSelected> Intersect<TSelected>(this IQuery<TSelected> words) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Intersect));
+        public static IQuery<TSelected> Intersect<TSelected>(this IQuery<TSelected> before) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Intersect));
 
         public static IQuery<Non> Intersect(bool isAll) => InvalitContext.Throw<IQuery<Non>>(nameof(Intersect));
-        public static IQuery<TSelected> Intersect<TSelected>(this IQuery<TSelected> words, bool isAll) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Intersect));
+        public static IQuery<TSelected> Intersect<TSelected>(this IQuery<TSelected> before, bool isAll) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Intersect));
 
         public static IQuery<Non> Except() => InvalitContext.Throw<IQuery<Non>>(nameof(Except));
-        public static IQuery<TSelected> Except<TSelected>(this IQuery<TSelected> words) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Except));
+        public static IQuery<TSelected> Except<TSelected>(this IQuery<TSelected> before) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Except));
 
         public static IQuery<Non> Except(bool isAll) => InvalitContext.Throw<IQuery<Non>>(nameof(Except));
-        public static IQuery<TSelected> Except<TSelected>(this IQuery<TSelected> words, bool isAll) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Except));
+        public static IQuery<TSelected> Except<TSelected>(this IQuery<TSelected> before, bool isAll) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Except));
 
         public static IQuery<Non> Minus() => InvalitContext.Throw<IQuery<Non>>(nameof(Minus));
-        public static IQuery<TSelected> Minus<TSelected>(this IQuery<TSelected> words) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Minus));
+        public static IQuery<TSelected> Minus<TSelected>(this IQuery<TSelected> before) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Minus));
 
         [MethodGroup(nameof(Update))]
         public static IQuery<Non, T> Update<T>(T table) => InvalitContext.Throw<IQuery<Non, T>>(nameof(Update));
         [MethodGroup(nameof(Update))]
-        public static IQuery<TSelected> Set<TSelected, T>(this IQuery<TSelected, T> words, params Assign[] assigns) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Set));
+        public static IQuery<TSelected> Set<TSelected, T>(this IQuery<TSelected, T> before, params Assign[] assigns) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Set));
 
         public static IQuery<Non> Delete() => InvalitContext.Throw<IQuery<Non>>(nameof(Delete));
 
@@ -210,7 +174,7 @@ namespace LambdicSql
         public static IQuery<Non, TTable> InsertInto<TTable>(TTable table, params object[] targets) => InvalitContext.Throw<IQuery<Non, TTable>>(nameof(InsertInto));
 
         [MethodGroup(nameof(InsertInto))]
-        public static IQuery<TSelected> Values<TSelected, TTable>(this IQuery<TSelected, TTable> words, params object[] targets)
+        public static IQuery<TSelected> Values<TSelected, TTable>(this IQuery<TSelected, TTable> before, params object[] targets)
              => InvalitContext.Throw<IQuery<TSelected>>(nameof(Values));
 
         public static bool IsNull<T>(T target) => InvalitContext.Throw<bool>(nameof(IsNull));
