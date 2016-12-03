@@ -53,14 +53,23 @@ namespace TestCheck35
             internal Objects MethodObject() => new Objects();
         }
 
-        class IntObjectImplicit
+        class IntObjectImplicit1
         {
-            public static implicit operator int(IntObjectImplicit src) => 1;
+            public static implicit operator int(IntObjectImplicit1 src) => 1;
+        }
+        class IntObjectImplicit2
+        {
+            public static implicit operator IntObjectImplicit1(IntObjectImplicit2 src) => new IntObjectImplicit1();
         }
 
-        class IntObjectExplicit
+        class IntObjectExplicit1
         {
-            public static explicit operator int(IntObjectExplicit src) => 1;
+            public static explicit operator int(IntObjectExplicit1 src) => 1;
+        }
+
+        class IntObjectExplicit2
+        {
+            public static explicit operator IntObjectExplicit1(IntObjectExplicit2 src) => new IntObjectExplicit1();
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -116,31 +125,15 @@ new Params()
         }
         
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_Cast()
-        {
-            long val1 = 1;
-            int val2 = 1;
-            var query = Sql<DB>.Create(db =>
-                Select(Asterisk(db.tbl_staff)).
-                From(db.tbl_staff).
-                Where(val1 == (long)(short)val2));
-
-            var datas = _connection.Query(query).ToList();
-            AssertEx.AreEqual(query, _connection,
-@"SELECT *
-FROM tbl_staff
-WHERE (@val1) = (@val2)", new Params { { "@val1", (long)1 }, { "@val2", 1 } });
-        }
-
-        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_ImplicitConvertOperator1()
         {
             var query = Sql<DB>.Create(db =>
                 Select(Asterisk(db.tbl_staff)).
                 From(db.tbl_staff).
-                Where(1 == new IntObjectImplicit()));
+                Where(1 == new IntObjectImplicit1()));
 
             var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT *
 FROM tbl_staff
@@ -150,17 +143,35 @@ WHERE (@p_0) = (@p_1)", 1, 1);
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_ImplicitConvertOperator2()
         {
-            var obj = new IntObjectImplicit();
+            var obj = new IntObjectImplicit1();
             var query = Sql<DB>.Create(db =>
                 Select(Asterisk(db.tbl_staff)).
                 From(db.tbl_staff).
-                Where(1 == (IntObjectImplicit)obj));
+                Where(1 == (IntObjectImplicit1)obj));
 
             var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT *
 FROM tbl_staff
-WHERE (@p_0) = (@obj)", new Params { {"@p_0", 1 }, { "@obj", 1 } });
+WHERE (@p_0) = (@obj)", new Params { { "@p_0", 1 }, { "@obj", 1 } });
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_ImplicitConvertOperator3()
+        {
+            var obj = new IntObjectImplicit2();
+            var query = Sql<DB>.Create(db =>
+                Select(Asterisk(db.tbl_staff)).
+                From(db.tbl_staff).
+                Where(1 == (IntObjectImplicit1)obj));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT *
+FROM tbl_staff
+WHERE (@p_0) = (@obj)", new Params { { "@p_0", 1 }, { "@obj", 1 } });
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -169,8 +180,9 @@ WHERE (@p_0) = (@obj)", new Params { {"@p_0", 1 }, { "@obj", 1 } });
             var query = Sql<DB>.Create(db =>
                 Select(Asterisk(db.tbl_staff)).
                 From(db.tbl_staff).
-                Where(1 == (int)new IntObjectExplicit()));
+                Where(1 == (int)new IntObjectExplicit1()));
             var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT *
 FROM tbl_staff
@@ -180,16 +192,79 @@ WHERE (@p_0) = (@p_1)", 1, 1);
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_ExplicitConvertOperator2()
         {
-            var obj = new IntObjectExplicit();
+            var obj = new IntObjectExplicit1();
             var query = Sql<DB>.Create(db =>
                 Select(Asterisk(db.tbl_staff)).
                 From(db.tbl_staff).
-                Where(1 == (int)(IntObjectExplicit)obj));
+                Where(1 == (int)(IntObjectExplicit1)obj));
             var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT *
 FROM tbl_staff
 WHERE (@p_0) = (@obj)", new Params { { "@p_0", 1 }, { "@obj", 1 } });
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_ExplicitConvertOperator3()
+        {
+            var obj = new IntObjectExplicit2();
+            var query = Sql<DB>.Create(db =>
+                Select(Asterisk(db.tbl_staff)).
+                From(db.tbl_staff).
+                Where(1 == (int)(IntObjectExplicit1)(IntObjectExplicit2)obj));
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT *
+FROM tbl_staff
+WHERE (@p_0) = (@obj)", new Params { { "@p_0", 1 }, { "@obj", 1 } });
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Cast1()
+        {
+            long val1 = 1;
+            int val2 = 1;
+            var query = Sql<DB>.Create(db =>
+                Select(Asterisk(db.tbl_staff)).
+                From(db.tbl_staff).
+                Where(val1 == (long)(short)val2));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT *
+FROM tbl_staff
+WHERE (@val1) = (@val2)", new Params { { "@val1", (long)1 }, { "@val2", 1 } });
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Cast2()
+        {
+            int val1 = 6;
+            long val2 = 1;
+            var obj1 = new IntObjectExplicit2();
+            var obj2 = new IntObjectImplicit2();
+            var query = Sql<DB>.Create(db =>
+                Select(Asterisk(db.tbl_staff)).
+                From(db.tbl_staff).
+                Where(val1 == (int)(short)val2 + 3 + (IntObjectImplicit1)obj2 + (int)(IntObjectExplicit1)obj1));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT *
+FROM tbl_staff
+WHERE (@val1) = ((((@val2) + (@p_0)) + (@obj2)) + (@obj1))", 
+new Params
+{
+    { "@val1", 6 },
+    { "@val2", (long)1 },
+    { "@obj2", 1 },
+    { "@obj1", 1 },
+    { "@p_0", 3 },
+});
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -298,8 +373,6 @@ WHERE (@p_0) <> (@p_1)", 3, 1);
             var query = Sql<Data>.Create(db => instance.GetValue(instance.GetValue()));
             AssertEx.AreEqual(query, _connection, @"@p_0", 1);
         }
-
-        //TODO キャストを絡めた式はもう少し書いた方がいい
     }
 
     public static class TestExpressionEx
