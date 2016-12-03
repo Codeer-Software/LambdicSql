@@ -1,5 +1,6 @@
 ﻿using LambdicSql.Inside;
 using LambdicSql.SqlBase;
+using System.Linq.Expressions;
 
 namespace LambdicSql
 {
@@ -10,5 +11,6 @@ namespace LambdicSql
         public SqlQuery(ISqlExpressionBase core) { _core = core; }
         public DbInfo DbInfo => _core.DbInfo;
         public string ToString(ISqlStringConverter decoder) => _core.ToString(decoder);
+        public Expression[] GetExpressions() => _core.GetExpressions();
     }
 }

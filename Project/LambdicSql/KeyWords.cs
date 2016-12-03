@@ -7,53 +7,278 @@ using System.Linq.Expressions;
 namespace LambdicSql
 {
     /// <summary>
-    /// 
+    /// SQL Keywords.
+    /// It can only be used within methods of the LambdicSql.Sql class.
+    /// Use[using static LambdicSql.Keywords;], you can use to write natural SQL.
     /// </summary>
     [SqlSyntax]
     public static class Keywords
     {
         /// <summary>
-        /// 
+        /// It's *.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="selected"></param>
-        /// <returns></returns>
-        public static Asterisk<T> Asterisk<T>(T selected) => new Asterisk<T>();
+        public static Asterisk Asterisk() => InvalitContext.Throw<Asterisk>(nameof(Asterisk));
 
+        /// <summary>
+        /// It's *.
+        /// The type you want to obtain with the SELECT clause. Usually you specify a table element.
+        /// </summary>
+        /// <typeparam name="TSelected">Type of selected.</typeparam>
+        /// <param name="selected"></param>
+        /// <returns>*</returns>
+        public static Asterisk<TSelected> Asterisk<TSelected>(TSelected selected) => InvalitContext.Throw<Asterisk<TSelected>>(nameof(Asterisk));
+
+        /// <summary>
+        /// This is TOP keywrod.
+        /// </summary>
+        /// <param name="count">Number of rows to return.</param>
+        /// <returns>TOP clause.</returns>
+        public static Top Top(long count) => InvalitContext.Throw<Top>(nameof(Top));
+
+        /// <summary>
+        /// This is ASC keywrod.
+        /// </summary>
+        /// <param name="target">target column.</param>
+        /// <returns></returns>
+        public static Asc Asc(object target) => InvalitContext.Throw<Asc>(nameof(Desc));
+
+        /// <summary>
+        /// This is DESC keywrod.
+        /// </summary>
+        /// <param name="target">target column.</param>
+        /// <returns></returns>
+        public static Desc Desc(object target) => InvalitContext.Throw<Desc>(nameof(Desc));
+
+        /// <summary>
+        /// This is the SELECT clause.
+        /// </summary>
+        /// <typeparam name="TSelected">Type of selected.</typeparam>
+        /// <param name="selected"></param>
+        /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
         public static IQuery<TSelected> Select<TSelected>(TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
+
+        /// <summary>
+        /// This is the SELECT clause.
+        /// </summary>
+        /// <typeparam name="TSrcSelected"></typeparam>
+        /// <typeparam name="TSelected">Type of selected.</typeparam>
+        /// <param name="before"></param>
+        /// <param name="selected"></param>
+        /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
         public static IQuery<TSelected> Select<TSrcSelected, TSelected>(this IQuery<TSrcSelected> before, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
 
+        /// <summary>
+        /// This is the SELECT clause.
+        /// </summary>
+        /// <typeparam name="TSelected">Type of selected.</typeparam>
+        /// <param name="top"></param>
+        /// <param name="selected"></param>
+        /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
         public static IQuery<TSelected> Select<TSelected>(Top top, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
+
+        /// <summary>
+        /// This is the SELECT clause.
+        /// </summary>
+        /// <typeparam name="TSrcSelected"></typeparam>
+        /// <typeparam name="TSelected">Type of selected.</typeparam>
+        /// <param name="before"></param>
+        /// <param name="top"></param>
+        /// <param name="selected"></param>
+        /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
         public static IQuery<TSelected> Select<TSrcSelected, TSelected>(this IQuery<TSrcSelected> before, Top top, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
 
+        /// <summary>
+        /// This is the SELECT clause.
+        /// </summary>
+        /// <param name="asterisk"></param>
+        /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
         public static IQuery<Non> Select(Asterisk asterisk) => InvalitContext.Throw<IQuery<Non>>(nameof(Select));
+
+        /// <summary>
+        /// This is the SELECT clause.
+        /// </summary>
+        /// <typeparam name="TSrcSelected"></typeparam>
+        /// <param name="before"></param>
+        /// <param name="asterisk"></param>
+        /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
         public static IQuery<Non> Select<TSrcSelected>(this IQuery<TSrcSelected> before, Asterisk asterisk) => InvalitContext.Throw<IQuery<Non>>(nameof(Select));
 
+        /// <summary>
+        /// This is the SELECT clause.
+        /// </summary>
+        /// <typeparam name="TSelected">Type of selected.</typeparam>
+        /// <param name="asterisk"></param>
+        /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
         public static IQuery<TSelected> Select<TSelected>(Asterisk<TSelected> asterisk) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
+
+        /// <summary>
+        /// This is the SELECT clause.
+        /// </summary>
+        /// <typeparam name="TSrcSelected"></typeparam>
+        /// <typeparam name="TSelected">Type of selected.</typeparam>
+        /// <param name="before"></param>
+        /// <param name="asterisk"></param>
+        /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
         public static IQuery<TSelected> Select<TSrcSelected, TSelected>(this IQuery<TSrcSelected> before, Asterisk<TSelected> asterisk) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
 
+        /// <summary>
+        /// This is the SELECT clause.
+        /// </summary>
+        /// <param name="top"></param>
+        /// <param name="asterisk"></param>
+        /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
         public static IQuery<Non> Select(Top top, Asterisk asterisk) => InvalitContext.Throw<IQuery<Non>>(nameof(Select));
+
+        /// <summary>
+        /// This is the SELECT clause.
+        /// </summary>
+        /// <typeparam name="TSrcSelected"></typeparam>
+        /// <param name="before"></param>
+        /// <param name="top"></param>
+        /// <param name="asterisk"></param>
+        /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
         public static IQuery<Non> Select<TSrcSelected>(this IQuery<TSrcSelected> before, Top top, Asterisk asterisk) => InvalitContext.Throw<IQuery<Non>>(nameof(Select));
 
+        /// <summary>
+        /// This is the SELECT clause.
+        /// </summary>
+        /// <typeparam name="TSelected">Type of selected.</typeparam>
+        /// <param name="top"></param>
+        /// <param name="asterisk"></param>
+        /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
         public static IQuery<TSelected> Select<TSelected>(Top top, Asterisk<TSelected> asterisk) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
+
+        /// <summary>
+        /// This is the SELECT clause.
+        /// </summary>
+        /// <typeparam name="TSrcSelected"></typeparam>
+        /// <typeparam name="TSelected">Type of selected.</typeparam>
+        /// <param name="before"></param>
+        /// <param name="top"></param>
+        /// <param name="asterisk"></param>
+        /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
         public static IQuery<TSelected> Select<TSrcSelected, TSelected>(this IQuery<TSrcSelected> before, Top top, Asterisk<TSelected> asterisk) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
 
+        /// <summary>
+        /// This is the SELECT clause.
+        /// </summary>
+        /// <typeparam name="TSelected">Type of selected.</typeparam>
+        /// <param name="predicate"></param>
+        /// <param name="selected"></param>
+        /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
         public static IQuery<TSelected> Select<TSelected>(AggregatePredicate predicate, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
+
+        /// <summary>
+        /// This is the SELECT clause.
+        /// </summary>
+        /// <typeparam name="TSrcSelected"></typeparam>
+        /// <typeparam name="TSelected">Type of selected.</typeparam>
+        /// <param name="before"></param>
+        /// <param name="predicate"></param>
+        /// <param name="selected"></param>
+        /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
         public static IQuery<TSelected> Select<TSrcSelected, TSelected>(this IQuery<TSrcSelected> before, AggregatePredicate predicate, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
 
+        /// <summary>
+        /// This is the SELECT clause.
+        /// </summary>
+        /// <typeparam name="TSelected">Type of selected.</typeparam>
+        /// <param name="predicate"></param>
+        /// <param name="top"></param>
+        /// <param name="selected"></param>
+        /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
         public static IQuery<TSelected> Select<TSelected>(AggregatePredicate predicate, Top top, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
+
+        /// <summary>
+        /// This is the SELECT clause.
+        /// </summary>
+        /// <typeparam name="TSrcSelected"></typeparam>
+        /// <typeparam name="TSelected">Type of selected.</typeparam>
+        /// <param name="before"></param>
+        /// <param name="predicate"></param>
+        /// <param name="top"></param>
+        /// <param name="selected"></param>
+        /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
         public static IQuery<TSelected> Select<TSrcSelected, TSelected>(this IQuery<TSrcSelected> before, AggregatePredicate predicate, Top top, TSelected selected) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
 
+        /// <summary>
+        /// This is the SELECT clause.
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <param name="asterisk"></param>
+        /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
         public static IQuery<Non> Select(AggregatePredicate predicate, Asterisk asterisk) => InvalitContext.Throw<IQuery<Non>>(nameof(Select));
+
+        /// <summary>
+        /// This is the SELECT clause.
+        /// </summary>
+        /// <typeparam name="TSrcSelected"></typeparam>
+        /// <param name="before"></param>
+        /// <param name="predicate"></param>
+        /// <param name="asterisk"></param>
+        /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
         public static IQuery<Non> Select<TSrcSelected>(this IQuery<TSrcSelected> before, AggregatePredicate predicate, Asterisk asterisk) => InvalitContext.Throw<IQuery<Non>>(nameof(Select));
 
+        /// <summary>
+        /// This is the SELECT clause.
+        /// </summary>
+        /// <typeparam name="TSelected">Type of selected.</typeparam>
+        /// <param name="predicate"></param>
+        /// <param name="asterisk"></param>
+        /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
         public static IQuery<TSelected> Select<TSelected>(AggregatePredicate predicate, Asterisk<TSelected> asterisk) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
+
+        /// <summary>
+        /// This is the SELECT clause.
+        /// </summary>
+        /// <typeparam name="TSrcSelected"></typeparam>
+        /// <typeparam name="TSelected">Type of selected.</typeparam>
+        /// <param name="before"></param>
+        /// <param name="predicate"></param>
+        /// <param name="asterisk"></param>
+        /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
         public static IQuery<TSelected> Select<TSrcSelected, TSelected>(this IQuery<TSrcSelected> before, AggregatePredicate predicate, Asterisk<TSelected> asterisk) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
 
+        /// <summary>
+        /// This is the SELECT clause.
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <param name="top"></param>
+        /// <param name="asterisk"></param>
+        /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
         public static IQuery<Non> Select(AggregatePredicate predicate, Top top, Asterisk asterisk) => InvalitContext.Throw<IQuery<Non>>(nameof(Select));
+
+        /// <summary>
+        /// This is the SELECT clause.
+        /// </summary>
+        /// <typeparam name="TSrcSelected"></typeparam>
+        /// <param name="before"></param>
+        /// <param name="predicate"></param>
+        /// <param name="top"></param>
+        /// <param name="asterisk"></param>
+        /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
         public static IQuery<Non> Select<TSrcSelected>(this IQuery<TSrcSelected> before, AggregatePredicate predicate, Top top, Asterisk asterisk) => InvalitContext.Throw<IQuery<Non>>(nameof(Select));
 
+        /// <summary>
+        /// This is the SELECT clause.
+        /// </summary>
+        /// <typeparam name="TSelected">Type of selected.</typeparam>
+        /// <param name="predicate"></param>
+        /// <param name="top"></param>
+        /// <param name="asterisk"></param>
+        /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
         public static IQuery<TSelected> Select<TSelected>(AggregatePredicate predicate, Top top, Asterisk<TSelected> asterisk) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
+
+        /// <summary>
+        /// This is the SELECT clause.
+        /// </summary>
+        /// <typeparam name="TSrcSelected"></typeparam>
+        /// <typeparam name="TSelected">Type of selected.</typeparam>
+        /// <param name="before"></param>
+        /// <param name="predicate"></param>
+        /// <param name="top"></param>
+        /// <param name="asterisk"></param>
+        /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
         public static IQuery<TSelected> Select<TSrcSelected, TSelected>(this IQuery<TSrcSelected> before, AggregatePredicate predicate, Top top, Asterisk<TSelected> asterisk) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Select));
 
         public interface ICaseAfter : IMethodChain { }
@@ -243,6 +468,14 @@ namespace LambdicSql
                 case nameof(IsNull):
                 case nameof(IsNotNull):
                     return NullCheck.ToString(converter, methods);
+                case nameof(Top):
+                    return LambdicSql.Top.ToString(converter, methods);
+                case nameof(Asterisk):
+                    return LambdicSql.Asterisk.ToString(converter, methods);
+                case nameof(Asc):
+                    return LambdicSql.Asc.ToString(converter, methods);
+                case nameof(Desc):
+                    return LambdicSql.Desc.ToString(converter, methods);
             }
             throw new NotSupportedException();
         }

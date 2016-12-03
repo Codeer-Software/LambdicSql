@@ -17,16 +17,17 @@ namespace LambdicSql
         public Asterisk() { InvalitContext.Throw("new " + nameof(Asterisk)); }
 
         static string ToString(ISqlStringConverter converter, NewExpression exp)
-        {
-            return "*";
-        }
+            => "*";
+
+        internal static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+            => "*";
     }
 
-    /// <summary>
-    /// It's *.
-    /// Used in Select clause and Count function.
-    /// </summary>
-    /// <typeparam name="T">It represents the type to select when used in the Select clause.</typeparam>
-    [SqlSyntax]
+        /// <summary>
+        /// It's *.
+        /// Used in Select clause and Count function.
+        /// </summary>
+        /// <typeparam name="T">It represents the type to select when used in the Select clause.</typeparam>
+        [SqlSyntax]
     public class Asterisk<T> : Asterisk { }
 }

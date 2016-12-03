@@ -373,6 +373,35 @@ WHERE (@p_0) <> (@p_1)", 3, 1);
             var query = Sql<Data>.Create(db => instance.GetValue(instance.GetValue()));
             AssertEx.AreEqual(query, _connection, @"@p_0", 1);
         }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Nest_Exp()
+        {
+            var condition = new ValuesInstance();
+
+            var exp1 = Sql<DB>.Create(db => condition.field == 1 || condition.Property == 20 || condition.Method() == 30);
+            var exp2 = Sql<DB>.Create(db => exp1);
+            var query = Sql<DB>.Create(db =>
+                Select(Asterisk(db.tbl_staff)).
+                From(db.tbl_staff).
+                Where(exp2.Cast<bool>()));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT *
+FROM tbl_staff
+WHERE (((@field) = (@p_0)) OR ((@Property) = (@p_1))) OR ((@p_2) = (@p_3))",
+new Params()
+{
+    { "@field", 1 },
+    { "@Property", 2 },
+    { "@p_0", 1 },
+    { "@p_1", 20 },
+    { "@p_2", 3 },
+    { "@p_3", 30 },
+});
+        }
     }
 
     public static class TestExpressionEx

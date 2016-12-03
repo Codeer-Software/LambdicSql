@@ -56,7 +56,7 @@ FROM tbl_remuneration");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_Select_Top()
+        public void Test_Select_Top1()
         {
             if (_connection.GetType() != typeof(SqlConnection)) return;
 
@@ -76,12 +76,112 @@ FROM tbl_remuneration");
 	tbl_remuneration.money AS Money
 FROM tbl_remuneration");
         }
+        
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Select_Top2()
+        {
+            if (_connection.GetType() != typeof(SqlConnection)) return;
+
+            var exp1 = Sql<DB>.Create(db => 1);
+            var exp2 = Sql<DB>.Create(db => new Top(exp1));
+            var query = Sql<DB>.Create(db =>
+                Select(exp2, new SelectData
+                {
+                    PaymentDate = db.tbl_remuneration.payment_date,
+                    Money = db.tbl_remuneration.money,
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+ @"SELECT TOP 1
+	tbl_remuneration.payment_date AS PaymentDate,
+	tbl_remuneration.money AS Money
+FROM tbl_remuneration");
+        }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_Select_Asterisk_Non()
+        public void Test_Select_Top3()
+        {
+            if (_connection.GetType() != typeof(SqlConnection)) return;
+
+            var query = Sql<DB>.Create(db =>
+                Select(Top(1), new SelectData
+                {
+                    PaymentDate = db.tbl_remuneration.payment_date,
+                    Money = db.tbl_remuneration.money,
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+ @"SELECT TOP 1
+	tbl_remuneration.payment_date AS PaymentDate,
+	tbl_remuneration.money AS Money
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Select_Top4()
+        {
+            if (_connection.GetType() != typeof(SqlConnection)) return;
+
+            var exp1 = Sql<DB>.Create(db => 1);
+            var exp2 = Sql<DB>.Create(db => Top(exp1));
+            var query = Sql<DB>.Create(db =>
+                Select(exp2, new SelectData
+                {
+                    PaymentDate = db.tbl_remuneration.payment_date,
+                    Money = db.tbl_remuneration.money,
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+ @"SELECT TOP 1
+	tbl_remuneration.payment_date AS PaymentDate,
+	tbl_remuneration.money AS Money
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Select_Asterisk_Non1()
         {
             var query = Sql<DB>.Create(db =>
                 Select(new Asterisk()).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query<Remuneration>(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT *
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Select_Asterisk_Non2()
+        {
+            var query = Sql<DB>.Create(db =>
+                Select(Asterisk()).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query<Remuneration>(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT *
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Select_Asterisk_Non3()
+        {
+            var exp1 = Sql<DB>.Create(db => Asterisk());
+            var exp2 = Sql<DB>.Create(db => exp1);
+            var query = Sql<DB>.Create(db =>
+                Select(exp2).
                 From(db.tbl_remuneration));
 
             var datas = _connection.Query<Remuneration>(query).ToList();

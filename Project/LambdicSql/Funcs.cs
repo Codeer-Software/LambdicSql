@@ -9,7 +9,7 @@ namespace LambdicSql
     /// <summary>
     /// SQL Functions.
     /// It can only be used within methods of the LambdicSql.Sql class.
-    /// Use[using static LambdicSql.Funcs;], you can be used to write natural SQL.
+    /// Use[using static LambdicSql.Funcs;], you can use to write natural SQL.
     /// </summary>
     [SqlSyntax]
     public static class Funcs

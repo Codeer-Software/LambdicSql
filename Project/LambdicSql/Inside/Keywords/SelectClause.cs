@@ -20,6 +20,19 @@ namespace LambdicSql.Inside.Keywords
             }
             var selectText = string.Join(" ", new[] { "SELECT" }.Concat(modify.Select(e => converter.ToString(e))).ToArray());
 
+            while (true)
+            {
+                if (!typeof(ISqlExpressionBase).IsAssignableFrom(define.Type))
+                {
+                    break;
+                }
+                object obj;
+                ExpressionToObject.GetExpressionObject(define, out obj);
+                var exp = ((ISqlExpressionBase)obj).GetExpressions();
+                if (exp.Length != 1) throw new NotSupportedException();
+                define = exp[0];
+            }
+                //TODO refactoring. other imlements.
             if (typeof(Asterisk).IsAssignableFrom(define.Type))
             {
                 var asteriskType = define.Type.IsGenericType ? define.Type.GetGenericTypeDefinition() : null;
