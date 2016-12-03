@@ -419,7 +419,7 @@ ORDER BY
                     Id = db.tbl_remuneration.staff_id
                 }).
                 From(db.tbl_remuneration).
-                OrderBy(exp1.Cast<ISortedBy>(), exp2.Cast<ISortedBy>()));
+                OrderBy(exp3.Cast<ISortedBy>(), exp4.Cast<ISortedBy>()));
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -485,9 +485,7 @@ ORDER BY
 	tbl_remuneration.money ASC,
 	tbl_remuneration.staff_id DESC");
         }
-
-        //TODO Asc,Descの引数がExp
-
+        
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Where1()
         {
