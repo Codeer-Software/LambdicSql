@@ -6,12 +6,27 @@ using System.Linq.Expressions;
 
 namespace LambdicSql
 {
+    /// <summary>
+    /// ROWS keyword.
+    /// Use it with the OVER function.
+    /// </summary>
     [SqlSyntax]
     public class Rows
     {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="preceding">Preceding row count.</param>
         public Rows(int preceding) { InvalitContext.Throw("new " + nameof(Rows)); }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="preceding">Preceding row count.</param>
+        /// <param name="following">Following row count.</param>
         public Rows(int preceding, int following) { InvalitContext.Throw("new " + nameof(Rows)); }
-        public static string ToString(ISqlStringConverter converter, NewExpression exp)
+
+        static string ToString(ISqlStringConverter converter, NewExpression exp)
         {
             var args = exp.Arguments.Select(e => converter.ToString(e)).ToArray();
             if (exp.Arguments.Count == 1)

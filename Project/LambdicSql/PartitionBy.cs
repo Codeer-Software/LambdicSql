@@ -6,11 +6,20 @@ using System.Linq.Expressions;
 
 namespace LambdicSql
 {
+    /// <summary>
+    /// PARTITION BY keyword.
+    /// Use it with the OVER function.
+    /// </summary>
     [SqlSyntax]
     public class PartitionBy
     {
-        public PartitionBy(params object[] targets) { InvalitContext.Throw("new " + nameof(PartitionBy)); }
-        public static string ToString(ISqlStringConverter converter, NewExpression exp)
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="columns">Specify column or expression.</param>
+        public PartitionBy(params object[] columns) { InvalitContext.Throw("new " + nameof(PartitionBy)); }
+
+        static string ToString(ISqlStringConverter converter, NewExpression exp)
         {
             var arg = exp.Arguments[0];
             var array = arg as NewArrayExpression;
