@@ -256,7 +256,7 @@ namespace TestCheck35
                     Name = db.tbl_staff.name,
                     Count = Count(db.tbl_remuneration.money),
                     Total = Sum(db.tbl_remuneration.money),
-                    Average = Avg(db.tbl_remuneration.money),
+                    Average = (decimal)Avg(db.tbl_remuneration.money),
                     Minimum = Min(db.tbl_remuneration.money),
                     Maximum = Max(db.tbl_remuneration.money),
                 }).

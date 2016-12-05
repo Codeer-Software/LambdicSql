@@ -60,5 +60,14 @@ namespace Test
 FROM tbl_remuneration
 	JOIN tbl_staff ON (tbl_staff.id) = (tbl_remuneration.staff_id)");
         }
+
+        void XXX()
+        {
+            //cout → int
+            //avg → double
+
+            var db = new ModelLambdicSqlTestDB();
+            var sum = db.tbl_remuneration.Sum(e => e.money);
+        }
     }
 }

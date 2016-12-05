@@ -19,7 +19,7 @@ namespace LambdicSql
         /// </summary>
         /// <typeparam name="T">Type represented by expression.</typeparam>
         /// <param name="expression">It specifies constants, columns, functions, and combinations of arithmetic operators, bit operators, and string operators.</param>
-        /// <returns></returns>
+        /// <returns>Total.</returns>
         public static T Sum<T>(T expression) => InvalitContext.Throw<T>(nameof(Sum));
 
         /// <summary>
@@ -28,21 +28,21 @@ namespace LambdicSql
         /// <typeparam name="T">Type represented by expression.</typeparam>
         /// <param name="aggregatePredicate">Specify All or Distinct.</param>
         /// <param name="expression">It specifies constants, columns, functions, and combinations of arithmetic operators, bit operators, and string operators.</param>
-        /// <returns></returns>
+        /// <returns>Total.</returns>
         public static T Sum<T>(AggregatePredicate aggregatePredicate, T expression) => InvalitContext.Throw<T>(nameof(Sum));
 
         /// <summary>
         /// Count the number of expression.
         /// </summary>
         /// <param name="expression">It specifies constants, columns, functions, and combinations of arithmetic operators, bit operators, and string operators.</param>
-        /// <returns></returns>
+        /// <returns>Count.</returns>
         public static int Count(object expression) => InvalitContext.Throw<int>(nameof(Count));
 
         /// <summary>
         /// Count the number of row.
         /// </summary>
         /// <param name="asterisk"></param>
-        /// <returns></returns>
+        /// <returns>Count.</returns>
         public static int Count(Asterisk asterisk) => InvalitContext.Throw<int>(nameof(Count));
 
         /// <summary>
@@ -50,23 +50,22 @@ namespace LambdicSql
         /// </summary>
         /// <param name="aggregatePredicate">Specify All or Distinct.</param>
         /// <param name="expression"></param>
-        /// <returns></returns>
+        /// <returns>Count.</returns>
         public static int Count(AggregatePredicate aggregatePredicate, object expression) => InvalitContext.Throw<int>(nameof(Count));
-
+        
         /// <summary>
         /// Calculate average of expression.
         /// </summary>
-        /// <typeparam name="T">Type represented by expression.</typeparam>
         /// <param name="expression">It specifies constants, columns, functions, and combinations of arithmetic operators, bit operators, and string operators.</param>
-        /// <returns></returns>
-        public static T Avg<T>(T expression) => InvalitContext.Throw<T>(nameof(Avg));
+        /// <returns>Average.</returns>
+        public static double Avg(object expression) => InvalitContext.Throw<double>(nameof(Avg));
 
         /// <summary>
         /// Get minimum item of expression.
         /// </summary>
         /// <typeparam name="T">Type represented by expression.</typeparam>
         /// <param name="expression">It specifies constants, columns, functions, and combinations of arithmetic operators, bit operators, and string operators.</param>
-        /// <returns></returns>
+        /// <returns>Minimum.</returns>
         public static T Min<T>(T expression) => InvalitContext.Throw<T>(nameof(Min));
 
         /// <summary>
@@ -74,7 +73,7 @@ namespace LambdicSql
         /// </summary>
         /// <typeparam name="T">Type represented by expression.</typeparam>
         /// <param name="expression">It specifies constants, columns, functions, and combinations of arithmetic operators, bit operators, and string operators.</param>
-        /// <returns></returns>
+        /// <returns>Maximum.</returns>
         public static T Max<T>(T expression) => InvalitContext.Throw<T>(nameof(Max));
 
         /// <summary>
@@ -82,7 +81,7 @@ namespace LambdicSql
         /// </summary>
         /// <typeparam name="T">Type represented by expression.</typeparam>
         /// <param name="expression">It specifies constants, columns, functions, and combinations of arithmetic operators, bit operators, and string operators.</param>
-        /// <returns></returns>
+        /// <returns>Absolute value.</returns>
         public static T Abs<T>(T expression) => InvalitContext.Throw<T>(nameof(Abs));
 
         /// <summary>
@@ -202,7 +201,7 @@ namespace LambdicSql
         /// <param name="src">The date data.</param>
         /// <returns>A part from the date data.</returns>
         public static double Extract(DateTimeElement element, DateTime src) => InvalitContext.Throw<double>(nameof(Extract));
-
+        
         /// <summary>
         /// Extract a part from the date data.
         /// </summary>

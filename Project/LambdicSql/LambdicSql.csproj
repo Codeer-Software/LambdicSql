@@ -63,6 +63,9 @@
     <Compile Include="Inside\TowWaySqlSpec.cs" />
     <Compile Include="Keywords.cs" />
     <Compile Include="ISortedBy.cs" />
+    <Compile Include="OrderBy.cs" />
+    <Compile Include="PartitionBy.cs" />
+    <Compile Include="Rows.cs" />
     <Compile Include="SqlBase\ExpressionToObject.CreateGetter.cs" />
     <Compile Include="SqlBase\ExpressionToObject.Getter.cs" />
     <Compile Include="Inside\SqlExpressionCoupled.cs" />

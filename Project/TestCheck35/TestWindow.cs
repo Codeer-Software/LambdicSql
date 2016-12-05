@@ -6,7 +6,6 @@ using static Test.Helper.DBProviderInfo;
 using LambdicSql;
 using LambdicSql.feat.Dapper;
 using static LambdicSql.Keywords;
-using static LambdicSql.Window;
 
 namespace TestCheck35
 {
@@ -778,7 +777,7 @@ FROM tbl_remuneration");
 	ORDER BY
 		tbl_remuneration.money ASC) AS Val
 FROM tbl_remuneration",
-(long)2);
+2);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -788,7 +787,7 @@ FROM tbl_remuneration",
             if (_connection.GetType().Name == "MySqlConnection") return;
             if (_connection.GetType().Name == "NpgsqlConnection") return;
 
-            var exp = Sql<DB>.Create(db => (long)2);
+            var exp = Sql<DB>.Create(db => 2);
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
@@ -807,7 +806,7 @@ FROM tbl_remuneration",
 	ORDER BY
 		tbl_remuneration.money ASC) AS Val
 FROM tbl_remuneration",
-(long)2);
+2);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -835,7 +834,7 @@ FROM tbl_remuneration",
 		tbl_remuneration.money ASC 
 	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
 FROM tbl_remuneration",
-(long)2);
+2);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -980,6 +979,7 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
             if (_connection.GetType().Name == "DB2Connection") return;
+       //     if (_connection.GetType().Name == "NpgsqlConnection") return;
 
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
@@ -1007,12 +1007,12 @@ FROM tbl_remuneration", 2);
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
             if (_connection.GetType().Name == "DB2Connection") return;
-            if (_connection.GetType().Name == "NpgsqlConnection") return;
+         //   if (_connection.GetType().Name == "NpgsqlConnection") return;
 
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = Window.Lag(3, db.tbl_remuneration.money).
+                    Val = Window.Lag(3, db.tbl_remuneration.id).
                             Over<decimal>(null,
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 null)
@@ -1023,7 +1023,7 @@ FROM tbl_remuneration", 2);
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	LAG(@p_0, tbl_remuneration.money)OVER(
+	LAG(@p_0, tbl_remuneration.id)OVER(
 	ORDER BY
 		tbl_remuneration.money ASC) AS Val
 FROM tbl_remuneration", 3);
@@ -1097,7 +1097,7 @@ FROM tbl_remuneration", 2, 100);
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = Window.Lag(2000, db.tbl_remuneration.money, db.tbl_remuneration.money).
+                    Val = Window.Lag(2000, db.tbl_remuneration.id, db.tbl_remuneration.id).
                             Over<decimal>(null,
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 null)
@@ -1107,7 +1107,7 @@ FROM tbl_remuneration", 2, 100);
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count); AssertEx.AreEqual(query, _connection,
  @"SELECT
-	LAG(@p_0, tbl_remuneration.money, tbl_remuneration.money)OVER(
+	LAG(@p_0, tbl_remuneration.id, tbl_remuneration.id)OVER(
 	ORDER BY
 		tbl_remuneration.money ASC) AS Val
 FROM tbl_remuneration", 2000);
@@ -1387,6 +1387,168 @@ FROM tbl_remuneration");
 	ORDER BY
 		tbl_remuneration.money ASC,
 		tbl_remuneration.payment_date DESC 
+	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Over1_1()
+        {
+            if (_connection.GetType().Name == "SQLiteConnection") return;
+            if (_connection.GetType().Name == "MySqlConnection") return;
+            
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData()
+                {
+                    Val = Window.Count(db.tbl_remuneration.money).
+                            Over<decimal>(new PartitionBy(db.tbl_remuneration.payment_date),
+                                new OrderBy(new Asc(db.tbl_remuneration.money)),
+                                new Rows(1, 5))
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	COUNT(tbl_remuneration.money)OVER(
+	PARTITION BY
+		tbl_remuneration.payment_date 
+	ORDER BY
+		tbl_remuneration.money ASC 
+	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Over1_2()
+        {
+            if (_connection.GetType().Name == "SQLiteConnection") return;
+            if (_connection.GetType().Name == "MySqlConnection") return;
+
+            var exp1 = Sql<DB>.Create(db => new PartitionBy(db.tbl_remuneration.payment_date));
+            var exp2 = Sql<DB>.Create(db => new OrderBy(new Asc(db.tbl_remuneration.money)));
+            var exp3 = Sql<DB>.Create(db => new Rows(1, 5));
+
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData()
+                {
+                    Val = Window.Count(db.tbl_remuneration.money).
+                            Over<decimal>(exp1.Body, exp2.Body, exp3.Body)
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	COUNT(tbl_remuneration.money)OVER(
+	PARTITION BY
+		tbl_remuneration.payment_date 
+	ORDER BY
+		tbl_remuneration.money ASC 
+	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Over2_1()
+        {
+            if (_connection.GetType().Name == "SQLiteConnection") return;
+            if (_connection.GetType().Name == "MySqlConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData()
+                {
+                    Val = Window.Count(db.tbl_remuneration.money).
+                            Over<decimal>(new OrderBy(new Asc(db.tbl_remuneration.money)))
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	COUNT(tbl_remuneration.money)OVER(
+	ORDER BY
+		tbl_remuneration.money ASC) AS Val
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Over2_2()
+        {
+            if (_connection.GetType().Name == "SQLiteConnection") return;
+            if (_connection.GetType().Name == "MySqlConnection") return;
+
+            var exp = Sql<DB>.Create(db => new OrderBy(new Asc(db.tbl_remuneration.money)));
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData()
+                {
+                    Val = Window.Count(db.tbl_remuneration.money).
+                            Over<decimal>(exp.Body)
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	COUNT(tbl_remuneration.money)OVER(
+	ORDER BY
+		tbl_remuneration.money ASC) AS Val
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Over3_1()
+        {
+            if (_connection.GetType().Name == "SQLiteConnection") return;
+            if (_connection.GetType().Name == "MySqlConnection") return;
+            
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData()
+                {
+                    Val = Window.Count(db.tbl_remuneration.money).
+                            Over<decimal>(new OrderBy(new Asc(db.tbl_remuneration.money)),
+                                new Rows(1, 5))
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	COUNT(tbl_remuneration.money)OVER(
+	ORDER BY
+		tbl_remuneration.money ASC 
+	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Over3_2()
+        {
+            if (_connection.GetType().Name == "SQLiteConnection") return;
+            if (_connection.GetType().Name == "MySqlConnection") return;
+            
+            var exp1 = Sql<DB>.Create(db => new OrderBy(new Asc(db.tbl_remuneration.money)));
+            var exp2 = Sql<DB>.Create(db => new Rows(1, 5));
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData()
+                {
+                    Val = Window.Count(db.tbl_remuneration.money).
+                            Over<decimal>(exp1.Body, exp2.Body)
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	COUNT(tbl_remuneration.money)OVER(
+	ORDER BY
+		tbl_remuneration.money ASC 
 	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
 FROM tbl_remuneration");
         }

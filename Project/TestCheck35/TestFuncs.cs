@@ -75,7 +75,7 @@ namespace TestCheck35
                    Val5 = Count(new Asterisk()),
                    Val6 = Count(AggregatePredicate.All, db.tbl_remuneration.money),
                    Val7 = Count(AggregatePredicate.Distinct, db.tbl_remuneration.money),
-                   Val8 = Avg(db.tbl_remuneration.money),
+                   Val8 = (decimal)Avg(db.tbl_remuneration.money),
                    Val9 = Min(db.tbl_remuneration.money),
                    Val10 = Max(db.tbl_remuneration.money),
                }).
@@ -115,7 +115,7 @@ GROUP BY tbl_staff.id, tbl_staff.name");
                    Val5 = Count(new Asterisk()),
                    Val6 = Count(AggregatePredicate.All, 5),
                    Val7 = Count(AggregatePredicate.Distinct, 6),
-                   Val8 = Avg(7),
+                   Val8 = (decimal)Avg(7),
                    Val9 = Min(8),
                    Val10 = Max(9),
                }).
@@ -156,7 +156,7 @@ GROUP BY tbl_staff.id, tbl_staff.name", 1, 2, 3, 4, 5, 6, 7, 8, 9);
                    Val5 = Count(new Asterisk()),
                    Val6 = Count(AggregatePredicate.All, exp),
                    Val7 = Count(AggregatePredicate.Distinct, exp),
-                   Val8 = Avg(exp),
+                   Val8 = (decimal)Avg(exp),
                    Val9 = Min(exp),
                    Val10 = Max(exp),
                }).
