@@ -6,6 +6,11 @@ using System.Linq.Expressions;
 
 namespace LambdicSql
 {
+    //TODO やっぱり統合したいよなー
+    //Window関数だけなんだかなーって感じやねんなー
+    //こんなに丁寧な感じでなくてもいいしなー
+    //Sumだけ引数にわたすとか？→いやーそれはなー
+
     /// <summary>
     /// SQL Window functions.
     /// It can only be used within methods of the LambdicSql.Sql class.
@@ -271,7 +276,8 @@ namespace LambdicSql
                     func = Funcs.ToString(converter, new[] { methods[0] });
                     break;
                 default:
-                    func = converter.MakeNormalSqlFunctionString(methods[0]);
+                    var method = methods[0];
+                    func = method.Method.Name.ToUpper() + "(" + string.Join(", ", method.Arguments.Skip(method.AdjustSqlSyntaxMethodArgumentIndex(0)).Select(e => converter.ToString(e)).ToArray()) + ")";
                     break;
             }
 

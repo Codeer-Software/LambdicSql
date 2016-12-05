@@ -1,15 +1,34 @@
 ﻿using LambdicSql.Inside;
 using LambdicSql.SqlBase;
-using System.Linq.Expressions;
 
 namespace LambdicSql
 {
+    /// <summary>
+    /// Query.
+    /// </summary>
+    /// <typeparam name="TSelected">Type of selected at SELECT clause.</typeparam>
     public class SqlQuery<TSelected> : ISqlQuery<TSelected>
     {
         ISqlExpressionBase _core;
+
+        /// <summary>
+        /// Entity of selected at SELECT clause.
+        /// It can only be used within methods of the LambdicSql.Sql class.
+        /// </summary>
         public TSelected Body => InvalitContext.Throw<TSelected>(nameof(Body));
-        public SqlQuery(ISqlExpressionBase core) { _core = core; }
+
+        /// <summary>
+        /// DataBase Information.
+        /// </summary>
         public DbInfo DbInfo => _core.DbInfo;
-        public string ToString(ISqlStringConverter decoder) => _core.ToString(decoder);
+
+        /// <summary>
+        /// Create SQL text.
+        /// </summary>
+        /// <param name="convertor">Convertor.</param>
+        /// <returns>SQL text.</returns>
+        public string ToString(ISqlStringConverter convertor) => _core.ToString(convertor);
+
+        internal SqlQuery(ISqlExpressionBase core) { _core = core; }
     }
 }

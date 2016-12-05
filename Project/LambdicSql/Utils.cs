@@ -4,20 +4,79 @@ using System.Linq.Expressions;
 using System.Linq;
 using System;
 
-//TODO やっぱり統合したいよなー
-//Window関数だけなんだかなーって感じやねんなー
 namespace LambdicSql
 {
+    /// <summary>
+    /// Utility.
+    /// It can only be used within methods of the LambdicSql.Sql class.
+    /// </summary>
     [SqlSyntax]
     public static class Utils
     {
-        public static T Cast<T>(this ISqlExpressionBase query) => InvalitContext.Throw<T>(nameof(Cast));
-        public static T Cast<T>(this IMethodChain words) => InvalitContext.Throw<T>(nameof(Cast));
+        /// <summary>
+        /// Cast.
+        /// Used to place an ISqlExpressionBase object in a C # expression.
+        /// </summary>
+        /// <typeparam name="T">Destination type.</typeparam>
+        /// <param name="expression">Expression.</param>
+        /// <returns>Casted object.</returns>
+        public static T Cast<T>(this ISqlExpressionBase expression) => InvalitContext.Throw<T>(nameof(Cast));
+
+        /// <summary>
+        /// Cast.
+        /// Used to place an IMethodChain object in a C # expression.
+        /// </summary>
+        /// <typeparam name="T">Destination type.</typeparam>
+        /// <param name="expression">Expression.</param>
+        /// <returns>Casted object.</returns>
+        public static T Cast<T>(this IMethodChain expression) => InvalitContext.Throw<T>(nameof(Cast));
+
+        /// <summary>
+        /// Condition building helper.
+        /// condition is used if enable is valid.
+        /// </summary>
+        /// <param name="enable">Whether condition is valid.</param>
+        /// <param name="condition">Condition expression.</param>
+        /// <returns>Condition.</returns>
         public static bool Condition(bool enable, bool condition) => InvalitContext.Throw<bool>(nameof(Condition));
-        public static object Text(string text, params object[] args) => InvalitContext.Throw<object>(nameof(Text));
-        public static T Text<T>(string text, params object[] args) => InvalitContext.Throw<T>(nameof(Text));
-        public static IQuery<Non> TwoWaySql(string text, params object[] args) => InvalitContext.Throw<IQuery<Non>>(nameof(Text));
-        public static T ColumnOnly<T>(T target) => InvalitContext.Throw<T>(nameof(ColumnOnly));
+
+        /// <summary>
+        /// Put the text in the expression of LamblicSql.
+        /// </summary>
+        /// <param name="text">Text.You can use the same format as System.String's Format method.</param>
+        /// <param name="args">Format arguments.</param>
+        /// <returns>LamblicSql's expression.</returns>
+        public static object TextSql(string text, params object[] args) => InvalitContext.Throw<object>(nameof(TextSql));
+
+        /// <summary>
+        /// Put the text in the expression of LamblicSql.
+        /// </summary>
+        /// <typeparam name="T">Destination type.</typeparam>
+        /// <param name="text">Text.You can use the same format as System.String's Format method.</param>
+        /// <param name="args">Format arguments.</param>
+        /// <returns>LamblicSql's expression.</returns>
+        public static T TextSql<T>(string text, params object[] args) => InvalitContext.Throw<T>(nameof(TextSql));
+
+        /// <summary>
+        /// Put the text in the expression of LamblicSql.
+        /// You can use TwoWaySql text format.
+        /// It's ...
+        /// TwoWaySql(@"SELECT money + /*0*/1000/**/ FROM tbl_remuneration WHERE /*1*/tbl_remuneration.money = 100/**/", 1000, tbl_remuneration.staff_id == 10)
+        /// Replace /*no*/.../**/ by arguments.
+        /// </summary>
+        /// <param name="text">Text.</param>
+        /// <param name="args">Format arguments.</param>
+        /// <returns>LamblicSql's expression.</returns>
+        public static IQuery<Non> TwoWaySql(string text, params object[] args) => InvalitContext.Throw<IQuery<Non>>(nameof(TextSql));
+
+        /// <summary>
+        /// Get column name only.
+        /// It's Removing table name and schema name.
+        /// </summary>
+        /// <typeparam name="T">column type.</typeparam>
+        /// <param name="column">column.</param>
+        /// <returns>Column name only.</returns>
+        public static T ColumnOnly<T>(T column) => InvalitContext.Throw<T>(nameof(ColumnOnly));
 
         static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
@@ -26,7 +85,7 @@ namespace LambdicSql
             {
                 case nameof(Cast): return string.Empty;
                 case nameof(Condition): return Condition(converter, method);
-                case nameof(Text): return Text(converter, method);
+                case nameof(TextSql): return TextSql(converter, method);
                 case nameof(TwoWaySql): return TwoWaySql(converter, method);
                 case nameof(ColumnOnly): return ColumnOnly(converter, method);
             }
@@ -39,7 +98,7 @@ namespace LambdicSql
             return (bool)obj ? converter.ToString(method.Arguments[1]) : string.Empty;
         }
 
-        static string Text(ISqlStringConverter converter, MethodCallExpression method)
+        static string TextSql(ISqlStringConverter converter, MethodCallExpression method)
         {
             var obj = converter.ToObject(method.Arguments[0]);
             var text = (string)obj;

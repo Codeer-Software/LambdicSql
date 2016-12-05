@@ -25,7 +25,7 @@ namespace LambdicSql
         static string ToString(ISqlStringConverter cnv, NewExpression exp)
             => cnv.ToString(exp.Arguments[0]) + " " + "ASC";
 
-        internal static string ToString(ISqlStringConverter cnv, MethodCallExpression[] methods)
+        static string ToString(ISqlStringConverter cnv, MethodCallExpression[] methods)
             => cnv.ToString(methods[0].Arguments[0]) + " " + "ASC";
     }
 
@@ -44,7 +44,7 @@ namespace LambdicSql
         static string ToString(ISqlStringConverter cnv, NewExpression exp)
             => cnv.ToString(exp.Arguments[0]) + " " + "DESC";
 
-        internal static string ToString(ISqlStringConverter cnv, MethodCallExpression[] methods)
+        static string ToString(ISqlStringConverter cnv, MethodCallExpression[] methods)
             => cnv.ToString(methods[0].Arguments[0]) + " " + "DESC";
     }
 }

@@ -949,14 +949,6 @@ namespace LambdicSql
                 case nameof(IsNull):
                 case nameof(IsNotNull):
                     return NullCheck.ToString(converter, methods);
-                case nameof(Top):
-                    return LambdicSql.Top.ToString(converter, methods);
-                case nameof(Asterisk):
-                    return LambdicSql.Asterisk.ToString(converter, methods);
-                case nameof(Asc):
-                    return LambdicSql.Asc.ToString(converter, methods);
-                case nameof(Desc):
-                    return LambdicSql.Desc.ToString(converter, methods);
             }
             throw new NotSupportedException();
         }

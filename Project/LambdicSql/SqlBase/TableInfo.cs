@@ -1,6 +1,4 @@
-﻿using System.Linq.Expressions;
-
-namespace LambdicSql.SqlBase
+﻿namespace LambdicSql.SqlBase
 {
     public class TableInfo
     {

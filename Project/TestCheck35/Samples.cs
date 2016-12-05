@@ -915,7 +915,7 @@ namespace TestCheck35
                 {
                     name = db.tbl_staff.name,
                     payment_date = db.tbl_remuneration.payment_date,
-                    money = Text<decimal>("{0} + {1}", db.tbl_remuneration.money, 1000),
+                    money = TextSql<decimal>("{0} + {1}", db.tbl_remuneration.money, 1000),
                 }).
                 From(db.tbl_remuneration).
                     Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
@@ -1130,7 +1130,7 @@ FROM tbl_remuneration
                     Select(new
                     {
                         Dst = CurrentDate()
-                    }).From(Text("dual")));
+                    }).From(TextSql("dual")));
                 ExecuteRead(query);
             }
             if (name == "IBM.Data.DB2.DB2Connection")
@@ -1139,7 +1139,7 @@ FROM tbl_remuneration
                     Select(new
                     {
                         Dst = CurrentSpaceDate()
-                    }).From(Text("sysibm.sysdummy1")));
+                    }).From(TextSql("sysibm.sysdummy1")));
                 ExecuteRead(query);
             }
 
@@ -1160,7 +1160,7 @@ FROM tbl_remuneration
                     Select(new
                     {
                         Dst = CurrentSpaceTime()
-                    }).From(Text("sysibm.sysdummy1")));
+                    }).From(TextSql("sysibm.sysdummy1")));
                 var x = ExecuteRead(query);
             }
 
@@ -1182,7 +1182,7 @@ FROM tbl_remuneration
                     Select(new
                     {
                         Dst = CurrentTimeStamp()
-                    }).From(Text("dual")));
+                    }).From(TextSql("dual")));
                 ExecuteRead(query);
             }
             if (name == "Oracle.ManagedDataAccess.Client.OracleConnection")
@@ -1191,7 +1191,7 @@ FROM tbl_remuneration
                     Select(new
                     {
                         Dst = CurrentTimeStamp()
-                    }).From(Text("dual")));
+                    }).From(TextSql("dual")));
                 ExecuteRead(query);
             }
             if (name == "IBM.Data.DB2.DB2Connection")
@@ -1200,7 +1200,7 @@ FROM tbl_remuneration
                     Select(new
                     {
                         Dst = CurrentSpaceTimeStamp()
-                    }).From(Text("sysibm.sysdummy1")));
+                    }).From(TextSql("sysibm.sysdummy1")));
                 var x = ExecuteRead(query);
             }
             if (name == "IBM.Data.DB2.DB2Connection")
@@ -1209,7 +1209,7 @@ FROM tbl_remuneration
                     Select(new
                     {
                         Dst = CurrentSpaceTimeStamp()
-                    }).From(Text("sysibm.sysdummy1")));
+                    }).From(TextSql("sysibm.sysdummy1")));
                 var x = ExecuteRead(query);
             }
 

@@ -4,12 +4,13 @@ using System.Linq;
 using System;
 using LambdicSql;
 using System.Collections.Generic;
+using LambdicSql.SqlBase;
 
-namespace LambdicSql.SqlBase
+namespace LambdicSql.Inside
 {
-    public static class ObjectCreateAnalyzer
+    internal static class ObjectCreateAnalyzer
     {
-        public static ObjectCreateInfo MakeSelectInfo(Type type)
+        internal static ObjectCreateInfo MakeSelectInfo(Type type)
         {
             var select = new List<ObjectCreateMemberElement>();
             foreach (var p in type.GetProperties())
@@ -19,7 +20,7 @@ namespace LambdicSql.SqlBase
             return new ObjectCreateInfo(select, null);
         }
 
-        public static ObjectCreateInfo MakeSelectInfo(Expression exp)
+        internal static ObjectCreateInfo MakeSelectInfo(Expression exp)
         {
             var select = new List<ObjectCreateMemberElement>();
             var newExp = exp as NewExpression;

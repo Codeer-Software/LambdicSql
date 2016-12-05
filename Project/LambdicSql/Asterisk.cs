@@ -19,7 +19,7 @@ namespace LambdicSql
         static string ToString(ISqlStringConverter converter, NewExpression exp)
             => "*";
 
-        internal static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
             => "*";
     }
 

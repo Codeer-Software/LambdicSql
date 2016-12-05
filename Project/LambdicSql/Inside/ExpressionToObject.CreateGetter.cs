@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace LambdicSql.SqlBase
+namespace LambdicSql.Inside
 {
-    public static partial class ExpressionToObject
+    internal static partial class ExpressionToObject
     {
         static IGetter CreateGetter(Type[] args)
         {

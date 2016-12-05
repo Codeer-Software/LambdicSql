@@ -4,10 +4,10 @@ using System.Linq.Expressions;
 using System.Linq;
 using System.Reflection;
 
-namespace LambdicSql.SqlBase
+namespace LambdicSql.Inside
 {
     //TODO refactoring.
-    public static partial class ExpressionToObject
+    internal static partial class ExpressionToObject
     {
         interface IGetter
         {
@@ -17,7 +17,7 @@ namespace LambdicSql.SqlBase
 
         static Dictionary<string, IGetter> _memberGet = new Dictionary<string, IGetter>();
 
-        public static bool GetExpressionObject(Expression exp, out object obj)
+        internal static bool GetExpressionObject(Expression exp, out object obj)
         {
             bool not = false;
             while (true)
@@ -84,7 +84,7 @@ namespace LambdicSql.SqlBase
             return false;
         }
 
-        public static bool GetBinaryExpression(BinaryExpression binaryExp, out object value)
+        internal static bool GetBinaryExpression(BinaryExpression binaryExp, out object value)
         {
             value = null;
 
@@ -173,7 +173,7 @@ namespace LambdicSql.SqlBase
         }
 
         //TODO refactoring.
-        public static bool GetMemberInitObject(MemberInitExpression memberInit, out object value)
+        internal static bool GetMemberInitObject(MemberInitExpression memberInit, out object value)
         {
             value = null;
 
@@ -225,7 +225,7 @@ namespace LambdicSql.SqlBase
             return true;
         }
 
-        public static bool GetNewObject(NewExpression newExp, out object value)
+        internal static bool GetNewObject(NewExpression newExp, out object value)
         {
             value = null;
 
@@ -262,7 +262,7 @@ namespace LambdicSql.SqlBase
             return true;
         }
 
-        public static bool GetMethodObject(MethodCallExpression method, out object value)
+        internal static bool GetMethodObject(MethodCallExpression method, out object value)
         {
             value = null;
 
@@ -322,7 +322,7 @@ namespace LambdicSql.SqlBase
             return true;
         }
 
-        public static bool GetMemberObject(MemberExpression exp, out object value)
+        internal static bool GetMemberObject(MemberExpression exp, out object value)
         {
             value = null;
             var member = exp;
@@ -392,7 +392,7 @@ namespace LambdicSql.SqlBase
             return true;
         }
 
-        public static object ConvertObject(Type dstType, object src)
+        internal static object ConvertObject(Type dstType, object src)
         {
             var srcType = src.GetType();
             var getterName = srcType.FullName + "@-@" + dstType.FullName;

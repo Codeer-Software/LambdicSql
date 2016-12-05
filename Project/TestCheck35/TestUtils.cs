@@ -208,8 +208,8 @@ GROUP BY tbl_remuneration.staff_id");
             var query = Sql<DB>.Create(db =>
                 Select(new Staff
                 {
-                    id = (int)Text("tbl_staff.id"),
-                    name = Text<string>("tbl_staff.name"),
+                    id = (int)TextSql("tbl_staff.id"),
+                    name = TextSql<string>("tbl_staff.name"),
                 }).
                 From(db.tbl_staff));
 
@@ -228,8 +228,8 @@ FROM tbl_staff");
             var query = Sql<DB>.Create(db =>
                 Select(new Staff
                 {
-                    id = (int)Text("{0}", db.tbl_staff.id),
-                    name = Text<string>("{0}", db.tbl_staff.name),
+                    id = (int)TextSql("{0}", db.tbl_staff.id),
+                    name = TextSql<string>("{0}", db.tbl_staff.name),
                 }).
                 From(db.tbl_staff));
 
@@ -250,8 +250,8 @@ FROM tbl_staff");
             var query = Sql<DB>.Create(db =>
                 Select(new Staff
                 {
-                    id = (int)Text("{0}", exp1),
-                    name = Text<string>("{0}", exp2),
+                    id = (int)TextSql("{0}", exp1),
+                    name = TextSql<string>("{0}", exp2),
                 }).
                 From(db.tbl_staff));
 
