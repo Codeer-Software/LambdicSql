@@ -15,195 +15,195 @@ namespace LambdicSql
     public static class Funcs
     {
         /// <summary>
-        /// Calculate total.
+        /// SUM function.
         /// </summary>
         /// <typeparam name="T">Type represented by expression.</typeparam>
-        /// <param name="expression">It specifies constants, columns, functions, and combinations of arithmetic operators, bit operators, and string operators.</param>
+        /// <param name="expression">The column or expression that is function target.</param>
         /// <returns>Total.</returns>
         public static T Sum<T>(T expression) => InvalitContext.Throw<T>(nameof(Sum));
 
         /// <summary>
-        /// Calculate total.
+        /// SUM function.
         /// </summary>
         /// <typeparam name="T">Type represented by expression.</typeparam>
         /// <param name="aggregatePredicate">Specify All or Distinct.</param>
-        /// <param name="expression">It specifies constants, columns, functions, and combinations of arithmetic operators, bit operators, and string operators.</param>
+        /// <param name="expression">The column or expression that is function target.</param>
         /// <returns>Total.</returns>
         public static T Sum<T>(AggregatePredicate aggregatePredicate, T expression) => InvalitContext.Throw<T>(nameof(Sum));
 
         /// <summary>
-        /// Count the number of expression.
+        /// COUNT function.
         /// </summary>
-        /// <param name="expression">It specifies constants, columns, functions, and combinations of arithmetic operators, bit operators, and string operators.</param>
+        /// <param name="expression">The column or expression that is function target.</param>
         /// <returns>Count.</returns>
         public static int Count(object expression) => InvalitContext.Throw<int>(nameof(Count));
 
         /// <summary>
-        /// Count the number of row.
+        /// COUNT function.
         /// </summary>
         /// <param name="asterisk"></param>
         /// <returns>Count.</returns>
         public static int Count(Asterisk asterisk) => InvalitContext.Throw<int>(nameof(Count));
 
         /// <summary>
-        /// Count the number of expression.
+        /// COUNT function.
         /// </summary>
         /// <param name="aggregatePredicate">Specify All or Distinct.</param>
         /// <param name="expression"></param>
         /// <returns>Count.</returns>
         public static int Count(AggregatePredicate aggregatePredicate, object expression) => InvalitContext.Throw<int>(nameof(Count));
-        
+
         /// <summary>
-        /// Calculate average of expression.
+        /// AVG function.
         /// </summary>
-        /// <param name="expression">It specifies constants, columns, functions, and combinations of arithmetic operators, bit operators, and string operators.</param>
+        /// <param name="expression">The column or expression that is function target.</param>
         /// <returns>Average.</returns>
         public static double Avg(object expression) => InvalitContext.Throw<double>(nameof(Avg));
 
         /// <summary>
-        /// Get minimum item of expression.
+        /// MIN function.
         /// </summary>
         /// <typeparam name="T">Type represented by expression.</typeparam>
-        /// <param name="expression">It specifies constants, columns, functions, and combinations of arithmetic operators, bit operators, and string operators.</param>
+        /// <param name="expression">The column or expression that is function target.</param>
         /// <returns>Minimum.</returns>
         public static T Min<T>(T expression) => InvalitContext.Throw<T>(nameof(Min));
 
         /// <summary>
-        /// Get maximum item of expression.
+        /// MAX function.
         /// </summary>
         /// <typeparam name="T">Type represented by expression.</typeparam>
-        /// <param name="expression">It specifies constants, columns, functions, and combinations of arithmetic operators, bit operators, and string operators.</param>
+        /// <param name="expression">The column or expression that is function target.</param>
         /// <returns>Maximum.</returns>
         public static T Max<T>(T expression) => InvalitContext.Throw<T>(nameof(Max));
 
         /// <summary>
-        /// Calculate absolute value of expression.
+        /// ABS function.
         /// </summary>
         /// <typeparam name="T">Type represented by expression.</typeparam>
-        /// <param name="expression">It specifies constants, columns, functions, and combinations of arithmetic operators, bit operators, and string operators.</param>
+        /// <param name="expression">The column or expression that is function target.</param>
         /// <returns>Absolute value.</returns>
         public static T Abs<T>(T expression) => InvalitContext.Throw<T>(nameof(Abs));
 
         /// <summary>
-        /// Calculate surplus.
+        /// MOD function.
         /// </summary>
         /// <typeparam name="T">Type represented by target</typeparam>
         /// <param name="target">Numeric expression to divide.</param>
         /// <param name="div">A numeric expression that divides the dividend.</param>
         /// <returns>Surplus.</returns>
-        public static T Mod<T>(T target, int div) => InvalitContext.Throw<T>(nameof(Mod));
+        public static T Mod<T>(T target, object div) => InvalitContext.Throw<T>(nameof(Mod));
 
         /// <summary>
-        /// Returns a numeric value, rounded to the specified length or precision.
+        /// ROUND function.
         /// </summary>
         /// <typeparam name="T">Type represented by target.</typeparam>
         /// <param name="target">Is an expression of the exact numeric or approximate numeric data type category, except for the bit data type.</param>
         /// <param name="digit">Is the precision to which it is to be rounded.</param>
         /// <returns>Rounded result.</returns>
-        public static T Round<T>(T target, int digit) => InvalitContext.Throw<T>(nameof(Round));
+        public static T Round<T>(T target, object digit) => InvalitContext.Throw<T>(nameof(Round));
 
         /// <summary>
-        /// Returns a string that is the result of concatenating two or more string values.
+        /// CONCAT function.
         /// </summary>
         /// <param name="targets">A string value to concatenate to the other values.</param>
         /// <returns>concatenated result.</returns>
-        public static string Concat(params string[] targets) => InvalitContext.Throw<string>(nameof(Concat));
+        public static string Concat(params object[] targets) => InvalitContext.Throw<string>(nameof(Concat));
 
         /// <summary>
-        /// Returns the number of characters of the specified string expression, excluding trailing blanks.
+        /// LENGTH function.
         /// </summary>
         /// <param name="target">target.</param>
         /// <returns>String length.</returns>
-        public static int Length(string target) => InvalitContext.Throw<int>(nameof(Length));
+        public static int Length(object target) => InvalitContext.Throw<int>(nameof(Length));
 
         /// <summary>
-        /// Returns the number of characters of the specified string expression, excluding trailing blanks.
+        /// LEN function.
         /// </summary>
         /// <param name="target">target.</param>
         /// <returns>String length.</returns>
-        public static int Len(string target) => InvalitContext.Throw<int>(nameof(Len));
+        public static int Len(object target) => InvalitContext.Throw<int>(nameof(Len));
 
         /// <summary>
-        /// Returns a character expression after converting uppercase character data to lowercase.
+        /// LOWER function.
         /// </summary>
         /// <param name="target">target.</param>
         /// <returns>Changed string.</returns>
-        public static string Lower(string target) => InvalitContext.Throw<string>(nameof(Lower));
+        public static string Lower(object target) => InvalitContext.Throw<string>(nameof(Lower));
 
         /// <summary>
-        /// Returns a character expression with lowercase character data converted to uppercase.
+        /// UPPER function.
         /// </summary>
         /// <param name="target">target.</param>
         /// <returns>Changed string.</returns>
-        public static string Upper(string target) => InvalitContext.Throw<string>(nameof(Upper));
+        public static string Upper(object target) => InvalitContext.Throw<string>(nameof(Upper));
 
         /// <summary>
-        /// Replaces all occurrences of a specified string value with another string value.
+        /// REPLACE function.
         /// </summary>
         /// <param name="target">target.</param>
         /// <param name="src">source.</param>
         /// <param name="dst">destination.</param>
         /// <returns>Changed string.</returns>
-        public static string Replace(string target, string src, string dst) => InvalitContext.Throw<string>(nameof(Replace));
+        public static string Replace(object target, object src, object dst) => InvalitContext.Throw<string>(nameof(Replace));
 
         /// <summary>
-        /// Returns part of a text.
+        /// SUBSTRING function.
         /// </summary>
         /// <param name="target">target.</param>
         /// <param name="startIndex">Specify the starting position of the character string to be acquired.</param>
         /// <param name="length">Specify the length of the string to be retrieved.</param>
         /// <returns>Part of a text.</returns>
-        public static string Substring(string target, int startIndex, int length) => InvalitContext.Throw<string>(nameof(Substring));
+        public static string Substring(object target, object startIndex, object length) => InvalitContext.Throw<string>(nameof(Substring));
 
         /// <summary>
-        /// Get date of executing SQL.
+        /// CURREN_TDATE function.
         /// </summary>
         /// <returns>Date of executing SQL.</returns>
         public static DateTime CurrentDate() => InvalitContext.Throw<DateTime>(nameof(CurrentDate));
 
         /// <summary>
-        /// Get time of executing SQL.
+        /// CURRENT_TIME function.
         /// </summary>
         /// <returns>Date of executing SQL.</returns>
         public static TimeSpan CurrentTime() => InvalitContext.Throw<TimeSpan>(nameof(DateTimeOffset));
 
         /// <summary>
-        /// Get date and time of executing SQL.
+        /// CURRENT_TIMESTAMP function.
         /// </summary>
         /// <returns>Date and time of executing SQL.</returns>
         public static DateTime CurrentTimeStamp() => InvalitContext.Throw<DateTime>(nameof(CurrentTimeStamp));
 
         /// <summary>
-        /// CURRENT DATE.
+        /// CURRENT DATE function.
         /// Get date and time of executing SQL.
         /// </summary>
         /// <returns>Date and time of executing SQL.</returns>
         public static DateTime CurrentSpaceDate() => InvalitContext.Throw<DateTime>(nameof(CurrentSpaceDate));
 
         /// <summary>
-        /// CURRENT TIME.
+        /// CURRENT TIME function.
         /// Get date and time of executing SQL.
         /// </summary>
         /// <returns>Date and time of executing SQL.</returns>
         public static TimeSpan CurrentSpaceTime() => InvalitContext.Throw<TimeSpan>(nameof(CurrentSpaceTime));
 
         /// <summary>
-        /// CURRENT TIMESTAMP.
+        /// CURRENT TIMESTAMP function.
         /// Get date and time of executing SQL.
         /// </summary>
         /// <returns>Date and time of executing SQL.</returns>
         public static DateTime CurrentSpaceTimeStamp() => InvalitContext.Throw<DateTime>(nameof(CurrentSpaceTimeStamp));
 
         /// <summary>
-        /// Extract a part from the date data.
+        /// EXTRACT function.
         /// </summary>
         /// <param name="element">Part type.</param>
         /// <param name="src">The date data.</param>
         /// <returns>A part from the date data.</returns>
         public static double Extract(DateTimeElement element, DateTime src) => InvalitContext.Throw<double>(nameof(Extract));
-        
+
         /// <summary>
-        /// Extract a part from the date data.
+        /// DATEPART function.
         /// </summary>
         /// <param name="element">Part type.</param>
         /// <param name="src">The date data.</param>
@@ -211,7 +211,7 @@ namespace LambdicSql
         public static int DatePart(DateTimeElement element, DateTime src) => InvalitContext.Throw<int>(nameof(Extract));
 
         /// <summary>
-        /// Convert a type.
+        /// CAST function.
         /// </summary>
         /// <typeparam name="TDst">Type of destination.</typeparam>
         /// <param name="target"></param>
@@ -220,7 +220,7 @@ namespace LambdicSql
         public static TDst Cast<TDst>(object target, string destinationType) => InvalitContext.Throw<TDst>(nameof(Cast));
 
         /// <summary>
-        /// Returns the first non-null value in the parameter.
+        /// COALESCE function.
         /// </summary>
         /// <typeparam name="T">Type of parameter</typeparam>
         /// <param name="parameter">Parameter.</param>
@@ -228,7 +228,7 @@ namespace LambdicSql
         public static T Coalesce<T>(params T[] parameter) => InvalitContext.Throw<T>(nameof(Coalesce));
 
         /// <summary>
-        /// If expression1 is null, it returns expression2. Otherwise it returns expression1.
+        /// NVL function.
         /// </summary>
         /// <typeparam name="T">Type represented by expression.</typeparam>
         /// <param name="expression1">expression.</param>

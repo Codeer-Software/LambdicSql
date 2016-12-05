@@ -127,7 +127,7 @@ namespace TestCheck35
 
         public class SelectData8
         {
-            public decimal Avg { get; set; }
+            public double Avg { get; set; }
             public DateTime PaymentDate { get; set; }
             public decimal Money { get; set; }
         }
@@ -734,7 +734,7 @@ namespace TestCheck35
                 Select(new SelectData8()
                 {
                     Avg = Window.Avg(db.tbl_remuneration.money).
-                            Over<decimal>(new PartitionBy(db.tbl_staff.name, db.tbl_remuneration.payment_date),
+                            Over(new PartitionBy(db.tbl_staff.name, db.tbl_remuneration.payment_date),
                                 new OrderBy(new Asc(db.tbl_remuneration.money), new Desc(db.tbl_remuneration.payment_date)),
                                 new Rows(1, 5)),
                     PaymentDate = db.tbl_remuneration.payment_date,

@@ -50,7 +50,7 @@ FROM tbl_remuneration
 ORDER BY
 	tbl_remuneration.id ASC
 LIMIT @p_0, @p_1",
-(long)1, (long)3);
+1, 3);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -105,7 +105,7 @@ ORDER BY
 	tbl_remuneration.id ASC
 LIMIT @p_0
 OFFSET @p_1",
-(long)1, (long)3);
+1, 3);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -161,7 +161,7 @@ ORDER BY
 	tbl_remuneration.id ASC
 OFFSET @p_0 ROWS
 FETCH NEXT @p_1 ROWS ONLY",
-(long)1, (long)3);
+1, 3);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -190,7 +190,7 @@ ORDER BY
 	tbl_remuneration.id ASC
 OFFSET @p_0 ROWS
 FETCH NEXT @p_1 ROWS ONLY",
-(long)1, (long)3);
+1, 3);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -216,7 +216,7 @@ FROM tbl_remuneration
 ORDER BY
 	tbl_remuneration.id ASC
 LIMIT @p_0, @p_1",
-(long)1, (long)3);
+1, 3);
         }
         
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -272,7 +272,7 @@ ORDER BY
 	tbl_remuneration.id ASC
 LIMIT @p_0
 OFFSET @p_1",
-(long)1, (long)3);
+1, 3);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -301,7 +301,7 @@ ORDER BY
 	tbl_remuneration.id ASC
 LIMIT @p_0
 OFFSET @p_1",
-(long)1, (long)3);
+1, 3);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -328,7 +328,7 @@ ORDER BY
 	tbl_remuneration.id ASC
 OFFSET @p_0 ROWS
 FETCH NEXT @p_1 ROWS ONLY",
-(long)1, (long)3);
+1, 3);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -381,7 +381,7 @@ FROM tbl_remuneration
 WHERE ROWNUM BETWEEN :p_0 AND :p_1
 ORDER BY
 	tbl_remuneration.id ASC",
-(long)1, (long)3);
+1, 3);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]

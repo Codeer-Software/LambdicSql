@@ -578,7 +578,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="count">Number of rows to acquire.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IQuery<Non> Limit(long count) => InvalitContext.Throw<IQuery<Non>>(nameof(OrderBy));
+        public static IQuery<Non> Limit(object count) => InvalitContext.Throw<IQuery<Non>>(nameof(OrderBy));
 
         /// <summary>
         /// LIMIT clause.
@@ -587,7 +587,7 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="count">Number of rows to acquire.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IQuery<TSelected> Limit<TSelected>(this IQuery<TSelected> before, long count) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
+        public static IQuery<TSelected> Limit<TSelected>(this IQuery<TSelected> before, object count) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
 
         /// <summary>
         /// LIMIT clause.
@@ -595,7 +595,7 @@ namespace LambdicSql
         /// <param name="offset">Start position.</param>
         /// <param name="count">Number of rows to acquire.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IQuery<Non> Limit(long offset, long count) => InvalitContext.Throw<IQuery<Non>>(nameof(OrderBy));
+        public static IQuery<Non> Limit(object offset, object count) => InvalitContext.Throw<IQuery<Non>>(nameof(OrderBy));
 
         /// <summary>
         /// LIMIT clause.
@@ -605,14 +605,14 @@ namespace LambdicSql
         /// <param name="offset">Start position.</param>
         /// <param name="count">Number of rows to acquire.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IQuery<TSelected> Limit<TSelected>(this IQuery<TSelected> before, long offset, long count) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
+        public static IQuery<TSelected> Limit<TSelected>(this IQuery<TSelected> before, object offset, object count) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
 
         /// <summary>
         /// OFFSET clause.
         /// </summary>
         /// <param name="offset">Start position.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IQuery<Non> Offset(long offset) => InvalitContext.Throw<IQuery<Non>>(nameof(OrderBy));
+        public static IQuery<Non> Offset(object offset) => InvalitContext.Throw<IQuery<Non>>(nameof(OrderBy));
 
         /// <summary>
         /// OFFSET clause.
@@ -621,14 +621,14 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="offset">Start position.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IQuery<TSelected> Offset<TSelected>(this IQuery<TSelected> before, long offset) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
+        public static IQuery<TSelected> Offset<TSelected>(this IQuery<TSelected> before, object offset) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
 
         /// <summary>
         /// OFFSET count ROWS clause.
         /// </summary>
         /// <param name="count">Number of rows to acquire.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IQuery<Non> OffsetRows(long count) => InvalitContext.Throw<IQuery<Non>>(nameof(OrderBy));
+        public static IQuery<Non> OffsetRows(object count) => InvalitContext.Throw<IQuery<Non>>(nameof(OrderBy));
 
         /// <summary>
         /// OFFSET count ROWS clause.
@@ -637,14 +637,14 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="rowCount"></param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IQuery<TSelected> OffsetRows<TSelected>(this IQuery<TSelected> before, long rowCount) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
+        public static IQuery<TSelected> OffsetRows<TSelected>(this IQuery<TSelected> before, object rowCount) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
 
         /// <summary>
         /// FETCH NEXT count ROWS ONLY clause.
         /// </summary>
         /// <param name="count">Number of rows to acquire.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IQuery<Non> FetchNextRowsOnly(long count) => InvalitContext.Throw<IQuery<Non>>(nameof(OrderBy));
+        public static IQuery<Non> FetchNextRowsOnly(object count) => InvalitContext.Throw<IQuery<Non>>(nameof(OrderBy));
 
         /// <summary>
         /// FETCH NEXT count ROWS ONLY clause.
@@ -653,7 +653,7 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="count">Number of rows to acquire.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IQuery<TSelected> FetchNextRowsOnly<TSelected>(this IQuery<TSelected> before, long count) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
+        public static IQuery<TSelected> FetchNextRowsOnly<TSelected>(this IQuery<TSelected> before, object count) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
 
         /// <summary>
         /// UNION clause.
@@ -790,7 +790,7 @@ namespace LambdicSql
         /// <param name="columns">It is a column that performs INSERT.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
         [MethodGroup(nameof(InsertInto))]
-        public static IQuery<Non> InsertInto<TTable>(TTable table, params object[] columns) => InvalitContext.Throw<IQuery<Non>>(nameof(InsertInto));
+        public static IQuery<Non> InsertInto(object table, params object[] columns) => InvalitContext.Throw<IQuery<Non>>(nameof(InsertInto));
 
         /// <summary>
         /// INSERT INTO clause.
@@ -817,44 +817,40 @@ namespace LambdicSql
         /// <param name="target">Target text.</param>
         /// <param name="pattern">Text that represents pattern matching.</param>
         /// <returns>If target matches the specified pattern, LIKE returns TRUE.</returns>
-        public static bool Like(string target, string pattern) => InvalitContext.Throw<bool>(nameof(Like));
+        public static bool Like(object target, object pattern) => InvalitContext.Throw<bool>(nameof(Like));
 
         /// <summary>
         /// BETWEEN keyword.
         /// </summary>
-        /// <typeparam name="T">Arguments type.</typeparam>
         /// <param name="target">Target of range check.</param>
         /// <param name="min">Minimum value.</param>
         /// <param name="max">Maxmum value.</param>
         /// <returns>Returns TRUE if target is included in the range of min and max.</returns>
-        public static bool Between<T>(T target, T min, T max) => InvalitContext.Throw<bool>(nameof(Between));
+        public static bool Between(object target, object min, object max) => InvalitContext.Throw<bool>(nameof(Between));
 
         /// <summary>
         /// IN keyword.
         /// </summary>
-        /// <typeparam name="T">Arguments type.</typeparam>
         /// <param name="target">Target of IN check.</param>
         /// <param name="canditates">Canditates.</param>
         /// <returns>Returns TRUE if target is included in the canditates represented by expression.</returns>
-        public static bool In<T>(T target, params T[] canditates) => InvalitContext.Throw<bool>(nameof(In));
+        public static bool In(object target, params object[] canditates) => InvalitContext.Throw<bool>(nameof(In));
 
         /// <summary>
         /// IN keyword.
         /// </summary>
-        /// <typeparam name="T">Arguments type.</typeparam>
         /// <param name="target">Target of IN check.</param>
         /// <param name="expression">Candidates expected for target.</param>
         /// <returns>Returns TRUE if target is included in the candidate represented by expression.</returns>
-        public static bool In<T>(T target, ISqlExpressionBase expression) => InvalitContext.Throw<bool>(nameof(In));
+        public static bool In(object target, ISqlExpressionBase expression) => InvalitContext.Throw<bool>(nameof(In));
 
         /// <summary>
         /// IN keyword.
         /// </summary>
-        /// <typeparam name="T">Arguments type.</typeparam>
         /// <param name="target">Target of IN check.</param>
         /// <param name="expressions">Table or subquery.</param>
         /// <returns>Returns TRUE if target is included in the candidate represented by expression.</returns>
-        public static bool In<T>(T target, IQuery expression) => InvalitContext.Throw<bool>(nameof(In));
+        public static bool In(object target, IQuery expression) => InvalitContext.Throw<bool>(nameof(In));
 
         /// <summary>
         /// EXISTS keyword.
@@ -873,23 +869,21 @@ namespace LambdicSql
         /// <summary>
         /// IS NULL keyword.
         /// </summary>
-        /// <typeparam name="T">Argument type.</typeparam>
         /// <param name="target">Target of null check.</param>
         /// <returns>Returns TRUE if target is null.</returns>
-        public static bool IsNull<T>(T target) => InvalitContext.Throw<bool>(nameof(IsNull));
+        public static bool IsNull(object target) => InvalitContext.Throw<bool>(nameof(IsNull));
 
         /// <summary>
         /// IS NOT NULL keyword.
         /// </summary>
-        /// <typeparam name="T">Argument type.</typeparam>
         /// <param name="target">Target of not null check.</param>
         /// <returns>Returns TRUE if target is not null</returns>
-        public static bool IsNotNull<T>(T target) => InvalitContext.Throw<bool>(nameof(IsNotNull));
+        public static bool IsNotNull(object target) => InvalitContext.Throw<bool>(nameof(IsNotNull));
 
         /// <summary>
         /// ROWNUM BETWEEN keyword.
         /// </summary>
-        public static long RowNum => InvalitContext.Throw<long>(nameof(RowNum));
+        public static object RowNum => InvalitContext.Throw<object>(nameof(RowNum));
 
         /// <summary>
         /// DUAL keyword.

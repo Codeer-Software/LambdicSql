@@ -39,8 +39,8 @@ namespace TestCheck35
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = Window.Avg(db.tbl_remuneration.money).
-                            Over<decimal>(new PartitionBy(db.tbl_remuneration.payment_date),
+                    Val = (decimal)Window.Avg(db.tbl_remuneration.money).
+                            Over(new PartitionBy(db.tbl_remuneration.payment_date),
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 new Rows(1, 5))
                 }).
@@ -68,8 +68,8 @@ FROM tbl_remuneration");
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = Window.Avg(3).
-                            Over<decimal>(new PartitionBy(db.tbl_remuneration.payment_date),
+                    Val = (decimal)Window.Avg(3).
+                            Over(new PartitionBy(db.tbl_remuneration.payment_date),
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 new Rows(1, 5))
                 }).
@@ -98,8 +98,8 @@ FROM tbl_remuneration", 3);
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = Window.Avg(exp).
-                            Over<decimal>(new PartitionBy(db.tbl_remuneration.payment_date),
+                    Val = (decimal)Window.Avg(exp).
+                            Over(new PartitionBy(db.tbl_remuneration.payment_date),
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 new Rows(1, 5))
                 }).
@@ -128,7 +128,7 @@ FROM tbl_remuneration");
                 Select(new SelectData()
                 {
                     Val = Window.Sum(db.tbl_remuneration.money).
-                            Over<decimal>(new PartitionBy(db.tbl_remuneration.payment_date),
+                            Over(new PartitionBy(db.tbl_remuneration.payment_date),
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 new Rows(1, 5))
                 }).
@@ -157,7 +157,7 @@ FROM tbl_remuneration");
                 Select(new SelectData()
                 {
                     Val = Window.Sum(3).
-                            Over<decimal>(new PartitionBy(db.tbl_remuneration.payment_date),
+                            Over(new PartitionBy(db.tbl_remuneration.payment_date),
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 new Rows(1, 5))
                 }).
@@ -187,7 +187,7 @@ FROM tbl_remuneration", 3);
                 Select(new SelectData()
                 {
                     Val = Window.Sum(exp).
-                            Over<decimal>(new PartitionBy(db.tbl_remuneration.payment_date),
+                            Over(new PartitionBy(db.tbl_remuneration.payment_date),
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 new Rows(1, 5))
                 }).
@@ -216,7 +216,7 @@ FROM tbl_remuneration");
                 Select(new SelectData()
                 {
                     Val = Window.Count(db.tbl_remuneration.money).
-                            Over<decimal>(new PartitionBy(db.tbl_remuneration.payment_date),
+                            Over(new PartitionBy(db.tbl_remuneration.payment_date),
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 new Rows(1, 5))
                 }).
@@ -245,7 +245,7 @@ FROM tbl_remuneration");
                 Select(new SelectData()
                 {
                     Val = Window.Count(3).
-                            Over<decimal>(new PartitionBy(db.tbl_remuneration.payment_date),
+                            Over(new PartitionBy(db.tbl_remuneration.payment_date),
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 new Rows(1, 5))
                 }).
@@ -275,7 +275,7 @@ FROM tbl_remuneration", 3);
                 Select(new SelectData()
                 {
                     Val = Window.Count(exp).
-                            Over<decimal>(new PartitionBy(db.tbl_remuneration.payment_date),
+                            Over(new PartitionBy(db.tbl_remuneration.payment_date),
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 new Rows(1, 5))
                 }).
@@ -304,7 +304,7 @@ FROM tbl_remuneration");
                 Select(new SelectData()
                 {
                     Val = Window.Max(db.tbl_remuneration.money).
-                            Over<decimal>(new PartitionBy(db.tbl_remuneration.payment_date),
+                            Over(new PartitionBy(db.tbl_remuneration.payment_date),
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 new Rows(1, 5))
                 }).
@@ -333,7 +333,7 @@ FROM tbl_remuneration");
                 Select(new SelectData()
                 {
                     Val = Window.Max(3).
-                            Over<decimal>(new PartitionBy(db.tbl_remuneration.payment_date),
+                            Over(new PartitionBy(db.tbl_remuneration.payment_date),
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 new Rows(1, 5))
                 }).
@@ -363,7 +363,7 @@ FROM tbl_remuneration", 3);
                 Select(new SelectData()
                 {
                     Val = Window.Max(exp).
-                            Over<decimal>(new PartitionBy(db.tbl_remuneration.payment_date),
+                            Over(new PartitionBy(db.tbl_remuneration.payment_date),
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 new Rows(1, 5))
                 }).
@@ -392,7 +392,7 @@ FROM tbl_remuneration");
                 Select(new SelectData()
                 {
                     Val = Window.Min(db.tbl_remuneration.money).
-                            Over<decimal>(new PartitionBy(db.tbl_remuneration.payment_date),
+                            Over(new PartitionBy(db.tbl_remuneration.payment_date),
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 new Rows(1, 5))
                 }).
@@ -421,7 +421,7 @@ FROM tbl_remuneration");
                 Select(new SelectData()
                 {
                     Val = Window.Min(3).
-                            Over<decimal>(new PartitionBy(db.tbl_remuneration.payment_date),
+                            Over(new PartitionBy(db.tbl_remuneration.payment_date),
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 new Rows(1, 5))
                 }).
@@ -451,7 +451,7 @@ FROM tbl_remuneration", 3);
                 Select(new SelectData()
                 {
                     Val = Window.Min(exp).
-                            Over<decimal>(new PartitionBy(db.tbl_remuneration.payment_date),
+                            Over(new PartitionBy(db.tbl_remuneration.payment_date),
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 new Rows(1, 5))
                 }).
@@ -480,7 +480,7 @@ FROM tbl_remuneration");
                 Select(new SelectData()
                 {
                     Val = Window.First_Value(db.tbl_remuneration.money).
-                            Over<decimal>(new PartitionBy(db.tbl_remuneration.payment_date),
+                            Over(new PartitionBy(db.tbl_remuneration.payment_date),
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 new Rows(1, 5))
                 }).
@@ -510,7 +510,7 @@ FROM tbl_remuneration");
                 Select(new SelectData()
                 {
                     Val = Window.First_Value(3).
-                            Over<decimal>(new PartitionBy(db.tbl_remuneration.payment_date),
+                            Over(new PartitionBy(db.tbl_remuneration.payment_date),
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 new Rows(1, 5))
                 }).
@@ -540,7 +540,7 @@ FROM tbl_remuneration", 3);
                 Select(new SelectData()
                 {
                     Val = Window.First_Value(exp).
-                            Over<decimal>(new PartitionBy(db.tbl_remuneration.payment_date),
+                            Over(new PartitionBy(db.tbl_remuneration.payment_date),
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 new Rows(1, 5))
                 }).
@@ -569,7 +569,7 @@ FROM tbl_remuneration");
                 Select(new SelectData()
                 {
                     Val = Window.Last_Value(db.tbl_remuneration.money).
-                            Over<decimal>(new PartitionBy(db.tbl_remuneration.payment_date),
+                            Over(new PartitionBy(db.tbl_remuneration.payment_date),
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 new Rows(1, 5))
                 }).
@@ -598,7 +598,7 @@ FROM tbl_remuneration");
                 Select(new SelectData()
                 {
                     Val = Window.Last_Value(3).
-                            Over<decimal>(new PartitionBy(db.tbl_remuneration.payment_date),
+                            Over(new PartitionBy(db.tbl_remuneration.payment_date),
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 new Rows(1, 5))
                 }).
@@ -628,7 +628,7 @@ FROM tbl_remuneration", 3);
                 Select(new SelectData()
                 {
                     Val = Window.Last_Value(exp).
-                            Over<decimal>(new PartitionBy(db.tbl_remuneration.payment_date),
+                            Over(new PartitionBy(db.tbl_remuneration.payment_date),
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 new Rows(1, 5))
                 }).
@@ -657,7 +657,7 @@ FROM tbl_remuneration");
                 Select(new SelectData()
                 {
                     Val = Window.Rank().
-                            Over<decimal>(null,
+                            Over(null,
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 null)
                 }).
@@ -683,7 +683,7 @@ FROM tbl_remuneration");
                 Select(new SelectData()
                 {
                     Val = Window.Dense_Rank().
-                            Over<decimal>(null,
+                            Over(null,
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 null)
                 }).
@@ -709,8 +709,8 @@ FROM tbl_remuneration");
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData
                 {
-                    Val = Window.Percent_Rank().
-                            Over<decimal>(null,
+                    Val = (decimal)Window.Percent_Rank().
+                            Over(null,
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 null)
                 }).
@@ -735,8 +735,8 @@ FROM tbl_remuneration");
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = Window.Cume_Dist().
-                            Over<decimal>(null,
+                    Val = (decimal)Window.Cume_Dist().
+                            Over(null,
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 null)
                 }).
@@ -763,7 +763,7 @@ FROM tbl_remuneration");
                 Select(new SelectData()
                 {
                     Val = Window.Ntile(2).
-                            Over<decimal>(null,
+                            Over(null,
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 null)
                 }).
@@ -792,7 +792,7 @@ FROM tbl_remuneration",
                 Select(new SelectData()
                 {
                     Val = Window.Ntile(exp).
-                            Over<decimal>(null,
+                            Over(null,
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 null)
                 }).
@@ -819,7 +819,7 @@ FROM tbl_remuneration",
                 Select(new SelectData()
                 {
                     Val = Window.Nth_Value(db.tbl_remuneration.money, 2).
-                            Over<decimal>(null,
+                            Over(null,
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 new Rows(1, 5))
                 }).
@@ -846,7 +846,7 @@ FROM tbl_remuneration",
                 Select(new SelectData()
                 {
                     Val = Window.Nth_Value(2, (long)db.tbl_remuneration.money).
-                            Over<decimal>(null,
+                            Over(null,
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 new Rows(1, 5))
                 }).
@@ -876,7 +876,7 @@ FROM tbl_remuneration",
                 Select(new SelectData()
                 {
                     Val = Window.Nth_Value(exp1, exp2).
-                            Over<decimal>(null,
+                            Over(null,
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 new Rows(1, 5))
                 }).
@@ -904,7 +904,7 @@ FROM tbl_remuneration",
                 Select(new SelectData()
                 {
                     Val = Window.Lag(db.tbl_remuneration.money).
-                            Over<decimal>(null,
+                            Over(null,
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 null)
                 }).
@@ -930,7 +930,7 @@ FROM tbl_remuneration");
                 Select(new SelectData()
                 {
                     Val = Window.Lag(3).
-                            Over<decimal>(null,
+                            Over(null,
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 null)
                 }).
@@ -957,7 +957,7 @@ FROM tbl_remuneration", 3);
                 Select(new SelectData()
                 {
                     Val = Window.Lag(exp).
-                            Over<decimal>(null,
+                            Over(null,
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 null)
                 }).
@@ -985,7 +985,7 @@ FROM tbl_remuneration");
                 Select(new SelectData()
                 {
                     Val = Window.Lag(db.tbl_remuneration.money, 2).
-                            Over<decimal>(null,
+                            Over(null,
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 null)
                 }).
@@ -1013,7 +1013,7 @@ FROM tbl_remuneration", 2);
                 Select(new SelectData()
                 {
                     Val = Window.Lag(3, db.tbl_remuneration.id).
-                            Over<decimal>(null,
+                            Over(null,
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 null)
                 }).
@@ -1042,7 +1042,7 @@ FROM tbl_remuneration", 3);
                 Select(new SelectData()
                 {
                     Val = Window.Lag(exp1, exp2).
-                            Over<decimal>(null,
+                            Over(null,
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 null)
                 }).
@@ -1070,7 +1070,7 @@ FROM tbl_remuneration", 2);
                 Select(new SelectData()
                 {
                     Val = Window.Lag(db.tbl_remuneration.money, 2, 100).
-                            Over<decimal>(null,
+                            Over(null,
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 null)
                 }).
@@ -1083,7 +1083,7 @@ FROM tbl_remuneration", 2);
 	LAG(tbl_remuneration.money, @p_0, @p_1)OVER(
 	ORDER BY
 		tbl_remuneration.money ASC) AS Val
-FROM tbl_remuneration", 2, 100);
+FROM tbl_remuneration", 2, (decimal)100);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -1098,7 +1098,7 @@ FROM tbl_remuneration", 2, 100);
                 Select(new SelectData()
                 {
                     Val = Window.Lag(2000, db.tbl_remuneration.id, db.tbl_remuneration.id).
-                            Over<decimal>(null,
+                            Over(null,
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 null)
                 }).
@@ -1127,8 +1127,8 @@ FROM tbl_remuneration", 2000);
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = Window.Lag(exp1, exp2, exp3).
-                            Over<decimal>(null,
+                    Val = Window.Lag(exp1.Body, exp2, exp3).
+                            Over(null,
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 null)
                 }).
@@ -1156,7 +1156,7 @@ FROM tbl_remuneration", 2, 100);
                 Select(new SelectData()
                 {
                     Val = Window.Count(db.tbl_remuneration.money).
-                            Over<decimal>(new PartitionBy(db.tbl_remuneration.payment_date),
+                            Over(new PartitionBy(db.tbl_remuneration.payment_date),
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 new Rows(1))
                 }).
@@ -1185,7 +1185,7 @@ FROM tbl_remuneration",
                 Select(new SelectData()
                 {
                     Val = Window.Count(db.tbl_remuneration.money).
-                            Over<decimal>(new PartitionBy(db.tbl_remuneration.payment_date),
+                            Over(new PartitionBy(db.tbl_remuneration.payment_date),
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 new Rows((int)db.tbl_remuneration.money))
                 }).
@@ -1217,7 +1217,7 @@ FROM tbl_remuneration");
                 Select(new SelectData()
                 {
                     Val = Window.Count(db.tbl_remuneration.money).
-                            Over<decimal>(new PartitionBy(db.tbl_remuneration.payment_date),
+                            Over(new PartitionBy(db.tbl_remuneration.payment_date),
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 new Rows(exp))
                 }).
@@ -1249,7 +1249,7 @@ FROM tbl_remuneration",
                 Select(new SelectData()
                 {
                     Val = Window.Count(db.tbl_remuneration.money).
-                            Over<decimal>(new PartitionBy(db.tbl_remuneration.payment_date),
+                            Over(new PartitionBy(db.tbl_remuneration.payment_date),
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 new Rows(1, 3))
                 }).
@@ -1277,7 +1277,7 @@ FROM tbl_remuneration");
                 Select(new SelectData()
                 {
                     Val = Window.Count(db.tbl_remuneration.money).
-                            Over<decimal>(new PartitionBy(db.tbl_remuneration.payment_date),
+                            Over(new PartitionBy(db.tbl_remuneration.payment_date),
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 new Rows((int)db.tbl_remuneration.money, (int)db.tbl_remuneration.money))
                 }).
@@ -1310,7 +1310,7 @@ FROM tbl_remuneration");
                 Select(new SelectData()
                 {
                     Val = Window.Count(db.tbl_remuneration.money).
-                            Over<decimal>(new PartitionBy(db.tbl_remuneration.payment_date),
+                            Over(new PartitionBy(db.tbl_remuneration.payment_date),
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 new Rows(exp1, exp2))
                 }).
@@ -1339,7 +1339,7 @@ FROM tbl_remuneration");
                 Select(new SelectData()
                 {
                     Val = Window.Count(db.tbl_remuneration.money).
-                            Over<decimal>(new PartitionBy(db.tbl_remuneration.payment_date),
+                            Over(new PartitionBy(db.tbl_remuneration.payment_date),
                                 new OrderBy(new Asc(db.tbl_remuneration.money), new Desc(db.tbl_remuneration.payment_date)),
                                 new Rows(1, 5))
                 }).
@@ -1371,7 +1371,7 @@ FROM tbl_remuneration");
                 Select(new SelectData()
                 {
                     Val = Window.Count(db.tbl_remuneration.money).
-                            Over<decimal>(new PartitionBy(db.tbl_remuneration.payment_date),
+                            Over(new PartitionBy(db.tbl_remuneration.payment_date),
                                 new OrderBy(exp1.Cast<ISortedBy>(), exp2.Cast<ISortedBy>()),
                                 new Rows(1, 5))
                 }).
@@ -1401,7 +1401,7 @@ FROM tbl_remuneration");
                 Select(new SelectData()
                 {
                     Val = Window.Count(db.tbl_remuneration.money).
-                            Over<decimal>(new PartitionBy(db.tbl_remuneration.payment_date),
+                            Over(new PartitionBy(db.tbl_remuneration.payment_date),
                                 new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 new Rows(1, 5))
                 }).
@@ -1434,7 +1434,7 @@ FROM tbl_remuneration");
                 Select(new SelectData()
                 {
                     Val = Window.Count(db.tbl_remuneration.money).
-                            Over<decimal>(exp1.Body, exp2.Body, exp3.Body)
+                            Over(exp1.Body, exp2.Body, exp3.Body)
                 }).
                 From(db.tbl_remuneration));
 
@@ -1461,7 +1461,7 @@ FROM tbl_remuneration");
                 Select(new SelectData()
                 {
                     Val = Window.Count(db.tbl_remuneration.money).
-                            Over<decimal>(new OrderBy(new Asc(db.tbl_remuneration.money)))
+                            Over(new OrderBy(new Asc(db.tbl_remuneration.money)))
                 }).
                 From(db.tbl_remuneration));
 
@@ -1486,7 +1486,7 @@ FROM tbl_remuneration");
                 Select(new SelectData()
                 {
                     Val = Window.Count(db.tbl_remuneration.money).
-                            Over<decimal>(exp.Body)
+                            Over(exp.Body)
                 }).
                 From(db.tbl_remuneration));
 
@@ -1510,7 +1510,7 @@ FROM tbl_remuneration");
                 Select(new SelectData()
                 {
                     Val = Window.Count(db.tbl_remuneration.money).
-                            Over<decimal>(new OrderBy(new Asc(db.tbl_remuneration.money)),
+                            Over(new OrderBy(new Asc(db.tbl_remuneration.money)),
                                 new Rows(1, 5))
                 }).
                 From(db.tbl_remuneration));
@@ -1538,7 +1538,7 @@ FROM tbl_remuneration");
                 Select(new SelectData()
                 {
                     Val = Window.Count(db.tbl_remuneration.money).
-                            Over<decimal>(exp1.Body, exp2.Body)
+                            Over(exp1.Body, exp2.Body)
                 }).
                 From(db.tbl_remuneration));
 
@@ -1552,5 +1552,7 @@ FROM tbl_remuneration");
 	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
 FROM tbl_remuneration");
         }
+
+        //TODO Overのパターンは全部
     }
 }
