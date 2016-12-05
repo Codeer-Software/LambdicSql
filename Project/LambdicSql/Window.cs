@@ -27,12 +27,39 @@ namespace LambdicSql
         public static IFuncAfter<T> Sum<T>(T expression) => InvalitContext.Throw<IFuncAfter<T>>(nameof(Sum));
 
         /// <summary>
+        /// SUM function.
+        /// </summary>
+        /// <typeparam name="T">Type represented by expression.</typeparam>
+        /// <param name="aggregatePredicate">Specify All or Distinct.</param>
+        /// <param name="expression">The column or expression that is function target.</param>
+        /// <returns>Total.</returns>
+        [MethodGroup(nameof(Window))]
+        public static IFuncAfter<T> Sum<T>(AggregatePredicate aggregatePredicate, T expression) => InvalitContext.Throw<IFuncAfter<T>>(nameof(Sum));
+
+        /// <summary>
         /// COUNT function.
         /// </summary>
         /// <param name="expression">The column or expression that is function target.</param>
         /// <returns>It is an object for describing the continuation of the OVER expression.</returns>
         [MethodGroup(nameof(Window))]
         public static IFuncAfter<int> Count(object expression) => InvalitContext.Throw<IFuncAfter<int>>(nameof(Count));
+
+        /// <summary>
+        /// COUNT function.
+        /// </summary>
+        /// <param name="asterisk"></param>
+        /// <returns>Count.</returns>
+        [MethodGroup(nameof(Window))]
+        public static IFuncAfter<int> Count(Asterisk asterisk) => InvalitContext.Throw<IFuncAfter<int>>(nameof(Count));
+
+        /// <summary>
+        /// COUNT function.
+        /// </summary>
+        /// <param name="aggregatePredicate">Specify All or Distinct.</param>
+        /// <param name="expression"></param>
+        /// <returns>Count.</returns>
+        [MethodGroup(nameof(Window))]
+        public static IFuncAfter<int> Count(AggregatePredicate aggregatePredicate, object expression) => InvalitContext.Throw<IFuncAfter<int>>(nameof(Count));
 
         /// <summary>
         /// AVG function.
@@ -158,6 +185,50 @@ namespace LambdicSql
         /// </summary>
         /// <typeparam name="T">Type represented by expression.</typeparam>
         /// <param name="before">It is an before expression in the Windwo function.</param>
+        /// <param name="partitionBy">PARTITION BY keyword.</param>
+        /// <returns>It is the result of Window function.</returns>
+        [MethodGroup(nameof(Window))]
+        public static T Over<T>(this IFuncAfter<T> before, PartitionBy partitionBy) => InvalitContext.Throw<T>(nameof(Over));
+
+        /// <summary>
+        /// OVER function.
+        /// </summary>
+        /// <typeparam name="T">Type represented by expression.</typeparam>
+        /// <param name="before">It is an before expression in the Windwo function.</param>
+        /// <param name="partitionBy">PARTITION BY keyword.</param>
+        /// <param name="orderBy">ORDER BY keyword.</param>
+        /// <returns>It is the result of Window function.</returns>
+        [MethodGroup(nameof(Window))]
+        public static T Over<T>(this IFuncAfter<T> before, PartitionBy partitionBy, OrderBy orderBy) => InvalitContext.Throw<T>(nameof(Over));
+
+        /// <summary>
+        /// OVER function.
+        /// </summary>
+        /// <typeparam name="T">Type represented by expression.</typeparam>
+        /// <param name="before">It is an before expression in the Windwo function.</param>
+        /// <param name="partitionBy">PARTITION BY keyword.</param>
+        /// <param name="rows">ROWS keyword.</param>
+        /// <returns>It is the result of Window function.</returns>
+        [MethodGroup(nameof(Window))]
+        public static T Over<T>(this IFuncAfter<T> before, PartitionBy partitionBy, Rows rows) => InvalitContext.Throw<T>(nameof(Over));
+
+        /// <summary>
+        /// OVER function.
+        /// </summary>
+        /// <typeparam name="T">Type represented by expression.</typeparam>
+        /// <param name="before">It is an before expression in the Windwo function.</param>
+        /// <param name="partitionBy">PARTITION BY keyword.</param>
+        /// <param name="orderBy">ORDER BY keyword.</param>
+        /// <param name="rows">ROWS keyword.</param>
+        /// <returns>It is the result of Window function.</returns>
+        [MethodGroup(nameof(Window))]
+        public static T Over<T>(this IFuncAfter<T> before, PartitionBy partitionBy, OrderBy orderBy, Rows rows) => InvalitContext.Throw<T>(nameof(Over));
+
+        /// <summary>
+        /// OVER function.
+        /// </summary>
+        /// <typeparam name="T">Type represented by expression.</typeparam>
+        /// <param name="before">It is an before expression in the Windwo function.</param>
         /// <param name="orderBy">ORDER BY keyword.</param>
         /// <returns>It is the result of Window function.</returns>
         [MethodGroup(nameof(Window))]
@@ -178,47 +249,30 @@ namespace LambdicSql
         /// OVER function.
         /// </summary>
         /// <typeparam name="T">Type represented by expression.</typeparam>
-        /// <param name="before">It is an before expression in the Windwo function.</param>
-        /// <param name="partitionBy">PARTITION BY keyword.</param>
-        /// <param name="orderBy">ORDER BY keyword.</param>
-        /// <param name="rows">ROWS keyword.</param>
+        /// <param name="rows">Getting row order.</param>
         /// <returns>It is the result of Window function.</returns>
         [MethodGroup(nameof(Window))]
-        public static T Over<T>(this IFuncAfter<T> before, PartitionBy partitionBy) => InvalitContext.Throw<T>(nameof(Over));
-
-        /// <summary>
-        /// OVER function.
-        /// </summary>
-        /// <typeparam name="T">Type represented by expression.</typeparam>
-        /// <param name="before">It is an before expression in the Windwo function.</param>
-        /// <param name="partitionBy">PARTITION BY keyword.</param>
-        /// <param name="orderBy">ORDER BY keyword.</param>
-        /// <param name="rows">ROWS keyword.</param>
-        /// <returns>It is the result of Window function.</returns>
-        [MethodGroup(nameof(Window))]
-        public static T Over<T>(this IFuncAfter<T> before, PartitionBy partitionBy, OrderBy orderBy) => InvalitContext.Throw<T>(nameof(Over));
-
-        /// <summary>
-        /// OVER function.
-        /// </summary>
-        /// <typeparam name="T">Type represented by expression.</typeparam>
-        /// <param name="before">It is an before expression in the Windwo function.</param>
-        /// <param name="partitionBy">PARTITION BY keyword.</param>
-        /// <param name="orderBy">ORDER BY keyword.</param>
-        /// <param name="rows">ROWS keyword.</param>
-        /// <returns>It is the result of Window function.</returns>
-        [MethodGroup(nameof(Window))]
-        public static T Over<T>(this IFuncAfter<T> before, PartitionBy partitionBy, OrderBy orderBy, Rows rows) => InvalitContext.Throw<T>(nameof(Over));
+        public static T Over<T>(this IFuncAfter<T> before, Rows rows) => InvalitContext.Throw<T>(nameof(Over));
 
         static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
-            var func = converter.MakeNormalSqlFunctionString(methods[0]);
+            string func = string.Empty;
+            switch (methods[0].Method.Name)
+            {
+                case nameof(Sum):
+                case nameof(Count):
+                    func = Funcs.ToString(converter, new[] { methods[0] });
+                    break;
+                default:
+                    func = converter.MakeNormalSqlFunctionString(methods[0]);
+                    break;
+            }
 
             var overMethod = methods[1];
             var over = overMethod.Method.Name.ToUpper() + "(" +
                 string.Join(" ", overMethod.Arguments.Skip(1).Where(e=>!(e is ConstantExpression)).Select(e => converter.ToString(e)).ToArray()) + ")";
 
-            return func + over;
+            return func + " " + over;
         }
     }
 }

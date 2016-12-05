@@ -41,7 +41,7 @@ namespace LambdicSql
         /// <summary>
         /// COUNT function.
         /// </summary>
-        /// <param name="asterisk"></param>
+        /// <param name="asterisk">*</param>
         /// <returns>Count.</returns>
         public static int Count(Asterisk asterisk) => InvalitContext.Throw<int>(nameof(Count));
 
@@ -52,6 +52,14 @@ namespace LambdicSql
         /// <param name="expression"></param>
         /// <returns>Count.</returns>
         public static int Count(AggregatePredicate aggregatePredicate, object expression) => InvalitContext.Throw<int>(nameof(Count));
+
+        /// <summary>
+        /// COUNT function.
+        /// </summary>
+        /// <param name="aggregatePredicate">Specify All or Distinct.</param>
+        /// <param name="asterisk">*</param>
+        /// <returns>Count.</returns>
+        public static int Count(AggregatePredicate aggregatePredicate, Asterisk asterisk) => InvalitContext.Throw<int>(nameof(Count));
 
         /// <summary>
         /// AVG function.
@@ -236,7 +244,7 @@ namespace LambdicSql
         /// <returns>expression1 or expression2.</returns>
         public static T NVL<T>(T expression1, T expression2) => InvalitContext.Throw<T>(nameof(NVL));
 
-        static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
             var args = method.Arguments.Select(e => converter.ToString(e)).ToArray();

@@ -50,7 +50,7 @@ namespace TestCheck35
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	AVG(tbl_remuneration.money)OVER(
+	AVG(tbl_remuneration.money) OVER(
 	PARTITION BY
 		tbl_remuneration.payment_date 
 	ORDER BY
@@ -79,7 +79,7 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	AVG(@p_0)OVER(
+	AVG(@p_0) OVER(
 	PARTITION BY
 		tbl_remuneration.payment_date 
 	ORDER BY
@@ -109,7 +109,7 @@ FROM tbl_remuneration", 3);
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	AVG(tbl_remuneration.money)OVER(
+	AVG(tbl_remuneration.money) OVER(
 	PARTITION BY
 		tbl_remuneration.payment_date 
 	ORDER BY
@@ -138,7 +138,7 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	SUM(tbl_remuneration.money)OVER(
+	SUM(tbl_remuneration.money) OVER(
 	PARTITION BY
 		tbl_remuneration.payment_date 
 	ORDER BY
@@ -167,7 +167,7 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
  @"SELECT
-	SUM(@p_0)OVER(
+	SUM(@p_0) OVER(
 	PARTITION BY
 		tbl_remuneration.payment_date 
 	ORDER BY
@@ -197,7 +197,37 @@ FROM tbl_remuneration", 3);
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	SUM(tbl_remuneration.money)OVER(
+	SUM(tbl_remuneration.money) OVER(
+	PARTITION BY
+		tbl_remuneration.payment_date 
+	ORDER BY
+		tbl_remuneration.money ASC 
+	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Sum4()
+        {
+            if (_connection.GetType().Name == "SQLiteConnection") return;
+            if (_connection.GetType().Name == "MySqlConnection") return;
+
+            var exp = Sql<DB>.Create(db => db.tbl_remuneration.money);
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData()
+                {
+                    Val = Window.Sum(AggregatePredicate.All, exp).
+                            Over(new PartitionBy(db.tbl_remuneration.payment_date),
+                                new OrderBy(new Asc(db.tbl_remuneration.money)),
+                                new Rows(1, 5))
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	SUM(ALL tbl_remuneration.money) OVER(
 	PARTITION BY
 		tbl_remuneration.payment_date 
 	ORDER BY
@@ -226,7 +256,7 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	COUNT(tbl_remuneration.money)OVER(
+	COUNT(tbl_remuneration.money) OVER(
 	PARTITION BY
 		tbl_remuneration.payment_date 
 	ORDER BY
@@ -255,7 +285,7 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	COUNT(@p_0)OVER(
+	COUNT(@p_0) OVER(
 	PARTITION BY
 		tbl_remuneration.payment_date 
 	ORDER BY
@@ -285,7 +315,93 @@ FROM tbl_remuneration", 3);
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	COUNT(tbl_remuneration.money)OVER(
+	COUNT(tbl_remuneration.money) OVER(
+	PARTITION BY
+		tbl_remuneration.payment_date 
+	ORDER BY
+		tbl_remuneration.money ASC 
+	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Count_Asterisk()
+        {
+            if (_connection.GetType().Name == "SQLiteConnection") return;
+            if (_connection.GetType().Name == "MySqlConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData()
+                {
+                    Val = Window.Count(new Asterisk()).
+                            Over(new PartitionBy(db.tbl_remuneration.payment_date),
+                                new OrderBy(new Asc(db.tbl_remuneration.money)),
+                                new Rows(1, 5))
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	COUNT(*) OVER(
+	PARTITION BY
+		tbl_remuneration.payment_date 
+	ORDER BY
+		tbl_remuneration.money ASC 
+	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Count_AggregatePredicate()
+        {
+            if (_connection.GetType().Name == "SQLiteConnection") return;
+            if (_connection.GetType().Name == "MySqlConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData()
+                {
+                    Val = Window.Count(AggregatePredicate.All, db.tbl_remuneration.money).
+                            Over(new PartitionBy(db.tbl_remuneration.payment_date),
+                                new OrderBy(new Asc(db.tbl_remuneration.money)),
+                                new Rows(1, 5))
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	COUNT(ALL tbl_remuneration.money) OVER(
+	PARTITION BY
+		tbl_remuneration.payment_date 
+	ORDER BY
+		tbl_remuneration.money ASC 
+	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Count_Asterisk_AggregatePredicate()
+        {
+            if (_connection.GetType().Name != "OracleConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData()
+                {
+                    Val = Window.Count(AggregatePredicate.All, new Asterisk()).
+                            Over(new PartitionBy(db.tbl_remuneration.payment_date),
+                                new OrderBy(new Asc(db.tbl_remuneration.money)),
+                                new Rows(1, 5))
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	COUNT(ALL *) OVER(
 	PARTITION BY
 		tbl_remuneration.payment_date 
 	ORDER BY
@@ -314,7 +430,7 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	MAX(tbl_remuneration.money)OVER(
+	MAX(tbl_remuneration.money) OVER(
 	PARTITION BY
 		tbl_remuneration.payment_date 
 	ORDER BY
@@ -343,7 +459,7 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	MAX(@p_0)OVER(
+	MAX(@p_0) OVER(
 	PARTITION BY
 		tbl_remuneration.payment_date 
 	ORDER BY
@@ -373,7 +489,7 @@ FROM tbl_remuneration", 3);
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	MAX(tbl_remuneration.money)OVER(
+	MAX(tbl_remuneration.money) OVER(
 	PARTITION BY
 		tbl_remuneration.payment_date 
 	ORDER BY
@@ -402,7 +518,7 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	MIN(tbl_remuneration.money)OVER(
+	MIN(tbl_remuneration.money) OVER(
 	PARTITION BY
 		tbl_remuneration.payment_date 
 	ORDER BY
@@ -431,7 +547,7 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	MIN(@p_0)OVER(
+	MIN(@p_0) OVER(
 	PARTITION BY
 		tbl_remuneration.payment_date 
 	ORDER BY
@@ -461,7 +577,7 @@ FROM tbl_remuneration", 3);
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	MIN(tbl_remuneration.money)OVER(
+	MIN(tbl_remuneration.money) OVER(
 	PARTITION BY
 		tbl_remuneration.payment_date 
 	ORDER BY
@@ -490,7 +606,7 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	FIRST_VALUE(tbl_remuneration.money)OVER(
+	FIRST_VALUE(tbl_remuneration.money) OVER(
 	PARTITION BY
 		tbl_remuneration.payment_date 
 	ORDER BY
@@ -520,7 +636,7 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	FIRST_VALUE(@p_0)OVER(
+	FIRST_VALUE(@p_0) OVER(
 	PARTITION BY
 		tbl_remuneration.payment_date 
 	ORDER BY
@@ -550,7 +666,7 @@ FROM tbl_remuneration", 3);
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	FIRST_VALUE(tbl_remuneration.money)OVER(
+	FIRST_VALUE(tbl_remuneration.money) OVER(
 	PARTITION BY
 		tbl_remuneration.payment_date 
 	ORDER BY
@@ -579,7 +695,7 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	LAST_VALUE(tbl_remuneration.money)OVER(
+	LAST_VALUE(tbl_remuneration.money) OVER(
 	PARTITION BY
 		tbl_remuneration.payment_date 
 	ORDER BY
@@ -608,7 +724,7 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	LAST_VALUE(@p_0)OVER(
+	LAST_VALUE(@p_0) OVER(
 	PARTITION BY
 		tbl_remuneration.payment_date 
 	ORDER BY
@@ -638,7 +754,7 @@ FROM tbl_remuneration", 3);
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	LAST_VALUE(tbl_remuneration.money)OVER(
+	LAST_VALUE(tbl_remuneration.money) OVER(
 	PARTITION BY
 		tbl_remuneration.payment_date 
 	ORDER BY
@@ -667,7 +783,7 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	RANK()OVER(
+	RANK() OVER(
 	ORDER BY
 		tbl_remuneration.money ASC) AS Val
 FROM tbl_remuneration");
@@ -693,7 +809,7 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	DENSE_RANK()OVER(
+	DENSE_RANK() OVER(
 	ORDER BY
 		tbl_remuneration.money ASC) AS Val
 FROM tbl_remuneration");
@@ -720,7 +836,7 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	PERCENT_RANK()OVER(
+	PERCENT_RANK() OVER(
 	ORDER BY
 		tbl_remuneration.money ASC) AS Val
 FROM tbl_remuneration");
@@ -746,7 +862,7 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	CUME_DIST()OVER(
+	CUME_DIST() OVER(
 	ORDER BY
 		tbl_remuneration.money ASC) AS Val
 FROM tbl_remuneration");
@@ -773,7 +889,7 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	NTILE(@p_0)OVER(
+	NTILE(@p_0) OVER(
 	ORDER BY
 		tbl_remuneration.money ASC) AS Val
 FROM tbl_remuneration",
@@ -802,7 +918,7 @@ FROM tbl_remuneration",
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	NTILE(@p_0)OVER(
+	NTILE(@p_0) OVER(
 	ORDER BY
 		tbl_remuneration.money ASC) AS Val
 FROM tbl_remuneration",
@@ -829,7 +945,7 @@ FROM tbl_remuneration",
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	NTH_VALUE(tbl_remuneration.money, @p_0)OVER(
+	NTH_VALUE(tbl_remuneration.money, @p_0) OVER(
 	ORDER BY
 		tbl_remuneration.money ASC 
 	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
@@ -856,7 +972,7 @@ FROM tbl_remuneration",
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	NTH_VALUE(@p_0, tbl_remuneration.money)OVER(
+	NTH_VALUE(@p_0, tbl_remuneration.money) OVER(
 	ORDER BY
 		tbl_remuneration.money ASC 
 	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
@@ -886,7 +1002,7 @@ FROM tbl_remuneration",
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	NTH_VALUE(tbl_remuneration.money, @p_0)OVER(
+	NTH_VALUE(tbl_remuneration.money, @p_0) OVER(
 	ORDER BY
 		tbl_remuneration.money ASC 
 	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
@@ -914,7 +1030,7 @@ FROM tbl_remuneration",
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	LAG(tbl_remuneration.money)OVER(
+	LAG(tbl_remuneration.money) OVER(
 	ORDER BY
 		tbl_remuneration.money ASC) AS Val
 FROM tbl_remuneration");
@@ -940,7 +1056,7 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	LAG(@p_0)OVER(
+	LAG(@p_0) OVER(
 	ORDER BY
 		tbl_remuneration.money ASC) AS Val
 FROM tbl_remuneration", 3);
@@ -967,7 +1083,7 @@ FROM tbl_remuneration", 3);
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	LAG(tbl_remuneration.money)OVER(
+	LAG(tbl_remuneration.money) OVER(
 	ORDER BY
 		tbl_remuneration.money ASC) AS Val
 FROM tbl_remuneration");
@@ -979,7 +1095,6 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
             if (_connection.GetType().Name == "DB2Connection") return;
-       //     if (_connection.GetType().Name == "NpgsqlConnection") return;
 
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
@@ -995,7 +1110,7 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	LAG(tbl_remuneration.money, @p_0)OVER(
+	LAG(tbl_remuneration.money, @p_0) OVER(
 	ORDER BY
 		tbl_remuneration.money ASC) AS Val
 FROM tbl_remuneration", 2);
@@ -1007,7 +1122,6 @@ FROM tbl_remuneration", 2);
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
             if (_connection.GetType().Name == "DB2Connection") return;
-         //   if (_connection.GetType().Name == "NpgsqlConnection") return;
 
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
@@ -1023,7 +1137,7 @@ FROM tbl_remuneration", 2);
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	LAG(@p_0, tbl_remuneration.id)OVER(
+	LAG(@p_0, tbl_remuneration.id) OVER(
 	ORDER BY
 		tbl_remuneration.money ASC) AS Val
 FROM tbl_remuneration", 3);
@@ -1052,7 +1166,7 @@ FROM tbl_remuneration", 3);
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	LAG(tbl_remuneration.money, @p_0)OVER(
+	LAG(tbl_remuneration.money, @p_0) OVER(
 	ORDER BY
 		tbl_remuneration.money ASC) AS Val
 FROM tbl_remuneration", 2);
@@ -1080,7 +1194,7 @@ FROM tbl_remuneration", 2);
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	LAG(tbl_remuneration.money, @p_0, @p_1)OVER(
+	LAG(tbl_remuneration.money, @p_0, @p_1) OVER(
 	ORDER BY
 		tbl_remuneration.money ASC) AS Val
 FROM tbl_remuneration", 2, (decimal)100);
@@ -1107,7 +1221,7 @@ FROM tbl_remuneration", 2, (decimal)100);
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count); AssertEx.AreEqual(query, _connection,
  @"SELECT
-	LAG(@p_0, tbl_remuneration.id, tbl_remuneration.id)OVER(
+	LAG(@p_0, tbl_remuneration.id, tbl_remuneration.id) OVER(
 	ORDER BY
 		tbl_remuneration.money ASC) AS Val
 FROM tbl_remuneration", 2000);
@@ -1138,7 +1252,7 @@ FROM tbl_remuneration", 2000);
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	LAG(tbl_remuneration.money, @p_0, @p_1)OVER(
+	LAG(tbl_remuneration.money, @p_0, @p_1) OVER(
 	ORDER BY
 		tbl_remuneration.money ASC) AS Val
 FROM tbl_remuneration", 2, 100);
@@ -1166,7 +1280,7 @@ FROM tbl_remuneration", 2, 100);
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	COUNT(tbl_remuneration.money)OVER(
+	COUNT(tbl_remuneration.money) OVER(
 	PARTITION BY
 		tbl_remuneration.payment_date 
 	ORDER BY
@@ -1195,7 +1309,7 @@ FROM tbl_remuneration",
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
  @"SELECT
-	COUNT(tbl_remuneration.money)OVER(
+	COUNT(tbl_remuneration.money) OVER(
 	PARTITION BY
 		tbl_remuneration.payment_date 
 	ORDER BY
@@ -1227,7 +1341,7 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	COUNT(tbl_remuneration.money)OVER(
+	COUNT(tbl_remuneration.money) OVER(
 	PARTITION BY
 		tbl_remuneration.payment_date 
 	ORDER BY
@@ -1259,7 +1373,7 @@ FROM tbl_remuneration",
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
  @"SELECT
-	COUNT(tbl_remuneration.money)OVER(
+	COUNT(tbl_remuneration.money) OVER(
 	PARTITION BY
 		tbl_remuneration.payment_date 
 	ORDER BY
@@ -1287,7 +1401,7 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	COUNT(tbl_remuneration.money)OVER(
+	COUNT(tbl_remuneration.money) OVER(
 	PARTITION BY
 		tbl_remuneration.payment_date 
 	ORDER BY
@@ -1320,7 +1434,7 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
  @"SELECT
-	COUNT(tbl_remuneration.money)OVER(
+	COUNT(tbl_remuneration.money) OVER(
 	PARTITION BY
 		tbl_remuneration.payment_date 
 	ORDER BY
@@ -1349,7 +1463,7 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	COUNT(tbl_remuneration.money)OVER(
+	COUNT(tbl_remuneration.money) OVER(
 	PARTITION BY
 		tbl_remuneration.payment_date 
 	ORDER BY
@@ -1381,7 +1495,7 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	COUNT(tbl_remuneration.money)OVER(
+	COUNT(tbl_remuneration.money) OVER(
 	PARTITION BY
 		tbl_remuneration.payment_date 
 	ORDER BY
@@ -1396,7 +1510,164 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
-            
+
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData()
+                {
+                    Val = Window.Count(db.tbl_remuneration.money).
+                            Over(new PartitionBy(db.tbl_remuneration.payment_date))
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	COUNT(tbl_remuneration.money) OVER(
+	PARTITION BY
+		tbl_remuneration.payment_date) AS Val
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Over1_2()
+        {
+            if (_connection.GetType().Name == "SQLiteConnection") return;
+            if (_connection.GetType().Name == "MySqlConnection") return;
+
+            var partitionBy = Sql<DB>.Create(db => new PartitionBy(db.tbl_remuneration.payment_date));
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData()
+                {
+                    Val = Window.Count(db.tbl_remuneration.money).
+                            Over(partitionBy)
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	COUNT(tbl_remuneration.money) OVER(
+	PARTITION BY
+		tbl_remuneration.payment_date) AS Val
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Over2_1()
+        {
+            if (_connection.GetType().Name == "SQLiteConnection") return;
+            if (_connection.GetType().Name == "MySqlConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData()
+                {
+                    Val = Window.Count(db.tbl_remuneration.money).
+                            Over(new PartitionBy(db.tbl_remuneration.payment_date),
+                                new OrderBy(new Asc(db.tbl_remuneration.money)))
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	COUNT(tbl_remuneration.money) OVER(
+	PARTITION BY
+		tbl_remuneration.payment_date 
+	ORDER BY
+		tbl_remuneration.money ASC) AS Val
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Over2_2()
+        {
+            if (_connection.GetType().Name == "SQLiteConnection") return;
+            if (_connection.GetType().Name == "MySqlConnection") return;
+
+            var partitionBy = Sql<DB>.Create(db => new PartitionBy(db.tbl_remuneration.payment_date));
+            var orderBy = Sql<DB>.Create(db => new OrderBy(new Asc(db.tbl_remuneration.money)));
+
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData()
+                {
+                    Val = Window.Count(db.tbl_remuneration.money).
+                            Over(partitionBy, orderBy)
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	COUNT(tbl_remuneration.money) OVER(
+	PARTITION BY
+		tbl_remuneration.payment_date 
+	ORDER BY
+		tbl_remuneration.money ASC) AS Val
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Over3_1()
+        {
+            if (_connection.GetType().Name != "NpgsqlConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData()
+                {
+                    Val = Window.Count(db.tbl_remuneration.money).
+                            Over(new PartitionBy(db.tbl_remuneration.payment_date),
+                                new Rows(1, 5))
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	COUNT(tbl_remuneration.money) OVER(
+	PARTITION BY
+		tbl_remuneration.payment_date 
+	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Over3_2()
+        {
+            if (_connection.GetType().Name != "NpgsqlConnection") return;
+
+            var partitionBy = Sql<DB>.Create(db => new PartitionBy(db.tbl_remuneration.payment_date));
+            var rows = Sql<DB>.Create(db => new Rows(1, 5));
+
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData()
+                {
+                    Val = Window.Count(db.tbl_remuneration.money).
+                            Over(partitionBy, rows)
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	COUNT(tbl_remuneration.money) OVER(
+	PARTITION BY
+		tbl_remuneration.payment_date 
+	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Over4_1()
+        {
+            if (_connection.GetType().Name == "SQLiteConnection") return;
+            if (_connection.GetType().Name == "MySqlConnection") return;
+
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
@@ -1411,7 +1682,7 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	COUNT(tbl_remuneration.money)OVER(
+	COUNT(tbl_remuneration.money) OVER(
 	PARTITION BY
 		tbl_remuneration.payment_date 
 	ORDER BY
@@ -1421,20 +1692,19 @@ FROM tbl_remuneration");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_Over1_2()
+        public void Test_Over4_2()
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var exp1 = Sql<DB>.Create(db => new PartitionBy(db.tbl_remuneration.payment_date));
-            var exp2 = Sql<DB>.Create(db => new OrderBy(new Asc(db.tbl_remuneration.money)));
-            var exp3 = Sql<DB>.Create(db => new Rows(1, 5));
-
+            var partitionBy = Sql<DB>.Create(db => new PartitionBy(db.tbl_remuneration.payment_date));
+            var orderBy = Sql<DB>.Create(db => new OrderBy(new Asc(db.tbl_remuneration.money)));
+            var rows = Sql<DB>.Create(db => new Rows(1, 5));
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
                     Val = Window.Count(db.tbl_remuneration.money).
-                            Over(exp1.Body, exp2.Body, exp3.Body)
+                            Over(partitionBy, orderBy, rows)
                 }).
                 From(db.tbl_remuneration));
 
@@ -1442,7 +1712,7 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	COUNT(tbl_remuneration.money)OVER(
+	COUNT(tbl_remuneration.money) OVER(
 	PARTITION BY
 		tbl_remuneration.payment_date 
 	ORDER BY
@@ -1452,10 +1722,14 @@ FROM tbl_remuneration");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_Over2_1()
+        public void Test_Over5_1()
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+
+            var partitionBy = Sql<DB>.Create(db => new PartitionBy(db.tbl_remuneration.payment_date));
+            var orderBy = Sql<DB>.Create(db => new OrderBy(new Asc(db.tbl_remuneration.money)));
+            var rows = Sql<DB>.Create(db => new Rows(1, 5));
 
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
@@ -1469,24 +1743,24 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	COUNT(tbl_remuneration.money)OVER(
+	COUNT(tbl_remuneration.money) OVER(
 	ORDER BY
 		tbl_remuneration.money ASC) AS Val
 FROM tbl_remuneration");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_Over2_2()
+        public void Test_Over5_2()
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
-
-            var exp = Sql<DB>.Create(db => new OrderBy(new Asc(db.tbl_remuneration.money)));
+            
+            var orderBy = Sql<DB>.Create(db => new OrderBy(new Asc(db.tbl_remuneration.money)));
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
                     Val = Window.Count(db.tbl_remuneration.money).
-                            Over(exp.Body)
+                            Over(orderBy)
                 }).
                 From(db.tbl_remuneration));
 
@@ -1494,18 +1768,18 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	COUNT(tbl_remuneration.money)OVER(
+	COUNT(tbl_remuneration.money) OVER(
 	ORDER BY
 		tbl_remuneration.money ASC) AS Val
 FROM tbl_remuneration");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_Over3_1()
+        public void Test_Over6_1()
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
-            
+
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
@@ -1519,7 +1793,7 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	COUNT(tbl_remuneration.money)OVER(
+	COUNT(tbl_remuneration.money) OVER(
 	ORDER BY
 		tbl_remuneration.money ASC 
 	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
@@ -1527,18 +1801,18 @@ FROM tbl_remuneration");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_Over3_2()
+        public void Test_Over6_2()
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
             
-            var exp1 = Sql<DB>.Create(db => new OrderBy(new Asc(db.tbl_remuneration.money)));
-            var exp2 = Sql<DB>.Create(db => new Rows(1, 5));
+            var orderBy = Sql<DB>.Create(db => new OrderBy(new Asc(db.tbl_remuneration.money)));
+            var rows = Sql<DB>.Create(db => new Rows(1, 5));
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
                     Val = Window.Count(db.tbl_remuneration.money).
-                            Over(exp1.Body, exp2.Body)
+                            Over(orderBy, rows)
                 }).
                 From(db.tbl_remuneration));
 
@@ -1546,13 +1820,56 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	COUNT(tbl_remuneration.money)OVER(
+	COUNT(tbl_remuneration.money) OVER(
 	ORDER BY
 		tbl_remuneration.money ASC 
 	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
 FROM tbl_remuneration");
         }
 
-        //TODO Overのパターンは全部
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Over7_1()
+        {
+            if (_connection.GetType().Name != "NpgsqlConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData()
+                {
+                    Val = Window.Count(db.tbl_remuneration.money).
+                            Over(new Rows(1, 5))
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	COUNT(tbl_remuneration.money) OVER(
+	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Over7_2()
+        {
+            if (_connection.GetType().Name != "NpgsqlConnection") return;
+            
+            var rows = Sql<DB>.Create(db => new Rows(1, 5));
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData()
+                {
+                    Val = Window.Count(db.tbl_remuneration.money).
+                            Over(rows)
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	COUNT(tbl_remuneration.money) OVER(
+	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+FROM tbl_remuneration");
+        }
     }
 }

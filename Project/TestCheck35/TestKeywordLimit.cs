@@ -171,8 +171,8 @@ FETCH NEXT @p_1 ROWS ONLY",
             if (name != "System.Data.SqlClient.SqlConnection" &&
                 name != "IBM.Data.DB2.DB2Connection") return;
 
-            var exp1 = Sql<DB>.Create(db => (long)1);
-            var exp2 = Sql<DB>.Create(db => (long)3);
+            var exp1 = Sql<DB>.Create(db => 1);
+            var exp2 = Sql<DB>.Create(db => 3);
             var query = Sql<DB>.Create(db =>
                  Select(Asterisk(db.tbl_remuneration)).
                  From(db.tbl_remuneration).
@@ -282,8 +282,8 @@ OFFSET @p_1",
             if (name == "System.Data.SqlClient.SqlConnection") return;
             if (name == "Oracle.ManagedDataAccess.Client.OracleConnection") return;
 
-            var exp1 = Sql<DB>.Create(db => (long)1);
-            var exp2 = Sql<DB>.Create(db => (long)3);
+            var exp1 = Sql<DB>.Create(db => 1);
+            var exp2 = Sql<DB>.Create(db => 3);
             var query = Sql<DB>.Create(db =>
                  Select(Asterisk(db.tbl_remuneration)).
                  From(db.tbl_remuneration).

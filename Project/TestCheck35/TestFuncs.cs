@@ -145,20 +145,22 @@ GROUP BY tbl_staff.id, tbl_staff.name", 1, 2, 3, 4, 5, 6, 7, 8, 9);
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Aggregate3()
         {
-            var exp = Sql<DB>.Create(db => db.tbl_remuneration.money);
+            var exp1 = Sql<DB>.Create(db => db.tbl_remuneration.money);
+            var exp2 = Sql<DB>.Create(db => AggregatePredicate.All);
+            var exp3 = Sql<DB>.Create(db => AggregatePredicate.Distinct);
             var query = Sql<DB>.Create(db =>
                Select(new SelectData1
                {
-                   Val1 = Sum(exp),
-                   Val2 = Sum(AggregatePredicate.All, exp),
-                   Val3 = Sum(AggregatePredicate.Distinct, exp),
-                   Val4 = Count(exp),
+                   Val1 = Sum(exp1),
+                   Val2 = Sum(exp2, exp1),
+                   Val3 = Sum(exp3, exp1),
+                   Val4 = Count(exp1),
                    Val5 = Count(new Asterisk()),
-                   Val6 = Count(AggregatePredicate.All, exp),
-                   Val7 = Count(AggregatePredicate.Distinct, exp),
-                   Val8 = (decimal)Avg(exp),
-                   Val9 = Min(exp),
-                   Val10 = Max(exp),
+                   Val6 = Count(exp2, exp1),
+                   Val7 = Count(exp3, exp1),
+                   Val8 = (decimal)Avg(exp1),
+                   Val9 = Min(exp1),
+                   Val10 = Max(exp1),
                }).
                From(db.tbl_remuneration).
                    Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
@@ -182,7 +184,33 @@ FROM tbl_remuneration
 	JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)
 GROUP BY tbl_staff.id, tbl_staff.name");
         }
-        
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Count_AggregatePredicate_Asterisk()
+        {
+            if (_connection.GetType().Name != "MySqlConnection" &&
+                _connection.GetType().Name != "OracleConnection") return;
+
+            var exp = Sql<DB>.Create(db => db.tbl_remuneration.money);
+            var query = Sql<DB>.Create(db =>
+               Select(new SelectData1
+               {
+                   Val1 = Count(AggregatePredicate.All, new Asterisk())
+               }).
+               From(db.tbl_remuneration).
+                   Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
+               GroupBy(db.tbl_staff.id, db.tbl_staff.name));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	COUNT(ALL *) AS Val1
+FROM tbl_remuneration
+	JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)
+GROUP BY tbl_staff.id, tbl_staff.name");
+        }
+
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Abs_Round1()
         {
