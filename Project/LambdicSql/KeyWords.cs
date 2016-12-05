@@ -806,36 +806,10 @@ namespace LambdicSql
         /// <summary>
         /// It's *.
         /// </summary>
-        public static Asterisk Asterisk() => InvalitContext.Throw<Asterisk>(nameof(Asterisk));
-
-        /// <summary>
-        /// It's *.
-        /// </summary>
         /// <typeparam name="TSelected">Type of selected.</typeparam>
         /// <param name="selected">The type you want to obtain with the SELECT clause. Usually you specify a table element.</param>
         /// <returns>*</returns>
         public static Asterisk<TSelected> Asterisk<TSelected>(TSelected selected) => InvalitContext.Throw<Asterisk<TSelected>>(nameof(Asterisk));
-
-        /// <summary>
-        /// This is TOP keywrod.
-        /// </summary>
-        /// <param name="count">Number of rows to return.</param>
-        /// <returns>TOP</returns>
-        public static Top Top(long count) => InvalitContext.Throw<Top>(nameof(Top));
-
-        /// <summary>
-        /// This is ASC keywrod.
-        /// </summary>
-        /// <param name="column">target column.</param>
-        /// <returns>ASC</returns>
-        public static Asc Asc(object column) => InvalitContext.Throw<Asc>(nameof(Desc));
-
-        /// <summary>
-        /// This is DESC keywrod.
-        /// </summary>
-        /// <param name="column">target column.</param>
-        /// <returns>DESC</returns>
-        public static Desc Desc(object column) => InvalitContext.Throw<Desc>(nameof(Desc));
 
         /// <summary>
         /// LIKE keyword.

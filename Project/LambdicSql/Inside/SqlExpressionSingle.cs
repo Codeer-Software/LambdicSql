@@ -16,7 +16,5 @@ namespace LambdicSql.Inside
 
         public override string ToString(ISqlStringConverter converter)
             => (_core == null) ? string.Empty : converter.ToString(_core);
-
-        public override Expression[] GetExpressions() => new[] { _core };
     }
 }

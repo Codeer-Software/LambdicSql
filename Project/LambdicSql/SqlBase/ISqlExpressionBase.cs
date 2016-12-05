@@ -6,9 +6,6 @@ namespace LambdicSql.SqlBase
     {
         DbInfo DbInfo { get; }
         string ToString(ISqlStringConverter decoder);
-
-        //TODO ない方がいい
-        Expression[] GetExpressions();
     }
 
     public interface ISqlExpressionBase<out TReturn> : ISqlExpressionBase { }

@@ -27,7 +27,5 @@ namespace LambdicSql.Inside
 
         public override string ToString(ISqlStringConverter converter)
             => _before.ToString(converter) + Environment.NewLine + _after.ToString(converter);
-
-        public override Expression[] GetExpressions() => _before.GetExpressions().Concat(_after.GetExpressions()).ToArray();
     }
 }

@@ -10,6 +10,5 @@ namespace LambdicSql
         public T Body => InvalitContext.Throw<T>(nameof(Body));
         public abstract string ToString(ISqlStringConverter decoder);
         public static implicit operator T(SqlExpression<T> src) => default(T);
-        public abstract Expression[] GetExpressions();
     }
 }

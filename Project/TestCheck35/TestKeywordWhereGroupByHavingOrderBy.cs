@@ -431,60 +431,6 @@ ORDER BY
 	tbl_remuneration.money ASC,
 	tbl_remuneration.staff_id DESC");
         }
-
-        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_OrderBy3()
-        {
-            var name = _connection.GetType().Name;
-            if (name == "SQLiteConnection") return;
-
-            var query = Sql<DB>.Create(db =>
-                Select(new SelectedData2
-                {
-                    Id = db.tbl_remuneration.staff_id
-                }).
-                From(db.tbl_remuneration).
-                OrderBy(Asc(db.tbl_remuneration.money), Desc(db.tbl_remuneration.staff_id)));
-
-            var datas = _connection.Query(query).ToList();
-            Assert.IsTrue(0 < datas.Count);
-            AssertEx.AreEqual(query, _connection,
-@"SELECT
-	tbl_remuneration.staff_id AS Id
-FROM tbl_remuneration
-ORDER BY
-	tbl_remuneration.money ASC,
-	tbl_remuneration.staff_id DESC");
-        }
-
-        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_OrderBy4()
-        {
-            var name = _connection.GetType().Name;
-            if (name == "SQLiteConnection") return;
-
-            var exp1 = Sql<DB>.Create(db => db.tbl_remuneration.money);
-            var exp2 = Sql<DB>.Create(db => db.tbl_remuneration.staff_id);
-            var exp3 = Sql<DB>.Create(db => Asc(exp1));
-            var exp4 = Sql<DB>.Create(db => Desc(exp2));
-            var query = Sql<DB>.Create(db =>
-                Select(new SelectedData2
-                {
-                    Id = db.tbl_remuneration.staff_id
-                }).
-                From(db.tbl_remuneration).
-                OrderBy(exp3.Cast<ISortedBy>(), exp4.Cast<ISortedBy>()));
-
-            var datas = _connection.Query(query).ToList();
-            Assert.IsTrue(0 < datas.Count);
-            AssertEx.AreEqual(query, _connection,
-@"SELECT
-	tbl_remuneration.staff_id AS Id
-FROM tbl_remuneration
-ORDER BY
-	tbl_remuneration.money ASC,
-	tbl_remuneration.staff_id DESC");
-        }
         
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Where1()
