@@ -11,7 +11,7 @@ namespace LambdicSql.Inside
     {
         static Dictionary<Type, DbInfo> _dbInfos = new Dictionary<Type, DbInfo>();
         
-        internal static DbInfo GetDbInfo<T>(Expression<Func<T>> define)
+        internal static DbInfo GetDbInfo<T>()
         {
             DbInfo db;
             lock (_dbInfos)

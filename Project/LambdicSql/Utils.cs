@@ -4,6 +4,8 @@ using System.Linq.Expressions;
 using System.Linq;
 using System;
 
+//TODO やっぱり統合したいよなー
+//Window関数だけなんだかなーって感じやねんなー
 namespace LambdicSql
 {
     [SqlSyntax]

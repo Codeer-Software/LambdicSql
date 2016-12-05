@@ -5,7 +5,7 @@ namespace LambdicSql.SqlBase
     public interface ISqlExpressionBase
     {
         DbInfo DbInfo { get; }
-        string ToString(ISqlStringConverter decoder);
+        string ToString(ISqlStringConverter convertor);
     }
 
     public interface ISqlExpressionBase<out TReturn> : ISqlExpressionBase { }

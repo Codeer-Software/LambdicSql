@@ -131,7 +131,7 @@ namespace TestCheck35
             public DateTime PaymentDate { get; set; }
             public decimal Money { get; set; }
         }
-        
+
         static IDbDataParameter CreateParameter(IDbCommand com, string name, object obj)
         {
             var param = com.CreateParameter();
@@ -230,7 +230,7 @@ namespace TestCheck35
                     Money = db.tbl_remuneration.money,
                 }).
                 From(db.tbl_remuneration));
-            
+
             var query2 = Sql<DB>.Create(db =>
                     Join(db.tbl_staff, db.tbl_staff.id == db.tbl_remuneration.staff_id).
                 Where(min < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
@@ -250,19 +250,19 @@ namespace TestCheck35
         public void TestGroupBy()
         {
             //make sql.
-            var query = Sql< DB>.Create(db =>
-                Select(new SelectData2
-                {
-                    Name = db.tbl_staff.name,
-                    Count = Count(db.tbl_remuneration.money),
-                    Total = Sum(db.tbl_remuneration.money),
-                    Average = (decimal)Avg(db.tbl_remuneration.money),
-                    Minimum = Min(db.tbl_remuneration.money),
-                    Maximum = Max(db.tbl_remuneration.money),
-                }).
-                From(db.tbl_remuneration).
-                    Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
-                GroupBy(db.tbl_staff.id, db.tbl_staff.name));
+            var query = Sql<DB>.Create(db =>
+               Select(new SelectData2
+               {
+                   Name = db.tbl_staff.name,
+                   Count = Count(db.tbl_remuneration.money),
+                   Total = Sum(db.tbl_remuneration.money),
+                   Average = (decimal)Avg(db.tbl_remuneration.money),
+                   Minimum = Min(db.tbl_remuneration.money),
+                   Maximum = Max(db.tbl_remuneration.money),
+               }).
+               From(db.tbl_remuneration).
+                   Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
+               GroupBy(db.tbl_staff.id, db.tbl_staff.name));
 
             //to string and params.
             var info = query.ToSqlInfo(_connection.GetType());
@@ -657,7 +657,7 @@ namespace TestCheck35
             TestWhereEx(false, true);
             TestWhereEx(false, false);
         }
-        
+
         public void TestWhereEx(bool minCondition, bool maxCondition)
         {
             //make sql.
@@ -757,7 +757,7 @@ namespace TestCheck35
         public void TestQueryConcat()
         {
             //make sql.
-            var select = Sql<DB>.Create(db => 
+            var select = Sql<DB>.Create(db =>
                 Select(new SelectData1()
                 {
                     Name = db.tbl_staff.name,
@@ -765,14 +765,14 @@ namespace TestCheck35
                     Money = db.tbl_remuneration.money,
                 }));
 
-            var from = Sql<DB>.Create(db => 
+            var from = Sql<DB>.Create(db =>
                  From(db.tbl_remuneration).
                 Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id));
 
-            var where = Sql<DB>.Create(db => 
+            var where = Sql<DB>.Create(db =>
                 Where(3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
 
-            var orderby = Sql<DB>.Create(db => 
+            var orderby = Sql<DB>.Create(db =>
                  OrderBy(new Asc(db.tbl_staff.name)));
 
             var query = select.Concat(from).Concat(where).Concat(orderby);
@@ -793,17 +793,17 @@ namespace TestCheck35
             var expWhereMin = Sql<DB>.Create(db => 3000 < db.tbl_remuneration.money);
             var expWhereMax = Sql<DB>.Create(db => db.tbl_remuneration.money < 4000);
 
-            var query = Sql< DB>.Create(db =>
-                Select(new SelectData1()
-                {
-                    Name = db.tbl_staff.name,
-                    PaymentDate = db.tbl_remuneration.payment_date,
-                    Money = expMoneyAdd,
-                }).
-                From(db.tbl_remuneration).
-                    Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
-                Where(expWhereMin && expWhereMax).
-                OrderBy(new Asc(db.tbl_staff.name)));
+            var query = Sql<DB>.Create(db =>
+               Select(new SelectData1()
+               {
+                   Name = db.tbl_staff.name,
+                   PaymentDate = db.tbl_remuneration.payment_date,
+                   Money = expMoneyAdd,
+               }).
+               From(db.tbl_remuneration).
+                   Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
+               Where(expWhereMin && expWhereMax).
+               OrderBy(new Asc(db.tbl_staff.name)));
 
             //to string and params.
             var info = query.ToSqlInfo(_connection.GetType());
@@ -818,7 +818,7 @@ namespace TestCheck35
         public void TestSubQueryAtWhere()
         {
             //make sql.
-            var sub = Sql<DB>.Create(db => 
+            var sub = Sql<DB>.Create(db =>
                 Select(new { total = db.tbl_remuneration.staff_id }).
                 From(db.tbl_remuneration));
 
@@ -839,7 +839,7 @@ namespace TestCheck35
         public void TestSubQuerySelect()
         {
             //make sql.
-            var sub = Sql<DB>.Create(db => 
+            var sub = Sql<DB>.Create(db =>
                 Select(new SelectData6 { Total = Sum(db.tbl_remuneration.money) }).
                 From(db.tbl_remuneration));
 
@@ -863,7 +863,7 @@ namespace TestCheck35
         public void TestSubQueryAtFrom()
         {
             //make sql.
-            var subQuery = Sql<DB>.Create(db => 
+            var subQuery = Sql<DB>.Create(db =>
                 Select(new
                 {
                     name_sub = db.tbl_staff.name,
@@ -938,7 +938,7 @@ namespace TestCheck35
             TestFormat2WaySql(false, true, 3000);
             TestFormat2WaySql(false, false, 4000);
         }
-        
+
         public void TestFormat2WaySql(bool minCondition, bool maxCondition, decimal bonus)
         {
             //make sql.
@@ -1165,7 +1165,7 @@ FROM tbl_remuneration
             }
 
             //CurrentTimeStamp
-            if (name == "System.Data.SqlClient.SqlConnection" || 
+            if (name == "System.Data.SqlClient.SqlConnection" ||
                 name == "Npgsql.NpgsqlConnection" ||
                 name == "MySql.Data.MySqlClient.MySqlConnection")
             {
@@ -1322,7 +1322,7 @@ FROM tbl_remuneration
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestGroupByEx()
-        {           
+        {
             //make sql.
             var selectFrom = Sql<DB>.Create(db =>
                Select(new SelectData2
@@ -1364,7 +1364,7 @@ FROM tbl_remuneration
                  OffsetRows(1).
                  FetchNextRowsOnly(3)
                  );
-            Debug.Print(query.ToSqlInfo().SqlText);
+          //  Debug.Print(query.ToSqlInfo().SqlText);
             _connection.Query(query);
         }
 
@@ -1382,7 +1382,7 @@ FROM tbl_remuneration
                  OrderBy(new Asc(db.tbl_remuneration.id)).
                  Limit(1, 3)
                  );
-            Debug.Print(query.ToSqlInfo().SqlText);
+      //      Debug.Print(query.ToSqlInfo().SqlText);
             _connection.Query(query);
         }
 
@@ -1400,7 +1400,7 @@ FROM tbl_remuneration
                  Limit(1).
                  Offset(3)
                  );
-            Debug.Print(query.ToSqlInfo().SqlText);
+       //     Debug.Print(query.ToSqlInfo().SqlText);
             _connection.Query(query);
         }
 
@@ -1416,7 +1416,7 @@ FROM tbl_remuneration
                  Where(Between(RowNum, 1, 5)).
                  OrderBy(new Asc(db.tbl_remuneration.id))
                  );
-            Debug.Print(query.ToSqlInfo().SqlText);
+       //     Debug.Print(query.ToSqlInfo().SqlText);
             _connection.Query(query);
         }
 
@@ -1434,7 +1434,7 @@ FROM tbl_remuneration
                               money = db.tbl_remuneration.money
                           }).
                       From(db.tbl_remuneration));
-                Debug.Print(query.ToSqlInfo().SqlText);
+         //       Debug.Print(query.ToSqlInfo().SqlText);
                 _connection.Query(query);
             }
             {
@@ -1443,7 +1443,7 @@ FROM tbl_remuneration
                           new Top(10),
                           new Asterisk()).
                       From(db.tbl_remuneration));
-                Debug.Print(query.ToSqlInfo().SqlText);
+         //       Debug.Print(query.ToSqlInfo().SqlText);
                 _connection.Query(query);
             }
             {
@@ -1456,7 +1456,7 @@ FROM tbl_remuneration
                               money = db.tbl_remuneration.money
                           }).
                       From(db.tbl_remuneration));
-                Debug.Print(query.ToSqlInfo().SqlText);
+       //         Debug.Print(query.ToSqlInfo().SqlText);
                 _connection.Query(query);
             }
             {
@@ -1466,18 +1466,18 @@ FROM tbl_remuneration
                           new Top(10),
                           new Asterisk()).
                       From(db.tbl_remuneration));
-                Debug.Print(query.ToSqlInfo().SqlText);
+        //        Debug.Print(query.ToSqlInfo().SqlText);
                 _connection.Query(query);
             }
         }
-        
+
         public IEnumerable<T> ExecuteRead<T>(ISqlExpressionBase<IQuery<T>> exp)
         {
             var info = exp.ToSqlInfo(_connection.GetType());
             Debug.Print(info.SqlText);
             return _connection.Query(exp).ToList();
         }
-        
+
         public IEnumerable<T> ExecuteRead<T>(ISqlExpressionBase exp)
         {
             var info = exp.ToSqlInfo(_connection.GetType());

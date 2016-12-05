@@ -66,6 +66,7 @@
     <Compile Include="OrderBy.cs" />
     <Compile Include="PartitionBy.cs" />
     <Compile Include="Rows.cs" />
+    <Compile Include="SetOperationExtensions.cs" />
     <Compile Include="SqlBase\ExpressionToObject.CreateGetter.cs" />
     <Compile Include="SqlBase\ExpressionToObject.Getter.cs" />
     <Compile Include="Inside\SqlExpressionCoupled.cs" />
