@@ -6,8 +6,6 @@ using System.Linq.Expressions;
 
 namespace LambdicSql
 {
-    //TODO SUMとCOUNTってALLとか*とかこれでもできるの？
-
     /// <summary>
     /// SQL Window functions.
     /// It can only be used within methods of the LambdicSql.Sql class.
@@ -21,28 +19,28 @@ namespace LambdicSql
         /// SUM function.
         /// </summary>
         /// <typeparam name="T">Type represented by expression.</typeparam>
-        /// <param name="expression">The column or expression that is function target.</param>
+        /// <param name="column">The column or expression that is function target.</param>
         /// <returns>It is an object for describing the continuation of the OVER expression.</returns>
         [MethodGroup(nameof(Window))]
-        public static IFuncAfter<T> Sum<T>(T expression) => InvalitContext.Throw<IFuncAfter<T>>(nameof(Sum));
+        public static IFuncAfter<T> Sum<T>(T column) => InvalitContext.Throw<IFuncAfter<T>>(nameof(Sum));
 
         /// <summary>
         /// SUM function.
         /// </summary>
         /// <typeparam name="T">Type represented by expression.</typeparam>
         /// <param name="aggregatePredicate">Specify All or Distinct.</param>
-        /// <param name="expression">The column or expression that is function target.</param>
+        /// <param name="column">The column or expression that is function target.</param>
         /// <returns>Total.</returns>
         [MethodGroup(nameof(Window))]
-        public static IFuncAfter<T> Sum<T>(AggregatePredicate aggregatePredicate, T expression) => InvalitContext.Throw<IFuncAfter<T>>(nameof(Sum));
+        public static IFuncAfter<T> Sum<T>(AggregatePredicate aggregatePredicate, T column) => InvalitContext.Throw<IFuncAfter<T>>(nameof(Sum));
 
         /// <summary>
         /// COUNT function.
         /// </summary>
-        /// <param name="expression">The column or expression that is function target.</param>
+        /// <param name="column">The column or expression that is function target.</param>
         /// <returns>It is an object for describing the continuation of the OVER expression.</returns>
         [MethodGroup(nameof(Window))]
-        public static IFuncAfter<int> Count(object expression) => InvalitContext.Throw<IFuncAfter<int>>(nameof(Count));
+        public static IFuncAfter<int> Count(object column) => InvalitContext.Throw<IFuncAfter<int>>(nameof(Count));
 
         /// <summary>
         /// COUNT function.
@@ -56,54 +54,63 @@ namespace LambdicSql
         /// COUNT function.
         /// </summary>
         /// <param name="aggregatePredicate">Specify All or Distinct.</param>
-        /// <param name="expression"></param>
+        /// <param name="column">The column or expression that is function target.</param>
         /// <returns>Count.</returns>
         [MethodGroup(nameof(Window))]
-        public static IFuncAfter<int> Count(AggregatePredicate aggregatePredicate, object expression) => InvalitContext.Throw<IFuncAfter<int>>(nameof(Count));
+        public static IFuncAfter<int> Count(AggregatePredicate aggregatePredicate, object column) => InvalitContext.Throw<IFuncAfter<int>>(nameof(Count));
+
+        /// <summary>
+        /// COUNT function.
+        /// </summary>
+        /// <param name="aggregatePredicate">Specify All or Distinct.</param>
+        /// <param name="asterisk">*</param>
+        /// <returns>Count.</returns>
+        [MethodGroup(nameof(Window))]
+        public static IFuncAfter<int> Count(AggregatePredicate aggregatePredicate, Asterisk asterisk) => InvalitContext.Throw<IFuncAfter<int>>(nameof(Count));
 
         /// <summary>
         /// AVG function.
         /// </summary>
-        /// <param name="expression">The column or expression that is function target.</param>
+        /// <param name="column">The column or expression that is function target.</param>
         /// <returns>It is an object for describing the continuation of the OVER expression.</returns>
         [MethodGroup(nameof(Window))]
-        public static IFuncAfter<double> Avg(object expression) => InvalitContext.Throw<IFuncAfter<double>>(nameof(Avg));
+        public static IFuncAfter<double> Avg(object colum) => InvalitContext.Throw<IFuncAfter<double>>(nameof(Avg));
 
         /// <summary>
         /// MIN function.
         /// </summary>
         /// <typeparam name="T">Type represented by expression.</typeparam>
-        /// <param name="expression">The column or expression that is function target.</param>
+        /// <param name="column">The column or expression that is function target.</param>
         /// <returns>It is an object for describing the continuation of the OVER expression.</returns>
         [MethodGroup(nameof(Window))]
-        public static IFuncAfter<T> Min<T>(T expression) => InvalitContext.Throw<IFuncAfter<T>>(nameof(Min));
+        public static IFuncAfter<T> Min<T>(T column) => InvalitContext.Throw<IFuncAfter<T>>(nameof(Min));
 
         /// <summary>
         /// MAX function.
         /// </summary>
         /// <typeparam name="T">Type represented by expression.</typeparam>
-        /// <param name="expression">The column or expression that is function target.</param>
+        /// <param name="column">The column or expression that is function target.</param>
         /// <returns>It is an object for describing the continuation of the OVER expression.</returns>
         [MethodGroup(nameof(Window))]
-        public static IFuncAfter<T> Max<T>(T expression) => InvalitContext.Throw<IFuncAfter<T>>(nameof(Max));
+        public static IFuncAfter<T> Max<T>(T column) => InvalitContext.Throw<IFuncAfter<T>>(nameof(Max));
 
         /// <summary>
         /// FIRST_VALUE function.
         /// </summary>
         /// <typeparam name="T">Type represented by expression.</typeparam>
-        /// <param name="expression">The column or expression that is function target.</param>
+        /// <param name="column">The column or expression that is function target.</param>
         /// <returns>It is an object for describing the continuation of the OVER expression.</returns>
         [MethodGroup(nameof(Window))]
-        public static IFuncAfter<T> First_Value<T>(T expression) => InvalitContext.Throw<IFuncAfter<T>>(nameof(Min));
+        public static IFuncAfter<T> First_Value<T>(T column) => InvalitContext.Throw<IFuncAfter<T>>(nameof(Min));
 
         /// <summary>
         /// LAST_VALUE function.
         /// </summary>
         /// <typeparam name="T">Type represented by expression.</typeparam>
-        /// <param name="expression">The column or expression that is function target.</param>
+        /// <param name="column">The column or expression that is function target.</param>
         /// <returns>It is an object for describing the continuation of the OVER expression.</returns>
         [MethodGroup(nameof(Window))]
-        public static IFuncAfter<T> Last_Value<T>(T expression) => InvalitContext.Throw<IFuncAfter<T>>(nameof(Min));
+        public static IFuncAfter<T> Last_Value<T>(T column) => InvalitContext.Throw<IFuncAfter<T>>(nameof(Min));
 
         /// <summary>
         /// RANK function.
@@ -144,41 +151,41 @@ namespace LambdicSql
         /// <summary>
         /// NTH_VALUE function.
         /// </summary>
-        /// <param name="expression">The column or expression that is function target.</param>
+        /// <param name="column">The column or expression that is function target.</param>
         /// <param name="offset">Specify the number of lines associated with the first line of the window that returns the expression.</param>
         /// <returns>It is an object for describing the continuation of the OVER expression.</returns>
         [MethodGroup(nameof(Window))]
-        public static IFuncAfter<int> Nth_Value(object expression, object offset) => InvalitContext.Throw<IFuncAfter<int>>(nameof(Min));
+        public static IFuncAfter<int> Nth_Value(object column, object offset) => InvalitContext.Throw<IFuncAfter<int>>(nameof(Min));
 
         /// <summary>
         /// LAG function.
         /// </summary>
         /// <typeparam name="T">Type represented by expression.</typeparam>
-        /// <param name="expression">The column or expression that is function target.</param>
+        /// <param name="column">The column or expression that is function target.</param>
         /// <returns>It is an object for describing the continuation of the OVER expression.</returns>
         [MethodGroup(nameof(Window))]
-        public static IFuncAfter<T> Lag<T>(T expression) => InvalitContext.Throw<IFuncAfter<T>>(nameof(Lag));
+        public static IFuncAfter<T> Lag<T>(T column) => InvalitContext.Throw<IFuncAfter<T>>(nameof(Lag));
 
         /// <summary>
         /// LAG function.
         /// </summary>
         /// <typeparam name="T">Type represented by expression.</typeparam>
-        /// <param name="expression">The column or expression that is function target.</param>
+        /// <param name="column">The column or expression that is function target.</param>
         /// <param name="offset">An optional parameter that specifies the number of lines before the current line that returns a value.</param>
         /// <returns>It is an object for describing the continuation of the OVER expression.</returns>
         [MethodGroup(nameof(Window))]
-        public static IFuncAfter<T> Lag<T>(T expression, object offset) => InvalitContext.Throw<IFuncAfter<T>>(nameof(Lag));
+        public static IFuncAfter<T> Lag<T>(T column, object offset) => InvalitContext.Throw<IFuncAfter<T>>(nameof(Lag));
 
         /// <summary>
         /// LAG function.
         /// </summary>
         /// <typeparam name="T">Type represented by expression.</typeparam>
-        /// <param name="expression">The column or expression that is function target.</param>
+        /// <param name="column">The column or expression that is function target.</param>
         /// <param name="offset">An optional parameter that specifies the number of lines before the current line that returns a value.</param>
         /// <param name="default">The value returned if the value specified by offset is NULL.</param>
         /// <returns>It is an object for describing the continuation of the OVER expression.</returns>
         [MethodGroup(nameof(Window))]
-        public static IFuncAfter<T> Lag<T>(T expression, object offset, T @default) => InvalitContext.Throw<IFuncAfter<T>>(nameof(Lag));
+        public static IFuncAfter<T> Lag<T>(T column, object offset, T @default) => InvalitContext.Throw<IFuncAfter<T>>(nameof(Lag));
 
         /// <summary>
         /// OVER function.

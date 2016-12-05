@@ -18,25 +18,25 @@ namespace LambdicSql
         /// SUM function.
         /// </summary>
         /// <typeparam name="T">Type represented by expression.</typeparam>
-        /// <param name="expression">The column or expression that is function target.</param>
+        /// <param name="column">The column or expression that is function target.</param>
         /// <returns>Total.</returns>
-        public static T Sum<T>(T expression) => InvalitContext.Throw<T>(nameof(Sum));
+        public static T Sum<T>(T column) => InvalitContext.Throw<T>(nameof(Sum));
 
         /// <summary>
         /// SUM function.
         /// </summary>
         /// <typeparam name="T">Type represented by expression.</typeparam>
         /// <param name="aggregatePredicate">Specify All or Distinct.</param>
-        /// <param name="expression">The column or expression that is function target.</param>
+        /// <param name="column">The column or expression that is function target.</param>
         /// <returns>Total.</returns>
-        public static T Sum<T>(AggregatePredicate aggregatePredicate, T expression) => InvalitContext.Throw<T>(nameof(Sum));
+        public static T Sum<T>(AggregatePredicate aggregatePredicate, T column) => InvalitContext.Throw<T>(nameof(Sum));
 
         /// <summary>
         /// COUNT function.
         /// </summary>
-        /// <param name="expression">The column or expression that is function target.</param>
+        /// <param name="column">The column or expression that is function target.</param>
         /// <returns>Count.</returns>
-        public static int Count(object expression) => InvalitContext.Throw<int>(nameof(Count));
+        public static int Count(object column) => InvalitContext.Throw<int>(nameof(Count));
 
         /// <summary>
         /// COUNT function.
@@ -49,9 +49,9 @@ namespace LambdicSql
         /// COUNT function.
         /// </summary>
         /// <param name="aggregatePredicate">Specify All or Distinct.</param>
-        /// <param name="expression"></param>
+        /// <param name="column">The column or expression that is function target.</param>
         /// <returns>Count.</returns>
-        public static int Count(AggregatePredicate aggregatePredicate, object expression) => InvalitContext.Throw<int>(nameof(Count));
+        public static int Count(AggregatePredicate aggregatePredicate, object column) => InvalitContext.Throw<int>(nameof(Count));
 
         /// <summary>
         /// COUNT function.
@@ -64,33 +64,33 @@ namespace LambdicSql
         /// <summary>
         /// AVG function.
         /// </summary>
-        /// <param name="expression">The column or expression that is function target.</param>
+        /// <param name="column">The column or expression that is function target.</param>
         /// <returns>Average.</returns>
-        public static double Avg(object expression) => InvalitContext.Throw<double>(nameof(Avg));
+        public static double Avg(object column) => InvalitContext.Throw<double>(nameof(Avg));
 
         /// <summary>
         /// MIN function.
         /// </summary>
         /// <typeparam name="T">Type represented by expression.</typeparam>
-        /// <param name="expression">The column or expression that is function target.</param>
+        /// <param name="column">The column or expression that is function target.</param>
         /// <returns>Minimum.</returns>
-        public static T Min<T>(T expression) => InvalitContext.Throw<T>(nameof(Min));
+        public static T Min<T>(T column) => InvalitContext.Throw<T>(nameof(Min));
 
         /// <summary>
         /// MAX function.
         /// </summary>
         /// <typeparam name="T">Type represented by expression.</typeparam>
-        /// <param name="expression">The column or expression that is function target.</param>
+        /// <param name="column">The column or expression that is function target.</param>
         /// <returns>Maximum.</returns>
-        public static T Max<T>(T expression) => InvalitContext.Throw<T>(nameof(Max));
+        public static T Max<T>(T column) => InvalitContext.Throw<T>(nameof(Max));
 
         /// <summary>
         /// ABS function.
         /// </summary>
         /// <typeparam name="T">Type represented by expression.</typeparam>
-        /// <param name="expression">The column or expression that is function target.</param>
+        /// <param name="column">The column or expression that is function target.</param>
         /// <returns>Absolute value.</returns>
-        public static T Abs<T>(T expression) => InvalitContext.Throw<T>(nameof(Abs));
+        public static T Abs<T>(T column) => InvalitContext.Throw<T>(nameof(Abs));
 
         /// <summary>
         /// MOD function.
@@ -105,7 +105,7 @@ namespace LambdicSql
         /// ROUND function.
         /// </summary>
         /// <typeparam name="T">Type represented by target.</typeparam>
-        /// <param name="target">Is an expression of the exact numeric or approximate numeric data type category, except for the bit data type.</param>
+        /// <param name="target">Numeric expression to round.</param>
         /// <param name="digit">Is the precision to which it is to be rounded.</param>
         /// <returns>Rounded result.</returns>
         public static T Round<T>(T target, object digit) => InvalitContext.Throw<T>(nameof(Round));

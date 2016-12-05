@@ -284,32 +284,29 @@ namespace LambdicSql
         /// <summary>
         /// CASE clause.
         /// </summary>
-        /// <typeparam name="T">Type represented by CASE expression.</typeparam>
         /// <param name="target">It's target of CASE branch.</param>
         /// <returns>It is an object for describing the continuation of the CASE expression.</returns>
         [MethodGroup(nameof(Case))]
-        public static ICaseAfter Case<T>(T target) => InvalitContext.Throw<ICaseAfter>(nameof(Case));
+        public static ICaseAfter Case(object target) => InvalitContext.Throw<ICaseAfter>(nameof(Case));
 
         /// <summary>
         /// WHEN clause.
         /// </summary>
-        /// <typeparam name="T">Type represented by CASE expression.</typeparam>
-        /// <param name="before">It is an before expression in the CASE clause.</param>
-        /// <param name="target">It's target of CASE branch.</param>
-        /// <returns>It is an object for describing the continuation of the CASE expression.</returns>
-        [MethodGroup(nameof(Case))]
-        public static IWhenAfter When<T>(this ICaseAfter before, T target) => InvalitContext.Throw<IWhenAfter>(nameof(When));
-
-        /// <summary>
-        /// WHEN clause.
-        /// </summary>
-        /// <typeparam name="TCaseResult"></typeparam>
-        /// <typeparam name="TWhenExpression"></typeparam>
         /// <param name="before">It is an before expression in the CASE clause.</param>
         /// <param name="expression">It is a conditional expression of the WHEN clause.</param>
         /// <returns>It is an object for describing the continuation of the CASE expression.</returns>
         [MethodGroup(nameof(Case))]
-        public static IWhenAfter<TCaseResult> When<TCaseResult, TWhenExpression>(this IThenAfter<TCaseResult> before, TWhenExpression expression) => InvalitContext.Throw<IWhenAfter<TCaseResult>>(nameof(When));
+        public static IWhenAfter When(this ICaseAfter before, object expression) => InvalitContext.Throw<IWhenAfter>(nameof(When));
+
+        /// <summary>
+        /// WHEN clause.
+        /// </summary>
+        /// <typeparam name="T">Type represented by CASE expression.</typeparam>
+        /// <param name="before">It is an before expression in the CASE clause.</param>
+        /// <param name="expression">It is a conditional expression of the WHEN clause.</param>
+        /// <returns>It is an object for describing the continuation of the CASE expression.</returns>
+        [MethodGroup(nameof(Case))]
+        public static IWhenAfter<T> When<T>(this IThenAfter<T> before, object expression) => InvalitContext.Throw<IWhenAfter<T>>(nameof(When));
 
         /// <summary>
         /// THEN clause.
@@ -371,63 +368,63 @@ namespace LambdicSql
         /// </summary>
         /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
-        /// <param name="expressions">Table or subquery.</param>
+        /// <param name="tables">Table or subquery.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IQuery<TSelected> From<TSelected>(this IQuery<TSelected> before, params object[] expressions) => InvalitContext.Throw<IQuery<TSelected>>(nameof(From));
+        public static IQuery<TSelected> From<TSelected>(this IQuery<TSelected> before, params object[] tables) => InvalitContext.Throw<IQuery<TSelected>>(nameof(From));
 
         /// <summary>
         /// JOIN clause.
         /// </summary>
-        /// <param name="expressions">Table or subquery.</param>
+        /// <param name="table">Table or subquery.</param>
         /// <param name="condition">It is a condition of JOIN.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IQuery<Non> Join(object expression, bool condition) => InvalitContext.Throw<IQuery<Non>>(nameof(Join));
+        public static IQuery<Non> Join(object table, bool condition) => InvalitContext.Throw<IQuery<Non>>(nameof(Join));
 
         /// <summary>
         /// JOIN clause.
         /// </summary>
         /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
-        /// <param name="expressions">Table or subquery.</param>
+        /// <param name="table">Table or subquery.</param>
         /// <param name="condition">It is a condition of JOIN.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IQuery<TSelected> Join<TSelected>(this IQuery<TSelected> before, object expression, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Join));
+        public static IQuery<TSelected> Join<TSelected>(this IQuery<TSelected> before, object table, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Join));
 
         /// <summary>
         /// JOIN clause.
         /// </summary>
-        /// <param name="expressions">Table or subquery.</param>
+        /// <param name="table">Table or subquery.</param>
         /// <param name="condition">It is a condition of LEFT JOIN.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IQuery<Non> LeftJoin(object expression, bool condition) => InvalitContext.Throw<IQuery<Non>>(nameof(LeftJoin));
+        public static IQuery<Non> LeftJoin(object table, bool condition) => InvalitContext.Throw<IQuery<Non>>(nameof(LeftJoin));
 
         /// <summary>
         /// LEFT JOIN clause.
         /// </summary>
         /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
-        /// <param name="expressions">Table or subquery.</param>
+        /// <param name="table">Table or subquery.</param>
         /// <param name="condition">It is a condition of LEFT JOIN.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IQuery<TSelected> LeftJoin<TSelected>(this IQuery<TSelected> before, object expression, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(LeftJoin));
+        public static IQuery<TSelected> LeftJoin<TSelected>(this IQuery<TSelected> before, object table, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(LeftJoin));
 
         /// <summary>
         /// RIGHT JOIN clause.
         /// </summary>
-        /// <param name="expressions">Table or subquery.</param>
+        /// <param name="table">Table or subquery.</param>
         /// <param name="condition">It is a condition of RIGHT JOIN.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IQuery<Non> RightJoin(object expression, bool condition) => InvalitContext.Throw<IQuery<Non>>(nameof(RightJoin));
+        public static IQuery<Non> RightJoin(object table, bool condition) => InvalitContext.Throw<IQuery<Non>>(nameof(RightJoin));
 
         /// <summary>
         /// RIGHT JOIN clause.
         /// </summary>
         /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
-        /// <param name="expressions">Table or subquery.</param>>
+        /// <param name="table">Table or subquery.</param>>
         /// <param name="condition">It is a condition of RIGHT JOIN.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IQuery<TSelected> RightJoin<TSelected>(this IQuery<TSelected> before, object expression, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(RightJoin));
+        public static IQuery<TSelected> RightJoin<TSelected>(this IQuery<TSelected> before, object table, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(RightJoin));
 
         /// <summary>
         /// CROSS JOIN clause.
@@ -441,25 +438,25 @@ namespace LambdicSql
         /// </summary>
         /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
-        /// <param name="expressions">Table or subquery.</param>
+        /// <param name="table">Table or subquery.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IQuery<TSelected> CrossJoin<TSelected>(this IQuery<TSelected> before, object expression) => InvalitContext.Throw<IQuery<TSelected>>(nameof(CrossJoin));
+        public static IQuery<TSelected> CrossJoin<TSelected>(this IQuery<TSelected> before, object table) => InvalitContext.Throw<IQuery<TSelected>>(nameof(CrossJoin));
 
         /// <summary>
         /// WHERE clause.
         /// </summary>
-        /// <param name="conditionExpression">It is a conditional expression of WHERE.</param>
+        /// <param name="condition">It is a conditional expression of WHERE.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IQuery<Non> Where(bool conditionExpression) => InvalitContext.Throw<IQuery<Non>>(nameof(Where));
+        public static IQuery<Non> Where(bool condition) => InvalitContext.Throw<IQuery<Non>>(nameof(Where));
 
         /// <summary>
         /// WHERE clause.
         /// </summary>
         /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
-        /// <param name="conditionExpression">It is a conditional expression of WHERE.</param>
+        /// <param name="condition">It is a conditional expression of WHERE.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IQuery<TSelected> Where<TSelected>(this IQuery<TSelected> before, bool conditionExpression) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Where));
+        public static IQuery<TSelected> Where<TSelected>(this IQuery<TSelected> before, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Where));
 
         /// <summary>
         /// GROUP BY clause.
@@ -544,18 +541,18 @@ namespace LambdicSql
         /// <summary>
         /// HAVING clause.
         /// </summary>
-        /// <param name="conditionExpression">It is a conditional expression of HAVING.</param>
+        /// <param name="condition">It is a conditional expression of HAVING.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IQuery<Non> Having(bool conditionExpression) => InvalitContext.Throw<IQuery<Non>>(nameof(Having));
+        public static IQuery<Non> Having(bool condition) => InvalitContext.Throw<IQuery<Non>>(nameof(Having));
 
         /// <summary>
         /// HAVING clause.
         /// </summary>
         /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
-        /// <param name="conditionExpression">It is a conditional expression of HAVING.</param>
+        /// <param name="condition">It is a conditional expression of HAVING.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IQuery<TSelected> Having<TSelected>(this IQuery<TSelected> before, bool conditionExpression) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Having));
+        public static IQuery<TSelected> Having<TSelected>(this IQuery<TSelected> before, bool condition) => InvalitContext.Throw<IQuery<TSelected>>(nameof(Having));
 
         /// <summary>
         /// ORDER BY clause.
@@ -635,9 +632,9 @@ namespace LambdicSql
         /// </summary>
         /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
-        /// <param name="rowCount"></param>
+        /// <param name="count">Number of rows to acquire.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IQuery<TSelected> OffsetRows<TSelected>(this IQuery<TSelected> before, object rowCount) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
+        public static IQuery<TSelected> OffsetRows<TSelected>(this IQuery<TSelected> before, object count) => InvalitContext.Throw<IQuery<TSelected>>(nameof(OrderBy));
 
         /// <summary>
         /// FETCH NEXT count ROWS ONLY clause.
@@ -840,17 +837,17 @@ namespace LambdicSql
         /// IN keyword.
         /// </summary>
         /// <param name="target">Target of IN check.</param>
-        /// <param name="expression">Candidates expected for target.</param>
+        /// <param name="canditates">Candidates expected for target.</param>
         /// <returns>Returns TRUE if target is included in the candidate represented by expression.</returns>
-        public static bool In(object target, ISqlExpressionBase expression) => InvalitContext.Throw<bool>(nameof(In));
+        public static bool In(object target, ISqlExpressionBase canditates) => InvalitContext.Throw<bool>(nameof(In));
 
         /// <summary>
         /// IN keyword.
         /// </summary>
         /// <param name="target">Target of IN check.</param>
-        /// <param name="expressions">Table or subquery.</param>
+        /// <param name="canditates">Table or subquery.</param>
         /// <returns>Returns TRUE if target is included in the candidate represented by expression.</returns>
-        public static bool In(object target, IQuery expression) => InvalitContext.Throw<bool>(nameof(In));
+        public static bool In(object target, IQuery canditates) => InvalitContext.Throw<bool>(nameof(In));
 
         /// <summary>
         /// EXISTS keyword.
