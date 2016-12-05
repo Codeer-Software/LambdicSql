@@ -28,6 +28,60 @@ namespace TestCheck35
         public void TestCleanup() => _connection.Dispose();
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Limit1()
+        {
+            var name = _connection.GetType().Name;
+            if (name == "SqlConnection") return;
+            if (name == "OracleConnection") return;
+            if (name == "NpgsqlConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+                 Select(Asterisk(db.tbl_remuneration)).
+                 From(db.tbl_remuneration).
+                 OrderBy(new Asc(db.tbl_remuneration.id)).
+                 Limit(1, 3)
+                 );
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT *
+FROM tbl_remuneration
+ORDER BY
+	tbl_remuneration.id ASC
+LIMIT @p_0, @p_1",
+(long)1, (long)3);
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Limit2()
+        {
+            var name = _connection.GetType().Name;
+            if (name == "SqlConnection") return;
+            if (name == "OracleConnection") return;
+            if (name == "NpgsqlConnection") return;
+
+            var exp1 = Sql<DB>.Create(db => (long)1);
+            var exp2 = Sql<DB>.Create(db => (long)3);
+            var query = Sql<DB>.Create(db =>
+                 Select(Asterisk(db.tbl_remuneration)).
+                 From(db.tbl_remuneration).
+                 OrderBy(new Asc(db.tbl_remuneration.id)).
+                 Limit(exp1, exp2)
+                 );
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT *
+FROM tbl_remuneration
+ORDER BY
+	tbl_remuneration.id ASC
+LIMIT @p_0, @p_1",
+(long)1, (long)3);
+        }
+        
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Limit_Offset1()
         {
             var name = _connection.GetType().FullName;
@@ -136,6 +190,61 @@ ORDER BY
 	tbl_remuneration.id ASC
 OFFSET @p_0 ROWS
 FETCH NEXT @p_1 ROWS ONLY",
+(long)1, (long)3);
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Continue_Limit1()
+        {
+            var name = _connection.GetType().Name;
+            if (name == "SqlConnection") return;
+            if (name == "OracleConnection") return;
+            if (name == "NpgsqlConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+                 Select(Asterisk(db.tbl_remuneration)).
+                 From(db.tbl_remuneration).
+                 OrderBy(new Asc(db.tbl_remuneration.id)));
+            var limit = Sql<DB>.Create(db => Limit(1, 3));
+            query = query.Concat(limit);
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT *
+FROM tbl_remuneration
+ORDER BY
+	tbl_remuneration.id ASC
+LIMIT @p_0, @p_1",
+(long)1, (long)3);
+        }
+        
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Continue_Limit2()
+        {
+            var name = _connection.GetType().Name;
+            if (name == "SqlConnection") return;
+            if (name == "OracleConnection") return;
+            if (name == "NpgsqlConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+                 Select(Asterisk(db.tbl_remuneration)).
+                 From(db.tbl_remuneration).
+                 OrderBy(new Asc(db.tbl_remuneration.id)));
+
+            var exp1 = Sql<DB>.Create(db => (long)1);
+            var exp2 = Sql<DB>.Create(db => (long)3);
+            var limit = Sql<DB>.Create(db => Limit(exp1, exp2));
+            query = query.Concat(limit);
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT *
+FROM tbl_remuneration
+ORDER BY
+	tbl_remuneration.id ASC
+LIMIT @p_0, @p_1",
 (long)1, (long)3);
         }
 

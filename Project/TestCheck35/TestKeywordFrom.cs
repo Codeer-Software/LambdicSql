@@ -30,6 +30,7 @@ namespace TestCheck35
 
         public class SelectData
         {
+            public string Name { get; set; }
             public DateTime PaymentDate { get; set; }
             public decimal Money { get; set; }
         }
@@ -102,6 +103,56 @@ FROM
 FROM 
 	(SELECT *
 	FROM tbl_remuneration)");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_From4()
+        {
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData
+                {
+                    Name = db.tbl_staff.name,
+                    PaymentDate = db.tbl_remuneration.payment_date,
+                    Money = db.tbl_remuneration.money,
+                }).
+                From(db.tbl_remuneration, db.tbl_staff).
+                Where(db.tbl_remuneration.staff_id == db.tbl_staff.id));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	tbl_staff.name AS Name,
+	tbl_remuneration.payment_date AS PaymentDate,
+	tbl_remuneration.money AS Money
+FROM tbl_remuneration,tbl_staff
+WHERE (tbl_remuneration.staff_id) = (tbl_staff.id)");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_From5()
+        {
+            var exp1 = Sql<DB>.Create(db => db.tbl_remuneration);
+            var exp2 = Sql<DB>.Create(db => db.tbl_staff);
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData
+                {
+                    Name = db.tbl_staff.name,
+                    PaymentDate = db.tbl_remuneration.payment_date,
+                    Money = db.tbl_remuneration.money,
+                }).
+                From(exp1, exp2).
+                Where(db.tbl_remuneration.staff_id == db.tbl_staff.id));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	tbl_staff.name AS Name,
+	tbl_remuneration.payment_date AS PaymentDate,
+	tbl_remuneration.money AS Money
+FROM tbl_remuneration,tbl_staff
+WHERE (tbl_remuneration.staff_id) = (tbl_staff.id)");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]

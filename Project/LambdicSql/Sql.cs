@@ -19,11 +19,5 @@ namespace LambdicSql
             var db = DBDefineAnalyzer.GetDbInfo(() => new TDB());
             return new SqlQuery<TSelected>(new SqlExpressionSingle<IQuery<TSelected>>(db, exp.Body));
         }
-
-        public static SqlQuery<TSelected> Create<TSelected, TInfo>(Expression<Func<TDB, IQuery<TSelected, TInfo>>> exp)
-        {
-            var db = DBDefineAnalyzer.GetDbInfo(() => new TDB());
-            return new SqlQuery<TSelected>(new SqlExpressionSingle<IQuery<TSelected, TInfo>>(db, exp.Body));
-        }
     }
 }
