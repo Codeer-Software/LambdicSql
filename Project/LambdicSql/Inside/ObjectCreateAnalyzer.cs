@@ -12,17 +12,17 @@ namespace LambdicSql.Inside
     {
         internal static ObjectCreateInfo MakeSelectInfo(Type type)
         {
-            var select = new List<ObjectCreateMemberElement>();
+            var select = new List<ObjectCreateMemberInfo>();
             foreach (var p in type.GetProperties())
             {
-                select.Add(new ObjectCreateMemberElement(p.Name, null));
+                select.Add(new ObjectCreateMemberInfo(p.Name, null));
             }
             return new ObjectCreateInfo(select, null);
         }
 
         internal static ObjectCreateInfo MakeSelectInfo(Expression exp)
         {
-            var select = new List<ObjectCreateMemberElement>();
+            var select = new List<ObjectCreateMemberInfo>();
             var newExp = exp as NewExpression;
             if (newExp != null)
             {
@@ -40,7 +40,7 @@ namespace LambdicSql.Inside
                         var method = newExp.Members[i] as MethodInfo;
                         name = method.GetPropertyName();
                     }
-                    select.Add(new ObjectCreateMemberElement(name, newExp.Arguments[i]));
+                    select.Add(new ObjectCreateMemberInfo(name, newExp.Arguments[i]));
                 }
                 return new ObjectCreateInfo(select, exp);
             }
@@ -49,7 +49,7 @@ namespace LambdicSql.Inside
             {
                 foreach (var b in initExp.Bindings.Cast<MemberAssignment>())
                 {
-                    select.Add(new ObjectCreateMemberElement(b.Member.Name, b.Expression));
+                    select.Add(new ObjectCreateMemberInfo(b.Member.Name, b.Expression));
                 }
                 return new ObjectCreateInfo(select, exp);
             }
@@ -59,7 +59,7 @@ namespace LambdicSql.Inside
                 //TODO ef
                 if (SupportedTypeSpec.IsSupported(exp.Type))
                 {
-                    return new ObjectCreateInfo(new[] { new ObjectCreateMemberElement(string.Empty, exp) }, exp);
+                    return new ObjectCreateInfo(new[] { new ObjectCreateMemberInfo(string.Empty, exp) }, exp);
                 }
                 Type type = null;
                 var prop = member.Member as PropertyInfo;
@@ -69,7 +69,7 @@ namespace LambdicSql.Inside
             }
             //TODO
             // new NotSupportedException();
-            return new ObjectCreateInfo(new[] { new ObjectCreateMemberElement(string.Empty, exp )}, exp);
+            return new ObjectCreateInfo(new[] { new ObjectCreateMemberInfo(string.Empty, exp )}, exp);
         }
 
         static string GetPropertyName(this MethodInfo method)

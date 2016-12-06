@@ -9,7 +9,7 @@ namespace LambdicSql.feat.EntityFramework
 {
     public static class EFApaptExtensions
     {
-        public static IEnumerable<T> SqlQuery<T>(this ISqlExpressionBase<IQuery<T>> exp, object dbContext)
+        public static IEnumerable<T> SqlQuery<T>(this ISqlExpressionBase<IClauseChain<T>> exp, object dbContext)
             => SqlQuery<T>((ISqlExpressionBase)exp, dbContext);
 
         public static IEnumerable<T> SqlQuery<T>(this ISqlExpressionBase exp, object dbContext)

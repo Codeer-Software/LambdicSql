@@ -3,11 +3,24 @@ using System.Linq;
 
 namespace LambdicSql.SqlBase
 {
+    /// <summary>
+    /// Data Base info.
+    /// </summary>
     public class DbInfo
     {
         Dictionary<string, ColumnInfo> _lambdaNameAndColumn = new Dictionary<string, ColumnInfo>();
         Dictionary<string, TableInfo> _lambdaNameAndTable = new Dictionary<string, TableInfo>();
+
+        /// <summary>
+        /// Get dictionary of full name in lambda and column info.
+        /// </summary>
+        /// <returns>dictionary of full name in lambda and column info.</returns>
         public Dictionary<string, ColumnInfo> GetLambdaNameAndColumn() => _lambdaNameAndColumn.ToDictionary(e=>e.Key, e=>e.Value);
+
+        /// <summary>
+        /// Get dictionary of full name in lambda and table info.
+        /// </summary>
+        /// <returns>dictionary of full name in lambda and table info.</returns>
         public Dictionary<string, TableInfo> GetLambdaNameAndTable() => _lambdaNameAndTable.ToDictionary(e => e.Key, e => e.Value);
 
         internal void Add(ColumnInfo col)

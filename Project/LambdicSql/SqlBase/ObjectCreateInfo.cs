@@ -4,15 +4,26 @@ using System.Linq;
 
 namespace LambdicSql.SqlBase
 {
+    /// <summary>
+    /// Object create info.
+    /// It is generated information in the SELECT clause.
+    /// </summary>
     public class ObjectCreateInfo
     {
-        public ObjectCreateMemberElement[] Elements { get; }
+        /// <summary>
+        /// Object create member.
+        /// </summary>
+        public ObjectCreateMemberInfo[] Members { get; }
+
+        /// <summary>
+        /// Expression.
+        /// </summary>
         public Expression Expression { get; }
 
-        public ObjectCreateInfo(IEnumerable<ObjectCreateMemberElement> elements, Expression exp)
+        internal ObjectCreateInfo(IEnumerable<ObjectCreateMemberInfo> members, Expression expression)
         {
-            Elements = elements.ToArray();
-            Expression = exp;
+            Members = members.ToArray();
+            Expression = expression;
         }
     }
 }

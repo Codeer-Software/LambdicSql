@@ -8,7 +8,7 @@ namespace LambdicSql
     /// </summary>
     public class SqlInfo
     {
-        PrepareParameters _parameters;
+        ParameterInfo _parameters;
 
         /// <summary>
         /// Object create information.
@@ -37,7 +37,7 @@ namespace LambdicSql
         /// <param name="sqlText">Sql text.</param>
         /// <param name="selectClauseInfo">Object create information.</param>
         /// <param name="parameters">Parameters.</param>
-        public SqlInfo(DbInfo dbInfo, string sqlText, ObjectCreateInfo selectClauseInfo, PrepareParameters parameters)
+        public SqlInfo(DbInfo dbInfo, string sqlText, ObjectCreateInfo selectClauseInfo, ParameterInfo parameters)
         {
             DbInfo = dbInfo;
             SqlText = sqlText;
@@ -64,7 +64,7 @@ namespace LambdicSql
     /// <typeparam name="TSelected">Type of selected at SELECT clause.</typeparam>
     public class SqlInfo<TSelected> : SqlInfo
     {
-        public SqlInfo(DbInfo dbInfo, string sqlText, ObjectCreateInfo selectClauseInfo, PrepareParameters parameters)
+        public SqlInfo(DbInfo dbInfo, string sqlText, ObjectCreateInfo selectClauseInfo, ParameterInfo parameters)
             : base(dbInfo, sqlText, selectClauseInfo, parameters) { }
         public SqlInfo(SqlInfo src) : base(src) { }
     }

@@ -27,9 +27,9 @@ namespace LambdicSql.Inside.Keywords
                 if (asteriskType == typeof(Asterisk<>))
                 {
                     var select = ObjectCreateAnalyzer.MakeSelectInfo(asteriskType);
-                    if (converter.Context.SelectClauseInfo == null)
+                    if (converter.Context.ObjectCreateInfo == null)
                     {
-                        converter.Context.SelectClauseInfo = select;
+                        converter.Context.ObjectCreateInfo = select;
                     }
                 }
                 return Environment.NewLine + selectText + " *";
@@ -37,16 +37,16 @@ namespace LambdicSql.Inside.Keywords
             else
             {
                 var select = ObjectCreateAnalyzer.MakeSelectInfo(define);
-                if (converter.Context.SelectClauseInfo == null)
+                if (converter.Context.ObjectCreateInfo == null)
                 {
-                    converter.Context.SelectClauseInfo = select;
+                    converter.Context.ObjectCreateInfo = select;
                 }
                 return Environment.NewLine + selectText + Environment.NewLine + "\t" +
-                    string.Join("," + Environment.NewLine + "\t", select.Elements.Select(e => ToString(converter, e)).ToArray());
+                    string.Join("," + Environment.NewLine + "\t", select.Members.Select(e => ToString(converter, e)).ToArray());
             }
         }
 
-        static string ToString(ISqlStringConverter decoder, ObjectCreateMemberElement element)
+        static string ToString(ISqlStringConverter decoder, ObjectCreateMemberInfo element)
         {
             if (element.Expression == null)
             {

@@ -24,7 +24,7 @@ namespace LambdicSql.Inside.Keywords
         //TODO refactoring.
         static string AdjustSubQuery(Expression e, string v)
         {
-            if (typeof(IQuery).IsAssignableFrom(e.Type))
+            if (typeof(IClauseChain).IsAssignableFrom(e.Type))
             {
                 return SqlStringConverter.AdjustSubQueryString(v);
             }

@@ -29,7 +29,7 @@ namespace LambdicSql.ORM
             }
             try
             {
-                var indexInSelect = _info.SelectClauseInfo.Elements.Select(e => e.Name).ToList();
+                var indexInSelect = _info.SelectClauseInfo.Members.Select(e => e.Name).ToList();
                 var create = ExpressionToCreateFunc.ToCreateUseDbResult<TSelect>(indexInSelect, _info.SelectClauseInfo.Expression);
 
                 using (var com = _connection.CreateCommand())

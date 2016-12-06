@@ -18,7 +18,7 @@ namespace LambdicSql
         /// <param name="expression">Object with information of expression representing SQL.</param>
         /// <param name="connectionType">IDbConnection's type.</param>
         /// <returns>Sql information.</returns>
-        public static SqlInfo<TSelected> ToSqlInfo<TSelected>(this ISqlExpressionBase<IQuery<TSelected>> expression, Type connectionType)
+        public static SqlInfo<TSelected> ToSqlInfo<TSelected>(this ISqlExpressionBase<IClauseChain<TSelected>> expression, Type connectionType)
           => new SqlInfo<TSelected>(ToSqlInfo((ISqlExpressionBase)expression, connectionType));
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace LambdicSql
 
         static SqlInfo ToSqlInfo(this ISqlExpressionBase exp, SqlConvertOption option, ISqlSyntaxCustomizer customizer)
         {
-            var context = new DecodeContext(exp.DbInfo, option.ParameterPrefix);
+            var context = new SqlConvertingContext(exp.DbInfo, option.ParameterPrefix);
             var converter = new SqlStringConverter(context, option, customizer);
             var text = exp.ToString(converter);
 
@@ -49,7 +49,7 @@ namespace LambdicSql
             var lines = text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
             text = string.Join(Environment.NewLine, lines.Where(e => !string.IsNullOrEmpty(e.Trim())).ToArray());
 
-            return new SqlInfo(exp.DbInfo, text, context.SelectClauseInfo, context.Parameters);
+            return new SqlInfo(exp.DbInfo, text, context.ObjectCreateInfo, context.Parameters);
         }
     }
 }

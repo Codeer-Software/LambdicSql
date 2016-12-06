@@ -5,16 +5,27 @@ using System;
 
 namespace LambdicSql.SqlBase
 {
-    public class PrepareParameters
+    /// <summary>
+    /// Parameter info.
+    /// </summary>
+    public class ParameterInfo
     {
         int _count;
         Dictionary<string, DecodingParameterInfo> _parameters = new Dictionary<string, DecodingParameterInfo>();
         string _prefix;
 
-        public PrepareParameters(string prefix)
+        internal ParameterInfo(string prefix)
         {
             _prefix = prefix;
         }
+
+        /// <summary>
+        /// Get parameters.
+        /// It's dictionary of name and parameter.
+        /// </summary>
+        /// <returns>parameters.</returns>
+        public Dictionary<string, DbParam> GetDbParams()
+            => _parameters.ToDictionary(e => e.Key, e => e.Value.Detail);
 
         internal string Push(object obj, string nameSrc = null, int? metadataToken = null, DbParam param = null)
         {
@@ -61,13 +72,7 @@ namespace LambdicSql.SqlBase
             _parameters[key].Detail = param;
         }
 
-        public Dictionary<string, object> GetParams()
-            => _parameters.ToDictionary(e => e.Key, e => e.Value.Detail.Value);
-
-        public Dictionary<string, DbParam> GetDbParams()
-            => _parameters.ToDictionary(e => e.Key, e => e.Value.Detail);
-
-        public bool TryGetParam(string name, out object leftObj)
+        internal bool TryGetParam(string name, out object leftObj)
         {
             leftObj = null;
             DecodingParameterInfo val;
@@ -79,10 +84,10 @@ namespace LambdicSql.SqlBase
             return false;
         }
 
-        public void Remove(string name)
+        internal void Remove(string name)
             => _parameters.Remove(name);
 
-        public string ResolvePrepare(string key)
+        internal string ResolvePrepare(string key)
         {
             DecodingParameterInfo val;
             if (!_parameters.TryGetValue(key, out val))
@@ -93,7 +98,7 @@ namespace LambdicSql.SqlBase
             return val.Detail.Value.ToString();
         }
 
-        public void ChangeObject(string key, object value)
+        internal void ChangeObject(string key, object value)
             => _parameters[key].Detail.Value = value;
     }
 }

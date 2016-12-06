@@ -67,7 +67,7 @@ namespace LambdicSql
         /// <param name="text">Text.</param>
         /// <param name="args">Format arguments.</param>
         /// <returns>LamblicSql's expression.</returns>
-        public static IQuery<Non> TwoWaySql(string text, params object[] args) => InvalitContext.Throw<IQuery<Non>>(nameof(TextSql));
+        public static IClauseChain<Non> TwoWaySql(string text, params object[] args) => InvalitContext.Throw<IClauseChain<Non>>(nameof(TextSql));
 
         /// <summary>
         /// Get column name only.

@@ -13,7 +13,7 @@ namespace TestCheck35
     [SqlSyntax]
     public static class TestSynatax
     {
-        public static IQuery<Non> Empty() => null;
+        public static IClauseChain<Non> Empty() => null;
         static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods) => string.Empty;
     }
 

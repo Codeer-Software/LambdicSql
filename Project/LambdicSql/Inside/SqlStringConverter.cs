@@ -15,9 +15,9 @@ namespace LambdicSql.Inside
         SqlConvertOption _option;
         ISqlSyntaxCustomizer _sqlSyntaxCustomizer;
 
-        public DecodeContext Context { get; }
+        public SqlConvertingContext Context { get; }
 
-        internal SqlStringConverter(DecodeContext context, SqlConvertOption option, ISqlSyntaxCustomizer sqlSyntaxCustomizer)
+        internal SqlStringConverter(SqlConvertingContext context, SqlConvertOption option, ISqlSyntaxCustomizer sqlSyntaxCustomizer)
         {
             Context = context;
             _option = option;

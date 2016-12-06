@@ -2,10 +2,28 @@
 
 namespace LambdicSql.SqlBase
 {
+    /// <summary>
+    /// Helper to convert expression to text. 
+    /// </summary>
     public interface ISqlStringConverter
     {
-        DecodeContext Context { get; }
+        /// <summary>
+        /// Context.
+        /// </summary>
+        SqlConvertingContext Context { get; }
+
+        /// <summary>
+        /// Convert object to sql text.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         string ToString(object obj);
-        object ToObject(Expression exp);
+
+        /// <summary>
+        /// Get object in expression.
+        /// </summary>
+        /// <param name="expression">expression.</param>
+        /// <returns>object.</returns>
+        object ToObject(Expression expression);
     }
 }

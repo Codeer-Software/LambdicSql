@@ -1471,7 +1471,7 @@ FROM tbl_remuneration
             }
         }
 
-        public IEnumerable<T> ExecuteRead<T>(ISqlExpressionBase<IQuery<T>> exp)
+        public IEnumerable<T> ExecuteRead<T>(ISqlExpressionBase<IClauseChain<T>> exp)
         {
             var info = exp.ToSqlInfo(_connection.GetType());
             Debug.Print(info.SqlText);

@@ -11,7 +11,7 @@ namespace LambdicSql
     /// Interface representing queries in LambdicSql.
     /// </summary>
     /// <typeparam name="TSelected">The type specified in the Select clause.</typeparam>
-    public interface ISqlQuery<out TSelected> : ISqlExpressionBase<IQuery<TSelected>>, ISqlQuery
+    public interface ISqlQuery<out TSelected> : ISqlExpressionBase<IClauseChain<TSelected>>, ISqlQuery
     {
         TSelected Body { get; }
     }
