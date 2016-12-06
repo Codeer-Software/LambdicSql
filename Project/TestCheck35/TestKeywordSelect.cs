@@ -686,5 +686,31 @@ FROM tbl_remuneration");
 	FROM tbl_remuneration) AS Money
 FROM tbl_remuneration");
         }
+        
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Single1()
+        {
+            var query = Sql<DB>.Create(db => Select(db.tbl_staff.id).From(db.tbl_staff));
+            
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	tbl_staff.id
+FROM tbl_staff");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Single2()
+        {
+            var query = Sql<DB>.Create(db => Select(Count(new Asterisk())).From(db.tbl_staff));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	COUNT(*)
+FROM tbl_staff");
+        }
     }
 }

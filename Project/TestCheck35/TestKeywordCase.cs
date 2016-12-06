@@ -8,6 +8,7 @@ using static Test.Helper.DBProviderInfo;
 using LambdicSql;
 using LambdicSql.feat.Dapper;
 using static LambdicSql.Keywords;
+using static LambdicSql.Funcs;
 
 namespace TestCheck35
 {
@@ -285,6 +286,35 @@ FROM tbl_staff",
 	END AS Type
 FROM tbl_staff",
 3, "x", 4, "y", "z");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Sub()
+        {
+            var sub = Sql<DB>.Create(db => Select(Count(new Asterisk())).From(db.tbl_staff));
+            var query = Sql<DB>.Create(db =>
+                Select(new
+                {
+                    Type = Case().
+                                When(sub.Cast<int>() == 1).Then("x").
+                                Else("z").
+                            End()
+                }).
+                From(db.tbl_staff));
+            
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	CASE
+		WHEN 
+		((
+			(SELECT
+				COUNT(*)
+			FROM tbl_staff)) = (@p_0)) THEN @p_1
+		ELSE @p_2
+	END AS Type
+FROM tbl_staff", 1, "x", "z");
         }
     }
 }

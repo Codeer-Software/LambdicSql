@@ -57,6 +57,10 @@ namespace LambdicSql.Inside
             if (member != null)
             {
                 //TODO ef
+                if (SupportedTypeSpec.IsSupported(exp.Type))
+                {
+                    return new ObjectCreateInfo(new[] { new ObjectCreateMemberElement(string.Empty, exp) }, exp);
+                }
                 Type type = null;
                 var prop = member.Member as PropertyInfo;
                 if (prop != null) type = prop.PropertyType;
