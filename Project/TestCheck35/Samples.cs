@@ -1491,6 +1491,7 @@ FROM tbl_remuneration
         {
             //TODO できた！
             //テストしとかなきゃ
+            //カラム一つだけとかも
             var sub = Sql<DB>.Create(db => Select(Count(new Asterisk())).From(db.tbl_staff));
 
             //TODO 改行とTabの入れ方を工夫したい。
