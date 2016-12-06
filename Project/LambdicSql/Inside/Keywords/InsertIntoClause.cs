@@ -26,7 +26,7 @@ namespace LambdicSql.Inside.Keywords
             {
                 case nameof(LambdicSql.Keywords.InsertInto):
                     {
-                        var table = FromClause.ExpressionToTableName(converter, method.Arguments[0]);
+                        var table = converter.ToString(method.Arguments[0]);
                         //TODO  table = converter.ToString(method.Arguments[0]) <- beset!
                         var arg = converter.ToString(method.Arguments[1]).Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(e => GetColumnOnly(e)).ToArray();
                         insertTargets.AddRange(arg);
@@ -43,7 +43,7 @@ namespace LambdicSql.Inside.Keywords
             }
             throw new NotSupportedException();
         }
-
+        
         static string GetColumnOnly(string src)
         {
             var index = src.LastIndexOf(".");

@@ -25,7 +25,7 @@ namespace LambdicSql.Inside.Keywords
             {
                 case nameof(LambdicSql.Keywords.Update):
                     {
-                        tableName = FromClause.ExpressionToTableName(converter, method.Arguments[0]);
+                        tableName = converter.ToString(method.Arguments[0]);
                         //TODO  tableName = converter.ToString(method.Arguments[0]);<- beset!
                         return Environment.NewLine + "UPDATE " + tableName;
                     }

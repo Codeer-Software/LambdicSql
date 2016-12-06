@@ -40,7 +40,7 @@ namespace LambdicSql.Inside.Keywords
         }
 
         //TODO refactoring.
-        internal static string ExpressionToTableName(ISqlStringConverter decoder, Expression exp)
+        static string ExpressionToTableName(ISqlStringConverter decoder, Expression exp)
         {
             return AdjustSubQuery(exp, ExpressionToTableNameCore(decoder, exp));
         }
@@ -92,30 +92,13 @@ namespace LambdicSql.Inside.Keywords
             var member = exp as MemberExpression;
             while (member != null)
             {
-                if (IsSqlQuery(member.Type))
+                if (typeof(ISqlExpressionBase).IsAssignableFrom(member.Type))
                 {
                     return member.Member.Name;
                 }
                 member = member.Expression as MemberExpression;
             }
             return null;
-        }
-
-        static bool IsSqlQuery(Type type)
-        {
-            while (type != null)
-            {
-                if (type.IsGenericType)
-                {
-                    //TODO 本当はISqlQuery<>だったらなんだけど
-                    if (typeof(SqlQuery<>).IsAssignableFrom(type.GetGenericTypeDefinition()))
-                    {
-                        return true;
-                    }
-                }
-                type = type.BaseType;
-            }
-            return false;
         }
     }
 }

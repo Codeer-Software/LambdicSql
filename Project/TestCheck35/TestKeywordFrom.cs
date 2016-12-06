@@ -132,27 +132,27 @@ WHERE (tbl_remuneration.staff_id) = (tbl_staff.id)");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_From5()
         {
-            var exp1 = Sql<DB>.Create(db => db.tbl_remuneration);
-            var exp2 = Sql<DB>.Create(db => db.tbl_staff);
+            var expRemuneration = Sql<DB>.Create(db => db.tbl_remuneration);
+            var expStaff = Sql<DB>.Create(db => db.tbl_staff);
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData
                 {
-                    Name = db.tbl_staff.name,
-                    PaymentDate = db.tbl_remuneration.payment_date,
-                    Money = db.tbl_remuneration.money,
+                    Name = expStaff.Body.name,
+                    PaymentDate = expRemuneration.Body.payment_date,
+                    Money = expRemuneration.Body.money,
                 }).
-                From(exp1, exp2).
-                Where(db.tbl_remuneration.staff_id == db.tbl_staff.id));
+                From(expRemuneration, expStaff).
+                Where(expRemuneration.Body.staff_id == expStaff.Body.id));
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	tbl_staff.name AS Name,
-	tbl_remuneration.payment_date AS PaymentDate,
-	tbl_remuneration.money AS Money
-FROM tbl_remuneration,tbl_staff
-WHERE (tbl_remuneration.staff_id) = (tbl_staff.id)");
+	expStaff.name AS Name,
+	expRemuneration.payment_date AS PaymentDate,
+	expRemuneration.money AS Money
+FROM tbl_remuneration expRemuneration,tbl_staff expStaff
+WHERE (expRemuneration.staff_id) = (expStaff.id)");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -180,8 +180,8 @@ FROM tbl_remuneration
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Join2()
         {
-            var exp1 = Sql<DB>.Create(db => db.tbl_staff);
-            var exp2 = Sql<DB>.Create(db => db.tbl_remuneration.staff_id == db.tbl_staff.id);
+            var expStaff = Sql<DB>.Create(db => db.tbl_staff);
+            var exp2 = Sql<DB>.Create(db => db.tbl_remuneration.staff_id == expStaff.Body.id);
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData
                 {
@@ -189,7 +189,7 @@ FROM tbl_remuneration
                     Money = db.tbl_remuneration.money,
                 }).
                 From(db.tbl_remuneration).
-                    Join(exp1, exp2));
+                    Join(expStaff, exp2));
             
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -198,7 +198,7 @@ FROM tbl_remuneration
 	tbl_remuneration.payment_date AS PaymentDate,
 	tbl_remuneration.money AS Money
 FROM tbl_remuneration
-	JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)");
+	JOIN tbl_staff expStaff ON (tbl_remuneration.staff_id) = (expStaff.id)");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -226,8 +226,8 @@ FROM tbl_remuneration
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_LeftJoin2()
         {
-            var exp1 = Sql<DB>.Create(db => db.tbl_staff);
-            var exp2 = Sql<DB>.Create(db => db.tbl_remuneration.staff_id == db.tbl_staff.id);
+            var expStaff = Sql<DB>.Create(db => db.tbl_staff);
+            var exp2 = Sql<DB>.Create(db => db.tbl_remuneration.staff_id == expStaff.Body.id);
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData
                 {
@@ -235,7 +235,7 @@ FROM tbl_remuneration
                     Money = db.tbl_remuneration.money,
                 }).
                 From(db.tbl_remuneration).
-                    LeftJoin(exp1, exp2));
+                    LeftJoin(expStaff, exp2));
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -244,7 +244,7 @@ FROM tbl_remuneration
 	tbl_remuneration.payment_date AS PaymentDate,
 	tbl_remuneration.money AS Money
 FROM tbl_remuneration
-	LEFT JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)");
+	LEFT JOIN tbl_staff expStaff ON (tbl_remuneration.staff_id) = (expStaff.id)");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -276,8 +276,8 @@ FROM tbl_remuneration
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
 
-            var exp1 = Sql<DB>.Create(db => db.tbl_staff);
-            var exp2 = Sql<DB>.Create(db => db.tbl_remuneration.staff_id == db.tbl_staff.id);
+            var expStaff = Sql<DB>.Create(db => db.tbl_staff);
+            var exp2 = Sql<DB>.Create(db => db.tbl_remuneration.staff_id == expStaff.Body.id);
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData
                 {
@@ -285,7 +285,7 @@ FROM tbl_remuneration
                     Money = db.tbl_remuneration.money,
                 }).
                 From(db.tbl_remuneration).
-                    RightJoin(exp1, exp2));
+                    RightJoin(expStaff, exp2));
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -294,7 +294,7 @@ FROM tbl_remuneration
 	tbl_remuneration.payment_date AS PaymentDate,
 	tbl_remuneration.money AS Money
 FROM tbl_remuneration
-	RIGHT JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)");
+	RIGHT JOIN tbl_staff expStaff ON (tbl_remuneration.staff_id) = (expStaff.id)");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -326,7 +326,7 @@ FROM tbl_remuneration
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
 
-            var exp = Sql<DB>.Create(db => db.tbl_staff);
+            var expStaff = Sql<DB>.Create(db => db.tbl_staff);
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData
                 {
@@ -334,7 +334,7 @@ FROM tbl_remuneration
                     Money = db.tbl_remuneration.money,
                 }).
                 From(db.tbl_remuneration).
-                    CrossJoin(exp));
+                    CrossJoin(expStaff));
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -343,7 +343,7 @@ FROM tbl_remuneration
 	tbl_remuneration.payment_date AS PaymentDate,
 	tbl_remuneration.money AS Money
 FROM tbl_remuneration
-	CROSS JOIN tbl_staff");
+	CROSS JOIN tbl_staff expStaff");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -381,9 +381,9 @@ FROM tbl_remuneration
                 }).
                 From(db.tbl_remuneration));
 
-            var exp1 = Sql<DB>.Create(db => db.tbl_staff);
-            var exp2 = Sql<DB>.Create(db => db.tbl_remuneration.staff_id == db.tbl_staff.id);
-            var target = Sql<DB>.Create(db => Join(exp1, exp2));
+            var expStaff = Sql<DB>.Create(db => db.tbl_staff);
+            var exp2 = Sql<DB>.Create(db => db.tbl_remuneration.staff_id == expStaff.Body.id);
+            var target = Sql<DB>.Create(db => Join(expStaff, exp2));
             query = query.Concat(target);
 
             var datas = _connection.Query(query).ToList();
@@ -393,7 +393,7 @@ FROM tbl_remuneration
 	tbl_remuneration.payment_date AS PaymentDate,
 	tbl_remuneration.money AS Money
 FROM tbl_remuneration
-	JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)");
+	JOIN tbl_staff expStaff ON (tbl_remuneration.staff_id) = (expStaff.id)");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -431,9 +431,9 @@ FROM tbl_remuneration
                 }).
                 From(db.tbl_remuneration));
 
-            var exp1 = Sql<DB>.Create(db => db.tbl_staff);
-            var exp2 = Sql<DB>.Create(db => db.tbl_remuneration.staff_id == db.tbl_staff.id);
-            var target = Sql<DB>.Create(db => LeftJoin(exp1, exp2));
+            var expStaff = Sql<DB>.Create(db => db.tbl_staff);
+            var exp2 = Sql<DB>.Create(db => db.tbl_remuneration.staff_id == expStaff.Body.id);
+            var target = Sql<DB>.Create(db => LeftJoin(expStaff, exp2));
             query = query.Concat(target);
 
             var datas = _connection.Query(query).ToList();
@@ -443,7 +443,7 @@ FROM tbl_remuneration
 	tbl_remuneration.payment_date AS PaymentDate,
 	tbl_remuneration.money AS Money
 FROM tbl_remuneration
-	LEFT JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)");
+	LEFT JOIN tbl_staff expStaff ON (tbl_remuneration.staff_id) = (expStaff.id)");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -485,9 +485,9 @@ FROM tbl_remuneration
                 }).
                 From(db.tbl_remuneration));
 
-            var exp1 = Sql<DB>.Create(db => db.tbl_staff);
-            var exp2 = Sql<DB>.Create(db => db.tbl_remuneration.staff_id == db.tbl_staff.id);
-            var target = Sql<DB>.Create(db => RightJoin(exp1, exp2));
+            var expStaff = Sql<DB>.Create(db => db.tbl_staff);
+            var exp2 = Sql<DB>.Create(db => db.tbl_remuneration.staff_id == expStaff.Body.id);
+            var target = Sql<DB>.Create(db => RightJoin(expStaff, exp2));
             query = query.Concat(target);
 
             var datas = _connection.Query(query).ToList();
@@ -497,7 +497,7 @@ FROM tbl_remuneration
 	tbl_remuneration.payment_date AS PaymentDate,
 	tbl_remuneration.money AS Money
 FROM tbl_remuneration
-	RIGHT JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)");
+	RIGHT JOIN tbl_staff expStaff ON (tbl_remuneration.staff_id) = (expStaff.id)");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -550,7 +550,7 @@ FROM tbl_remuneration
 	tbl_remuneration.payment_date AS PaymentDate,
 	tbl_remuneration.money AS Money
 FROM tbl_remuneration
-	CROSS JOIN tbl_staff");
+	CROSS JOIN tbl_staff exp");
         }
     }
 }
