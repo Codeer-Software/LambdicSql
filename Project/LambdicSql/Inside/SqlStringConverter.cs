@@ -483,7 +483,7 @@ namespace LambdicSql.Inside
         //TODO Can I define it here?
         internal static string AdjustSubQueryString(string text)
         {
-            if (text.Replace(Environment.NewLine, string.Empty).Trim().IndexOf("SELECT") != 0) return text;
+            if (text.Replace(Environment.NewLine, string.Empty).Replace("\t", " ").Replace("(", string.Empty).Trim().IndexOf("SELECT") != 0) return text;
 
             var lines = text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToArray();
             lines[0] = InsertSubQueryStart(lines[0]);

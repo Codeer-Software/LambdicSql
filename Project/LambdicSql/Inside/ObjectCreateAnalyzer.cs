@@ -63,7 +63,9 @@ namespace LambdicSql.Inside
                 else type = ((FieldInfo)member.Member).FieldType;
                 return MakeSelectInfo(type);
             }
-            throw new NotSupportedException();
+            //TODO
+            // new NotSupportedException();
+            return new ObjectCreateInfo(new[] { new ObjectCreateMemberElement(string.Empty, exp )}, exp);
         }
 
         static string GetPropertyName(this MethodInfo method)

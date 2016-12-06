@@ -1486,6 +1486,30 @@ FROM tbl_remuneration
         }
 
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Case1()
+        {
+            //TODO できた！
+            //テストしとかなきゃ
+            var sub = Sql<DB>.Create(db => Select(Count(new Asterisk())).From(db.tbl_staff));
+
+            //TODO 改行とTabの入れ方を工夫したい。
+            var query = Sql<DB>.Create(db =>
+                Select(new
+                {
+                    Type = Case().
+                                When(sub.Cast<int>() == 1).Then("x").
+                                Else("z").
+                            End()
+                }).
+                From(db.tbl_staff));
+
+            query.Gen(_connection);
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            query.Gen(_connection);
+        }
 
         /*
         [TestMethod]

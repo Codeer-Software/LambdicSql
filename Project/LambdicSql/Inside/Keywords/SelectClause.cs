@@ -45,8 +45,18 @@ namespace LambdicSql.Inside.Keywords
                     string.Join("," + Environment.NewLine + "\t", select.Elements.Select(e => ToString(converter, e)).ToArray());
             }
         }
-        
+
         static string ToString(ISqlStringConverter decoder, ObjectCreateMemberElement element)
-            => element.Expression == null ? element.Name : decoder.ToString(element.Expression) + " AS " + element.Name;
+        {
+            if (element.Expression == null)
+            {
+                return element.Name;
+            }
+            if (string.IsNullOrEmpty(element.Name))
+            {
+                return decoder.ToString(element.Expression);
+            }
+            return decoder.ToString(element.Expression) + " AS " + element.Name;
+        }
     }
 }
