@@ -1,5 +1,6 @@
 ﻿using LambdicSql.Inside;
 using LambdicSql.SqlBase;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -18,15 +19,14 @@ namespace LambdicSql
         public Top(long count) { InvalitContext.Throw("new " + nameof(Assign)); }
 
         static string ToString(ISqlStringConverter converter, NewExpression exp)
-        {
-            var args = exp.Arguments.Select(e => converter.ToString(e)).ToArray();
-            return "TOP " + converter.Context.Parameters.ResolvePrepare(args[0]);
-        }
+            => ToString(converter, exp.Arguments);
 
         static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+            => ToString(converter, methods[0].Arguments);
+
+        static string ToString(ISqlStringConverter converter, ReadOnlyCollection<Expression> arguments)
         {
-            var exp = methods[0];
-            var args = exp.Arguments.Select(e => converter.ToString(e)).ToArray();
+            var args = arguments.Select(e => converter.ToString(e)).ToArray();
             return "TOP " + converter.Context.Parameters.ResolvePrepare(args[0]);
         }
     }

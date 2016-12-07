@@ -9,6 +9,9 @@ namespace LambdicSql.feat.EntityFramework
 {
     /// <summary>
     /// Extensions for adjust Entity Framework.
+    /// In order to use these, it is necessary that arbitrary  Entity Framework is installed. 
+    /// LambdicSql has no dependency on  Entity Framework from the project compositionally with  Entity Framework. 
+    /// That is to avoid inconsistencies between versions. Please install your favorite version of  Entity Framework by yourself.
     /// </summary>
     public static class EFApaptExtensions
     {
@@ -38,15 +41,15 @@ namespace LambdicSql.feat.EntityFramework
             using (var com = cnn.CreateCommand())
             {
                 args = info.DbParams.Select(e => CreateParameter(com, e.Key, e.Value)).ToArray();
-            }
 
-            try
-            {
-                return EFWrapper<T>.SqlQuery(dbContext, info.SqlText, args);
-            }
-            catch (Exception e)
-            {
-                throw GetCoreException(e);
+                try
+                {
+                    return EFWrapper<T>.SqlQuery(dbContext, info.SqlText, args);
+                }
+                catch (Exception e)
+                {
+                    throw GetCoreException(e);
+                }
             }
         }
 
@@ -60,8 +63,6 @@ namespace LambdicSql.feat.EntityFramework
         {
             var cnn = EFWrapper.GetConnection(dbContext);
             var info = query.ToSqlInfo(cnn.GetType());
-            
-            Debug.Print(info.SqlText);
 
             object[] args;
             using (var com = cnn.CreateCommand())

@@ -100,9 +100,7 @@ namespace LambdicSql
 
         static string TextSql(ISqlStringConverter converter, MethodCallExpression method)
         {
-            var obj = converter.ToObject(method.Arguments[0]);
-            var text = (string)obj;
-
+            var text = (string)converter.ToObject(method.Arguments[0]);
             var array = method.Arguments[1] as NewArrayExpression;
             return string.Format(text, array.Expressions.Select(e => converter.ToString(e)).ToArray());
         }
@@ -111,7 +109,6 @@ namespace LambdicSql
         {
             var obj = converter.ToObject(method.Arguments[0]);
             var text = TowWaySqlSpec.ToStringFormat((string)obj);
-
             var array = method.Arguments[1] as NewArrayExpression;
             return string.Format(text, array.Expressions.Select(e => converter.ToString(e)).ToArray());
         }

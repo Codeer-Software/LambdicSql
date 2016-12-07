@@ -6,7 +6,10 @@ using System.Data;
 namespace LambdicSql.feat.Dapper
 {
     /// <summary>
-    /// 
+    /// Extensions for adjust Dapper.
+    /// In order to use these, it is necessary that arbitrary Dapper is installed. 
+    /// LambdicSql has no dependency on Dapper from the project compositionally with Dapper. 
+    /// That is to avoid inconsistencies between versions. Please install your favorite version of Dapper by yourself.
     /// </summary>
     public static class DapperApaptExtensions
     {

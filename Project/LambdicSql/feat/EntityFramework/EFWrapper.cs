@@ -25,7 +25,6 @@ namespace LambdicSql.feat.EntityFramework
             catch { throw new PackageIsNotInstalledException("EntityFramework is not installed. Please install EntityFramework of your faverit version."); }
             if (asm == null) throw new PackageIsNotInstalledException("EntityFramework is not installed. Please install EntityFramework of your faverit version.");
 
-
             var sql = Expression.Parameter(typeof(string), "sql");
             var paramsArray = Expression.Parameter(typeof(object[]), "paramsArray");
             var dbContext = Expression.Parameter(typeof(object), "dbContext");
@@ -63,7 +62,6 @@ namespace LambdicSql.feat.EntityFramework
             var paramsArray = Expression.Parameter(typeof(object[]), "paramsArray");
 
             var database = Expression.PropertyOrField(Expression.Convert(dbContext, dbContextType), "Database");
-
 
             SqlQuery = Expression.Lambda<SqlQueryDelegate>(
                 Expression.Call(database, "SqlQuery", new[] { typeof(T) }, new[] { sql, paramsArray }), 

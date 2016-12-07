@@ -62,6 +62,7 @@
     <Compile Include="Inside\Keywords\OffsetRowsClause.cs" />
     <Compile Include="Inside\Keywords\SetOperation.cs" />
     <Compile Include="Inside\RefrectionUtility.cs" />
+    <Compile Include="Inside\SqlDisplayAdjuster.cs" />
     <Compile Include="Inside\TowWaySqlSpec.cs" />
     <Compile Include="Keywords.cs" />
     <Compile Include="ISortedBy.cs" />

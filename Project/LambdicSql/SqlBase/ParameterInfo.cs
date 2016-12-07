@@ -60,6 +60,7 @@ namespace LambdicSql.SqlBase
                     nameSrc += "_";
                 }
             }
+
             if (param == null) param = new DbParam();
             param.Value = obj;
             _parameters.Add(name, new DecodingParameterInfo() { MetadataToken = metadataToken, Detail = param });
@@ -90,10 +91,7 @@ namespace LambdicSql.SqlBase
         internal string ResolvePrepare(string key)
         {
             DecodingParameterInfo val;
-            if (!_parameters.TryGetValue(key, out val))
-            {
-                return key;
-            }
+            if (!_parameters.TryGetValue(key, out val)) return key;
             _parameters.Remove(key);
             return val.Detail.Value.ToString();
         }

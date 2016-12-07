@@ -35,6 +35,7 @@ namespace LambdicSql
             }
             else
             {
+                //Sql server can't use parameter.
                 return Environment.NewLine + "\tROWS BETWEEN " + converter.Context.Parameters.ResolvePrepare(args[0]) +
                     " PRECEDING AND " + converter.Context.Parameters.ResolvePrepare(args[1]) + " FOLLOWING";
             }

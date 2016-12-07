@@ -6,10 +6,7 @@ using System.Linq.Expressions;
 
 namespace LambdicSql
 {
-    //TODO やっぱり統合したいよなー
-    //Window関数だけなんだかなーって感じやねんなー
-    //こんなに丁寧な感じでなくてもいいしなー
-    //Sumだけ引数にわたすとか？→いやーそれはなー
+    //TODO Integrate Keyword, Func, Window, Utils
 
     /// <summary>
     /// SQL Window functions.
@@ -288,7 +285,9 @@ namespace LambdicSql
 
             var overMethod = methods[1];
             var over = overMethod.Method.Name.ToUpper() + "(" +
-                string.Join(" ", overMethod.Arguments.Skip(1).Where(e=>!(e is ConstantExpression)).Select(e => converter.ToString(e)).ToArray()) + ")";
+                string.Join(" ", overMethod.Arguments.Skip(1).
+                Where(e=>!(e is ConstantExpression)). //Skip null.
+                Select(e => converter.ToString(e)).ToArray()) + ")";
 
             return func + " " + over;
         }

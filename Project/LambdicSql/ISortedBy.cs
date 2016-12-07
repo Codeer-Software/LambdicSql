@@ -23,10 +23,10 @@ namespace LambdicSql
         public Asc(object target) { InvalitContext.Throw("new " + nameof(Asc)); }
 
         static string ToString(ISqlStringConverter cnv, NewExpression exp)
-            => cnv.ToString(exp.Arguments[0]) + " " + "ASC";
+            => cnv.ToString(exp.Arguments[0]) + " ASC";
 
         static string ToString(ISqlStringConverter cnv, MethodCallExpression[] methods)
-            => cnv.ToString(methods[0].Arguments[0]) + " " + "ASC";
+            => cnv.ToString(methods[0].Arguments[0]) + " ASC";
     }
 
     /// <summary>
@@ -42,9 +42,9 @@ namespace LambdicSql
         public Desc(object target) { InvalitContext.Throw("new " + nameof(Desc)); }
 
         static string ToString(ISqlStringConverter cnv, NewExpression exp)
-            => cnv.ToString(exp.Arguments[0]) + " " + "DESC";
+            => cnv.ToString(exp.Arguments[0]) + " DESC";
 
         static string ToString(ISqlStringConverter cnv, MethodCallExpression[] methods)
-            => cnv.ToString(methods[0].Arguments[0]) + " " + "DESC";
+            => cnv.ToString(methods[0].Arguments[0]) + " DESC";
     }
 }
