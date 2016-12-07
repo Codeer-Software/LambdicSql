@@ -56,7 +56,6 @@ namespace LambdicSql.Inside
             var member = exp as MemberExpression;
             if (member != null)
             {
-                //TODO ef
                 if (SupportedTypeSpec.IsSupported(exp.Type))
                 {
                     return new ObjectCreateInfo(new[] { new ObjectCreateMemberInfo(string.Empty, exp) }, exp);
@@ -67,13 +66,12 @@ namespace LambdicSql.Inside
                 else type = ((FieldInfo)member.Member).FieldType;
                 return MakeSelectInfo(type);
             }
-            //TODO
-            // new NotSupportedException();
             return new ObjectCreateInfo(new[] { new ObjectCreateMemberInfo(string.Empty, exp )}, exp);
         }
 
         static string GetPropertyName(this MethodInfo method)
             => (method.Name.IndexOf("get_") == 0) ?
-                method.Name.Substring(4) : method.Name;
+                method.Name.Substring(4) : 
+                method.Name;
     }
 }

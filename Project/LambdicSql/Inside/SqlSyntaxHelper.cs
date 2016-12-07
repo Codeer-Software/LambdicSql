@@ -20,6 +20,8 @@ namespace LambdicSql.Inside
 
         static Dictionary<Type, bool> _isSqlSyntax = new Dictionary<Type, bool>();
 
+        static Dictionary<string, string> _methodGroup = new Dictionary<string, string>();
+
         internal static bool IsSqlSyntax(this Type type)
         {
             lock (_isSqlSyntax)
@@ -108,6 +110,30 @@ namespace LambdicSql.Inside
                 _newToStrings.Add(type, func);
                 return func;
             }
+        }
+
+        internal static string GetMethodGroupName(this MethodInfo method)
+        {
+            string cacheName = method.DeclaringType.FullName + "." + method.Name + "(" +
+                string.Join(",", method.GetParameters().Select(e => e.ParameterType.FullName).ToArray()) + ")";
+            lock (_methodGroup)
+            {
+                string groupName;
+                if (_methodGroup.TryGetValue(cacheName, out groupName)) return groupName;
+
+                var attr = method.GetCustomAttributes(typeof(MethodGroupAttribute), true).Cast<MethodGroupAttribute>().FirstOrDefault();
+                groupName = attr == null ? string.Empty : attr.GroupName;
+                _methodGroup[cacheName] = groupName;
+                return groupName;
+            }
+        }
+
+        //TODO
+        internal static int AdjustSqlSyntaxMethodArgumentIndex(this MethodCallExpression exp, int index)
+        {
+            var ps = exp.Method.GetParameters();
+            if (0 < ps.Length && typeof(IMethodChain).IsAssignableFrom(ps[0].ParameterType)) return index + 1;
+            else return index;
         }
     }
 }

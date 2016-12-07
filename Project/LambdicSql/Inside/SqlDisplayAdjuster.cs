@@ -5,10 +5,9 @@ using System.Text;
 
 namespace LambdicSql.Inside
 {
+    //TODO
     class SqlDisplayAdjuster
     {
-
-        //TODO
         internal static string Adjust(string text)
         {
             //adjust. remove empty line.

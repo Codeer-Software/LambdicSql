@@ -8,10 +8,21 @@ using System.Runtime.CompilerServices;
 
 namespace LambdicSql.Inside
 {
-    //TODO 入れ子フラグ持ってたら、AdjustSubQueryStringがもう少しきれいに書けるかも！
-    //それで外から呼ばなくてもいいかも
+    //TODO refactoring.
     class SqlStringConverter : ISqlStringConverter
     {
+        class DecodedInfo
+        {
+            internal Type Type { get; }
+            internal string Text { get; }
+            internal DecodedInfo(Type type, string text)
+            {
+                Type = type;
+                Text = text;
+            }
+            public override string ToString() => Text;
+        }
+
         SqlConvertOption _option;
         ISqlSyntaxCustomizer _sqlSyntaxCustomizer;
 

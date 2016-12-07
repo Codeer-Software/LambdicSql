@@ -61,7 +61,6 @@
     <Compile Include="Inside\Keywords\OffsetClause.cs" />
     <Compile Include="Inside\Keywords\OffsetRowsClause.cs" />
     <Compile Include="Inside\Keywords\SetOperation.cs" />
-    <Compile Include="Inside\RefrectionUtility.cs" />
     <Compile Include="Inside\SqlDisplayAdjuster.cs" />
     <Compile Include="Inside\TowWaySqlSpec.cs" />
     <Compile Include="Keywords.cs" />
@@ -87,7 +86,6 @@
     <Compile Include="SqlBase\SqlSyntaxAttribute.cs" />
     <Compile Include="SqlBase\Non.cs" />
     <Compile Include="Inside\SqlExpressionSingle.cs" />
-    <Compile Include="Inside\SqlSyntaxUtility.cs" />
     <Compile Include="SqlBase\SqlConvertOption.cs" />
     <Compile Include="SqlInfo.cs" />
     <Compile Include="SqlExpressionExtensions.cs" />
@@ -108,7 +106,6 @@
     <Compile Include="SqlBase\IMethodChain.cs" />
     <Compile Include="SqlBase\ISqlStringConverter.cs" />
     <Compile Include="Inside\SqlStringConverter.cs" />
-    <Compile Include="Inside\DecodedInfo.cs" />
     <Compile Include="Inside\DBDefineAnalyzer.cs" />
     <Compile Include="Inside\ObjectCreateAnalyzer.cs" />
     <Compile Include="SqlBase\ColumnInfo.cs" />
