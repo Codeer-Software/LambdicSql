@@ -7,15 +7,32 @@ using System.Linq;
 
 namespace LambdicSql.feat.EntityFramework
 {
+    /// <summary>
+    /// Extensions for adjust Entity Framework.
+    /// </summary>
     public static class EFApaptExtensions
     {
-        public static IEnumerable<T> SqlQuery<T>(this ISqlExpressionBase<IClauseChain<T>> exp, object dbContext)
-            => SqlQuery<T>((ISqlExpressionBase)exp, dbContext);
+        /// <summary>
+        /// Execute query.
+        /// </summary>
+        /// <typeparam name="T">Type of result entity.</typeparam>
+        /// <param name="query">Query.</param>
+        /// <param name="dbContext">DbContext object.</param>
+        /// <returns>Query result.</returns>
+        public static IEnumerable<T> SqlQuery<T>(this ISqlExpressionBase<IClauseChain<T>> query, object dbContext)
+            => SqlQuery<T>((ISqlExpressionBase)query, dbContext);
 
-        public static IEnumerable<T> SqlQuery<T>(this ISqlExpressionBase exp, object dbContext)
+        /// <summary>
+        /// Execute query.
+        /// </summary>
+        /// <typeparam name="T">Type of result entity.</typeparam>
+        /// <param name="query">Query.</param>
+        /// <param name="dbContext">DbContext object.</param>
+        /// <returns>Query result.</returns>
+        public static IEnumerable<T> SqlQuery<T>(this ISqlExpressionBase query, object dbContext)
         {
             var cnn = EFWrapper.GetConnection(dbContext);
-            var info = exp.ToSqlInfo(cnn.GetType());
+            var info = query.ToSqlInfo(cnn.GetType());
             
             object[] args;
             using (var com = cnn.CreateCommand())
@@ -33,10 +50,16 @@ namespace LambdicSql.feat.EntityFramework
             }
         }
 
-        public static int ExecuteSqlCommand(this ISqlExpressionBase exp, object dbContext)
+        /// <summary>
+        /// Execute query.
+        /// </summary>
+        /// <param name="query">Query.</param>
+        /// <param name="dbContext">DbContext object.</param>
+        /// <returns>Number of rows affected.</returns>
+        public static int ExecuteSqlCommand(this ISqlExpressionBase query, object dbContext)
         {
             var cnn = EFWrapper.GetConnection(dbContext);
-            var info = exp.ToSqlInfo(cnn.GetType());
+            var info = query.ToSqlInfo(cnn.GetType());
             
             Debug.Print(info.SqlText);
 
@@ -64,6 +87,7 @@ namespace LambdicSql.feat.EntityFramework
                 e = e.InnerException;
             }
         }
+
         static IDbDataParameter CreateParameter(IDbCommand com, string name, DbParam src)
         {
             var dst = com.CreateParameter();

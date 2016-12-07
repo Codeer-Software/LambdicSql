@@ -240,7 +240,7 @@ namespace LambdicSql
         /// </summary>
         /// <typeparam name="T">Type represented by expression.</typeparam>
         /// <param name="expression1">expression.</param>
-        /// <param name="expression1">expression.</param>
+        /// <param name="expression2">expression.</param>
         /// <returns>expression1 or expression2.</returns>
         public static T NVL<T>(T expression1, T expression2) => InvalitContext.Throw<T>(nameof(NVL));
 

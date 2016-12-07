@@ -78,8 +78,16 @@ namespace LambdicSql
         internal DbParam Clone()=> (DbParam)MemberwiseClone();
     }
 
+    /// <summary>
+    /// Represents a parameter information.
+    /// </summary>
+    /// <typeparam name="T">The type that the parameter represents</typeparam>
     public class DbParam<T> : DbParam
     {
+        /// <summary>
+        /// Converter for converting to T
+        /// </summary>
+        /// <param name="src">Source.</param>
         public static implicit operator T(DbParam<T> src) => InvalitContext.Throw<T>("new DbParameter<T>");
     }
 }

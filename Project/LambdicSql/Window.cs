@@ -18,6 +18,10 @@ namespace LambdicSql
     [SqlSyntax]
     public static class Window
     {
+        /// <summary>
+        /// Return value of window functions.
+        /// </summary>
+        /// <typeparam name="T">Window functions result.</typeparam>
         public interface IFuncAfter<T> : IMethodChain { }
 
         /// <summary>
@@ -79,7 +83,7 @@ namespace LambdicSql
         /// <param name="column">The column or expression that is function target.</param>
         /// <returns>It is an object for describing the continuation of the OVER expression.</returns>
         [MethodGroup(nameof(Window))]
-        public static IFuncAfter<double> Avg(object colum) => InvalitContext.Throw<IFuncAfter<double>>(nameof(Avg));
+        public static IFuncAfter<double> Avg(object column) => InvalitContext.Throw<IFuncAfter<double>>(nameof(Avg));
 
         /// <summary>
         /// MIN function.
@@ -261,6 +265,7 @@ namespace LambdicSql
         /// OVER function.
         /// </summary>
         /// <typeparam name="T">Type represented by expression.</typeparam>
+        /// <param name="before">It is an before expression in the Windwo function.</param>
         /// <param name="rows">Getting row order.</param>
         /// <returns>It is the result of Window function.</returns>
         [MethodGroup(nameof(Window))]

@@ -7,10 +7,6 @@ using System.Reflection;
 
 namespace LambdicSql.feat.EntityFramework
 {
-    //EntityFramework.dll
-        //  public int ExecuteSqlCommand(string sql, params object[] parameters);
-        //   public DbRawSqlQuery<TElement> SqlQuery<TElement>(string sql, params object[] parameters);
-    
     static class EFWrapper
     {
         internal delegate int ExecuteSqlCommandDelegate(object dbContext, string sql, object[] parameters);

@@ -13,7 +13,7 @@ namespace LambdicSql
         /// <summary>
         /// Concatenate expression1 and expression2.
         /// </summary>
-        /// <typeparam name="T">The type represented by SqlExpression.</typeparam>
+        /// <typeparam name="TResult">The type represented by SqlExpression.</typeparam>
         /// <param name="expression1">Expression 1.</param>
         /// <param name="expression2">Exppresion 2.</param>
         /// <returns>Concatenated result.</returns>
@@ -33,7 +33,7 @@ namespace LambdicSql
         /// <summary>
         /// Concatenate expression1 and expression2 using UNION clause.
         /// </summary>
-        /// <typeparam name="T">The type represented by SqlExpression.</typeparam>
+        /// <typeparam name="TResult">The type represented by SqlExpression.</typeparam>
         /// <param name="expression1">Expression 1.</param>
         /// <param name="expression2">Exppresion 2.</param>
         /// <returns>Concatenated result.</returns>
@@ -43,7 +43,7 @@ namespace LambdicSql
         /// <summary>
         /// Concatenate expression1 and expression2 using UNION clause.
         /// </summary>
-        /// <typeparam name="T">The type represented by SqlExpression.</typeparam>
+        /// <typeparam name="TResult">The type represented by SqlExpression.</typeparam>
         /// <param name="expression1">Expression 1.</param>
         /// <param name="isAll">If isAll is true, add an ALL predicate.</param>
         /// <param name="expression2">Exppresion 2.</param>
@@ -54,7 +54,7 @@ namespace LambdicSql
         /// <summary>
         /// Concatenate expression1 and expression2 using INTERSECT clause.
         /// </summary>
-        /// <typeparam name="T">The type represented by SqlExpression.</typeparam>
+        /// <typeparam name="TResult">The type represented by SqlExpression.</typeparam>
         /// <param name="expression1">Expression 1.</param>
         /// <param name="expression2">Exppresion 2.</param>
         /// <returns>Concatenated result.</returns>
@@ -64,7 +64,7 @@ namespace LambdicSql
         /// <summary>
         /// Concatenate expression1 and expression2 using INTERSECT clause.
         /// </summary>
-        /// <typeparam name="T">The type represented by SqlExpression.</typeparam>
+        /// <typeparam name="TResult">The type represented by SqlExpression.</typeparam>
         /// <param name="expression1">Expression 1.</param>
         /// <param name="isAll">If isAll is true, add an ALL predicate.</param>
         /// <param name="expression2">Exppresion 2.</param>
@@ -75,7 +75,7 @@ namespace LambdicSql
         /// <summary>
         /// Concatenate expression1 and expression2 using EXCEPT clause.
         /// </summary>
-        /// <typeparam name="T">The type represented by SqlExpression.</typeparam>
+        /// <typeparam name="TResult">The type represented by SqlExpression.</typeparam>
         /// <param name="expression1">Expression 1.</param>
         /// <param name="expression2">Exppresion 2.</param>
         /// <returns>Concatenated result.</returns>
@@ -85,7 +85,7 @@ namespace LambdicSql
         /// <summary>
         /// Concatenate expression1 and expression2 using EXCEPT clause.
         /// </summary>
-        /// <typeparam name="T">The type represented by SqlExpression.</typeparam>
+        /// <typeparam name="TResult">The type represented by SqlExpression.</typeparam>
         /// <param name="expression1">Expression 1.</param>
         /// <param name="isAll">If isAll is true, add an ALL predicate.</param>
         /// <param name="expression2">Exppresion 2.</param>
@@ -96,7 +96,7 @@ namespace LambdicSql
         /// <summary>
         /// Concatenate expression1 and expression2 using MINUS clause.
         /// </summary>
-        /// <typeparam name="T">The type represented by SqlExpression.</typeparam>
+        /// <typeparam name="TResult">The type represented by SqlExpression.</typeparam>
         /// <param name="expression1">Expression 1.</param>
         /// <param name="expression2">Exppresion 2.</param>
         /// <returns>Concatenated result.</returns>

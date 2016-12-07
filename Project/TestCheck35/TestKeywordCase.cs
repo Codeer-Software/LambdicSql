@@ -289,7 +289,7 @@ FROM tbl_staff",
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_Sub()
+        public void Test_Sub1()
         {
             var sub = Sql<DB>.Create(db => Select(Count(new Asterisk())).From(db.tbl_staff));
             var query = Sql<DB>.Create(db =>
@@ -301,17 +301,45 @@ FROM tbl_staff",
                             End()
                 }).
                 From(db.tbl_staff));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	CASE
+		WHEN ((
+			(SELECT
+				COUNT(*)
+			FROM tbl_staff)) = (@p_0)) THEN @p_1
+		ELSE @p_2
+	END AS Type
+FROM tbl_staff", 1, "x", "z");
+
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Sub2()
+        {
+            var sub = Sql<DB>.Create(db => Select(Count(new Asterisk())).From(db.tbl_staff));
+            var query = Sql<DB>.Create(db =>
+                Select(new
+                {
+                    Type = Case().
+                                When(1 == sub.Cast<int>()).Then("x").
+                                Else("z").
+                            End()
+                }).
+                From(db.tbl_staff));
             
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
 	CASE
-		WHEN 
-		((
+		WHEN ((@p_0) = (
 			(SELECT
 				COUNT(*)
-			FROM tbl_staff)) = (@p_0)) THEN @p_1
+			FROM tbl_staff))) THEN @p_1
 		ELSE @p_2
 	END AS Type
 FROM tbl_staff", 1, "x", "z");

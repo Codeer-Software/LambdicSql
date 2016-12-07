@@ -16,7 +16,7 @@ namespace LambdicSql.feat.Dapper
         /// </summary>
         /// <typeparam name="T">Result type.</typeparam>
         /// <param name="cnn">Connection.</param>
-        /// <param name="exp">Query expression.</param>
+        /// <param name="query">Query expression.</param>
         /// <param name="transaction">Transactions to be executed at the data source.</param>
         /// <param name="buffered">Is buffered,</param>
         /// <param name="commandTimeout">Command timeout.</param>
@@ -27,8 +27,8 @@ namespace LambdicSql.feat.Dapper
         ///     is created per row, and a direct column-name===member-name mapping is assumed
         ///     (case insensitive).
         /// </returns>
-        public static IEnumerable<T> Query<T>(this IDbConnection cnn, ISqlExpressionBase<IClauseChain<T>> exp, IDbTransaction transaction = null, bool buffered = true, int? commandTimeout = default(int?), CommandType? commandType = default(CommandType?))
-            => Query<T>(cnn, (ISqlExpressionBase)exp, transaction, buffered, commandTimeout, commandType);
+        public static IEnumerable<T> Query<T>(this IDbConnection cnn, ISqlExpressionBase<IClauseChain<T>> query, IDbTransaction transaction = null, bool buffered = true, int? commandTimeout = default(int?), CommandType? commandType = default(CommandType?))
+            => Query<T>(cnn, (ISqlExpressionBase)query, transaction, buffered, commandTimeout, commandType);
 
         /// <summary>
         /// Executes a query, returning the data typed as per T.
@@ -36,7 +36,7 @@ namespace LambdicSql.feat.Dapper
         /// </summary>
         /// <typeparam name="T">Result type.</typeparam>
         /// <param name="cnn">Connection.</param>
-        /// <param name="exp">Query expression.</param>
+        /// <param name="query">Query expression.</param>
         /// <param name="transaction">Transactions to be executed at the data source.</param>
         /// <param name="buffered">Is buffered,</param>
         /// <param name="commandTimeout">Command timeout.</param>
@@ -47,9 +47,9 @@ namespace LambdicSql.feat.Dapper
         ///     is created per row, and a direct column-name===member-name mapping is assumed
         ///     (case insensitive).
         /// </returns>
-        public static IEnumerable<T> Query<T>(this IDbConnection cnn, ISqlExpressionBase exp, IDbTransaction transaction = null, bool buffered = true, int? commandTimeout = default(int?), CommandType? commandType = default(CommandType?))
+        public static IEnumerable<T> Query<T>(this IDbConnection cnn, ISqlExpressionBase query, IDbTransaction transaction = null, bool buffered = true, int? commandTimeout = default(int?), CommandType? commandType = default(CommandType?))
         {
-            var info = exp.ToSqlInfo(cnn.GetType());
+            var info = query.ToSqlInfo(cnn.GetType());
 
             //for testing.
             if (DapperApaptExtensionsForTest.Query != null) return new T[DapperApaptExtensionsForTest.Query(cnn, info)];

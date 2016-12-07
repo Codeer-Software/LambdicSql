@@ -336,7 +336,7 @@ namespace LambdicSql
         /// <param name="result">It is an item to return to when the ELSE clause is valid.</param>
         /// <returns>It is an object for describing the continuation of the CASE expression.</returns>
         [MethodGroup(nameof(Case))]
-        public static IElseAfter<T> Else<T>(this IThenAfter<T> before, T t) => InvalitContext.Throw<IElseAfter<T>>(nameof(Then));
+        public static IElseAfter<T> Else<T>(this IThenAfter<T> before, T result) => InvalitContext.Throw<IElseAfter<T>>(nameof(Then));
 
         /// <summary>
         /// END clause.
@@ -429,7 +429,7 @@ namespace LambdicSql
         /// <summary>
         /// CROSS JOIN clause.
         /// </summary>
-        /// <param name="expressions">Table or subquery.</param>
+        /// <param name="expression">Table or subquery.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
         public static IClauseChain<Non> CrossJoin(object expression) => InvalitContext.Throw<IClauseChain<Non>>(nameof(CrossJoin));
 

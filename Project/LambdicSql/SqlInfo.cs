@@ -64,8 +64,20 @@ namespace LambdicSql
     /// <typeparam name="TSelected">Type of selected at SELECT clause.</typeparam>
     public class SqlInfo<TSelected> : SqlInfo
     {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="dbInfo">DataBase information.</param>
+        /// <param name="sqlText">Sql text.</param>
+        /// <param name="selectClauseInfo">Object create information.</param>
+        /// <param name="parameters">Parameters.</param>
         public SqlInfo(DbInfo dbInfo, string sqlText, ObjectCreateInfo selectClauseInfo, ParameterInfo parameters)
             : base(dbInfo, sqlText, selectClauseInfo, parameters) { }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="src">Source.</param>
         public SqlInfo(SqlInfo src) : base(src) { }
     }
 }
