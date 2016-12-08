@@ -12,51 +12,48 @@ namespace LambdicSql.Inside.Keywords
         {
             var method = methods[0];
 
-            var define = method.Arguments[method.Arguments.Count - 1];
+            //ALL, DISTINCT
             var modify = new List<Expression>();
             for (int i = method.AdjustSqlSyntaxMethodArgumentIndex(0); i < method.Arguments.Count - 1; i++)
             {
                 modify.Add(method.Arguments[i]);
             }
-            var selectText = string.Join(" ", new[] { "SELECT" }.Concat(modify.Select(e => converter.ToString(e))).ToArray());
-            
-            //TODO refactoring. other imlements.
-            if (typeof(Asterisk).IsAssignableFrom(define.Type))
+
+            //select core.
+            var selectTarget = method.Arguments[method.Arguments.Count - 1];
+            var selectTargetText = string.Empty;
+            ObjectCreateInfo createInfo = null;
+
+            //*
+            if (typeof(Asterisk).IsAssignableFrom(selectTarget.Type))
             {
-                var asteriskType = define.Type.IsGenericType ? define.Type.GetGenericTypeDefinition() : null;
-                if (asteriskType == typeof(Asterisk<>))
-                {
-                    var select = ObjectCreateAnalyzer.MakeSelectInfo(asteriskType);
-                    if (converter.Context.ObjectCreateInfo == null)
-                    {
-                        converter.Context.ObjectCreateInfo = select;
-                    }
-                }
-                return Environment.NewLine + selectText + " *";
+                var asteriskType = selectTarget.Type.IsGenericType ? selectTarget.Type.GetGenericTypeDefinition() : null;
+                if (asteriskType == typeof(Asterisk<>)) createInfo = ObjectCreateAnalyzer.MakeSelectInfo(asteriskType);
+                selectTargetText = " *";
             }
+            //new { item = db.tbl.column }
             else
             {
-                var select = ObjectCreateAnalyzer.MakeSelectInfo(define);
-                if (converter.Context.ObjectCreateInfo == null)
-                {
-                    converter.Context.ObjectCreateInfo = select;
-                }
-                return Environment.NewLine + selectText + Environment.NewLine + "\t" +
-                    string.Join("," + Environment.NewLine + "\t", select.Members.Select(e => ToString(converter, e)).ToArray());
+                createInfo = ObjectCreateAnalyzer.MakeSelectInfo(selectTarget);
+                selectTargetText = Environment.NewLine + "\t" +
+                    string.Join("," + Environment.NewLine + "\t", createInfo.Members.Select(e => ToStringSelectedElement(converter, e)).ToArray());
             }
+
+            //remember creat info.
+            if (converter.Context.ObjectCreateInfo == null) converter.Context.ObjectCreateInfo = createInfo;
+
+            //return select clause text.
+            return Environment.NewLine + string.Join(" ", new[] { "SELECT" }.Concat(modify.Select(e => converter.ToString(e))).ToArray()) + selectTargetText;
         }
 
-        static string ToString(ISqlStringConverter decoder, ObjectCreateMemberInfo element)
+        static string ToStringSelectedElement(ISqlStringConverter converter, ObjectCreateMemberInfo element)
         {
-            if (element.Expression == null)
-            {
-                return element.Name;
-            }
-            if (string.IsNullOrEmpty(element.Name))
-            {
-                return decoder.ToString(element.Expression);
-            }
-            return decoder.ToString(element.Expression) + " AS " + element.Name;
+            //single select.
+            //for example, COUNT(*).
+            if (string.IsNullOrEmpty(element.Name)) return converter.ToString(element.Expression);
+
+            //normal select.
+            return converter.ToString(element.Expression) + " AS " + element.Name;
         }
     }
 }

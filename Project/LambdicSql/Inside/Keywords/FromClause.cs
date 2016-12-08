@@ -9,14 +9,7 @@ namespace LambdicSql.Inside.Keywords
     static class FromClause
     {
         internal static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
-        {
-            var list = new List<string>();
-            foreach (var m in methods)
-            {
-                list.Add(MethodToString(converter, m));
-            }
-            return string.Join(string.Empty, list.ToArray());
-        }
+            => string.Join(string.Empty, methods.Select(m=> MethodToString(converter, m)).ToArray());
 
         static string MethodToString(ISqlStringConverter converter, MethodCallExpression method)
         {
@@ -35,15 +28,12 @@ namespace LambdicSql.Inside.Keywords
                     name = "RIGHT JOIN";
                     break;
             }
-            string[] argSrc = method.Arguments.Skip(startIndex).Select(e => converter.ToString(e)).ToArray();
-            return Environment.NewLine + "\t" + name.ToUpper() + " " + ExpressionToTableName(converter, method.Arguments[startIndex]) + " ON " + argSrc[1];
+            var condition = converter.ToString(method.Arguments[startIndex + 1]);
+            return Environment.NewLine + "\t" + name.ToUpper() + " " + ExpressionToTableName(converter, method.Arguments[startIndex]) + " ON " + condition;
         }
 
-        //TODO refactoring.
         static string ExpressionToTableName(ISqlStringConverter decoder, Expression exp)
-        {
-            return AdjustSubQuery(exp, ExpressionToTableNameCore(decoder, exp));
-        }
+            => SqlDisplayAdjuster.AdjustSubQuery(exp, ExpressionToTableNameCore(decoder, exp));
 
         static string ExpressionToTableNameCore(ISqlStringConverter decoder, Expression exp)
         {
@@ -74,17 +64,6 @@ namespace LambdicSql.Inside.Keywords
                 return text + " " + body;
             }
             return text;
-        }
-
-
-        //TODO refactoring.
-        static string AdjustSubQuery(Expression e, string v)
-        {
-            if (typeof(IClauseChain).IsAssignableFrom(e.Type))
-            {
-                return SqlStringConverter.AdjustSubQueryString(v);
-            }
-            return v;
         }
 
         static string GetSqlExpressionBody(Expression exp)
