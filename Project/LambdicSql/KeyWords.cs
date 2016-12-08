@@ -888,12 +888,62 @@ namespace LambdicSql
         public static object Dual => InvalitContext.Throw<object>(nameof(Dual));
 
         /// <summary>
+        /// CURREN_TDATE function.
+        /// </summary>
+        /// <returns>Date of executing SQL.</returns>
+        public static DateTime Current_Date => InvalitContext.Throw<DateTime>(nameof(Current_Date));
+
+        /// <summary>
+        /// CURRENT_TIME function.
+        /// </summary>
+        /// <returns>Date of executing SQL.</returns>
+        public static TimeSpan Current_Time => InvalitContext.Throw<TimeSpan>(nameof(DateTimeOffset));
+
+        /// <summary>
+        /// CURRENT_TIMESTAMP function.
+        /// </summary>
+        /// <returns>Date and time of executing SQL.</returns>
+        public static DateTime Current_TimeStamp => InvalitContext.Throw<DateTime>(nameof(Current_TimeStamp));
+
+        /// <summary>
+        /// CURRENT DATE function.
+        /// Get date and time of executing SQL.
+        /// </summary>
+        /// <returns>Date and time of executing SQL.</returns>
+        public static DateTime CurrentSpaceDate => InvalitContext.Throw<DateTime>(nameof(CurrentSpaceDate));
+
+        /// <summary>
+        /// CURRENT TIME function.
+        /// Get date and time of executing SQL.
+        /// </summary>
+        /// <returns>Date and time of executing SQL.</returns>
+        public static TimeSpan CurrentSpaceTime => InvalitContext.Throw<TimeSpan>(nameof(CurrentSpaceTime));
+
+        /// <summary>
+        /// CURRENT TIMESTAMP function.
+        /// Get date and time of executing SQL.
+        /// </summary>
+        /// <returns>Date and time of executing SQL.</returns>
+        public static DateTime CurrentSpaceTimeStamp => InvalitContext.Throw<DateTime>(nameof(CurrentSpaceTimeStamp));
+
+        /// <summary>
         /// SYSIBM keyword.
         /// </summary>
         public static SysibmType Sysibm => InvalitContext.Throw<SysibmType>(nameof(Sysibm));
 
         static string ToString(ISqlStringConverter converter, MemberExpression member)
-            => member.Member.Name.ToUpper();
+        {
+            switch (member.Member.Name)
+            {
+                case nameof(CurrentSpaceDate):
+                    return "CURRENT DATE";
+                case nameof(CurrentSpaceTime):
+                    return "CURRENT TIME";
+                case nameof(CurrentSpaceTimeStamp):
+                    return "CURRENT TIMESTAMP";
+            }
+            return member.Member.Name.ToUpper();
+        }
 
         static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {

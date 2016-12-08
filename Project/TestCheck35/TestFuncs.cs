@@ -803,7 +803,7 @@ FROM tbl_staff",
             var query = Sql<DB>.Create(db =>
                 Select(new
                 {
-                    Val = CurrentDate()
+                    Val = Current_Date
                 }));
 
             var datas = _connection.Query(query).ToList();
@@ -823,7 +823,7 @@ FROM tbl_staff",
             var query = Sql<DB>.Create(db =>
                 Select(new
                 {
-                    Val = CurrentDate()
+                    Val = Current_Date
                 }).From(Dual));
 
             var datas = _connection.Query(query).ToList();
@@ -843,7 +843,7 @@ FROM DUAL");
             var query = Sql<DB>.Create(db =>
                 Select(new
                 {
-                    Val = CurrentTime()
+                    Val = Current_Time
                 }));
 
             var datas = _connection.Query(query).ToList();
@@ -864,7 +864,7 @@ FROM DUAL");
             var query = Sql<DB>.Create(db =>
             Select(new
             {
-                Val = CurrentTimeStamp()
+                Val = Current_TimeStamp
             }));
 
             var datas = _connection.Query(query).ToList();
@@ -883,7 +883,7 @@ FROM DUAL");
             var query = Sql<DB>.Create(db =>
                 Select(new
                 {
-                    Val = CurrentTimeStamp()
+                    Val = Current_TimeStamp
                 }).
                 From(Dual));
 
@@ -904,7 +904,7 @@ FROM DUAL");
             var query = Sql<DB>.Create(db =>
                 Select(new
                 {
-                    Val = CurrentSpaceDate()
+                    Val = CurrentSpaceDate
                 }).
                 From(Sysibm.Sysdummy1));
 
@@ -925,7 +925,7 @@ FROM SYSIBM.SYSDUMMY1");
             var query = Sql<DB>.Create(db =>
                 Select(new
                 {
-                    Val = CurrentSpaceTime()
+                    Val = CurrentSpaceTime
                 }).
                 From(Sysibm.Sysdummy1));
 
@@ -946,7 +946,7 @@ FROM SYSIBM.SYSDUMMY1");
             var query = Sql<DB>.Create(db =>
                 Select(new
                 {
-                    Val = CurrentSpaceTimeStamp()
+                    Val = CurrentSpaceTimeStamp
                 }).
                 From(Sysibm.Sysdummy1));
 
@@ -967,16 +967,16 @@ FROM SYSIBM.SYSDUMMY1");
             var query = Sql<DB>.Create(db =>
                 Select(new
                 {
-                    Val1 = Extract(DateTimeElement.Year, CurrentTimeStamp()),
-                    Val2 = Extract(DateTimeElement.Month, CurrentTimeStamp()),
-                    Val3 = Extract(DateTimeElement.Day, CurrentTimeStamp()),
-                    Val4 = Extract(DateTimeElement.Hour, CurrentTimeStamp()),
-                    Val5 = Extract(DateTimeElement.Minute, CurrentTimeStamp()),
-                    Val6 = Extract(DateTimeElement.Second, CurrentTimeStamp()),
-                    Val7 = Extract(DateTimeElement.Millisecond, CurrentTimeStamp()),
-                    Val8 = Extract(DateTimeElement.Microsecond, CurrentTimeStamp()),
-                    Val9 = Extract(DateTimeElement.Quarter, CurrentTimeStamp()),
-                    Val10 = Extract(DateTimeElement.Week, CurrentTimeStamp())
+                    Val1 = Extract(DateTimeElement.Year, Current_TimeStamp),
+                    Val2 = Extract(DateTimeElement.Month, Current_TimeStamp),
+                    Val3 = Extract(DateTimeElement.Day, Current_TimeStamp),
+                    Val4 = Extract(DateTimeElement.Hour, Current_TimeStamp),
+                    Val5 = Extract(DateTimeElement.Minute, Current_TimeStamp),
+                    Val6 = Extract(DateTimeElement.Second, Current_TimeStamp),
+                    Val7 = Extract(DateTimeElement.Millisecond, Current_TimeStamp),
+                    Val8 = Extract(DateTimeElement.Microsecond, Current_TimeStamp),
+                    Val9 = Extract(DateTimeElement.Quarter, Current_TimeStamp),
+                    Val10 = Extract(DateTimeElement.Week, Current_TimeStamp)
                 }));
 
             var datas = _connection.Query(query).ToList();
@@ -1003,14 +1003,14 @@ FROM SYSIBM.SYSDUMMY1");
             var query = Sql<DB>.Create(db =>
             Select(new
             {
-                Val1 = (long)Extract(DateTimeElement.Year, CurrentTimeStamp()),
-                Val2 = (long)Extract(DateTimeElement.Month, CurrentTimeStamp()),
-                Val3 = (long)Extract(DateTimeElement.Day, CurrentTimeStamp()),
-                Val4 = (long)Extract(DateTimeElement.Hour, CurrentTimeStamp()),
-                Val5 = (long)Extract(DateTimeElement.Minute, CurrentTimeStamp()),
-                Val6 = (long)Extract(DateTimeElement.Second, CurrentTimeStamp()),
-                Val7 = (long)Extract(DateTimeElement.Quarter, CurrentTimeStamp()),
-                Val8 = (long)Extract(DateTimeElement.Week, CurrentTimeStamp())
+                Val1 = (long)Extract(DateTimeElement.Year, Current_TimeStamp),
+                Val2 = (long)Extract(DateTimeElement.Month, Current_TimeStamp),
+                Val3 = (long)Extract(DateTimeElement.Day, Current_TimeStamp),
+                Val4 = (long)Extract(DateTimeElement.Hour, Current_TimeStamp),
+                Val5 = (long)Extract(DateTimeElement.Minute, Current_TimeStamp),
+                Val6 = (long)Extract(DateTimeElement.Second, Current_TimeStamp),
+                Val7 = (long)Extract(DateTimeElement.Quarter, Current_TimeStamp),
+                Val8 = (long)Extract(DateTimeElement.Week, Current_TimeStamp)
             }));
 
             var datas = _connection.Query(query).ToList();
@@ -1035,20 +1035,20 @@ FROM SYSIBM.SYSDUMMY1");
             var query = Sql<DB>.Create(db =>
                 Select(new
                 {
-                    Val1 = DatePart(DateTimeElement.Year, CurrentTimeStamp()),
-                    Val2 = DatePart(DateTimeElement.Quarter, CurrentTimeStamp()),
-                    Val3 = DatePart(DateTimeElement.Month, CurrentTimeStamp()),
-                    Val4 = DatePart(DateTimeElement.Dayofyear, CurrentTimeStamp()),
-                    Val5 = DatePart(DateTimeElement.Day, CurrentTimeStamp()),
-                    Val6 = DatePart(DateTimeElement.Week, CurrentTimeStamp()),
-                    Val7 = DatePart(DateTimeElement.Weekday, CurrentTimeStamp()),
-                    Val8 = DatePart(DateTimeElement.Hour, CurrentTimeStamp()),
-                    Val9 = DatePart(DateTimeElement.Minute, CurrentTimeStamp()),
-                    Val10 = DatePart(DateTimeElement.Second, CurrentTimeStamp()),
-                    Val11 = DatePart(DateTimeElement.Millisecond, CurrentTimeStamp()),
-                    Val12 = DatePart(DateTimeElement.Microsecond, CurrentTimeStamp()),
-                    Val13 = DatePart(DateTimeElement.Nanosecond, CurrentTimeStamp()),
-                    Val14 = DatePart(DateTimeElement.ISO_WEEK, CurrentTimeStamp())
+                    Val1 = DatePart(DateTimeElement.Year, Current_TimeStamp),
+                    Val2 = DatePart(DateTimeElement.Quarter, Current_TimeStamp),
+                    Val3 = DatePart(DateTimeElement.Month, Current_TimeStamp),
+                    Val4 = DatePart(DateTimeElement.Dayofyear, Current_TimeStamp),
+                    Val5 = DatePart(DateTimeElement.Day, Current_TimeStamp),
+                    Val6 = DatePart(DateTimeElement.Week, Current_TimeStamp),
+                    Val7 = DatePart(DateTimeElement.Weekday, Current_TimeStamp),
+                    Val8 = DatePart(DateTimeElement.Hour, Current_TimeStamp),
+                    Val9 = DatePart(DateTimeElement.Minute, Current_TimeStamp),
+                    Val10 = DatePart(DateTimeElement.Second, Current_TimeStamp),
+                    Val11 = DatePart(DateTimeElement.Millisecond, Current_TimeStamp),
+                    Val12 = DatePart(DateTimeElement.Microsecond, Current_TimeStamp),
+                    Val13 = DatePart(DateTimeElement.Nanosecond, Current_TimeStamp),
+                    Val14 = DatePart(DateTimeElement.ISO_WEEK, Current_TimeStamp)
                 }));
 
             var datas = _connection.Query(query).ToList();

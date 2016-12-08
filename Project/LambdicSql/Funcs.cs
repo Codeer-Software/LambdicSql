@@ -164,45 +164,6 @@ namespace LambdicSql
         public static string Substring(object target, object startIndex, object length) => InvalitContext.Throw<string>(nameof(Substring));
 
         /// <summary>
-        /// CURREN_TDATE function.
-        /// </summary>
-        /// <returns>Date of executing SQL.</returns>
-        public static DateTime CurrentDate() => InvalitContext.Throw<DateTime>(nameof(CurrentDate));
-
-        /// <summary>
-        /// CURRENT_TIME function.
-        /// </summary>
-        /// <returns>Date of executing SQL.</returns>
-        public static TimeSpan CurrentTime() => InvalitContext.Throw<TimeSpan>(nameof(DateTimeOffset));
-
-        /// <summary>
-        /// CURRENT_TIMESTAMP function.
-        /// </summary>
-        /// <returns>Date and time of executing SQL.</returns>
-        public static DateTime CurrentTimeStamp() => InvalitContext.Throw<DateTime>(nameof(CurrentTimeStamp));
-
-        /// <summary>
-        /// CURRENT DATE function.
-        /// Get date and time of executing SQL.
-        /// </summary>
-        /// <returns>Date and time of executing SQL.</returns>
-        public static DateTime CurrentSpaceDate() => InvalitContext.Throw<DateTime>(nameof(CurrentSpaceDate));
-
-        /// <summary>
-        /// CURRENT TIME function.
-        /// Get date and time of executing SQL.
-        /// </summary>
-        /// <returns>Date and time of executing SQL.</returns>
-        public static TimeSpan CurrentSpaceTime() => InvalitContext.Throw<TimeSpan>(nameof(CurrentSpaceTime));
-
-        /// <summary>
-        /// CURRENT TIMESTAMP function.
-        /// Get date and time of executing SQL.
-        /// </summary>
-        /// <returns>Date and time of executing SQL.</returns>
-        public static DateTime CurrentSpaceTimeStamp() => InvalitContext.Throw<DateTime>(nameof(CurrentSpaceTimeStamp));
-
-        /// <summary>
         /// EXTRACT function.
         /// </summary>
         /// <param name="element">Part type.</param>
@@ -254,26 +215,14 @@ namespace LambdicSql
                 case nameof(Count):
                     if (method.Arguments.Count == 2) return method.Method.Name.ToUpper() + "(" + args[0].ToUpper() + " " + args[1] + ")";
                     break;
-                case nameof(CurrentDate):
-                    return "CURRENT_DATE";
-                case nameof(CurrentTime):
-                    return "CURRENT_TIME";
-                case nameof(CurrentTimeStamp):
-                    return "CURRENT_TIMESTAMP";
-                case nameof(CurrentSpaceDate):
-                    return "CURRENT DATE";
-                case nameof(CurrentSpaceTime):
-                    return "CURRENT TIME";
-                case nameof(CurrentSpaceTimeStamp):
-                    return "CURRENT TIMESTAMP";
                 case nameof(Extract):
                     return method.Method.Name.ToUpper() + "(" + args[0].ToUpper() + " FROM " + args[1] + ")";
-                case nameof(DatePart):
-                    return method.Method.Name.ToUpper() + "(" + args[0].ToUpper() + ", " + args[1] + ")";
                 case nameof(Cast):
                     return "CAST((" + args[0] + ") AS " + converter.Context.Parameters.ResolvePrepare(args[1]) + ")";
+                default:
+                    break;
             }
-            return method.Method.Name.ToUpper() + "(" + string.Join(", ", args.Skip(method.AdjustSqlSyntaxMethodArgumentIndex(0)).ToArray()) + ")";
+            return method.Method.Name.ToUpper() + "(" + string.Join(", ", args) + ")";
         }
     }
 }
