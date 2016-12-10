@@ -9,7 +9,7 @@ namespace LambdicSql.Inside.Keywords
         internal static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
-            var text = converter.ToString(method.Arguments[method.AdjustSqlSyntaxMethodArgumentIndex(0)]);
+            var text = converter.ToString(method.Arguments[method.SkipMethodChain(0)]);
             return string.IsNullOrEmpty(text.Trim()) ? string.Empty : Environment.NewLine + "WHERE " + text;
         }
     }

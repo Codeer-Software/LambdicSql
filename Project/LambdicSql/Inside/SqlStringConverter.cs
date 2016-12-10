@@ -110,7 +110,7 @@ namespace LambdicSql.Inside
                 }
 
                 //convert expression to text.
-                var func = newExp.GetNewToString();
+                var func = newExp.GetConverotrMethod();
                 return new DecodedInfo(null, func(this, newExp));
             }
 
@@ -191,14 +191,14 @@ namespace LambdicSql.Inside
                     }
                 }
                 //convert.
-                return new DecodedInfo(member.Type, member.GetMemberToString()(this, member));
+                return new DecodedInfo(member.Type, member.GetConverotrMethod()(this, member));
             }
 
             //sql syntax extension method
             var method = member.Expression as MethodCallExpression;
             if (method != null && method.Method.DeclaringType.IsSqlSyntax())
             {
-                var memberName = method.GetMethodsToString()(this, new[] { method }) + "." + member.Member.Name;
+                var memberName = method.GetConverotrMethod()(this, new[] { method }) + "." + member.Member.Name;
 
                 TableInfo table;
                 if (Context.DbInfo.GetLambdaNameAndTable().TryGetValue(memberName, out table))
@@ -256,7 +256,7 @@ namespace LambdicSql.Inside
                 }
 
                 //convert.
-                ret.Add(chain[0].GetMethodsToString()(this, chain));
+                ret.Add(chain[0].GetConverotrMethod()(this, chain));
             }
 
             return new DecodedInfo(method.Method.ReturnType, string.Join(string.Empty, ret.ToArray()));
@@ -466,7 +466,7 @@ namespace LambdicSql.Inside
         static List<List<MethodCallExpression>> GetMethodChains(MethodCallExpression end)
         {
             //resolve chain.
-            if (end.Method.IsResolveSqlSyntaxMethodChain())
+            if (end.Method.CanResolveSqlSyntaxMethodChain())
             {
                 return new List<List<MethodCallExpression>> { new List<MethodCallExpression> { end } };
             }

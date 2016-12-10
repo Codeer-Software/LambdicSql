@@ -14,7 +14,7 @@ namespace LambdicSql.Inside.Keywords
 
             //ALL, DISTINCT
             var modify = new List<Expression>();
-            for (int i = method.AdjustSqlSyntaxMethodArgumentIndex(0); i < method.Arguments.Count - 1; i++)
+            for (int i = method.SkipMethodChain(0); i < method.Arguments.Count - 1; i++)
             {
                 modify.Add(method.Arguments[i]);
             }

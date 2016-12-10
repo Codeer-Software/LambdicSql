@@ -279,7 +279,7 @@ namespace LambdicSql
                     break;
                 default:
                     var method = methods[0];
-                    func = method.Method.Name.ToUpper() + "(" + string.Join(", ", method.Arguments.Skip(method.AdjustSqlSyntaxMethodArgumentIndex(0)).Select(e => converter.ToString(e)).ToArray()) + ")";
+                    func = method.Method.Name.ToUpper() + "(" + string.Join(", ", method.Arguments.Skip(method.SkipMethodChain(0)).Select(e => converter.ToString(e)).ToArray()) + ")";
                     break;
             }
 

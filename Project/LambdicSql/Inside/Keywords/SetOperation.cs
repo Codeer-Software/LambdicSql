@@ -10,7 +10,7 @@ namespace LambdicSql.Inside.Keywords
         {
             var method = methods[0];
             var text = Environment.NewLine + method.Method.Name.ToUpper();
-            var index = method.AdjustSqlSyntaxMethodArgumentIndex(0);
+            var index = method.SkipMethodChain(0);
             if (index < method.Arguments.Count)
             {
                 var obj = converter.ToObject(method.Arguments[index]);

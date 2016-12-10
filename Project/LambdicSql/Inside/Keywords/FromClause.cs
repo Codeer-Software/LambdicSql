@@ -14,7 +14,7 @@ namespace LambdicSql.Inside.Keywords
         static string MethodToString(ISqlStringConverter converter, MethodCallExpression method)
         {
             string name = method.Method.Name;
-            var startIndex = method.AdjustSqlSyntaxMethodArgumentIndex(0);
+            var startIndex = method.SkipMethodChain(0);
             switch (name)
             {
                 case nameof(LambdicSql.Keywords.From):

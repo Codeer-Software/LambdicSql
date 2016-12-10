@@ -9,7 +9,7 @@ namespace LambdicSql.Inside.Keywords
         internal static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
-            var count = converter.ToString(method.Arguments[method.AdjustSqlSyntaxMethodArgumentIndex(0)]);
+            var count = converter.ToString(method.Arguments[method.SkipMethodChain(0)]);
             return Environment.NewLine + "OFFSET " + count;
         }
     }

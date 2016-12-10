@@ -13,7 +13,7 @@ namespace LambdicSql.Inside.Keywords
             var list = new List<string>();
             foreach (var m in methods)
             {
-                var argSrc = m.Arguments.Skip(m.AdjustSqlSyntaxMethodArgumentIndex(0)).Select(e => converter.ToString(e)).ToArray();
+                var argSrc = m.Arguments.Skip(m.SkipMethodChain(0)).Select(e => converter.ToString(e)).ToArray();
                 list.Add(MethodToString(m.Method.Name, argSrc));
             }
             return string.Join(string.Empty, list.ToArray());
