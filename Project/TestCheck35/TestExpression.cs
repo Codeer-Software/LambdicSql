@@ -438,6 +438,8 @@ new Params()
 
         //TODO ExpressionToObjectがテストされるだけのテストを書くこと
             //new 引数あり + 初期化
+        
+        //TODO is null で両方パラメータの場合・・・、無益やけど
     }
 
     public static class TestExpressionEx

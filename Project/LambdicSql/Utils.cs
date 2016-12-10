@@ -83,7 +83,12 @@ namespace LambdicSql
             var method = methods[0];
             switch (method.Method.Name)
             {
-                case nameof(Cast): return string.Empty;
+                case nameof(Cast):
+                    if (typeof(IMethodChain).IsAssignableFrom(method.Arguments[0].Type))
+                    {
+                        return SqlDisplayAdjuster.AdjustSubQueryString(converter.ToString(method.Arguments[0]));
+                    }
+                    return converter.ToString(method.Arguments[0]);
                 case nameof(Condition): return Condition(converter, method);
                 case nameof(TextSql): return TextSql(converter, method);
                 case nameof(TwoWaySql): return TwoWaySql(converter, method);

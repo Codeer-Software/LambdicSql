@@ -27,9 +27,12 @@ namespace LambdicSql.feat.EntityFramework
             var method = methods[0];
             switch (method.Method.Name)
             {
-                case nameof(T): return string.Empty;
+                case nameof(T): return converter.ToString(method.Arguments[0]);
             }
             throw new NotSupportedException();
+
+
+
         }
     }
 }

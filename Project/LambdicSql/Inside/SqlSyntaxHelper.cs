@@ -7,6 +7,7 @@ using System.Reflection;
 
 namespace LambdicSql.Inside
 {
+    //TODO
     static class SqlSyntaxHelper
     {
         static Dictionary<Type, Func<ISqlStringConverter, MethodCallExpression[], string>> _methodToStrings =
@@ -36,6 +37,7 @@ namespace LambdicSql.Inside
             }
         }
 
+        //TODO 全部 GetConverotr でいいかな
         internal static Func<ISqlStringConverter, MethodCallExpression[], string>
             GetMethodsToString(this MethodCallExpression exp)
         {

@@ -137,7 +137,7 @@ namespace LambdicSql.Inside
                         case ExpressionType.Subtract: body = Expression.Convert(Expression.Subtract(left, right), typeof(object)); break;
                         case ExpressionType.SubtractChecked: body = Expression.Convert(Expression.SubtractChecked(left, right), typeof(object)); break;
                         default:
-                            throw new NotSupportedException("I'm sorry. Currently unresponsive. Please write a little simpler. And please send us an issue.");
+                            throw new NotSupportedException("I'm sorry. Currently unresponsive at LambdicSql. Please consider another way of writing. And please send us an issue.");
                     }
 
                     getter = CreateGetter(new[] { binaryExp.Left.Type, binaryExp.Right.Type });

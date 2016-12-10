@@ -8,7 +8,6 @@ using System.Runtime.CompilerServices;
 
 namespace LambdicSql.Inside
 {
-    //TODO refactoring.
     class SqlStringConverter : ISqlStringConverter
     {
         class DecodedInfo
@@ -44,8 +43,6 @@ namespace LambdicSql.Inside
 
         public string ToString(object obj)
         {
-          //  if (obj == null) return "NULL";
-
             var exp = obj as Expression;
             if (exp != null) return ToString(exp).Text;
 
@@ -99,16 +96,22 @@ namespace LambdicSql.Inside
 
         DecodedInfo ToString(NewExpression newExp)
         {
+            //syntax.
             if (newExp.Type.IsSqlSyntax())
             {
+                //exist customizer.
                 if (_sqlSyntaxCustomizer != null)
                 {
                     var ret = _sqlSyntaxCustomizer.ToString(this, newExp);
                     if (ret != null) return new DecodedInfo(null, ret);
                 }
+
+                //convert expression to text.
                 var func = newExp.GetNewToString();
                 return new DecodedInfo(null, func(this, newExp));
             }
+
+            //object.
             var value = ExpressionToObject.GetNewObject(newExp);
             return new DecodedInfo(newExp.Type, ToString(value));
         }
@@ -128,6 +131,8 @@ namespace LambdicSql.Inside
                     return new DecodedInfo(typeof(bool), "NOT (" + ToString(unary.Operand) + ")");
                 case ExpressionType.Convert:
                     var ret = ToString(unary.Operand);
+
+                    //In the case of parameters, execute casting.
                     object obj;
                     if (Context.Parameters.TryGetParam(ret.Text, out obj))
                     {
@@ -137,6 +142,7 @@ namespace LambdicSql.Inside
                         }
                     }
                     return ret;
+                //TODO
                 case ExpressionType.ArrayLength:
                     throw new NotSupportedException();
                 case ExpressionType.ArrayIndex:
@@ -162,64 +168,17 @@ namespace LambdicSql.Inside
             var nodeType = ToString(left, binary.NodeType, right);
             return new DecodedInfo(nodeType.Type, "(" + left.Text + ") " + nodeType.Text + " (" + right.Text + ")");
         }
-
-        //TODO bad name!
-        DecodedInfo IsSqlExpressionBody(MemberExpression member)
-        {
-            var type = member.Type;
-            var names = new List<string>();
-            bool isSqlExpressionBase = false;
-            bool isBody = false;
-            Expression exp = null;
-            while (member != null)
-            {
-                if (typeof(ISqlExpressionBase).IsAssignableFrom(member.Type))
-                {
-                    exp = member;
-                    isSqlExpressionBase = true;
-                }
-                if (member.Member.Name == "Body")
-                {
-                    isBody = true;
-                }
-                else
-                {
-                    names.Insert(0, member.Member.Name);
-                }
-                var next = member.Expression as MemberExpression;
-                if (next == null)
-                {
-                    if (member.Expression != null && typeof(ISqlExpressionBase).IsAssignableFrom(member.Expression.Type))
-                    {
-                        exp = member.Expression;
-                        isSqlExpressionBase = true;
-                    }
-                }
-                member = next;
-            }
-            if (isSqlExpressionBase && isBody)
-            {
-                //sub query
-                if (names.Count <= 1)
-                {
-                    return ResolveExpressionObject(exp);
-                }
-                else
-                {
-                    return new DecodedInfo(type, string.Join(".", names.ToArray()));
-                }
-            }
-            return null;
-        }
-
+        
         DecodedInfo ToString(MemberExpression member)
         {
-            //ISqlExpression extensions.
-            var body = IsSqlExpressionBody(member);
+            //sub.Body
+            var body = ResolveSqlExpressionBody(member);
             if (body != null) return body;
 
+            //sql syntax.
             if (member.Member.DeclaringType.IsSqlSyntax())
             {
+                //exist customizer.
                 if (_sqlSyntaxCustomizer != null)
                 {
                     var custom = _sqlSyntaxCustomizer.ToString(this, member);
@@ -228,23 +187,16 @@ namespace LambdicSql.Inside
                         return new DecodedInfo(member.Type, custom);
                     }
                 }
+                //convert.
                 return new DecodedInfo(member.Type, member.GetMemberToString()(this, member));
             }
 
-            //TODO delete
-            //SubQuery's member.
-            //example [ sub.Cast().id ]
+            //sql syntax extension method
             var method = member.Expression as MethodCallExpression;
             if (method != null && method.Method.DeclaringType.IsSqlSyntax())
             {
-                var text = method.GetMethodsToString()(this, new[] { method });
-                if (string.IsNullOrEmpty(text)) text = ".";
-                else text = "." + text + ".";
+                var memberName = method.GetMethodsToString()(this, new[] { method }) + "." + member.Member.Name;
 
-                var mem2 = method.Arguments[0] as MemberExpression;
-
-                //TODO
-                var memberName = mem2.Member.Name + text + member.Member.Name;
                 TableInfo table;
                 if (Context.DbInfo.GetLambdaNameAndTable().TryGetValue(memberName, out table))
                 {
@@ -281,17 +233,8 @@ namespace LambdicSql.Inside
 
         DecodedInfo ToString(MethodCallExpression method)
         {
-            if (!method.Method.DeclaringType.IsSqlSyntax())
-            {
-                return ResolveExpressionObject(method);
-            }
-
-            //ISqlExpression extensions.
-            var args = method.Method.GetParameters();
-            if (0 < args.Length && typeof(ISqlExpressionBase).IsAssignableFrom(args[0].ParameterType))
-            {
-                if (method.Method.Name == "Cast" || method.Method.Name == "T") return ResolveExpressionObject(method.Arguments[0]);
-            }
+            //not sql syntax.
+            if (!method.Method.DeclaringType.IsSqlSyntax()) return ResolveExpressionObject(method);
 
             var ret = new List<string>();
             foreach (var c in GetMethodChains(method))
@@ -309,112 +252,38 @@ namespace LambdicSql.Inside
                     }
                 }
 
-                //normal.
+                //convert.
                 ret.Add(chain[0].GetMethodsToString()(this, chain));
             }
 
-            //Cast for IMethodChain.
-            var text = string.Join(string.Empty, ret.ToArray());
-            if (method.Method.Name == "Cast" || method.Method.Name == "T") text = AdjustSubQueryString(text);
-            return new DecodedInfo(method.Method.ReturnType, text);
+            return new DecodedInfo(method.Method.ReturnType, string.Join(string.Empty, ret.ToArray()));
         }
 
-        DecodedInfo ResolveExpressionObject(Expression exp)
+        DecodedInfo ResolveSqlExpressionBody(MemberExpression member)
         {
-            object obj;
-            if (!ExpressionToObject.GetExpressionObject(exp, out obj))
+            //get all members.
+            var members = new List<MemberExpression>();
+            var exp = member;
+            while (exp != null)
             {
-                throw new NotSupportedException();
+                members.Add(exp);
+                exp = exp.Expression as MemberExpression;
             }
+            if (members.Count < 2) return null;
+            members.Reverse();
 
-            //value type is SqlSyntax
-            //example [ enum ]
-            if (exp.Type.IsSqlSyntax())
-            {
-                if (_sqlSyntaxCustomizer != null)
-                {
-                    var ret = _sqlSyntaxCustomizer.ToString(this, obj);
-                    if (ret != null) return new DecodedInfo(exp.Type, obj.ToString());
-                }
-                return new DecodedInfo(exp.Type, obj.ToString());
-            }
-            
-            if (SupportedTypeSpec.IsSupported(exp.Type))
-            {
-                string name = string.Empty;
-                int? metadataToken = null;
-                var member = exp as MemberExpression;
-                if (member != null)
-                {
-                    name = member.Member.Name;
-                    metadataToken = member.Member.MetadataToken;
-                }
+            //check SqlExpression's Body
+            if (!typeof(ISqlExpressionBase).IsAssignableFrom(members[0].Type) ||
+                members[1].Member.Name != "Body") return null;
 
-                //use field name.
-                return new DecodedInfo(exp.Type, Context.Parameters.Push(obj, name, metadataToken));
-            }
-            
-            if (obj != null)
-            {
-                var type = obj.GetType();
-                if (type.IsArray && SupportedTypeSpec.IsSupported(type.GetElementType()))
-                {
-                    var list = new List<string>();
-                    foreach (var e in (IEnumerable)obj)
-                    {
-                        list.Add(Context.Parameters.Push(e, null, null));
-                    }
-                    return new DecodedInfo(exp.Type, string.Join(", ", list.ToArray()));
-                }
-            }
-
-            //TODO refactoring.
-            if (typeof(DbParam).IsAssignableFrom(exp.Type))
-            {
-                string name = string.Empty;
-                int? metadataToken = null;
-                var member = exp as MemberExpression;
-                if (member != null)
-                {
-                    name = member.Member.Name;
-                    metadataToken = member.Member.MetadataToken;
-                }
-                var param = ((DbParam)obj);
-                obj = param.Value;
-                //use field name.
-                return new DecodedInfo(exp.Type.GetGenericArguments()[0], Context.Parameters.Push(obj, name, metadataToken, param));
-            }
-
-            //SqlExpression.
-            //example [ from(exp) ]
-            var sqlExp = obj as ISqlExpressionBase;
-            if (sqlExp != null)
-            {
-                Type type = null;
-                var types = sqlExp.GetType().GetGenericArguments();
-                if (0 < types.Length) type = types[0];
-                return new DecodedInfo(type, AdjustSubQueryString(sqlExp.ToString(this)));
-            }
-
-            //TODO casting case.
-            {
-                string name = string.Empty;
-                int? metadataToken = null;
-                var member = exp as MemberExpression;
-                if (member != null)
-                {
-                    name = member.Member.Name;
-                    metadataToken = member.Member.MetadataToken;
-                }
-
-                //use field name.
-                return new DecodedInfo(exp.Type, Context.Parameters.Push(obj, name, metadataToken));
-            }
+            //for example, sub.Body
+            if (members.Count == 2) return ResolveExpressionObject(members[0]);
+            //for example, sub.Body.column.
+            else return new DecodedInfo(member.Type, string.Join(".", members.Where((e, i) => i != 1).Select(e => e.Member.Name).ToArray()));
         }
 
         DecodedInfo ToString(DecodedInfo left, ExpressionType nodeType, DecodedInfo right)
         {
-            //_option
             switch (nodeType)
             {
                 case ExpressionType.Equal: return new DecodedInfo(typeof(bool), "=");
@@ -456,7 +325,7 @@ namespace LambdicSql.Inside
             object leftObj, rightObj;
             var leftIsParam = Context.Parameters.TryGetParam(left.Text, out leftObj);
             var rightIsParam = Context.Parameters.TryGetParam(right.Text, out rightObj);
-            if (leftIsParam && rightIsParam) return null;
+            var bothParam = (leftIsParam && rightIsParam);
 
             var isParams = new[] { leftIsParam, rightIsParam };
             var objs = new[] { leftObj, rightObj };
@@ -468,7 +337,11 @@ namespace LambdicSql.Inside
                 if (isParams[i])
                 {
                     var nullObj = obj == null;
-                    if (!nullObj) return null;
+                    if (!nullObj)
+                    {
+                        if (bothParam) continue;
+                        return null;
+                    }
                     Context.Parameters.Remove(names[i]);
                     return new DecodedInfo(null, "(" + targetTexts[i] + ")" + ope);
                 }
@@ -485,6 +358,8 @@ namespace LambdicSql.Inside
                 names.Insert(0, member.Member.Name);
                 if (member.Expression is ParameterExpression)
                 {
+                    //using ParameterExpression with LambdicSql only when it represents a component of db.
+                    //for example, Sql<DB>.Create(db =>
                     lambdaName = string.Join(".", names.ToArray());
                     return true;
                 }
@@ -493,31 +368,110 @@ namespace LambdicSql.Inside
             return false;
         }
 
-        //TODO Can I define it here?
-        internal static string AdjustSubQueryString(string text)
-        {
-            if (text.Replace(Environment.NewLine, string.Empty).Replace("\t", " ").Replace("(", string.Empty).Trim().IndexOf("SELECT") != 0) return text;
+        //TODO refactoring.
 
-            var lines = text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToArray();
-            lines[0] = InsertSubQueryStart(lines[0]);
-            return Environment.NewLine + string.Join(Environment.NewLine, lines.Select(e => "\t" + e).ToArray()) + ")";
-        }
-
-        static string InsertSubQueryStart(string line)
+        DecodedInfo ResolveExpressionObject(Expression exp)
         {
-            for (int i = 0; i < line.Length; i++)
+            object obj;
+            if (!ExpressionToObject.GetExpressionObject(exp, out obj))
             {
-                if (line[i] != '\t')
+                throw new NotSupportedException();
+            }
+
+            //value type is SqlSyntax
+            //example [ enum ]
+            if (exp.Type.IsSqlSyntax())
+            {
+                if (_sqlSyntaxCustomizer != null)
                 {
-                    return line.Substring(0, i) + "(" + line.Substring(i);
+                    var ret = _sqlSyntaxCustomizer.ToString(this, obj);
+                    if (ret != null) return new DecodedInfo(exp.Type, obj.ToString());
+                }
+                return new DecodedInfo(exp.Type, obj.ToString());
+            }
+
+            if (SupportedTypeSpec.IsSupported(exp.Type))
+            {
+                string name = string.Empty;
+                int? metadataToken = null;
+                var member = exp as MemberExpression;
+                if (member != null)
+                {
+                    name = member.Member.Name;
+                    metadataToken = member.Member.MetadataToken;
+                }
+
+                //use field name.
+                return new DecodedInfo(exp.Type, Context.Parameters.Push(obj, name, metadataToken));
+            }
+
+            if (obj != null)
+            {
+                var type = obj.GetType();
+                if (type.IsArray && SupportedTypeSpec.IsSupported(type.GetElementType()))
+                {
+                    var list = new List<string>();
+                    foreach (var e in (IEnumerable)obj)
+                    {
+                        list.Add(Context.Parameters.Push(e, null, null));
+                    }
+                    return new DecodedInfo(exp.Type, string.Join(", ", list.ToArray()));
                 }
             }
-            return line;
+
+            //TODO refactoring.
+            if (typeof(DbParam).IsAssignableFrom(exp.Type))
+            {
+                string name = string.Empty;
+                int? metadataToken = null;
+                var member = exp as MemberExpression;
+                if (member != null)
+                {
+                    name = member.Member.Name;
+                    metadataToken = member.Member.MetadataToken;
+                }
+                var param = ((DbParam)obj);
+                obj = param.Value;
+                //use field name.
+                return new DecodedInfo(exp.Type.GetGenericArguments()[0], Context.Parameters.Push(obj, name, metadataToken, param));
+            }
+
+            //TODO だったらFromに処理させなきゃ
+            //SqlExpression.
+            //example [ from(exp) ]
+            var sqlExp = obj as ISqlExpressionBase;
+            if (sqlExp != null)
+            {
+                Type type = null;
+                var types = sqlExp.GetType().GetGenericArguments();
+                if (0 < types.Length) type = types[0];
+                return new DecodedInfo(type, SqlDisplayAdjuster.AdjustSubQueryString(sqlExp.ToString(this)));
+            }
+
+            //TODO casting case.
+            {
+                string name = string.Empty;
+                int? metadataToken = null;
+                var member = exp as MemberExpression;
+                if (member != null)
+                {
+                    name = member.Member.Name;
+                    metadataToken = member.Member.MetadataToken;
+                }
+
+                //use field name.
+                return new DecodedInfo(exp.Type, Context.Parameters.Push(obj, name, metadataToken));
+            }
         }
 
-        //TODO refactoring.
         static List<List<MethodCallExpression>> GetMethodChains(MethodCallExpression end)
         {
+            //なにか偉い属性で判断するようにするか・・・
+            if (end.Method.Name == "Cast")
+            {
+                return new List<List<MethodCallExpression>> { new List<MethodCallExpression> { end } };
+            }
+
             var chains = new List<List<MethodCallExpression>>();
             var curent = end;
             while (true)
