@@ -887,6 +887,8 @@ namespace LambdicSql
         /// </summary>
         public static object Dual => InvalitContext.Throw<object>(nameof(Dual));
 
+
+        //TODO これはやっぱり関数にする
         /// <summary>
         /// CURREN_TDATE function.
         /// </summary>

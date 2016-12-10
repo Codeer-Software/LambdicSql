@@ -158,6 +158,8 @@ FROM tbl_staff
 WHERE (@p_0) = (@obj)", new Params { { "@p_0", 1 }, { "@obj", 1 } });
         }
 
+        //TODO as のテストやってなかった
+
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_ImplicitConvertOperator3()
         {

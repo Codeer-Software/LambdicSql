@@ -20,6 +20,8 @@ namespace LambdicSql.Inside
                 new Dictionary<Type, Func<ISqlStringConverter, NewExpression, string>>();
 
         static Dictionary<Type, bool> _isSqlSyntax = new Dictionary<Type, bool>();
+        //TODO 一旦 モジュールと組み合わせる必要があるらしい
+        static Dictionary<int, bool> _isResolveSqlSyntaxMethodChain = new Dictionary<int, bool>();
 
         static Dictionary<string, string> _methodGroup = new Dictionary<string, string>();
 
@@ -32,6 +34,20 @@ namespace LambdicSql.Inside
                 {
                     check = type.GetCustomAttributes(true).Any(e=>e is SqlSyntaxAttribute);
                     _isSqlSyntax[type] = check;
+                }
+                return check;
+            }
+        }
+
+        internal static bool IsResolveSqlSyntaxMethodChain(this MethodInfo type)
+        {
+            lock (_isResolveSqlSyntaxMethodChain)
+            {
+                bool check;
+                if (!_isResolveSqlSyntaxMethodChain.TryGetValue(type.MetadataToken, out check))
+                {
+                    check = type.GetCustomAttributes(true).Any(e => e is ResolveSqlSyntaxMethodChainAttribute);
+                    _isResolveSqlSyntaxMethodChain[type.MetadataToken] = check;
                 }
                 return check;
             }

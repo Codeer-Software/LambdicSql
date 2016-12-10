@@ -249,6 +249,7 @@ FROM tbl_staff
 WHERE tbl_staff.id IN(@p_0, @p_1)",
 1, 2);
         }
+        //TODO ↑このパターンでvalsがexpressionになるやつを追加
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_In2()

@@ -72,6 +72,7 @@
     <Compile Include="Inside\ExpressionToObject.CreateGetter.cs" />
     <Compile Include="Inside\ExpressionToObject.Getter.cs" />
     <Compile Include="Inside\SqlExpressionCoupled.cs" />
+    <Compile Include="SqlBase\ResolveSqlSyntaxMethodChainAttribute.cs" />
     <Compile Include="SqlBase\SqlConvertingContext.cs" />
     <Compile Include="SqlBase\ISqlExpressionBase.cs" />
     <Compile Include="ISqlQuery.cs" />

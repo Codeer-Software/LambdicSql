@@ -29,6 +29,7 @@ namespace LambdicSql
         /// <typeparam name="T">Destination type.</typeparam>
         /// <param name="expression">Expression.</param>
         /// <returns>Casted object.</returns>
+        [ResolveSqlSyntaxMethodChain]
         public static T Cast<T>(this IMethodChain expression) => InvalitContext.Throw<T>(nameof(Cast));
 
         /// <summary>

@@ -89,8 +89,11 @@ namespace LambdicSql.Inside
 
         DecodedInfo ToString(ConstantExpression constant)
         {
+            //sql syntax.
             if (constant.Type.IsSqlSyntax()) return new DecodedInfo(constant.Type, constant.Value.ToString().ToUpper());
+            //normal object.
             if (SupportedTypeSpec.IsSupported(constant.Type)) return new DecodedInfo(constant.Type, ToString(constant.Value));
+
             throw new NotSupportedException();
         }
 
@@ -368,8 +371,6 @@ namespace LambdicSql.Inside
             return false;
         }
 
-        //TODO refactoring.
-
         DecodedInfo ResolveExpressionObject(Expression exp)
         {
             object obj;
@@ -378,18 +379,30 @@ namespace LambdicSql.Inside
                 throw new NotSupportedException();
             }
 
+            //array.
+            if (obj != null && obj.GetType().IsArray)
+            {
+                var list = new List<string>();
+                foreach (var e in (IEnumerable)obj)
+                {
+                    list.Add(ToString(e));
+                }
+                return new DecodedInfo(exp.Type, string.Join(", ", list.ToArray()));
+            }
+
             //value type is SqlSyntax
-            //example [ enum ]
+            //for example [ enum ]
             if (exp.Type.IsSqlSyntax())
             {
                 if (_sqlSyntaxCustomizer != null)
                 {
                     var ret = _sqlSyntaxCustomizer.ToString(this, obj);
-                    if (ret != null) return new DecodedInfo(exp.Type, obj.ToString());
+                    if (ret != null) return new DecodedInfo(exp.Type, obj.ToString().ToUpper());
                 }
-                return new DecodedInfo(exp.Type, obj.ToString());
+                return new DecodedInfo(exp.Type, obj.ToString().ToUpper());
             }
 
+            //normal object.
             if (SupportedTypeSpec.IsSupported(exp.Type))
             {
                 string name = string.Empty;
@@ -405,21 +418,7 @@ namespace LambdicSql.Inside
                 return new DecodedInfo(exp.Type, Context.Parameters.Push(obj, name, metadataToken));
             }
 
-            if (obj != null)
-            {
-                var type = obj.GetType();
-                if (type.IsArray && SupportedTypeSpec.IsSupported(type.GetElementType()))
-                {
-                    var list = new List<string>();
-                    foreach (var e in (IEnumerable)obj)
-                    {
-                        list.Add(Context.Parameters.Push(e, null, null));
-                    }
-                    return new DecodedInfo(exp.Type, string.Join(", ", list.ToArray()));
-                }
-            }
-
-            //TODO refactoring.
+            //DbParam.
             if (typeof(DbParam).IsAssignableFrom(exp.Type))
             {
                 string name = string.Empty;
@@ -435,8 +434,7 @@ namespace LambdicSql.Inside
                 //use field name.
                 return new DecodedInfo(exp.Type.GetGenericArguments()[0], Context.Parameters.Push(obj, name, metadataToken, param));
             }
-
-            //TODO だったらFromに処理させなきゃ
+            
             //SqlExpression.
             //example [ from(exp) ]
             var sqlExp = obj as ISqlExpressionBase;
@@ -448,7 +446,8 @@ namespace LambdicSql.Inside
                 return new DecodedInfo(type, SqlDisplayAdjuster.AdjustSubQueryString(sqlExp.ToString(this)));
             }
 
-            //TODO casting case.
+            //others.
+            //If it is correctly written it will be cast at the caller.
             {
                 string name = string.Empty;
                 int? metadataToken = null;
@@ -466,8 +465,8 @@ namespace LambdicSql.Inside
 
         static List<List<MethodCallExpression>> GetMethodChains(MethodCallExpression end)
         {
-            //なにか偉い属性で判断するようにするか・・・
-            if (end.Method.Name == "Cast")
+            //resolve chain.
+            if (end.Method.IsResolveSqlSyntaxMethodChain())
             {
                 return new List<List<MethodCallExpression>> { new List<MethodCallExpression> { end } };
             }
