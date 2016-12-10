@@ -6,7 +6,6 @@ using System.Reflection;
 
 namespace LambdicSql.Inside
 {
-    //TODO refactoring.
     internal static partial class ExpressionToObject
     {
         interface IGetter
@@ -23,30 +22,27 @@ namespace LambdicSql.Inside
             while (true)
             {
                 var unary = exp as UnaryExpression;
-                if (unary == null)
-                {
-                    break;
-                }
-                if (unary.NodeType == ExpressionType.Not)
-                {
-                    not = !not;
-                }
+                if (unary == null) break;
+
+                if (unary.NodeType == ExpressionType.Not) not = !not;
+
                 exp = unary.Operand;
             }
+
             var ret = GetExpressionObjectCore(exp, out obj);
-            if (not)
-            {
-                obj = !((bool)obj);
-            }
+            if (not) obj = !((bool)obj);
             return ret;
         }
 
         static bool GetExpressionObjectCore(Expression exp, out object obj)
         {
+            obj = null;
+
             var binaryExp = exp as BinaryExpression;
             if (binaryExp != null)
             {
-                return GetBinaryExpression(binaryExp, out obj);
+                obj = GetBinaryExpression(binaryExp);
+                return true;
             }
 
             var constExp = exp as ConstantExpression;
@@ -59,35 +55,36 @@ namespace LambdicSql.Inside
             var member = exp as MemberExpression;
             if (member != null)
             {
-                return GetMemberObject(member, out obj);
+                obj = GetMemberObject(member);
+                return true;
             }
 
             var method = exp as MethodCallExpression;
             if (method != null)
             {
-                return GetMethodObject(method, out obj);
+                obj = GetMethodObject(method);
+                return true;
             }
 
             var newExp = exp as NewExpression;
             if (newExp != null)
             {
-                return GetNewObject(newExp, out obj);
+                obj = GetNewObject(newExp);
+                return true;
             }
 
             var memberInit = exp as MemberInitExpression;
             if (memberInit != null)
             {
-                return GetMemberInitObject(memberInit, out obj);
+                obj = GetMemberInitObject(memberInit);
+                return true;
             }
 
-            obj = null;
             return false;
         }
 
-        internal static bool GetBinaryExpression(BinaryExpression binaryExp, out object value)
+        static object GetBinaryExpression(BinaryExpression binaryExp)
         {
-            value = null;
-
             object objLeft, objRight;
             if (!GetExpressionObject(binaryExp.Left, out objLeft) ||
                 !GetExpressionObject(binaryExp.Right, out objRight))
@@ -119,48 +116,28 @@ namespace LambdicSql.Inside
                         case ExpressionType.AddChecked: body = Expression.Convert(Expression.AddChecked(left, right), typeof(object)); break;
                         case ExpressionType.And: body = Expression.Convert(Expression.And(left, right), typeof(object)); break;
                         case ExpressionType.AndAlso: body = Expression.Convert(Expression.AndAlso(left, right), typeof(object)); break;
-                      //  case ExpressionType.ArrayLength: body = Expression.Convert(Expression.ArrayLength(left, right), typeof(object)); break;
                         case ExpressionType.ArrayIndex: body = Expression.Convert(Expression.ArrayIndex(left, right), typeof(object)); break;
-                    //    case ExpressionType.Call: body = Expression.Convert(Expression.Call(left, right), typeof(object)); break;
                         case ExpressionType.Coalesce: body = Expression.Convert(Expression.Coalesce(left, right), typeof(object)); break;
-                       // case ExpressionType.Conditional: body = Expression.Convert(Expression.Conditional(left, right), typeof(object)); break;
-                    //    case ExpressionType.Constant: body = Expression.Convert(Expression.Constant(left, right), typeof(object)); break;
-                     //   case ExpressionType.Convert: body = Expression.Convert(Expression.Convert(left, right), typeof(object)); break;
-                      //  case ExpressionType.ConvertChecked: body = Expression.Convert(Expression.ConvertChecked(left, right), typeof(object)); break;
                         case ExpressionType.Divide: body = Expression.Convert(Expression.Divide(left, right), typeof(object)); break;
                         case ExpressionType.Equal: body = Expression.Convert(Expression.Equal(left, right), typeof(object)); break;
                         case ExpressionType.ExclusiveOr: body = Expression.Convert(Expression.ExclusiveOr(left, right), typeof(object)); break;
                         case ExpressionType.GreaterThan: body = Expression.Convert(Expression.GreaterThan(left, right), typeof(object)); break;
                         case ExpressionType.GreaterThanOrEqual: body = Expression.Convert(Expression.GreaterThanOrEqual(left, right), typeof(object)); break;
-                     //   case ExpressionType.Invoke: body = Expression.Convert(Expression.Invoke(left, right), typeof(object)); break;
-                     //   case ExpressionType.Lambda: body = Expression.Convert(Expression.Lambda(left, right), typeof(object)); break;
                         case ExpressionType.LeftShift: body = Expression.Convert(Expression.LeftShift(left, right), typeof(object)); break;
                         case ExpressionType.LessThan: body = Expression.Convert(Expression.LessThan(left, right), typeof(object)); break;
                         case ExpressionType.LessThanOrEqual: body = Expression.Convert(Expression.LessThanOrEqual(left, right), typeof(object)); break;
-                      //  case ExpressionType.ListInit: body = Expression.Convert(Expression.ListInit(left, right), typeof(object)); break;
-                      //  case ExpressionType.MemberAccess: body = Expression.Convert(Expression.MemberAccess(left, right), typeof(object)); break;
-                      //  case ExpressionType.MemberInit: body = Expression.Convert(Expression.XXX(left, right), typeof(object)); break;
                         case ExpressionType.Modulo: body = Expression.Convert(Expression.Modulo(left, right), typeof(object)); break;
                         case ExpressionType.Multiply: body = Expression.Convert(Expression.Multiply(left, right), typeof(object)); break;
                         case ExpressionType.MultiplyChecked: body = Expression.Convert(Expression.MultiplyChecked(left, right), typeof(object)); break;
-                       // case ExpressionType.Negate: body = Expression.Convert(Expression.Negate(left, right), typeof(object)); break;
-                       // case ExpressionType.UnaryPlus: body = Expression.Convert(Expression.UnaryPlus(left, right), typeof(object)); break;
-                    //    case ExpressionType.NegateChecked: body = Expression.Convert(Expression.NegateChecked(left, right), typeof(object)); break;
-                    //    case ExpressionType.New: body = Expression.Convert(Expression.XXX(left, right), typeof(object)); break;
-                    //    case ExpressionType.NewArrayInit: body = Expression.Convert(Expression.XXX(left, right), typeof(object)); break;
-                    //    case ExpressionType.NewArrayBounds: body = Expression.Convert(Expression.XXX(left, right), typeof(object)); break;
-                     //@@@   case ExpressionType.Not: body = Expression.Convert(Expression.Not(left, right), typeof(object)); break;
                         case ExpressionType.NotEqual: body = Expression.Convert(Expression.NotEqual(left, right), typeof(object)); break;
                         case ExpressionType.Or: body = Expression.Convert(Expression.Or(left, right), typeof(object)); break;
                         case ExpressionType.OrElse: body = Expression.Convert(Expression.OrElse(left, right), typeof(object)); break;
-                    //    case ExpressionType.Parameter: body = Expression.Convert(Expression.Parameter(left, right), typeof(object)); break;
                         case ExpressionType.Power: body = Expression.Convert(Expression.Power(left, right), typeof(object)); break;
-                  //      case ExpressionType.Quote: body = Expression.Convert(Expression.Quote(left, right), typeof(object)); break;
                         case ExpressionType.RightShift: body = Expression.Convert(Expression.RightShift(left, right), typeof(object)); break;
                         case ExpressionType.Subtract: body = Expression.Convert(Expression.Subtract(left, right), typeof(object)); break;
                         case ExpressionType.SubtractChecked: body = Expression.Convert(Expression.SubtractChecked(left, right), typeof(object)); break;
-                     //   case ExpressionType.TypeAs: body = Expression.Convert(Expression.TypeAs(left, right), typeof(object)); break;
-                     //   case ExpressionType.TypeIs: body = Expression.Convert(Expression.XXX(left, right), typeof(object)); break;
+                        default:
+                            throw new NotSupportedException("I'm sorry. Currently unresponsive. Please write a little simpler. And please send us an issue.");
                     }
 
                     getter = CreateGetter(new[] { binaryExp.Left.Type, binaryExp.Right.Type });
@@ -168,36 +145,39 @@ namespace LambdicSql.Inside
                     _memberGet[getterName] = getter;
                 }
             }
-            value = getter.GetMemberObject(args.ToArray());
-            return true;
+
+            return getter.GetMemberObject(args.ToArray());
         }
-
-        //TODO refactoring.
-        internal static bool GetMemberInitObject(MemberInitExpression memberInit, out object value)
+        
+        internal static object GetMemberInitObject(MemberInitExpression memberInit)
         {
-            value = null;
-
-            var newExp = memberInit.NewExpression;
-            var paramsTypes = newExp.Constructor.GetParameters().Select(e => e.ParameterType).ToList();
-            var prams = new List<ParameterExpression>();
             var args = new List<object>();
-            for (int i = 0; i < paramsTypes.Count; i++)
+            var paramTypes = new List<Type>();
+            var prams = new List<ParameterExpression>();
+
+            //get new expression info.
+            var newExp = memberInit.NewExpression;
+            var newParameteInfos = newExp.Constructor.GetParameters();
+            for (int i = 0; i < newParameteInfos.Length; i++)
             {
-                prams.Add(Expression.Parameter(paramsTypes[i], "p" + i));
+                var type = newParameteInfos[i].ParameterType;
+                paramTypes.Add(type);
+                prams.Add(Expression.Parameter(type, "p" + i));
                 object arg;
                 GetExpressionObject(newExp.Arguments[i], out arg);
                 args.Add(arg);
             }
-            
-            int offset = paramsTypes.Count;
-            var assignments = memberInit.Bindings.Select(e => ((MemberAssignment)e).Expression).ToList();
-            paramsTypes.AddRange(assignments.Select(e => e.Type));
 
-            prams.AddRange(assignments.Select((e, i) => Expression.Parameter(e.Type, "p" + (offset + i))));
-
-            var bs = memberInit.Bindings.Select((e, i) => Expression.Bind(e.Member, prams[offset + i])).ToArray();
-            for (int i = 0; i < assignments.Count; i++)
+            //add member assignment info.
+            int offset = paramTypes.Count;
+            var assignments = memberInit.Bindings.Select(e => ((MemberAssignment)e).Expression).ToArray();
+            var memberAssignments = new List<MemberAssignment>();
+            for (int i = 0; i < assignments.Length; i++)
             {
+                paramTypes.Add(assignments[i].Type);
+                var p = Expression.Parameter(assignments[i].Type, "p" + (offset + i));
+                prams.Add(p);
+                memberAssignments.Add(Expression.Bind(memberInit.Bindings[i].Member, p));
                 object arg;
                 GetExpressionObject(assignments[i], out arg);
                 args.Add(arg);
@@ -205,8 +185,8 @@ namespace LambdicSql.Inside
 
             //name.
             var getterName = memberInit.NewExpression.Type.FullName +
-                "(" + string.Join(",", paramsTypes.Take(offset).Select(e => e.FullName).ToArray()) + ")" + 
-                "()(" + string.Join(",", paramsTypes.Skip(offset).Select(e => e.FullName).ToArray()) + ")";
+                "(" + string.Join(",", paramTypes.Take(offset).Select(e => e.FullName).ToArray()) + ")" +
+                "()(" + string.Join(",", paramTypes.Skip(offset).Select(e => e.FullName).ToArray()) + ")";
 
             //getter.
             IGetter getter;
@@ -214,21 +194,17 @@ namespace LambdicSql.Inside
             {
                 if (!_memberGet.TryGetValue(getterName, out getter))
                 {
-                    Expression body = null;
-                    body = Expression.Convert(Expression.MemberInit(Expression.New(newExp.Constructor, prams.Take(offset).ToArray()), bs), typeof(object));
-                    getter = CreateGetter(paramsTypes.ToArray());
+                    var body = Expression.Convert(Expression.MemberInit(Expression.New(newExp.Constructor, prams.Take(offset).ToArray()), memberAssignments.ToArray()), typeof(object));
+                    getter = CreateGetter(paramTypes.ToArray());
                     getter.Init(body, prams.ToArray());
                     _memberGet[getterName] = getter;
                 }
             }
-            value = getter.GetMemberObject(args.ToArray());
-            return true;
+            return getter.GetMemberObject(args.ToArray());
         }
-
-        internal static bool GetNewObject(NewExpression newExp, out object value)
+        
+        internal static object GetNewObject(NewExpression newExp)
         {
-            value = null;
-
             //arguments.
             var ps = newExp.Constructor.GetParameters().Select(e => e.ParameterType).ToList();
             var psExp = new List<ParameterExpression>();
@@ -251,21 +227,17 @@ namespace LambdicSql.Inside
             {
                 if (!_memberGet.TryGetValue(getterName, out getter))
                 {
-                    Expression body = null;
-                    body = Expression.Convert(Expression.New(newExp.Constructor, psExp.ToArray()), typeof(object));
+                    var body = Expression.Convert(Expression.New(newExp.Constructor, psExp.ToArray()), typeof(object));
                     getter = CreateGetter(ps.ToArray());
                     getter.Init(body, psExp.ToArray());
                     _memberGet[getterName] = getter;
                 }
             }
-            value = getter.GetMemberObject(args.ToArray());
-            return true;
+            return getter.GetMemberObject(args.ToArray());
         }
 
-        internal static bool GetMethodObject(MethodCallExpression method, out object value)
+        static object GetMethodObject(MethodCallExpression method)
         {
-            value = null;
-
             if (method.Method.ReturnType == typeof(void))
             {
                 throw new NotSupportedException("Can't call void method.");
@@ -318,27 +290,28 @@ namespace LambdicSql.Inside
                     _memberGet[getterName] = getter;
                 }
             }
-            value = getter.GetMemberObject(args.ToArray());
-            return true;
+            return getter.GetMemberObject(args.ToArray());
         }
 
-        internal static bool GetMemberObject(MemberExpression exp, out object value)
+        static object GetMemberObject(MemberExpression exp)
         {
-            value = null;
-            var member = exp;
             var names = new List<string>();
             object targt = null;
             Type type = null;
+
+            //find member root object.
+            var member = exp;
             while (member != null)
             {
                 names.Add(member.Member.Name);
               
+                //static method.
                 if (member.Expression == null)
                 {
-                    //static
                     type = member.Member.DeclaringType;
                     break;
                 }
+
                 var constant = member.Expression as ConstantExpression;
                 if (constant != null)
                 {
@@ -346,94 +319,86 @@ namespace LambdicSql.Inside
                     type = constant.Type;
                     break;
                 }
+
                 var method = member.Expression as MethodCallExpression;
                 if (method != null)
                 {
                     type = method.Type;
-                    if (!GetMethodObject(method, out targt)) return false;
+                    targt = GetMethodObject(method);
+                    break;
                 }
+
                 var newExp = member.Expression as NewExpression;
                 if (newExp != null)
                 {
                     type = newExp.Type;
-                    if (!GetNewObject(newExp, out targt)) return false;
+                    targt = GetNewObject(newExp);
+                    break;
                 }
+
                 member = member.Expression as MemberExpression;
             }
-            if (type == null)
-            {
-                return false;
-            }
 
+            //name.
             var getterName = type.FullName + "@" + string.Join("@", names.ToArray());
+
+            //getter.
             IGetter getter;
             lock (_memberGet)
             {
-                if (_memberGet.TryGetValue(getterName, out getter))
+                if (!_memberGet.TryGetValue(getterName, out getter))
                 {
-                    value = getter.GetMemberObject(new object[] { targt });
-                    return true;
+                    var param = Expression.Parameter(type, "param");
+                    Expression target = param;
+                    names.Reverse();
+                    if (targt == null)
+                    {
+                        target = StaticPropertyOrField(type, names[0]);
+                        names.RemoveAt(0);
+                    }
+                    names.ForEach(e => target = Expression.PropertyOrField(target, e));
+                    getter = Activator.CreateInstance(typeof(GetterCore<>).MakeGenericType(type), true) as IGetter;
+                    getter.Init(Expression.Convert(target, typeof(object)), new[] { param });
+                    _memberGet.Add(getterName, getter);
                 }
-
-                var param = Expression.Parameter(type, "param");
-                Expression target = param;
-                names.Reverse();
-                if (targt == null)
-                {
-                    target = StaticPropertyOrField(type, names[0]);
-                    names.RemoveAt(0);
-                }
-                names.ForEach(e => target = Expression.PropertyOrField(target, e));
-                getter = Activator.CreateInstance(typeof(GetterCore<>).MakeGenericType(type), true) as IGetter;
-                getter.Init(Expression.Convert(target, typeof(object)), new[] { param });
-                _memberGet.Add(getterName, getter);
             }
-            value = getter.GetMemberObject(new object[] { targt });
-            return true;
+            return getter.GetMemberObject(new object[] { targt });
         }
 
         internal static object ConvertObject(Type dstType, object src)
         {
             var srcType = src.GetType();
+
+            //getter name.
             var getterName = srcType.FullName + "@-@" + dstType.FullName;
+
+            //getter.
             IGetter getter;
             lock (_memberGet)
             {
-                if (_memberGet.TryGetValue(getterName, out getter))
+                if (!_memberGet.TryGetValue(getterName, out getter))
                 {
-                    return getter.GetMemberObject(new object[] { src });
+                    var param = Expression.Parameter(srcType, "src");
+                    var body = Expression.Convert(Expression.Convert(param, dstType), typeof(object));
+                    getter = ExpressionToObject.CreateGetter(new Type[] { srcType });
+                    getter.Init(body, new[] { param });
+                    _memberGet.Add(getterName, getter);
                 }
-                var param = Expression.Parameter(srcType, "src");
-                var body = Expression.Convert(Expression.Convert(param, dstType), typeof(object));
-                getter = ExpressionToObject.CreateGetter(new Type[] { srcType });
-                getter.Init(body, new[] { param });
-                _memberGet.Add(getterName, getter);
-                return getter.GetMemberObject(new[] { src });
             }
+            return getter.GetMemberObject(new[] { src });
         }
 
         static MemberExpression StaticPropertyOrField(Type type, string propertyOrFieldName)
         {
-            PropertyInfo property = type.GetProperty(propertyOrFieldName, BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.IgnoreCase | BindingFlags.Static);
-            if (property != null)
-            {
-                return Expression.Property(null, property);
-            }
-            FieldInfo field = type.GetField(propertyOrFieldName, BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.IgnoreCase | BindingFlags.Static);
-            if (field == null)
-            {
-                property = type.GetProperty(propertyOrFieldName, BindingFlags.FlattenHierarchy | BindingFlags.NonPublic | BindingFlags.IgnoreCase | BindingFlags.Static);
-                if (property != null)
-                {
-                    return Expression.Property(null, property);
-                }
-                field = type.GetField(propertyOrFieldName, BindingFlags.FlattenHierarchy | BindingFlags.NonPublic | BindingFlags.IgnoreCase | BindingFlags.Static);
-                if (field == null)
-                {
-                    throw new ArgumentException(string.Format("{0} NotAMemberOfType {1}", propertyOrFieldName, type));
-                }
-            }
-            return Expression.Field(null, field);
+            var flgs = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
+
+            var property = type.GetProperty(propertyOrFieldName, flgs);
+            if (property != null) return Expression.Property(null, property);
+
+            var field = type.GetField(propertyOrFieldName, flgs);
+            if (field != null) return Expression.Field(null, field);
+
+            throw new NotSupportedException();
         }
     }
 }

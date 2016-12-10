@@ -13,14 +13,8 @@ namespace LambdicSql.Inside
         {
             _before = before;
             _after = after;
-            if (_before.DbInfo != null)
-            {
-                DbInfo = _before.DbInfo;
-            }
-            else if (_after.DbInfo != null)
-            {
-                DbInfo = _after.DbInfo;
-            }
+            if (_before.DbInfo != null) DbInfo = _before.DbInfo;
+            else if (_after.DbInfo != null) DbInfo = _after.DbInfo;
         }
 
         public override string ToString(ISqlStringConverter converter)

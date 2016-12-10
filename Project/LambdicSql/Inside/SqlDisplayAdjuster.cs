@@ -7,7 +7,7 @@ using System.Text;
 
 namespace LambdicSql.Inside
 {
-    //TODO
+    //TODO 表示用の調整
     class SqlDisplayAdjuster
     {
         internal static string Adjust(string text)
@@ -43,14 +43,14 @@ namespace LambdicSql.Inside
             return v;
         }
 
-        //TODO これ色んな所にいるんじゃなかろうか？まあ、サブクエリが入りうるか所なんだけど、統一的に処理できないかな？
+        //これ色んな所にいるんじゃなかろうか？まあ、サブクエリが入りうるか所なんだけど、統一的に処理できないかな？
         internal static string AdjustSubQueryString(string text, string adjust)
         {
             var lines = text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).Where(e => !string.IsNullOrEmpty(e.Trim())).ToArray();
             if (lines.Length <= 1) return text;
             lines[0] = InsertTextToTop(lines[0], "(");
 
-            //TODO ここで改行をいきなり先頭に入れるんじゃなくって
+            //ここで改行をいきなり先頭に入れるんじゃなくって
             //先頭にSelectがなかったら改行はいらんとか
             if (lines[0].IndexOf("SELECT") == -1)
             {

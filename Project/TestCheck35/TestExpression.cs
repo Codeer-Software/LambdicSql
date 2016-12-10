@@ -7,6 +7,7 @@ using LambdicSql;
 using LambdicSql.feat.Dapper;
 using static LambdicSql.Keywords;
 using System;
+using System.Collections.Generic;
 
 namespace TestCheck35
 {
@@ -402,6 +403,41 @@ new Params()
     { "@p_3", 30 },
 });
         }
+        
+        //TODO Test_ArrayLength  [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_ArrayLength()
+        {
+            var x = new[] { 1, 2, 3 };
+            var query = Sql<Data>.Create(db => x.Length);
+            query.Gen(_connection);
+        }
+
+        //TODO  Test_ArrayIndex   [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_ArrayIndex()
+        {
+            var x = new[] { 1, 2, 3 };
+            var query = Sql<Data>.Create(db => x[0]);
+            query.Gen(_connection);
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_ListCount()
+        {
+            var x = new List<int> { 1, 2, 3 };
+            var query = Sql<Data>.Create(db => x.Count);
+            AssertEx.AreEqual(query, _connection, @"@Count", new Params { { "@Count", 3 } });
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_ListIndex()
+        {
+            var x = new List<int> { 1, 2, 3 };
+            var query = Sql<Data>.Create(db => x[0]);
+            AssertEx.AreEqual(query, _connection, @"@p_0", 1);
+        }
+
+        //TODO ExpressionToObjectがテストされるだけのテストを書くこと
+            //new 引数あり + 初期化
     }
 
     public static class TestExpressionEx

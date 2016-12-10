@@ -86,9 +86,8 @@ namespace LambdicSql.Inside
 
         DecodedInfo ToString(MemberInitExpression memberInit)
         {
-            object value;
-            if (ExpressionToObject.GetMemberInitObject(memberInit, out value)) return new DecodedInfo(memberInit.Type, ToString(value));
-            throw new NotSupportedException();
+            var value = ExpressionToObject.GetMemberInitObject(memberInit);
+            return new DecodedInfo(memberInit.Type, ToString(value));
         }
 
         DecodedInfo ToString(ConstantExpression constant)
@@ -110,9 +109,8 @@ namespace LambdicSql.Inside
                 var func = newExp.GetNewToString();
                 return new DecodedInfo(null, func(this, newExp));
             }
-            object value;
-            if (ExpressionToObject.GetNewObject(newExp, out value)) return new DecodedInfo(newExp.Type, ToString(value));
-            throw new NotSupportedException();
+            var value = ExpressionToObject.GetNewObject(newExp);
+            return new DecodedInfo(newExp.Type, ToString(value));
         }
 
         DecodedInfo ToString(NewArrayExpression array)
@@ -139,6 +137,10 @@ namespace LambdicSql.Inside
                         }
                     }
                     return ret;
+                case ExpressionType.ArrayLength:
+                    throw new NotSupportedException();
+                case ExpressionType.ArrayIndex:
+                    throw new NotSupportedException();
                 default:
                     return ToString(unary.Operand);
             }
