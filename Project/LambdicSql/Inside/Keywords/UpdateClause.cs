@@ -30,6 +30,7 @@ namespace LambdicSql.Inside.Keywords
                     }
                 case nameof(LambdicSql.Keywords.Set):
                     {
+                        //TODO これよくないAssignを継承したクラスを作ってって感じ　それか、Assignはそういうものってするか？
                         var name = tableName + ".";
                         var array = method.Arguments[1] as NewArrayExpression;
                         return Environment.NewLine + "SET" + Environment.NewLine + "\t" +

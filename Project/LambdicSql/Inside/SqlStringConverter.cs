@@ -34,6 +34,8 @@ namespace LambdicSql.Inside
             _sqlSyntaxCustomizer = sqlSyntaxCustomizer;
         }
 
+
+        //TODO ここに再帰カウンターを付けることによって、それが0でなければサブクエリだってことが分かる！つけすぎるとうざいから、メソッド呼び出しのところで。
         public object ToObject(Expression exp)
         {
             object obj;
