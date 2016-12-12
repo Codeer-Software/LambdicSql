@@ -933,18 +933,18 @@ namespace LambdicSql
         /// </summary>
         public static SysibmType Sysibm => InvalitContext.Throw<SysibmType>(nameof(Sysibm));
 
-        static string ToString(ISqlStringConverter converter, MemberExpression member)
+        static IText ToString(ISqlStringConverter converter, MemberExpression member)
         {
             switch (member.Member.Name)
             {
                 case nameof(CurrentSpaceDate):
-                    return "CURRENT DATE";
+                    return new SingleText("CURRENT DATE");
                 case nameof(CurrentSpaceTime):
-                    return "CURRENT TIME";
+                    return new SingleText("CURRENT TIME");
                 case nameof(CurrentSpaceTimeStamp):
-                    return "CURRENT TIMESTAMP";
+                    return new SingleText("CURRENT TIMESTAMP");
             }
-            return member.Member.Name.ToUpper();
+            return new SingleText(member.Member.Name.ToUpper());
         }
 
         static IText ToString(ISqlStringConverter converter, MethodCallExpression[] methods)

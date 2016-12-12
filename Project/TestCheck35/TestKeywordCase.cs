@@ -46,6 +46,9 @@ namespace TestCheck35
                             End()
                 }).
                 From(db.tbl_staff));
+
+            query.Gen(_connection);
+
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
