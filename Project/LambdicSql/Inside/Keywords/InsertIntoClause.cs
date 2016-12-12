@@ -27,9 +27,18 @@ namespace LambdicSql.Inside.Keywords
         {
             var table = converter.ToString(method.Arguments[0]);
             //column should not have a table name.
-            //TODO Assign修正
-            var arg = converter.ToString(method.Arguments[1]);//@@@.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(e => GetColumnOnly(e)).ToArray();
-            return new HorizontalText() { IsFunctional = true, Indent = 1 } + "INSERT INTO " + table + "(" + new HorizontalText(", ", arg) + ")";
+            //TODO ここでargをコンバートしている区間はカラム名称のみにするとかできたらいい。
+            bool src = converter.UsingColumnNameOnly;
+            try
+            {
+                converter.UsingColumnNameOnly = true;
+                var arg = converter.ToString(method.Arguments[1]);//@@@.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(e => GetColumnOnly(e)).ToArray();
+                return new HorizontalText() { IsFunctional = true } + "INSERT INTO " + table + "(" + new HorizontalText(", ", arg) + ")";
+            }
+            finally
+            {
+                converter.UsingColumnNameOnly = src;
+            }
         }
 
         static string GetColumnOnly(string src)

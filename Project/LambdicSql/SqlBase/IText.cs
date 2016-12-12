@@ -151,6 +151,11 @@ namespace LambdicSql.SqlBase
         public bool IsFunctional { get; set; }
 
         /// <summary>
+        /// TODO
+        /// </summary>
+        public bool IsNotLineChange { get; set; }
+
+        /// <summary>
         /// Constructor.
         /// </summary>
         public HorizontalText() { }
@@ -186,11 +191,12 @@ namespace LambdicSql.SqlBase
             if (_texts.Count == 0) return string.Empty;
             if (_texts.Count == 1) return _texts[0].ToString(indent);
 
-            if (IsSingleLine)
+            if (IsSingleLine || IsNotLineChange)
             {
                 var sep = 1 < _texts.Count ? _separator : string.Empty;
                 return _texts[0].ToString(indent) + sep + string.Join(_separator, _texts.Skip(1).Select(e => e.ToString(0)).ToArray());
             }
+            //TODO あー指定があれば、ここもセパレータ入れた方がいいな
             var addIndentCount = IsFunctional ? 1 : 0;
             return _texts[0].ToString(indent) + Environment.NewLine + string.Join(Environment.NewLine, _texts.Skip(1).Select(e => e.ToString(indent + addIndentCount)).ToArray());
         }
@@ -229,7 +235,7 @@ namespace LambdicSql.SqlBase
         /// <returns>Text.</returns>
         public IText ConcatAround(string front, string back)
         {
-            if (_texts.Count == 0) return new HorizontalText(_separator, new SingleText(front + back)) { Indent = Indent, IsFunctional = IsFunctional };
+            if (_texts.Count == 0) return new HorizontalText(_separator, new SingleText(front + back)) { Indent = Indent, IsFunctional = IsFunctional, IsNotLineChange = IsNotLineChange };
             var dst = _texts.ToArray();
             dst[0] = dst[0].ConcatToFront(front);
             dst[dst.Length - 1] = dst[dst.Length - 1].ConcatToBack(back);
@@ -243,7 +249,7 @@ namespace LambdicSql.SqlBase
         /// <returns>Text.</returns>
         public IText ConcatToFront(string front)
         {
-            if (_texts.Count == 0) return new HorizontalText(_separator, new SingleText(front)) { Indent = Indent, IsFunctional = IsFunctional };
+            if (_texts.Count == 0) return new HorizontalText(_separator, new SingleText(front)) { Indent = Indent, IsFunctional = IsFunctional, IsNotLineChange = IsNotLineChange };
             var dst = _texts.ToArray();
             dst[0] = dst[0].ConcatToFront(front);
             return new HorizontalText(_separator, dst);
@@ -256,7 +262,7 @@ namespace LambdicSql.SqlBase
         /// <returns></returns>
         public IText ConcatToBack(string back)
         {
-            if (_texts.Count == 0) return new HorizontalText(_separator, new SingleText(back)) { Indent = Indent, IsFunctional = IsFunctional };
+            if (_texts.Count == 0) return new HorizontalText(_separator, new SingleText(back)) { Indent = Indent, IsFunctional = IsFunctional, IsNotLineChange = IsNotLineChange };
             var dst = _texts.ToArray();
             dst[dst.Length - 1] = dst[dst.Length - 1].ConcatToBack(back);
             return new HorizontalText(_separator, dst);
@@ -273,7 +279,7 @@ namespace LambdicSql.SqlBase
         /// <returns>result value.</returns>
         public static HorizontalText operator +(HorizontalText l, IText r)
         {
-            var dst = new HorizontalText(l._separator) { Indent = l.Indent, IsFunctional = l.IsFunctional };
+            var dst = new HorizontalText(l._separator) { Indent = l.Indent, IsFunctional = l.IsFunctional, IsNotLineChange = l.IsNotLineChange };
             dst._texts.AddRange(l._texts);
 
             /*
@@ -297,7 +303,7 @@ namespace LambdicSql.SqlBase
         /// <returns>result value.</returns>
         public static HorizontalText operator +(HorizontalText l, string r)
         {
-            var dst = new HorizontalText(l._separator) { Indent = l.Indent, IsFunctional = l.IsFunctional };
+            var dst = new HorizontalText(l._separator) { Indent = l.Indent, IsFunctional = l.IsFunctional, IsNotLineChange = l.IsNotLineChange };
             dst._texts.AddRange(l._texts);
             dst._texts.Add(new SingleText(r));
             return dst;

@@ -8,6 +8,11 @@ namespace LambdicSql.SqlBase
     public interface ISqlStringConverter
     {
         /// <summary>
+        /// using column name only.
+        /// </summary>
+        bool UsingColumnNameOnly { get; set; }
+
+        /// <summary>
         /// Context.
         /// </summary>
         SqlConvertingContext Context { get; }

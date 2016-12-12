@@ -19,11 +19,12 @@ namespace LambdicSql.Inside
                 Type = type;
                 Text = text;
             }
-            public override string ToString() => Text.ToString(0);
         }
 
         SqlConvertOption _option;
         ISqlSyntaxCustomizer _sqlSyntaxCustomizer;
+
+        public bool UsingColumnNameOnly { get; set; }
 
         public SqlConvertingContext Context { get; }
 
@@ -137,6 +138,7 @@ namespace LambdicSql.Inside
                     var ret = ToString(unary.Operand);
 
                     //In the case of parameters, execute casting.
+                    //TODO これだめだ。内部的に何度もパラメータ変換が実行される ToString(0)
                     var paramText = ret.Text.ToString(0);
                     object obj;
                     if (Context.Parameters.TryGetParam(paramText, out obj))
@@ -207,10 +209,11 @@ namespace LambdicSql.Inside
                 {
                     return new DecodedInfo(null, new SingleText(table.SqlFullName));
                 }
-                ColumnInfo col;
-                if (Context.DbInfo.GetLambdaNameAndColumn().TryGetValue(memberName, out col))
+                string col;
+                Type colType;
+                if (TryGetValueLambdaNameAndColumn(memberName, out col, out colType))
                 {
-                    return new DecodedInfo(col.Type, new SingleText(col.SqlFullName));
+                    return new DecodedInfo(colType, new SingleText(col));
                 }
                 return new DecodedInfo(null, new SingleText(memberName));
             }
@@ -224,16 +227,30 @@ namespace LambdicSql.Inside
                 {
                     return new DecodedInfo(null, new SingleText(table.SqlFullName));
                 }
-                ColumnInfo col;
-                if (Context.DbInfo.GetLambdaNameAndColumn().TryGetValue(name, out col))
+                string col;
+                Type colType;
+                if (TryGetValueLambdaNameAndColumn(name, out col, out colType))
                 {
-                    return new DecodedInfo(col.Type, new SingleText(col.SqlFullName));
+                    return new DecodedInfo(colType, new SingleText(col));
                 }
                 throw new NotSupportedException();
             }
 
             //get value.
             return ResolveExpressionObject(member);
+        }
+
+        public bool TryGetValueLambdaNameAndColumn(string lambdaName, out string columnName, out Type colType)
+        {
+            columnName = string.Empty;
+            colType = null;
+            ColumnInfo col;
+            if (!Context.DbInfo.GetLambdaNameAndColumn().TryGetValue(lambdaName, out col)) return false;
+
+            colType = col.Type;
+            if (UsingColumnNameOnly) columnName = col.SqlColumnName;
+            else columnName = col.SqlFullName;
+            return true;
         }
 
         DecodedInfo ToString(MethodCallExpression method)
@@ -327,6 +344,7 @@ namespace LambdicSql.Inside
                 default: return null;
             }
             //TODO .ToString(0)多い
+            //TODO これだめだ。内部的に何度もパラメータ変換が実行される ToString(0)
             object leftObj, rightObj;
             var leftIsParam = Context.Parameters.TryGetParam(left.Text.ToString(0), out leftObj);
             var rightIsParam = Context.Parameters.TryGetParam(right.Text.ToString(0), out rightObj);
@@ -389,7 +407,7 @@ namespace LambdicSql.Inside
                 {
                     list.Add(ToString(e));
                 }
-                return new DecodedInfo(exp.Type, new HorizontalText(list.ToArray()));
+                return new DecodedInfo(exp.Type, new HorizontalText(", ", list.ToArray()));
             }
 
             //value type is SqlSyntax

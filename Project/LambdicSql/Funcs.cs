@@ -221,6 +221,7 @@ namespace LambdicSql
                 case nameof(Extract):
                     return new HorizontalText() { IsFunctional = true } + (method.Method.Name.ToUpper() + "(") + args[0] + " FROM " + args[1] + ")";
                 case nameof(Cast):
+                    //TODO これだめだ。内部的に何度もパラメータ変換が実行される ToString(0)
                     return new HorizontalText() { IsFunctional = true } + "CAST((" + args[0] + ") AS " + converter.Context.Parameters.ResolvePrepare(args[1].ToString(0)) + ")";
                 default:
                     break;

@@ -274,12 +274,13 @@ WHERE tbl_staff.id IN(@p_0, @p_1)",
 @"SELECT
 	tbl_staff.id AS Id
 FROM tbl_staff
-WHERE tbl_staff.id IN(
-	(SELECT
-		tbl_remuneration.staff_id AS id
-	FROM tbl_remuneration
-		JOIN tbl_staff ON (tbl_staff.id) = (tbl_staff.id)
-	WHERE (@p_0) < (tbl_remuneration.money)))",
+WHERE
+	tbl_staff.id IN
+		((SELECT
+			tbl_remuneration.staff_id AS id
+		FROM tbl_remuneration
+			JOIN tbl_staff ON (tbl_staff.id) = (tbl_staff.id)
+		WHERE (@p_0) < (tbl_remuneration.money)))",
 (decimal)1000);
         }
 
@@ -307,12 +308,13 @@ WHERE tbl_staff.id IN(
 @"SELECT
 	tbl_staff.id AS Id
 FROM tbl_staff
-WHERE tbl_staff.id IN(
-	(SELECT
-		tbl_remuneration.staff_id AS id
-	FROM tbl_remuneration
-		JOIN tbl_staff ON (tbl_staff.id) = (tbl_staff.id)
-	WHERE (@p_0) < (tbl_remuneration.money)))",
+WHERE
+	tbl_staff.id IN
+		((SELECT
+			tbl_remuneration.staff_id AS id
+		FROM tbl_remuneration
+			JOIN tbl_staff ON (tbl_staff.id) = (tbl_staff.id)
+		WHERE (@p_0) < (tbl_remuneration.money)))",
 (decimal)1000);
         }
 
@@ -338,12 +340,13 @@ WHERE tbl_staff.id IN(
 @"SELECT
 	tbl_staff.id AS Id
 FROM tbl_staff
-WHERE tbl_staff.id IN(
-	(SELECT
-		tbl_remuneration.staff_id AS id
-	FROM tbl_remuneration
-		JOIN tbl_staff ON (tbl_staff.id) = (tbl_staff.id)
-	WHERE (@p_0) < (tbl_remuneration.money)))",
+WHERE
+	tbl_staff.id IN
+		((SELECT
+			tbl_remuneration.staff_id AS id
+		FROM tbl_remuneration
+			JOIN tbl_staff ON (tbl_staff.id) = (tbl_staff.id)
+		WHERE (@p_0) < (tbl_remuneration.money)))",
 (decimal)1000);
         }
 
@@ -370,12 +373,13 @@ WHERE tbl_staff.id IN(
 @"SELECT
 	tbl_staff.id AS Id
 FROM tbl_staff
-WHERE tbl_staff.id IN(
-	(SELECT
-		tbl_remuneration.staff_id AS id
-	FROM tbl_remuneration
-		JOIN tbl_staff ON (tbl_staff.id) = (tbl_staff.id)
-	WHERE (@p_0) < (tbl_remuneration.money)))",
+WHERE
+	tbl_staff.id IN
+		((SELECT
+			tbl_remuneration.staff_id AS id
+		FROM tbl_remuneration
+			JOIN tbl_staff ON (tbl_staff.id) = (tbl_staff.id)
+		WHERE (@p_0) < (tbl_remuneration.money)))",
 (decimal)1000);
         }
 
@@ -402,12 +406,13 @@ WHERE tbl_staff.id IN(
 @"SELECT
 	tbl_staff.id AS Id
 FROM tbl_staff
-WHERE EXISTS
-	(SELECT
-		tbl_remuneration.staff_id AS id
-	FROM tbl_remuneration
-		JOIN tbl_staff ON (tbl_staff.id) = (tbl_staff.id)
-	WHERE (@p_0) < (tbl_remuneration.money))",
+WHERE
+	EXISTS
+		(SELECT
+			tbl_remuneration.staff_id AS id
+		FROM tbl_remuneration
+			JOIN tbl_staff ON (tbl_staff.id) = (tbl_staff.id)
+		WHERE (@p_0) < (tbl_remuneration.money))",
 (decimal)1000);
         }
 
@@ -433,12 +438,13 @@ WHERE EXISTS
 @"SELECT
 	tbl_staff.id AS Id
 FROM tbl_staff
-WHERE EXISTS
-	(SELECT
-		tbl_remuneration.staff_id AS id
-	FROM tbl_remuneration
-		JOIN tbl_staff ON (tbl_staff.id) = (tbl_staff.id)
-	WHERE (@p_0) < (tbl_remuneration.money))",
+WHERE
+	EXISTS
+		(SELECT
+			tbl_remuneration.staff_id AS id
+		FROM tbl_remuneration
+			JOIN tbl_staff ON (tbl_staff.id) = (tbl_staff.id)
+		WHERE (@p_0) < (tbl_remuneration.money))",
 (decimal)1000);
         }
 

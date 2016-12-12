@@ -20,10 +20,21 @@ namespace LambdicSql
         /// <param name="lhs">Lvalue</param>
         public Assign(object rhs, object lhs) { InvalitContext.Throw("new " + nameof(Assign)); }
         
-        static string ToString(ISqlStringConverter converter, NewExpression exp)
+        static IText ToString(ISqlStringConverter converter, NewExpression exp)
         {
+            var src = converter.UsingColumnNameOnly;
+            IText arg1 = null;
+            try
+            {
+                converter.UsingColumnNameOnly = true;
+                arg1 = converter.ToString(exp.Arguments[0]);
+            }
+            finally
+            {
+                converter.UsingColumnNameOnly = src;
+            }
             var args = exp.Arguments.Select(e => converter.ToString(e)).ToArray();
-            return args[0] + " = " + args[1];
+            return new HorizontalText(" ") + arg1 + "=" + converter.ToString(exp.Arguments[1]);
         }
     }
 }

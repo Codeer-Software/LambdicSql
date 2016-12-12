@@ -129,3 +129,5 @@ namespace LambdicSql
     }
 }
 
+//TODO あー！！！ToString(0)ってテストしづらい！！！
+

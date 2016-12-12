@@ -35,7 +35,9 @@ namespace TestCheck35
             var query = Sql<DB>.Create(db =>
                 Update(db.tbl_data).Set(new Assign(db.tbl_data.val1, 100), new Assign(db.tbl_data.val2, "200")).
                 Where(db.tbl_data.id == 1));
-            
+
+            query.Gen(_connection);
+
             Assert.AreEqual(1, _connection.Execute(query));
             AssertEx.AreEqual(query, _connection,
 @"UPDATE tbl_data
@@ -104,6 +106,8 @@ FROM tbl_data");
             
             var query = Sql<DB>.Create(db =>
                    InsertInto(db.tbl_data, db.tbl_data.id, db.tbl_data.val2).Values(1, "val2"));
+            
+            //TODO あ、Values (は隙間がある
 
             Assert.AreEqual(1, _connection.Execute(query));
             AssertEx.AreEqual(query, _connection,

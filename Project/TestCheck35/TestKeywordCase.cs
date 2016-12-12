@@ -310,14 +310,16 @@ FROM tbl_staff",
             AssertEx.AreEqual(query, _connection,
 @"SELECT
 	CASE
-		WHEN ((
-			(SELECT
+		WHEN
+			(((SELECT
 				COUNT(*)
-			FROM tbl_staff)) = (@p_0)) THEN @p_1
+			FROM tbl_staff))
+			 = 
+			(@p_0))
+			THEN @p_1
 		ELSE @p_2
 	END AS Type
 FROM tbl_staff", 1, "x", "z");
-
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -333,16 +335,19 @@ FROM tbl_staff", 1, "x", "z");
                             End()
                 }).
                 From(db.tbl_staff));
-            
+
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
 	CASE
-		WHEN ((@p_0) = (
-			(SELECT
+		WHEN
+			(@p_0)
+			 = 
+			((SELECT
 				COUNT(*)
-			FROM tbl_staff))) THEN @p_1
+			FROM tbl_staff))
+			THEN @p_1
 		ELSE @p_2
 	END AS Type
 FROM tbl_staff", 1, "x", "z");

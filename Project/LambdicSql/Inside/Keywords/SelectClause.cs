@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 
 namespace LambdicSql.Inside.Keywords
 {
+    //SELECTに関しても AS とこの部分はFunctionalではないようにする
     static class SelectClause
     {
         internal static IText ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
@@ -23,6 +24,7 @@ namespace LambdicSql.Inside.Keywords
             var x = "SELECT";
             if (modify.Count != 0)
             {
+                //TODO これだめだ。内部的に何度もパラメータ変換が実行される ToString(0)
                 x += " ";
                 x += string.Join(" ", modify.Select(e => converter.ToString(e).ToString(0)).ToArray());
             }
@@ -64,8 +66,9 @@ namespace LambdicSql.Inside.Keywords
             //for example, COUNT(*).
             if (string.IsNullOrEmpty(element.Name)) return converter.ToString(element.Expression);
 
+            //TODO この無理やりくっつけるのはなくてもいいかな
             //normal select.
-            return new HorizontalText() + converter.ToString(element.Expression) + " AS " + element.Name;
+            return new HorizontalText() { IsNotLineChange = true } + converter.ToString(element.Expression) + " AS " + element.Name;
         }
     }
 }
