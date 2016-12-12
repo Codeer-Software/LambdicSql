@@ -268,28 +268,30 @@ namespace LambdicSql
         [MethodGroup(nameof(Window))]
         public static T Over<T>(this IFuncAfter<T> before, Rows rows) => InvalitContext.Throw<T>(nameof(Over));
 
-        static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        static IText ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
-            string func = string.Empty;
+            var func = new HorizontalText();
             switch (methods[0].Method.Name)
             {
                 case nameof(Sum):
                 case nameof(Count):
-                    func = Funcs.ToString(converter, new[] { methods[0] });
+                    func = func + Funcs.ToString(converter, new[] { methods[0] });
                     break;
                 default:
                     var method = methods[0];
-                    func = method.Method.Name.ToUpper() + "(" + string.Join(", ", method.Arguments.Skip(method.SkipMethodChain(0)).Select(e => converter.ToString(e)).ToArray()) + ")";
+                    func = func + new HorizontalText() { IsFunctional = true } + method.Method.Name.ToUpper() + "(" + 
+                        new HorizontalText(", ", method.Arguments.Skip(method.SkipMethodChain(0)).Select(e => converter.ToString(e)).ToArray()) + ")";
                     break;
             }
 
             var overMethod = methods[1];
-            var over = overMethod.Method.Name.ToUpper() + "(" +
-                string.Join(" ", overMethod.Arguments.Skip(1).
-                Where(e=>!(e is ConstantExpression)). //Skip null.
-                Select(e => converter.ToString(e)).ToArray()) + ")";
+            var over = new HorizontalText() { IsFunctional = true } +
+                overMethod.Method.Name.ToUpper() + "(";
+            var args = new HorizontalText(" ", overMethod.Arguments.Skip(1).
+                Where(e => !(e is ConstantExpression)). //Skip null.
+                Select(e => converter.ToString(e)).ToArray());
 
-            return func + " " + over;
+            return func + " " + over + args +")";
         }
     }
 }

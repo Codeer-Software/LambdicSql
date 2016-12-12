@@ -16,11 +16,11 @@ namespace LambdicSql
         /// </summary>
         public Asterisk() { InvalitContext.Throw("new " + nameof(Asterisk)); }
 
-        static string ToString(ISqlStringConverter converter, NewExpression exp)
-            => "*";
+        static IText ToString(ISqlStringConverter converter, NewExpression exp)
+            => new SingleText("*");
 
-        static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
-            => "*";
+        static IText ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+            => new SingleText("*");
     }
 
     /// <summary>

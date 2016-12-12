@@ -15,7 +15,7 @@
         /// </summary>
         /// <param name="convertor">convertor.</param>
         /// <returns>text.</returns>
-        string ToString(ISqlStringConverter convertor);
+        IText ToString(ISqlStringConverter convertor);
     }
 
     /// <summary>

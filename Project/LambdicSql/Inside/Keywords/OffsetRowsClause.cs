@@ -6,11 +6,11 @@ namespace LambdicSql.Inside.Keywords
 {
     static class OffsetRowsClause
     {
-        internal static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static IText ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
             var count = converter.ToString(method.Arguments[method.SkipMethodChain(0)]);
-            return Environment.NewLine + "OFFSET " + count + " ROWS";
+            return new SingleText("OFFSET " + count + " ROWS");
         }
     }
 }

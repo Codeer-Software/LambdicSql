@@ -83,6 +83,8 @@ namespace TestCheck35
                    Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
                GroupBy(db.tbl_staff.id, db.tbl_staff.name));
 
+            query.Gen(_connection);
+
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
@@ -363,7 +365,7 @@ FROM tbl_remuneration",
                    Val = Concat(db.tbl_staff.name, "a", "b")
                }).
                From(db.tbl_staff));
-
+            
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,

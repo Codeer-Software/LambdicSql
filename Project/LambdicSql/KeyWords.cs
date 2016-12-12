@@ -947,7 +947,7 @@ namespace LambdicSql
             return member.Member.Name.ToUpper();
         }
 
-        static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        static IText ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
             switch (method.Method.Name)

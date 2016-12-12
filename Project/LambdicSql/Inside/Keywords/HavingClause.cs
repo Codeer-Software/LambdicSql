@@ -6,11 +6,11 @@ namespace LambdicSql.Inside.Keywords
 {
     static class HavingClause
     {
-        internal static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static IText ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
             var text = converter.ToString(method.Arguments[method.SkipMethodChain(0)]);
-            return string.IsNullOrEmpty(text.Trim()) ? string.Empty : Environment.NewLine + "HAVING " + text;
+            return new HorizontalText(" ") { IsFunctional = true } + "HAVING" + text;
         }
     }
 }

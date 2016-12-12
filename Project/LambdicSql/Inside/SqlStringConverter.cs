@@ -13,13 +13,13 @@ namespace LambdicSql.Inside
         class DecodedInfo
         {
             internal Type Type { get; }
-            internal string Text { get; }
-            internal DecodedInfo(Type type, string text)
+            internal IText Text { get; }
+            internal DecodedInfo(Type type, IText text)
             {
                 Type = type;
                 Text = text;
             }
-            public override string ToString() => Text;
+            public override string ToString() => Text.ToString(0);
         }
 
         SqlConvertOption _option;
@@ -34,8 +34,6 @@ namespace LambdicSql.Inside
             _sqlSyntaxCustomizer = sqlSyntaxCustomizer;
         }
 
-
-        //TODO ここに再帰カウンターを付けることによって、それが0でなければサブクエリだってことが分かる！つけすぎるとうざいから、メソッド呼び出しのところで。
         public object ToObject(Expression exp)
         {
             object obj;
@@ -43,15 +41,16 @@ namespace LambdicSql.Inside
             return obj;
         }
 
-        public string ToString(object obj)
+        //TODO ここに再帰カウンターを付けることによって、それが0でなければサブクエリだってことが分かる！つけすぎるとうざいから、メソッド呼び出しのところで。
+        public IText ToString(object obj)
         {
             var exp = obj as Expression;
             if (exp != null) return ToString(exp).Text;
 
             var param = obj as DbParam;
-            if (param != null) return Context.Parameters.Push(param.Value, null, null, param);
+            if (param != null) return new SingleText(Context.Parameters.Push(param.Value, null, null, param));
 
-            return Context.Parameters.Push(obj);
+            return new SingleText(Context.Parameters.Push(obj));
         }
 
         DecodedInfo ToString(Expression exp)
@@ -92,7 +91,7 @@ namespace LambdicSql.Inside
         DecodedInfo ToString(ConstantExpression constant)
         {
             //sql syntax.
-            if (constant.Type.IsSqlSyntax()) return new DecodedInfo(constant.Type, constant.Value.ToString().ToUpper());
+            if (constant.Type.IsSqlSyntax()) return new DecodedInfo(constant.Type, new SingleText(constant.Value.ToString().ToUpper()));
             //normal object.
             if (SupportedTypeSpec.IsSupported(constant.Type)) return new DecodedInfo(constant.Type, ToString(constant.Value));
 
@@ -123,9 +122,9 @@ namespace LambdicSql.Inside
 
         DecodedInfo ToString(NewArrayExpression array)
         {
-            if (array.Expressions.Count == 0) return new DecodedInfo(null, string.Empty);
+            if (array.Expressions.Count == 0) return new DecodedInfo(null, new SingleText(string.Empty));
             var infos = array.Expressions.Select(e => ToString(e)).ToArray();
-            return new DecodedInfo(infos[0].Type, string.Join(", ", infos.Select(e => e.Text).ToArray()));
+            return new DecodedInfo(infos[0].Type, new HorizontalText(", ", infos.Select(e=>e.Text).ToArray()));
         }
 
         DecodedInfo ToString(UnaryExpression unary)
@@ -133,17 +132,18 @@ namespace LambdicSql.Inside
             switch (unary.NodeType)
             {
                 case ExpressionType.Not:
-                    return new DecodedInfo(typeof(bool), "NOT (" + ToString(unary.Operand) + ")");
+                    return new DecodedInfo(typeof(bool), ToString(unary.Operand).Text.ConcatAround("NOT (", ")"));
                 case ExpressionType.Convert:
                     var ret = ToString(unary.Operand);
 
                     //In the case of parameters, execute casting.
+                    var paramText = ret.Text.ToString(0);
                     object obj;
-                    if (Context.Parameters.TryGetParam(ret.Text, out obj))
+                    if (Context.Parameters.TryGetParam(paramText, out obj))
                     {
                         if (obj != null && !SupportedTypeSpec.IsSupported(obj.GetType()))
                         {
-                            Context.Parameters.ChangeObject(ret.Text, ExpressionToObject.ConvertObject(unary.Type, obj));
+                            Context.Parameters.ChangeObject(paramText, ExpressionToObject.ConvertObject(unary.Type, obj));
                         }
                     }
                     return ret;
@@ -162,16 +162,16 @@ namespace LambdicSql.Inside
             var left = ToString(binary.Left);
             var right = ToString(binary.Right);
 
-            if (string.IsNullOrEmpty(left.Text) && string.IsNullOrEmpty(right.Text)) return new DecodedInfo(null, string.Empty);
-            if (string.IsNullOrEmpty(left.Text)) return right;
-            if (string.IsNullOrEmpty(right.Text)) return left;
+            if (left.Text.IsEmpty && right.Text.IsEmpty) return new DecodedInfo(null, new SingleText(string.Empty));
+            if (left.Text.IsEmpty) return right;
+            if (right.Text.IsEmpty) return left;
 
             //for null
             var nullCheck = ResolveNullCheck(left, binary.NodeType, right);
             if (nullCheck != null) return nullCheck;
 
             var nodeType = ToString(left, binary.NodeType, right);
-            return new DecodedInfo(nodeType.Type, "(" + left.Text + ") " + nodeType.Text + " (" + right.Text + ")");
+            return new DecodedInfo(nodeType.Type, new HorizontalText(left.Text.ConcatAround("(", ")"), nodeType.Text.ConcatAround(" ", " "), right.Text.ConcatAround("(", ")")));
         }
         
         DecodedInfo ToString(MemberExpression member)
@@ -205,14 +205,14 @@ namespace LambdicSql.Inside
                 TableInfo table;
                 if (Context.DbInfo.GetLambdaNameAndTable().TryGetValue(memberName, out table))
                 {
-                    return new DecodedInfo(null, table.SqlFullName);
+                    return new DecodedInfo(null, new SingleText(table.SqlFullName));
                 }
                 ColumnInfo col;
                 if (Context.DbInfo.GetLambdaNameAndColumn().TryGetValue(memberName, out col))
                 {
-                    return new DecodedInfo(col.Type, col.SqlFullName);
+                    return new DecodedInfo(col.Type, new SingleText(col.SqlFullName));
                 }
-                return new DecodedInfo(null, memberName);
+                return new DecodedInfo(null, new SingleText(memberName));
             }
 
             //db element.
@@ -222,12 +222,12 @@ namespace LambdicSql.Inside
                 TableInfo table;
                 if (Context.DbInfo.GetLambdaNameAndTable().TryGetValue(name, out table))
                 {
-                    return new DecodedInfo(null, table.SqlFullName);
+                    return new DecodedInfo(null, new SingleText(table.SqlFullName));
                 }
                 ColumnInfo col;
                 if (Context.DbInfo.GetLambdaNameAndColumn().TryGetValue(name, out col))
                 {
-                    return new DecodedInfo(col.Type, col.SqlFullName);
+                    return new DecodedInfo(col.Type, new SingleText(col.SqlFullName));
                 }
                 throw new NotSupportedException();
             }
@@ -241,7 +241,7 @@ namespace LambdicSql.Inside
             //not sql syntax.
             if (!method.Method.DeclaringType.IsSqlSyntax()) return ResolveExpressionObject(method);
 
-            var ret = new List<string>();
+            var ret = new List<IText>();
             foreach (var c in GetMethodChains(method))
             {
                 var chain = c.ToArray();
@@ -261,7 +261,7 @@ namespace LambdicSql.Inside
                 ret.Add(chain[0].GetConverotrMethod()(this, chain));
             }
 
-            return new DecodedInfo(method.Method.ReturnType, string.Join(string.Empty, ret.ToArray()));
+            return new DecodedInfo(method.Method.ReturnType, new VerticalText(ret.ToArray()));
         }
 
         DecodedInfo ResolveSqlExpressionBody(MemberExpression member)
@@ -284,35 +284,35 @@ namespace LambdicSql.Inside
             //for example, sub.Body
             if (members.Count == 2) return ResolveExpressionObject(members[0]);
             //for example, sub.Body.column.
-            else return new DecodedInfo(member.Type, string.Join(".", members.Where((e, i) => i != 1).Select(e => e.Member.Name).ToArray()));
+            else return new DecodedInfo(member.Type, new SingleText(string.Join(".", members.Where((e, i) => i != 1).Select(e => e.Member.Name).ToArray())));
         }
 
         DecodedInfo ToString(DecodedInfo left, ExpressionType nodeType, DecodedInfo right)
         {
             switch (nodeType)
             {
-                case ExpressionType.Equal: return new DecodedInfo(typeof(bool), "=");
-                case ExpressionType.NotEqual: return new DecodedInfo(typeof(bool), "<>");
-                case ExpressionType.LessThan: return new DecodedInfo(typeof(bool), "<");
-                case ExpressionType.LessThanOrEqual: return new DecodedInfo(typeof(bool), "<=");
-                case ExpressionType.GreaterThan: return new DecodedInfo(typeof(bool), ">");
-                case ExpressionType.GreaterThanOrEqual: return new DecodedInfo(typeof(bool), ">=");
+                case ExpressionType.Equal: return new DecodedInfo(typeof(bool), new SingleText("="));
+                case ExpressionType.NotEqual: return new DecodedInfo(typeof(bool), new SingleText("<>"));
+                case ExpressionType.LessThan: return new DecodedInfo(typeof(bool), new SingleText("<"));
+                case ExpressionType.LessThanOrEqual: return new DecodedInfo(typeof(bool), new SingleText("<="));
+                case ExpressionType.GreaterThan: return new DecodedInfo(typeof(bool), new SingleText(">"));
+                case ExpressionType.GreaterThanOrEqual: return new DecodedInfo(typeof(bool), new SingleText(">="));
                 case ExpressionType.Add:
                     {
                         if (left.Type == typeof(string) || right.Type == typeof(string))
                         {
-                            return new DecodedInfo(left.Type, _option.StringAddOperator);
+                            return new DecodedInfo(left.Type, new SingleText(_option.StringAddOperator));
                         }
-                        return new DecodedInfo(left.Type, "+");
+                        return new DecodedInfo(left.Type, new SingleText("+"));
                     }
-                case ExpressionType.Subtract: return new DecodedInfo(left.Type, "-");
-                case ExpressionType.Multiply: return new DecodedInfo(left.Type, "*");
-                case ExpressionType.Divide: return new DecodedInfo(left.Type, "/");
-                case ExpressionType.Modulo: return new DecodedInfo(left.Type, "%");
-                case ExpressionType.And: return new DecodedInfo(typeof(bool), "AND");
-                case ExpressionType.AndAlso: return new DecodedInfo(typeof(bool), "AND");
-                case ExpressionType.Or: return new DecodedInfo(typeof(bool), "OR");
-                case ExpressionType.OrElse: return new DecodedInfo(typeof(bool), "OR");
+                case ExpressionType.Subtract: return new DecodedInfo(left.Type, new SingleText("-"));
+                case ExpressionType.Multiply: return new DecodedInfo(left.Type, new SingleText("*"));
+                case ExpressionType.Divide: return new DecodedInfo(left.Type, new SingleText("/"));
+                case ExpressionType.Modulo: return new DecodedInfo(left.Type, new SingleText("%"));
+                case ExpressionType.And: return new DecodedInfo(typeof(bool), new SingleText("AND"));
+                case ExpressionType.AndAlso: return new DecodedInfo(typeof(bool), new SingleText("AND"));
+                case ExpressionType.Or: return new DecodedInfo(typeof(bool), new SingleText("OR"));
+                case ExpressionType.OrElse: return new DecodedInfo(typeof(bool), new SingleText("OR"));
             }
             throw new NotImplementedException();
         }
@@ -326,15 +326,15 @@ namespace LambdicSql.Inside
                 case ExpressionType.NotEqual: ope = " IS NOT NULL"; break;
                 default: return null;
             }
-
+            //TODO .ToString(0)多い
             object leftObj, rightObj;
-            var leftIsParam = Context.Parameters.TryGetParam(left.Text, out leftObj);
-            var rightIsParam = Context.Parameters.TryGetParam(right.Text, out rightObj);
+            var leftIsParam = Context.Parameters.TryGetParam(left.Text.ToString(0), out leftObj);
+            var rightIsParam = Context.Parameters.TryGetParam(right.Text.ToString(0), out rightObj);
             var bothParam = (leftIsParam && rightIsParam);
 
             var isParams = new[] { leftIsParam, rightIsParam };
             var objs = new[] { leftObj, rightObj };
-            var names = new[] { left.Text, right.Text };
+            var names = new[] { left.Text.ToString(0), right.Text.ToString(0) };
             var targetTexts = new[] { right.Text, left.Text };
             for (int i = 0; i < isParams.Length; i++)
             {
@@ -348,7 +348,7 @@ namespace LambdicSql.Inside
                         return null;
                     }
                     Context.Parameters.Remove(names[i]);
-                    return new DecodedInfo(null, "(" + targetTexts[i] + ")" + ope);
+                    return new DecodedInfo(null, targetTexts[i].ConcatAround("(", ")" + ope));
                 }
             }
             return null;
@@ -384,12 +384,12 @@ namespace LambdicSql.Inside
             //array.
             if (obj != null && obj.GetType().IsArray)
             {
-                var list = new List<string>();
+                var list = new List<IText>();
                 foreach (var e in (IEnumerable)obj)
                 {
                     list.Add(ToString(e));
                 }
-                return new DecodedInfo(exp.Type, string.Join(", ", list.ToArray()));
+                return new DecodedInfo(exp.Type, new HorizontalText(list.ToArray()));
             }
 
             //value type is SqlSyntax
@@ -399,9 +399,9 @@ namespace LambdicSql.Inside
                 if (_sqlSyntaxCustomizer != null)
                 {
                     var ret = _sqlSyntaxCustomizer.ToString(this, obj);
-                    if (ret != null) return new DecodedInfo(exp.Type, obj.ToString().ToUpper());
+                    if (ret != null) return new DecodedInfo(exp.Type, ret);
                 }
-                return new DecodedInfo(exp.Type, obj.ToString().ToUpper());
+                return new DecodedInfo(exp.Type, new SingleText(obj.ToString().ToUpper()));
             }
 
             //normal object.
@@ -417,7 +417,7 @@ namespace LambdicSql.Inside
                 }
 
                 //use field name.
-                return new DecodedInfo(exp.Type, Context.Parameters.Push(obj, name, metadataToken));
+                return new DecodedInfo(exp.Type, new SingleText(Context.Parameters.Push(obj, name, metadataToken)));
             }
 
             //DbParam.
@@ -434,7 +434,7 @@ namespace LambdicSql.Inside
                 var param = ((DbParam)obj);
                 obj = param.Value;
                 //use field name.
-                return new DecodedInfo(exp.Type.GetGenericArguments()[0], Context.Parameters.Push(obj, name, metadataToken, param));
+                return new DecodedInfo(exp.Type.GetGenericArguments()[0], new SingleText(Context.Parameters.Push(obj, name, metadataToken, param)));
             }
             
             //SqlExpression.
@@ -461,7 +461,7 @@ namespace LambdicSql.Inside
                 }
 
                 //use field name.
-                return new DecodedInfo(exp.Type, Context.Parameters.Push(obj, name, metadataToken));
+                return new DecodedInfo(exp.Type, new SingleText(Context.Parameters.Push(obj, name, metadataToken)));
             }
         }
 

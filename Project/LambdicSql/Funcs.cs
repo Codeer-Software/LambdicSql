@@ -205,7 +205,7 @@ namespace LambdicSql
         /// <returns>expression1 or expression2.</returns>
         public static T NVL<T>(T expression1, T expression2) => InvalitContext.Throw<T>(nameof(NVL));
 
-        internal static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static IText ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
             var args = method.Arguments.Select(e => converter.ToString(e)).ToArray();
@@ -213,16 +213,19 @@ namespace LambdicSql
             {
                 case nameof(Sum):
                 case nameof(Count):
-                    if (method.Arguments.Count == 2) return method.Method.Name.ToUpper() + "(" + args[0].ToUpper() + " " + args[1] + ")";
+                    if (method.Arguments.Count == 2)
+                    {
+                        return new HorizontalText() { IsFunctional = true } + method.Method.Name.ToUpper() + "(" + new HorizontalText(" ", args) + ")";
+                    }
                     break;
                 case nameof(Extract):
-                    return method.Method.Name.ToUpper() + "(" + args[0].ToUpper() + " FROM " + args[1] + ")";
+                    return new HorizontalText() { IsFunctional = true } + (method.Method.Name.ToUpper() + "(") + args[0] + " FROM " + args[1] + ")";
                 case nameof(Cast):
-                    return "CAST((" + args[0] + ") AS " + converter.Context.Parameters.ResolvePrepare(args[1]) + ")";
+                    return new HorizontalText() { IsFunctional = true } + "CAST((" + args[0] + ") AS " + converter.Context.Parameters.ResolvePrepare(args[1].ToString(0)) + ")";
                 default:
                     break;
             }
-            return method.Method.Name.ToUpper() + "(" + string.Join(", ", args) + ")";
+            return new HorizontalText() { IsFunctional = true } + method.Method.Name.ToUpper() + "(" + new HorizontalText(", ", args) + ")";
         }
     }
 }

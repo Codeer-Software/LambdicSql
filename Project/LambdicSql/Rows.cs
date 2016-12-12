@@ -26,18 +26,18 @@ namespace LambdicSql
         /// <param name="following">Following row count.</param>
         public Rows(int preceding, int following) { InvalitContext.Throw("new " + nameof(Rows)); }
 
-        static string ToString(ISqlStringConverter converter, NewExpression exp)
+        static IText ToString(ISqlStringConverter converter, NewExpression exp)
         {
             var args = exp.Arguments.Select(e => converter.ToString(e)).ToArray();
             if (exp.Arguments.Count == 1)
             {
-                return Environment.NewLine + "\tROWS " + args[0] + " PRECEDING";
+                return new SingleText("ROWS " + args[0] + " PRECEDING");
             }
             else
             {
                 //Sql server can't use parameter.
-                return Environment.NewLine + "\tROWS BETWEEN " + converter.Context.Parameters.ResolvePrepare(args[0]) +
-                    " PRECEDING AND " + converter.Context.Parameters.ResolvePrepare(args[1]) + " FOLLOWING";
+                return new SingleText("ROWS BETWEEN " + converter.Context.Parameters.ResolvePrepare(args[0].ToString(0)) +
+                    " PRECEDING AND " + converter.Context.Parameters.ResolvePrepare(args[1].ToString(0)) + " FOLLOWING");
             }
         }
     }

@@ -254,6 +254,9 @@ WHERE (@val1) = (@val2)", new Params { { "@val1", (long)1 }, { "@val2", 1 } });
                 From(db.tbl_staff).
                 Where(val1 == (int)(short)val2 + 3 + (IntObjectImplicit1)obj2 + (int)(IntObjectExplicit1)obj1));
 
+
+            query.Gen(_connection);
+
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,

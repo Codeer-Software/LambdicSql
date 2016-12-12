@@ -34,7 +34,14 @@ namespace LambdicSql.Inside
             return text;
         }
 
-        //TODO Can I define it here?
+        internal static IText AdjustSubQueryString(IText text)
+        {
+            if (text.ToString(0).Replace(Environment.NewLine, string.Empty).Replace("\t", " ").Replace("(", string.Empty).Trim().IndexOf("SELECT") != 0) return text;
+
+            return text.ConcatAround("(", ")");
+        }
+
+
         internal static string AdjustSubQueryString(string text)
         {
             if (text.Replace(Environment.NewLine, string.Empty).Replace("\t", " ").Replace("(", string.Empty).Trim().IndexOf("SELECT") != 0) return text;
@@ -56,7 +63,7 @@ namespace LambdicSql.Inside
             return line;
         }
 
-        internal static string AdjustSubQuery(Expression e, string v)
+        internal static IText AdjustSubQuery(Expression e, IText v)
         {
             if (typeof(IClauseChain).IsAssignableFrom(e.Type))
             {

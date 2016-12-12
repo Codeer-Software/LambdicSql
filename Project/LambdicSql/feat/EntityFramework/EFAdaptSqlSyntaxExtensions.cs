@@ -22,7 +22,7 @@ namespace LambdicSql.feat.EntityFramework
         /// <returns>Entity.</returns>
         public static TEntity T<TEntity>(this IQueryable<TEntity> queryable) => InvalitContext.Throw<TEntity>(nameof(T));
 
-        static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        static IText ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
             switch (method.Method.Name)
@@ -30,9 +30,6 @@ namespace LambdicSql.feat.EntityFramework
                 case nameof(T): return converter.ToString(method.Arguments[0]);
             }
             throw new NotSupportedException();
-
-
-
         }
     }
 }

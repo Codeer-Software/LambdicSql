@@ -49,6 +49,8 @@ namespace TestCheck35
                 From(db.tbl_remuneration).
                 Join(db.tbl_staff, db.tbl_staff.id == db.tbl_remuneration.staff_id));
 
+            query.Gen(_connection);
+
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,

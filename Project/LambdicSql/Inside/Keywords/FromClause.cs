@@ -8,39 +8,42 @@ namespace LambdicSql.Inside.Keywords
 {
     static class FromClause
     {
-        internal static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
-            => string.Join(string.Empty, methods.Select(m=> MethodToString(converter, m)).ToArray());
+        internal static IText ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+            => new VerticalText(methods.Select(m=> MethodToString(converter, m)).ToArray());
 
-        static string MethodToString(ISqlStringConverter converter, MethodCallExpression method)
+        static IText MethodToString(ISqlStringConverter converter, MethodCallExpression method)
         {
-            string name = method.Method.Name;
+            HorizontalText name = null;
             var startIndex = method.SkipMethodChain(0);
-            switch (name)
+            switch (method.Method.Name)
             {
                 case nameof(LambdicSql.Keywords.From):
-                    return Environment.NewLine + "FROM " + ExpressionToTableName(converter, method.Arguments[startIndex]);
+                    return new HorizontalText() { IsFunctional = true } + "FROM " + ExpressionToTableName(converter, method.Arguments[startIndex]);
                 case nameof(LambdicSql.Keywords.CrossJoin):
-                    return Environment.NewLine + "\tCROSS JOIN " + ExpressionToTableName(converter, method.Arguments[startIndex]);
+                    return new HorizontalText() { IsFunctional = true, Indent = 1 } + "CROSS JOIN " + ExpressionToTableName(converter, method.Arguments[startIndex]);
                 case nameof(LambdicSql.Keywords.LeftJoin):
-                    name = "LEFT JOIN";
+                    name = new HorizontalText(" ") { IsFunctional = true, Indent = 1 } + "LEFT JOIN";
                     break;
                 case nameof(LambdicSql.Keywords.RightJoin):
-                    name = "RIGHT JOIN";
+                    name = new HorizontalText(" ") { IsFunctional = true, Indent = 1 } + "RIGHT JOIN";
+                    break;
+                case nameof(LambdicSql.Keywords.Join):
+                    name = new HorizontalText(" ") { IsFunctional = true, Indent = 1 } + "JOIN";
                     break;
             }
             var condition = converter.ToString(method.Arguments[startIndex + 1]);
-            return Environment.NewLine + "\t" + name.ToUpper() + " " + ExpressionToTableName(converter, method.Arguments[startIndex]) + " ON " + condition;
+            return name + ExpressionToTableName(converter, method.Arguments[startIndex]) + "ON" + condition;
         }
 
-        static string ExpressionToTableName(ISqlStringConverter decoder, Expression exp)
+        static IText ExpressionToTableName(ISqlStringConverter decoder, Expression exp)
             => SqlDisplayAdjuster.AdjustSubQuery(exp, ExpressionToTableNameCore(decoder, exp));
 
-        static string ExpressionToTableNameCore(ISqlStringConverter decoder, Expression exp)
+        static IText ExpressionToTableNameCore(ISqlStringConverter decoder, Expression exp)
         {
             var arry = exp as NewArrayExpression;
             if (arry != null)
             {
-                return string.Join(",", arry.Expressions.Select(e => ExpressionToTableName(decoder, e)).ToArray());
+                return new HorizontalText(",", arry.Expressions.Select(e => ExpressionToTableName(decoder, e)).ToArray());
             }
 
             var text = decoder.ToString(exp);
@@ -52,7 +55,7 @@ namespace LambdicSql.Inside.Keywords
                 if (member != null)
                 {
                     var x = member.Member.Name;
-                    return text + " " + x;
+                    return new HorizontalText(" ") + text + x;
                 }
                 return text;
             }
@@ -61,7 +64,7 @@ namespace LambdicSql.Inside.Keywords
             var body = GetSqlExpressionBody(exp);
             if (body != null)
             {
-                return text + " " + body;
+                return new HorizontalText(" ") + text + body;
             }
             return text;
         }

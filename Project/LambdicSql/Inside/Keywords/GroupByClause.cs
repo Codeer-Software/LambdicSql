@@ -6,7 +6,7 @@ namespace LambdicSql.Inside.Keywords
 {
     static class GroupByClause
     {
-        internal static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static IText ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
             var name = string.Empty;
@@ -14,16 +14,16 @@ namespace LambdicSql.Inside.Keywords
             {
                 case nameof(LambdicSql.Keywords.GroupBy):
                     name = "GROUP BY";
-                    return Environment.NewLine + name + " " + converter.ToString(method.Arguments[method.SkipMethodChain(0)]);
+                    return new HorizontalText() + name + " " + converter.ToString(method.Arguments[method.SkipMethodChain(0)]);
                 case nameof(LambdicSql.Keywords.GroupByWithRollup):
                     name = "GROUP BY";
-                    return Environment.NewLine + name + " " + converter.ToString(method.Arguments[method.SkipMethodChain(0)]) + " WITH ROLLUP";
+                    return new HorizontalText() + name + " " + converter.ToString(method.Arguments[method.SkipMethodChain(0)]) + " WITH ROLLUP";
                 case nameof(LambdicSql.Keywords.GroupByRollup): name = "GROUP BY ROLLUP"; break;
                 case nameof(LambdicSql.Keywords.GroupByCube): name = "GROUP BY CUBE"; break;
                 case nameof(LambdicSql.Keywords.GroupByGroupingSets): name = "GROUP BY GROUPING SETS"; break;
                 default: throw new NotSupportedException();
             }
-            return Environment.NewLine + name + "(" + converter.ToString(method.Arguments[method.SkipMethodChain(0)]) + ")";
+            return new HorizontalText() + name + "(" + converter.ToString(method.Arguments[method.SkipMethodChain(0)]) + ")";
         }
     }
 }

@@ -15,9 +15,9 @@ namespace LambdicSql.SqlBase
         /// <summary>
         /// Convert object to sql text.
         /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        string ToString(object obj);
+        /// <param name="obj">object.</param>
+        /// <returns>text.</returns>
+        IText ToString(object obj);
 
         /// <summary>
         /// Get object in expression.

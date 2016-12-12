@@ -27,7 +27,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="convertor">Convertor.</param>
         /// <returns>SQL text.</returns>
-        public string ToString(ISqlStringConverter convertor) => _core.ToString(convertor);
+        public IText ToString(ISqlStringConverter convertor) => _core.ToString(convertor);
 
         internal SqlQuery(ISqlExpressionBase core) { _core = core; }
     }

@@ -6,7 +6,7 @@ namespace LambdicSql.Inside.Keywords
 {
     static class DeleteClause
     {
-        internal static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
-            => Environment.NewLine + "DELETE";
+        internal static IText ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+            => new SingleText("DELETE");
     }
 }

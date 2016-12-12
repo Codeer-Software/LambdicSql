@@ -14,7 +14,7 @@ namespace LambdicSql.Inside
             _core = core;
         }
 
-        public override string ToString(ISqlStringConverter converter)
-            => _core == null ? string.Empty : converter.ToString(_core);
+        public override IText ToString(ISqlStringConverter converter)
+            => _core == null ? new SingleText(string.Empty) : converter.ToString(_core);
     }
 }

@@ -8,7 +8,7 @@ namespace LambdicSql.Inside.Keywords
 {
     static class SelectClause
     {
-        internal static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static IText ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
 
@@ -18,10 +18,18 @@ namespace LambdicSql.Inside.Keywords
             {
                 modify.Add(method.Arguments[i]);
             }
+            //TODO modifyの扱いが良くないのと、これは改行入れて欲しくないの表現が難しい　後文字列化も良くないけど、しょうがないか？
+            //まあ、これは改行入れて欲しくないは文字列でいい気もするけど・・・
+            var x = "SELECT";
+            if (modify.Count != 0)
+            {
+                x += " ";
+                x += string.Join(" ", modify.Select(e => converter.ToString(e).ToString(0)).ToArray());
+            }
 
             //select core.
             var selectTarget = method.Arguments[method.Arguments.Count - 1];
-            var selectTargetText = string.Empty;
+            IText selectTargetText = null;
             ObjectCreateInfo createInfo = null;
 
             //*
@@ -29,31 +37,35 @@ namespace LambdicSql.Inside.Keywords
             {
                 var asteriskType = selectTarget.Type.IsGenericType ? selectTarget.Type.GetGenericTypeDefinition() : null;
                 if (asteriskType == typeof(Asterisk<>)) createInfo = ObjectCreateAnalyzer.MakeSelectInfo(asteriskType);
-                selectTargetText = " *";
+                x += " *";
             }
             //new { item = db.tbl.column }
             else
             {
                 createInfo = ObjectCreateAnalyzer.MakeSelectInfo(selectTarget);
-                selectTargetText = Environment.NewLine + "\t" +
-                    string.Join("," + Environment.NewLine + "\t", createInfo.Members.Select(e => ToStringSelectedElement(converter, e)).ToArray());
+                selectTargetText =
+                    new VerticalText(",", createInfo.Members.Select(e => ToStringSelectedElement(converter, e)).ToArray()) { Indent = 1 };
             }
 
             //remember creat info.
             if (converter.Context.ObjectCreateInfo == null) converter.Context.ObjectCreateInfo = createInfo;
 
-            //return select clause text.
-            return Environment.NewLine + string.Join(" ", new[] { "SELECT" }.Concat(modify.Select(e => converter.ToString(e))).ToArray()) + selectTargetText;
+       //     return Environment.NewLine + string.Join(" ", new[] { "SELECT" }.Concat(modify.Select(e => converter.ToString(e))).ToArray()) + selectTargetText;
+
+           //return select clause text.
+            var select = new HorizontalText(" ") + x;
+       //     select.AddRange(modify.Select(e => converter.ToString(e)));
+            return selectTargetText == null ? (IText)new SingleText(x) : new VerticalText(new SingleText(x), selectTargetText);
         }
 
-        static string ToStringSelectedElement(ISqlStringConverter converter, ObjectCreateMemberInfo element)
+        static IText ToStringSelectedElement(ISqlStringConverter converter, ObjectCreateMemberInfo element)
         {
             //single select.
             //for example, COUNT(*).
             if (string.IsNullOrEmpty(element.Name)) return converter.ToString(element.Expression);
 
             //normal select.
-            return converter.ToString(element.Expression) + " AS " + element.Name;
+            return new HorizontalText() + converter.ToString(element.Expression) + " AS " + element.Name;
         }
     }
 }

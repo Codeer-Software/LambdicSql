@@ -7,11 +7,11 @@ namespace LambdicSql.Inside.Keywords
 {
     static class LimitClause
     {
-        internal static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static IText ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
-            var args = string.Join(", ", method.Arguments.Skip(method.SkipMethodChain(0)).Select(e=>converter.ToString(e)).ToArray());
-            return Environment.NewLine + "LIMIT " + args;
+            var args = new HorizontalText(", ", method.Arguments.Skip(method.SkipMethodChain(0)).Select(e=>converter.ToString(e)).ToArray());
+            return new HorizontalText() { IsFunctional = true} + "LIMIT " + args;
         }
     }
 }

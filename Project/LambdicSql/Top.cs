@@ -18,16 +18,16 @@ namespace LambdicSql
         /// <param name="count">cout.</param>
         public Top(long count) { InvalitContext.Throw("new " + nameof(Assign)); }
 
-        static string ToString(ISqlStringConverter converter, NewExpression exp)
+        static IText ToString(ISqlStringConverter converter, NewExpression exp)
             => ToString(converter, exp.Arguments);
 
-        static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        static IText ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
             => ToString(converter, methods[0].Arguments);
 
-        static string ToString(ISqlStringConverter converter, ReadOnlyCollection<Expression> arguments)
+        static IText ToString(ISqlStringConverter converter, ReadOnlyCollection<Expression> arguments)
         {
             var args = arguments.Select(e => converter.ToString(e)).ToArray();
-            return "TOP " + converter.Context.Parameters.ResolvePrepare(args[0]);
+            return new SingleText("TOP " + converter.Context.Parameters.ResolvePrepare(args[0].ToString(0)));
         }
     }
 }

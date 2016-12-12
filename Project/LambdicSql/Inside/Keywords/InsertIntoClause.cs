@@ -7,10 +7,10 @@ namespace LambdicSql.Inside.Keywords
 {
     static class InsertIntoClause
     {
-        internal static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
-            => string.Join(string.Empty, methods.Select(m => MethodToString(converter, m)).ToArray());
+        internal static IText ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+            => new VerticalText(methods.Select(m => MethodToString(converter, m)).ToArray());
 
-        static string MethodToString(ISqlStringConverter converter, MethodCallExpression method)
+        static IText MethodToString(ISqlStringConverter converter, MethodCallExpression method)
         {
             switch (method.Method.Name)
             {
@@ -20,15 +20,16 @@ namespace LambdicSql.Inside.Keywords
             throw new NotSupportedException();
         }
 
-        static string MethodToStringValues(ISqlStringConverter converter, MethodCallExpression method)
-            => Environment.NewLine + "\tVALUES (" + converter.ToString(method.Arguments[1]) + ")";
+        static IText MethodToStringValues(ISqlStringConverter converter, MethodCallExpression method)
+            => new HorizontalText() { IsFunctional = true, Indent = 1} + "VALUES (" + converter.ToString(method.Arguments[1]) + ")";
 
-        static string MethodToStringInsertInto(ISqlStringConverter converter, MethodCallExpression method)
+        static IText MethodToStringInsertInto(ISqlStringConverter converter, MethodCallExpression method)
         {
             var table = converter.ToString(method.Arguments[0]);
             //column should not have a table name.
-            var arg = converter.ToString(method.Arguments[1]).Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(e => GetColumnOnly(e)).ToArray();
-            return Environment.NewLine + "INSERT INTO " + table + "(" + string.Join(", ", arg) + ")";
+            //TODO Assign修正
+            var arg = converter.ToString(method.Arguments[1]);//@@@.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(e => GetColumnOnly(e)).ToArray();
+            return new HorizontalText() { IsFunctional = true, Indent = 1 } + "INSERT INTO " + table + "(" + new HorizontalText(", ", arg) + ")";
         }
 
         static string GetColumnOnly(string src)

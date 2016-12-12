@@ -17,7 +17,7 @@ namespace LambdicSql.Inside
             else if (_after.DbInfo != null) DbInfo = _after.DbInfo;
         }
 
-        public override string ToString(ISqlStringConverter converter)
-            => _before.ToString(converter) + Environment.NewLine + _after.ToString(converter);
+        public override IText ToString(ISqlStringConverter converter)
+            => new VerticalText(_before.ToString(converter), _after.ToString(converter));
     }
 }

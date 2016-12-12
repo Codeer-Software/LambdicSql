@@ -6,7 +6,7 @@ namespace LambdicSql.Inside.Keywords
 {
     static class SetOperation
     {
-        internal static string ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static IText ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
             var text = Environment.NewLine + method.Method.Name.ToUpper();
@@ -19,7 +19,7 @@ namespace LambdicSql.Inside.Keywords
                     text += " ALL";
                 }
             }
-            return text;
+            return new SingleText(text);
         }
     }
 }
