@@ -394,10 +394,13 @@ FROM tbl_remuneration");
                 }).
                 From(db.tbl_remuneration));
 
+            query.Gen(_connection);
+
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
-@"SELECT
+@"
+SELECT
 	tbl_remuneration.payment_date AS PaymentDate,
 	tbl_remuneration.money AS Money
 FROM tbl_remuneration");
@@ -419,7 +422,8 @@ FROM tbl_remuneration");
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
-@"SELECT TOP 1
+@"
+SELECT TOP 1
 	tbl_remuneration.payment_date AS PaymentDate,
 	tbl_remuneration.money AS Money
 FROM tbl_remuneration");
@@ -435,7 +439,8 @@ FROM tbl_remuneration");
             var datas = _connection.Query<Remuneration>(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
-@"SELECT *
+@"
+SELECT *
 FROM tbl_remuneration");
         }
 
@@ -449,7 +454,8 @@ FROM tbl_remuneration");
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
-@"SELECT *
+@"
+SELECT *
 FROM tbl_remuneration");
         }
 
@@ -463,7 +469,8 @@ FROM tbl_remuneration");
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
-@"SELECT *
+@"
+SELECT *
 FROM tbl_remuneration");
         }
 
@@ -479,7 +486,8 @@ FROM tbl_remuneration");
             var datas = _connection.Query<Remuneration>(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
-@"SELECT TOP 2 *
+@"
+SELECT TOP 2 *
 FROM tbl_remuneration");
         }
 
@@ -495,7 +503,8 @@ FROM tbl_remuneration");
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
-@"SELECT TOP 2 *
+@"
+SELECT TOP 2 *
 FROM tbl_remuneration");
         }
 
@@ -513,7 +522,8 @@ FROM tbl_remuneration");
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
-@"SELECT ALL
+@"
+SELECT ALL
 	tbl_remuneration.payment_date AS PaymentDate,
 	tbl_remuneration.money AS Money
 FROM tbl_remuneration");
@@ -533,7 +543,8 @@ FROM tbl_remuneration");
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
-@"SELECT DISTINCT
+@"
+SELECT DISTINCT
 	tbl_remuneration.payment_date AS PaymentDate,
 	tbl_remuneration.money AS Money
 FROM tbl_remuneration");
@@ -549,7 +560,8 @@ FROM tbl_remuneration");
             var datas = _connection.Query<Remuneration>(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
-@"SELECT ALL *
+@"
+SELECT ALL *
 FROM tbl_remuneration");
         }
 
@@ -563,7 +575,8 @@ FROM tbl_remuneration");
             var datas = _connection.Query<Remuneration>(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
-@"SELECT DISTINCT *
+@"
+SELECT DISTINCT *
 FROM tbl_remuneration");
         }
 
@@ -577,7 +590,8 @@ FROM tbl_remuneration");
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
-@"SELECT ALL *
+@"
+SELECT ALL *
 FROM tbl_remuneration");
         }
 
@@ -591,7 +605,8 @@ FROM tbl_remuneration");
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
-@"SELECT DISTINCT *
+@"
+SELECT DISTINCT *
 FROM tbl_remuneration");
         }
 
@@ -607,7 +622,8 @@ FROM tbl_remuneration");
             var datas = _connection.Query<Remuneration>(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
-@"SELECT ALL TOP 2 *
+@"
+SELECT ALL TOP 2 *
 FROM tbl_remuneration");
         }
 
@@ -623,7 +639,8 @@ FROM tbl_remuneration");
             var datas = _connection.Query<Remuneration>(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
-@"SELECT DISTINCT TOP 2 *
+@"
+SELECT DISTINCT TOP 2 *
 FROM tbl_remuneration");
         }
 
@@ -639,7 +656,8 @@ FROM tbl_remuneration");
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
-@"SELECT ALL TOP 2 *
+@"
+SELECT ALL TOP 2 *
 FROM tbl_remuneration");
         }
 
@@ -655,7 +673,8 @@ FROM tbl_remuneration");
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
-@"SELECT DISTINCT TOP 2 *
+@"
+SELECT DISTINCT TOP 2 *
 FROM tbl_remuneration");
         }
 

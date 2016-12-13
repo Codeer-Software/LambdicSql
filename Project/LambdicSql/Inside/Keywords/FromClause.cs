@@ -18,9 +18,9 @@ namespace LambdicSql.Inside.Keywords
             switch (method.Method.Name)
             {
                 case nameof(LambdicSql.Keywords.From):
-                    return new HorizontalText() { IsFunctional = true } + "FROM " + ExpressionToTableName(converter, method.Arguments[startIndex]);
+                    return new HorizontalText(" ") { IsFunctional = true } + "FROM" + ExpressionToTableName(converter, method.Arguments[startIndex]);
                 case nameof(LambdicSql.Keywords.CrossJoin):
-                    return new HorizontalText() { IsFunctional = true, Indent = 1 } + "CROSS JOIN " + ExpressionToTableName(converter, method.Arguments[startIndex]);
+                    return new HorizontalText(" ") { IsFunctional = true, Indent = 1 } + "CROSS JOIN" + ExpressionToTableName(converter, method.Arguments[startIndex]);
                 case nameof(LambdicSql.Keywords.LeftJoin):
                     name = new HorizontalText(" ") { IsFunctional = true, Indent = 1 } + "LEFT JOIN";
                     break;
@@ -55,7 +55,7 @@ namespace LambdicSql.Inside.Keywords
                 if (member != null)
                 {
                     var x = member.Member.Name;
-                    return new HorizontalText(" ") + text + x;
+                    return new HorizontalText(" ") { IsNotLineChange = true } + text + x;
                 }
                 return text;
             }
@@ -64,7 +64,7 @@ namespace LambdicSql.Inside.Keywords
             var body = GetSqlExpressionBody(exp);
             if (body != null)
             {
-                return new HorizontalText(" ") + text + body;
+                return new HorizontalText(" ") { IsNotLineChange = true } + text + body;
             }
             return text;
         }

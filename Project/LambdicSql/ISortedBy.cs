@@ -22,11 +22,11 @@ namespace LambdicSql
         /// <param name="target">target column.</param>
         public Asc(object target) { InvalitContext.Throw("new " + nameof(Asc)); }
 
-        static string ToString(ISqlStringConverter cnv, NewExpression exp)
-            => cnv.ToString(exp.Arguments[0]) + " ASC";
+        static IText ToString(ISqlStringConverter cnv, NewExpression exp)
+            => new HorizontalText(" ") + cnv.ToString(exp.Arguments[0]) + "ASC";
 
-        static string ToString(ISqlStringConverter cnv, MethodCallExpression[] methods)
-            => cnv.ToString(methods[0].Arguments[0]) + " ASC";
+        static IText ToString(ISqlStringConverter cnv, MethodCallExpression[] methods)
+            => new HorizontalText(" ") + cnv.ToString(methods[0].Arguments[0]) + "ASC";
     }
 
     /// <summary>
@@ -41,10 +41,10 @@ namespace LambdicSql
         /// <param name="target">target column.</param>
         public Desc(object target) { InvalitContext.Throw("new " + nameof(Desc)); }
 
-        static string ToString(ISqlStringConverter cnv, NewExpression exp)
-            => cnv.ToString(exp.Arguments[0]) + " DESC";
+        static IText ToString(ISqlStringConverter cnv, NewExpression exp)
+            => new HorizontalText(" ") + cnv.ToString(exp.Arguments[0]) + "DESC";
 
-        static string ToString(ISqlStringConverter cnv, MethodCallExpression[] methods)
-            => cnv.ToString(methods[0].Arguments[0]) + " DESC";
+        static IText ToString(ISqlStringConverter cnv, MethodCallExpression[] methods)
+            => new HorizontalText(" ") + cnv.ToString(methods[0].Arguments[0]) + "DESC";
     }
 }

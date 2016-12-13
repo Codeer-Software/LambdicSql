@@ -10,7 +10,7 @@ namespace LambdicSql.Inside.Keywords
         {
             var method = methods[0];
             var count = converter.ToString(method.Arguments[method.SkipMethodChain(0)]);
-            return new SingleText("FETCH NEXT " + count + " ROWS ONLY");
+            return new HorizontalText(" ") + "FETCH NEXT" + count + "ROWS ONLY";
         }
     }
 }

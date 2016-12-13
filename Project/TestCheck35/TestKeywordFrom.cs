@@ -72,11 +72,12 @@ FROM tbl_remuneration");
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
+            query.Gen(_connection);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
 	sub.payment_date AS PaymentDate,
 	sub.money AS Money
-FROM 
+FROM
 	(SELECT *
 	FROM tbl_remuneration) sub");
         }
@@ -100,7 +101,7 @@ FROM
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT *
-FROM 
+FROM
 	(SELECT *
 	FROM tbl_remuneration)");
         }

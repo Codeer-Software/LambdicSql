@@ -9,7 +9,7 @@ namespace LambdicSql.Inside.Keywords
         internal static IText ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
-            var text = Environment.NewLine + method.Method.Name.ToUpper();
+            var text = method.Method.Name.ToUpper();
             var index = method.SkipMethodChain(0);
             if (index < method.Arguments.Count)
             {

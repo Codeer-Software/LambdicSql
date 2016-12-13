@@ -816,6 +816,9 @@ HAVING (@p_0) < (SUM(tbl_remuneration.money))",
             var target = Sql<DB>.Create(db => OrderBy(new Asc(db.tbl_remuneration.money), new Desc(db.tbl_remuneration.staff_id)));
             query = query.Concat(target);
 
+
+            query.Gen(_connection);
+
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
