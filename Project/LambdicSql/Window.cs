@@ -270,28 +270,26 @@ namespace LambdicSql
 
         static IText ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
-            var func = new HorizontalText();
+            var v = new VerticalText();
+            IText func = null;
             switch (methods[0].Method.Name)
             {
                 case nameof(Sum):
                 case nameof(Count):
-                    func = func + Funcs.ToString(converter, new[] { methods[0] });
+                    v.Add(Funcs.ToString(converter, new[] { methods[0] }));
                     break;
                 default:
                     var method = methods[0];
-                    func = func + new HorizontalText() { IsFunctional = true } + method.Method.Name.ToUpper() + "(" + 
-                        new HorizontalText(", ", method.Arguments.Skip(method.SkipMethodChain(0)).Select(e => converter.ToString(e)).ToArray()) + ")";
+                   v.Add(new HorizontalText() { IsFunctional = true } + method.Method.Name.ToUpper() + "(" + 
+                        new HorizontalText(", ", method.Arguments.Skip(method.SkipMethodChain(0)).Select(e => converter.ToString(e)).ToArray()) + ")");
                     break;
             }
-
             var overMethod = methods[1];
-            var over = new HorizontalText() { IsFunctional = true } +
-                overMethod.Method.Name.ToUpper() + "(";
-            var args = new HorizontalText(" ", overMethod.Arguments.Skip(1).
+            v.Add(overMethod.Method.Name.ToUpper() + "(");
+            v.AddRange(1, overMethod.Arguments.Skip(1).
                 Where(e => !(e is ConstantExpression)). //Skip null.
                 Select(e => converter.ToString(e)).ToArray());
-
-            return func + " " + over + args +")";
+            return v.ConcatToBack(")");
         }
     }
 }

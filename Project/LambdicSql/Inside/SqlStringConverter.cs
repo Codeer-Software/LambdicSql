@@ -202,7 +202,8 @@ namespace LambdicSql.Inside
             var method = member.Expression as MethodCallExpression;
             if (method != null && method.Method.DeclaringType.IsSqlSyntax())
             {
-                var memberName = method.GetConverotrMethod()(this, new[] { method }) + "." + member.Member.Name;
+                //TODO あれ？なんでここってこんな流れ？
+                var memberName = method.GetConverotrMethod()(this, new[] { method }).ToString(0) + "." + member.Member.Name;
 
                 TableInfo table;
                 if (Context.DbInfo.GetLambdaNameAndTable().TryGetValue(memberName, out table))

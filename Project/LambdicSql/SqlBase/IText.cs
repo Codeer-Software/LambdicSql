@@ -85,7 +85,7 @@ namespace LambdicSql.SqlBase
         /// <summary>
         /// Is empty.
         /// </summary>
-        public bool IsEmpty => string.IsNullOrEmpty(_text);
+        public bool IsEmpty => string.IsNullOrEmpty(_text.Trim());
 
         /// <summary>
         /// To string.
@@ -166,7 +166,7 @@ namespace LambdicSql.SqlBase
         /// <param name="texts">Horizontal texts.</param>
         public HorizontalText(params IText[] texts)
         {
-            _texts.AddRange(texts);
+            _texts.AddRange(texts.Where(e=>!e.IsEmpty));
         }
 
         /// <summary>
@@ -205,27 +205,39 @@ namespace LambdicSql.SqlBase
         /// Add text.
         /// </summary>
         /// <param name="text">Text.</param>
-        public void Add(string text) => _texts.Add(new SingleText(text));
+        public void Add(string text)
+        {
+            if (string.IsNullOrEmpty(text.Trim())) return;
+            _texts.Add(new SingleText(text));
+        }
 
         /// <summary>
         /// Add text.
         /// </summary>
         /// <param name="text">Text.</param>
         /// <param name="indent">Indent.</param>
-        public void Add(string text, int indent) => _texts.Add(new SingleText(text, indent));
+        public void Add(string text, int indent)
+        {
+            if (string.IsNullOrEmpty(text.Trim())) return;
+            _texts.Add(new SingleText(text, indent));
+        }
 
         /// <summary>
         /// Add text.
         /// </summary>
         /// <param name="text">Text.</param>
-        public void Add(IText text) => _texts.Add(text);
+        public void Add(IText text)
+        {
+            if (text.IsEmpty) return;
+            _texts.Add(text);
+        }
 
         /// <summary>
         /// Add text.
         /// </summary>
         /// <param name="texts">Texts.</param>
         public void AddRange(IEnumerable<IText> texts)
-            => _texts.AddRange(texts);
+            => _texts.AddRange(texts.Where(e=>!e.IsEmpty));
 
         /// <summary>
         /// Concat to front and back.
@@ -239,7 +251,7 @@ namespace LambdicSql.SqlBase
             var dst = _texts.ToArray();
             dst[0] = dst[0].ConcatToFront(front);
             dst[dst.Length - 1] = dst[dst.Length - 1].ConcatToBack(back);
-            return new HorizontalText(_separator, dst);
+            return new HorizontalText(_separator, dst) { Indent = Indent, IsFunctional = IsFunctional, IsNotLineChange = IsNotLineChange };
         }
 
         /// <summary>
@@ -252,7 +264,7 @@ namespace LambdicSql.SqlBase
             if (_texts.Count == 0) return new HorizontalText(_separator, new SingleText(front)) { Indent = Indent, IsFunctional = IsFunctional, IsNotLineChange = IsNotLineChange };
             var dst = _texts.ToArray();
             dst[0] = dst[0].ConcatToFront(front);
-            return new HorizontalText(_separator, dst);
+            return new HorizontalText(_separator, dst) { Indent = Indent, IsFunctional = IsFunctional, IsNotLineChange = IsNotLineChange };
         }
 
         /// <summary>
@@ -265,7 +277,7 @@ namespace LambdicSql.SqlBase
             if (_texts.Count == 0) return new HorizontalText(_separator, new SingleText(back)) { Indent = Indent, IsFunctional = IsFunctional, IsNotLineChange = IsNotLineChange };
             var dst = _texts.ToArray();
             dst[dst.Length - 1] = dst[dst.Length - 1].ConcatToBack(back);
-            return new HorizontalText(_separator, dst);
+            return new HorizontalText(_separator, dst) { Indent = Indent, IsFunctional = IsFunctional, IsNotLineChange = IsNotLineChange };
         }
 
         //あー、この結合で内部的な事情をガッツリしったらなんとかなるな・・・
@@ -279,6 +291,7 @@ namespace LambdicSql.SqlBase
         /// <returns>result value.</returns>
         public static HorizontalText operator +(HorizontalText l, IText r)
         {
+            if (r.IsEmpty) return l;
             var dst = new HorizontalText(l._separator) { Indent = l.Indent, IsFunctional = l.IsFunctional, IsNotLineChange = l.IsNotLineChange };
             dst._texts.AddRange(l._texts);
 
@@ -303,6 +316,7 @@ namespace LambdicSql.SqlBase
         /// <returns>result value.</returns>
         public static HorizontalText operator +(HorizontalText l, string r)
         {
+            if (string.IsNullOrEmpty(r.Trim())) return l;
             var dst = new HorizontalText(l._separator) { Indent = l.Indent, IsFunctional = l.IsFunctional, IsNotLineChange = l.IsNotLineChange };
             dst._texts.AddRange(l._texts);
             dst._texts.Add(new SingleText(r));
@@ -344,7 +358,7 @@ namespace LambdicSql.SqlBase
         /// <param name="texts">Vertical texts.</param>
         public VerticalText(params IText[] texts)
         {
-            _texts.AddRange(texts);
+            _texts.AddRange(texts.Where(e=>!e.IsEmpty));
         }
 
         /// <summary>
@@ -355,7 +369,7 @@ namespace LambdicSql.SqlBase
         public VerticalText(string separator, params IText[] texts)
         {
             _separator = separator;
-            _texts.AddRange(texts);
+            _texts.AddRange(texts.Where(e => !e.IsEmpty));
         }
 
         /// <summary>
@@ -376,20 +390,32 @@ namespace LambdicSql.SqlBase
         /// Add text.
         /// </summary>
         /// <param name="text">Text.</param>
-        public void Add(string text) => _texts.Add(new SingleText(text));
+        public void Add(string text)
+        {
+            if (string.IsNullOrEmpty(text.Trim())) return;
+            _texts.Add(new SingleText(text));
+        }
 
         /// <summary>
         /// Add text.
         /// </summary>
         /// <param name="text">Text.</param>
         /// <param name="indent">Indent.</param>
-        public void Add(string text, int indent) => _texts.Add(new SingleText(text, indent));
+        public void Add(string text, int indent)
+        {
+            if (string.IsNullOrEmpty(text.Trim())) return;
+            _texts.Add(new SingleText(text, indent));
+        }
 
         /// <summary>
         /// Add text.
         /// </summary>
         /// <param name="text">Text.</param>
-        public void Add(IText text) => _texts.Add(text);
+        public void Add(IText text)
+        {
+            if (text.IsEmpty) return;
+            _texts.Add(text);
+        }
 
         /// <summary>
         /// Add texts.
@@ -398,7 +424,7 @@ namespace LambdicSql.SqlBase
         /// <param name="texts">Texts.</param>
         public void AddRange(int indent, IEnumerable<IText> texts)
         {
-            foreach (var e in texts)
+            foreach (var e in texts.Where(e=>!e.IsEmpty))
             {
                 _texts.Add(new HorizontalText(e) { Indent = 1 });
             }
@@ -412,11 +438,11 @@ namespace LambdicSql.SqlBase
         /// <returns>Text.</returns>
         public IText ConcatAround(string front, string back)
         {
-            if (_texts.Count == 0) return new VerticalText(_separator, new SingleText(front + back));
+            if (_texts.Count == 0) return new VerticalText(_separator, new SingleText(front + back)) { Indent = Indent };
             var dst = _texts.ToArray();
             dst[0] = dst[0].ConcatToFront(front);
             dst[dst.Length - 1] = dst[dst.Length - 1].ConcatToBack(back);
-            return new VerticalText(_separator, dst);
+            return new VerticalText(_separator, dst) { Indent = Indent };
         }
 
         /// <summary>
@@ -426,10 +452,10 @@ namespace LambdicSql.SqlBase
         /// <returns>Text.</returns>
         public IText ConcatToFront(string front)
         {
-            if (_texts.Count == 0) return new VerticalText(_separator, new SingleText(front));
+            if (_texts.Count == 0) return new VerticalText(_separator, new SingleText(front)) { Indent = Indent };
             var dst = _texts.ToArray();
             dst[0] = dst[0].ConcatToFront(front);
-            return new VerticalText(_separator, dst);
+            return new VerticalText(_separator, dst) { Indent = Indent };
         }
 
         /// <summary>
@@ -439,10 +465,10 @@ namespace LambdicSql.SqlBase
         /// <returns></returns>
         public IText ConcatToBack(string back)
         {
-            if (_texts.Count == 0) return new VerticalText(_separator, new SingleText(back));
+            if (_texts.Count == 0) return new VerticalText(_separator, new SingleText(back)) { Indent = Indent };
             var dst = _texts.ToArray();
             dst[dst.Length - 1] = dst[dst.Length - 1].ConcatToBack(back);
-            return new VerticalText(_separator, dst);
+            return new VerticalText(_separator, dst) { Indent = Indent };
         }
     }
 }

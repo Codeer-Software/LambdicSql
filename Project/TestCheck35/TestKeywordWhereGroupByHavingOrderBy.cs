@@ -191,6 +191,8 @@ GROUP BY ROLLUP(tbl_remuneration.id, tbl_remuneration.staff_id)");
                From(db.tbl_remuneration).
                GroupByWithRollup(db.tbl_remuneration.id, db.tbl_remuneration.staff_id));
 
+            query.Gen(_connection);
+
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,

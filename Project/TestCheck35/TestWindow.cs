@@ -50,12 +50,13 @@ namespace TestCheck35
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	AVG(tbl_remuneration.money) OVER(
-	PARTITION BY
-		tbl_remuneration.payment_date 
-	ORDER BY
-		tbl_remuneration.money ASC 
-	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+	AVG(tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
 FROM tbl_remuneration");
         }
 
@@ -79,12 +80,13 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	AVG(@p_0) OVER(
-	PARTITION BY
-		tbl_remuneration.payment_date 
-	ORDER BY
-		tbl_remuneration.money ASC 
-	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+	AVG(@p_0)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
 FROM tbl_remuneration", 3);
         }
 
@@ -105,16 +107,20 @@ FROM tbl_remuneration", 3);
                 }).
                 From(db.tbl_remuneration));
 
+
+            //TODO 期待値を変更すればいいだけ
+            query.Gen(_connection);
+
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
 	AVG(tbl_remuneration.money) OVER(
-	PARTITION BY
-		tbl_remuneration.payment_date 
-	ORDER BY
-		tbl_remuneration.money ASC 
-	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
 FROM tbl_remuneration");
         }
 

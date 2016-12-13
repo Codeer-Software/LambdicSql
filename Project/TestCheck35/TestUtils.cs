@@ -268,8 +268,8 @@ FROM tbl_staff");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Format2WaySql1()
         {
-            var sql = @"
-SELECT
+            var sql = 
+@"SELECT
 	tbl_staff.name AS name,
     tbl_remuneration.payment_date AS payment_date,
 	tbl_remuneration.money + /*0*/1000/**/ AS money
@@ -300,8 +300,8 @@ WHERE (@p_1) < (tbl_remuneration.money)",
         {
             var exp1 = Sql<DB>.Create(db => 100);
             var exp2 = Sql<DB>.Create(db => Where(3000 < db.tbl_remuneration.money));
-            var sql = @"
-SELECT
+            var sql = 
+@"SELECT
 	tbl_staff.name AS name,
     tbl_remuneration.payment_date AS payment_date,
 	tbl_remuneration.money + /*0*/1000/**/ AS money
@@ -330,8 +330,8 @@ WHERE (@p_1) < (tbl_remuneration.money)",
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_ColumnOnly()
         {
-            var sql = @"
-SELECT
+            var sql = 
+@"SELECT
 	tbl_staff.name AS name,
     tbl_remuneration.payment_date AS payment_date,
 	/*0*/tbl_remuneration.money/**/ AS /*1*/money/**/
@@ -344,6 +344,8 @@ FROM tbl_remuneration
                 ColumnOnly(db.tbl_remuneration.money),
                 Where(3000 < db.tbl_remuneration.money)
                 ));
+
+            query.Gen(_connection);
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
