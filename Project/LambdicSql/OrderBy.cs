@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 
 namespace LambdicSql
 {
+    //TODO この辺全部関数化
     /// <summary>
     /// ORDERBY keyword.
     /// Use it with the OVER function.
@@ -25,7 +26,7 @@ namespace LambdicSql
             var array = arg as NewArrayExpression;
             var texts = new VerticalText();
             texts.Add("ORDER BY");
-            var elements = new VerticalText() { Indent = 1 };
+            var elements = new VerticalText(",") { Indent = 1 };
             foreach (var e in array.Expressions.Select(e => converter.ToString(e)))
             {
                 elements.Add(e);

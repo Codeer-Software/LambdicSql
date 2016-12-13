@@ -25,7 +25,7 @@ namespace LambdicSql
             var array = arg as NewArrayExpression;
             var texts = new VerticalText();
             texts.Add("PARTITION BY");
-            var elements = new VerticalText() { Indent = 1 };
+            var elements = new VerticalText(",") { Indent = 1 };
             foreach (var e in array.Expressions.Select(e => converter.ToString(e)))
             {
                 elements.Add(e);

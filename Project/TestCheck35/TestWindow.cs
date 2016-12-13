@@ -6,6 +6,7 @@ using static Test.Helper.DBProviderInfo;
 using LambdicSql;
 using LambdicSql.feat.Dapper;
 using static LambdicSql.Keywords;
+using System.Diagnostics;
 
 namespace TestCheck35
 {
@@ -60,6 +61,8 @@ namespace TestCheck35
 FROM tbl_remuneration");
         }
 
+        //TODO PARTITION BY の複数行のテスト！
+
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Avg2()
         {
@@ -107,15 +110,12 @@ FROM tbl_remuneration", 3);
                 }).
                 From(db.tbl_remuneration));
 
-
-            //TODO 期待値を変更すればいいだけ
-            query.Gen(_connection);
-
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	AVG(tbl_remuneration.money) OVER(
+	AVG(tbl_remuneration.money)
+	OVER(
 		PARTITION BY
 			tbl_remuneration.payment_date
 		ORDER BY
@@ -144,12 +144,13 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	SUM(tbl_remuneration.money) OVER(
-	PARTITION BY
-		tbl_remuneration.payment_date 
-	ORDER BY
-		tbl_remuneration.money ASC 
-	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+	SUM(tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
 FROM tbl_remuneration");
         }
 
@@ -172,13 +173,14 @@ FROM tbl_remuneration");
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
- @"SELECT
-	SUM(@p_0) OVER(
-	PARTITION BY
-		tbl_remuneration.payment_date 
-	ORDER BY
-		tbl_remuneration.money ASC 
-	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+@"SELECT
+	SUM(@p_0)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
 FROM tbl_remuneration", 3);
         }
 
@@ -203,12 +205,13 @@ FROM tbl_remuneration", 3);
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	SUM(tbl_remuneration.money) OVER(
-	PARTITION BY
-		tbl_remuneration.payment_date 
-	ORDER BY
-		tbl_remuneration.money ASC 
-	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+	SUM(tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
 FROM tbl_remuneration");
         }
 
@@ -233,12 +236,13 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	SUM(ALL tbl_remuneration.money) OVER(
-	PARTITION BY
-		tbl_remuneration.payment_date 
-	ORDER BY
-		tbl_remuneration.money ASC 
-	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+	SUM(ALL tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
 FROM tbl_remuneration");
         }
 
@@ -262,12 +266,13 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	COUNT(tbl_remuneration.money) OVER(
-	PARTITION BY
-		tbl_remuneration.payment_date 
-	ORDER BY
-		tbl_remuneration.money ASC 
-	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+	COUNT(tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
 FROM tbl_remuneration");
         }
 
@@ -291,12 +296,13 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	COUNT(@p_0) OVER(
-	PARTITION BY
-		tbl_remuneration.payment_date 
-	ORDER BY
-		tbl_remuneration.money ASC 
-	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+	COUNT(@p_0)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
 FROM tbl_remuneration", 3);
         }
 
@@ -321,12 +327,13 @@ FROM tbl_remuneration", 3);
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	COUNT(tbl_remuneration.money) OVER(
-	PARTITION BY
-		tbl_remuneration.payment_date 
-	ORDER BY
-		tbl_remuneration.money ASC 
-	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+	COUNT(tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
 FROM tbl_remuneration");
         }
 
@@ -350,12 +357,13 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	COUNT(*) OVER(
-	PARTITION BY
-		tbl_remuneration.payment_date 
-	ORDER BY
-		tbl_remuneration.money ASC 
-	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+	COUNT(*)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
 FROM tbl_remuneration");
         }
 
@@ -379,12 +387,13 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	COUNT(ALL tbl_remuneration.money) OVER(
-	PARTITION BY
-		tbl_remuneration.payment_date 
-	ORDER BY
-		tbl_remuneration.money ASC 
-	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+	COUNT(ALL tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
 FROM tbl_remuneration");
         }
 
@@ -407,12 +416,13 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	COUNT(ALL *) OVER(
-	PARTITION BY
-		tbl_remuneration.payment_date 
-	ORDER BY
-		tbl_remuneration.money ASC 
-	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+	COUNT(ALL *)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
 FROM tbl_remuneration");
         }
 
@@ -436,12 +446,13 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	MAX(tbl_remuneration.money) OVER(
-	PARTITION BY
-		tbl_remuneration.payment_date 
-	ORDER BY
-		tbl_remuneration.money ASC 
-	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+	MAX(tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
 FROM tbl_remuneration");
         }
 
@@ -465,12 +476,13 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	MAX(@p_0) OVER(
-	PARTITION BY
-		tbl_remuneration.payment_date 
-	ORDER BY
-		tbl_remuneration.money ASC 
-	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+	MAX(@p_0)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
 FROM tbl_remuneration", 3);
         }
 
@@ -495,12 +507,13 @@ FROM tbl_remuneration", 3);
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	MAX(tbl_remuneration.money) OVER(
-	PARTITION BY
-		tbl_remuneration.payment_date 
-	ORDER BY
-		tbl_remuneration.money ASC 
-	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+	MAX(tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
 FROM tbl_remuneration");
         }
 
@@ -524,12 +537,13 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	MIN(tbl_remuneration.money) OVER(
-	PARTITION BY
-		tbl_remuneration.payment_date 
-	ORDER BY
-		tbl_remuneration.money ASC 
-	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+	MIN(tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
 FROM tbl_remuneration");
         }
 
@@ -553,12 +567,13 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	MIN(@p_0) OVER(
-	PARTITION BY
-		tbl_remuneration.payment_date 
-	ORDER BY
-		tbl_remuneration.money ASC 
-	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+	MIN(@p_0)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
 FROM tbl_remuneration", 3);
         }
 
@@ -583,12 +598,13 @@ FROM tbl_remuneration", 3);
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	MIN(tbl_remuneration.money) OVER(
-	PARTITION BY
-		tbl_remuneration.payment_date 
-	ORDER BY
-		tbl_remuneration.money ASC 
-	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+	MIN(tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
 FROM tbl_remuneration");
         }
 
@@ -612,12 +628,13 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	FIRST_VALUE(tbl_remuneration.money) OVER(
-	PARTITION BY
-		tbl_remuneration.payment_date 
-	ORDER BY
-		tbl_remuneration.money ASC 
-	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+	FIRST_VALUE(tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
 FROM tbl_remuneration");
         }
 
@@ -642,12 +659,13 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	FIRST_VALUE(@p_0) OVER(
-	PARTITION BY
-		tbl_remuneration.payment_date 
-	ORDER BY
-		tbl_remuneration.money ASC 
-	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+	FIRST_VALUE(@p_0)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
 FROM tbl_remuneration", 3);
         }
 
@@ -672,12 +690,13 @@ FROM tbl_remuneration", 3);
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	FIRST_VALUE(tbl_remuneration.money) OVER(
-	PARTITION BY
-		tbl_remuneration.payment_date 
-	ORDER BY
-		tbl_remuneration.money ASC 
-	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+	FIRST_VALUE(tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
 FROM tbl_remuneration");
         }
 
@@ -701,12 +720,13 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	LAST_VALUE(tbl_remuneration.money) OVER(
-	PARTITION BY
-		tbl_remuneration.payment_date 
-	ORDER BY
-		tbl_remuneration.money ASC 
-	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+	LAST_VALUE(tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
 FROM tbl_remuneration");
         }
 
@@ -730,12 +750,13 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	LAST_VALUE(@p_0) OVER(
-	PARTITION BY
-		tbl_remuneration.payment_date 
-	ORDER BY
-		tbl_remuneration.money ASC 
-	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+	LAST_VALUE(@p_0)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
 FROM tbl_remuneration", 3);
         }
 
@@ -760,12 +781,13 @@ FROM tbl_remuneration", 3);
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	LAST_VALUE(tbl_remuneration.money) OVER(
-	PARTITION BY
-		tbl_remuneration.payment_date 
-	ORDER BY
-		tbl_remuneration.money ASC 
-	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+	LAST_VALUE(tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
 FROM tbl_remuneration");
         }
 
@@ -789,9 +811,10 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	RANK() OVER(
-	ORDER BY
-		tbl_remuneration.money ASC) AS Val
+	RANK()
+	OVER(
+		ORDER BY
+			tbl_remuneration.money ASC) AS Val
 FROM tbl_remuneration");
         }
 
@@ -815,9 +838,10 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	DENSE_RANK() OVER(
-	ORDER BY
-		tbl_remuneration.money ASC) AS Val
+	DENSE_RANK()
+	OVER(
+		ORDER BY
+			tbl_remuneration.money ASC) AS Val
 FROM tbl_remuneration");
         }
 
@@ -842,9 +866,10 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	PERCENT_RANK() OVER(
-	ORDER BY
-		tbl_remuneration.money ASC) AS Val
+	PERCENT_RANK()
+	OVER(
+		ORDER BY
+			tbl_remuneration.money ASC) AS Val
 FROM tbl_remuneration");
         }
 
@@ -868,9 +893,10 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	CUME_DIST() OVER(
-	ORDER BY
-		tbl_remuneration.money ASC) AS Val
+	CUME_DIST()
+	OVER(
+		ORDER BY
+			tbl_remuneration.money ASC) AS Val
 FROM tbl_remuneration");
         }
 
@@ -895,11 +921,11 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	NTILE(@p_0) OVER(
-	ORDER BY
-		tbl_remuneration.money ASC) AS Val
-FROM tbl_remuneration",
-2);
+	NTILE(@p_0)
+	OVER(
+		ORDER BY
+			tbl_remuneration.money ASC) AS Val
+FROM tbl_remuneration", 2);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -924,11 +950,11 @@ FROM tbl_remuneration",
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	NTILE(@p_0) OVER(
-	ORDER BY
-		tbl_remuneration.money ASC) AS Val
-FROM tbl_remuneration",
-2);
+	NTILE(@p_0)
+	OVER(
+		ORDER BY
+			tbl_remuneration.money ASC) AS Val
+FROM tbl_remuneration", 2);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -951,12 +977,12 @@ FROM tbl_remuneration",
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	NTH_VALUE(tbl_remuneration.money, @p_0) OVER(
-	ORDER BY
-		tbl_remuneration.money ASC 
-	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
-FROM tbl_remuneration",
-2);
+	NTH_VALUE(tbl_remuneration.money, @p_0)
+	OVER(
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+FROM tbl_remuneration", 2);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -978,14 +1004,14 @@ FROM tbl_remuneration",
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	NTH_VALUE(@p_0, tbl_remuneration.money) OVER(
-	ORDER BY
-		tbl_remuneration.money ASC 
-	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
-FROM tbl_remuneration",
-2);
+	NTH_VALUE(:p_0, tbl_remuneration.money)
+	OVER(
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+FROM tbl_remuneration", 2);
         }
-        
+
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestNth_Value3()
         {
@@ -1008,12 +1034,12 @@ FROM tbl_remuneration",
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	NTH_VALUE(tbl_remuneration.money, @p_0) OVER(
-	ORDER BY
-		tbl_remuneration.money ASC 
-	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
-FROM tbl_remuneration",
-(long)2);
+	NTH_VALUE(tbl_remuneration.money, @p_0)
+	OVER(
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+FROM tbl_remuneration", (long)2);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -1036,9 +1062,10 @@ FROM tbl_remuneration",
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	LAG(tbl_remuneration.money) OVER(
-	ORDER BY
-		tbl_remuneration.money ASC) AS Val
+	LAG(tbl_remuneration.money)
+	OVER(
+		ORDER BY
+			tbl_remuneration.money ASC) AS Val
 FROM tbl_remuneration");
         }
 
@@ -1062,9 +1089,10 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	LAG(@p_0) OVER(
-	ORDER BY
-		tbl_remuneration.money ASC) AS Val
+	LAG(@p_0)
+	OVER(
+		ORDER BY
+			tbl_remuneration.money ASC) AS Val
 FROM tbl_remuneration", 3);
         }
 
@@ -1089,9 +1117,10 @@ FROM tbl_remuneration", 3);
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	LAG(tbl_remuneration.money) OVER(
-	ORDER BY
-		tbl_remuneration.money ASC) AS Val
+	LAG(tbl_remuneration.money)
+	OVER(
+		ORDER BY
+			tbl_remuneration.money ASC) AS Val
 FROM tbl_remuneration");
         }
 
@@ -1116,9 +1145,10 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	LAG(tbl_remuneration.money, @p_0) OVER(
-	ORDER BY
-		tbl_remuneration.money ASC) AS Val
+	LAG(tbl_remuneration.money, @p_0)
+	OVER(
+		ORDER BY
+			tbl_remuneration.money ASC) AS Val
 FROM tbl_remuneration", 2);
         }
 
@@ -1143,9 +1173,10 @@ FROM tbl_remuneration", 2);
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	LAG(@p_0, tbl_remuneration.id) OVER(
-	ORDER BY
-		tbl_remuneration.money ASC) AS Val
+	LAG(@p_0, tbl_remuneration.id)
+	OVER(
+		ORDER BY
+			tbl_remuneration.money ASC) AS Val
 FROM tbl_remuneration", 3);
         }
         
@@ -1172,9 +1203,10 @@ FROM tbl_remuneration", 3);
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	LAG(tbl_remuneration.money, @p_0) OVER(
-	ORDER BY
-		tbl_remuneration.money ASC) AS Val
+	LAG(tbl_remuneration.money, @p_0)
+	OVER(
+		ORDER BY
+			tbl_remuneration.money ASC) AS Val
 FROM tbl_remuneration", 2);
         }
 
@@ -1200,9 +1232,10 @@ FROM tbl_remuneration", 2);
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	LAG(tbl_remuneration.money, @p_0, @p_1) OVER(
-	ORDER BY
-		tbl_remuneration.money ASC) AS Val
+	LAG(tbl_remuneration.money, @p_0, @p_1)
+	OVER(
+		ORDER BY
+			tbl_remuneration.money ASC) AS Val
 FROM tbl_remuneration", 2, (decimal)100);
         }
 
@@ -1225,11 +1258,13 @@ FROM tbl_remuneration", 2, (decimal)100);
                 From(db.tbl_remuneration));
 
             var datas = _connection.Query(query).ToList();
-            Assert.IsTrue(0 < datas.Count); AssertEx.AreEqual(query, _connection,
- @"SELECT
-	LAG(@p_0, tbl_remuneration.id, tbl_remuneration.id) OVER(
-	ORDER BY
-		tbl_remuneration.money ASC) AS Val
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	LAG(@p_0, tbl_remuneration.id, tbl_remuneration.id)
+	OVER(
+		ORDER BY
+			tbl_remuneration.money ASC) AS Val
 FROM tbl_remuneration", 2000);
         }
 
@@ -1258,19 +1293,53 @@ FROM tbl_remuneration", 2000);
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	LAG(tbl_remuneration.money, @p_0, @p_1) OVER(
-	ORDER BY
-		tbl_remuneration.money ASC) AS Val
+	LAG(tbl_remuneration.money, @p_0, @p_1)
+	OVER(
+		ORDER BY
+			tbl_remuneration.money ASC) AS Val
 FROM tbl_remuneration", 2, 100);
+        }
+        
+        //TODO PARTITION BY のテストが少し弱いかな？
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_PartitionBy()
+        {
+            if (_connection.GetType().FullName == "System.Data.SQLite.SQLiteConnection") return;
+            if (_connection.GetType().FullName == "MySql.Data.MySqlClient.MySqlConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData()
+                {
+                    Val = Window.Count(db.tbl_remuneration.money).
+                            Over(new PartitionBy(db.tbl_staff.name, db.tbl_remuneration.payment_date),
+                                new OrderBy(new Asc(db.tbl_remuneration.money), new Desc(db.tbl_remuneration.payment_date)),
+                                new Rows(1, 5))
+                }).
+                From(db.tbl_remuneration).
+                Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	COUNT(tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_staff.name,
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC,
+			tbl_remuneration.payment_date DESC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+FROM tbl_remuneration
+	JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Rows1_1()
         {
-            if (_connection.GetType().Name == "SqlConnection") return;
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
-            if (_connection.GetType().Name == "DB2Connection") return;
 
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
@@ -1285,15 +1354,15 @@ FROM tbl_remuneration", 2, 100);
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
-@"SELECT
-	COUNT(tbl_remuneration.money) OVER(
-	PARTITION BY
-		tbl_remuneration.payment_date 
-	ORDER BY
-		tbl_remuneration.money ASC 
-	ROWS @p_0 PRECEDING) AS Val
-FROM tbl_remuneration",
-1);
+ @"SELECT
+	COUNT(tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS 1 PRECEDING) AS Val
+FROM tbl_remuneration");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -1314,13 +1383,14 @@ FROM tbl_remuneration",
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
- @"SELECT
-	COUNT(tbl_remuneration.money) OVER(
-	PARTITION BY
-		tbl_remuneration.payment_date 
-	ORDER BY
-		tbl_remuneration.money ASC 
-	ROWS tbl_remuneration.money PRECEDING) AS Val
+@"SELECT
+	COUNT(tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS tbl_remuneration.money PRECEDING) AS Val
 FROM tbl_remuneration");
         }
 
@@ -1347,14 +1417,14 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	COUNT(tbl_remuneration.money) OVER(
-	PARTITION BY
-		tbl_remuneration.payment_date 
-	ORDER BY
-		tbl_remuneration.money ASC 
-	ROWS @p_0 PRECEDING) AS Val
-FROM tbl_remuneration",
-1);
+	COUNT(tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS 1 PRECEDING) AS Val
+FROM tbl_remuneration");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -1378,13 +1448,14 @@ FROM tbl_remuneration",
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
- @"SELECT
-	COUNT(tbl_remuneration.money) OVER(
-	PARTITION BY
-		tbl_remuneration.payment_date 
-	ORDER BY
-		tbl_remuneration.money ASC 
-	ROWS BETWEEN 1 PRECEDING AND 3 FOLLOWING) AS Val
+@"SELECT
+	COUNT(tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 3 FOLLOWING) AS Val
 FROM tbl_remuneration");
         }
 
@@ -1407,12 +1478,13 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	COUNT(tbl_remuneration.money) OVER(
-	PARTITION BY
-		tbl_remuneration.payment_date 
-	ORDER BY
-		tbl_remuneration.money ASC 
-	ROWS BETWEEN tbl_remuneration.money PRECEDING AND tbl_remuneration.money FOLLOWING) AS Val
+	COUNT(tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN tbl_remuneration.money PRECEDING AND tbl_remuneration.money FOLLOWING) AS Val
 FROM tbl_remuneration");
         }
 
@@ -1439,13 +1511,14 @@ FROM tbl_remuneration");
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
- @"SELECT
-	COUNT(tbl_remuneration.money) OVER(
-	PARTITION BY
-		tbl_remuneration.payment_date 
-	ORDER BY
-		tbl_remuneration.money ASC 
-	ROWS BETWEEN 1 PRECEDING AND 3 FOLLOWING) AS Val
+@"SELECT
+	COUNT(tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 3 FOLLOWING) AS Val
 FROM tbl_remuneration");
         }
 
@@ -1469,13 +1542,14 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	COUNT(tbl_remuneration.money) OVER(
-	PARTITION BY
-		tbl_remuneration.payment_date 
-	ORDER BY
-		tbl_remuneration.money ASC,
-		tbl_remuneration.payment_date DESC 
-	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+	COUNT(tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC,
+			tbl_remuneration.payment_date DESC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
 FROM tbl_remuneration");
         }
 
@@ -1501,13 +1575,14 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	COUNT(tbl_remuneration.money) OVER(
-	PARTITION BY
-		tbl_remuneration.payment_date 
-	ORDER BY
-		tbl_remuneration.money ASC,
-		tbl_remuneration.payment_date DESC 
-	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+	COUNT(tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC,
+			tbl_remuneration.payment_date DESC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
 FROM tbl_remuneration");
         }
 
@@ -1529,9 +1604,10 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	COUNT(tbl_remuneration.money) OVER(
-	PARTITION BY
-		tbl_remuneration.payment_date) AS Val
+	COUNT(tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date) AS Val
 FROM tbl_remuneration");
         }
 
@@ -1554,9 +1630,10 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	COUNT(tbl_remuneration.money) OVER(
-	PARTITION BY
-		tbl_remuneration.payment_date) AS Val
+	COUNT(tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date) AS Val
 FROM tbl_remuneration");
         }
 
@@ -1579,11 +1656,12 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	COUNT(tbl_remuneration.money) OVER(
-	PARTITION BY
-		tbl_remuneration.payment_date 
-	ORDER BY
-		tbl_remuneration.money ASC) AS Val
+	COUNT(tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC) AS Val
 FROM tbl_remuneration");
         }
 
@@ -1608,11 +1686,12 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	COUNT(tbl_remuneration.money) OVER(
-	PARTITION BY
-		tbl_remuneration.payment_date 
-	ORDER BY
-		tbl_remuneration.money ASC) AS Val
+	COUNT(tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC) AS Val
 FROM tbl_remuneration");
         }
 
@@ -1634,10 +1713,11 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	COUNT(tbl_remuneration.money) OVER(
-	PARTITION BY
-		tbl_remuneration.payment_date 
-	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+	COUNT(tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
 FROM tbl_remuneration");
         }
 
@@ -1661,10 +1741,11 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	COUNT(tbl_remuneration.money) OVER(
-	PARTITION BY
-		tbl_remuneration.payment_date 
-	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+	COUNT(tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
 FROM tbl_remuneration");
         }
 
@@ -1688,12 +1769,13 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	COUNT(tbl_remuneration.money) OVER(
-	PARTITION BY
-		tbl_remuneration.payment_date 
-	ORDER BY
-		tbl_remuneration.money ASC 
-	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+	COUNT(tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
 FROM tbl_remuneration");
         }
 
@@ -1718,12 +1800,13 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	COUNT(tbl_remuneration.money) OVER(
-	PARTITION BY
-		tbl_remuneration.payment_date 
-	ORDER BY
-		tbl_remuneration.money ASC 
-	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+	COUNT(tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
 FROM tbl_remuneration");
         }
 
@@ -1749,9 +1832,10 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	COUNT(tbl_remuneration.money) OVER(
-	ORDER BY
-		tbl_remuneration.money ASC) AS Val
+	COUNT(tbl_remuneration.money)
+	OVER(
+		ORDER BY
+			tbl_remuneration.money ASC) AS Val
 FROM tbl_remuneration");
         }
 
@@ -1774,9 +1858,10 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	COUNT(tbl_remuneration.money) OVER(
-	ORDER BY
-		tbl_remuneration.money ASC) AS Val
+	COUNT(tbl_remuneration.money)
+	OVER(
+		ORDER BY
+			tbl_remuneration.money ASC) AS Val
 FROM tbl_remuneration");
         }
 
@@ -1799,10 +1884,11 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	COUNT(tbl_remuneration.money) OVER(
-	ORDER BY
-		tbl_remuneration.money ASC 
-	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+	COUNT(tbl_remuneration.money)
+	OVER(
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
 FROM tbl_remuneration");
         }
 
@@ -1826,10 +1912,11 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	COUNT(tbl_remuneration.money) OVER(
-	ORDER BY
-		tbl_remuneration.money ASC 
-	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+	COUNT(tbl_remuneration.money)
+	OVER(
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
 FROM tbl_remuneration");
         }
 
@@ -1850,8 +1937,9 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	COUNT(tbl_remuneration.money) OVER(
-	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+	COUNT(tbl_remuneration.money)
+	OVER(
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
 FROM tbl_remuneration");
         }
 
@@ -1873,8 +1961,9 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	COUNT(tbl_remuneration.money) OVER(
-	ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+	COUNT(tbl_remuneration.money)
+	OVER(
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
 FROM tbl_remuneration");
         }
     }

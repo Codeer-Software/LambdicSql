@@ -31,7 +31,7 @@ namespace LambdicSql
             var args = exp.Arguments.Select(e => converter.ToString(e)).ToArray();
             if (exp.Arguments.Count == 1)
             {
-                return new SingleText("ROWS " + args[0] + " PRECEDING");
+                return new SingleText("ROWS " + converter.Context.Parameters.ResolvePrepare(args[0].ToString(0)) + " PRECEDING");
             }
             else
             {
