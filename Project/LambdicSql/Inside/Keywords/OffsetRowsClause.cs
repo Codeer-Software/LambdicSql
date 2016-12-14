@@ -10,7 +10,7 @@ namespace LambdicSql.Inside.Keywords
         {
             var method = methods[0];
             var count = converter.ToString(method.Arguments[method.SkipMethodChain(0)]);
-            return new HorizontalText(" ") + "OFFSET" + count + "ROWS";
+            return new HorizontalText() { Separator = " " } + "OFFSET" + count + "ROWS";
         }
     }
 }

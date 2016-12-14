@@ -25,7 +25,7 @@ namespace LambdicSql.Inside.Keywords
                 {
                     case nameof(LambdicSql.Keywords.Case):
                         {
-                            var text = new HorizontalText(" ") { IsFunctional = true } + "CASE";
+                            var text = new HorizontalText() { Separator = " ", IsFunctional = true } + "CASE";
                             if (argSrc.Length == 1)
                             {
                                 text += argSrc[0];
@@ -35,25 +35,25 @@ namespace LambdicSql.Inside.Keywords
                         break;
                     case nameof(LambdicSql.Keywords.When):
                         {
-                            h = new HorizontalText(" ") { IsFunctional = true, Indent = 1 } + "WHEN" + SqlDisplayAdjuster.AdjustSubQueryString(argSrc[0]);
+                            h = new HorizontalText() { Separator = " ", IsFunctional = true, Indent = 1 } + "WHEN" + SqlDisplayAdjuster.AdjustSubQueryString(argSrc[0]);
                         }
                         break;
                     case nameof(LambdicSql.Keywords.Then):
                         {
                             if (h != null)
                             {
-                                h = h + (new HorizontalText(" ") { IsFunctional = true } + "THEN" + argSrc[0]);
+                                h = h + (new HorizontalText() { Separator = " ", IsFunctional = true } + "THEN" + argSrc[0]);
                                 v.Add(h);
                                 h = null;
                             }
                             else
                             {
-                                v.Add(new HorizontalText(" ") { IsFunctional = true, Indent = 1 } + "THEN" + argSrc[0]);
+                                v.Add(new HorizontalText() { Separator = " ", IsFunctional = true, Indent = 1 } + "THEN" + argSrc[0]);
                             }
                             break;
                         }
                     case nameof(LambdicSql.Keywords.Else):
-                        v.Add(new HorizontalText(" ") { IsFunctional = true, Indent = 1 } + "ELSE" + argSrc[0]);
+                        v.Add(new HorizontalText() { Separator = " ", IsFunctional = true, Indent = 1 } + "ELSE" + argSrc[0]);
                         break;
                     case nameof(LambdicSql.Keywords.End):
                         v.Add(new SingleText("END"));

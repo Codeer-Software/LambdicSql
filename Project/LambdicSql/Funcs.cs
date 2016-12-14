@@ -215,7 +215,7 @@ namespace LambdicSql
                 case nameof(Count):
                     if (method.Arguments.Count == 2)
                     {
-                        return new HorizontalText() { IsFunctional = true } + method.Method.Name.ToUpper() + "(" + new HorizontalText(" ", args) + ")";
+                        return new HorizontalText() { IsFunctional = true } + method.Method.Name.ToUpper() + "(" + new HorizontalText(args) { Separator = " " } + ")";
                     }
                     break;
                 case nameof(Extract):
@@ -225,7 +225,7 @@ namespace LambdicSql
                 default:
                     break;
             }
-            return new HorizontalText() { IsFunctional = true } + method.Method.Name.ToUpper() + "(" + new HorizontalText(", ", args) + ")";
+            return new HorizontalText() { IsFunctional = true } + method.Method.Name.ToUpper() + "(" + new HorizontalText(args)  { Separator = ", " }+ ")";
         }
     }
 }

@@ -33,7 +33,7 @@ namespace LambdicSql.Inside.Keywords
             {
                 converter.UsingColumnNameOnly = true;
                 var arg = converter.ToString(method.Arguments[1]);//@@@.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(e => GetColumnOnly(e)).ToArray();
-                return new HorizontalText() { IsFunctional = true } + "INSERT INTO " + table + "(" + new HorizontalText(", ", arg) + ")";
+                return new HorizontalText() { IsFunctional = true } + "INSERT INTO " + table + "(" + new HorizontalText(arg) { Separator = ", " } + ")";
             }
             finally
             {

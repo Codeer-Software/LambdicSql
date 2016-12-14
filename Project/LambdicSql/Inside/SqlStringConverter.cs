@@ -125,7 +125,7 @@ namespace LambdicSql.Inside
         {
             if (array.Expressions.Count == 0) return new DecodedInfo(null, new SingleText(string.Empty));
             var infos = array.Expressions.Select(e => ToString(e)).ToArray();
-            return new DecodedInfo(infos[0].Type, new HorizontalText(", ", infos.Select(e=>e.Text).ToArray()));
+            return new DecodedInfo(infos[0].Type, new HorizontalText(infos.Select(e=>e.Text).ToArray()) { Separator = ", " });
         }
 
         DecodedInfo ToString(UnaryExpression unary)
@@ -408,7 +408,7 @@ namespace LambdicSql.Inside
                 {
                     list.Add(ToString(e));
                 }
-                return new DecodedInfo(exp.Type, new HorizontalText(", ", list.ToArray()));
+                return new DecodedInfo(exp.Type, new HorizontalText(list.ToArray()) { Separator = ", " });
             }
 
             //value type is SqlSyntax

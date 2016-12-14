@@ -55,7 +55,7 @@ namespace LambdicSql.Inside.Keywords
        //     return Environment.NewLine + string.Join(" ", new[] { "SELECT" }.Concat(modify.Select(e => converter.ToString(e))).ToArray()) + selectTargetText;
 
            //return select clause text.
-            var select = new HorizontalText(" ") + x;
+            var select = new HorizontalText() { Separator = " " } + x;
        //     select.AddRange(modify.Select(e => converter.ToString(e)));
             return selectTargetText == null ? (IText)new SingleText(x) : new VerticalText(new SingleText(x), selectTargetText);
         }

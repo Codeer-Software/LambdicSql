@@ -271,7 +271,6 @@ namespace LambdicSql
         static IText ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var v = new VerticalText();
-            IText func = null;
             switch (methods[0].Method.Name)
             {
                 case nameof(Sum):
@@ -281,7 +280,7 @@ namespace LambdicSql
                 default:
                     var method = methods[0];
                    v.Add(new HorizontalText() { IsFunctional = true } + method.Method.Name.ToUpper() + "(" + 
-                        new HorizontalText(", ", method.Arguments.Skip(method.SkipMethodChain(0)).Select(e => converter.ToString(e)).ToArray()) + ")");
+                        new HorizontalText(method.Arguments.Skip(method.SkipMethodChain(0)).Select(e => converter.ToString(e)).ToArray()) { Separator = ", " } + ")");
                     break;
             }
             var overMethod = methods[1];

@@ -33,7 +33,7 @@ namespace LambdicSql
             {
                 converter.UsingColumnNameOnly = src;
             }
-            return new HorizontalText(" ") + arg1 + "=" + converter.ToString(exp.Arguments[1]);
+            return new HorizontalText() { Separator = " " } + arg1 + "=" + converter.ToString(exp.Arguments[1]);
         }
     }
 }

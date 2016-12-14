@@ -7,24 +7,24 @@ namespace LambdicSql.SqlBase
     /// <summary>
     /// Text.
     /// </summary>
-    public interface IText
+    public abstract class IText
     {
         /// <summary>
         /// Is single line.
         /// </summary>
-        bool IsSingleLine { get; }
+        public abstract bool IsSingleLine { get; }
 
         /// <summary>
         /// Is empty.
         /// </summary>
-        bool IsEmpty { get; }
+        public abstract bool IsEmpty { get; }
 
         /// <summary>
         /// To string.
         /// </summary>
         /// <param name="indent">Indent.</param>
         /// <returns>Text.</returns>
-        string ToString(int indent);
+        public abstract string ToString(int indent);
 
         /// <summary>
         /// Concat to front and back.
@@ -32,21 +32,27 @@ namespace LambdicSql.SqlBase
         /// <param name="front">Front.</param>
         /// <param name="back">Back.</param>
         /// <returns>Text.</returns>
-        IText ConcatAround(string front, string back);
+        public abstract IText ConcatAround(string front, string back);
 
         /// <summary>
         /// Concat to front.
         /// </summary>
         /// <param name="front">Front.</param>
         /// <returns>Text.</returns>
-        IText ConcatToFront(string front);
+        public abstract IText ConcatToFront(string front);
 
         /// <summary>
         /// Concat to back.
         /// </summary>
         /// <param name="back"></param>
         /// <returns></returns>
-        IText ConcatToBack(string back);
+        public abstract IText ConcatToBack(string back);
+
+        /// <summary>
+        /// Convert string to IText.
+        /// </summary>
+        /// <param name="text">string.</param>
+        public static implicit operator IText (string text) => new SingleText(text);
     }
 
     /// <summary>
@@ -80,19 +86,19 @@ namespace LambdicSql.SqlBase
         /// <summary>
         /// Is single line.
         /// </summary>
-        public bool IsSingleLine => true;
+        public override bool IsSingleLine => true;
 
         /// <summary>
         /// Is empty.
         /// </summary>
-        public bool IsEmpty => string.IsNullOrEmpty(_text.Trim());
+        public override bool IsEmpty => string.IsNullOrEmpty(_text.Trim());
 
         /// <summary>
         /// To string.
         /// </summary>
         /// <param name="indent">Indent.</param>
         /// <returns>Text.</returns>
-        public string ToString(int indent)
+        public override string ToString(int indent)
             => string.Join(string.Empty, Enumerable.Range(0, _indent + indent).Select(e => "\t").ToArray()) + _text;
 
         /// <summary>
@@ -101,21 +107,21 @@ namespace LambdicSql.SqlBase
         /// <param name="front">Front.</param>
         /// <param name="back">Back.</param>
         /// <returns>Text.</returns>
-        public IText ConcatAround(string front, string back) => new SingleText(front + _text + back, _indent);
+        public override IText ConcatAround(string front, string back) => new SingleText(front + _text + back, _indent);
 
         /// <summary>
         /// Concat to front.
         /// </summary>
         /// <param name="front">Front.</param>
         /// <returns>Text.</returns>
-        public IText ConcatToFront(string front) => new SingleText(front + _text, _indent);
+        public override IText ConcatToFront(string front) => new SingleText(front + _text, _indent);
 
         /// <summary>
         /// Concat to back.
         /// </summary>
         /// <param name="back"></param>
         /// <returns></returns>
-        public IText ConcatToBack(string back) => new SingleText(_text + back, _indent);
+        public override IText ConcatToBack(string back) => new SingleText(_text + back, _indent);
     }
 
     /// <summary>
@@ -124,7 +130,11 @@ namespace LambdicSql.SqlBase
     public class HorizontalText : IText
     {
         List<IText> _texts = new List<IText>();
-        string _separator = string.Empty;
+
+        /// <summary>
+        /// Separator.
+        /// </summary>
+        public string Separator { get; set; } = string.Empty;
 
         /// <summary>
         /// Indent
@@ -134,12 +144,12 @@ namespace LambdicSql.SqlBase
         /// <summary>
         /// Is single line.
         /// </summary>
-        public bool IsSingleLine => !_texts.Any(e => !e.IsSingleLine);
+        public override bool IsSingleLine => !_texts.Any(e => !e.IsSingleLine);
 
         /// <summary>
         /// Is empty.
         /// </summary>
-        public bool IsEmpty => !_texts.Any(e => !e.IsEmpty);
+        public override bool IsEmpty => !_texts.Any(e => !e.IsEmpty);
 
         //内部的にはこれでいいけど
         //protectedにして
@@ -170,22 +180,11 @@ namespace LambdicSql.SqlBase
         }
 
         /// <summary>
-        /// Constructor.
-        /// </summary>
-        /// <param name="separator">Separator.</param>
-        /// <param name="texts">Horizontal texts.</param>
-        public HorizontalText(string separator, params IText[] texts)
-        {
-            _separator = separator;
-            _texts.AddRange(texts);
-        }
-
-        /// <summary>
         /// To string.
         /// </summary>
         /// <param name="indent">Indent.</param>
         /// <returns>Text.</returns>
-        public string ToString(int indent)
+        public override string ToString(int indent)
         {
             indent += Indent;
             if (_texts.Count == 0) return string.Empty;
@@ -193,8 +192,8 @@ namespace LambdicSql.SqlBase
 
             if (IsSingleLine || IsNotLineChange)
             {
-                var sep = 1 < _texts.Count ? _separator : string.Empty;
-                return _texts[0].ToString(indent) + sep + string.Join(_separator, _texts.Skip(1).Select(e => e.ToString(0)).ToArray());
+                var sep = 1 < _texts.Count ? Separator : string.Empty;
+                return _texts[0].ToString(indent) + sep + string.Join(Separator, _texts.Skip(1).Select(e => e.ToString(0)).ToArray());
             }
             //TODO あー指定があれば、ここもセパレータ入れた方がいいな
             var addIndentCount = IsFunctional ? 1 : 0;
@@ -245,13 +244,13 @@ namespace LambdicSql.SqlBase
         /// <param name="front">Front.</param>
         /// <param name="back">Back.</param>
         /// <returns>Text.</returns>
-        public IText ConcatAround(string front, string back)
+        public override IText ConcatAround(string front, string back)
         {
-            if (_texts.Count == 0) return new HorizontalText(_separator, new SingleText(front + back)) { Indent = Indent, IsFunctional = IsFunctional, IsNotLineChange = IsNotLineChange };
+            if (_texts.Count == 0) return new HorizontalText(new SingleText(front + back)) { Indent = Indent, IsFunctional = IsFunctional, IsNotLineChange = IsNotLineChange, Separator = Separator };
             var dst = _texts.ToArray();
             dst[0] = dst[0].ConcatToFront(front);
             dst[dst.Length - 1] = dst[dst.Length - 1].ConcatToBack(back);
-            return new HorizontalText(_separator, dst) { Indent = Indent, IsFunctional = IsFunctional, IsNotLineChange = IsNotLineChange };
+            return new HorizontalText(dst) { Indent = Indent, IsFunctional = IsFunctional, IsNotLineChange = IsNotLineChange, Separator = Separator };
         }
 
         /// <summary>
@@ -259,12 +258,12 @@ namespace LambdicSql.SqlBase
         /// </summary>
         /// <param name="front">Front.</param>
         /// <returns>Text.</returns>
-        public IText ConcatToFront(string front)
+        public override IText ConcatToFront(string front)
         {
-            if (_texts.Count == 0) return new HorizontalText(_separator, new SingleText(front)) { Indent = Indent, IsFunctional = IsFunctional, IsNotLineChange = IsNotLineChange };
+            if (_texts.Count == 0) return new HorizontalText(new SingleText(front)) { Indent = Indent, IsFunctional = IsFunctional, IsNotLineChange = IsNotLineChange, Separator = Separator };
             var dst = _texts.ToArray();
             dst[0] = dst[0].ConcatToFront(front);
-            return new HorizontalText(_separator, dst) { Indent = Indent, IsFunctional = IsFunctional, IsNotLineChange = IsNotLineChange };
+            return new HorizontalText(dst) { Indent = Indent, IsFunctional = IsFunctional, IsNotLineChange = IsNotLineChange, Separator = Separator };
         }
 
         /// <summary>
@@ -272,12 +271,12 @@ namespace LambdicSql.SqlBase
         /// </summary>
         /// <param name="back"></param>
         /// <returns></returns>
-        public IText ConcatToBack(string back)
+        public override IText ConcatToBack(string back)
         {
-            if (_texts.Count == 0) return new HorizontalText(_separator, new SingleText(back)) { Indent = Indent, IsFunctional = IsFunctional, IsNotLineChange = IsNotLineChange };
+            if (_texts.Count == 0) return new HorizontalText(new SingleText(back)) { Indent = Indent, IsFunctional = IsFunctional, IsNotLineChange = IsNotLineChange, Separator = Separator };
             var dst = _texts.ToArray();
             dst[dst.Length - 1] = dst[dst.Length - 1].ConcatToBack(back);
-            return new HorizontalText(_separator, dst) { Indent = Indent, IsFunctional = IsFunctional, IsNotLineChange = IsNotLineChange };
+            return new HorizontalText(dst) { Indent = Indent, IsFunctional = IsFunctional, IsNotLineChange = IsNotLineChange, Separator = Separator };
         }
 
         //あー、この結合で内部的な事情をガッツリしったらなんとかなるな・・・
@@ -292,7 +291,7 @@ namespace LambdicSql.SqlBase
         public static HorizontalText operator +(HorizontalText l, IText r)
         {
             if (r.IsEmpty) return l;
-            var dst = new HorizontalText(l._separator) { Indent = l.Indent, IsFunctional = l.IsFunctional, IsNotLineChange = l.IsNotLineChange };
+            var dst = new HorizontalText() { Indent = l.Indent, IsFunctional = l.IsFunctional, IsNotLineChange = l.IsNotLineChange, Separator = l.Separator };
             dst._texts.AddRange(l._texts);
 
             /*
@@ -317,7 +316,7 @@ namespace LambdicSql.SqlBase
         public static HorizontalText operator +(HorizontalText l, string r)
         {
             if (string.IsNullOrEmpty(r.Trim())) return l;
-            var dst = new HorizontalText(l._separator) { Indent = l.Indent, IsFunctional = l.IsFunctional, IsNotLineChange = l.IsNotLineChange };
+            var dst = new HorizontalText() { Indent = l.Indent, IsFunctional = l.IsFunctional, IsNotLineChange = l.IsNotLineChange, Separator = l.Separator };
             dst._texts.AddRange(l._texts);
             dst._texts.Add(new SingleText(r));
             return dst;
@@ -340,12 +339,12 @@ namespace LambdicSql.SqlBase
         /// <summary>
         /// Is single line.
         /// </summary>
-        public bool IsSingleLine => _texts.Count <= 1 && !_texts.Any(e => !e.IsSingleLine);
+        public override bool IsSingleLine => _texts.Count <= 1 && !_texts.Any(e => !e.IsSingleLine);
 
         /// <summary>
         /// Is empty.
         /// </summary>
-        public bool IsEmpty => !_texts.Any(e => !e.IsEmpty);
+        public override bool IsEmpty => !_texts.Any(e => !e.IsEmpty);
 
         /// <summary>
         /// Constructor.
@@ -377,7 +376,7 @@ namespace LambdicSql.SqlBase
         /// </summary>
         /// <param name="indent">Indent.</param>
         /// <returns>Text.</returns>
-        public string ToString(int indent)
+        public override string ToString(int indent)
             => string.Join(Environment.NewLine, _texts.Select((e, i) => e.ToString(Indent + indent) + GetSeparator(i)).ToArray());
 
         string GetSeparator(int i)
@@ -436,7 +435,7 @@ namespace LambdicSql.SqlBase
         /// <param name="front">Front.</param>
         /// <param name="back">Back.</param>
         /// <returns>Text.</returns>
-        public IText ConcatAround(string front, string back)
+        public override IText ConcatAround(string front, string back)
         {
             if (_texts.Count == 0) return new VerticalText(_separator, new SingleText(front + back)) { Indent = Indent };
             var dst = _texts.ToArray();
@@ -450,7 +449,7 @@ namespace LambdicSql.SqlBase
         /// </summary>
         /// <param name="front">Front.</param>
         /// <returns>Text.</returns>
-        public IText ConcatToFront(string front)
+        public override IText ConcatToFront(string front)
         {
             if (_texts.Count == 0) return new VerticalText(_separator, new SingleText(front)) { Indent = Indent };
             var dst = _texts.ToArray();
@@ -463,7 +462,7 @@ namespace LambdicSql.SqlBase
         /// </summary>
         /// <param name="back"></param>
         /// <returns></returns>
-        public IText ConcatToBack(string back)
+        public override IText ConcatToBack(string back)
         {
             if (_texts.Count == 0) return new VerticalText(_separator, new SingleText(back)) { Indent = Indent };
             var dst = _texts.ToArray();

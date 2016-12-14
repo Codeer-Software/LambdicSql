@@ -17,12 +17,12 @@ namespace LambdicSql.Inside.Keywords
                 case nameof(LambdicSql.Keywords.Like):
                     {
                         var x = new HorizontalText() { IsNotLineChange = true } + args[0] + " LIKE";
-                        return new HorizontalText(" ") { IsFunctional = true } + x + args[1];
+                        return new HorizontalText() { Separator = " ", IsFunctional = true } + x + args[1];
                     }
                 case nameof(LambdicSql.Keywords.Between):
                     {
                         var x = new HorizontalText() { IsNotLineChange = true } + args[0] + " BETWEEN";
-                        return new HorizontalText(" ") { IsFunctional = true } +x + args[1] + "AND" + args[2];
+                        return new HorizontalText() { Separator = " ", IsFunctional = true } +x + args[1] + "AND" + args[2];
                     }
                 case nameof(LambdicSql.Keywords.In):
                     {
@@ -32,7 +32,7 @@ namespace LambdicSql.Inside.Keywords
                         h.Add(args[1].ConcatAround("(", ")"));
                         return h;
                     }
-                case nameof(LambdicSql.Keywords.Exists): return new HorizontalText(" ") { IsFunctional = true } + "EXISTS" + args[0];
+                case nameof(LambdicSql.Keywords.Exists): return new HorizontalText() { Separator = " ", IsFunctional = true } + "EXISTS" + args[0];
             }
             return null;
         }
