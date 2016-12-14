@@ -6,7 +6,7 @@ namespace LambdicSql.Inside.Keywords
 {
     static class NullCheck
     {
-        internal static IText ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static TextParts ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
             switch (method.Method.Name)

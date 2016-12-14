@@ -20,7 +20,7 @@ namespace LambdicSql
         /// <param name="elements">Specify column and sort order. Asc(column) or Desc(column).</param>
         public OrderBy(params ISortedBy[] elements) { InvalitContext.Throw("new " + nameof(OrderBy)); }
 
-        static IText ToString(ISqlStringConverter converter, NewExpression exp)
+        static TextParts ToString(ISqlStringConverter converter, NewExpression exp)
         {
             var arg = exp.Arguments[0];
             var array = arg as NewArrayExpression;

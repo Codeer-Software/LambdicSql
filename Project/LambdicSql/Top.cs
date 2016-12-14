@@ -18,13 +18,13 @@ namespace LambdicSql
         /// <param name="count">cout.</param>
         public Top(long count) { InvalitContext.Throw("new " + nameof(Assign)); }
 
-        static IText ToString(ISqlStringConverter converter, NewExpression exp)
+        static TextParts ToString(ISqlStringConverter converter, NewExpression exp)
             => ToString(converter, exp.Arguments);
 
-        static IText ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        static TextParts ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
             => ToString(converter, methods[0].Arguments);
 
-        static IText ToString(ISqlStringConverter converter, ReadOnlyCollection<Expression> arguments)
+        static TextParts ToString(ISqlStringConverter converter, ReadOnlyCollection<Expression> arguments)
         {
             //TODO これだめだ。内部的に何度もパラメータ変換が実行される ToString(0)
             var args = arguments.Select(e => converter.ToString(e)).ToArray();

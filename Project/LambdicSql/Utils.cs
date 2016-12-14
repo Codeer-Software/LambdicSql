@@ -79,7 +79,7 @@ namespace LambdicSql
         /// <returns>Column name only.</returns>
         public static T ColumnOnly<T>(T column) => InvalitContext.Throw<T>(nameof(ColumnOnly));
 
-        static IText ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        static TextParts ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
             switch (method.Method.Name)
@@ -98,20 +98,20 @@ namespace LambdicSql
             throw new NotSupportedException();
         }
 
-        static IText Condition(ISqlStringConverter converter, MethodCallExpression method)
+        static TextParts Condition(ISqlStringConverter converter, MethodCallExpression method)
         {
             var obj = converter.ToObject(method.Arguments[0]);
             return (bool)obj ? converter.ToString(method.Arguments[1]) : new SingleText("");
         }
 
-        static IText TextSql(ISqlStringConverter converter, MethodCallExpression method)
+        static TextParts TextSql(ISqlStringConverter converter, MethodCallExpression method)
         {
             var text = (string)converter.ToObject(method.Arguments[0]);
             var array = method.Arguments[1] as NewArrayExpression;
             return new SingleText(string.Format(text, array.Expressions.Select(e => converter.ToString(e).ToString(0)).ToArray()));
         }
 
-        static IText TwoWaySql(ISqlStringConverter converter, MethodCallExpression method)
+        static TextParts TwoWaySql(ISqlStringConverter converter, MethodCallExpression method)
         {
             var obj = converter.ToObject(method.Arguments[0]);
             var text = TowWaySqlSpec.ToStringFormat((string)obj);
@@ -119,7 +119,7 @@ namespace LambdicSql
             return new SingleText(string.Format(text, array.Expressions.Select(e => converter.ToString(e).ToString(0)).ToArray()));
         }
 
-        static IText ColumnOnly(ISqlStringConverter converter, MethodCallExpression method)
+        static TextParts ColumnOnly(ISqlStringConverter converter, MethodCallExpression method)
         {
             var dic = converter.Context.DbInfo.GetLambdaNameAndColumn().ToDictionary(e => e.Value.SqlFullName, e => e.Value.SqlColumnName);
             string col;

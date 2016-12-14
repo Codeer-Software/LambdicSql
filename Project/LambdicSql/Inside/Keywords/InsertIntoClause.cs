@@ -7,10 +7,10 @@ namespace LambdicSql.Inside.Keywords
 {
     static class InsertIntoClause
     {
-        internal static IText ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static TextParts ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
             => new VText(methods.Select(m => MethodToString(converter, m)).ToArray());
 
-        static IText MethodToString(ISqlStringConverter converter, MethodCallExpression method)
+        static TextParts MethodToString(ISqlStringConverter converter, MethodCallExpression method)
         {
             switch (method.Method.Name)
             {
@@ -20,10 +20,10 @@ namespace LambdicSql.Inside.Keywords
             throw new NotSupportedException();
         }
 
-        static IText MethodToStringValues(ISqlStringConverter converter, MethodCallExpression method)
+        static TextParts MethodToStringValues(ISqlStringConverter converter, MethodCallExpression method)
             => new HText("VALUES (", converter.ToString(method.Arguments[1]), ")") { IsFunctional = true, Indent = 1};
 
-        static IText MethodToStringInsertInto(ISqlStringConverter converter, MethodCallExpression method)
+        static TextParts MethodToStringInsertInto(ISqlStringConverter converter, MethodCallExpression method)
         {
             var table = converter.ToString(method.Arguments[0]);
             //column should not have a table name.

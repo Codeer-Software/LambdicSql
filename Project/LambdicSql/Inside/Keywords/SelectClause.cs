@@ -9,7 +9,7 @@ namespace LambdicSql.Inside.Keywords
     //SELECTに関しても AS とこの部分はFunctionalではないようにする
     static class SelectClause
     {
-        internal static IText ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static TextParts ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
 
@@ -31,7 +31,7 @@ namespace LambdicSql.Inside.Keywords
 
             //select core.
             var selectTarget = method.Arguments[method.Arguments.Count - 1];
-            IText selectTargetText = null;
+            TextParts selectTargetText = null;
             ObjectCreateInfo createInfo = null;
 
             //*
@@ -57,10 +57,10 @@ namespace LambdicSql.Inside.Keywords
            //return select clause text.
             var select = new HText() { Separator = " " } + x;
        //     select.AddRange(modify.Select(e => converter.ToString(e)));
-            return selectTargetText == null ? (IText)new SingleText(x) : new VText(new SingleText(x), selectTargetText);
+            return selectTargetText == null ? (TextParts)new SingleText(x) : new VText(new SingleText(x), selectTargetText);
         }
 
-        static IText ToStringSelectedElement(ISqlStringConverter converter, ObjectCreateMemberInfo element)
+        static TextParts ToStringSelectedElement(ISqlStringConverter converter, ObjectCreateMemberInfo element)
         {
             //single select.
             //for example, COUNT(*).

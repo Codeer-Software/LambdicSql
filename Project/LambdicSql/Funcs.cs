@@ -205,7 +205,7 @@ namespace LambdicSql
         /// <returns>expression1 or expression2.</returns>
         public static T NVL<T>(T expression1, T expression2) => InvalitContext.Throw<T>(nameof(NVL));
 
-        internal static IText ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static TextParts ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
             var args = method.Arguments.Select(e => converter.ToString(e)).ToArray();

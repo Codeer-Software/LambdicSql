@@ -933,7 +933,7 @@ namespace LambdicSql
         /// </summary>
         public static SysibmType Sysibm => InvalitContext.Throw<SysibmType>(nameof(Sysibm));
 
-        static IText ToString(ISqlStringConverter converter, MemberExpression member)
+        static TextParts ToString(ISqlStringConverter converter, MemberExpression member)
         {
             switch (member.Member.Name)
             {
@@ -947,7 +947,7 @@ namespace LambdicSql
             return new SingleText(member.Member.Name.ToUpper());
         }
 
-        static IText ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        static TextParts ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
             switch (method.Method.Name)

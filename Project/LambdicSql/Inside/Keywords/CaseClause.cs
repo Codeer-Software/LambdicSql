@@ -8,7 +8,7 @@ namespace LambdicSql.Inside.Keywords
 {
     static class CaseClause
     {
-        internal static IText ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static TextParts ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var v = new VText();
             HText h = null;

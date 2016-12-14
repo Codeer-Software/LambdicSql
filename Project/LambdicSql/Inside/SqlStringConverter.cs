@@ -13,8 +13,8 @@ namespace LambdicSql.Inside
         class DecodedInfo
         {
             internal Type Type { get; }
-            internal IText Text { get; }
-            internal DecodedInfo(Type type, IText text)
+            internal TextParts Text { get; }
+            internal DecodedInfo(Type type, TextParts text)
             {
                 Type = type;
                 Text = text;
@@ -43,7 +43,7 @@ namespace LambdicSql.Inside
         }
 
         //TODO ここに再帰カウンターを付けることによって、それが0でなければサブクエリだってことが分かる！つけすぎるとうざいから、メソッド呼び出しのところで。
-        public IText ToString(object obj)
+        public TextParts ToString(object obj)
         {
             var exp = obj as Expression;
             if (exp != null) return ToString(exp).Text;
@@ -259,7 +259,7 @@ namespace LambdicSql.Inside
             //not sql syntax.
             if (!method.Method.DeclaringType.IsSqlSyntax()) return ResolveExpressionObject(method);
 
-            var ret = new List<IText>();
+            var ret = new List<TextParts>();
             foreach (var c in GetMethodChains(method))
             {
                 var chain = c.ToArray();
@@ -403,7 +403,7 @@ namespace LambdicSql.Inside
             //array.
             if (obj != null && obj.GetType().IsArray)
             {
-                var list = new List<IText>();
+                var list = new List<TextParts>();
                 foreach (var e in (IEnumerable)obj)
                 {
                     list.Add(ToString(e));

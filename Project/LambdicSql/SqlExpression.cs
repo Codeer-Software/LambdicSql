@@ -25,7 +25,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="convertor">Convertor.</param>
         /// <returns>Text.</returns>
-        public abstract IText ToString(ISqlStringConverter convertor);
+        public abstract TextParts ToString(ISqlStringConverter convertor);
 
         /// <summary>
         /// Implicitly convert to the type represented by SqlExpression.

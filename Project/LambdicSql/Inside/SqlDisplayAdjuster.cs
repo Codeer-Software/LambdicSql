@@ -34,7 +34,7 @@ namespace LambdicSql.Inside
             return text;
         }
 
-        internal static IText AdjustSubQueryString(IText text)
+        internal static TextParts AdjustSubQueryString(TextParts text)
         {
             if (text.ToString(0).Replace(Environment.NewLine, string.Empty).Replace("\t", " ").Replace("(", string.Empty).Trim().IndexOf("SELECT") != 0) return text;
 
@@ -63,7 +63,7 @@ namespace LambdicSql.Inside
             return line;
         }
 
-        internal static IText AdjustSubQuery(Expression e, IText v)
+        internal static TextParts AdjustSubQuery(Expression e, TextParts v)
         {
             if (typeof(IClauseChain).IsAssignableFrom(e.Type))
             {
