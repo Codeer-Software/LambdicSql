@@ -7,7 +7,7 @@ namespace LambdicSql.Inside.Keywords
 {
     static class ConditionKeyWords
     {
-        //TODO ToStringではなくなったな
+        //TODO ToStringではなくなったな 素直にConvertかな。
         internal static TextParts ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
@@ -16,23 +16,21 @@ namespace LambdicSql.Inside.Keywords
             {
                 case nameof(LambdicSql.Keywords.Like):
                     {
-                        var x = new HText(args[0], " LIKE") { EnableChangeLine = false };
-                        return new HText(x, args[1]) { Separator = " ", IsFunctional = true };
+                        var header = new HText(args[0], " LIKE") { EnableChangeLine = false };
+                        return new HText(header, args[1]) { Separator = " ", IsFunctional = true };
                     }
                 case nameof(LambdicSql.Keywords.Between):
                     {
-                        var x = new HText(args[0], " BETWEEN") { EnableChangeLine = false };
-                        return new HText(x, args[1], "AND", args[2]) { Separator = " ", IsFunctional = true };
+                        var header = new HText(args[0], " BETWEEN") { EnableChangeLine = false };
+                        return new HText(header, args[1], "AND", args[2]) { Separator = " ", IsFunctional = true };
                     }
                 case nameof(LambdicSql.Keywords.In):
                     {
-                        var x = new HText(args[0], " IN") { EnableChangeLine = false };
-                        var h = new HText() { IsFunctional = true };
-                        h.Add(x);
-                        h.Add(args[1].ConcatAround("(", ")"));
-                        return h;
+                        var header = new HText(args[0], " IN") { EnableChangeLine = false };
+                        return new HText(header, args[1].ConcatAround("(", ")")) { IsFunctional = true };
                     }
-                case nameof(LambdicSql.Keywords.Exists): return new HText("EXISTS", args[0]) { Separator = " ", IsFunctional = true };
+                case nameof(LambdicSql.Keywords.Exists):
+                    return new HText("EXISTS", args[0]) { Separator = " ", IsFunctional = true };
             }
             return null;
         }

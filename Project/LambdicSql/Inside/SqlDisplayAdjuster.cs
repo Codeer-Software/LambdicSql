@@ -10,57 +10,11 @@ namespace LambdicSql.Inside
     //TODO 表示用の調整
     class SqlDisplayAdjuster
     {
-        internal static string Adjust(string text)
-        {
-            //adjust. remove empty line.
-            //ここはこだわりの世界やけど、括弧を前詰めにするか？
-            var list = new List<string>();
-            var insert = string.Empty;
-            foreach (var l in text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries))
-            {
-                var check = l.Trim();
-                if (string.IsNullOrEmpty(check)) continue;
-                check = insert + check;
-                if (string.IsNullOrEmpty(check.Replace("(", string.Empty).Trim()))
-                {
-                    insert = check.Replace(" ", string.Empty).Replace("\t", string.Empty);
-                    continue;
-                }
-                list.Add(InsertTextToTop(l, insert));
-                insert = string.Empty;
-            }
-
-            text = string.Join(Environment.NewLine, list.ToArray());
-            return text;
-        }
-
         internal static TextParts AdjustSubQueryString(TextParts text)
         {
             if (text.ToString(0).Replace(Environment.NewLine, string.Empty).Replace("\t", " ").Replace("(", string.Empty).Trim().IndexOf("SELECT") != 0) return text;
 
             return text.ConcatAround("(", ")");
-        }
-
-
-        internal static string AdjustSubQueryString(string text)
-        {
-            if (text.Replace(Environment.NewLine, string.Empty).Replace("\t", " ").Replace("(", string.Empty).Trim().IndexOf("SELECT") != 0) return text;
-
-            var lines = text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToArray();
-            lines[0] = InsertSubQueryStart(lines[0]);
-            return Environment.NewLine + string.Join(Environment.NewLine, lines.Select(e => "\t" + e).ToArray()) + ")";
-        }
-
-        static string InsertSubQueryStart(string line)
-        {
-            for (int i = 0; i < line.Length; i++)
-            {
-                if (line[i] != '\t')
-                {
-                    return line.Substring(0, i) + "(" + line.Substring(i);
-                }
-            }
-            return line;
         }
 
         internal static TextParts AdjustSubQuery(Expression e, TextParts v)
@@ -70,36 +24,6 @@ namespace LambdicSql.Inside
                 return AdjustSubQueryString(v);
             }
             return v;
-        }
-
-        //これ色んな所にいるんじゃなかろうか？まあ、サブクエリが入りうるか所なんだけど、統一的に処理できないかな？
-        internal static string AdjustSubQueryString(string text, string adjust)
-        {
-            var lines = text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).Where(e => !string.IsNullOrEmpty(e.Trim())).ToArray();
-            if (lines.Length <= 1) return text;
-            lines[0] = InsertTextToTop(lines[0], "(");
-
-            //ここで改行をいきなり先頭に入れるんじゃなくって
-            //先頭にSelectがなかったら改行はいらんとか
-            if (lines[0].IndexOf("SELECT") == -1)
-            {
-                return lines[0].Trim() + Environment.NewLine +
-                    string.Join(Environment.NewLine, lines.Skip(1).Select(e => adjust + e).ToArray()) + ")";
-            }
-
-            return Environment.NewLine + string.Join(Environment.NewLine, lines.Select(e => adjust + e).ToArray()) + ")";
-        }
-
-        static string InsertTextToTop(string line, string insertText)
-        {
-            for (int i = 0; i < line.Length; i++)
-            {
-                if (line[i] != '\t')
-                {
-                    return line.Substring(0, i) + insertText + line.Substring(i);
-                }
-            }
-            return insertText + line;
         }
     }
 }
