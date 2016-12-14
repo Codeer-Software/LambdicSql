@@ -55,7 +55,7 @@ namespace LambdicSql.Inside.Keywords
                 var member = methodCall.Arguments[0] as MemberExpression;
                 if (member != null)
                 {
-                    return new HText(text, member.Member.Name) { Separator = " ", IsNotLineChange = true };
+                    return new HText(text, member.Member.Name) { Separator = " ", EnableChangeLine = false };
                 }
                 return text;
             }
@@ -64,7 +64,7 @@ namespace LambdicSql.Inside.Keywords
             var body = GetSqlExpressionBody(exp);
             if (body != null)
             {
-                return new HText(text, body) { Separator = " ", IsNotLineChange = true };
+                return new HText(text, body) { Separator = " ", EnableChangeLine = false };
             }
             return text;
         }

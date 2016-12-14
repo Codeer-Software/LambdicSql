@@ -68,7 +68,7 @@ namespace LambdicSql.Inside.Keywords
 
             //TODO この無理やりくっつけるのはなくてもいいかな
             //normal select.
-            return new HText(converter.ToString(element.Expression), " AS ", element.Name) { IsNotLineChange = true };
+            return new HText(converter.ToString(element.Expression), " AS ", element.Name) { EnableChangeLine = false };
         }
     }
 }

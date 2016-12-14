@@ -16,17 +16,17 @@ namespace LambdicSql.Inside.Keywords
             {
                 case nameof(LambdicSql.Keywords.Like):
                     {
-                        var x = new HText(args[0], " LIKE") { IsNotLineChange = true };
+                        var x = new HText(args[0], " LIKE") { EnableChangeLine = false };
                         return new HText(x, args[1]) { Separator = " ", IsFunctional = true };
                     }
                 case nameof(LambdicSql.Keywords.Between):
                     {
-                        var x = new HText(args[0], " BETWEEN") { IsNotLineChange = true };
+                        var x = new HText(args[0], " BETWEEN") { EnableChangeLine = false };
                         return new HText(x, args[1], "AND", args[2]) { Separator = " ", IsFunctional = true };
                     }
                 case nameof(LambdicSql.Keywords.In):
                     {
-                        var x = new HText(args[0], " IN") { IsNotLineChange = true };
+                        var x = new HText(args[0], " IN") { EnableChangeLine = false };
                         var h = new HText() { IsFunctional = true };
                         h.Add(x);
                         h.Add(args[1].ConcatAround("(", ")"));

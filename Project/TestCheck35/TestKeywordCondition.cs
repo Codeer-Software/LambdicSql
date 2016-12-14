@@ -402,6 +402,9 @@ WHERE
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
+
+            query.Gen(_connection);
+
             AssertEx.AreEqual(query, _connection,
 @"SELECT
 	tbl_staff.id AS Id

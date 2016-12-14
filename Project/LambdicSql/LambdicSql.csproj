@@ -72,6 +72,8 @@
     <Compile Include="Inside\ExpressionToObject.CreateGetter.cs" />
     <Compile Include="Inside\ExpressionToObject.Getter.cs" />
     <Compile Include="Inside\SqlExpressionCoupled.cs" />
+    <Compile Include="SqlBase\HText.cs" />
+    <Compile Include="SqlBase\SingleText.cs" />
     <Compile Include="SqlBase\TextParts.cs" />
     <Compile Include="SqlBase\ResolveSqlSyntaxMethodChainAttribute.cs" />
     <Compile Include="SqlBase\SqlConvertingContext.cs" />
@@ -83,6 +85,7 @@
     <Compile Include="ISqlExpression.cs" />
     <Compile Include="DbParam.cs" />
     <Compile Include="SqlBase\MethodGroupAttribute.cs" />
+    <Compile Include="SqlBase\VText.cs" />
     <Compile Include="SqlExpression.cs" />
     <Compile Include="SqlQuery.cs" />
     <Compile Include="SqlBase\SqlSyntaxAttribute.cs" />
