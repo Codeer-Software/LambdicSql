@@ -12,9 +12,9 @@ namespace LambdicSql.Inside.Keywords
             switch (method.Method.Name)
             {
                 case nameof(LambdicSql.Keywords.IsNull):
-                    return new HorizontalText() + converter.ToString(method.Arguments[0]) + " IS NULL";
+                    return new HText(converter.ToString(method.Arguments[0]), " IS NULL");
                 case nameof(LambdicSql.Keywords.IsNotNull):
-                    return new HorizontalText() + converter.ToString(method.Arguments[0]) + " IS NOT NULL";
+                    return new HText(converter.ToString(method.Arguments[0]), " IS NOT NULL");
             }
             throw new NotSupportedException();
         }

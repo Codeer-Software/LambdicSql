@@ -11,7 +11,7 @@ namespace LambdicSql.Inside.Keywords
             var method = methods[0];
             var text = converter.ToString(method.Arguments[method.SkipMethodChain(0)]);
             if (text.IsEmpty) return new SingleText("");
-            return new HorizontalText() { Separator = " ", IsFunctional = true } + "HAVING" + text;
+            return new HText("HAVING", text) { Separator = " ", IsFunctional = true };
         }
     }
 }

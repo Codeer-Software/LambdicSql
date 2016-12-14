@@ -18,6 +18,6 @@ namespace LambdicSql.Inside
         }
 
         public override IText ToString(ISqlStringConverter converter)
-            => new VerticalText(_before.ToString(converter), _after.ToString(converter));
+            => new VText(_before.ToString(converter), _after.ToString(converter));
     }
 }

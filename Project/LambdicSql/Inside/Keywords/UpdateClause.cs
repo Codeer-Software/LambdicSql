@@ -16,7 +16,7 @@ namespace LambdicSql.Inside.Keywords
             {
                 list.Add(MethodToString(converter, m, ref tableName));
             }
-            return new VerticalText(list.ToArray());
+            return new VText(list.ToArray());
         }
 
         static IText MethodToString(ISqlStringConverter converter, MethodCallExpression method, ref IText tableName)
@@ -26,16 +26,16 @@ namespace LambdicSql.Inside.Keywords
                 case nameof(LambdicSql.Keywords.Update):
                     {
                         tableName = converter.ToString(method.Arguments[0]);
-                        return new HorizontalText() + "UPDATE " + tableName;
+                        return new HText("UPDATE", tableName) { Separator = " "};
                     }
                 case nameof(LambdicSql.Keywords.Set):
                     {
                         //TODO これよくないAssignを継承したクラスを作ってって感じ　それか、Assignはそういうものってするか？
                         var name = tableName + ".";
                         var array = method.Arguments[1] as NewArrayExpression;
-                        var texts = new VerticalText();
+                        var texts = new VText();
                         texts.Add("SET");
-                        texts.Add(new VerticalText(",", array.Expressions.Select(e => converter.ToString(e)).ToArray()) { Indent = 1});
+                        texts.Add(new VText(",", array.Expressions.Select(e => converter.ToString(e)).ToArray()) { Indent = 1});
                         return texts;
                    //     return Environment.NewLine + "SET" + Environment.NewLine + "\t" +
                    //         string.Join("," + Environment.NewLine + "\t", array.Expressions.Select(e => converter.ToString(e).Replace(name, string.Empty)).ToArray());

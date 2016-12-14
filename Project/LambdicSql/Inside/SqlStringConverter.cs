@@ -125,7 +125,7 @@ namespace LambdicSql.Inside
         {
             if (array.Expressions.Count == 0) return new DecodedInfo(null, new SingleText(string.Empty));
             var infos = array.Expressions.Select(e => ToString(e)).ToArray();
-            return new DecodedInfo(infos[0].Type, new HorizontalText(infos.Select(e=>e.Text).ToArray()) { Separator = ", " });
+            return new DecodedInfo(infos[0].Type, new HText(infos.Select(e=>e.Text).ToArray()) { Separator = ", " });
         }
 
         DecodedInfo ToString(UnaryExpression unary)
@@ -173,7 +173,7 @@ namespace LambdicSql.Inside
             if (nullCheck != null) return nullCheck;
 
             var nodeType = ToString(left, binary.NodeType, right);
-            return new DecodedInfo(nodeType.Type, new HorizontalText(left.Text.ConcatAround("(", ")"), nodeType.Text.ConcatAround(" ", " "), right.Text.ConcatAround("(", ")")));
+            return new DecodedInfo(nodeType.Type, new HText(left.Text.ConcatAround("(", ")"), nodeType.Text.ConcatAround(" ", " "), right.Text.ConcatAround("(", ")")));
         }
         
         DecodedInfo ToString(MemberExpression member)
@@ -279,7 +279,7 @@ namespace LambdicSql.Inside
                 ret.Add(chain[0].GetConverotrMethod()(this, chain));
             }
 
-            return new DecodedInfo(method.Method.ReturnType, new VerticalText(ret.ToArray()));
+            return new DecodedInfo(method.Method.ReturnType, new VText(ret.ToArray()));
         }
 
         DecodedInfo ResolveSqlExpressionBody(MemberExpression member)
@@ -408,7 +408,7 @@ namespace LambdicSql.Inside
                 {
                     list.Add(ToString(e));
                 }
-                return new DecodedInfo(exp.Type, new HorizontalText(list.ToArray()) { Separator = ", " });
+                return new DecodedInfo(exp.Type, new HText(list.ToArray()) { Separator = ", " });
             }
 
             //value type is SqlSyntax

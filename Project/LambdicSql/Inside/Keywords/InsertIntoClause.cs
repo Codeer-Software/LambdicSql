@@ -8,7 +8,7 @@ namespace LambdicSql.Inside.Keywords
     static class InsertIntoClause
     {
         internal static IText ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
-            => new VerticalText(methods.Select(m => MethodToString(converter, m)).ToArray());
+            => new VText(methods.Select(m => MethodToString(converter, m)).ToArray());
 
         static IText MethodToString(ISqlStringConverter converter, MethodCallExpression method)
         {
@@ -21,7 +21,7 @@ namespace LambdicSql.Inside.Keywords
         }
 
         static IText MethodToStringValues(ISqlStringConverter converter, MethodCallExpression method)
-            => new HorizontalText() { IsFunctional = true, Indent = 1} + "VALUES (" + converter.ToString(method.Arguments[1]) + ")";
+            => new HText("VALUES (", converter.ToString(method.Arguments[1]), ")") { IsFunctional = true, Indent = 1};
 
         static IText MethodToStringInsertInto(ISqlStringConverter converter, MethodCallExpression method)
         {
@@ -33,7 +33,7 @@ namespace LambdicSql.Inside.Keywords
             {
                 converter.UsingColumnNameOnly = true;
                 var arg = converter.ToString(method.Arguments[1]);//@@@.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(e => GetColumnOnly(e)).ToArray();
-                return new HorizontalText() { IsFunctional = true } + "INSERT INTO " + table + "(" + new HorizontalText(arg) { Separator = ", " } + ")";
+                return new HText("INSERT INTO ", table, "(", new HText(arg) { Separator = ", " }, ")") { IsFunctional = true };
             }
             finally
             {

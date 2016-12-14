@@ -46,7 +46,7 @@ namespace LambdicSql.Inside.Keywords
             {
                 createInfo = ObjectCreateAnalyzer.MakeSelectInfo(selectTarget);
                 selectTargetText =
-                    new VerticalText(",", createInfo.Members.Select(e => ToStringSelectedElement(converter, e)).ToArray()) { Indent = 1 };
+                    new VText(",", createInfo.Members.Select(e => ToStringSelectedElement(converter, e)).ToArray()) { Indent = 1 };
             }
 
             //remember creat info.
@@ -55,9 +55,9 @@ namespace LambdicSql.Inside.Keywords
        //     return Environment.NewLine + string.Join(" ", new[] { "SELECT" }.Concat(modify.Select(e => converter.ToString(e))).ToArray()) + selectTargetText;
 
            //return select clause text.
-            var select = new HorizontalText() { Separator = " " } + x;
+            var select = new HText() { Separator = " " } + x;
        //     select.AddRange(modify.Select(e => converter.ToString(e)));
-            return selectTargetText == null ? (IText)new SingleText(x) : new VerticalText(new SingleText(x), selectTargetText);
+            return selectTargetText == null ? (IText)new SingleText(x) : new VText(new SingleText(x), selectTargetText);
         }
 
         static IText ToStringSelectedElement(ISqlStringConverter converter, ObjectCreateMemberInfo element)
@@ -68,7 +68,7 @@ namespace LambdicSql.Inside.Keywords
 
             //TODO この無理やりくっつけるのはなくてもいいかな
             //normal select.
-            return new HorizontalText() { IsNotLineChange = true } + converter.ToString(element.Expression) + " AS " + element.Name;
+            return new HText(converter.ToString(element.Expression), " AS ", element.Name) { IsNotLineChange = true };
         }
     }
 }

@@ -10,8 +10,8 @@ namespace LambdicSql.Inside.Keywords
     {
         internal static IText ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
-            var v = new VerticalText();
-            HorizontalText h = null;
+            var v = new VText();
+            HText h = null;
             for (int i = 0; i < methods.Length; i++)
             {
                 var m = methods[i];
@@ -25,38 +25,37 @@ namespace LambdicSql.Inside.Keywords
                 {
                     case nameof(LambdicSql.Keywords.Case):
                         {
-                            var text = new HorizontalText() { Separator = " ", IsFunctional = true } + "CASE";
+                            var text = new HText("CASE") { Separator = " ", IsFunctional = true };
                             if (argSrc.Length == 1)
                             {
-                                text += argSrc[0];
+                                text.Add(argSrc[0]);
                             }
                             v.Add(text);
                         }
                         break;
                     case nameof(LambdicSql.Keywords.When):
                         {
-                            h = new HorizontalText() { Separator = " ", IsFunctional = true, Indent = 1 } + "WHEN" + SqlDisplayAdjuster.AdjustSubQueryString(argSrc[0]);
+                            h = new HText("WHEN", SqlDisplayAdjuster.AdjustSubQueryString(argSrc[0])) { Separator = " ", IsFunctional = true, Indent = 1 };
                         }
                         break;
                     case nameof(LambdicSql.Keywords.Then):
                         {
                             if (h != null)
                             {
-                                h = h + (new HorizontalText() { Separator = " ", IsFunctional = true } + "THEN" + argSrc[0]);
+                                h.Add(new HText("THEN", argSrc[0]) { Separator = " ", IsFunctional = true });
                                 v.Add(h);
-                                h = null;
                             }
                             else
                             {
-                                v.Add(new HorizontalText() { Separator = " ", IsFunctional = true, Indent = 1 } + "THEN" + argSrc[0]);
+                                v.Add(new HText("THEN", argSrc[0]) { Separator = " ", IsFunctional = true, Indent = 1 });
                             }
                             break;
                         }
                     case nameof(LambdicSql.Keywords.Else):
-                        v.Add(new HorizontalText() { Separator = " ", IsFunctional = true, Indent = 1 } + "ELSE" + argSrc[0]);
+                        v.Add(new HText("ELSE", argSrc[0]) { Separator = " ", IsFunctional = true, Indent = 1 });
                         break;
                     case nameof(LambdicSql.Keywords.End):
-                        v.Add(new SingleText("END"));
+                        v.Add("END");
                         break;
                     default:
                         throw new NotSupportedException();

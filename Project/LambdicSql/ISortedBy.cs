@@ -23,10 +23,10 @@ namespace LambdicSql
         public Asc(object target) { InvalitContext.Throw("new " + nameof(Asc)); }
 
         static IText ToString(ISqlStringConverter cnv, NewExpression exp)
-            => new HorizontalText() { Separator = " " } + cnv.ToString(exp.Arguments[0]) + "ASC";
+            => new HText(cnv.ToString(exp.Arguments[0]), "ASC") { Separator = " " };
 
         static IText ToString(ISqlStringConverter cnv, MethodCallExpression[] methods)
-            => new HorizontalText() { Separator = " " } + cnv.ToString(methods[0].Arguments[0]) + "ASC";
+            => new HText(cnv.ToString(methods[0].Arguments[0]), "ASC") { Separator = " " };
     }
 
     /// <summary>
@@ -42,9 +42,9 @@ namespace LambdicSql
         public Desc(object target) { InvalitContext.Throw("new " + nameof(Desc)); }
 
         static IText ToString(ISqlStringConverter cnv, NewExpression exp)
-            => new HorizontalText() { Separator = " " } + cnv.ToString(exp.Arguments[0]) + "DESC";
+            => new HText(cnv.ToString(exp.Arguments[0]), "DESC") { Separator = " " };
 
         static IText ToString(ISqlStringConverter cnv, MethodCallExpression[] methods)
-            => new HorizontalText() { Separator = " " } + cnv.ToString(methods[0].Arguments[0]) + "DESC";
+            => new HText(cnv.ToString(methods[0].Arguments[0]), "DESC") { Separator = " " };
     }
 }

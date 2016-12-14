@@ -9,30 +9,31 @@ namespace LambdicSql.Inside.Keywords
     static class FromClause
     {
         internal static IText ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
-            => new VerticalText(methods.Select(m=> MethodToString(converter, m)).ToArray());
+            => new VText(methods.Select(m=> MethodToString(converter, m)).ToArray());
 
         static IText MethodToString(ISqlStringConverter converter, MethodCallExpression method)
         {
-            HorizontalText name = null;
+            HText name = null;
             var startIndex = method.SkipMethodChain(0);
             switch (method.Method.Name)
             {
                 case nameof(LambdicSql.Keywords.From):
-                    return new HorizontalText() { Separator = " ", IsFunctional = true } + "FROM" + ExpressionToTableName(converter, method.Arguments[startIndex]);
+                    return new HText("FROM", ExpressionToTableName(converter, method.Arguments[startIndex])) { Separator = " ", IsFunctional = true };
                 case nameof(LambdicSql.Keywords.CrossJoin):
-                    return new HorizontalText() { Separator = " ", IsFunctional = true, Indent = 1 } + "CROSS JOIN" + ExpressionToTableName(converter, method.Arguments[startIndex]);
+                    return new HText("CROSS JOIN", ExpressionToTableName(converter, method.Arguments[startIndex])) { Separator = " ", IsFunctional = true, Indent = 1 };
                 case nameof(LambdicSql.Keywords.LeftJoin):
-                    name = new HorizontalText() { Separator = " ", IsFunctional = true, Indent = 1 } + "LEFT JOIN";
+                    name = new HText("LEFT JOIN") { Separator = " ", IsFunctional = true, Indent = 1 };
                     break;
                 case nameof(LambdicSql.Keywords.RightJoin):
-                    name = new HorizontalText() { Separator = " ", IsFunctional = true, Indent = 1 } + "RIGHT JOIN";
+                    name = new HText("RIGHT JOIN") { Separator = " ", IsFunctional = true, Indent = 1 };
                     break;
                 case nameof(LambdicSql.Keywords.Join):
-                    name = new HorizontalText() { Separator = " ", IsFunctional = true, Indent = 1 } + "JOIN";
+                    name = new HText("JOIN") { Separator = " ", IsFunctional = true, Indent = 1 };
                     break;
             }
             var condition = converter.ToString(method.Arguments[startIndex + 1]);
-            return name + ExpressionToTableName(converter, method.Arguments[startIndex]) + "ON" + condition;
+            name.AddRange(ExpressionToTableName(converter, method.Arguments[startIndex]), "ON", condition);
+            return name;
         }
 
         static IText ExpressionToTableName(ISqlStringConverter decoder, Expression exp)
@@ -43,7 +44,7 @@ namespace LambdicSql.Inside.Keywords
             var arry = exp as NewArrayExpression;
             if (arry != null)
             {
-                return new HorizontalText(arry.Expressions.Select(e => ExpressionToTableName(decoder, e)).ToArray()) { Separator = "," };
+                return new HText(arry.Expressions.Select(e => ExpressionToTableName(decoder, e)).ToArray()) { Separator = "," };
             }
 
             var text = decoder.ToString(exp);
@@ -54,8 +55,7 @@ namespace LambdicSql.Inside.Keywords
                 var member = methodCall.Arguments[0] as MemberExpression;
                 if (member != null)
                 {
-                    var x = member.Member.Name;
-                    return new HorizontalText() { Separator = " ", IsNotLineChange = true } + text + x;
+                    return new HText(text, member.Member.Name) { Separator = " ", IsNotLineChange = true };
                 }
                 return text;
             }
@@ -64,7 +64,7 @@ namespace LambdicSql.Inside.Keywords
             var body = GetSqlExpressionBody(exp);
             if (body != null)
             {
-                return new HorizontalText() { Separator = " ", IsNotLineChange = true } + text + body;
+                return new HText(text, body) { Separator = " ", IsNotLineChange = true };
             }
             return text;
         }

@@ -215,17 +215,18 @@ namespace LambdicSql
                 case nameof(Count):
                     if (method.Arguments.Count == 2)
                     {
-                        return new HorizontalText() { IsFunctional = true } + method.Method.Name.ToUpper() + "(" + new HorizontalText(args) { Separator = " " } + ")";
+                        return new HText(method.Method.Name.ToUpper(), "(", new HText(args) { Separator = " " }, ")") { IsFunctional = true };
                     }
                     break;
                 case nameof(Extract):
-                    return new HorizontalText() { IsFunctional = true } + (method.Method.Name.ToUpper() + "(") + args[0] + " FROM " + args[1] + ")";
+                    //TODO 括弧の付け方は AddAroundに統一したいな
+                    return new HText(method.Method.Name.ToUpper() + "(", args[0], " FROM ", args[1] , ")") { IsFunctional = true };
                 case nameof(Cast):
-                    return new HorizontalText() { IsFunctional = true } + "CAST((" + args[0] + ") AS " + converter.Context.Parameters.ResolvePrepare(args[1].ToString(0)) + ")";
+                    return new HText("CAST((", args[0], ") AS ", converter.Context.Parameters.ResolvePrepare(args[1].ToString(0)), ")") { IsFunctional = true };
                 default:
                     break;
             }
-            return new HorizontalText() { IsFunctional = true } + method.Method.Name.ToUpper() + "(" + new HorizontalText(args)  { Separator = ", " }+ ")";
+            return new HText(method.Method.Name.ToUpper(), "(", new HText(args) { Separator = ", " }, ")") { IsFunctional = true };
         }
     }
 }
