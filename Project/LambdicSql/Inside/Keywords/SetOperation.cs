@@ -19,7 +19,7 @@ namespace LambdicSql.Inside.Keywords
                     text += " ALL";
                 }
             }
-            return new SingleText(text);
+            return text;
         }
     }
 }

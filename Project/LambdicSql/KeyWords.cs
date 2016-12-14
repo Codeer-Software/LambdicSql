@@ -938,13 +938,13 @@ namespace LambdicSql
             switch (member.Member.Name)
             {
                 case nameof(CurrentSpaceDate):
-                    return new SingleText("CURRENT DATE");
+                    return "CURRENT DATE";
                 case nameof(CurrentSpaceTime):
-                    return new SingleText("CURRENT TIME");
+                    return "CURRENT TIME";
                 case nameof(CurrentSpaceTimeStamp):
-                    return new SingleText("CURRENT TIMESTAMP");
+                    return "CURRENT TIMESTAMP";
             }
-            return new SingleText(member.Member.Name.ToUpper());
+            return member.Member.Name.ToUpper();
         }
 
         static TextParts ToString(ISqlStringConverter converter, MethodCallExpression[] methods)

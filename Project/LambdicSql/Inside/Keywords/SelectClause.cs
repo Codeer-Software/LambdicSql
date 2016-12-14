@@ -46,7 +46,7 @@ namespace LambdicSql.Inside.Keywords
             {
                 createInfo = ObjectCreateAnalyzer.MakeSelectInfo(selectTarget);
                 selectTargetText =
-                    new VText(",", createInfo.Members.Select(e => ToStringSelectedElement(converter, e)).ToArray()) { Indent = 1 };
+                    new VText(createInfo.Members.Select(e => ToStringSelectedElement(converter, e)).ToArray()) { Indent = 1, Separator = "," };
             }
 
             //remember creat info.
@@ -57,7 +57,7 @@ namespace LambdicSql.Inside.Keywords
            //return select clause text.
             var select = new HText() { Separator = " " } + x;
        //     select.AddRange(modify.Select(e => converter.ToString(e)));
-            return selectTargetText == null ? (TextParts)new SingleText(x) : new VText(new SingleText(x), selectTargetText);
+            return selectTargetText == null ? (TextParts)x : new VText(x, selectTargetText);
         }
 
         static TextParts ToStringSelectedElement(ISqlStringConverter converter, ObjectCreateMemberInfo element)

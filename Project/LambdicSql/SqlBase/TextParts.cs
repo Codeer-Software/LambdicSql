@@ -299,7 +299,11 @@ namespace LambdicSql.SqlBase
     public class VText : TextParts
     {
         List<TextParts> _texts = new List<TextParts>();
-        string _separator = string.Empty;
+
+        /// <summary>
+        /// Separator
+        /// </summary>
+        public string Separator { get; set; }
 
         /// <summary>
         /// Indent
@@ -331,17 +335,6 @@ namespace LambdicSql.SqlBase
         }
 
         /// <summary>
-        /// Constructor.
-        /// </summary>
-        /// <param name="separator">Separator.</param>
-        /// <param name="texts">Vertical texts.</param>
-        public VText(string separator, params TextParts[] texts)
-        {
-            _separator = separator;
-            _texts.AddRange(texts.Where(e => !e.IsEmpty));
-        }
-
-        /// <summary>
         /// To string.
         /// </summary>
         /// <param name="indent">Indent.</param>
@@ -352,7 +345,7 @@ namespace LambdicSql.SqlBase
         string GetSeparator(int i)
         {
             if (_texts.Count == 1 || i == _texts.Count - 1) return string.Empty;
-            return _separator;
+            return Separator;
         }
 
         /// <summary>
@@ -407,11 +400,11 @@ namespace LambdicSql.SqlBase
         /// <returns>Text.</returns>
         public override TextParts ConcatAround(string front, string back)
         {
-            if (_texts.Count == 0) return new VText(_separator, new SingleText(front + back)) { Indent = Indent };
+            if (_texts.Count == 0) return new VText(new SingleText(front + back)) { Indent = Indent, Separator = Separator };
             var dst = _texts.ToArray();
             dst[0] = dst[0].ConcatToFront(front);
             dst[dst.Length - 1] = dst[dst.Length - 1].ConcatToBack(back);
-            return new VText(_separator, dst) { Indent = Indent };
+            return new VText(dst) { Indent = Indent };
         }
 
         /// <summary>
@@ -421,10 +414,10 @@ namespace LambdicSql.SqlBase
         /// <returns>Text.</returns>
         public override TextParts ConcatToFront(string front)
         {
-            if (_texts.Count == 0) return new VText(_separator, new SingleText(front)) { Indent = Indent };
+            if (_texts.Count == 0) return new VText(new SingleText(front)) { Indent = Indent, Separator = Separator };
             var dst = _texts.ToArray();
             dst[0] = dst[0].ConcatToFront(front);
-            return new VText(_separator, dst) { Indent = Indent };
+            return new VText(dst) { Indent = Indent, Separator = Separator };
         }
 
         /// <summary>
@@ -434,10 +427,10 @@ namespace LambdicSql.SqlBase
         /// <returns></returns>
         public override TextParts ConcatToBack(string back)
         {
-            if (_texts.Count == 0) return new VText(_separator, new SingleText(back)) { Indent = Indent };
+            if (_texts.Count == 0) return new VText(new SingleText(back)) { Indent = Indent, Separator = Separator };
             var dst = _texts.ToArray();
             dst[dst.Length - 1] = dst[dst.Length - 1].ConcatToBack(back);
-            return new VText(_separator, dst) { Indent = Indent };
+            return new VText(dst) { Indent = Indent, Separator = Separator };
         }
     }
 }

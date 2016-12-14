@@ -49,9 +49,9 @@ namespace LambdicSql.Inside
             if (exp != null) return ToString(exp).Text;
 
             var param = obj as DbParam;
-            if (param != null) return new SingleText(Context.Parameters.Push(param.Value, null, null, param));
+            if (param != null) return Context.Parameters.Push(param.Value, null, null, param);
 
-            return new SingleText(Context.Parameters.Push(obj));
+            return Context.Parameters.Push(obj);
         }
 
         DecodedInfo ToString(Expression exp)
@@ -92,7 +92,7 @@ namespace LambdicSql.Inside
         DecodedInfo ToString(ConstantExpression constant)
         {
             //sql syntax.
-            if (constant.Type.IsSqlSyntax()) return new DecodedInfo(constant.Type, new SingleText(constant.Value.ToString().ToUpper()));
+            if (constant.Type.IsSqlSyntax()) return new DecodedInfo(constant.Type, constant.Value.ToString().ToUpper());
             //normal object.
             if (SupportedTypeSpec.IsSupported(constant.Type)) return new DecodedInfo(constant.Type, ToString(constant.Value));
 
@@ -123,7 +123,7 @@ namespace LambdicSql.Inside
 
         DecodedInfo ToString(NewArrayExpression array)
         {
-            if (array.Expressions.Count == 0) return new DecodedInfo(null, new SingleText(string.Empty));
+            if (array.Expressions.Count == 0) return new DecodedInfo(null, string.Empty);
             var infos = array.Expressions.Select(e => ToString(e)).ToArray();
             return new DecodedInfo(infos[0].Type, new HText(infos.Select(e=>e.Text).ToArray()) { Separator = ", " });
         }
@@ -164,7 +164,7 @@ namespace LambdicSql.Inside
             var left = ToString(binary.Left);
             var right = ToString(binary.Right);
 
-            if (left.Text.IsEmpty && right.Text.IsEmpty) return new DecodedInfo(null, new SingleText(string.Empty));
+            if (left.Text.IsEmpty && right.Text.IsEmpty) return new DecodedInfo(null, string.Empty);
             if (left.Text.IsEmpty) return right;
             if (right.Text.IsEmpty) return left;
 
@@ -208,15 +208,15 @@ namespace LambdicSql.Inside
                 TableInfo table;
                 if (Context.DbInfo.GetLambdaNameAndTable().TryGetValue(memberName, out table))
                 {
-                    return new DecodedInfo(null, new SingleText(table.SqlFullName));
+                    return new DecodedInfo(null, table.SqlFullName);
                 }
                 string col;
                 Type colType;
                 if (TryGetValueLambdaNameAndColumn(memberName, out col, out colType))
                 {
-                    return new DecodedInfo(colType, new SingleText(col));
+                    return new DecodedInfo(colType, col);
                 }
-                return new DecodedInfo(null, new SingleText(memberName));
+                return new DecodedInfo(null, memberName);
             }
 
             //db element.
@@ -226,13 +226,13 @@ namespace LambdicSql.Inside
                 TableInfo table;
                 if (Context.DbInfo.GetLambdaNameAndTable().TryGetValue(name, out table))
                 {
-                    return new DecodedInfo(null, new SingleText(table.SqlFullName));
+                    return new DecodedInfo(null, table.SqlFullName);
                 }
                 string col;
                 Type colType;
                 if (TryGetValueLambdaNameAndColumn(name, out col, out colType))
                 {
-                    return new DecodedInfo(colType, new SingleText(col));
+                    return new DecodedInfo(colType, col);
                 }
                 throw new NotSupportedException();
             }
@@ -302,35 +302,35 @@ namespace LambdicSql.Inside
             //for example, sub.Body
             if (members.Count == 2) return ResolveExpressionObject(members[0]);
             //for example, sub.Body.column.
-            else return new DecodedInfo(member.Type, new SingleText(string.Join(".", members.Where((e, i) => i != 1).Select(e => e.Member.Name).ToArray())));
+            else return new DecodedInfo(member.Type, string.Join(".", members.Where((e, i) => i != 1).Select(e => e.Member.Name).ToArray()));
         }
 
         DecodedInfo ToString(DecodedInfo left, ExpressionType nodeType, DecodedInfo right)
         {
             switch (nodeType)
             {
-                case ExpressionType.Equal: return new DecodedInfo(typeof(bool), new SingleText("="));
-                case ExpressionType.NotEqual: return new DecodedInfo(typeof(bool), new SingleText("<>"));
-                case ExpressionType.LessThan: return new DecodedInfo(typeof(bool), new SingleText("<"));
-                case ExpressionType.LessThanOrEqual: return new DecodedInfo(typeof(bool), new SingleText("<="));
-                case ExpressionType.GreaterThan: return new DecodedInfo(typeof(bool), new SingleText(">"));
-                case ExpressionType.GreaterThanOrEqual: return new DecodedInfo(typeof(bool), new SingleText(">="));
+                case ExpressionType.Equal: return new DecodedInfo(typeof(bool), "=");
+                case ExpressionType.NotEqual: return new DecodedInfo(typeof(bool), "<>");
+                case ExpressionType.LessThan: return new DecodedInfo(typeof(bool), "<");
+                case ExpressionType.LessThanOrEqual: return new DecodedInfo(typeof(bool), "<=");
+                case ExpressionType.GreaterThan: return new DecodedInfo(typeof(bool), ">");
+                case ExpressionType.GreaterThanOrEqual: return new DecodedInfo(typeof(bool), ">=");
                 case ExpressionType.Add:
                     {
                         if (left.Type == typeof(string) || right.Type == typeof(string))
                         {
-                            return new DecodedInfo(left.Type, new SingleText(_option.StringAddOperator));
+                            return new DecodedInfo(left.Type, _option.StringAddOperator);
                         }
-                        return new DecodedInfo(left.Type, new SingleText("+"));
+                        return new DecodedInfo(left.Type, "+");
                     }
-                case ExpressionType.Subtract: return new DecodedInfo(left.Type, new SingleText("-"));
-                case ExpressionType.Multiply: return new DecodedInfo(left.Type, new SingleText("*"));
-                case ExpressionType.Divide: return new DecodedInfo(left.Type, new SingleText("/"));
-                case ExpressionType.Modulo: return new DecodedInfo(left.Type, new SingleText("%"));
-                case ExpressionType.And: return new DecodedInfo(typeof(bool), new SingleText("AND"));
-                case ExpressionType.AndAlso: return new DecodedInfo(typeof(bool), new SingleText("AND"));
-                case ExpressionType.Or: return new DecodedInfo(typeof(bool), new SingleText("OR"));
-                case ExpressionType.OrElse: return new DecodedInfo(typeof(bool), new SingleText("OR"));
+                case ExpressionType.Subtract: return new DecodedInfo(left.Type, "-");
+                case ExpressionType.Multiply: return new DecodedInfo(left.Type, "*");
+                case ExpressionType.Divide: return new DecodedInfo(left.Type, "/");
+                case ExpressionType.Modulo: return new DecodedInfo(left.Type, "%");
+                case ExpressionType.And: return new DecodedInfo(typeof(bool), "AND");
+                case ExpressionType.AndAlso: return new DecodedInfo(typeof(bool), "AND");
+                case ExpressionType.Or: return new DecodedInfo(typeof(bool), "OR");
+                case ExpressionType.OrElse: return new DecodedInfo(typeof(bool), "OR");
             }
             throw new NotImplementedException();
         }
@@ -420,7 +420,7 @@ namespace LambdicSql.Inside
                     var ret = _sqlSyntaxCustomizer.ToString(this, obj);
                     if (ret != null) return new DecodedInfo(exp.Type, ret);
                 }
-                return new DecodedInfo(exp.Type, new SingleText(obj.ToString().ToUpper()));
+                return new DecodedInfo(exp.Type, obj.ToString().ToUpper());
             }
 
             //normal object.
@@ -436,7 +436,7 @@ namespace LambdicSql.Inside
                 }
 
                 //use field name.
-                return new DecodedInfo(exp.Type, new SingleText(Context.Parameters.Push(obj, name, metadataToken)));
+                return new DecodedInfo(exp.Type, Context.Parameters.Push(obj, name, metadataToken));
             }
 
             //DbParam.
@@ -453,7 +453,7 @@ namespace LambdicSql.Inside
                 var param = ((DbParam)obj);
                 obj = param.Value;
                 //use field name.
-                return new DecodedInfo(exp.Type.GetGenericArguments()[0], new SingleText(Context.Parameters.Push(obj, name, metadataToken, param)));
+                return new DecodedInfo(exp.Type.GetGenericArguments()[0], Context.Parameters.Push(obj, name, metadataToken, param));
             }
             
             //SqlExpression.
@@ -480,7 +480,7 @@ namespace LambdicSql.Inside
                 }
 
                 //use field name.
-                return new DecodedInfo(exp.Type, new SingleText(Context.Parameters.Push(obj, name, metadataToken)));
+                return new DecodedInfo(exp.Type, Context.Parameters.Push(obj, name, metadataToken));
             }
         }
 

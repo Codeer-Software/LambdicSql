@@ -101,14 +101,14 @@ namespace LambdicSql
         static TextParts Condition(ISqlStringConverter converter, MethodCallExpression method)
         {
             var obj = converter.ToObject(method.Arguments[0]);
-            return (bool)obj ? converter.ToString(method.Arguments[1]) : new SingleText("");
+            return (bool)obj ? converter.ToString(method.Arguments[1]) : (TextParts)string.Empty;
         }
 
         static TextParts TextSql(ISqlStringConverter converter, MethodCallExpression method)
         {
             var text = (string)converter.ToObject(method.Arguments[0]);
             var array = method.Arguments[1] as NewArrayExpression;
-            return new SingleText(string.Format(text, array.Expressions.Select(e => converter.ToString(e).ToString(0)).ToArray()));
+            return string.Format(text, array.Expressions.Select(e => converter.ToString(e).ToString(0)).ToArray());
         }
 
         static TextParts TwoWaySql(ISqlStringConverter converter, MethodCallExpression method)
@@ -116,20 +116,15 @@ namespace LambdicSql
             var obj = converter.ToObject(method.Arguments[0]);
             var text = TowWaySqlSpec.ToStringFormat((string)obj);
             var array = method.Arguments[1] as NewArrayExpression;
-            return new SingleText(string.Format(text, array.Expressions.Select(e => converter.ToString(e).ToString(0)).ToArray()));
+            return string.Format(text, array.Expressions.Select(e => converter.ToString(e).ToString(0)).ToArray());
         }
 
         static TextParts ColumnOnly(ISqlStringConverter converter, MethodCallExpression method)
         {
             var dic = converter.Context.DbInfo.GetLambdaNameAndColumn().ToDictionary(e => e.Value.SqlFullName, e => e.Value.SqlColumnName);
             string col;
-            if (dic.TryGetValue(converter.ToString(method.Arguments[0]).ToString(0), out col)) return new SingleText(col);
+            if (dic.TryGetValue(converter.ToString(method.Arguments[0]).ToString(0), out col)) return col;
             throw new NotSupportedException("invalid column.");
         }
     }
 }
-
-//TODO あー！！！ToString(0)ってテストしづらい！！！
-//え？本当？冷静に考えるとそんなことないんじゃない？
-//今の不具合は逆になんで？
-

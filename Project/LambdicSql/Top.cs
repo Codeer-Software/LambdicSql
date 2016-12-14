@@ -26,9 +26,8 @@ namespace LambdicSql
 
         static TextParts ToString(ISqlStringConverter converter, ReadOnlyCollection<Expression> arguments)
         {
-            //TODO これだめだ。内部的に何度もパラメータ変換が実行される ToString(0)
             var args = arguments.Select(e => converter.ToString(e)).ToArray();
-            return new SingleText("TOP " + converter.Context.Parameters.ResolvePrepare(args[0].ToString(0)));
+            return "TOP " + converter.Context.Parameters.ResolvePrepare(args[0].ToString(0));
         }
     }
 }

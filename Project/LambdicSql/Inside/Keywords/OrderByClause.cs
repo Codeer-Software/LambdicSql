@@ -14,7 +14,7 @@ namespace LambdicSql.Inside.Keywords
             var array = arg as NewArrayExpression;
             var text = new VText();
             text.Add("ORDER BY");
-            var text2 = new VText(",");
+            var text2 = new VText() { Separator = "," };
             text2.AddRange(1, array.Expressions.Select(e => converter.ToString(e)).ToList());
             text.Add(text2);
             return text;

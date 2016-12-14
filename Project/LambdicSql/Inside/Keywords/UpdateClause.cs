@@ -35,7 +35,7 @@ namespace LambdicSql.Inside.Keywords
                         var array = method.Arguments[1] as NewArrayExpression;
                         var texts = new VText();
                         texts.Add("SET");
-                        texts.Add(new VText(",", array.Expressions.Select(e => converter.ToString(e)).ToArray()) { Indent = 1});
+                        texts.Add(new VText(array.Expressions.Select(e => converter.ToString(e)).ToArray()) { Indent = 1, Separator = "," });
                         return texts;
                    //     return Environment.NewLine + "SET" + Environment.NewLine + "\t" +
                    //         string.Join("," + Environment.NewLine + "\t", array.Expressions.Select(e => converter.ToString(e).Replace(name, string.Empty)).ToArray());
