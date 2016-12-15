@@ -442,33 +442,33 @@ namespace LambdicSql.Inside
             if (SupportedTypeSpec.IsSupported(exp.Type))
             {
                 string name = string.Empty;
-                int? metadataToken = null;
+                MetaId metaId = null;
                 var member = exp as MemberExpression;
                 if (member != null)
                 {
                     name = member.Member.Name;
-                    metadataToken = member.Member.MetadataToken;
+                    metaId = new MetaId(member.Member);
                 }
 
                 //use field name.
-                return new DecodedInfo(exp.Type, Context.Parameters.Push(obj, name, metadataToken));
+                return new DecodedInfo(exp.Type, Context.Parameters.Push(obj, name, metaId));
             }
 
             //DbParam.
             if (typeof(DbParam).IsAssignableFrom(exp.Type))
             {
                 string name = string.Empty;
-                int? metadataToken = null;
+                MetaId metaId = null;
                 var member = exp as MemberExpression;
                 if (member != null)
                 {
                     name = member.Member.Name;
-                    metadataToken = member.Member.MetadataToken;
+                    metaId = new MetaId(member.Member);
                 }
                 var param = ((DbParam)obj);
                 obj = param.Value;
                 //use field name.
-                return new DecodedInfo(exp.Type.GetGenericArguments()[0], Context.Parameters.Push(obj, name, metadataToken, param));
+                return new DecodedInfo(exp.Type.GetGenericArguments()[0], Context.Parameters.Push(obj, name, metaId, param));
             }
             
             //SqlExpression.
@@ -486,16 +486,16 @@ namespace LambdicSql.Inside
             //If it is correctly written it will be cast at the caller.
             {
                 string name = string.Empty;
-                int? metadataToken = null;
+                MetaId metaId = null;
                 var member = exp as MemberExpression;
                 if (member != null)
                 {
                     name = member.Member.Name;
-                    metadataToken = member.Member.MetadataToken;
+                    metaId = new MetaId(member.Member);
                 }
 
                 //use field name.
-                return new DecodedInfo(exp.Type, Context.Parameters.Push(obj, name, metadataToken));
+                return new DecodedInfo(exp.Type, Context.Parameters.Push(obj, name, metaId));
             }
         }
 

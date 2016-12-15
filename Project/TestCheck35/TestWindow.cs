@@ -63,8 +63,6 @@ namespace TestCheck35
 FROM tbl_remuneration");
         }
 
-        //TODO PARTITION BY の複数行のテスト！
-
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Avg2()
         {

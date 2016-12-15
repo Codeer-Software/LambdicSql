@@ -85,6 +85,8 @@ namespace LambdicSql.Inside
 
         static object GetBinaryExpression(BinaryExpression binaryExp)
         {
+            //TODO あれ？ binaryExp.Methodを使えばよいかも
+            //TODO あー、テストできてない！
             object objLeft, objRight;
             if (!GetExpressionObject(binaryExp.Left, out objLeft) ||
                 !GetExpressionObject(binaryExp.Right, out objRight))
@@ -217,6 +219,7 @@ namespace LambdicSql.Inside
                 args.Add(arg);
             }
 
+            //TODO MetaId
             //name.
             var getterName = newExp.Type.FullName + 
                 "(" + string.Join(",", ps.Select(e => e.FullName).ToArray()) + ")";
@@ -263,6 +266,7 @@ namespace LambdicSql.Inside
                 args.Add(instance);
             }
 
+            //TODO MetaId
             //name.
             var getterName = method.Method.DeclaringType.FullName + "." + method.Method.Name +
                 "(" + string.Join(",", ps.Select(e=>e.FullName).ToArray()) + ")";
@@ -339,6 +343,7 @@ namespace LambdicSql.Inside
                 member = member.Expression as MemberExpression;
             }
 
+            //TODO MetaId
             //name.
             var getterName = type.FullName + "@" + string.Join("@", names.ToArray());
 

@@ -149,7 +149,6 @@ FROM tbl_remuneration");
         {
             var exp = Sql<DB>.Create(db => new Asterisk<Remuneration>());
 
-            //TODO あれ？これSelect句の中で頑張ったきがする
             var query = Sql<DB>.Create(db =>
                 Select(exp.Body).
                 From(db.tbl_remuneration));

@@ -16,10 +16,8 @@ namespace LambdicSql.Inside
         static Dictionary<Type, Func<ISqlStringConverter, MemberExpression, SqlText>> _memberToStrings = new Dictionary<Type, Func<ISqlStringConverter, MemberExpression, SqlText>>();
         static Dictionary<Type, Func<ISqlStringConverter, NewExpression, SqlText>> _newToStrings = new Dictionary<Type, Func<ISqlStringConverter, NewExpression, SqlText>>();
         static Dictionary<Type, bool> _isSqlSyntax = new Dictionary<Type, bool>();
-
-        //TODO 本当はモジュールと組み合わせる必要があるらしい
-        static Dictionary<int, bool> _canResolveSqlSyntaxMethodChain = new Dictionary<int, bool>();
-        static Dictionary<int, string> _methodGroup = new Dictionary<int, string>();
+        static Dictionary<MetaId, bool> _canResolveSqlSyntaxMethodChain = new Dictionary<MetaId, bool>();
+        static Dictionary<MetaId, string> _methodGroup = new Dictionary<MetaId, string>();
 
         internal static bool IsSqlSyntax(this Type type)
         {
@@ -35,15 +33,16 @@ namespace LambdicSql.Inside
             }
         }
 
-        internal static bool CanResolveSqlSyntaxMethodChain(this MethodInfo type)
+        internal static bool CanResolveSqlSyntaxMethodChain(this MethodInfo methodInfo)
         {
             lock (_canResolveSqlSyntaxMethodChain)
             {
+                var id = new MetaId(methodInfo);
                 bool check;
-                if (!_canResolveSqlSyntaxMethodChain.TryGetValue(type.MetadataToken, out check))
+                if (!_canResolveSqlSyntaxMethodChain.TryGetValue(id, out check))
                 {
-                    check = type.GetCustomAttributes(true).Any(e => e is ResolveSqlSyntaxMethodChainAttribute);
-                    _canResolveSqlSyntaxMethodChain[type.MetadataToken] = check;
+                    check = methodInfo.GetCustomAttributes(true).Any(e => e is ResolveSqlSyntaxMethodChainAttribute);
+                    _canResolveSqlSyntaxMethodChain[id] = check;
                 }
                 return check;
             }
@@ -129,16 +128,17 @@ namespace LambdicSql.Inside
             }
         }
 
-        internal static string GetMethodGroupName(this MethodInfo method)
+        internal static string GetMethodGroupName(this MethodInfo methodInfo)
         {
             lock (_methodGroup)
             {
                 string groupName;
-                if (_methodGroup.TryGetValue(method.MetadataToken, out groupName)) return groupName;
+                var id = new MetaId(methodInfo);
+                if (_methodGroup.TryGetValue(id, out groupName)) return groupName;
 
-                var attr = method.GetCustomAttributes(typeof(MethodGroupAttribute), true).Cast<MethodGroupAttribute>().FirstOrDefault();
+                var attr = methodInfo.GetCustomAttributes(typeof(MethodGroupAttribute), true).Cast<MethodGroupAttribute>().FirstOrDefault();
                 groupName = attr == null ? string.Empty : attr.GroupName;
-                _methodGroup[method.MetadataToken] = groupName;
+                _methodGroup[id] = groupName;
                 return groupName;
             }
         }

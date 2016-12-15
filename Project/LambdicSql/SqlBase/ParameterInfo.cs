@@ -30,7 +30,7 @@ namespace LambdicSql.SqlBase
         public Dictionary<string, DbParam> GetDbParams()
             => _parameters.ToDictionary(e => e.Key, e => e.Value.Detail);
 
-        internal SqlText Push(object obj, string nameSrc = null, int? metadataToken = null, DbParam param = null)
+        internal SqlText Push(object obj, string nameSrc = null, MetaId metadataToken = null, DbParam param = null)
         {
             if (string.IsNullOrEmpty(nameSrc)) nameSrc = "p_" + _count++;
 
