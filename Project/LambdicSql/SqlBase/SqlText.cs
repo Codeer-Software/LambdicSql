@@ -56,7 +56,7 @@ namespace LambdicSql.SqlBase
         /// Convert string to IText.
         /// </summary>
         /// <param name="text">string.</param>
-        public static implicit operator SqlText (string text) => new SingleText(text);
+        public static implicit operator SqlText(string text) => new SingleText(text);
     }
 
     /// <summary>
@@ -173,7 +173,7 @@ namespace LambdicSql.SqlBase
         /// <param name="isTopLevel">Is top level.</param>
         /// <param name="indent">Indent.</param>
         /// <returns>Text.</returns>
-        public override string ToString(bool isTopLevel, int indent)=> base.ToString(false, indent);
+        public override string ToString(bool isTopLevel, int indent) => base.ToString(false, indent);
 
         /// <summary>
         /// Concat to front and back.
@@ -196,5 +196,14 @@ namespace LambdicSql.SqlBase
         /// <param name="back"></param>
         /// <returns></returns>
         public override SqlText ConcatToBack(string back) => new QueryText(Core.ConcatToBack(back));
+    }
+
+    internal class ParameterText : SingleText
+    {
+        public string Text { get; }
+        public ParameterText(string text) : base(text)
+        {
+            Text = text;
+        }
     }
 }

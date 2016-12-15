@@ -27,7 +27,7 @@ namespace LambdicSql
         static SqlText Convert(ISqlStringConverter converter, ReadOnlyCollection<Expression> arguments)
         {
             var args = arguments.Select(e => converter.Convert(e)).ToArray();
-            return "TOP " + converter.Context.Parameters.ResolvePrepare(args[0].ToString(false, 0));
+            return "TOP " + converter.Context.Parameters.ResolvePrepare(args[0]);
         }
     }
 }

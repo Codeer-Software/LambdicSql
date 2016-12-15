@@ -27,7 +27,7 @@ namespace LambdicSql.SqlBase
         public Dictionary<string, DbParam> GetDbParams()
             => _parameters.ToDictionary(e => e.Key, e => e.Value.Detail);
 
-        internal string Push(object obj, string nameSrc = null, int? metadataToken = null, DbParam param = null)
+        internal SqlText Push(object obj, string nameSrc = null, int? metadataToken = null, DbParam param = null)
         {
             if (string.IsNullOrEmpty(nameSrc)) nameSrc = "p_" + _count++;
 
@@ -39,7 +39,7 @@ namespace LambdicSql.SqlBase
                 //not be same direct value. 
                 if (metadataToken != null && metadataToken == val.MetadataToken)
                 {
-                    return name;
+                    return new ParameterText(name);
                 }
                 while (true)
                 {
@@ -49,7 +49,7 @@ namespace LambdicSql.SqlBase
                         //not be same direct value. 
                         if (metadataToken != null && metadataToken == val.MetadataToken)
                         {
-                            return nameCheck;
+                            return new ParameterText(nameCheck);
                         }
                     }
                     else
@@ -64,20 +64,18 @@ namespace LambdicSql.SqlBase
             if (param == null) param = new DbParam();
             param.Value = obj;
             _parameters.Add(name, new DecodingParameterInfo() { MetadataToken = metadataToken, Detail = param });
-            return name;
+            return new ParameterText(name);
         }
 
-        internal void SetDbParam(string key, DbParam param)
-        {
-            param.Value = _parameters[key].Detail.Value;
-            _parameters[key].Detail = param;
-        }
-
-        internal bool TryGetParam(string name, out object leftObj)
+        internal bool TryGetParam(SqlText key, out object leftObj)
         {
             leftObj = null;
+
+            var param = key as ParameterText;
+            if (param == null) return false;
+
             DecodingParameterInfo val;
-            if (_parameters.TryGetValue(name, out val))
+            if (_parameters.TryGetValue(param.Text, out val))
             {
                 leftObj = val.Detail.Value;
                 return true;
@@ -85,18 +83,24 @@ namespace LambdicSql.SqlBase
             return false;
         }
 
-        internal void Remove(string name)
-            => _parameters.Remove(name);
-
-        internal string ResolvePrepare(string key)
+        internal void Remove(SqlText key)
         {
+            var param = key as ParameterText;
+            if (param != null) _parameters.Remove(param.Text);
+        }
+
+        internal string ResolvePrepare(SqlText key)
+        {
+            var param = key as ParameterText;
+            if (param == null) return key.ToString(false, 0);
+
             DecodingParameterInfo val;
-            if (!_parameters.TryGetValue(key, out val)) return key;
-            _parameters.Remove(key);
+            if (!_parameters.TryGetValue(param.Text, out val)) return key.ToString(false, 0);
+            _parameters.Remove(param.Text);
             return val.Detail.Value.ToString();
         }
 
-        internal void ChangeObject(string key, object value)
-            => _parameters[key].Detail.Value = value;
+        internal void ChangeObject(SqlText key, object value)
+            => _parameters[((ParameterText)key).Text].Detail.Value = value;
     }
 }

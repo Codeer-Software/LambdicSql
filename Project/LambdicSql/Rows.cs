@@ -31,13 +31,13 @@ namespace LambdicSql
             var args = exp.Arguments.Select(e => converter.Convert(e)).ToArray();
             if (exp.Arguments.Count == 1)
             {
-                return "ROWS " + converter.Context.Parameters.ResolvePrepare(args[0].ToString(false, 0)) + " PRECEDING";
+                return "ROWS " + converter.Context.Parameters.ResolvePrepare(args[0]) + " PRECEDING";
             }
             else
             {
                 //Sql server can't use parameter.
-                return "ROWS BETWEEN " + converter.Context.Parameters.ResolvePrepare(args[0].ToString(false, 0)) +
-                    " PRECEDING AND " + converter.Context.Parameters.ResolvePrepare(args[1].ToString(false, 0)) + " FOLLOWING";
+                return "ROWS BETWEEN " + converter.Context.Parameters.ResolvePrepare(args[0]) +
+                    " PRECEDING AND " + converter.Context.Parameters.ResolvePrepare(args[1]) + " FOLLOWING";
             }
         }
     }

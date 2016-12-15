@@ -138,14 +138,12 @@ namespace LambdicSql.Inside
                     var ret = Convert(unary.Operand);
 
                     //In the case of parameters, execute casting.
-                    //TODO これだめだ。内部的に何度もパラメータ変換が実行される Convert(0)
-                    var paramText = ret.Text.ToString(false, 0);
                     object obj;
-                    if (Context.Parameters.TryGetParam(paramText, out obj))
+                    if (Context.Parameters.TryGetParam(ret.Text, out obj))
                     {
                         if (obj != null && !SupportedTypeSpec.IsSupported(obj.GetType()))
                         {
-                            Context.Parameters.ChangeObject(paramText, ExpressionToObject.ConvertObject(unary.Type, obj));
+                            Context.Parameters.ChangeObject(ret.Text, ExpressionToObject.ConvertObject(unary.Type, obj));
                         }
                     }
                     return ret;
@@ -359,13 +357,13 @@ namespace LambdicSql.Inside
             //TODO .Convert(0)多い
             //TODO これだめだ。内部的に何度もパラメータ変換が実行される Convert(0)
             object leftObj, rightObj;
-            var leftIsParam = Context.Parameters.TryGetParam(left.Text.ToString(false, 0), out leftObj);
-            var rightIsParam = Context.Parameters.TryGetParam(right.Text.ToString(false, 0), out rightObj);
+            var leftIsParam = Context.Parameters.TryGetParam(left.Text, out leftObj);
+            var rightIsParam = Context.Parameters.TryGetParam(right.Text, out rightObj);
             var bothParam = (leftIsParam && rightIsParam);
 
             var isParams = new[] { leftIsParam, rightIsParam };
             var objs = new[] { leftObj, rightObj };
-            var names = new[] { left.Text.ToString(false, 0), right.Text.ToString(false, 0) };
+            var names = new[] { left.Text, right.Text };
             var targetTexts = new[] { right.Text, left.Text };
             for (int i = 0; i < isParams.Length; i++)
             {

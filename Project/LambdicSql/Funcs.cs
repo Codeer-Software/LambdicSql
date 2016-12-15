@@ -222,7 +222,7 @@ namespace LambdicSql
                     //TODO 括弧の付け方は AddAroundに統一したいな
                     return new HText(method.Method.Name.ToUpper() + "(", args[0], " FROM ", args[1] , ")") { IsFunctional = true };
                 case nameof(Cast):
-                    return new HText("CAST((", args[0], ") AS ", converter.Context.Parameters.ResolvePrepare(args[1].ToString(false, 0)), ")") { IsFunctional = true };
+                    return new HText("CAST((", args[0], ") AS ", converter.Context.Parameters.ResolvePrepare(args[1]), ")") { IsFunctional = true };
                 default:
                     break;
             }
