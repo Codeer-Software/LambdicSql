@@ -196,6 +196,7 @@ namespace LambdicSql.Inside
                 return new DecodedInfo(member.Type, member.GetConverotrMethod()(this, member));
             }
 
+            //TODO テーブルとカラムはそれとわかる型にしておく
             //sql syntax extension method
             var method = member.Expression as MethodCallExpression;
             if (method != null && method.Method.DeclaringType.IsSqlSyntax())
@@ -257,7 +258,8 @@ namespace LambdicSql.Inside
             //not sql syntax.
             if (!method.Method.DeclaringType.IsSqlSyntax()) return ResolveExpressionObject(method);
 
-            //TODO Concatとかには対応しないといけないなー。一筆で書かないタイプ
+            //TODO Concatとか　対応はいらないと思うけどテスト書いておく
+
 
             var ret = new List<SqlText>();
             foreach (var c in GetMethodChains(method))

@@ -1092,7 +1092,7 @@ FROM SYSIBM.SYSDUMMY1");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	CAST((tbl_remuneration.money) AS int) AS id
+	CAST(tbl_remuneration.money AS int) AS id
 FROM tbl_remuneration");
         }
 
@@ -1117,7 +1117,7 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	CAST((tbl_remuneration.money) AS int) AS id
+	CAST(tbl_remuneration.money AS int) AS id
 FROM tbl_remuneration");
         }
 

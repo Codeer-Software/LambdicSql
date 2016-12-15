@@ -3,6 +3,7 @@ using LambdicSql.SqlBase;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using static LambdicSql.SqlTextUtil;
 
 namespace LambdicSql
 {
@@ -213,20 +214,32 @@ namespace LambdicSql
             {
                 case nameof(Sum):
                 case nameof(Count):
-                    if (method.Arguments.Count == 2)
-                    {
-                        return new HText(method.Method.Name.ToUpper(), "(", new HText(args) { Separator = " " }, ")") { IsFunctional = true };
-                    }
+                    if (method.Arguments.Count == 2) return FuncSpace(method.Method.Name.ToUpper(), args);
                     break;
                 case nameof(Extract):
-                    //TODO 括弧の付け方は AddAroundに統一したいな
-                    return new HText(method.Method.Name.ToUpper() + "(", args[0], " FROM ", args[1] , ")") { IsFunctional = true };
+                    return FuncSpace(method.Method.Name.ToUpper(), args[0], "FROM", args[1]);
                 case nameof(Cast):
-                    return new HText("CAST((", args[0], ") AS ", converter.Context.Parameters.ResolvePrepare(args[1]), ")") { IsFunctional = true };
+                    return FuncSpace("CAST", args[0], "AS", converter.Context.Parameters.ResolvePrepare(args[1]));
                 default:
                     break;
             }
-            return new HText(method.Method.Name.ToUpper(), "(", new HText(args) { Separator = ", " }, ")") { IsFunctional = true };
+            return Func(method.Method.Name.ToUpper(), args);
+        }
+    }
+
+    //TODO 移動
+    static class SqlTextUtil
+    {
+        public static SqlText Func(string func, params SqlText[] args)
+            => Func(func, ", ", args);
+
+        public static SqlText FuncSpace(string func, params SqlText[] args)
+            => Func(func, " ", args);
+
+        static SqlText Func(string func, string separator, params SqlText[] args)
+        {
+            var hArgs = new HText(args) { Separator = separator }.ConcatToBack(")");
+            return new HText(func + "(", hArgs) { IsFunctional = true };
         }
     }
 }
