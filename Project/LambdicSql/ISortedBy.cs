@@ -2,6 +2,7 @@
 using LambdicSql.SqlBase;
 using System.Linq.Expressions;
 using LambdicSql.SqlBase.TextParts;
+using static LambdicSql.SqlBase.TextParts.SqlTextUtils;
 
 namespace LambdicSql
 {
@@ -24,10 +25,10 @@ namespace LambdicSql
         public Asc(object target) { InvalitContext.Throw("new " + nameof(Asc)); }
 
         static SqlText Convert(ISqlStringConverter cnv, NewExpression exp)
-            => new HText(cnv.Convert(exp.Arguments[0]), "ASC") { Separator = " " };
+            => LineSpace(cnv.Convert(exp.Arguments[0]), "ASC");
 
         static SqlText Convert(ISqlStringConverter cnv, MethodCallExpression[] methods)
-            => new HText(cnv.Convert(methods[0].Arguments[0]), "ASC") { Separator = " " };
+            => LineSpace(cnv.Convert(methods[0].Arguments[0]), "ASC");
     }
 
     /// <summary>
@@ -43,9 +44,9 @@ namespace LambdicSql
         public Desc(object target) { InvalitContext.Throw("new " + nameof(Desc)); }
 
         static SqlText Convert(ISqlStringConverter cnv, NewExpression exp)
-            => new HText(cnv.Convert(exp.Arguments[0]), "DESC") { Separator = " " };
+            => LineSpace(cnv.Convert(exp.Arguments[0]), "DESC");
 
         static SqlText Convert(ISqlStringConverter cnv, MethodCallExpression[] methods)
-            => new HText(cnv.Convert(methods[0].Arguments[0]), "DESC") { Separator = " " };
+            => LineSpace(cnv.Convert(methods[0].Arguments[0]), "DESC");
     }
 }

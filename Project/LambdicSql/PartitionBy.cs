@@ -21,17 +21,18 @@ namespace LambdicSql
 
         static SqlText Convert(ISqlStringConverter converter, NewExpression exp)
         {
-            var arg = exp.Arguments[0];
-            var array = arg as NewArrayExpression;
-            var texts = new VText();
-            texts.Add("PARTITION BY");
+            var partitionBy = new VText();
+            partitionBy.Add("PARTITION BY");
+
             var elements = new VText() { Indent = 1, Separator = "," };
+            var array = exp.Arguments[0] as NewArrayExpression;
             foreach (var e in array.Expressions.Select(e => converter.Convert(e)))
             {
                 elements.Add(e);
             }
-            texts.Add(elements);
-            return texts;
+            partitionBy.Add(elements);
+
+            return partitionBy;
         }
     }
 }

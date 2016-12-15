@@ -29,13 +29,15 @@ namespace LambdicSql
         static SqlText Convert(ISqlStringConverter converter, NewExpression exp)
         {
             var args = exp.Arguments.Select(e => converter.Convert(e)).ToArray();
+
+            //Sql server can't use parameter.
+            //TODO ここもパラメータキャストで解決できるようにする
             if (exp.Arguments.Count == 1)
             {
                 return "ROWS " + converter.Context.Parameters.ResolvePrepare(args[0]) + " PRECEDING";
             }
             else
             {
-                //Sql server can't use parameter.
                 return "ROWS BETWEEN " + converter.Context.Parameters.ResolvePrepare(args[0]) +
                     " PRECEDING AND " + converter.Context.Parameters.ResolvePrepare(args[1]) + " FOLLOWING";
             }

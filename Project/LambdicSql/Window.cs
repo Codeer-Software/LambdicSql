@@ -3,6 +3,7 @@ using LambdicSql.SqlBase;
 using LambdicSql.SqlBase.TextParts;
 using System.Linq;
 using System.Linq.Expressions;
+using static LambdicSql.SqlBase.TextParts.SqlTextUtils;
 
 namespace LambdicSql
 {
@@ -279,9 +280,7 @@ namespace LambdicSql
                     break;
                 default:
                     var method = methods[0];
-                    var h = new HText(method.Method.Name.ToUpper(), "(") { IsFunctional = true };
-                    h.AddRange(new HText(method.Arguments.Skip(method.SkipMethodChain(0)).Select(e => converter.Convert(e)).ToArray()) { Separator = ", " }, ")");
-                   v.Add(h);
+                    v.Add(Func(method.Method.Name.ToUpper(), method.Arguments.Skip(method.SkipMethodChain(0)).Select(e => converter.Convert(e)).ToArray()));
                     break;
             }
             var overMethod = methods[1];

@@ -6,6 +6,8 @@ using System;
 
 namespace LambdicSql.SqlBase
 {
+    //TODO パラメータを遅延でできる設計にする
+
     /// <summary>
     /// Parameter info.
     /// </summary>

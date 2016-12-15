@@ -22,17 +22,18 @@ namespace LambdicSql
 
         static SqlText Convert(ISqlStringConverter converter, NewExpression exp)
         {
-            var arg = exp.Arguments[0];
-            var array = arg as NewArrayExpression;
-            var texts = new VText();
-            texts.Add("ORDER BY");
+            var orderBy = new VText();
+            orderBy.Add("ORDER BY");
+
             var elements = new VText() { Indent = 1, Separator = "," };
+            var array = exp.Arguments[0] as NewArrayExpression;
             foreach (var e in array.Expressions.Select(e => converter.Convert(e)))
             {
                 elements.Add(e);
             }
-            texts.Add(elements);
-            return texts;
+            orderBy.Add(elements);
+
+            return orderBy;
         }
     }
 }

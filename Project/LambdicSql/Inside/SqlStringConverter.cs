@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
+using static LambdicSql.SqlBase.TextParts.SqlTextUtils;
 
 namespace LambdicSql.Inside
 {
@@ -25,6 +26,7 @@ namespace LambdicSql.Inside
         SqlConvertOption _option;
         ISqlSyntaxCustomizer _sqlSyntaxCustomizer;
 
+        //TODO 特定の型にしてVisitで変更すれば何とかなるんだよね。
         public bool UsingColumnNameOnly { get; set; }
 
         public SqlConvertingContext Context { get; }
@@ -93,6 +95,7 @@ namespace LambdicSql.Inside
         {
             //sql syntax.
             if (constant.Type.IsSqlSyntax()) return new DecodedInfo(constant.Type, constant.Value.ToString().ToUpper());
+
             //normal object.
             if (SupportedTypeSpec.IsSupported(constant.Type)) return new DecodedInfo(constant.Type, Convert(constant.Value));
 
@@ -125,7 +128,7 @@ namespace LambdicSql.Inside
         {
             if (array.Expressions.Count == 0) return new DecodedInfo(null, string.Empty);
             var infos = array.Expressions.Select(e => Convert(e)).ToArray();
-            return new DecodedInfo(infos[0].Type, new HText(infos.Select(e=>e.Text).ToArray()) { Separator = ", " });
+            return new DecodedInfo(infos[0].Type, Arguments(infos.Select(e=>e.Text).ToArray()));
         }
 
         DecodedInfo Convert(UnaryExpression unary)
@@ -313,6 +316,7 @@ namespace LambdicSql.Inside
 
             //for example, sub.Body
             if (members.Count == 2) return ResolveExpressionObject(members[0]);
+
             //for example, sub.Body.column.
             else return new DecodedInfo(member.Type, string.Join(".", members.Where((e, i) => i != 1).Select(e => e.Member.Name).ToArray()));
         }
@@ -356,8 +360,7 @@ namespace LambdicSql.Inside
                 case ExpressionType.NotEqual: ope = " IS NOT NULL"; break;
                 default: return null;
             }
-            //TODO .Convert(0)多い
-            //TODO これだめだ。内部的に何度もパラメータ変換が実行される Convert(0)
+
             object leftObj, rightObj;
             var leftIsParam = Context.Parameters.TryGetParam(left.Text, out leftObj);
             var rightIsParam = Context.Parameters.TryGetParam(right.Text, out rightObj);
@@ -420,7 +423,7 @@ namespace LambdicSql.Inside
                 {
                     list.Add(Convert(e));
                 }
-                return new DecodedInfo(exp.Type, new HText(list.ToArray()) { Separator = ", " });
+                return new DecodedInfo(exp.Type, Arguments(list.ToArray()));
             }
 
             //value type is SqlSyntax
