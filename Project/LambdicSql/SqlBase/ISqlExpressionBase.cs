@@ -1,4 +1,6 @@
-﻿namespace LambdicSql.SqlBase
+﻿using LambdicSql.SqlBase.TextParts;
+
+namespace LambdicSql.SqlBase
 {
     /// <summary>
     /// Expression.

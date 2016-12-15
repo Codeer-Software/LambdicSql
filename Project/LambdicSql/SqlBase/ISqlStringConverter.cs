@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using LambdicSql.SqlBase.TextParts;
 
 namespace LambdicSql.SqlBase
 {

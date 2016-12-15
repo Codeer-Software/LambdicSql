@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace LambdicSql.SqlBase
+namespace LambdicSql.SqlBase.TextParts
 {
     /// <summary>
     /// Single text.

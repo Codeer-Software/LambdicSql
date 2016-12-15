@@ -1,9 +1,10 @@
 ﻿using LambdicSql.Inside;
 using LambdicSql.SqlBase;
+using LambdicSql.SqlBase.TextParts;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
-using static LambdicSql.SqlTextUtil;
+using static LambdicSql.SqlBase.TextParts.SqlTextUtils;
 
 namespace LambdicSql
 {
@@ -224,22 +225,6 @@ namespace LambdicSql
                     break;
             }
             return Func(method.Method.Name.ToUpper(), args);
-        }
-    }
-
-    //TODO 移動
-    static class SqlTextUtil
-    {
-        public static SqlText Func(string func, params SqlText[] args)
-            => Func(func, ", ", args);
-
-        public static SqlText FuncSpace(string func, params SqlText[] args)
-            => Func(func, " ", args);
-
-        static SqlText Func(string func, string separator, params SqlText[] args)
-        {
-            var hArgs = new HText(args) { Separator = separator }.ConcatToBack(")");
-            return new HText(func + "(", hArgs) { IsFunctional = true };
         }
     }
 }

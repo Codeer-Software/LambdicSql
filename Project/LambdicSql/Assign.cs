@@ -1,7 +1,6 @@
 ﻿using LambdicSql.Inside;
 using LambdicSql.SqlBase;
-using System;
-using System.Linq;
+using LambdicSql.SqlBase.TextParts;
 using System.Linq.Expressions;
 
 namespace LambdicSql

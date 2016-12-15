@@ -3,6 +3,7 @@ using System;
 using System.Linq.Expressions;
 using System.Linq;
 using System.Collections.Generic;
+using LambdicSql.SqlBase.TextParts;
 
 namespace LambdicSql.Inside.Keywords
 {

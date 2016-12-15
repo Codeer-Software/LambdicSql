@@ -1,4 +1,5 @@
 ﻿using LambdicSql.Inside;
+using LambdicSql.SqlBase.TextParts;
 using System.Collections.Generic;
 using System.Linq;
 using System;

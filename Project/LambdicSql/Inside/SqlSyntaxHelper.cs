@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Linq;
 using System.Reflection;
+using LambdicSql.SqlBase.TextParts;
 
 namespace LambdicSql.Inside
 {

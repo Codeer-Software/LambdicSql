@@ -1,7 +1,8 @@
-﻿using LambdicSql.SqlBase;
+﻿using LambdicSql;
+using LambdicSql.SqlBase;
+using LambdicSql.SqlBase.TextParts;
 using System.Linq.Expressions;
 using System;
-using LambdicSql;
 using System.Diagnostics;
 using System.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
