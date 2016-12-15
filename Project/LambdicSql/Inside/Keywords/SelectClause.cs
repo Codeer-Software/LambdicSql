@@ -3,10 +3,10 @@ using LambdicSql.SqlBase.TextParts;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using static LambdicSql.SqlBase.TextParts.SqlTextUtils;
 
 namespace LambdicSql.Inside.Keywords
 {
-    //SELECTに関しても AS とこの部分はFunctionalではないようにする
     static class SelectClause
     {
         internal static SqlText Convert(ISqlStringConverter converter, MethodCallExpression[] methods)
@@ -19,40 +19,33 @@ namespace LambdicSql.Inside.Keywords
             {
                 modify.Add(method.Arguments[i]);
             }
-            //TODO modifyの扱いが良くないのと、これは改行入れて欲しくないの表現が難しい　後文字列化も良くないけど、しょうがないか？
-            //まあ、これは改行入れて欲しくないは文字列でいい気もするけど・・・
-            var x = "SELECT";
-            if (modify.Count != 0)
-            {
-                x += " ";
-                x += string.Join(" ", modify.Select(e => converter.Convert(e).ToString(false, 0)).ToArray());
-            }
 
-            //select core.
-            var selectTarget = method.Arguments[method.Arguments.Count - 1];
+            var select = LineSpace(new SqlText[] { "SELECT" }.Concat(modify.Select(e => converter.Convert(e))).ToArray());
+
+            //select elemnts.
+            var selectTargets = method.Arguments[method.Arguments.Count - 1];
             SqlText selectTargetText = null;
             ObjectCreateInfo createInfo = null;
 
             //*
-            if (typeof(Asterisk).IsAssignableFrom(selectTarget.Type))
+            if (typeof(Asterisk).IsAssignableFrom(selectTargets.Type))
             {
-                var asteriskType = selectTarget.Type.IsGenericType ? selectTarget.Type.GetGenericTypeDefinition() : null;
+                var asteriskType = selectTargets.Type.IsGenericType ? selectTargets.Type.GetGenericTypeDefinition() : null;
                 if (asteriskType == typeof(Asterisk<>)) createInfo = ObjectCreateAnalyzer.MakeSelectInfo(asteriskType);
-                x += " *";
+                select.Add("*");
             }
             //new { item = db.tbl.column }
             else
             {
-                createInfo = ObjectCreateAnalyzer.MakeSelectInfo(selectTarget);
+                createInfo = ObjectCreateAnalyzer.MakeSelectInfo(selectTargets);
                 selectTargetText =
                     new VText(createInfo.Members.Select(e => ToStringSelectedElement(converter, e)).ToArray()) { Indent = 1, Separator = "," };
             }
 
             //remember creat info.
             if (converter.Context.ObjectCreateInfo == null) converter.Context.ObjectCreateInfo = createInfo;
-
-            var select = new HText() { Separator = " " } + x;
-            return new SelectClauseText(selectTargetText == null ? (SqlText)x : new VText(x, selectTargetText));
+            
+            return new SelectClauseText(selectTargetText == null ? (SqlText)select : new VText(select, selectTargetText));
         }
 
         static SqlText ToStringSelectedElement(ISqlStringConverter converter, ObjectCreateMemberInfo element)
@@ -60,13 +53,9 @@ namespace LambdicSql.Inside.Keywords
             //single select.
             //for example, COUNT(*).
             if (string.IsNullOrEmpty(element.Name)) return converter.Convert(element.Expression);
-
-            //TODO この無理やりくっつけるのはなくてもいいかな
+            
             //normal select.
-            return new HText(converter.Convert(element.Expression), " AS ", element.Name) { EnableChangeLine = false };
+            return LineSpace(converter.Convert(element.Expression), "AS", element.Name);
         }
     }
-
-
- //   class SelectClauseText()
 }

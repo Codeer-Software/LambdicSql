@@ -72,7 +72,7 @@
     <Compile Include="Inside\ExpressionToObject.Getter.cs" />
     <Compile Include="Inside\SqlExpressionCoupled.cs" />
     <Compile Include="SqlBase\TextParts\HText.cs" />
-    <Compile Include="SqlBase\SingleText.cs" />
+    <Compile Include="SqlBase\TextParts\SingleText.cs" />
     <Compile Include="SqlBase\TextParts\ParameterText.cs" />
     <Compile Include="SqlBase\TextParts\QueryText.cs" />
     <Compile Include="SqlBase\TextParts\SelectClauseText.cs" />

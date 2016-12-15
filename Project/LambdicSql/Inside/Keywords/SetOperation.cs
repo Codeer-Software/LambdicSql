@@ -9,17 +9,14 @@ namespace LambdicSql.Inside.Keywords
         internal static SqlText Convert(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
-            var text = method.Method.Name.ToUpper();
+            var clause = method.Method.Name.ToUpper();
             var index = method.SkipMethodChain(0);
             if (index < method.Arguments.Count)
             {
                 var obj = converter.ToObject(method.Arguments[index]);
-                if ((bool)obj)
-                {
-                    text += " ALL";
-                }
+                if ((bool)obj) clause += " ALL";
             }
-            return text;
+            return clause;
         }
     }
 }

@@ -1011,8 +1011,9 @@ namespace LambdicSql
                 case nameof(Minus):
                     return SetOperation.Convert(converter, methods);
                 case nameof(IsNull):
+                    return NullCheck.ConvertIsNull(converter, methods);
                 case nameof(IsNotNull):
-                    return NullCheck.Convert(converter, methods);
+                    return NullCheck.ConvertIsNotNull(converter, methods);
             }
             throw new NotSupportedException();
         }
