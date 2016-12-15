@@ -7,7 +7,7 @@ namespace LambdicSql.Inside.Keywords
 {
     static class InsertIntoClause
     {
-        internal static TextParts ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static TextParts Convert(ISqlStringConverter converter, MethodCallExpression[] methods)
             => new VText(methods.Select(m => MethodToString(converter, m)).ToArray());
 
         static TextParts MethodToString(ISqlStringConverter converter, MethodCallExpression method)
@@ -21,18 +21,18 @@ namespace LambdicSql.Inside.Keywords
         }
 
         static TextParts MethodToStringValues(ISqlStringConverter converter, MethodCallExpression method)
-            => new HText("VALUES (", converter.ToString(method.Arguments[1]), ")") { IsFunctional = true, Indent = 1};
+            => new HText("VALUES (", converter.Convert(method.Arguments[1]), ")") { IsFunctional = true, Indent = 1};
 
         static TextParts MethodToStringInsertInto(ISqlStringConverter converter, MethodCallExpression method)
         {
-            var table = converter.ToString(method.Arguments[0]);
+            var table = converter.Convert(method.Arguments[0]);
             //column should not have a table name.
             //TODO ここでargをコンバートしている区間はカラム名称のみにするとかできたらいい。
             bool src = converter.UsingColumnNameOnly;
             try
             {
                 converter.UsingColumnNameOnly = true;
-                var arg = converter.ToString(method.Arguments[1]);//@@@.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(e => GetColumnOnly(e)).ToArray();
+                var arg = converter.Convert(method.Arguments[1]);//@@@.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(e => GetColumnOnly(e)).ToArray();
                 return new HText("INSERT INTO ", table, "(", new HText(arg) { Separator = ", " }, ")") { IsFunctional = true };
             }
             finally

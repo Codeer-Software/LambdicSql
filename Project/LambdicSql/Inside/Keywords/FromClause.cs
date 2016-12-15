@@ -8,7 +8,7 @@ namespace LambdicSql.Inside.Keywords
 {
     static class FromClause
     {
-        internal static TextParts ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static TextParts Convert(ISqlStringConverter converter, MethodCallExpression[] methods)
             => new VText(methods.Select(m=> MethodToString(converter, m)).ToArray());
 
         static TextParts MethodToString(ISqlStringConverter converter, MethodCallExpression method)
@@ -31,7 +31,7 @@ namespace LambdicSql.Inside.Keywords
                     name = new HText("JOIN") { Separator = " ", IsFunctional = true, Indent = 1 };
                     break;
             }
-            var condition = converter.ToString(method.Arguments[startIndex + 1]);
+            var condition = converter.Convert(method.Arguments[startIndex + 1]);
             name.AddRange(ExpressionToTableName(converter, method.Arguments[startIndex]), "ON", condition);
             return name;
         }
@@ -47,7 +47,7 @@ namespace LambdicSql.Inside.Keywords
                 return new HText(arry.Expressions.Select(e => ExpressionToTableName(decoder, e)).ToArray()) { Separator = "," };
             }
 
-            var text = decoder.ToString(exp);
+            var text = decoder.Convert(exp);
 
             var methodCall = exp as MethodCallExpression;
             if (methodCall != null)

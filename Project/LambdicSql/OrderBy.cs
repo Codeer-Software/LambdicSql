@@ -20,14 +20,14 @@ namespace LambdicSql
         /// <param name="elements">Specify column and sort order. Asc(column) or Desc(column).</param>
         public OrderBy(params ISortedBy[] elements) { InvalitContext.Throw("new " + nameof(OrderBy)); }
 
-        static TextParts ToString(ISqlStringConverter converter, NewExpression exp)
+        static TextParts Convert(ISqlStringConverter converter, NewExpression exp)
         {
             var arg = exp.Arguments[0];
             var array = arg as NewArrayExpression;
             var texts = new VText();
             texts.Add("ORDER BY");
             var elements = new VText() { Indent = 1, Separator = "," };
-            foreach (var e in array.Expressions.Select(e => converter.ToString(e)))
+            foreach (var e in array.Expressions.Select(e => converter.Convert(e)))
             {
                 elements.Add(e);
             }

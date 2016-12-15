@@ -8,10 +8,11 @@ namespace LambdicSql.Inside.Keywords
     static class ConditionKeyWords
     {
         //TODO ToStringではなくなったな 素直にConvertかな。
-        internal static TextParts ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        //そんでこれは関数を分ける！
+        internal static TextParts Convert(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
-            var args = method.Arguments.Select(e => SqlDisplayAdjuster.AdjustSubQuery(e, converter.ToString(e))).ToArray();
+            var args = method.Arguments.Select(e => SqlDisplayAdjuster.AdjustSubQuery(e, converter.Convert(e))).ToArray();
             switch (method.Method.Name)
             {
                 case nameof(LambdicSql.Keywords.Like):

@@ -8,13 +8,13 @@ namespace LambdicSql.Inside.Keywords
 {
     static class CaseClause
     {
-        internal static TextParts ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static TextParts Convert(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var texts = new VText();
             HText whenThen = null;
             foreach(var m in methods)
             {
-                var argSrc = m.Arguments.Skip(m.SkipMethodChain(0)).Select(e => converter.ToString(e)).ToArray();
+                var argSrc = m.Arguments.Skip(m.SkipMethodChain(0)).Select(e => converter.Convert(e)).ToArray();
 
                 switch (m.Method.Name)
                 {

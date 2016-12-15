@@ -44,7 +44,7 @@ namespace LambdicSql
         {
             var context = new SqlConvertingContext(exp.DbInfo, option.ParameterPrefix);
             var converter = new SqlStringConverter(context, option, customizer);
-            var text = exp.ToString(converter);
+            var text = exp.Convert(converter);
 
             //adjust for display.
           //  text = SqlDisplayAdjuster.Adjust(text);

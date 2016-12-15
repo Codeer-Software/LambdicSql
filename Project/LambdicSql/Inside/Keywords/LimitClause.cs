@@ -7,10 +7,10 @@ namespace LambdicSql.Inside.Keywords
 {
     static class LimitClause
     {
-        internal static TextParts ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static TextParts Convert(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
-            var args = new HText(method.Arguments.Skip(method.SkipMethodChain(0)).Select(e=>converter.ToString(e)).ToArray()) { Separator = ", " };
+            var args = new HText(method.Arguments.Skip(method.SkipMethodChain(0)).Select(e=>converter.Convert(e)).ToArray()) { Separator = ", " };
             return new HText("LIMIT ", args) { IsFunctional = true};
         }
     }

@@ -26,9 +26,9 @@ namespace LambdicSql
         /// <param name="following">Following row count.</param>
         public Rows(int preceding, int following) { InvalitContext.Throw("new " + nameof(Rows)); }
 
-        static TextParts ToString(ISqlStringConverter converter, NewExpression exp)
+        static TextParts Convert(ISqlStringConverter converter, NewExpression exp)
         {
-            var args = exp.Arguments.Select(e => converter.ToString(e)).ToArray();
+            var args = exp.Arguments.Select(e => converter.Convert(e)).ToArray();
             if (exp.Arguments.Count == 1)
             {
                 return "ROWS " + converter.Context.Parameters.ResolvePrepare(args[0].ToString(0)) + " PRECEDING";

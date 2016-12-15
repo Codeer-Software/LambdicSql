@@ -19,14 +19,14 @@ namespace LambdicSql
         /// <param name="columns">Specify column or expression.</param>
         public PartitionBy(params object[] columns) { InvalitContext.Throw("new " + nameof(PartitionBy)); }
 
-        static TextParts ToString(ISqlStringConverter converter, NewExpression exp)
+        static TextParts Convert(ISqlStringConverter converter, NewExpression exp)
         {
             var arg = exp.Arguments[0];
             var array = arg as NewArrayExpression;
             var texts = new VText();
             texts.Add("PARTITION BY");
             var elements = new VText() { Indent = 1, Separator = "," };
-            foreach (var e in array.Expressions.Select(e => converter.ToString(e)))
+            foreach (var e in array.Expressions.Select(e => converter.Convert(e)))
             {
                 elements.Add(e);
             }

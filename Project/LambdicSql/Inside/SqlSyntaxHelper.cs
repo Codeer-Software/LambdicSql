@@ -56,7 +56,7 @@ namespace LambdicSql.Inside
                 Func<ISqlStringConverter, MethodCallExpression[], TextParts> func;
                 if (_methodToStrings.TryGetValue(type, out func)) return func;
                 
-                var methodToString = type.GetMethod("ToString", MethodFindFlags,
+                var methodToString = type.GetMethod("Convert", MethodFindFlags,
                     null,
                     new Type[] { typeof(ISqlStringConverter), typeof(MethodCallExpression[]) },
                     new ParameterModifier[0]);
@@ -83,7 +83,7 @@ namespace LambdicSql.Inside
                 Func<ISqlStringConverter, MemberExpression, TextParts> func;
                 if (_memberToStrings.TryGetValue(type, out func)) return func;
 
-                var methodToString = type.GetMethod("ToString", MethodFindFlags,
+                var methodToString = type.GetMethod("Convert", MethodFindFlags,
                     null,
                     new Type[] { typeof(ISqlStringConverter), typeof(MemberExpression) },
                     new ParameterModifier[0]);
@@ -110,7 +110,7 @@ namespace LambdicSql.Inside
                 Func<ISqlStringConverter, NewExpression, TextParts> func;
                 if (_newToStrings.TryGetValue(type, out func)) return func;
 
-                var newToString = type.GetMethod("ToString", MethodFindFlags,
+                var newToString = type.GetMethod("Convert", MethodFindFlags,
                     null,
                     new Type[] { typeof(ISqlStringConverter), typeof(NewExpression) },
                     new ParameterModifier[0]);

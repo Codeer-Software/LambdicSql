@@ -933,7 +933,7 @@ namespace LambdicSql
         /// </summary>
         public static SysibmType Sysibm => InvalitContext.Throw<SysibmType>(nameof(Sysibm));
 
-        static TextParts ToString(ISqlStringConverter converter, MemberExpression member)
+        static TextParts Convert(ISqlStringConverter converter, MemberExpression member)
         {
             switch (member.Member.Name)
             {
@@ -947,60 +947,60 @@ namespace LambdicSql
             return member.Member.Name.ToUpper();
         }
 
-        static TextParts ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        static TextParts Convert(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
             switch (method.Method.Name)
             {
                 case nameof(Select):
-                    return SelectClause.ToString(converter, methods);
+                    return SelectClause.Convert(converter, methods);
                 case nameof(Case):
-                    return CaseClause.ToString(converter, methods);
+                    return CaseClause.Convert(converter, methods);
                 case nameof(Delete):
-                    return DeleteClause.ToString(converter, methods);
+                    return DeleteClause.Convert(converter, methods);
                 case nameof(From):
                 case nameof(Join):
                 case nameof(LeftJoin):
                 case nameof(RightJoin):
                 case nameof(CrossJoin):
-                    return FromClause.ToString(converter, methods);
+                    return FromClause.Convert(converter, methods);
                 case nameof(GroupBy):
                 case nameof(GroupByRollup):
                 case nameof(GroupByWithRollup):
                 case nameof(GroupByCube):
                 case nameof(GroupByGroupingSets):
-                    return GroupByClause.ToString(converter, methods);
+                    return GroupByClause.Convert(converter, methods);
                 case nameof(Having):
-                    return HavingClause.ToString(converter, methods);
+                    return HavingClause.Convert(converter, methods);
                 case nameof(InsertInto):
-                    return InsertIntoClause.ToString(converter, methods);
+                    return InsertIntoClause.Convert(converter, methods);
                 case nameof(OrderBy):
-                    return OrderByWordsClause.ToString(converter, methods);
+                    return OrderByWordsClause.Convert(converter, methods);
                 case nameof(OffsetRows):
-                    return OffsetRowsClause.ToString(converter, methods);
+                    return OffsetRowsClause.Convert(converter, methods);
                 case nameof(FetchNextRowsOnly):
-                    return FetchNextRowsOnlyClause.ToString(converter, methods);
+                    return FetchNextRowsOnlyClause.Convert(converter, methods);
                 case nameof(Limit):
-                    return LimitClause.ToString(converter, methods);
+                    return LimitClause.Convert(converter, methods);
                 case nameof(Offset):
-                    return OffsetClause.ToString(converter, methods);
+                    return OffsetClause.Convert(converter, methods);
                 case nameof(Update):
-                    return UpdateClause.ToString(converter, methods);
+                    return UpdateClause.Convert(converter, methods);
                 case nameof(Where):
-                    return WhereClause.ToString(converter, methods);
+                    return WhereClause.Convert(converter, methods);
                 case nameof(In):
                 case nameof(Like):
                 case nameof(Between):
                 case nameof(Exists):
-                    return ConditionKeyWords.ToString(converter, methods);
+                    return ConditionKeyWords.Convert(converter, methods);
                 case nameof(Union):
                 case nameof(Intersect):
                 case nameof(Except):
                 case nameof(Minus):
-                    return SetOperation.ToString(converter, methods);
+                    return SetOperation.Convert(converter, methods);
                 case nameof(IsNull):
                 case nameof(IsNotNull):
-                    return NullCheck.ToString(converter, methods);
+                    return NullCheck.Convert(converter, methods);
             }
             throw new NotSupportedException();
         }

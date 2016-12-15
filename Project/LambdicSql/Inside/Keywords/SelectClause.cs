@@ -9,7 +9,7 @@ namespace LambdicSql.Inside.Keywords
     //SELECTに関しても AS とこの部分はFunctionalではないようにする
     static class SelectClause
     {
-        internal static TextParts ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static TextParts Convert(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
 
@@ -26,7 +26,7 @@ namespace LambdicSql.Inside.Keywords
             {
                 //TODO これだめだ。内部的に何度もパラメータ変換が実行される ToString(0)
                 x += " ";
-                x += string.Join(" ", modify.Select(e => converter.ToString(e).ToString(0)).ToArray());
+                x += string.Join(" ", modify.Select(e => converter.Convert(e).ToString(0)).ToArray());
             }
 
             //select core.
@@ -64,11 +64,11 @@ namespace LambdicSql.Inside.Keywords
         {
             //single select.
             //for example, COUNT(*).
-            if (string.IsNullOrEmpty(element.Name)) return converter.ToString(element.Expression);
+            if (string.IsNullOrEmpty(element.Name)) return converter.Convert(element.Expression);
 
             //TODO この無理やりくっつけるのはなくてもいいかな
             //normal select.
-            return new HText(converter.ToString(element.Expression), " AS ", element.Name) { EnableChangeLine = false };
+            return new HText(converter.Convert(element.Expression), " AS ", element.Name) { EnableChangeLine = false };
         }
     }
 }

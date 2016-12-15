@@ -43,10 +43,10 @@ namespace LambdicSql.Inside
         }
 
         //TODO ここに再帰カウンターを付けることによって、それが0でなければサブクエリだってことが分かる！つけすぎるとうざいから、メソッド呼び出しのところで。
-        public TextParts ToString(object obj)
+        public TextParts Convert(object obj)
         {
             var exp = obj as Expression;
-            if (exp != null) return ToString(exp).Text;
+            if (exp != null) return Convert(exp).Text;
 
             var param = obj as DbParam;
             if (param != null) return Context.Parameters.Push(param.Value, null, null, param);
@@ -54,52 +54,52 @@ namespace LambdicSql.Inside
             return Context.Parameters.Push(obj);
         }
 
-        DecodedInfo ToString(Expression exp)
+        DecodedInfo Convert(Expression exp)
         {
             var constant = exp as ConstantExpression;
-            if (constant != null) return ToString(constant);
+            if (constant != null) return Convert(constant);
 
             var newExp = exp as NewExpression;
-            if (newExp != null) return ToString(newExp);
+            if (newExp != null) return Convert(newExp);
 
             var array = exp as NewArrayExpression;
-            if (array != null) return ToString(array);
+            if (array != null) return Convert(array);
 
             var unary = exp as UnaryExpression;
-            if (unary != null) return ToString(unary);
+            if (unary != null) return Convert(unary);
 
             var binary = exp as BinaryExpression;
-            if (binary != null) return ToString(binary);
+            if (binary != null) return Convert(binary);
 
             var member = exp as MemberExpression;
-            if (member != null) return ToString(member);
+            if (member != null) return Convert(member);
 
             var method = exp as MethodCallExpression;
-            if (method != null) return ToString(method);
+            if (method != null) return Convert(method);
 
             var memberInit = exp as MemberInitExpression;
-            if (memberInit != null) return ToString(memberInit);
+            if (memberInit != null) return Convert(memberInit);
 
             throw new NotSupportedException("Not suported expression at LambdicSql.");
         }
 
-        DecodedInfo ToString(MemberInitExpression memberInit)
+        DecodedInfo Convert(MemberInitExpression memberInit)
         {
             var value = ExpressionToObject.GetMemberInitObject(memberInit);
-            return new DecodedInfo(memberInit.Type, ToString(value));
+            return new DecodedInfo(memberInit.Type, Convert(value));
         }
 
-        DecodedInfo ToString(ConstantExpression constant)
+        DecodedInfo Convert(ConstantExpression constant)
         {
             //sql syntax.
             if (constant.Type.IsSqlSyntax()) return new DecodedInfo(constant.Type, constant.Value.ToString().ToUpper());
             //normal object.
-            if (SupportedTypeSpec.IsSupported(constant.Type)) return new DecodedInfo(constant.Type, ToString(constant.Value));
+            if (SupportedTypeSpec.IsSupported(constant.Type)) return new DecodedInfo(constant.Type, Convert(constant.Value));
 
             throw new NotSupportedException();
         }
 
-        DecodedInfo ToString(NewExpression newExp)
+        DecodedInfo Convert(NewExpression newExp)
         {
             //syntax.
             if (newExp.Type.IsSqlSyntax())
@@ -107,7 +107,7 @@ namespace LambdicSql.Inside
                 //exist customizer.
                 if (_sqlSyntaxCustomizer != null)
                 {
-                    var ret = _sqlSyntaxCustomizer.ToString(this, newExp);
+                    var ret = _sqlSyntaxCustomizer.Convert(this, newExp);
                     if (ret != null) return new DecodedInfo(null, ret);
                 }
 
@@ -118,27 +118,27 @@ namespace LambdicSql.Inside
 
             //object.
             var value = ExpressionToObject.GetNewObject(newExp);
-            return new DecodedInfo(newExp.Type, ToString(value));
+            return new DecodedInfo(newExp.Type, Convert(value));
         }
 
-        DecodedInfo ToString(NewArrayExpression array)
+        DecodedInfo Convert(NewArrayExpression array)
         {
             if (array.Expressions.Count == 0) return new DecodedInfo(null, string.Empty);
-            var infos = array.Expressions.Select(e => ToString(e)).ToArray();
+            var infos = array.Expressions.Select(e => Convert(e)).ToArray();
             return new DecodedInfo(infos[0].Type, new HText(infos.Select(e=>e.Text).ToArray()) { Separator = ", " });
         }
 
-        DecodedInfo ToString(UnaryExpression unary)
+        DecodedInfo Convert(UnaryExpression unary)
         {
             switch (unary.NodeType)
             {
                 case ExpressionType.Not:
-                    return new DecodedInfo(typeof(bool), ToString(unary.Operand).Text.ConcatAround("NOT (", ")"));
+                    return new DecodedInfo(typeof(bool), Convert(unary.Operand).Text.ConcatAround("NOT (", ")"));
                 case ExpressionType.Convert:
-                    var ret = ToString(unary.Operand);
+                    var ret = Convert(unary.Operand);
 
                     //In the case of parameters, execute casting.
-                    //TODO これだめだ。内部的に何度もパラメータ変換が実行される ToString(0)
+                    //TODO これだめだ。内部的に何度もパラメータ変換が実行される Convert(0)
                     var paramText = ret.Text.ToString(0);
                     object obj;
                     if (Context.Parameters.TryGetParam(paramText, out obj))
@@ -155,14 +155,14 @@ namespace LambdicSql.Inside
                 case ExpressionType.ArrayIndex:
                     throw new NotSupportedException();
                 default:
-                    return ToString(unary.Operand);
+                    return Convert(unary.Operand);
             }
         }
 
-        DecodedInfo ToString(BinaryExpression binary)
+        DecodedInfo Convert(BinaryExpression binary)
         {
-            var left = ToString(binary.Left);
-            var right = ToString(binary.Right);
+            var left = Convert(binary.Left);
+            var right = Convert(binary.Right);
 
             if (left.Text.IsEmpty && right.Text.IsEmpty) return new DecodedInfo(null, string.Empty);
             if (left.Text.IsEmpty) return right;
@@ -172,11 +172,11 @@ namespace LambdicSql.Inside
             var nullCheck = ResolveNullCheck(left, binary.NodeType, right);
             if (nullCheck != null) return nullCheck;
 
-            var nodeType = ToString(left, binary.NodeType, right);
+            var nodeType = Convert(left, binary.NodeType, right);
             return new DecodedInfo(nodeType.Type, new HText(left.Text.ConcatAround("(", ")"), nodeType.Text.ConcatAround(" ", " "), right.Text.ConcatAround("(", ")")));
         }
         
-        DecodedInfo ToString(MemberExpression member)
+        DecodedInfo Convert(MemberExpression member)
         {
             //sub.Body
             var body = ResolveSqlExpressionBody(member);
@@ -188,7 +188,7 @@ namespace LambdicSql.Inside
                 //exist customizer.
                 if (_sqlSyntaxCustomizer != null)
                 {
-                    var custom = _sqlSyntaxCustomizer.ToString(this, member);
+                    var custom = _sqlSyntaxCustomizer.Convert(this, member);
                     if (custom != null)
                     {
                         return new DecodedInfo(member.Type, custom);
@@ -254,7 +254,7 @@ namespace LambdicSql.Inside
             return true;
         }
 
-        DecodedInfo ToString(MethodCallExpression method)
+        DecodedInfo Convert(MethodCallExpression method)
         {
             //not sql syntax.
             if (!method.Method.DeclaringType.IsSqlSyntax()) return ResolveExpressionObject(method);
@@ -267,7 +267,7 @@ namespace LambdicSql.Inside
                 //custom.
                 if (_sqlSyntaxCustomizer != null)
                 {
-                    var custom = _sqlSyntaxCustomizer.ToString(this, chain);
+                    var custom = _sqlSyntaxCustomizer.Convert(this, chain);
                     if (custom != null)
                     {
                         ret.Add(custom);
@@ -305,7 +305,7 @@ namespace LambdicSql.Inside
             else return new DecodedInfo(member.Type, string.Join(".", members.Where((e, i) => i != 1).Select(e => e.Member.Name).ToArray()));
         }
 
-        DecodedInfo ToString(DecodedInfo left, ExpressionType nodeType, DecodedInfo right)
+        DecodedInfo Convert(DecodedInfo left, ExpressionType nodeType, DecodedInfo right)
         {
             switch (nodeType)
             {
@@ -344,8 +344,8 @@ namespace LambdicSql.Inside
                 case ExpressionType.NotEqual: ope = " IS NOT NULL"; break;
                 default: return null;
             }
-            //TODO .ToString(0)多い
-            //TODO これだめだ。内部的に何度もパラメータ変換が実行される ToString(0)
+            //TODO .Convert(0)多い
+            //TODO これだめだ。内部的に何度もパラメータ変換が実行される Convert(0)
             object leftObj, rightObj;
             var leftIsParam = Context.Parameters.TryGetParam(left.Text.ToString(0), out leftObj);
             var rightIsParam = Context.Parameters.TryGetParam(right.Text.ToString(0), out rightObj);
@@ -406,7 +406,7 @@ namespace LambdicSql.Inside
                 var list = new List<TextParts>();
                 foreach (var e in (IEnumerable)obj)
                 {
-                    list.Add(ToString(e));
+                    list.Add(Convert(e));
                 }
                 return new DecodedInfo(exp.Type, new HText(list.ToArray()) { Separator = ", " });
             }
@@ -417,7 +417,7 @@ namespace LambdicSql.Inside
             {
                 if (_sqlSyntaxCustomizer != null)
                 {
-                    var ret = _sqlSyntaxCustomizer.ToString(this, obj);
+                    var ret = _sqlSyntaxCustomizer.Convert(this, obj);
                     if (ret != null) return new DecodedInfo(exp.Type, ret);
                 }
                 return new DecodedInfo(exp.Type, obj.ToString().ToUpper());
@@ -464,7 +464,7 @@ namespace LambdicSql.Inside
                 Type type = null;
                 var types = sqlExp.GetType().GetGenericArguments();
                 if (0 < types.Length) type = types[0];
-                return new DecodedInfo(type, SqlDisplayAdjuster.AdjustSubQueryString(sqlExp.ToString(this)));
+                return new DecodedInfo(type, SqlDisplayAdjuster.AdjustSubQueryString(sqlExp.Convert(this)));
             }
 
             //others.

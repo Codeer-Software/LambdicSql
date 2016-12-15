@@ -7,7 +7,7 @@ namespace LambdicSql.Inside.Keywords
 {
     static class OrderByWordsClause
     {
-        internal static TextParts ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static TextParts Convert(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
             var arg = method.Arguments[method.SkipMethodChain(0)];
@@ -15,7 +15,7 @@ namespace LambdicSql.Inside.Keywords
             var text = new VText();
             text.Add("ORDER BY");
             var text2 = new VText() { Separator = "," };
-            text2.AddRange(1, array.Expressions.Select(e => converter.ToString(e)).ToList());
+            text2.AddRange(1, array.Expressions.Select(e => converter.Convert(e)).ToList());
             text.Add(text2);
             return text;
         }

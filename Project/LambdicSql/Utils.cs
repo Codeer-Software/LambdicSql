@@ -79,7 +79,7 @@ namespace LambdicSql
         /// <returns>Column name only.</returns>
         public static T ColumnOnly<T>(T column) => InvalitContext.Throw<T>(nameof(ColumnOnly));
 
-        static TextParts ToString(ISqlStringConverter converter, MethodCallExpression[] methods)
+        static TextParts Convert(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
             switch (method.Method.Name)
@@ -87,9 +87,9 @@ namespace LambdicSql
                 case nameof(Cast):
                     if (typeof(IMethodChain).IsAssignableFrom(method.Arguments[0].Type))
                     {
-                        return SqlDisplayAdjuster.AdjustSubQueryString(converter.ToString(method.Arguments[0]));
+                        return SqlDisplayAdjuster.AdjustSubQueryString(converter.Convert(method.Arguments[0]));
                     }
-                    return converter.ToString(method.Arguments[0]);
+                    return converter.Convert(method.Arguments[0]);
                 case nameof(Condition): return Condition(converter, method);
                 case nameof(TextSql): return TextSql(converter, method);
                 case nameof(TwoWaySql): return TwoWaySql(converter, method);
@@ -101,14 +101,14 @@ namespace LambdicSql
         static TextParts Condition(ISqlStringConverter converter, MethodCallExpression method)
         {
             var obj = converter.ToObject(method.Arguments[0]);
-            return (bool)obj ? converter.ToString(method.Arguments[1]) : (TextParts)string.Empty;
+            return (bool)obj ? converter.Convert(method.Arguments[1]) : (TextParts)string.Empty;
         }
 
         static TextParts TextSql(ISqlStringConverter converter, MethodCallExpression method)
         {
             var text = (string)converter.ToObject(method.Arguments[0]);
             var array = method.Arguments[1] as NewArrayExpression;
-            return string.Format(text, array.Expressions.Select(e => converter.ToString(e).ToString(0)).ToArray());
+            return string.Format(text, array.Expressions.Select(e => converter.Convert(e).ToString(0)).ToArray());
         }
 
         static TextParts TwoWaySql(ISqlStringConverter converter, MethodCallExpression method)
@@ -116,14 +116,14 @@ namespace LambdicSql
             var obj = converter.ToObject(method.Arguments[0]);
             var text = TowWaySqlSpec.ToStringFormat((string)obj);
             var array = method.Arguments[1] as NewArrayExpression;
-            return string.Format(text, array.Expressions.Select(e => converter.ToString(e).ToString(0)).ToArray());
+            return string.Format(text, array.Expressions.Select(e => converter.Convert(e).ToString(0)).ToArray());
         }
 
         static TextParts ColumnOnly(ISqlStringConverter converter, MethodCallExpression method)
         {
             var dic = converter.Context.DbInfo.GetLambdaNameAndColumn().ToDictionary(e => e.Value.SqlFullName, e => e.Value.SqlColumnName);
             string col;
-            if (dic.TryGetValue(converter.ToString(method.Arguments[0]).ToString(0), out col)) return col;
+            if (dic.TryGetValue(converter.Convert(method.Arguments[0]).ToString(0), out col)) return col;
             throw new NotSupportedException("invalid column.");
         }
     }

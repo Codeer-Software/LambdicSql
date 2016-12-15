@@ -14,7 +14,7 @@ namespace TestCheck35
     public static class TestSynatax
     {
         public static IClauseChain<Non> Empty() => null;
-        static TextParts ToString(ISqlStringConverter converter, MethodCallExpression[] methods) => new SingleText(string.Empty);
+        static TextParts Convert(ISqlStringConverter converter, MethodCallExpression[] methods) => new SingleText(string.Empty);
     }
 
     public static class TestExtensions
