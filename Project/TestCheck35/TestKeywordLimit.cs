@@ -42,6 +42,8 @@ namespace TestCheck35
                  Limit(1, 3)
                  );
 
+            query.Gen(_connection);
+
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
@@ -207,6 +209,8 @@ FETCH NEXT @p_1 ROWS ONLY",
                  OrderBy(new Asc(db.tbl_remuneration.id)));
             var limit = Sql<DB>.Create(db => Limit(1, 3));
             query = query.Concat(limit);
+
+            query.Gen(_connection);
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);

@@ -970,11 +970,15 @@ namespace LambdicSql
                 case nameof(CrossJoin):
                     return FromClause.ConvertCrossJoin(converter, methods);
                 case nameof(GroupBy):
+                    return GroupByClause.ConvertGroupBy(converter, methods);
                 case nameof(GroupByRollup):
+                    return GroupByClause.ConvertGroupByRollup(converter, methods);
                 case nameof(GroupByWithRollup):
+                    return GroupByClause.ConvertGroupByWithRollup(converter, methods);
                 case nameof(GroupByCube):
+                    return GroupByClause.ConvertGroupByCube(converter, methods);
                 case nameof(GroupByGroupingSets):
-                    return GroupByClause.Convert(converter, methods);
+                    return GroupByClause.ConvertGroupByGroupingSets(converter, methods);
                 case nameof(Having):
                     return HavingClause.Convert(converter, methods);
                 case nameof(InsertInto):

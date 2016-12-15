@@ -171,7 +171,7 @@ HAVING (@p_0) < (SUM(tbl_remuneration.money))",
                 From(db.tbl_remuneration).
                 GroupBy(db.tbl_remuneration.staff_id).
                 Having(condition));
-
+            
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,

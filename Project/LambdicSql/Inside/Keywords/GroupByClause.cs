@@ -1,30 +1,25 @@
 ﻿using LambdicSql.SqlBase;
 using LambdicSql.SqlBase.TextParts;
-using System;
 using System.Linq.Expressions;
+using static LambdicSql.SqlBase.TextParts.SqlTextUtils;
 
 namespace LambdicSql.Inside.Keywords
 {
     static class GroupByClause
     {
-        internal static SqlText Convert(ISqlStringConverter converter, MethodCallExpression[] methods)
-        {
-            var method = methods[0];
-            var name = string.Empty;
-            switch (method.Method.Name)
-            {
-                case nameof(LambdicSql.Keywords.GroupBy):
-                    name = "GROUP BY";
-                    return new HText(name, converter.Convert(method.Arguments[method.SkipMethodChain(0)])) { Separator = " " };
-                case nameof(LambdicSql.Keywords.GroupByWithRollup):
-                    name = "GROUP BY";
-                    return new HText(name, converter.Convert(method.Arguments[method.SkipMethodChain(0)]), "WITH ROLLUP") { Separator = " " };
-                case nameof(LambdicSql.Keywords.GroupByRollup): name = "GROUP BY ROLLUP"; break;
-                case nameof(LambdicSql.Keywords.GroupByCube): name = "GROUP BY CUBE"; break;
-                case nameof(LambdicSql.Keywords.GroupByGroupingSets): name = "GROUP BY GROUPING SETS"; break;
-                default: throw new NotSupportedException();
-            }
-            return new HText(name, "(", converter.Convert(method.Arguments[method.SkipMethodChain(0)]), ")");
-        }
+        internal static SqlText ConvertGroupBy(ISqlStringConverter converter, MethodCallExpression[] methods)
+            => Clause("GROUP BY", converter.Convert(methods[0].Arguments[methods[0].SkipMethodChain(0)]));
+
+        internal static SqlText ConvertGroupByWithRollup(ISqlStringConverter converter, MethodCallExpression[] methods)
+           => Clause("GROUP BY", converter.Convert(methods[0].Arguments[methods[0].SkipMethodChain(0)]), "WITH ROLLUP");
+
+        internal static SqlText ConvertGroupByRollup(ISqlStringConverter converter, MethodCallExpression[] methods)
+           => Func("GROUP BY ROLLUP", converter.Convert(methods[0].Arguments[methods[0].SkipMethodChain(0)]));
+
+        internal static SqlText ConvertGroupByCube(ISqlStringConverter converter, MethodCallExpression[] methods)
+           => Func("GROUP BY CUBE", converter.Convert(methods[0].Arguments[methods[0].SkipMethodChain(0)]));
+
+        internal static SqlText ConvertGroupByGroupingSets(ISqlStringConverter converter, MethodCallExpression[] methods)
+           => Func("GROUP BY GROUPING SETS", converter.Convert(methods[0].Arguments[methods[0].SkipMethodChain(0)]));
     }
 }

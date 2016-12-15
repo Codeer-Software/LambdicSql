@@ -5,7 +5,7 @@ namespace LambdicSql.SqlBase.TextParts
     static class SqlTextUtils
     {
         internal static HText Arguments(params SqlText[] args)
-            => new HText(args) { Separator = "," };
+            => new HText(args) { Separator = ", " };
 
         internal static HText Func(SqlText func, params SqlText[] args)
             => Func(func, ", ", args);

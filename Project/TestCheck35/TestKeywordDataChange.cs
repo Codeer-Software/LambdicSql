@@ -106,13 +106,11 @@ FROM tbl_data");
             
             var query = Sql<DB>.Create(db =>
                    InsertInto(db.tbl_data, db.tbl_data.id, db.tbl_data.val2).Values(1, "val2"));
-            
-            //TODO あ、Values (は隙間がある
 
             Assert.AreEqual(1, _connection.Execute(query));
             AssertEx.AreEqual(query, _connection,
 @"INSERT INTO tbl_data(id, val2)
-	VALUES (@p_0, @p_1)",
+	VALUES(@p_0, @p_1)",
 1, "val2");
         }
         
@@ -132,7 +130,7 @@ FROM tbl_data");
             Assert.AreEqual(1, _connection.Execute(query));
             AssertEx.AreEqual(query, _connection,
 @"INSERT INTO tbl_data(id, val2)
-	VALUES (@p_0, @p_1)",
+	VALUES(@p_0, @p_1)",
 1, "val2");
         }
 

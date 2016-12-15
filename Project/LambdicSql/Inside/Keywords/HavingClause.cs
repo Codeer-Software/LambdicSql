@@ -1,6 +1,7 @@
 ﻿using LambdicSql.SqlBase;
 using LambdicSql.SqlBase.TextParts;
 using System.Linq.Expressions;
+using static LambdicSql.SqlBase.TextParts.SqlTextUtils;
 
 namespace LambdicSql.Inside.Keywords
 {
@@ -9,9 +10,9 @@ namespace LambdicSql.Inside.Keywords
         internal static SqlText Convert(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
-            var text = converter.Convert(method.Arguments[method.SkipMethodChain(0)]);
-            if (text.IsEmpty) return string.Empty;
-            return new HText("HAVING", text) { Separator = " ", IsFunctional = true };
+            var condition = converter.Convert(method.Arguments[method.SkipMethodChain(0)]);
+            if (condition.IsEmpty) return string.Empty;
+            return Clause("HAVING", condition);
         }
     }
 }

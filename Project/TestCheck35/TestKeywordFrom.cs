@@ -155,7 +155,7 @@ FROM
 	tbl_staff.name AS Name,
 	tbl_remuneration.payment_date AS PaymentDate,
 	tbl_remuneration.money AS Money
-FROM tbl_remuneration,tbl_staff
+FROM tbl_remuneration, tbl_staff
 WHERE (tbl_remuneration.staff_id) = (tbl_staff.id)");
         }
 
@@ -181,7 +181,7 @@ WHERE (tbl_remuneration.staff_id) = (tbl_staff.id)");
 	expStaff.name AS Name,
 	expRemuneration.payment_date AS PaymentDate,
 	expRemuneration.money AS Money
-FROM tbl_remuneration expRemuneration,tbl_staff expStaff
+FROM tbl_remuneration expRemuneration, tbl_staff expStaff
 WHERE (expRemuneration.staff_id) = (expStaff.id)");
         }
 
