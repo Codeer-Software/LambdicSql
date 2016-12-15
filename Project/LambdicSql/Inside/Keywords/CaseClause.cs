@@ -1,9 +1,9 @@
-﻿using LambdicSql.SqlBase;
-using System;
+﻿using System;
 using System.Linq.Expressions;
 using System.Linq;
-using System.Collections.Generic;
+using LambdicSql.SqlBase;
 using LambdicSql.SqlBase.TextParts;
+using static LambdicSql.SqlBase.TextParts.SqlTextUtils;
 
 namespace LambdicSql.Inside.Keywords
 {
@@ -20,36 +20,19 @@ namespace LambdicSql.Inside.Keywords
                 switch (m.Method.Name)
                 {
                     case nameof(LambdicSql.Keywords.Case):
-                        {
-                            var text = new HText("CASE") { Separator = " ", IsFunctional = true };
-                            if (argSrc.Length == 1)
-                            {
-                                text.Add(argSrc[0]);
-                            }
-                            texts.Add(text);
-                        }
+                        texts.Add(Clause("CASE", argSrc));
                         break;
                     case nameof(LambdicSql.Keywords.When):
-                        {
-                            whenThen = new HText("WHEN", argSrc[0]) { Separator = " ", IsFunctional = true, Indent = 1 };
-                        }
+                        whenThen = SubClause("WHEN", argSrc);
                         break;
                     case nameof(LambdicSql.Keywords.Then):
-                        {
-                            if (whenThen != null)
-                            {
-                                whenThen.Add(new HText("THEN", argSrc[0]) { Separator = " ", IsFunctional = true });
-                                texts.Add(whenThen);
-                            }
-                            else
-                            {
-                                texts.Add(new HText("THEN", argSrc[0]) { Separator = " ", IsFunctional = true, Indent = 1 });
-                            }
-                            whenThen = null;
-                            break;
-                        }
+                        if (whenThen == null) throw new NotSupportedException();
+                        whenThen.Add(Clause("THEN", argSrc));
+                        texts.Add(whenThen);
+                        whenThen = null;
+                        break;
                     case nameof(LambdicSql.Keywords.Else):
-                        texts.Add(new HText("ELSE", argSrc[0]) { Separator = " ", IsFunctional = true, Indent = 1 });
+                        texts.Add(SubClause("ELSE", argSrc));
                         break;
                     case nameof(LambdicSql.Keywords.End):
                         texts.Add("END");

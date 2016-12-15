@@ -51,6 +51,15 @@ namespace LambdicSql.SqlBase.TextParts
         }
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="texts">Horizontal texts.</param>
+        public HText(IEnumerable<SqlText> texts)
+        {
+            _texts.AddRange(texts.Where(e => !e.IsEmpty));
+        }
+
+        /// <summary>
         /// To string.
         /// </summary>
         /// <param name="isTopLevel">Is top level.</param>

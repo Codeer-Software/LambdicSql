@@ -960,11 +960,15 @@ namespace LambdicSql
                 case nameof(Delete):
                     return DeleteClause.Convert(converter, methods);
                 case nameof(From):
+                    return FromClause.ConvertFrom(converter, methods);
                 case nameof(Join):
+                    return FromClause.ConvertJoin(converter, methods);
                 case nameof(LeftJoin):
+                    return FromClause.ConvertLeftJoin(converter, methods);
                 case nameof(RightJoin):
+                    return FromClause.ConvertRightJoin(converter, methods);
                 case nameof(CrossJoin):
-                    return FromClause.Convert(converter, methods);
+                    return FromClause.ConvertCrossJoin(converter, methods);
                 case nameof(GroupBy):
                 case nameof(GroupByRollup):
                 case nameof(GroupByWithRollup):
@@ -990,10 +994,13 @@ namespace LambdicSql
                 case nameof(Where):
                     return WhereClause.Convert(converter, methods);
                 case nameof(In):
+                    return ConditionKeyWords.ConvertIn(converter, methods);
                 case nameof(Like):
+                    return ConditionKeyWords.ConvertLike(converter, methods);
                 case nameof(Between):
+                    return ConditionKeyWords.ConvertBetween(converter, methods);
                 case nameof(Exists):
-                    return ConditionKeyWords.Convert(converter, methods);
+                    return ConditionKeyWords.ConvertExists(converter, methods);
                 case nameof(Union):
                 case nameof(Intersect):
                 case nameof(Except):

@@ -43,6 +43,8 @@ namespace TestCheck35
                From(db.tbl_staff).
                Where(Like(db.tbl_staff.name, "%a%")));
 
+            query.Gen(_connection);
+
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
@@ -270,16 +272,13 @@ WHERE tbl_staff.id IN(@p_0, @p_1)",
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
-
-            query.Gen(_connection);
-
             AssertEx.AreEqual(query, _connection,
-@"SELECT
+ @"SELECT
 	tbl_staff.id AS Id
 FROM tbl_staff
 WHERE
-	tbl_staff.id IN
-		((SELECT
+	tbl_staff.id IN(
+		(SELECT
 			tbl_remuneration.staff_id AS id
 		FROM tbl_remuneration
 			JOIN tbl_staff ON (tbl_staff.id) = (tbl_staff.id)
@@ -312,8 +311,8 @@ WHERE
 	tbl_staff.id AS Id
 FROM tbl_staff
 WHERE
-	tbl_staff.id IN
-		((SELECT
+	tbl_staff.id IN(
+		(SELECT
 			tbl_remuneration.staff_id AS id
 		FROM tbl_remuneration
 			JOIN tbl_staff ON (tbl_staff.id) = (tbl_staff.id)
@@ -344,8 +343,8 @@ WHERE
 	tbl_staff.id AS Id
 FROM tbl_staff
 WHERE
-	tbl_staff.id IN
-		((SELECT
+	tbl_staff.id IN(
+		(SELECT
 			tbl_remuneration.staff_id AS id
 		FROM tbl_remuneration
 			JOIN tbl_staff ON (tbl_staff.id) = (tbl_staff.id)
@@ -377,8 +376,8 @@ WHERE
 	tbl_staff.id AS Id
 FROM tbl_staff
 WHERE
-	tbl_staff.id IN
-		((SELECT
+	tbl_staff.id IN(
+		(SELECT
 			tbl_remuneration.staff_id AS id
 		FROM tbl_remuneration
 			JOIN tbl_staff ON (tbl_staff.id) = (tbl_staff.id)

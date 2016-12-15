@@ -1,68 +1,57 @@
 ﻿using LambdicSql.SqlBase;
 using LambdicSql.SqlBase.TextParts;
+using System;
 using System.Linq;
 using System.Linq.Expressions;
+using static LambdicSql.SqlBase.TextParts.SqlTextUtils;
 
 namespace LambdicSql.Inside.Keywords
 {
     static class FromClause
     {
-        internal static SqlText Convert(ISqlStringConverter converter, MethodCallExpression[] methods)
-            => new VText(methods.Select(m=> MethodToString(converter, m)).ToArray());
+        internal static SqlText ConvertFrom(ISqlStringConverter converter, MethodCallExpression[] methods)
+            => ConvertNonCodition(Clause, "FROM", converter, methods);
 
-        static SqlText MethodToString(ISqlStringConverter converter, MethodCallExpression method)
+        internal static SqlText ConvertCrossJoin(ISqlStringConverter converter, MethodCallExpression[] methods)
+            => ConvertNonCodition(SubClause, "CROSS JOIN", converter, methods);
+
+        internal static SqlText ConvertLeftJoin(ISqlStringConverter converter, MethodCallExpression[] methods)
+            => ConvertCondition("LEFT JOIN", converter, methods);
+
+        internal static SqlText ConvertRightJoin(ISqlStringConverter converter, MethodCallExpression[] methods)
+            => ConvertCondition("RIGHT JOIN", converter, methods);
+
+        internal static SqlText ConvertJoin(ISqlStringConverter converter, MethodCallExpression[] methods)
+            => ConvertCondition("JOIN", converter, methods);
+
+        static SqlText ConvertNonCodition(Func<SqlText, SqlText[], HText> makeSqlText, string name, ISqlStringConverter converter, MethodCallExpression[] methods)
         {
-            HText name = null;
-            var startIndex = method.SkipMethodChain(0);
-            switch (method.Method.Name)
-            {
-                case nameof(LambdicSql.Keywords.From):
-                    return new HText("FROM", ExpressionToTableName(converter, method.Arguments[startIndex])) { Separator = " ", IsFunctional = true };
-                case nameof(LambdicSql.Keywords.CrossJoin):
-                    return new HText("CROSS JOIN", ExpressionToTableName(converter, method.Arguments[startIndex])) { Separator = " ", IsFunctional = true, Indent = 1 };
-                case nameof(LambdicSql.Keywords.LeftJoin):
-                    name = new HText("LEFT JOIN") { Separator = " ", IsFunctional = true, Indent = 1 };
-                    break;
-                case nameof(LambdicSql.Keywords.RightJoin):
-                    name = new HText("RIGHT JOIN") { Separator = " ", IsFunctional = true, Indent = 1 };
-                    break;
-                case nameof(LambdicSql.Keywords.Join):
-                    name = new HText("JOIN") { Separator = " ", IsFunctional = true, Indent = 1 };
-                    break;
-            }
-            var condition = converter.Convert(method.Arguments[startIndex + 1]);
-            name.AddRange(ExpressionToTableName(converter, method.Arguments[startIndex]), "ON", condition);
-            return name;
+            var method = methods[0]; var startIndex = method.SkipMethodChain(0);
+            var table = ToTableName(converter, method.Arguments[startIndex]);
+            return makeSqlText(name, new[] { table });
         }
 
-        static SqlText ExpressionToTableName(ISqlStringConverter decoder, Expression exp)
+        static SqlText ConvertCondition(string name, ISqlStringConverter converter, MethodCallExpression[] methods)
         {
+            var method = methods[0]; var startIndex = method.SkipMethodChain(0);
+            var table = ToTableName(converter, method.Arguments[startIndex]);
+            var condition = (startIndex + 1) < method.Arguments.Count ? converter.Convert(method.Arguments[startIndex + 1]) : null;
+            return SubClause(name, table, "ON", condition);
+        }
+
+        static SqlText ToTableName(ISqlStringConverter decoder, Expression exp)
+        {
+            //where query, write tables side by side
             var arry = exp as NewArrayExpression;
-            if (arry != null)
-            {
-                return new HText(arry.Expressions.Select(e => ExpressionToTableName(decoder, e)).ToArray()) { Separator = "," };
-            }
+            if (arry != null) return Arguments(arry.Expressions.Select(e => ToTableName(decoder, e)).ToArray());
 
-            var text = decoder.Convert(exp);
+            var table = decoder.Convert(exp);
 
-            var methodCall = exp as MethodCallExpression;
-            if (methodCall != null)
-            {
-                var member = methodCall.Arguments[0] as MemberExpression;
-                if (member != null)
-                {
-                    return new HText(text, member.Member.Name) { Separator = " ", EnableChangeLine = false };
-                }
-                return text;
-            }
-
-            //From clause only
+            //sub query. add alias.
             var body = GetSqlExpressionBody(exp);
-            if (body != null)
-            {
-                return new HText(text, body) { Separator = " ", EnableChangeLine = false };
-            }
-            return text;
+            if (body != null) return new HText(table, body) { Separator = " ", EnableChangeLine = false };
+
+            return table;
         }
 
         static string GetSqlExpressionBody(Expression exp)
@@ -70,10 +59,7 @@ namespace LambdicSql.Inside.Keywords
             var member = exp as MemberExpression;
             while (member != null)
             {
-                if (typeof(ISqlExpressionBase).IsAssignableFrom(member.Type))
-                {
-                    return member.Member.Name;
-                }
+                if (typeof(ISqlExpressionBase).IsAssignableFrom(member.Type)) return member.Member.Name;
                 member = member.Expression as MemberExpression;
             }
             return null;

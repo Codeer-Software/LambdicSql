@@ -1,17 +1,34 @@
-﻿namespace LambdicSql.SqlBase.TextParts
+﻿using System.Linq;
+
+namespace LambdicSql.SqlBase.TextParts
 {
     static class SqlTextUtils
     {
-        public static SqlText Func(string func, params SqlText[] args)
+        internal static HText Arguments(params SqlText[] args)
+            => new HText(args) { Separator = "," };
+
+        internal static HText Func(SqlText func, params SqlText[] args)
             => Func(func, ", ", args);
 
-        public static SqlText FuncSpace(string func, params SqlText[] args)
+        internal static HText FuncSpace(SqlText func, params SqlText[] args)
             => Func(func, " ", args);
 
-        static SqlText Func(string func, string separator, params SqlText[] args)
+        internal static HText Clause(SqlText clause, params SqlText[] args)
+            => new HText(new SqlText[] { clause }.Concat(args)) { IsFunctional = true, Separator = " " };
+
+        internal static HText SubClause(SqlText clause, params SqlText[] args)
+            => new HText(new SqlText[] { clause }.Concat(args)) { IsFunctional = true, Separator = " ", Indent = 1 };
+
+        internal static HText Line(params SqlText[] args)
+            => new HText(args) { EnableChangeLine = false };
+
+        internal static HText LineSpace(params SqlText[] args)
+             => new HText(args) { EnableChangeLine = false, Separator = " " };
+
+        static HText Func(SqlText func, string separator, params SqlText[] args)
         {
             var hArgs = new HText(args) { Separator = separator }.ConcatToBack(")");
-            return new HText(func + "(", hArgs) { IsFunctional = true };
+            return new HText(Line(func, "("), hArgs) { IsFunctional = true };
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using LambdicSql.SqlBase;
 using System.Linq.Expressions;
 using LambdicSql.SqlBase.TextParts;
+using static LambdicSql.SqlBase.TextParts.SqlTextUtils;
 
 namespace LambdicSql.Inside.Keywords
 {
@@ -10,7 +11,7 @@ namespace LambdicSql.Inside.Keywords
         {
             var method = methods[0];
             var count = converter.Convert(method.Arguments[method.SkipMethodChain(0)]);
-            return new HText("FETCH NEXT", count, "ROWS ONLY") { Separator = " " };
+            return Clause("FETCH NEXT", count, "ROWS ONLY");
         }
     }
 }

@@ -46,6 +46,8 @@ namespace TestCheck35
                 }).
                 From(db.tbl_remuneration));
 
+            query.Gen(_connection);
+
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
@@ -69,6 +71,33 @@ FROM tbl_remuneration");
                     Money = sub.Body.money,
                 }).
                 From(sub));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            query.Gen(_connection);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	sub.payment_date AS PaymentDate,
+	sub.money AS Money
+FROM
+	(SELECT *
+	FROM tbl_remuneration) sub");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_From2_2()
+        {
+            var sub = Sql<DB>.Create(db =>
+                Select(Asterisk(db.tbl_remuneration)).
+                From(db.tbl_remuneration));
+
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData
+                {
+                    PaymentDate = sub.Body.payment_date,
+                    Money = sub.Body.money,
+                }).
+                From(sub.Body));
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
