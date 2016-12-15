@@ -43,7 +43,6 @@ namespace LambdicSql.Inside
             return obj;
         }
 
-        //TODO ここに再帰カウンターを付けることによって、それが0でなければサブクエリだってことが分かる！つけすぎるとうざいから、メソッド呼び出しのところで。
         public SqlText Convert(object obj)
         {
             var exp = obj as Expression;
