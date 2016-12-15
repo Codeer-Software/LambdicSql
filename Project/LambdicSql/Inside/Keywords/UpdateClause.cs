@@ -8,10 +8,10 @@ namespace LambdicSql.Inside.Keywords
 {
     static class UpdateClause
     {
-        internal static TextParts Convert(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static SqlText Convert(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
-            var list = new List<TextParts>();
-            TextParts tableName = null;
+            var list = new List<SqlText>();
+            SqlText tableName = null;
             foreach (var m in methods)
             {
                 list.Add(MethodToString(converter, m, ref tableName));
@@ -19,7 +19,7 @@ namespace LambdicSql.Inside.Keywords
             return new VText(list.ToArray());
         }
 
-        static TextParts MethodToString(ISqlStringConverter converter, MethodCallExpression method, ref TextParts tableName)
+        static SqlText MethodToString(ISqlStringConverter converter, MethodCallExpression method, ref SqlText tableName)
         {
             switch (method.Method.Name)
             {

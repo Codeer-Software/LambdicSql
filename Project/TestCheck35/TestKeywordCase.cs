@@ -305,17 +305,19 @@ FROM tbl_staff",
                 }).
                 From(db.tbl_staff));
 
+            query.Gen(_connection);
+
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
 	CASE
 		WHEN
-			(((SELECT
+			((SELECT
 				COUNT(*)
 			FROM tbl_staff))
 			 = 
-			(@p_0))
+			(@p_0)
 			THEN @p_1
 		ELSE @p_2
 	END AS Type

@@ -268,7 +268,7 @@ namespace LambdicSql
         [MethodGroup(nameof(Window))]
         public static T Over<T>(this IFuncAfter<T> before, Rows rows) => InvalitContext.Throw<T>(nameof(Over));
 
-        static TextParts Convert(ISqlStringConverter converter, MethodCallExpression[] methods)
+        static SqlText Convert(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var v = new VText();
             switch (methods[0].Method.Name)

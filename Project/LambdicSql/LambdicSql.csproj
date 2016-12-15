@@ -61,7 +61,6 @@
     <Compile Include="Inside\Keywords\OffsetClause.cs" />
     <Compile Include="Inside\Keywords\OffsetRowsClause.cs" />
     <Compile Include="Inside\Keywords\SetOperation.cs" />
-    <Compile Include="Inside\SqlDisplayAdjuster.cs" />
     <Compile Include="Inside\TowWaySqlSpec.cs" />
     <Compile Include="Keywords.cs" />
     <Compile Include="ISortedBy.cs" />
@@ -74,7 +73,7 @@
     <Compile Include="Inside\SqlExpressionCoupled.cs" />
     <Compile Include="SqlBase\HText.cs" />
     <Compile Include="SqlBase\SingleText.cs" />
-    <Compile Include="SqlBase\TextParts.cs" />
+    <Compile Include="SqlBase\SqlText.cs" />
     <Compile Include="SqlBase\ResolveSqlSyntaxMethodChainAttribute.cs" />
     <Compile Include="SqlBase\SqlConvertingContext.cs" />
     <Compile Include="SqlBase\ISqlExpressionBase.cs" />

@@ -49,7 +49,7 @@ namespace LambdicSql
             //adjust for display.
           //  text = SqlDisplayAdjuster.Adjust(text);
 
-            return new SqlInfo(exp.DbInfo, text.ToString(0), context.ObjectCreateInfo, context.Parameters);
+            return new SqlInfo(exp.DbInfo, text.ToString(true, 0), context.ObjectCreateInfo, context.Parameters);
         }
     }
 }

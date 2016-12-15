@@ -19,7 +19,7 @@ namespace LambdicSql
         /// <param name="columns">Specify column or expression.</param>
         public PartitionBy(params object[] columns) { InvalitContext.Throw("new " + nameof(PartitionBy)); }
 
-        static TextParts Convert(ISqlStringConverter converter, NewExpression exp)
+        static SqlText Convert(ISqlStringConverter converter, NewExpression exp)
         {
             var arg = exp.Arguments[0];
             var array = arg as NewArrayExpression;

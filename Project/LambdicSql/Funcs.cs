@@ -205,7 +205,7 @@ namespace LambdicSql
         /// <returns>expression1 or expression2.</returns>
         public static T NVL<T>(T expression1, T expression2) => InvalitContext.Throw<T>(nameof(NVL));
 
-        internal static TextParts Convert(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static SqlText Convert(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
             var args = method.Arguments.Select(e => converter.Convert(e)).ToArray();
@@ -222,7 +222,7 @@ namespace LambdicSql
                     //TODO 括弧の付け方は AddAroundに統一したいな
                     return new HText(method.Method.Name.ToUpper() + "(", args[0], " FROM ", args[1] , ")") { IsFunctional = true };
                 case nameof(Cast):
-                    return new HText("CAST((", args[0], ") AS ", converter.Context.Parameters.ResolvePrepare(args[1].ToString(0)), ")") { IsFunctional = true };
+                    return new HText("CAST((", args[0], ") AS ", converter.Context.Parameters.ResolvePrepare(args[1].ToString(false, 0)), ")") { IsFunctional = true };
                 default:
                     break;
             }

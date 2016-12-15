@@ -22,7 +22,7 @@ namespace LambdicSql.SqlBase
         /// </summary>
         /// <param name="obj">object.</param>
         /// <returns>text.</returns>
-        TextParts Convert(object obj);
+        SqlText Convert(object obj);
 
         /// <summary>
         /// Get object in expression.

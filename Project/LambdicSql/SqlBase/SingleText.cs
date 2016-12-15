@@ -5,7 +5,7 @@ namespace LambdicSql.SqlBase
     /// <summary>
     /// Single text.
     /// </summary>
-    public class SingleText : TextParts
+    public class SingleText : SqlText
     {
         string _text;
         int _indent;
@@ -43,9 +43,10 @@ namespace LambdicSql.SqlBase
         /// <summary>
         /// To string.
         /// </summary>
+        /// <param name="isTopLevel">Is top level.</param>
         /// <param name="indent">Indent.</param>
         /// <returns>Text.</returns>
-        public override string ToString(int indent)
+        public override string ToString(bool isTopLevel, int indent)
             => string.Join(string.Empty, Enumerable.Range(0, _indent + indent).Select(e => "\t").ToArray()) + _text;
 
         /// <summary>
@@ -54,20 +55,20 @@ namespace LambdicSql.SqlBase
         /// <param name="front">Front.</param>
         /// <param name="back">Back.</param>
         /// <returns>Text.</returns>
-        public override TextParts ConcatAround(string front, string back) => new SingleText(front + _text + back, _indent);
+        public override SqlText ConcatAround(string front, string back) => new SingleText(front + _text + back, _indent);
 
         /// <summary>
         /// Concat to front.
         /// </summary>
         /// <param name="front">Front.</param>
         /// <returns>Text.</returns>
-        public override TextParts ConcatToFront(string front) => new SingleText(front + _text, _indent);
+        public override SqlText ConcatToFront(string front) => new SingleText(front + _text, _indent);
 
         /// <summary>
         /// Concat to back.
         /// </summary>
         /// <param name="back"></param>
         /// <returns></returns>
-        public override TextParts ConcatToBack(string back) => new SingleText(_text + back, _indent);
+        public override SqlText ConcatToBack(string back) => new SingleText(_text + back, _indent);
     }
 }

@@ -8,10 +8,10 @@ namespace LambdicSql.Inside.Keywords
 {
     static class FromClause
     {
-        internal static TextParts Convert(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static SqlText Convert(ISqlStringConverter converter, MethodCallExpression[] methods)
             => new VText(methods.Select(m=> MethodToString(converter, m)).ToArray());
 
-        static TextParts MethodToString(ISqlStringConverter converter, MethodCallExpression method)
+        static SqlText MethodToString(ISqlStringConverter converter, MethodCallExpression method)
         {
             HText name = null;
             var startIndex = method.SkipMethodChain(0);
@@ -36,10 +36,7 @@ namespace LambdicSql.Inside.Keywords
             return name;
         }
 
-        static TextParts ExpressionToTableName(ISqlStringConverter decoder, Expression exp)
-            => SqlDisplayAdjuster.AdjustSubQuery(exp, ExpressionToTableNameCore(decoder, exp));
-
-        static TextParts ExpressionToTableNameCore(ISqlStringConverter decoder, Expression exp)
+        static SqlText ExpressionToTableName(ISqlStringConverter decoder, Expression exp)
         {
             var arry = exp as NewArrayExpression;
             if (arry != null)

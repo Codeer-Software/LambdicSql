@@ -13,8 +13,8 @@ namespace LambdicSql.Inside
         class DecodedInfo
         {
             internal Type Type { get; }
-            internal TextParts Text { get; }
-            internal DecodedInfo(Type type, TextParts text)
+            internal SqlText Text { get; }
+            internal DecodedInfo(Type type, SqlText text)
             {
                 Type = type;
                 Text = text;
@@ -43,7 +43,7 @@ namespace LambdicSql.Inside
         }
 
         //TODO ここに再帰カウンターを付けることによって、それが0でなければサブクエリだってことが分かる！つけすぎるとうざいから、メソッド呼び出しのところで。
-        public TextParts Convert(object obj)
+        public SqlText Convert(object obj)
         {
             var exp = obj as Expression;
             if (exp != null) return Convert(exp).Text;
@@ -139,7 +139,7 @@ namespace LambdicSql.Inside
 
                     //In the case of parameters, execute casting.
                     //TODO これだめだ。内部的に何度もパラメータ変換が実行される Convert(0)
-                    var paramText = ret.Text.ToString(0);
+                    var paramText = ret.Text.ToString(false, 0);
                     object obj;
                     if (Context.Parameters.TryGetParam(paramText, out obj))
                     {
@@ -203,7 +203,7 @@ namespace LambdicSql.Inside
             if (method != null && method.Method.DeclaringType.IsSqlSyntax())
             {
                 //TODO あれ？なんでここってこんな流れ？
-                var memberName = method.GetConverotrMethod()(this, new[] { method }).ToString(0) + "." + member.Member.Name;
+                var memberName = method.GetConverotrMethod()(this, new[] { method }).ToString(false, 0) + "." + member.Member.Name;
 
                 TableInfo table;
                 if (Context.DbInfo.GetLambdaNameAndTable().TryGetValue(memberName, out table))
@@ -259,7 +259,9 @@ namespace LambdicSql.Inside
             //not sql syntax.
             if (!method.Method.DeclaringType.IsSqlSyntax()) return ResolveExpressionObject(method);
 
-            var ret = new List<TextParts>();
+            //TODO Concatとかには対応しないといけないなー。一筆で書かないタイプ
+
+            var ret = new List<SqlText>();
             foreach (var c in GetMethodChains(method))
             {
                 var chain = c.ToArray();
@@ -279,7 +281,17 @@ namespace LambdicSql.Inside
                 ret.Add(chain[0].GetConverotrMethod()(this, chain));
             }
 
-            return new DecodedInfo(method.Method.ReturnType, new VText(ret.ToArray()));
+            SqlText text = new VText(ret.ToArray());
+            if (typeof(SelectClauseText).IsAssignableFrom(ret[0].GetType()))
+            {
+                text = new SelectQueryText(text);
+            }
+            else
+            {
+                text = new QueryText(text);
+            }
+
+            return new DecodedInfo(method.Method.ReturnType, text);
         }
 
         DecodedInfo ResolveSqlExpressionBody(MemberExpression member)
@@ -347,13 +359,13 @@ namespace LambdicSql.Inside
             //TODO .Convert(0)多い
             //TODO これだめだ。内部的に何度もパラメータ変換が実行される Convert(0)
             object leftObj, rightObj;
-            var leftIsParam = Context.Parameters.TryGetParam(left.Text.ToString(0), out leftObj);
-            var rightIsParam = Context.Parameters.TryGetParam(right.Text.ToString(0), out rightObj);
+            var leftIsParam = Context.Parameters.TryGetParam(left.Text.ToString(false, 0), out leftObj);
+            var rightIsParam = Context.Parameters.TryGetParam(right.Text.ToString(false, 0), out rightObj);
             var bothParam = (leftIsParam && rightIsParam);
 
             var isParams = new[] { leftIsParam, rightIsParam };
             var objs = new[] { leftObj, rightObj };
-            var names = new[] { left.Text.ToString(0), right.Text.ToString(0) };
+            var names = new[] { left.Text.ToString(false, 0), right.Text.ToString(false, 0) };
             var targetTexts = new[] { right.Text, left.Text };
             for (int i = 0; i < isParams.Length; i++)
             {
@@ -403,7 +415,7 @@ namespace LambdicSql.Inside
             //array.
             if (obj != null && obj.GetType().IsArray)
             {
-                var list = new List<TextParts>();
+                var list = new List<SqlText>();
                 foreach (var e in (IEnumerable)obj)
                 {
                     list.Add(Convert(e));
@@ -464,7 +476,7 @@ namespace LambdicSql.Inside
                 Type type = null;
                 var types = sqlExp.GetType().GetGenericArguments();
                 if (0 < types.Length) type = types[0];
-                return new DecodedInfo(type, SqlDisplayAdjuster.AdjustSubQueryString(sqlExp.Convert(this)));
+                return new DecodedInfo(type,sqlExp.Convert(this));
             }
 
             //others.

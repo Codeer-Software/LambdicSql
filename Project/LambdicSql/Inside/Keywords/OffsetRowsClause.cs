@@ -6,7 +6,7 @@ namespace LambdicSql.Inside.Keywords
 {
     static class OffsetRowsClause
     {
-        internal static TextParts Convert(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static SqlText Convert(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
             var count = converter.Convert(method.Arguments[method.SkipMethodChain(0)]);

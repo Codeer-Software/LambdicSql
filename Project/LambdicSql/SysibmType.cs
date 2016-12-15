@@ -17,7 +17,7 @@ namespace LambdicSql
         /// </summary>
         public object Sysdummy1 => InvalitContext.Throw<long>(nameof(Sysdummy1));
 
-        static TextParts Convert(ISqlStringConverter converter, MemberExpression member)
+        static SqlText Convert(ISqlStringConverter converter, MemberExpression member)
             => "SYSIBM." + member.Member.Name.ToUpper();
     }
 }

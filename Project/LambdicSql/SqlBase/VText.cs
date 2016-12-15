@@ -7,9 +7,9 @@ namespace LambdicSql.SqlBase
     /// <summary>
     /// Vertical text.
     /// </summary>
-    public class VText : TextParts
+    public class VText : SqlText
     {
-        List<TextParts> _texts = new List<TextParts>();
+        List<SqlText> _texts = new List<SqlText>();
 
         /// <summary>
         /// Separator
@@ -35,7 +35,7 @@ namespace LambdicSql.SqlBase
         /// Constructor.
         /// </summary>
         /// <param name="texts">Vertical texts.</param>
-        public VText(params TextParts[] texts)
+        public VText(params SqlText[] texts)
         {
             _texts.AddRange(texts.Where(e => !e.IsEmpty));
         }
@@ -43,10 +43,11 @@ namespace LambdicSql.SqlBase
         /// <summary>
         /// To string.
         /// </summary>
+        /// <param name="isTopLevel">Is top level.</param>
         /// <param name="indent">Indent.</param>
         /// <returns>Text.</returns>
-        public override string ToString(int indent)
-            => string.Join(Separator + Environment.NewLine, _texts.Select(e => e.ToString(Indent + indent)).ToArray());
+        public override string ToString(bool isTopLevel, int indent)
+            => string.Join(Separator + Environment.NewLine, _texts.Select(e => e.ToString(isTopLevel, Indent + indent)).ToArray());
 
         /// <summary>
         /// Add text.
@@ -63,7 +64,7 @@ namespace LambdicSql.SqlBase
         /// Add text.
         /// </summary>
         /// <param name="text">Text.</param>
-        public void Add(TextParts text)
+        public void Add(SqlText text)
         {
             if (text.IsEmpty) return;
             _texts.Add(text);
@@ -74,16 +75,16 @@ namespace LambdicSql.SqlBase
         /// </summary>
         /// <param name="indent">Indent.</param>
         /// <param name="texts">Texts.</param>
-        public void AddRange(int indent, IEnumerable<TextParts> texts)
-            => _texts.AddRange(texts.Where(e => !e.IsEmpty).Select(e => new HText(e) { Indent = 1 }).Cast<TextParts>());
+        public void AddRange(int indent, IEnumerable<SqlText> texts)
+            => _texts.AddRange(texts.Where(e => !e.IsEmpty).Select(e => new HText(e) { Indent = 1 }).Cast<SqlText>());
 
         /// <summary>
         /// Add texts.
         /// </summary>
         /// <param name="indent">Indent.</param>
         /// <param name="texts">Texts.</param>
-        public void AddRange(int indent, params TextParts[] texts)
-            => _texts.AddRange(texts.Where(e => !e.IsEmpty).Select(e => new HText(e) { Indent = 1 }).Cast<TextParts>());
+        public void AddRange(int indent, params SqlText[] texts)
+            => _texts.AddRange(texts.Where(e => !e.IsEmpty).Select(e => new HText(e) { Indent = 1 }).Cast<SqlText>());
 
         /// <summary>
         /// Concat to front and back.
@@ -91,7 +92,7 @@ namespace LambdicSql.SqlBase
         /// <param name="front">Front.</param>
         /// <param name="back">Back.</param>
         /// <returns>Text.</returns>
-        public override TextParts ConcatAround(string front, string back)
+        public override SqlText ConcatAround(string front, string back)
         {
             if (_texts.Count == 0) return CopyProperty(front + back);
 
@@ -106,7 +107,7 @@ namespace LambdicSql.SqlBase
         /// </summary>
         /// <param name="front">Front.</param>
         /// <returns>Text.</returns>
-        public override TextParts ConcatToFront(string front)
+        public override SqlText ConcatToFront(string front)
         {
             if (_texts.Count == 0) return CopyProperty(front);
 
@@ -120,7 +121,7 @@ namespace LambdicSql.SqlBase
         /// </summary>
         /// <param name="back"></param>
         /// <returns>Text.</returns>
-        public override TextParts ConcatToBack(string back)
+        public override SqlText ConcatToBack(string back)
         {
             if (_texts.Count == 0) return CopyProperty(back);
 
@@ -129,7 +130,7 @@ namespace LambdicSql.SqlBase
             return CopyProperty(dst);
         }
 
-        VText CopyProperty(params TextParts[] texts)
+        VText CopyProperty(params SqlText[] texts)
              => new VText(texts) { Indent = Indent, Separator = Separator };
     }
 }

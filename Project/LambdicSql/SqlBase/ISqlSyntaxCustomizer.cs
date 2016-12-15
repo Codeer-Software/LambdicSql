@@ -14,7 +14,7 @@ namespace LambdicSql.SqlBase
         /// <param name="converter">Convertor.</param>
         /// <param name="obj">Object.</param>
         /// <returns>Text.</returns>
-        TextParts Convert(ISqlStringConverter converter, object obj);
+        SqlText Convert(ISqlStringConverter converter, object obj);
 
         /// <summary>
         /// Customize of to convert method to sql text.
@@ -23,7 +23,7 @@ namespace LambdicSql.SqlBase
         /// <param name="converter">Convertor.</param>
         /// <param name="expression">Expression.</param>
         /// <returns>Text.</returns>
-        TextParts Convert(ISqlStringConverter converter, MethodCallExpression[] expression);
+        SqlText Convert(ISqlStringConverter converter, MethodCallExpression[] expression);
 
         /// <summary>
         /// Customize of to convert new to sql text.
@@ -32,7 +32,7 @@ namespace LambdicSql.SqlBase
         /// <param name="converter">Convertor.</param>
         /// <param name="expression">Expression.</param>
         /// <returns>Text.</returns>
-        TextParts Convert(ISqlStringConverter converter, NewExpression expression);
+        SqlText Convert(ISqlStringConverter converter, NewExpression expression);
 
         /// <summary>
         /// Customize of to convert member to sql text.
@@ -41,6 +41,6 @@ namespace LambdicSql.SqlBase
         /// <param name="converter">Convertor.</param>
         /// <param name="expression">Expression.</param>
         /// <returns>Text.</returns>
-        TextParts Convert(ISqlStringConverter converter, MemberExpression expression);
+        SqlText Convert(ISqlStringConverter converter, MemberExpression expression);
     }
 }

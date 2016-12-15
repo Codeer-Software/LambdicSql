@@ -9,7 +9,7 @@ namespace LambdicSql.Inside.Keywords
     //SELECTに関しても AS とこの部分はFunctionalではないようにする
     static class SelectClause
     {
-        internal static TextParts Convert(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static SqlText Convert(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
 
@@ -24,14 +24,13 @@ namespace LambdicSql.Inside.Keywords
             var x = "SELECT";
             if (modify.Count != 0)
             {
-                //TODO これだめだ。内部的に何度もパラメータ変換が実行される ToString(0)
                 x += " ";
-                x += string.Join(" ", modify.Select(e => converter.Convert(e).ToString(0)).ToArray());
+                x += string.Join(" ", modify.Select(e => converter.Convert(e).ToString(false, 0)).ToArray());
             }
 
             //select core.
             var selectTarget = method.Arguments[method.Arguments.Count - 1];
-            TextParts selectTargetText = null;
+            SqlText selectTargetText = null;
             ObjectCreateInfo createInfo = null;
 
             //*
@@ -52,15 +51,11 @@ namespace LambdicSql.Inside.Keywords
             //remember creat info.
             if (converter.Context.ObjectCreateInfo == null) converter.Context.ObjectCreateInfo = createInfo;
 
-       //     return Environment.NewLine + string.Join(" ", new[] { "SELECT" }.Concat(modify.Select(e => converter.ToString(e))).ToArray()) + selectTargetText;
-
-           //return select clause text.
             var select = new HText() { Separator = " " } + x;
-       //     select.AddRange(modify.Select(e => converter.ToString(e)));
-            return selectTargetText == null ? (TextParts)x : new VText(x, selectTargetText);
+            return new SelectClauseText(selectTargetText == null ? (SqlText)x : new VText(x, selectTargetText));
         }
 
-        static TextParts ToStringSelectedElement(ISqlStringConverter converter, ObjectCreateMemberInfo element)
+        static SqlText ToStringSelectedElement(ISqlStringConverter converter, ObjectCreateMemberInfo element)
         {
             //single select.
             //for example, COUNT(*).
@@ -71,4 +66,7 @@ namespace LambdicSql.Inside.Keywords
             return new HText(converter.Convert(element.Expression), " AS ", element.Name) { EnableChangeLine = false };
         }
     }
+
+
+ //   class SelectClauseText()
 }

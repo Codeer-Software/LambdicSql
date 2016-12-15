@@ -6,7 +6,7 @@ namespace LambdicSql.Inside.Keywords
 {
     static class DeleteClause
     {
-        internal static TextParts Convert(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static SqlText Convert(ISqlStringConverter converter, MethodCallExpression[] methods)
             => methods[0].Method.Name.ToUpper();
     }
 }

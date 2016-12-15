@@ -8,7 +8,7 @@ namespace LambdicSql.Inside.Keywords
 {
     static class CaseClause
     {
-        internal static TextParts Convert(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static SqlText Convert(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var texts = new VText();
             HText whenThen = null;
@@ -30,7 +30,7 @@ namespace LambdicSql.Inside.Keywords
                         break;
                     case nameof(LambdicSql.Keywords.When):
                         {
-                            whenThen = new HText("WHEN", SqlDisplayAdjuster.AdjustSubQueryString(argSrc[0])) { Separator = " ", IsFunctional = true, Indent = 1 };
+                            whenThen = new HText("WHEN", argSrc[0]) { Separator = " ", IsFunctional = true, Indent = 1 };
                         }
                         break;
                     case nameof(LambdicSql.Keywords.Then):
