@@ -457,6 +457,9 @@ new Params()
         //new 引数あり + 初期化
 
         //TODO is null で両方パラメータの場合・・・、無益やけど
+
+        //TODO is null でnullに括弧つけまくりとか
+
     }
 
     public static class TestExpressionEx

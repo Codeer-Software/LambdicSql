@@ -23,14 +23,11 @@ namespace LambdicSql.Inside
             }
         }
 
-        SqlConvertOption _option;
-
         public SqlConvertingContext Context { get; }
 
-        internal SqlStringConverter(SqlConvertingContext context, SqlConvertOption option)
+        internal SqlStringConverter(SqlConvertingContext context)
         {
             Context = context;
-            _option = option;
         }
 
         public object ToObject(Expression exp)
@@ -46,9 +43,9 @@ namespace LambdicSql.Inside
             if (exp != null) return Convert(exp).Text;
 
             var param = obj as DbParam;
-            if (param != null) return Context.Parameters.Push(param.Value, null, null, param);
+            if (param != null) return new ParameterText(null, null, param);
 
-            return Context.Parameters.Push(obj);
+            return new ParameterText(obj);
         }
 
         DecodedInfo Convert(Expression exp)
@@ -127,14 +124,13 @@ namespace LambdicSql.Inside
                     return new DecodedInfo(typeof(bool), Convert(unary.Operand).Text.ConcatAround("NOT (", ")"));
                 case ExpressionType.Convert:
                     var ret = Convert(unary.Operand);
-
-                    //In the case of parameters, execute casting.
-                    object obj;
-                    if (Context.Parameters.TryGetParam(ret.Text, out obj))
+                    var p = ret.Text as ParameterText;
+                    if (p != null)
                     {
-                        if (obj != null && !SupportedTypeSpec.IsSupported(obj.GetType()))
+                        if (p.Value != null && !SupportedTypeSpec.IsSupported(p.Value.GetType()))
                         {
-                            Context.Parameters.ChangeObject(ret.Text, ExpressionToObject.ConvertObject(unary.Type, obj));
+                            var casted = ExpressionToObject.ConvertObject(unary.Type, p.Value);
+                            return new DecodedInfo(ret.Type, new ParameterText(p.Name, p.MetaId, new DbParam() { Value = casted }));
                         }
                     }
                     return ret;
@@ -183,7 +179,8 @@ namespace LambdicSql.Inside
             var method = member.Expression as MethodCallExpression;
             if (method != null && method.Method.DeclaringType.IsSqlSyntax())
             {
-                var memberName = method.GetConverotrMethod()(this, new[] { method }).ToString(false, 0) + "." + member.Member.Name;
+                //TODO なんか嫌
+                var memberName = method.GetConverotrMethod()(this, new[] { method }).ToString(false, 0, new SqlConvertOption(), new ParameterInfo("")) + "." + member.Member.Name;
                 return ResolveLambdicElement(memberName);
             }
 
@@ -276,7 +273,7 @@ namespace LambdicSql.Inside
                     {
                         if (left.Type == typeof(string) || right.Type == typeof(string))
                         {
-                            return new DecodedInfo(left.Type, _option.StringAddOperator);
+                            return new DecodedInfo(left.Type, new StringAddOperatorText());
                         }
                         return new DecodedInfo(left.Type, "+");
                     }
@@ -302,12 +299,14 @@ namespace LambdicSql.Inside
                 default: return null;
             }
 
-            object leftObj, rightObj;
-            var leftIsParam = Context.Parameters.TryGetParam(left.Text, out leftObj);
-            var rightIsParam = Context.Parameters.TryGetParam(right.Text, out rightObj);
-            var bothParam = (leftIsParam && rightIsParam);
+            var leftParam = left.Text as ParameterText;
+            var rightParam = right.Text as ParameterText;
 
-            var isParams = new[] { leftIsParam, rightIsParam };
+            var leftObj = leftParam != null ? leftParam.Value : null;
+            var rightObj = rightParam != null ? rightParam.Value : null;
+            var bothParam = (leftParam != null && rightParam != null);
+
+            var isParams = new[] { leftParam != null, rightParam != null };
             var objs = new[] { leftObj, rightObj };
             var names = new[] { left.Text, right.Text };
             var targetTexts = new[] { right.Text, left.Text };
@@ -322,7 +321,6 @@ namespace LambdicSql.Inside
                         if (bothParam) continue;
                         return null;
                     }
-                    Context.Parameters.Remove(names[i]);
                     return new DecodedInfo(null, targetTexts[i].ConcatAround("(", ")" + ope));
                 }
             }
@@ -387,7 +385,7 @@ namespace LambdicSql.Inside
                 }
 
                 //use field name.
-                return new DecodedInfo(exp.Type, Context.Parameters.Push(obj, name, metaId));
+                return new DecodedInfo(exp.Type, new ParameterText(name, metaId, new DbParam() { Value = metaId }));
             }
 
             //DbParam.
@@ -402,9 +400,8 @@ namespace LambdicSql.Inside
                     metaId = new MetaId(member.Member);
                 }
                 var param = ((DbParam)obj);
-                obj = param.Value;
                 //use field name.
-                return new DecodedInfo(exp.Type.GetGenericArguments()[0], Context.Parameters.Push(obj, name, metaId, param));
+                return new DecodedInfo(exp.Type.GetGenericArguments()[0], new ParameterText(name, metaId, param));
             }
             
             //SqlExpression.
@@ -431,7 +428,7 @@ namespace LambdicSql.Inside
                 }
 
                 //use field name.
-                return new DecodedInfo(exp.Type, Context.Parameters.Push(obj, name, metaId));
+                return new DecodedInfo(exp.Type, new ParameterText(name, metaId, new DbParam() { Value = obj }));
             }
         }
 

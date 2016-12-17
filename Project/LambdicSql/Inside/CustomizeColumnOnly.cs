@@ -8,7 +8,7 @@ namespace LambdicSql.Inside
         {
             var col = src as DbColumnText;
             if (col == null) return src;
-            return new DbColumnText(col.Info, true);
+            return col.ToColumnOnly();
         }
     }
 }

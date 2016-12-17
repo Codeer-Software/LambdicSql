@@ -13,7 +13,7 @@
         SqlText Custom(SqlText src);
     }
 
-
+    //TODO やっぱりこいつらはSqlPartsだな
     /// <summary>
     /// Text.
     /// </summary>
@@ -34,8 +34,10 @@
         /// </summary>
         /// <param name="isTopLevel">Is top level.</param>
         /// <param name="indent">Indent.</param>
+        /// <param name="option">Option.</param>
+        /// <param name="paramterInfo">ParamterInfo.</param>
         /// <returns>Text.</returns>
-        public abstract string ToString(bool isTopLevel, int indent);
+        public abstract string ToString(bool isTopLevel, int indent, SqlConvertOption option, ParameterInfo paramterInfo);
 
         /// <summary>
         /// Concat to front and back.

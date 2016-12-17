@@ -4,6 +4,7 @@ using LambdicSql.SqlBase.TextParts;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
+using static LambdicSql.SqlBase.TextParts.SqlTextUtils;
 
 namespace LambdicSql
 {
@@ -28,7 +29,17 @@ namespace LambdicSql
         static SqlText Convert(ISqlStringConverter converter, ReadOnlyCollection<Expression> arguments)
         {
             var args = arguments.Select(e => converter.Convert(e)).ToArray();
-            return "TOP " + converter.Context.Parameters.ResolvePrepare(args[0]);
+            return LineSpace("TOP", args[0].Customize(new CustomizeParameterToObject()));
+        }
+    }
+
+    class CustomizeParameterToObject : ISqlTextCustomizer
+    {
+        public SqlText Custom(SqlText src)
+        {
+            var col = src as ParameterText;
+            if (col == null) return src;
+            return col.ToDisplayValue();
         }
     }
 }

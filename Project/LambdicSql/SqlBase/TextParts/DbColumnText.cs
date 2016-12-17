@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace LambdicSql.SqlBase.TextParts
 {
@@ -11,6 +12,9 @@ namespace LambdicSql.SqlBase.TextParts
         internal ColumnInfo Info { get; private set; }
 
         string ColumnName => _columnOnly ? Info.SqlColumnName : Info.SqlFullName;
+
+        internal SqlText ToColumnOnly() =>
+            new DbColumnText(Info, true, _front, _back);
 
         internal DbColumnText(ColumnInfo info)
         {
@@ -35,7 +39,7 @@ namespace LambdicSql.SqlBase.TextParts
 
         public override bool IsEmpty => false;
 
-        public override string ToString(bool isTopLevel, int indent)
+        public override string ToString(bool isTopLevel, int indent, SqlConvertOption option, ParameterInfo paramterInfo)
             => string.Join(string.Empty, Enumerable.Range(0, indent).Select(e => "\t").ToArray()) + _front + ColumnName + _back;
 
         public override SqlText ConcatAround(string front, string back) 

@@ -3,6 +3,7 @@ using LambdicSql.SqlBase;
 using LambdicSql.SqlBase.TextParts;
 using System.Linq;
 using System.Linq.Expressions;
+using static LambdicSql.SqlBase.TextParts.SqlTextUtils;
 
 namespace LambdicSql
 {
@@ -29,17 +30,16 @@ namespace LambdicSql
         static SqlText Convert(ISqlStringConverter converter, NewExpression exp)
         {
             var args = exp.Arguments.Select(e => converter.Convert(e)).ToArray();
-
+            
             //Sql server can't use parameter.
-            //TODO ここもパラメータキャストで解決できるようにする
             if (exp.Arguments.Count == 1)
             {
-                return "ROWS " + converter.Context.Parameters.ResolvePrepare(args[0]) + " PRECEDING";
+                return LineSpace("ROWS", args[0].Customize(new CustomizeParameterToObject()), "PRECEDING");
             }
             else
             {
-                return "ROWS BETWEEN " + converter.Context.Parameters.ResolvePrepare(args[0]) +
-                    " PRECEDING AND " + converter.Context.Parameters.ResolvePrepare(args[1]) + " FOLLOWING";
+                return LineSpace("ROWS BETWEEN", args[0].Customize(new CustomizeParameterToObject()),
+                    "PRECEDING AND", args[1].Customize(new CustomizeParameterToObject()), "FOLLOWING");
             }
         }
     }

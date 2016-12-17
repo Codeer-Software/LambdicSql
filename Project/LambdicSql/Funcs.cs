@@ -220,7 +220,9 @@ namespace LambdicSql
                 case nameof(Extract):
                     return FuncSpace(method.Method.Name.ToUpper(), args[0], "FROM", args[1]);
                 case nameof(Cast):
-                    return FuncSpace("CAST", args[0], "AS", converter.Context.Parameters.ResolvePrepare(args[1]));
+                    //TODO ★ParameterInfo
+                    //  return FuncSpace("CAST", args[0], "AS", converter.Context.Parameters.ResolvePrepare(args[1]));
+                    return null;
                 default:
                     break;
             }

@@ -6,8 +6,6 @@ using System;
 
 namespace LambdicSql.SqlBase
 {
-    //TODO パラメータを遅延でできる設計にする
-
     /// <summary>
     /// Parameter info.
     /// </summary>
@@ -21,7 +19,6 @@ namespace LambdicSql.SqlBase
         {
             _prefix = prefix;
         }
-
         /// <summary>
         /// Get parameters.
         /// It's dictionary of name and parameter.
@@ -30,7 +27,7 @@ namespace LambdicSql.SqlBase
         public Dictionary<string, DbParam> GetDbParams()
             => _parameters.ToDictionary(e => e.Key, e => e.Value.Detail);
 
-        internal SqlText Push(object obj, string nameSrc = null, MetaId metadataToken = null, DbParam param = null)
+        internal string Push(object obj, string nameSrc = null, MetaId metadataToken = null, DbParam param = null)
         {
             if (string.IsNullOrEmpty(nameSrc)) nameSrc = "p_" + _count++;
 
@@ -42,7 +39,7 @@ namespace LambdicSql.SqlBase
                 //not be same direct value. 
                 if (metadataToken != null && metadataToken == val.MetadataToken)
                 {
-                    return new ParameterText(name);
+                    return name;
                 }
                 while (true)
                 {
@@ -52,7 +49,7 @@ namespace LambdicSql.SqlBase
                         //not be same direct value. 
                         if (metadataToken != null && metadataToken == val.MetadataToken)
                         {
-                            return new ParameterText(nameCheck);
+                            return nameCheck;
                         }
                     }
                     else
@@ -67,9 +64,9 @@ namespace LambdicSql.SqlBase
             if (param == null) param = new DbParam();
             param.Value = obj;
             _parameters.Add(name, new DecodingParameterInfo() { MetadataToken = metadataToken, Detail = param });
-            return new ParameterText(name);
+            return name;
         }
-
+        /*
         internal bool TryGetParam(SqlText key, out object leftObj)
         {
             leftObj = null;
@@ -104,6 +101,6 @@ namespace LambdicSql.SqlBase
         }
 
         internal void ChangeObject(SqlText key, object value)
-            => _parameters[((ParameterText)key).Text].Detail.Value = value;
+            => _parameters[((ParameterText)key).Text].Detail.Value = value;*/
     }
 }

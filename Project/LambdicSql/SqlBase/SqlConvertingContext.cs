@@ -15,15 +15,9 @@
         /// </summary>
         public DbInfo DbInfo { get; }
 
-        /// <summary>
-        /// Parameters.
-        /// </summary>
-        public ParameterInfo Parameters { get; }
-
-        internal SqlConvertingContext(DbInfo dbInfo, string prefix)
+        internal SqlConvertingContext(DbInfo dbInfo)
         {
             DbInfo = dbInfo;
-            Parameters = new ParameterInfo(prefix);
         }
     }
 }

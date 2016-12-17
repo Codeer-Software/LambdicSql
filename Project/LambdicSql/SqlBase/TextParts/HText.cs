@@ -64,23 +64,26 @@ namespace LambdicSql.SqlBase.TextParts
         /// </summary>
         /// <param name="isTopLevel">Is top level.</param>
         /// <param name="indent">Indent.</param>
+        /// <param name="option">Option.</param>
+        /// <param name="paramterInfo">ParamterInfo.</param>
         /// <returns>Text.</returns>
-        public override string ToString(bool isTopLevel, int indent)
+        public override string ToString(bool isTopLevel, int indent, SqlConvertOption option, ParameterInfo paramterInfo)
         {
             indent += Indent;
             if (_texts.Count == 0) return string.Empty;
-            if (_texts.Count == 1) return _texts[0].ToString(isTopLevel, indent);
+            if (_texts.Count == 1) return _texts[0].ToString(isTopLevel, indent, option, paramterInfo);
 
             if (IsSingleLine || !EnableChangeLine)
             {
-                return _texts[0].ToString(isTopLevel, indent) + Separator + string.Join(Separator, _texts.Skip(1).Select(e => e.ToString(isTopLevel, 0)).ToArray());
+                return _texts[0].ToString(isTopLevel, indent, option, paramterInfo) + Separator
+                    + string.Join(Separator, _texts.Skip(1).Select(e => e.ToString(isTopLevel, 0, option, paramterInfo)).ToArray());
             }
 
             //if IsFunctional is true, add Indent other than the first line.
             var addIndentCount = IsFunctional ? 1 : 0;
             var sep = Separator.TrimEnd();
-            return _texts[0].ToString(isTopLevel, indent) + sep + Environment.NewLine +
-                string.Join(sep + Environment.NewLine, _texts.Skip(1).Select(e => e.ToString(isTopLevel, indent + addIndentCount)).ToArray());
+            return _texts[0].ToString(isTopLevel, indent, option, paramterInfo) + sep + Environment.NewLine +
+                string.Join(sep + Environment.NewLine, _texts.Skip(1).Select(e => e.ToString(isTopLevel, indent + addIndentCount, option, paramterInfo)).ToArray());
         }
 
         /// <summary>

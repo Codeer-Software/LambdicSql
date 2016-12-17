@@ -13,6 +13,7 @@
 
         public override bool IsEmpty => Core.IsEmpty;
 
-        public override string ToString(bool isTopLevel, int indent) => Core.ToString(isTopLevel, indent);
+        public override string ToString(bool isTopLevel, int indent, SqlConvertOption option, ParameterInfo paramterInfo) 
+            => Core.ToString(isTopLevel, indent, option, paramterInfo);
     }
 }

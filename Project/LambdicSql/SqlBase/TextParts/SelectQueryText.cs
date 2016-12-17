@@ -4,10 +4,10 @@
     {
         internal SelectQueryText(SqlText core) : base(core) { }
 
-        public override string ToString(bool isTopLevel, int indent)
+        public override string ToString(bool isTopLevel, int indent, SqlConvertOption option, ParameterInfo paramterInfo)
         {
-            if (isTopLevel) return base.ToString(false, indent);
-            return Core.ConcatAround("(", ")").ToString(false, indent);
+            if (isTopLevel) return base.ToString(false, indent, option, paramterInfo);
+            return Core.ConcatAround("(", ")").ToString(false, indent, option, paramterInfo);
         }
 
         public override SqlText ConcatAround(string front, string back) => new SelectQueryText(Core.ConcatAround(front, back));

@@ -109,7 +109,7 @@ namespace LambdicSql
         {
             var text = (string)converter.ToObject(method.Arguments[0]);
             var array = method.Arguments[1] as NewArrayExpression;
-            return string.Format(text, array.Expressions.Select(e => converter.Convert(e).ToString(true, 0)).ToArray());
+            return new StringFormatText(text, array.Expressions.Select(e => converter.Convert(e)).ToArray());
         }
 
         static SqlText TwoWaySql(ISqlStringConverter converter, MethodCallExpression method)
@@ -117,14 +117,14 @@ namespace LambdicSql
             var obj = converter.ToObject(method.Arguments[0]);
             var text = TowWaySqlSpec.ToStringFormat((string)obj);
             var array = method.Arguments[1] as NewArrayExpression;
-            return string.Format(text, array.Expressions.Select(e => converter.Convert(e).ToString(true, 0)).ToArray());
+            return new StringFormatText(text, array.Expressions.Select(e => converter.Convert(e)).ToArray());
         }
 
         static SqlText ColumnOnly(ISqlStringConverter converter, MethodCallExpression method)
         {
-            ColumnInfo col;
-            if (converter.Context.DbInfo.GetLambdaNameAndColumn().TryGetValue(converter.Convert(method.Arguments[0]).ToString(false, 0), out col)) return col.SqlColumnName;
-            throw new NotSupportedException("invalid column.");
+            var col = converter.Convert(method.Arguments[0]) as DbColumnText;
+            if (col == null) throw new NotSupportedException("invalid column.");
+            return col.Customize(new CustomizeColumnOnly());
         }
     }
 }

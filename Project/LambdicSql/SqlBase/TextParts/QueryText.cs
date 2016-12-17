@@ -4,7 +4,8 @@
     {
         internal QueryText(SqlText core) : base(core) { }
 
-        public override string ToString(bool isTopLevel, int indent) => base.ToString(false, indent);
+        public override string ToString(bool isTopLevel, int indent, SqlConvertOption option, ParameterInfo paramterInfo) 
+            => base.ToString(false, indent, option, paramterInfo);
 
         public override SqlText ConcatAround(string front, string back) => new QueryText(Core.ConcatAround(front, back));
 

@@ -92,6 +92,8 @@
     <Compile Include="DbParam.cs" />
     <Compile Include="SqlBase\MethodGroupAttribute.cs" />
     <Compile Include="SqlBase\TextParts\SqlTextUtils.cs" />
+    <Compile Include="SqlBase\TextParts\StringAddOperatorText.cs" />
+    <Compile Include="SqlBase\TextParts\StringFormatText.cs" />
     <Compile Include="SqlBase\TextParts\TextWrapper.cs" />
     <Compile Include="SqlBase\TextParts\VText.cs" />
     <Compile Include="SqlExpression.cs" />
