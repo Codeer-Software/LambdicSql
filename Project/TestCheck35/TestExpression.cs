@@ -460,6 +460,7 @@ new Params()
 
         //TODO is null でnullに括弧つけまくりとか
 
+        //TODO BinaryExpressionのテスト
     }
 
     public static class TestExpressionEx

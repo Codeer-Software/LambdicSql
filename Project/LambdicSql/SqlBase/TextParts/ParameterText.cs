@@ -4,7 +4,6 @@ using System;
 
 namespace LambdicSql.SqlBase.TextParts
 {
-    //TODO いやー、さすがにこれは最後に確定でコンテキストでながすかなー
     class ParameterText : SqlText
     {
         internal string Name { get; private set; }

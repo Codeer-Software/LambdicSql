@@ -85,8 +85,6 @@ namespace LambdicSql.Inside
 
         static object GetBinaryExpression(BinaryExpression binaryExp)
         {
-            //TODO あれ？ binaryExp.Methodを使えばよいかも
-            //TODO あー、テストできてない！
             object objLeft, objRight;
             if (!GetExpressionObject(binaryExp.Left, out objLeft) ||
                 !GetExpressionObject(binaryExp.Right, out objRight))
