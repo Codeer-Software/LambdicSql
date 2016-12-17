@@ -162,6 +162,17 @@ namespace LambdicSql.SqlBase.TextParts
             return CopyProperty(dst);
         }
 
+        /// <summary>
+        /// Customize.
+        /// </summary>
+        /// <param name="customizer">Customizer.</param>
+        /// <returns>Customized SqlText.</returns>
+        public override SqlText Customize(ISqlTextCustomizer customizer)
+        {
+            var dst = _texts.Select(e => customizer.Custom(e));
+            return CopyProperty(dst.ToArray());
+        }
+
         HText CopyProperty(params SqlText[] texts)
              => new HText(texts) { Indent = Indent, IsFunctional = IsFunctional, EnableChangeLine = EnableChangeLine, Separator = Separator };
     }

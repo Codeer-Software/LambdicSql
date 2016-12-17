@@ -2,6 +2,7 @@
 using LambdicSql.SqlBase;
 using LambdicSql.SqlBase.TextParts;
 using System.Linq.Expressions;
+using System;
 
 namespace LambdicSql
 {
@@ -21,17 +22,7 @@ namespace LambdicSql
         
         static SqlText Convert(ISqlStringConverter converter, NewExpression exp)
         {
-            var src = converter.UsingColumnNameOnly;
-            SqlText arg1 = null;
-            try
-            {
-                converter.UsingColumnNameOnly = true;
-                arg1 = converter.Convert(exp.Arguments[0]);
-            }
-            finally
-            {
-                converter.UsingColumnNameOnly = src;
-            }
+            SqlText arg1 = converter.Convert(exp.Arguments[0]).Customize(new CustomizeColumnOnly());
             return new HText(arg1, "=", converter.Convert(exp.Arguments[1])) { Separator = " " };
         }
     }

@@ -15,5 +15,7 @@
         public override SqlText ConcatToFront(string front) => new SelectQueryText(Core.ConcatToFront(front));
 
         public override SqlText ConcatToBack(string back) => new SelectQueryText(Core.ConcatToBack(back));
+
+        public override SqlText Customize(ISqlTextCustomizer customizer) => customizer.Custom(this);
     }
 }

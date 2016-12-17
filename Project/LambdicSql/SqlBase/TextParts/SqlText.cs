@@ -1,6 +1,20 @@
 ﻿namespace LambdicSql.SqlBase.TextParts
 {
     /// <summary>
+    /// 
+    /// </summary>
+    public interface ISqlTextCustomizer
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="src"></param>
+        /// <returns></returns>
+        SqlText Custom(SqlText src);
+    }
+
+
+    /// <summary>
     /// Text.
     /// </summary>
     public abstract class SqlText
@@ -44,6 +58,13 @@
         /// <param name="back"></param>
         /// <returns></returns>
         public abstract SqlText ConcatToBack(string back);
+
+        /// <summary>
+        /// Customize.
+        /// </summary>
+        /// <param name="customizer">Customizer.</param>
+        /// <returns>Customized SqlText.</returns>
+        public abstract SqlText Customize(ISqlTextCustomizer customizer);
 
         /// <summary>
         /// Convert string to IText.

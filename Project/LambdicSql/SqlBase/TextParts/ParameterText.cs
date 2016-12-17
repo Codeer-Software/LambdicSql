@@ -7,5 +7,8 @@
         {
             Text = text;
         }
+
+        public override SqlText Customize(ISqlTextCustomizer customizer)
+            => customizer.Custom(this);
     }
 }

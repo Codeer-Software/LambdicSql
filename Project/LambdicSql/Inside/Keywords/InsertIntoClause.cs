@@ -34,17 +34,8 @@ namespace LambdicSql.Inside.Keywords
             var table = converter.Convert(method.Arguments[0]);
 
             //column should not have a table name.
-            bool src = converter.UsingColumnNameOnly;
-            try
-            {
-                converter.UsingColumnNameOnly = true;
-                var arg = converter.Convert(method.Arguments[1]);
-                return Func(LineSpace("INSERT INTO", table), arg);
-            }
-            finally
-            {
-                converter.UsingColumnNameOnly = src;
-            }
+            var arg = converter.Convert(method.Arguments[1]).Customize(new CustomizeColumnOnly());
+            return Func(LineSpace("INSERT INTO", table), arg);
         }
     }
 }

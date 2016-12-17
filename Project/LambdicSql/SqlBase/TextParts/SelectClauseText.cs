@@ -9,5 +9,7 @@
         public override SqlText ConcatToFront(string front) => new SelectClauseText(Core.ConcatToFront(front));
 
         public override SqlText ConcatToBack(string back) => new SelectClauseText(Core.ConcatToBack(back));
+
+        public override SqlText Customize(ISqlTextCustomizer customizer) => customizer.Custom(this);
     }
 }

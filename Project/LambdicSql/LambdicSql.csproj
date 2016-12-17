@@ -53,6 +53,7 @@
     <Compile Include="feat\EntityFramework\EFApaptExtensions.cs" />
     <Compile Include="feat\EntityFramework\EFWrapper.cs" />
     <Compile Include="feat\PackageIsNotInstalledException.cs" />
+    <Compile Include="Inside\CustomizeColumnOnly.cs" />
     <Compile Include="Inside\InvalitContext.cs" />
     <Compile Include="Inside\DecodingParameterInfo.cs" />
     <Compile Include="Inside\Keywords\FetchNextRowsOnlyClause.cs" />
@@ -72,6 +73,8 @@
     <Compile Include="Inside\ExpressionToObject.CreateGetter.cs" />
     <Compile Include="Inside\ExpressionToObject.Getter.cs" />
     <Compile Include="Inside\SqlExpressionCoupled.cs" />
+    <Compile Include="SqlBase\TextParts\DbColumnText.cs" />
+    <Compile Include="SqlBase\TextParts\DbTableText.cs" />
     <Compile Include="SqlBase\TextParts\HText.cs" />
     <Compile Include="SqlBase\TextParts\SingleText.cs" />
     <Compile Include="SqlBase\TextParts\ParameterText.cs" />

@@ -25,9 +25,6 @@ namespace LambdicSql.Inside
 
         SqlConvertOption _option;
 
-        //TODO 特定の型にしてVisitで変更すれば何とかなるんだよね。
-        public bool UsingColumnNameOnly { get; set; }
-
         public SqlConvertingContext Context { get; }
 
         internal SqlStringConverter(SqlConvertingContext context, SqlConvertOption option)
@@ -174,10 +171,10 @@ namespace LambdicSql.Inside
             var body = ResolveSqlExpressionBody(member);
             if (body != null) return body;
 
+            //TODO ややこしいから methodとenum以外はやめとこ
             //sql syntax.
             if (member.Member.DeclaringType.IsSqlSyntax())
             {
-                //TODO あーでもこれは sql syntax のenumが来る可能性もあるよねー
                 //convert.
                 return new DecodedInfo(member.Type, member.GetConverotrMethod()(this, member));
             }
@@ -187,44 +184,33 @@ namespace LambdicSql.Inside
             if (method != null && method.Method.DeclaringType.IsSqlSyntax())
             {
                 var memberName = method.GetConverotrMethod()(this, new[] { method }).ToString(false, 0) + "." + member.Member.Name;
-                return ResolveDbElement(memberName);
+                return ResolveLambdicElement(memberName);
             }
 
             //db element.
             string name;
-            if (IsDbDesignParam(member, out name)) return ResolveDbElement(name);
+            if (IsDbDesignParam(member, out name))
+            {
+                return ResolveLambdicElement(name);
+            }
 
             //get value.
             return ResolveExpressionObject(member);
         }
 
-        private DecodedInfo ResolveDbElement(string name)
+        private DecodedInfo ResolveLambdicElement(string name)
         {
             TableInfo table;
             if (Context.DbInfo.GetLambdaNameAndTable().TryGetValue(name, out table))
             {
-                return new DecodedInfo(null, table.SqlFullName);
+                return new DecodedInfo(null, new DbTableText(table));
             }
-            string col;
-            Type colType;
-            if (TryGetValueLambdaNameAndColumn(name, out col, out colType))
+            ColumnInfo col;
+            if (Context.DbInfo.GetLambdaNameAndColumn().TryGetValue(name, out col))
             {
-                return new DecodedInfo(colType, col);
+                return new DecodedInfo(col.Type, new DbColumnText(col));
             }
             return new DecodedInfo(null, name);
-        }
-
-        public bool TryGetValueLambdaNameAndColumn(string lambdaName, out string columnName, out Type colType)
-        {
-            columnName = string.Empty;
-            colType = null;
-            ColumnInfo col;
-            if (!Context.DbInfo.GetLambdaNameAndColumn().TryGetValue(lambdaName, out col)) return false;
-
-            colType = col.Type;
-            if (UsingColumnNameOnly) columnName = col.SqlColumnName;
-            else columnName = col.SqlFullName;
-            return true;
         }
 
         DecodedInfo Convert(MethodCallExpression method)

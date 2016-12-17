@@ -124,7 +124,7 @@ new Params()
     { "@p_3", 30 },
 });
         }
-        
+
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_ImplicitConvertOperator1()
         {
@@ -262,7 +262,7 @@ WHERE (@val1) = (@val2)", new Params { { "@val1", (long)1 }, { "@val2", 1 } });
             AssertEx.AreEqual(query, _connection,
 @"SELECT *
 FROM tbl_staff
-WHERE (@val1) = ((((@val2) + (@p_0)) + (@obj2)) + (@obj1))", 
+WHERE (@val1) = ((((@val2) + (@p_0)) + (@obj2)) + (@obj1))",
 new Params
 {
     { "@val1", 6 },
@@ -304,7 +304,7 @@ WHERE (@field) = (@p_0)", new Params { { "@field", 1 }, { "@p_0", 1 } });
             AssertEx.AreEqual(query, _connection,
 @"SELECT *
 FROM tbl_staff
-WHERE (@field) = (@p_0)", new Params { { "@field", 1}, { "@p_0", 1} });
+WHERE (@field) = (@p_0)", new Params { { "@field", 1 }, { "@p_0", 1 } });
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -357,7 +357,7 @@ WHERE (@p_0) <> (@p_1)", 3, 1);
             var query = Sql<DB>.Create(db => val);
             AssertEx.AreEqual(query, _connection, @"@val", new Params { { @"@val", null } });
         }
-        
+
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_New_Object()
         {
@@ -408,7 +408,7 @@ new Params()
     { "@p_3", 30 },
 });
         }
-        
+
         //TODO Test_ArrayLength  [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_ArrayLength()
         {
@@ -441,9 +441,21 @@ new Params()
             AssertEx.AreEqual(query, _connection, @"@p_0", 1);
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_SqlSyntaxMember()
+        {
+            var data = new
+            {
+                val = AggregatePredicate.All
+            };
+
+            var query = Sql<Data>.Create(db => data.val);
+            AssertEx.AreEqual(query, _connection, @"ALL");
+        }
+
         //TODO ExpressionToObjectがテストされるだけのテストを書くこと
-            //new 引数あり + 初期化
-        
+        //new 引数あり + 初期化
+
         //TODO is null で両方パラメータの場合・・・、無益やけど
     }
 

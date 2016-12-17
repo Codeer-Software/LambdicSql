@@ -70,5 +70,12 @@ namespace LambdicSql.SqlBase.TextParts
         /// <param name="back"></param>
         /// <returns></returns>
         public override SqlText ConcatToBack(string back) => new SingleText(_text + back, _indent);
+
+        /// <summary>
+        /// Customize.
+        /// </summary>
+        /// <param name="customizer">Customizer.</param>
+        /// <returns>Customized SqlText.</returns>
+        public override SqlText Customize(ISqlTextCustomizer customizer) => customizer.Custom(this);
     }
 }

@@ -130,6 +130,17 @@ namespace LambdicSql.SqlBase.TextParts
             return CopyProperty(dst);
         }
 
+        /// <summary>
+        /// Customize.
+        /// </summary>
+        /// <param name="customizer">Customizer.</param>
+        /// <returns>Customized SqlText.</returns>
+        public override SqlText Customize(ISqlTextCustomizer customizer)
+        {
+            var dst = _texts.Select(e => customizer.Custom(e));
+            return CopyProperty(dst.ToArray());
+        }
+
         VText CopyProperty(params SqlText[] texts)
              => new VText(texts) { Indent = Indent, Separator = Separator };
     }
