@@ -385,7 +385,7 @@ namespace LambdicSql.Inside
                 }
 
                 //use field name.
-                return new DecodedInfo(exp.Type, new ParameterText(name, metaId, new DbParam() { Value = metaId }));
+                return new DecodedInfo(exp.Type, new ParameterText(name, metaId, new DbParam() { Value = obj }));
             }
 
             //DbParam.
