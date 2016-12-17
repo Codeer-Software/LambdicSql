@@ -186,6 +186,8 @@ namespace LambdicSql.Inside
             //sql syntax.
             if (member.Member.DeclaringType.IsSqlSyntax())
             {
+                //TODO あーでもこれは sql syntax のenumが来る可能性もあるよねー
+
                 //exist customizer.
                 if (_sqlSyntaxCustomizer != null)
                 {
@@ -198,49 +200,37 @@ namespace LambdicSql.Inside
                 //convert.
                 return new DecodedInfo(member.Type, member.GetConverotrMethod()(this, member));
             }
-
-            //TODO テーブルとカラムはそれとわかる型にしておく
+            
             //sql syntax extension method
             var method = member.Expression as MethodCallExpression;
             if (method != null && method.Method.DeclaringType.IsSqlSyntax())
             {
-                //TODO あれ？なんでここってこんな流れ？
                 var memberName = method.GetConverotrMethod()(this, new[] { method }).ToString(false, 0) + "." + member.Member.Name;
-
-                TableInfo table;
-                if (Context.DbInfo.GetLambdaNameAndTable().TryGetValue(memberName, out table))
-                {
-                    return new DecodedInfo(null, table.SqlFullName);
-                }
-                string col;
-                Type colType;
-                if (TryGetValueLambdaNameAndColumn(memberName, out col, out colType))
-                {
-                    return new DecodedInfo(colType, col);
-                }
-                return new DecodedInfo(null, memberName);
+                return ResolveDbElement(memberName);
             }
 
             //db element.
             string name;
-            if (IsDbDesignParam(member, out name))
-            {
-                TableInfo table;
-                if (Context.DbInfo.GetLambdaNameAndTable().TryGetValue(name, out table))
-                {
-                    return new DecodedInfo(null, table.SqlFullName);
-                }
-                string col;
-                Type colType;
-                if (TryGetValueLambdaNameAndColumn(name, out col, out colType))
-                {
-                    return new DecodedInfo(colType, col);
-                }
-                throw new NotSupportedException();
-            }
+            if (IsDbDesignParam(member, out name)) return ResolveDbElement(name);
 
             //get value.
             return ResolveExpressionObject(member);
+        }
+
+        private DecodedInfo ResolveDbElement(string name)
+        {
+            TableInfo table;
+            if (Context.DbInfo.GetLambdaNameAndTable().TryGetValue(name, out table))
+            {
+                return new DecodedInfo(null, table.SqlFullName);
+            }
+            string col;
+            Type colType;
+            if (TryGetValueLambdaNameAndColumn(name, out col, out colType))
+            {
+                return new DecodedInfo(colType, col);
+            }
+            return new DecodedInfo(null, name);
         }
 
         public bool TryGetValueLambdaNameAndColumn(string lambdaName, out string columnName, out Type colType)
@@ -260,9 +250,6 @@ namespace LambdicSql.Inside
         {
             //not sql syntax.
             if (!method.Method.DeclaringType.IsSqlSyntax()) return ResolveExpressionObject(method);
-
-            //TODO Concatとか　対応はいらないと思うけどテスト書いておく
-
 
             var ret = new List<SqlText>();
             foreach (var c in GetMethodChains(method))
