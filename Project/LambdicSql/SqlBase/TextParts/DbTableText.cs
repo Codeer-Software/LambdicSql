@@ -4,18 +4,18 @@ namespace LambdicSql.SqlBase.TextParts
 {
     class DbTableText : SqlText
     {
-        TableInfo _info;
+        internal TableInfo Info { get; private set; }
         string _front = string.Empty;
         string _back = string.Empty;
 
         internal DbTableText(TableInfo info)
         {
-            _info = info;
+            Info = info;
         }
 
         DbTableText(TableInfo info, string front, string back)
         {
-            _info = info;
+            Info = info;
             _front = front;
             _back = back;
         }
@@ -25,16 +25,16 @@ namespace LambdicSql.SqlBase.TextParts
         public override bool IsEmpty => false;
 
         public override string ToString(bool isTopLevel, int indent, SqlConvertOption option, ParameterInfo paramterInfo)
-            => string.Join(string.Empty, Enumerable.Range(0, indent).Select(e => "\t").ToArray()) + _front + _info.SqlFullName + _back;
+            => string.Join(string.Empty, Enumerable.Range(0, indent).Select(e => "\t").ToArray()) + _front + Info.SqlFullName + _back;
 
         public override SqlText ConcatAround(string front, string back) 
-            => new DbTableText(_info, front + _front, _back + back);
+            => new DbTableText(Info, front + _front, _back + back);
 
         public override SqlText ConcatToFront(string front) 
-            => new DbTableText(_info, front + _front, _back);
+            => new DbTableText(Info, front + _front, _back);
 
         public override SqlText ConcatToBack(string back) 
-            => new DbTableText(_info, _front, _back + back);
+            => new DbTableText(Info, _front, _back + back);
 
         public override SqlText Customize(ISqlTextCustomizer customizer)
             => customizer.Custom(this);

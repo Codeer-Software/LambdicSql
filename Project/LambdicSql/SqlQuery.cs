@@ -24,12 +24,11 @@ namespace LambdicSql
         public DbInfo DbInfo => _core.DbInfo;
 
         /// <summary>
-        /// Create SQL text.
+        /// Data converted from Expression to a form close to a string representation.
         /// </summary>
-        /// <param name="convertor">Convertor.</param>
-        /// <returns>SQL text.</returns>
-        public SqlText Convert(ISqlStringConverter convertor) => _core.Convert(convertor);
-
+        /// <returns>text.</returns>
+        public SqlText SqlText => _core.SqlText;
+        
         internal SqlQuery(ISqlExpressionBase core) { _core = core; }
     }
 }

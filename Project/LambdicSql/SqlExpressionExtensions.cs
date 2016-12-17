@@ -39,11 +39,9 @@ namespace LambdicSql
         /// <returns>Sql information.</returns>
         public static SqlInfo ToSqlInfo(this ISqlExpressionBase expression, SqlConvertOption option)
         { 
-            var context = new SqlConvertingContext(expression.DbInfo);
-            var converter = new SqlStringConverter(context);
-            var text = expression.Convert(converter);
             var paramterInfo = new ParameterInfo(option.ParameterPrefix);
-            return new SqlInfo(expression.DbInfo, text.ToString(true, 0, option, paramterInfo), context.ObjectCreateInfo, paramterInfo);
+            //TODO context.ObjectCreateInfo
+            return new SqlInfo(expression.DbInfo, expression.SqlText.ToString(true, 0, option, paramterInfo), null, paramterInfo);
         }
     }
 }

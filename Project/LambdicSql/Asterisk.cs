@@ -28,5 +28,10 @@ namespace LambdicSql
     /// </summary>
     /// <typeparam name="T">It represents the type to select when used in the Select clause.</typeparam>
     [SqlSyntax]
-    public class Asterisk<T> : Asterisk { }
+    public class Asterisk<T> : Asterisk
+    {
+        static SqlText Convert(ISqlStringConverter converter, NewExpression exp) => "*";
+
+        static SqlText Convert(ISqlStringConverter converter, MethodCallExpression[] methods) => "*";
+    }
 }

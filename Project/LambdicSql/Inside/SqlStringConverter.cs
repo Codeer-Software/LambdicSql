@@ -179,8 +179,13 @@ namespace LambdicSql.Inside
             var method = member.Expression as MethodCallExpression;
             if (method != null && method.Method.DeclaringType.IsSqlSyntax())
             {
-                //TODO なんか嫌
-                var memberName = method.GetConverotrMethod()(this, new[] { method }).ToString(false, 0, new SqlConvertOption(), new ParameterInfo("")) + "." + member.Member.Name;
+                var ret = method.GetConverotrMethod()(this, new[] { method });
+                var tbl = ret as DbTableText;
+                if (tbl == null)
+                {
+                    throw new NotSupportedException();
+                }
+                var memberName = tbl.Info.LambdaFullName + "." + member.Member.Name;
                 return ResolveLambdicElement(memberName);
             }
 
@@ -412,7 +417,7 @@ namespace LambdicSql.Inside
                 Type type = null;
                 var types = sqlExp.GetType().GetGenericArguments();
                 if (0 < types.Length) type = types[0];
-                return new DecodedInfo(type,sqlExp.Convert(this));
+                return new DecodedInfo(type, sqlExp.SqlText);
             }
 
             //others.

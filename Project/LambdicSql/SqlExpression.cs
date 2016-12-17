@@ -16,17 +16,16 @@ namespace LambdicSql
         public abstract DbInfo DbInfo { get; protected set; }
 
         /// <summary>
+        /// Data converted from Expression to a form close to a string representation.
+        /// </summary>
+        /// <returns>text.</returns>
+        public abstract SqlText SqlText { get; }
+
+        /// <summary>
         /// Entity represented by SqlExpression.
         /// It can only be used within methods of the LambdicSql.Sql class.
         /// </summary>
         public T Body => InvalitContext.Throw<T>(nameof(Body));
-
-        /// <summary>
-        /// Stringify.
-        /// </summary>
-        /// <param name="convertor">Convertor.</param>
-        /// <returns>Text.</returns>
-        public abstract SqlText Convert(ISqlStringConverter convertor);
 
         /// <summary>
         /// Implicitly convert to the type represented by SqlExpression.

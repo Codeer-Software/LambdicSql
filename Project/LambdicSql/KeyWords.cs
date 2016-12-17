@@ -1014,6 +1014,8 @@ namespace LambdicSql
                     return NullCheck.ConvertIsNull(converter, methods);
                 case nameof(IsNotNull):
                     return NullCheck.ConvertIsNotNull(converter, methods);
+                case nameof(Asterisk):
+                    return "*";
             }
             throw new NotSupportedException();
         }

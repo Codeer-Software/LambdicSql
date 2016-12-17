@@ -6,16 +6,17 @@ namespace LambdicSql.Inside
 {
     class SqlExpressionSingle<TSelected> : SqlExpression<TSelected>
     {
-        Expression _core;
         public override DbInfo DbInfo { get; protected set; }
+        public override SqlText SqlText { get; }
 
         public SqlExpressionSingle(DbInfo dbInfo, Expression core)
         {
             DbInfo = dbInfo;
-            _core = core;
+            //TODO
+            var context = new SqlConvertingContext(dbInfo);
+            var converter = new SqlStringConverter(context);
+            if (core == null) SqlText = string.Empty;
+            else SqlText = converter.Convert(core);
         }
-
-        public override SqlText Convert(ISqlStringConverter converter)
-            => _core == null ? (SqlText)string.Empty : converter.Convert(_core);
     }
 }

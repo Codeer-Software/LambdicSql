@@ -13,11 +13,10 @@ namespace LambdicSql.SqlBase
         DbInfo DbInfo { get; }
 
         /// <summary>
-        /// Expression to text.
+        /// Data converted from Expression to a form close to a string representation.
         /// </summary>
-        /// <param name="convertor">convertor.</param>
         /// <returns>text.</returns>
-        SqlText Convert(ISqlStringConverter convertor);
+        SqlText SqlText { get; }
     }
 
     /// <summary>
