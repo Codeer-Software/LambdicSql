@@ -38,14 +38,11 @@ namespace LambdicSql
         /// <param name="option">Options for converting from C # to SQL string.</param>
         /// <returns>Sql information.</returns>
         public static SqlInfo ToSqlInfo(this ISqlExpressionBase expression, SqlConvertOption option)
-            => ToSqlInfo(expression, option, null);
-
-        static SqlInfo ToSqlInfo(this ISqlExpressionBase exp, SqlConvertOption option, ISqlSyntaxCustomizer customizer)
-        {
-            var context = new SqlConvertingContext(exp.DbInfo, option.ParameterPrefix);
-            var converter = new SqlStringConverter(context, option, customizer);
-            var text = exp.Convert(converter);
-            return new SqlInfo(exp.DbInfo, text.ToString(true, 0), context.ObjectCreateInfo, context.Parameters);
+        { 
+            var context = new SqlConvertingContext(expression.DbInfo, option.ParameterPrefix);
+            var converter = new SqlStringConverter(context, option);
+            var text = expression.Convert(converter);
+            return new SqlInfo(expression.DbInfo, text.ToString(true, 0), context.ObjectCreateInfo, context.Parameters);
         }
     }
 }

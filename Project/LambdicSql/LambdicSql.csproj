@@ -83,7 +83,6 @@
     <Compile Include="SqlBase\SqlConvertingContext.cs" />
     <Compile Include="SqlBase\ISqlExpressionBase.cs" />
     <Compile Include="ISqlQuery.cs" />
-    <Compile Include="SqlBase\ISqlSyntaxCustomizer.cs" />
     <Compile Include="SqlBase\IClauseChain.cs" />
     <Compile Include="AggregatePredicate.cs" />
     <Compile Include="ISqlExpression.cs" />

@@ -24,18 +24,16 @@ namespace LambdicSql.Inside
         }
 
         SqlConvertOption _option;
-        ISqlSyntaxCustomizer _sqlSyntaxCustomizer;
 
         //TODO 特定の型にしてVisitで変更すれば何とかなるんだよね。
         public bool UsingColumnNameOnly { get; set; }
 
         public SqlConvertingContext Context { get; }
 
-        internal SqlStringConverter(SqlConvertingContext context, SqlConvertOption option, ISqlSyntaxCustomizer sqlSyntaxCustomizer)
+        internal SqlStringConverter(SqlConvertingContext context, SqlConvertOption option)
         {
             Context = context;
             _option = option;
-            _sqlSyntaxCustomizer = sqlSyntaxCustomizer;
         }
 
         public object ToObject(Expression exp)
@@ -107,13 +105,6 @@ namespace LambdicSql.Inside
             //syntax.
             if (newExp.Type.IsSqlSyntax())
             {
-                //exist customizer.
-                if (_sqlSyntaxCustomizer != null)
-                {
-                    var ret = _sqlSyntaxCustomizer.Convert(this, newExp);
-                    if (ret != null) return new DecodedInfo(null, ret);
-                }
-
                 //convert expression to text.
                 var func = newExp.GetConverotrMethod();
                 return new DecodedInfo(null, func(this, newExp));
@@ -187,16 +178,6 @@ namespace LambdicSql.Inside
             if (member.Member.DeclaringType.IsSqlSyntax())
             {
                 //TODO あーでもこれは sql syntax のenumが来る可能性もあるよねー
-
-                //exist customizer.
-                if (_sqlSyntaxCustomizer != null)
-                {
-                    var custom = _sqlSyntaxCustomizer.Convert(this, member);
-                    if (custom != null)
-                    {
-                        return new DecodedInfo(member.Type, custom);
-                    }
-                }
                 //convert.
                 return new DecodedInfo(member.Type, member.GetConverotrMethod()(this, member));
             }
@@ -255,20 +236,7 @@ namespace LambdicSql.Inside
             foreach (var c in GetMethodChains(method))
             {
                 var chain = c.ToArray();
-
-                //custom.
-                if (_sqlSyntaxCustomizer != null)
-                {
-                    var custom = _sqlSyntaxCustomizer.Convert(this, chain);
-                    if (custom != null)
-                    {
-                        ret.Add(custom);
-                        continue;
-                    }
-                }
-
-                //convert.
-                ret.Add(chain[0].GetConverotrMethod()(this, chain));
+                ret.Add(chain[0].GetConverotrMethod()(this, c.ToArray()));
             }
 
             SqlText text = new VText(ret.ToArray());
@@ -417,11 +385,6 @@ namespace LambdicSql.Inside
             //for example [ enum ]
             if (exp.Type.IsSqlSyntax())
             {
-                if (_sqlSyntaxCustomizer != null)
-                {
-                    var ret = _sqlSyntaxCustomizer.Convert(this, obj);
-                    if (ret != null) return new DecodedInfo(exp.Type, ret);
-                }
                 return new DecodedInfo(exp.Type, obj.ToString().ToUpper());
             }
 
