@@ -45,11 +45,10 @@ namespace LambdicSql.SqlBase.TextParts
         /// </summary>
         /// <param name="isTopLevel">Is top level.</param>
         /// <param name="indent">Indent.</param>
-        /// <param name="option">Option.</param>
-        /// <param name="paramterInfo">ParamterInfo.</param>
+        /// <param name="context">Context.</param>
         /// <returns>Text.</returns>
-        public override string ToString(bool isTopLevel, int indent, SqlConvertOption option, ParameterInfo paramterInfo)
-            => string.Join(Separator + Environment.NewLine, _texts.Select(e => e.ToString(isTopLevel, Indent + indent, option, paramterInfo)).ToArray());
+        public override string ToString(bool isTopLevel, int indent, SqlConvertingContext context)
+            => string.Join(Separator + Environment.NewLine, _texts.Select(e => e.ToString(isTopLevel, Indent + indent, context)).ToArray());
 
         /// <summary>
         /// Add text.

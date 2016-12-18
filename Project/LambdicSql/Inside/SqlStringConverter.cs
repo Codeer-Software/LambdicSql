@@ -22,12 +22,12 @@ namespace LambdicSql.Inside
                 Text = text;
             }
         }
+        
+        public DbInfo DbInfo { get; }
 
-        public SqlConvertingContext Context { get; }
-
-        internal SqlStringConverter(SqlConvertingContext context)
+        internal SqlStringConverter(DbInfo info)
         {
-            Context = context;
+            DbInfo = info;
         }
 
         public object ToObject(Expression exp)
@@ -203,12 +203,12 @@ namespace LambdicSql.Inside
         private DecodedInfo ResolveLambdicElement(string name)
         {
             TableInfo table;
-            if (Context.DbInfo.GetLambdaNameAndTable().TryGetValue(name, out table))
+            if (DbInfo.GetLambdaNameAndTable().TryGetValue(name, out table))
             {
                 return new DecodedInfo(null, new DbTableText(table));
             }
             ColumnInfo col;
-            if (Context.DbInfo.GetLambdaNameAndColumn().TryGetValue(name, out col))
+            if (DbInfo.GetLambdaNameAndColumn().TryGetValue(name, out col))
             {
                 return new DecodedInfo(col.Type, new DbColumnText(col));
             }

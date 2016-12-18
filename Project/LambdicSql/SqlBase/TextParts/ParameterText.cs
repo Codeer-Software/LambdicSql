@@ -43,8 +43,8 @@ namespace LambdicSql.SqlBase.TextParts
 
         public override bool IsEmpty => false;
 
-        public override string ToString(bool isTopLevel, int indent, SqlConvertOption option, ParameterInfo paramterInfo)
-            => string.Join(string.Empty, Enumerable.Range(0, indent).Select(e => "\t").ToArray()) + _front + GetDisplayText(option, paramterInfo) + _back;
+        public override string ToString(bool isTopLevel, int indent, SqlConvertingContext context)
+            => string.Join(string.Empty, Enumerable.Range(0, indent).Select(e => "\t").ToArray()) + _front + GetDisplayText(context) + _back;
 
         public override SqlText ConcatAround(string front, string back)
             => new ParameterText(Name, MetaId, _param, front + _front, _back + back, _displayValue);
@@ -61,9 +61,9 @@ namespace LambdicSql.SqlBase.TextParts
         internal SqlText ToDisplayValue() =>
             new ParameterText(Name, MetaId, _param, _front, _back, true);
 
-        string GetDisplayText(SqlConvertOption option, ParameterInfo paramterInfo)
+        string GetDisplayText(SqlConvertingContext context)
         {
-            return _displayValue ? Value.ToString() : paramterInfo.Push(_param.Value, Name, MetaId, _param);
+            return _displayValue ? Value.ToString() : context.ParameterInfo.Push(_param.Value, Name, MetaId, _param);
         }
 
 

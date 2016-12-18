@@ -1,5 +1,6 @@
 ﻿using LambdicSql.Inside;
 using LambdicSql.SqlBase;
+using LambdicSql.SqlBase.TextParts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,10 +39,10 @@ namespace LambdicSql
         /// <param name="option">Options for converting from C # to SQL string.</param>
         /// <returns>Sql information.</returns>
         public static SqlInfo ToSqlInfo(this ISqlExpressionBase expression, SqlConvertOption option)
-        { 
-            var paramterInfo = new ParameterInfo(option.ParameterPrefix);
+        {
             //TODO context.ObjectCreateInfo
-            return new SqlInfo(expression.DbInfo, expression.SqlText.ToString(true, 0, option, paramterInfo), null, paramterInfo);
+            var context = new SqlConvertingContext(option);
+            return new SqlInfo(expression.DbInfo, expression.SqlText.ToString(true, 0, context), null, context.ParameterInfo);
         }
     }
 }

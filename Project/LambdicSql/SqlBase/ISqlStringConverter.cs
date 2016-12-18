@@ -9,9 +9,9 @@ namespace LambdicSql.SqlBase
     public interface ISqlStringConverter
     {
         /// <summary>
-        /// Context.
+        /// Data base info.
         /// </summary>
-        SqlConvertingContext Context { get; }
+        DbInfo DbInfo { get; }
 
         /// <summary>
         /// Convert object to sql text.

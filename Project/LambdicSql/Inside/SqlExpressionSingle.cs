@@ -12,9 +12,7 @@ namespace LambdicSql.Inside
         public SqlExpressionSingle(DbInfo dbInfo, Expression core)
         {
             DbInfo = dbInfo;
-            //TODO
-            var context = new SqlConvertingContext(dbInfo);
-            var converter = new SqlStringConverter(context);
+            var converter = new SqlStringConverter(dbInfo);
             if (core == null) SqlText = string.Empty;
             else SqlText = converter.Convert(core);
         }

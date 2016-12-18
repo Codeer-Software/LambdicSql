@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
+using System.Linq.Expressions;
 using static LambdicSql.Keywords;
 
 namespace Performance
@@ -40,16 +41,26 @@ namespace Performance
         }
         static void Test()
         {
+            //いやいや、やっぱり文字列組み合わせがそんなに遅いわけはない。どこがボトルネックか？
+
+            //リストへの投入は結構コストが高い
+            //オブジェクトの生成もただではない
+
+
             Console.ReadKey();
             Console.WriteLine("Start");
             SqlInfo info = null;
             var times = new List<double>();
             var watch = new Stopwatch();
 
+
             for (int i = 0; i < 10000; i++)
             {
                 watch.Start();
+
+
                 var query = Sql<Data>.Create(db =>
+
                     Select(new SelectedData()
                     {
                         name = db.tbl_staff.name,
@@ -60,11 +71,16 @@ namespace Performance
                         Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
                     Where(3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
 
+
                 info = query.ToSqlInfo(typeof(SqlConnection));
 
                 watch.Stop();
-                times.Add(watch.Elapsed.TotalMilliseconds);
+                if (i != 0)
+                {
+                    times.Add(watch.Elapsed.TotalMilliseconds);
+                }
                 watch.Reset();
+                
             }
 
             times = times.Skip(1).ToList();
@@ -72,5 +88,16 @@ namespace Performance
             Console.WriteLine(times.Average().ToString());
             Console.ReadKey();
         }
+
+
+    }
+
+    class XXX<TDB>
+    {
+        public static Expression<Func<TDB, TResult>> Create<TResult>(Expression<Func<TDB, TResult>> expression)
+        {
+            return expression;
+        }
     }
 }
+

@@ -216,8 +216,7 @@ namespace LambdicSql.Inside
                 GetExpressionObject(newExp.Arguments[i], out arg);
                 args.Add(arg);
             }
-
-            //TODO MetaId
+            
             //name.
             var getterName = newExp.Type.FullName + 
                 "(" + string.Join(",", ps.Select(e => e.FullName).ToArray()) + ")";
@@ -264,7 +263,6 @@ namespace LambdicSql.Inside
                 args.Add(instance);
             }
 
-            //TODO MetaId
             //name.
             var getterName = method.Method.DeclaringType.FullName + "." + method.Method.Name +
                 "(" + string.Join(",", ps.Select(e=>e.FullName).ToArray()) + ")";
@@ -340,8 +338,7 @@ namespace LambdicSql.Inside
 
                 member = member.Expression as MemberExpression;
             }
-
-            //TODO MetaId
+            
             //name.
             var getterName = type.FullName + "@" + string.Join("@", names.ToArray());
 

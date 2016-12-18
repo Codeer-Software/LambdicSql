@@ -76,14 +76,15 @@
     <Compile Include="SqlBase\TextParts\DbColumnText.cs" />
     <Compile Include="SqlBase\TextParts\DbTableText.cs" />
     <Compile Include="SqlBase\TextParts\HText.cs" />
+    <Compile Include="SqlBase\TextParts\ISqlTextCustomizer.cs" />
     <Compile Include="SqlBase\TextParts\SingleText.cs" />
     <Compile Include="SqlBase\TextParts\ParameterText.cs" />
     <Compile Include="SqlBase\TextParts\QueryText.cs" />
     <Compile Include="SqlBase\TextParts\SelectClauseText.cs" />
     <Compile Include="SqlBase\TextParts\SelectQueryText.cs" />
+    <Compile Include="SqlBase\TextParts\SqlConvertingContext.cs" />
     <Compile Include="SqlBase\TextParts\SqlText.cs" />
     <Compile Include="SqlBase\ResolveSqlSyntaxMethodChainAttribute.cs" />
-    <Compile Include="SqlBase\SqlConvertingContext.cs" />
     <Compile Include="SqlBase\ISqlExpressionBase.cs" />
     <Compile Include="ISqlQuery.cs" />
     <Compile Include="SqlBase\IClauseChain.cs" />

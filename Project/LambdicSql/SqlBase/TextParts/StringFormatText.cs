@@ -31,10 +31,10 @@ namespace LambdicSql.SqlBase.TextParts
 
         public override bool IsEmpty => false;
 
-        public override string ToString(bool isTopLevel, int indent, SqlConvertOption option, ParameterInfo paramterInfo)
+        public override string ToString(bool isTopLevel, int indent, SqlConvertingContext context)
             => string.Join(string.Empty, Enumerable.Range(0, indent).Select(e => "\t").ToArray()) + 
             _front +
-             string.Format(_formatText, _args.Select(e => e.ToString(true, 0, option, paramterInfo)).ToArray()) +
+             string.Format(_formatText, _args.Select(e => e.ToString(true, 0, context)).ToArray()) +
             _back;
 
         public override SqlText ConcatAround(string front, string back)

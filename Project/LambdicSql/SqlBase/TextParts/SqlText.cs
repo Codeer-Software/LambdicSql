@@ -1,20 +1,6 @@
 ﻿namespace LambdicSql.SqlBase.TextParts
 {
     /// <summary>
-    /// 
-    /// </summary>
-    public interface ISqlTextCustomizer
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="src"></param>
-        /// <returns></returns>
-        SqlText Custom(SqlText src);
-    }
-
-    //TODO やっぱりこいつらはSqlPartsだな
-    /// <summary>
     /// Text.
     /// </summary>
     public abstract class SqlText
@@ -28,16 +14,15 @@
         /// Is empty.
         /// </summary>
         public abstract bool IsEmpty { get; }
-
+        
         /// <summary>
         /// To string.
         /// </summary>
         /// <param name="isTopLevel">Is top level.</param>
         /// <param name="indent">Indent.</param>
-        /// <param name="option">Option.</param>
-        /// <param name="paramterInfo">ParamterInfo.</param>
+        /// <param name="context">Context.</param>
         /// <returns>Text.</returns>
-        public abstract string ToString(bool isTopLevel, int indent, SqlConvertOption option, ParameterInfo paramterInfo);
+        public abstract string ToString(bool isTopLevel, int indent, SqlConvertingContext context);
 
         /// <summary>
         /// Concat to front and back.

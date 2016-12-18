@@ -42,10 +42,7 @@ namespace LambdicSql.Inside.Keywords
                     new VText(createInfo.Members.Select(e => ToStringSelectedElement(converter, e)).ToArray()) { Indent = 1, Separator = "," };
             }
 
-            //remember creat info.
-            if (converter.Context.ObjectCreateInfo == null) converter.Context.ObjectCreateInfo = createInfo;
-            
-            return new SelectClauseText(selectTargetText == null ? (SqlText)select : new VText(select, selectTargetText));
+            return new SelectClauseText(createInfo, selectTargetText == null ? (SqlText)select : new VText(select, selectTargetText));
         }
 
         static SqlText ToStringSelectedElement(ISqlStringConverter converter, ObjectCreateMemberInfo element)
