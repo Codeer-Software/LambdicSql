@@ -1,5 +1,10 @@
 ﻿namespace LambdicSql.SqlBase.TextParts
 {
+    //TODO \tをテーブル化すると早くなる
+    //抽象メソッドをなくしても早くなる
+    //string.joinもEX
+    //Linqをなくしても早くなる
+
     /// <summary>
     /// Text.
     /// </summary>

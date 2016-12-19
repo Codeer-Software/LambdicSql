@@ -7,7 +7,6 @@ using static Test.Helper.DBProviderInfo;
 using LambdicSql;
 using LambdicSql.feat.Dapper;
 using static LambdicSql.Keywords;
-using static LambdicSql.Funcs;
 using System.Data.SqlClient;
 using static TestCheck35.TestSynatax;
 

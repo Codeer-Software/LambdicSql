@@ -2,8 +2,6 @@
 using LambdicSql.SqlBase;
 using LambdicSql.SqlBase.TextParts;
 using System.Linq.Expressions;
-using System;
-
 
 namespace LambdicSql
 {

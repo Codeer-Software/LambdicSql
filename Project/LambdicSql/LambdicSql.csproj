@@ -105,7 +105,6 @@
     <Compile Include="SqlBase\SqlConvertOption.cs" />
     <Compile Include="SqlInfo.cs" />
     <Compile Include="SqlExpressionExtensions.cs" />
-    <Compile Include="Funcs.cs" />
     <Compile Include="SysibmType.cs" />
     <Compile Include="Top.cs" />
     <Compile Include="Utils.cs" />

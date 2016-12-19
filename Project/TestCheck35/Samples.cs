@@ -10,9 +10,6 @@ using Test.Helper;
 using LambdicSql;
 using LambdicSql.feat.Dapper;
 using static LambdicSql.Keywords;
-using static LambdicSql.Window;
-using static LambdicSql.Funcs;
-using static LambdicSql.Utils;
 using System.Collections.Generic;
 using LambdicSql.SqlBase;
 
