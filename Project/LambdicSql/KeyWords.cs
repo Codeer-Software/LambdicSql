@@ -906,6 +906,9 @@ namespace LambdicSql
         /// <returns>Date and time of executing SQL.</returns>
         public static DateTime Current_TimeStamp => InvalitContext.Throw<DateTime>(nameof(Current_TimeStamp));
 
+        //TODO この辺嫌な感じやけど DB2だけやからね。少し考えてこのままにするかな
+        //基本書き分けさせるというルールを曲げてまでやることじゃないよね
+        //-----------------------------------------------------------------------------------
         /// <summary>
         /// CURRENT DATE function.
         /// Get date and time of executing SQL.
@@ -926,6 +929,7 @@ namespace LambdicSql
         /// </summary>
         /// <returns>Date and time of executing SQL.</returns>
         public static DateTime CurrentSpaceTimeStamp => InvalitContext.Throw<DateTime>(nameof(CurrentSpaceTimeStamp));
+        //----------------------------------------------------------------------------------
 
         /// <summary>
         /// It's *.
