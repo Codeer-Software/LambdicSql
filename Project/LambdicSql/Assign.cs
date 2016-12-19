@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 
 namespace LambdicSql
 {
+    //TODO 若干残念な感はある・・・
     /// <summary>
     /// It represents assignment. It is used in the Set clause.
     /// new Assign(db.tbl_staff.name, name) -> tbl_staff.name = "@name"

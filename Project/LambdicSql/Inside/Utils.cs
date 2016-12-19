@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Linq;
 using System;
 
-namespace LambdicSql
+namespace LambdicSql.Inside
 {
     /// <summary>
     /// Utility.

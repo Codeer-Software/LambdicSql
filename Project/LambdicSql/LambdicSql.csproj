@@ -45,7 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assign.cs" />
-    <Compile Include="Asterisk.cs" />
+    <Compile Include="KeywordsSub.cs" />
     <Compile Include="DateTimeElement.cs" />
     <Compile Include="feat\Dapper\DapperApaptExtensions.cs" />
     <Compile Include="feat\Dapper\DapperWrapper.cs" />
@@ -65,14 +65,11 @@
     <Compile Include="Inside\MetaId.cs" />
     <Compile Include="Inside\TowWaySqlSpec.cs" />
     <Compile Include="Keywords.cs" />
-    <Compile Include="ISortedBy.cs" />
-    <Compile Include="OrderBy.cs" />
-    <Compile Include="PartitionBy.cs" />
-    <Compile Include="Rows.cs" />
     <Compile Include="SetOperationExtensions.cs" />
     <Compile Include="Inside\ExpressionToObject.CreateGetter.cs" />
     <Compile Include="Inside\ExpressionToObject.Getter.cs" />
     <Compile Include="Inside\SqlExpressionCoupled.cs" />
+    <Compile Include="SqlBase\TextParts\CustomizeParameterToObject.cs" />
     <Compile Include="SqlBase\TextParts\DbColumnText.cs" />
     <Compile Include="SqlBase\TextParts\DbTableText.cs" />
     <Compile Include="SqlBase\TextParts\HText.cs" />
@@ -100,15 +97,13 @@
     <Compile Include="SqlExpression.cs" />
     <Compile Include="SqlQuery.cs" />
     <Compile Include="SqlBase\SqlSyntaxAttribute.cs" />
-    <Compile Include="SqlBase\Non.cs" />
     <Compile Include="Inside\SqlExpressionSingle.cs" />
     <Compile Include="SqlBase\SqlConvertOption.cs" />
     <Compile Include="SqlInfo.cs" />
     <Compile Include="SqlExpressionExtensions.cs" />
     <Compile Include="SysibmType.cs" />
-    <Compile Include="Top.cs" />
-    <Compile Include="Utils.cs" />
-    <Compile Include="Window.cs" />
+    <Compile Include="Inside\Utils.cs" />
+    <Compile Include="Inside\Window.cs" />
     <Compile Include="Inside\Keywords\FromClause.cs" />
     <Compile Include="Inside\Keywords\GroupByClause.cs" />
     <Compile Include="Inside\Keywords\HavingClause.cs" />

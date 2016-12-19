@@ -8,8 +8,6 @@ namespace LambdicSql
     /// </summary>
     public static class SetOperationExtensions
     {
-        class Dummy { }
-
         /// <summary>
         /// Concatenate expression1 and expression2.
         /// </summary>
@@ -38,7 +36,7 @@ namespace LambdicSql
         /// <param name="expression2">Exppresion 2.</param>
         /// <returns>Concatenated result.</returns>
         public static SqlExpression<TResult> Union<TResult>(this ISqlExpressionBase<TResult> expression1, ISqlExpressionBase expression2)
-            => expression1.Concat(Sql<Dummy>.Create(db => Keywords.Union())).Concat(expression2);
+            => expression1.Concat(Sql<Non>.Create(db => Keywords.Union())).Concat(expression2);
 
         /// <summary>
         /// Concatenate expression1 and expression2 using UNION clause.
@@ -49,7 +47,7 @@ namespace LambdicSql
         /// <param name="expression2">Exppresion 2.</param>
         /// <returns>Concatenated result.</returns>
         public static SqlExpression<TResult> Union<TResult>(this ISqlExpressionBase<TResult> expression1, bool isAll, ISqlExpressionBase expression2)
-            => expression1.Concat(Sql<Dummy>.Create(db => Keywords.Union(isAll))).Concat(expression2);
+            => expression1.Concat(Sql<Non>.Create(db => Keywords.Union(isAll))).Concat(expression2);
 
         /// <summary>
         /// Concatenate expression1 and expression2 using INTERSECT clause.
@@ -59,7 +57,7 @@ namespace LambdicSql
         /// <param name="expression2">Exppresion 2.</param>
         /// <returns>Concatenated result.</returns>
         public static SqlExpression<TResult> Intersect<TResult>(this ISqlExpressionBase<TResult> expression1, ISqlExpressionBase expression2)
-            => expression1.Concat(Sql<Dummy>.Create(db => Keywords.Intersect())).Concat(expression2);
+            => expression1.Concat(Sql<Non>.Create(db => Keywords.Intersect())).Concat(expression2);
 
         /// <summary>
         /// Concatenate expression1 and expression2 using INTERSECT clause.
@@ -70,7 +68,7 @@ namespace LambdicSql
         /// <param name="expression2">Exppresion 2.</param>
         /// <returns>Concatenated result.</returns>
         public static SqlExpression<TResult> Intersect<TResult>(this ISqlExpressionBase<TResult> expression1, bool isAll, ISqlExpressionBase expression2)
-            => expression1.Concat(Sql<Dummy>.Create(db => Keywords.Intersect(isAll))).Concat(expression2);
+            => expression1.Concat(Sql<Non>.Create(db => Keywords.Intersect(isAll))).Concat(expression2);
 
         /// <summary>
         /// Concatenate expression1 and expression2 using EXCEPT clause.
@@ -80,7 +78,7 @@ namespace LambdicSql
         /// <param name="expression2">Exppresion 2.</param>
         /// <returns>Concatenated result.</returns>
         public static SqlExpression<TResult> Except<TResult>(this ISqlExpressionBase<TResult> expression1, ISqlExpressionBase expression2)
-            => expression1.Concat(Sql<Dummy>.Create(db => Keywords.Except())).Concat(expression2);
+            => expression1.Concat(Sql<Non>.Create(db => Keywords.Except())).Concat(expression2);
 
         /// <summary>
         /// Concatenate expression1 and expression2 using EXCEPT clause.
@@ -91,7 +89,7 @@ namespace LambdicSql
         /// <param name="expression2">Exppresion 2.</param>
         /// <returns>Concatenated result.</returns>
         public static SqlExpression<TResult> Except<TResult>(this ISqlExpressionBase<TResult> expression1, bool isAll, ISqlExpressionBase expression2)
-            => expression1.Concat(Sql<Dummy>.Create(db => Keywords.Except(isAll))).Concat(expression2);
+            => expression1.Concat(Sql<Non>.Create(db => Keywords.Except(isAll))).Concat(expression2);
 
         /// <summary>
         /// Concatenate expression1 and expression2 using MINUS clause.
@@ -101,7 +99,7 @@ namespace LambdicSql
         /// <param name="expression2">Exppresion 2.</param>
         /// <returns>Concatenated result.</returns>
         public static SqlExpression<TResult> Minus<TResult>(this ISqlExpressionBase<TResult> expression1, ISqlExpressionBase expression2)
-            => expression1.Concat(Sql<Dummy>.Create(db => Keywords.Minus())).Concat(expression2);
+            => expression1.Concat(Sql<Non>.Create(db => Keywords.Minus())).Concat(expression2);
 
         /// <summary>
         /// Concatenate query and expression using UNION clause.
@@ -111,7 +109,7 @@ namespace LambdicSql
         /// <param name="expression">Expression.</param>
         /// <returns>Concatenated result.</returns>
         public static SqlQuery<TSelected> Union<TSelected>(this ISqlQuery<TSelected> query, ISqlExpressionBase expression)
-            => new SqlQuery<TSelected>(query.Concat(Sql<Dummy>.Create(db => Keywords.Union())).Concat(expression));
+            => new SqlQuery<TSelected>(query.Concat(Sql<Non>.Create(db => Keywords.Union())).Concat(expression));
 
         /// <summary>
         /// Concatenate query and expression using UNION clause.
@@ -122,7 +120,7 @@ namespace LambdicSql
         /// <param name="expression">Expression.</param>
         /// <returns>Concatenated result.</returns>
         public static SqlQuery<TSelected> Union<TSelected>(this ISqlQuery<TSelected> query, bool isAll, ISqlExpressionBase expression)
-            => new SqlQuery<TSelected>(query.Concat(Sql<Dummy>.Create(db => Keywords.Union(isAll))).Concat(expression));
+            => new SqlQuery<TSelected>(query.Concat(Sql<Non>.Create(db => Keywords.Union(isAll))).Concat(expression));
 
         /// <summary>
         /// Concatenate query and expression using INTERSECT clause.
@@ -132,7 +130,7 @@ namespace LambdicSql
         /// <param name="expression">Expression.</param>
         /// <returns>Concatenated result.</returns>
         public static SqlQuery<TSelected> Intersect<TSelected>(this ISqlQuery<TSelected> query, ISqlExpressionBase expression)
-            => new SqlQuery<TSelected>(query.Concat(Sql<Dummy>.Create(db => Keywords.Intersect())).Concat(expression));
+            => new SqlQuery<TSelected>(query.Concat(Sql<Non>.Create(db => Keywords.Intersect())).Concat(expression));
 
         /// <summary>
         /// Concatenate query and expression using INTERSECT clause.
@@ -143,7 +141,7 @@ namespace LambdicSql
         /// <param name="expression">Expression.</param>
         /// <returns>Concatenated result.</returns>
         public static SqlQuery<TSelected> Intersect<TSelected>(this ISqlQuery<TSelected> query, bool isAll, ISqlExpressionBase expression)
-            => new SqlQuery<TSelected>(query.Concat(Sql<Dummy>.Create(db => Keywords.Intersect(isAll))).Concat(expression));
+            => new SqlQuery<TSelected>(query.Concat(Sql<Non>.Create(db => Keywords.Intersect(isAll))).Concat(expression));
 
         /// <summary>
         /// Concatenate query and expression using EXCEPT clause.
@@ -153,7 +151,7 @@ namespace LambdicSql
         /// <param name="expression">Expression.</param>
         /// <returns>Concatenated result.</returns>
         public static SqlQuery<TSelected> Except<TSelected>(this ISqlQuery<TSelected> query, ISqlExpressionBase expression)
-            => new SqlQuery<TSelected>(query.Concat(Sql<Dummy>.Create(db => Keywords.Except())).Concat(expression));
+            => new SqlQuery<TSelected>(query.Concat(Sql<Non>.Create(db => Keywords.Except())).Concat(expression));
 
         /// <summary>
         /// Concatenate query and expression using EXCEPT clause.
@@ -164,7 +162,7 @@ namespace LambdicSql
         /// <param name="expression">Expression.</param>
         /// <returns>Concatenated result.</returns>
         public static SqlQuery<TSelected> Except<TSelected>(this ISqlQuery<TSelected> query, bool isAll, ISqlExpressionBase expression)
-            => new SqlQuery<TSelected>(query.Concat(Sql<Dummy>.Create(db => Keywords.Except(isAll))).Concat(expression));
+            => new SqlQuery<TSelected>(query.Concat(Sql<Non>.Create(db => Keywords.Except(isAll))).Concat(expression));
 
         /// <summary>
         /// Concatenate query and expression using MINUS clause.
@@ -174,6 +172,6 @@ namespace LambdicSql
         /// <param name="expression">Expression.</param>
         /// <returns>Concatenated result.</returns>
         public static SqlQuery<TSelected> Minus<TSelected>(this ISqlQuery<TSelected> query, ISqlExpressionBase expression)
-            => new SqlQuery<TSelected>(query.Concat(Sql<Dummy>.Create(db => Keywords.Minus())).Concat(expression));
+            => new SqlQuery<TSelected>(query.Concat(Sql<Non>.Create(db => Keywords.Minus())).Concat(expression));
     }
 }

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using static LambdicSql.SqlBase.TextParts.SqlTextUtils;
 
-namespace LambdicSql
+namespace LambdicSql.Inside
 {
     /// <summary>
     /// SQL Window functions.
