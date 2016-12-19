@@ -10,6 +10,7 @@ using Test.Helper;
 using LambdicSql;
 using LambdicSql.feat.Dapper;
 using static LambdicSql.Keywords;
+using static LambdicSql.Window;
 using static LambdicSql.Funcs;
 using static LambdicSql.Utils;
 using System.Collections.Generic;
@@ -206,7 +207,7 @@ namespace TestCheck35
         public void TestSelectFrom()
         {
             //make sql.
-            var query = Sql<DB>.Create(db => Select(new Asterisk()).From(db.tbl_staff));
+            var query = Sql<DB>.Create(db => Select(Asterisk()).From(db.tbl_staff));
 
             //to string and params.
             var info = query.ToSqlInfo(_connection.GetType());
@@ -352,7 +353,7 @@ namespace TestCheck35
         {
             //make sql.
             var query = Sql<DB>.Create(db =>
-                Select(new Asterisk()).From(db.tbl_staff).
+                Select(Asterisk()).From(db.tbl_staff).
                 Where(Like(db.tbl_staff.name, "%son%")));
 
             //to string and params.
@@ -368,7 +369,7 @@ namespace TestCheck35
         {
             //make sql.
             var query = Sql<DB>.Create(db =>
-                Select(new Asterisk()).From(db.tbl_staff).
+                Select(Asterisk()).From(db.tbl_staff).
                 Where(In(db.tbl_staff.id, 1, 3)));
 
             //to string and params.
@@ -384,7 +385,7 @@ namespace TestCheck35
         {
             //make sql.
             var query = Sql<DB>.Create(db =>
-                Select(new Asterisk()).From(db.tbl_staff).
+                Select(Asterisk()).From(db.tbl_staff).
                 Where(Between(db.tbl_staff.id, 1, 3)));
 
             //to string and params.
@@ -665,7 +666,7 @@ namespace TestCheck35
                 Condition(minCondition, 3000 < db.tbl_remuneration.money) &&
                 Condition(maxCondition, db.tbl_remuneration.money < 4000));
 
-            var query = Sql<DB>.Create(db => Select(new Asterisk()).From(db.tbl_remuneration).Where(exp));
+            var query = Sql<DB>.Create(db => Select(Asterisk()).From(db.tbl_remuneration).Where(exp));
 
             //to string and params.
             var info = query.ToSqlInfo(_connection.GetType());
@@ -733,10 +734,10 @@ namespace TestCheck35
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData8()
                 {
-                    Avg = Window.Avg(db.tbl_remuneration.money).
-                            Over(new PartitionBy(db.tbl_staff.name, db.tbl_remuneration.payment_date),
-                                new OrderBy(new Asc(db.tbl_remuneration.money), new Desc(db.tbl_remuneration.payment_date)),
-                                new Rows(1, 5)),
+                    Avg = AvgOver(db.tbl_remuneration.money,
+                                PartitionBy(db.tbl_staff.name, db.tbl_remuneration.payment_date),
+                                OrderBy(Asc(db.tbl_remuneration.money), Desc(db.tbl_remuneration.payment_date)),
+                                Rows(1, 5)),
                     PaymentDate = db.tbl_remuneration.payment_date,
                     Money = db.tbl_remuneration.money,
                 }).
@@ -773,7 +774,7 @@ namespace TestCheck35
                 Where(3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
 
             var orderby = Sql<DB>.Create(db =>
-                 OrderBy(new Asc(db.tbl_staff.name)));
+                 OrderBy(Asc(db.tbl_staff.name)));
 
             var query = select.Concat(from).Concat(where).Concat(orderby);
 
@@ -803,7 +804,7 @@ namespace TestCheck35
                From(db.tbl_remuneration).
                    Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
                Where(expWhereMin && expWhereMax).
-               OrderBy(new Asc(db.tbl_staff.name)));
+               OrderBy(Asc(db.tbl_staff.name)));
 
             //to string and params.
             var info = query.ToSqlInfo(_connection.GetType());
@@ -1277,9 +1278,9 @@ FROM tbl_remuneration
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestUnion()
         {
-            var query = Sql<DB>.Create(db => Select(new Asterisk()).From(db.tbl_staff).Union().Select(new Asterisk()).From(db.tbl_staff));
+            var query = Sql<DB>.Create(db => Select(Asterisk()).From(db.tbl_staff).Union().Select(Asterisk()).From(db.tbl_staff));
             ExecuteRead<Staff>(query);
-            query = Sql<DB>.Create(db => Select(new Asterisk()).From(db.tbl_staff).Union(true).Select(new Asterisk()).From(db.tbl_staff));
+            query = Sql<DB>.Create(db => Select(Asterisk()).From(db.tbl_staff).Union(true).Select(Asterisk()).From(db.tbl_staff));
             ExecuteRead<Staff>(query);
         }
 
@@ -1288,12 +1289,12 @@ FROM tbl_remuneration
         {
             var name = _connection.GetType().FullName;
             if (name == "MySql.Data.MySqlClient.MySqlConnection") return;
-            var query = Sql<DB>.Create(db => Select(new Asterisk()).From(db.tbl_staff).Intersect().Select(new Asterisk()).From(db.tbl_staff));
+            var query = Sql<DB>.Create(db => Select(Asterisk()).From(db.tbl_staff).Intersect().Select(Asterisk()).From(db.tbl_staff));
             ExecuteRead<Staff>(query);
             if (name == "System.Data.SqlClient.SqlConnection") return;
             if (name == "System.Data.SQLite.SQLiteConnection") return;
             if (name == "Oracle.ManagedDataAccess.Client.OracleConnection") return;
-            query = Sql<DB>.Create(db => Select(new Asterisk()).From(db.tbl_staff).Intersect(true).Select(new Asterisk()).From(db.tbl_staff));
+            query = Sql<DB>.Create(db => Select(Asterisk()).From(db.tbl_staff).Intersect(true).Select(Asterisk()).From(db.tbl_staff));
             ExecuteRead<Staff>(query);
         }
 
@@ -1303,11 +1304,11 @@ FROM tbl_remuneration
             var name = _connection.GetType().FullName;
             if (name == "MySql.Data.MySqlClient.MySqlConnection") return;
             if (name == "Oracle.ManagedDataAccess.Client.OracleConnection") return;
-            var query = Sql<DB>.Create(db => Select(new Asterisk()).From(db.tbl_staff).Except().Select(new Asterisk()).From(db.tbl_staff));
+            var query = Sql<DB>.Create(db => Select(Asterisk()).From(db.tbl_staff).Except().Select(Asterisk()).From(db.tbl_staff));
             ExecuteRead<Staff>(query);
             if (name == "System.Data.SqlClient.SqlConnection") return;
             if (name == "System.Data.SQLite.SQLiteConnection") return;
-            query = Sql<DB>.Create(db => Select(new Asterisk()).From(db.tbl_staff).Except(true).Select(new Asterisk()).From(db.tbl_staff));
+            query = Sql<DB>.Create(db => Select(Asterisk()).From(db.tbl_staff).Except(true).Select(Asterisk()).From(db.tbl_staff));
             ExecuteRead<Staff>(query);
         }
 
@@ -1316,7 +1317,7 @@ FROM tbl_remuneration
         {
             var name = _connection.GetType().FullName;
             if (name != "Oracle.ManagedDataAccess.Client.OracleConnection") return;
-            var query = Sql<DB>.Create(db => Select(new Asterisk()).From(db.tbl_staff).Minus().Select(new Asterisk()).From(db.tbl_staff));
+            var query = Sql<DB>.Create(db => Select(Asterisk()).From(db.tbl_staff).Minus().Select(Asterisk()).From(db.tbl_staff));
             ExecuteRead<Staff>(query);
         }
 
@@ -1358,9 +1359,9 @@ FROM tbl_remuneration
                 name != "IBM.Data.DB2.DB2Connection") return;
 
             var query = Sql<DB>.Create(db =>
-                 Select(new Asterisk()).
+                 Select(Asterisk()).
                  From(db.tbl_remuneration).
-                 OrderBy(new Asc(db.tbl_remuneration.id)).
+                 OrderBy(Asc(db.tbl_remuneration.id)).
                  OffsetRows(1).
                  FetchNextRowsOnly(3)
                  );
@@ -1377,9 +1378,9 @@ FROM tbl_remuneration
             if (name == "Npgsql.NpgsqlConnection") return;
 
             var query = Sql<DB>.Create(db =>
-                 Select(new Asterisk()).
+                 Select(Asterisk()).
                  From(db.tbl_remuneration).
-                 OrderBy(new Asc(db.tbl_remuneration.id)).
+                 OrderBy(Asc(db.tbl_remuneration.id)).
                  Limit(1, 3)
                  );
       //      Debug.Print(query.ToSqlInfo().SqlText);
@@ -1394,9 +1395,9 @@ FROM tbl_remuneration
             if (name == "Oracle.ManagedDataAccess.Client.OracleConnection") return;
 
             var query = Sql<DB>.Create(db =>
-                 Select(new Asterisk()).
+                 Select(Asterisk()).
                  From(db.tbl_remuneration).
-                 OrderBy(new Asc(db.tbl_remuneration.id)).
+                 OrderBy(Asc(db.tbl_remuneration.id)).
                  Limit(1).
                  Offset(3)
                  );
@@ -1411,10 +1412,10 @@ FROM tbl_remuneration
             if (name != "Oracle.ManagedDataAccess.Client.OracleConnection") return;
 
             var query = Sql<DB>.Create(db =>
-                 Select(new Asterisk()).
+                 Select(Asterisk()).
                  From(db.tbl_remuneration).
                  Where(Between(RowNum, 1, 5)).
-                 OrderBy(new Asc(db.tbl_remuneration.id))
+                 OrderBy(Asc(db.tbl_remuneration.id))
                  );
        //     Debug.Print(query.ToSqlInfo().SqlText);
             _connection.Query(query);
@@ -1428,7 +1429,7 @@ FROM tbl_remuneration
             {
                 var query = Sql<DB>.Create(db =>
                       Select(
-                          new Top(10),
+                          Top(10),
                           new
                           {
                               money = db.tbl_remuneration.money
@@ -1440,8 +1441,8 @@ FROM tbl_remuneration
             {
                 var query = Sql<DB>.Create(db =>
                       Select(
-                          new Top(10),
-                          new Asterisk()).
+                          Top(10),
+                          Asterisk()).
                       From(db.tbl_remuneration));
          //       Debug.Print(query.ToSqlInfo().SqlText);
                 _connection.Query(query);
@@ -1450,7 +1451,7 @@ FROM tbl_remuneration
                 var query = Sql<DB>.Create(db =>
                       Select(
                           AggregatePredicate.Distinct,
-                          new Top(10),
+                          Top(10),
                           new
                           {
                               money = db.tbl_remuneration.money
@@ -1463,8 +1464,8 @@ FROM tbl_remuneration
                 var query = Sql<DB>.Create(db =>
                       Select(
                           AggregatePredicate.Distinct,
-                          new Top(10),
-                          new Asterisk()).
+                          Top(10),
+                          Asterisk()).
                       From(db.tbl_remuneration));
         //        Debug.Print(query.ToSqlInfo().SqlText);
                 _connection.Query(query);

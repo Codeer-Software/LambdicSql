@@ -38,7 +38,7 @@ namespace TestCheck35
             var query = Sql<DB>.Create(db =>
                  Select(Asterisk(db.tbl_remuneration)).
                  From(db.tbl_remuneration).
-                 OrderBy(new Asc(db.tbl_remuneration.id)).
+                 OrderBy(Asc(db.tbl_remuneration.id)).
                  Limit(1, 3)
                  );
 
@@ -68,7 +68,7 @@ LIMIT @p_0, @p_1",
             var query = Sql<DB>.Create(db =>
                  Select(Asterisk(db.tbl_remuneration)).
                  From(db.tbl_remuneration).
-                 OrderBy(new Asc(db.tbl_remuneration.id)).
+                 OrderBy(Asc(db.tbl_remuneration.id)).
                  Limit(exp1, exp2)
                  );
 
@@ -93,7 +93,7 @@ LIMIT @p_0, @p_1",
             var query = Sql<DB>.Create(db =>
                  Select(Asterisk(db.tbl_remuneration)).
                  From(db.tbl_remuneration).
-                 OrderBy(new Asc(db.tbl_remuneration.id)).
+                 OrderBy(Asc(db.tbl_remuneration.id)).
                  Limit(1).
                  Offset(3)
                  );
@@ -122,7 +122,7 @@ OFFSET @p_1",
             var query = Sql<DB>.Create(db =>
                  Select(Asterisk(db.tbl_remuneration)).
                  From(db.tbl_remuneration).
-                 OrderBy(new Asc(db.tbl_remuneration.id)).
+                 OrderBy(Asc(db.tbl_remuneration.id)).
                  Limit(exp1).
                  Offset(exp2)
                  );
@@ -149,7 +149,7 @@ OFFSET @p_1",
             var query = Sql<DB>.Create(db =>
                  Select(Asterisk(db.tbl_remuneration)).
                  From(db.tbl_remuneration).
-                 OrderBy(new Asc(db.tbl_remuneration.id)).
+                 OrderBy(Asc(db.tbl_remuneration.id)).
                  OffsetRows(1).
                  FetchNextRowsOnly(3)
                  );
@@ -178,7 +178,7 @@ FETCH NEXT @p_1 ROWS ONLY",
             var query = Sql<DB>.Create(db =>
                  Select(Asterisk(db.tbl_remuneration)).
                  From(db.tbl_remuneration).
-                 OrderBy(new Asc(db.tbl_remuneration.id)).
+                 OrderBy(Asc(db.tbl_remuneration.id)).
                  OffsetRows(exp1).
                  FetchNextRowsOnly(exp2)
                  );
@@ -206,7 +206,7 @@ FETCH NEXT @p_1 ROWS ONLY",
             var query = Sql<DB>.Create(db =>
                  Select(Asterisk(db.tbl_remuneration)).
                  From(db.tbl_remuneration).
-                 OrderBy(new Asc(db.tbl_remuneration.id)));
+                 OrderBy(Asc(db.tbl_remuneration.id)));
             var limit = Sql<DB>.Create(db => Limit(1, 3));
             query = query.Concat(limit);
 
@@ -234,7 +234,7 @@ LIMIT @p_0, @p_1",
             var query = Sql<DB>.Create(db =>
                  Select(Asterisk(db.tbl_remuneration)).
                  From(db.tbl_remuneration).
-                 OrderBy(new Asc(db.tbl_remuneration.id)));
+                 OrderBy(Asc(db.tbl_remuneration.id)));
 
             var exp1 = Sql<DB>.Create(db => (long)1);
             var exp2 = Sql<DB>.Create(db => (long)3);
@@ -262,7 +262,7 @@ LIMIT @p_0, @p_1",
             var query = Sql<DB>.Create(db =>
                  Select(Asterisk(db.tbl_remuneration)).
                  From(db.tbl_remuneration).
-                 OrderBy(new Asc(db.tbl_remuneration.id)));
+                 OrderBy(Asc(db.tbl_remuneration.id)));
             var limit = Sql<DB>.Create(db => Limit(1));
             var offset = Sql<DB>.Create(db => Offset(3));
             query = query.Concat(limit).Concat(offset);
@@ -291,7 +291,7 @@ OFFSET @p_1",
             var query = Sql<DB>.Create(db =>
                  Select(Asterisk(db.tbl_remuneration)).
                  From(db.tbl_remuneration).
-                 OrderBy(new Asc(db.tbl_remuneration.id)));
+                 OrderBy(Asc(db.tbl_remuneration.id)));
             var limit = Sql<DB>.Create(db => Limit(exp1));
             var offset = Sql<DB>.Create(db => Offset(exp2));
             query = query.Concat(limit).Concat(offset);
@@ -318,7 +318,7 @@ OFFSET @p_1",
             var query = Sql<DB>.Create(db =>
                  Select(Asterisk(db.tbl_remuneration)).
                  From(db.tbl_remuneration).
-                 OrderBy(new Asc(db.tbl_remuneration.id)));
+                 OrderBy(Asc(db.tbl_remuneration.id)));
             var offsetRows = Sql<DB>.Create(db => OffsetRows(1));
             var fetchNextRowOnly = Sql<DB>.Create(db => FetchNextRowsOnly(3));
             query = query.Concat(offsetRows).Concat(fetchNextRowOnly);
@@ -347,7 +347,7 @@ FETCH NEXT @p_1 ROWS ONLY",
             var query = Sql<DB>.Create(db =>
                  Select(Asterisk(db.tbl_remuneration)).
                  From(db.tbl_remuneration).
-                 OrderBy(new Asc(db.tbl_remuneration.id)));
+                 OrderBy(Asc(db.tbl_remuneration.id)));
             var offsetRows = Sql<DB>.Create(db => OffsetRows(exp1));
             var fetchNextRowOnly = Sql<DB>.Create(db => FetchNextRowsOnly(exp2));
             query = query.Concat(offsetRows).Concat(fetchNextRowOnly);
@@ -374,7 +374,7 @@ FETCH NEXT @p_1 ROWS ONLY",
                  Select(Asterisk(db.tbl_remuneration)).
                  From(db.tbl_remuneration).
                  Where(Between(RowNum, 1, 3)).
-                 OrderBy(new Asc(db.tbl_remuneration.id))
+                 OrderBy(Asc(db.tbl_remuneration.id))
                  );
 
             var datas = _connection.Query(query).ToList();
@@ -401,7 +401,7 @@ ORDER BY
                  Select(Asterisk(db.tbl_remuneration)).
                  From(db.tbl_remuneration).
                  Where(Between(exp1, exp2, exp3)).
-                 OrderBy(new Asc(db.tbl_remuneration.id))
+                 OrderBy(Asc(db.tbl_remuneration.id))
                  );
 
             var datas = _connection.Query(query).ToList();

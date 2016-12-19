@@ -45,7 +45,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="asterisk">*</param>
         /// <returns>Count.</returns>
-        public static int Count(Asterisk asterisk) => InvalitContext.Throw<int>(nameof(Count));
+        public static int Count(IAsterisk asterisk) => InvalitContext.Throw<int>(nameof(Count));
 
         /// <summary>
         /// COUNT function.
@@ -61,7 +61,7 @@ namespace LambdicSql
         /// <param name="aggregatePredicate">Specify All or Distinct.</param>
         /// <param name="asterisk">*</param>
         /// <returns>Count.</returns>
-        public static int Count(AggregatePredicate aggregatePredicate, Asterisk asterisk) => InvalitContext.Throw<int>(nameof(Count));
+        public static int Count(AggregatePredicate aggregatePredicate, IAsterisk asterisk) => InvalitContext.Throw<int>(nameof(Count));
 
         /// <summary>
         /// AVG function.

@@ -11,6 +11,12 @@ namespace LambdicSql
     /// <summary>
     /// TOP keyword.
     /// </summary>
+    public interface ITop { }
+
+    /*
+    /// <summary>
+    /// TOP keyword.
+    /// </summary>
     [SqlSyntax]
     public class Top
     {
@@ -31,7 +37,7 @@ namespace LambdicSql
             var args = arguments.Select(e => converter.Convert(e)).ToArray();
             return LineSpace("TOP", args[0].Customize(new CustomizeParameterToObject()));
         }
-    }
+    }*/
 
     class CustomizeParameterToObject : ISqlTextCustomizer
     {

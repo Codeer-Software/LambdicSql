@@ -61,7 +61,7 @@ FROM tbl_remuneration");
             if (_connection.GetType() != typeof(SqlConnection)) return;
 
             var query = Sql<DB>.Create(db =>
-                Select(new Top(1), new SelectData
+                Select(Top(1), new SelectData
                 {
                     PaymentDate = db.tbl_remuneration.payment_date,
                     Money = db.tbl_remuneration.money,
@@ -83,9 +83,9 @@ FROM tbl_remuneration");
             if (_connection.GetType() != typeof(SqlConnection)) return;
 
             var exp1 = Sql<DB>.Create(db => 1);
-            var exp2 = Sql<DB>.Create(db => new Top(exp1));
+            var exp2 = Sql<DB>.Create(db => Top(exp1));
             var query = Sql<DB>.Create(db =>
-                Select(exp2, new SelectData
+                Select(exp2.Body, new SelectData
                 {
                     PaymentDate = db.tbl_remuneration.payment_date,
                     Money = db.tbl_remuneration.money,
@@ -105,7 +105,7 @@ FROM tbl_remuneration");
         public void Test_Select_Asterisk_Non1()
         {
             var query = Sql<DB>.Create(db =>
-                Select(new Asterisk()).
+                Select(Asterisk()).
                 From(db.tbl_remuneration));
 
             var datas = _connection.Query<Remuneration>(query).ToList();
@@ -118,7 +118,7 @@ FROM tbl_remuneration");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Select_Asterisk_Non2()
         {
-            var exp = Sql<DB>.Create(db => new Asterisk());
+            var exp = Sql<DB>.Create(db => Asterisk());
             var query = Sql<DB>.Create(db =>
                 Select(exp.Body).
                 From(db.tbl_remuneration));
@@ -134,7 +134,7 @@ FROM tbl_remuneration");
         public void Test_Select_Asterisk1()
         {
             var query = Sql<DB>.Create(db =>
-                Select(new Asterisk<Remuneration>()).
+                Select(Asterisk<Remuneration>()).
                 From(db.tbl_remuneration));
 
             var datas = _connection.Query(query).ToList();
@@ -147,7 +147,7 @@ FROM tbl_remuneration");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Select_Asterisk2()
         {
-            var exp = Sql<DB>.Create(db => new Asterisk<Remuneration>());
+            var exp = Sql<DB>.Create(db => Asterisk<Remuneration>());
 
             var query = Sql<DB>.Create(db =>
                 Select(exp.Body).
@@ -196,7 +196,7 @@ FROM tbl_remuneration");
             if (_connection.GetType() != typeof(SqlConnection)) return;
 
             var query = Sql<DB>.Create(db =>
-                Select(new Top(2), new Asterisk()).
+                Select(Top(2), Asterisk()).
                 From(db.tbl_remuneration));
 
             var datas = _connection.Query<Remuneration>(query).ToList();
@@ -212,7 +212,7 @@ FROM tbl_remuneration");
             if (_connection.GetType() != typeof(SqlConnection)) return;
 
             var query = Sql<DB>.Create(db =>
-                Select(new Top(2), new Asterisk<Remuneration>()).
+                Select(Top(2), Asterisk<Remuneration>()).
                 From(db.tbl_remuneration));
 
             var datas = _connection.Query(query).ToList();
@@ -266,7 +266,7 @@ FROM tbl_remuneration");
         public void Test_Select_All_Asterisk_Non()
         {
             var query = Sql<DB>.Create(db =>
-                Select(AggregatePredicate.All, new Asterisk()).
+                Select(AggregatePredicate.All, Asterisk()).
                 From(db.tbl_remuneration));
 
             var datas = _connection.Query<Remuneration>(query).ToList();
@@ -280,7 +280,7 @@ FROM tbl_remuneration");
         public void Test_Select_Distinct_Asterisk_Non()
         {
             var query = Sql<DB>.Create(db =>
-                Select(AggregatePredicate.Distinct, new Asterisk()).
+                Select(AggregatePredicate.Distinct, Asterisk()).
                 From(db.tbl_remuneration));
 
             var datas = _connection.Query<Remuneration>(query).ToList();
@@ -324,7 +324,7 @@ FROM tbl_remuneration");
             if (_connection.GetType() != typeof(SqlConnection)) return;
 
             var query = Sql<DB>.Create(db =>
-                Select(AggregatePredicate.All, new Top(2), new Asterisk()).
+                Select(AggregatePredicate.All, Top(2), Asterisk()).
                 From(db.tbl_remuneration));
 
             var datas = _connection.Query<Remuneration>(query).ToList();
@@ -340,7 +340,7 @@ FROM tbl_remuneration");
             if (_connection.GetType() != typeof(SqlConnection)) return;
 
             var query = Sql<DB>.Create(db =>
-                Select(AggregatePredicate.Distinct, new Top(2), new Asterisk()).
+                Select(AggregatePredicate.Distinct, Top(2), Asterisk()).
                 From(db.tbl_remuneration));
 
             var datas = _connection.Query<Remuneration>(query).ToList();
@@ -356,7 +356,7 @@ FROM tbl_remuneration");
             if (_connection.GetType() != typeof(SqlConnection)) return;
 
             var query = Sql<DB>.Create(db =>
-                Select(AggregatePredicate.All, new Top(2), Asterisk(db.tbl_remuneration)).
+                Select(AggregatePredicate.All, Top(2), Asterisk(db.tbl_remuneration)).
                 From(db.tbl_remuneration));
 
             var datas = _connection.Query(query).ToList();
@@ -372,7 +372,7 @@ FROM tbl_remuneration");
             if (_connection.GetType() != typeof(SqlConnection)) return;
 
             var query = Sql<DB>.Create(db =>
-                Select(AggregatePredicate.Distinct, new Top(2), Asterisk(db.tbl_remuneration)).
+                Select(AggregatePredicate.Distinct, Top(2), Asterisk(db.tbl_remuneration)).
                 From(db.tbl_remuneration));
 
             var datas = _connection.Query(query).ToList();
@@ -408,7 +408,7 @@ FROM tbl_remuneration");
             if (_connection.GetType() != typeof(SqlConnection)) return;
 
             var query = Sql<DB>.Create(db =>
-                Empty().Select(new Top(1), new SelectData
+                Empty().Select(Top(1), new SelectData
                 {
                     PaymentDate = db.tbl_remuneration.payment_date,
                     Money = db.tbl_remuneration.money,
@@ -428,7 +428,7 @@ FROM tbl_remuneration");
         public void Test_Continue_Select_Asterisk_Non()
         {
             var query = Sql<DB>.Create(db =>
-                Empty().Select(new Asterisk()).
+                Empty().Select(Asterisk()).
                 From(db.tbl_remuneration));
 
             var datas = _connection.Query<Remuneration>(query).ToList();
@@ -442,7 +442,7 @@ FROM tbl_remuneration");
         public void Test_Continue_Select_Asterisk()
         {
             var query = Sql<DB>.Create(db =>
-                Empty().Select(new Asterisk<Remuneration>()).
+                Empty().Select(Asterisk<Remuneration>()).
                 From(db.tbl_remuneration));
 
             var datas = _connection.Query(query).ToList();
@@ -472,7 +472,7 @@ FROM tbl_remuneration");
             if (_connection.GetType() != typeof(SqlConnection)) return;
 
             var query = Sql<DB>.Create(db =>
-                Empty().Select(new Top(2), new Asterisk()).
+                Empty().Select(Top(2), Asterisk()).
                 From(db.tbl_remuneration));
 
             var datas = _connection.Query<Remuneration>(query).ToList();
@@ -488,7 +488,7 @@ FROM tbl_remuneration");
             if (_connection.GetType() != typeof(SqlConnection)) return;
 
             var query = Sql<DB>.Create(db =>
-                Empty().Select(new Top(2), new Asterisk<Remuneration>()).
+                Empty().Select(Top(2), Asterisk<Remuneration>()).
                 From(db.tbl_remuneration));
 
             var datas = _connection.Query(query).ToList();
@@ -542,7 +542,7 @@ FROM tbl_remuneration");
         public void Test_Continue_Select_All_Asterisk_Non()
         {
             var query = Sql<DB>.Create(db =>
-                Empty().Select(AggregatePredicate.All, new Asterisk()).
+                Empty().Select(AggregatePredicate.All, Asterisk()).
                 From(db.tbl_remuneration));
 
             var datas = _connection.Query<Remuneration>(query).ToList();
@@ -556,7 +556,7 @@ FROM tbl_remuneration");
         public void Test_Continue_Select_Distinct_Asterisk_Non()
         {
             var query = Sql<DB>.Create(db =>
-                Empty().Select(AggregatePredicate.Distinct, new Asterisk()).
+                Empty().Select(AggregatePredicate.Distinct, Asterisk()).
                 From(db.tbl_remuneration));
 
             var datas = _connection.Query<Remuneration>(query).ToList();
@@ -600,7 +600,7 @@ FROM tbl_remuneration");
             if (_connection.GetType() != typeof(SqlConnection)) return;
 
             var query = Sql<DB>.Create(db =>
-                Empty().Select(AggregatePredicate.All, new Top(2), new Asterisk()).
+                Empty().Select(AggregatePredicate.All, Top(2), Asterisk()).
                 From(db.tbl_remuneration));
 
             var datas = _connection.Query<Remuneration>(query).ToList();
@@ -616,7 +616,7 @@ FROM tbl_remuneration");
             if (_connection.GetType() != typeof(SqlConnection)) return;
 
             var query = Sql<DB>.Create(db =>
-                Empty().Select(AggregatePredicate.Distinct, new Top(2), new Asterisk()).
+                Empty().Select(AggregatePredicate.Distinct, Top(2), Asterisk()).
                 From(db.tbl_remuneration));
 
             var datas = _connection.Query<Remuneration>(query).ToList();
@@ -632,7 +632,7 @@ FROM tbl_remuneration");
             if (_connection.GetType() != typeof(SqlConnection)) return;
 
             var query = Sql<DB>.Create(db =>
-                Empty().Select(AggregatePredicate.All, new Top(2), Asterisk(db.tbl_remuneration)).
+                Empty().Select(AggregatePredicate.All, Top(2), Asterisk(db.tbl_remuneration)).
                 From(db.tbl_remuneration));
 
             var datas = _connection.Query(query).ToList();
@@ -648,7 +648,7 @@ FROM tbl_remuneration");
             if (_connection.GetType() != typeof(SqlConnection)) return;
 
             var query = Sql<DB>.Create(db =>
-                Empty().Select(AggregatePredicate.Distinct, new Top(2), Asterisk(db.tbl_remuneration)).
+                Empty().Select(AggregatePredicate.Distinct, Top(2), Asterisk(db.tbl_remuneration)).
                 From(db.tbl_remuneration));
 
             var datas = _connection.Query(query).ToList();
@@ -702,7 +702,7 @@ FROM tbl_staff");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Single2()
         {
-            var query = Sql<DB>.Create(db => Select(Count(new Asterisk())).From(db.tbl_staff));
+            var query = Sql<DB>.Create(db => Select(Count(Asterisk())).From(db.tbl_staff));
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);

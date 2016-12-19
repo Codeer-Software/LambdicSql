@@ -392,7 +392,7 @@ HAVING (@p_0) < (SUM(tbl_remuneration.money))",
                     Id = db.tbl_remuneration.staff_id
                 }).
                 From(db.tbl_remuneration).
-                OrderBy(new Asc(db.tbl_remuneration.money), new Desc(db.tbl_remuneration.staff_id)));
+                OrderBy(Asc(db.tbl_remuneration.money), Desc(db.tbl_remuneration.staff_id)));
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -413,8 +413,8 @@ ORDER BY
 
             var exp1 = Sql<DB>.Create(db => db.tbl_remuneration.money);
             var exp2 = Sql<DB>.Create(db => db.tbl_remuneration.staff_id);
-            var exp3 = Sql<DB>.Create(db => new Asc(exp1));
-            var exp4 = Sql<DB>.Create(db => new Desc(exp2));
+            var exp3 = Sql<DB>.Create(db => Asc(exp1));
+            var exp4 = Sql<DB>.Create(db => Desc(exp2));
             var query = Sql<DB>.Create(db =>
                 Select(new SelectedData2
                 {
@@ -815,7 +815,7 @@ HAVING (@p_0) < (SUM(tbl_remuneration.money))",
                 }).
                 From(db.tbl_remuneration));
 
-            var target = Sql<DB>.Create(db => OrderBy(new Asc(db.tbl_remuneration.money), new Desc(db.tbl_remuneration.staff_id)));
+            var target = Sql<DB>.Create(db => OrderBy(Asc(db.tbl_remuneration.money), Desc(db.tbl_remuneration.staff_id)));
             query = query.Concat(target);
 
 
@@ -840,8 +840,8 @@ ORDER BY
 
             var exp1 = Sql<DB>.Create(db => db.tbl_remuneration.money);
             var exp2 = Sql<DB>.Create(db => db.tbl_remuneration.staff_id);
-            var exp3 = Sql<DB>.Create(db => new Asc(exp1));
-            var exp4 = Sql<DB>.Create(db => new Desc(exp2));
+            var exp3 = Sql<DB>.Create(db => Asc(exp1));
+            var exp4 = Sql<DB>.Create(db => Desc(exp2));
             var query = Sql<DB>.Create(db =>
                 Select(new SelectedData2
                 {

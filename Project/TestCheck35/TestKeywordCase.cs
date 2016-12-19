@@ -297,7 +297,7 @@ FROM tbl_staff",
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Sub1()
         {
-            var sub = Sql<DB>.Create(db => Select(Count(new Asterisk())).From(db.tbl_staff));
+            var sub = Sql<DB>.Create(db => Select(Count(Asterisk())).From(db.tbl_staff));
             var query = Sql<DB>.Create(db =>
                 Select(new
                 {
@@ -330,7 +330,7 @@ FROM tbl_staff", 1, "x", "z");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Sub2()
         {
-            var sub = Sql<DB>.Create(db => Select(Count(new Asterisk())).From(db.tbl_staff));
+            var sub = Sql<DB>.Create(db => Select(Count(Asterisk())).From(db.tbl_staff));
             var query = Sql<DB>.Create(db =>
                 Select(new
                 {

@@ -17,19 +17,16 @@ namespace LambdicSql
     public static class Window
     {
         /// <summary>
-        /// Return value of window functions.
-        /// </summary>
-        /// <typeparam name="T">Window functions result.</typeparam>
-        public interface IFuncAfter<T> : IMethodChain { }
-
-        /// <summary>
         /// SUM function.
         /// </summary>
         /// <typeparam name="T">Type represented by expression.</typeparam>
         /// <param name="column">The column or expression that is function target.</param>
+        /// <param name="partitionBy">PARTITION BY keyword.</param>
+        /// <param name="orderBy">ORDER BY keyword.</param>
+        /// <param name="rows">ROWS keyword.</param>
         /// <returns>It is an object for describing the continuation of the OVER expression.</returns>
         [MethodGroup(nameof(Window))]
-        public static IFuncAfter<T> Sum<T>(T column) => InvalitContext.Throw<IFuncAfter<T>>(nameof(Sum));
+        public static T SumOver<T>(T column, IPartitionBy partitionBy, IOrderBy orderBy, IRows rows) => InvalitContext.Throw<T>(nameof(SumOver));
 
         /// <summary>
         /// SUM function.
@@ -37,141 +34,192 @@ namespace LambdicSql
         /// <typeparam name="T">Type represented by expression.</typeparam>
         /// <param name="aggregatePredicate">Specify All or Distinct.</param>
         /// <param name="column">The column or expression that is function target.</param>
+        /// <param name="partitionBy">PARTITION BY keyword.</param>
+        /// <param name="orderBy">ORDER BY keyword.</param>
+        /// <param name="rows">ROWS keyword.</param>
         /// <returns>Total.</returns>
         [MethodGroup(nameof(Window))]
-        public static IFuncAfter<T> Sum<T>(AggregatePredicate aggregatePredicate, T column) => InvalitContext.Throw<IFuncAfter<T>>(nameof(Sum));
+        public static T SumOver<T>(AggregatePredicate aggregatePredicate, T column, IPartitionBy partitionBy, IOrderBy orderBy, IRows rows) => InvalitContext.Throw<T>(nameof(SumOver));
 
         /// <summary>
         /// COUNT function.
         /// </summary>
         /// <param name="column">The column or expression that is function target.</param>
+        /// <param name="partitionBy">PARTITION BY keyword.</param>
+        /// <param name="orderBy">ORDER BY keyword.</param>
+        /// <param name="rows">ROWS keyword.</param>
         /// <returns>It is an object for describing the continuation of the OVER expression.</returns>
         [MethodGroup(nameof(Window))]
-        public static IFuncAfter<int> Count(object column) => InvalitContext.Throw<IFuncAfter<int>>(nameof(Count));
+        public static int CountOver(object column, IPartitionBy partitionBy, IOrderBy orderBy, IRows rows) => InvalitContext.Throw<int>(nameof(CountOver));
 
         /// <summary>
         /// COUNT function.
         /// </summary>
         /// <param name="asterisk"></param>
+        /// <param name="partitionBy">PARTITION BY keyword.</param>
+        /// <param name="orderBy">ORDER BY keyword.</param>
+        /// <param name="rows">ROWS keyword.</param>
         /// <returns>Count.</returns>
         [MethodGroup(nameof(Window))]
-        public static IFuncAfter<int> Count(Asterisk asterisk) => InvalitContext.Throw<IFuncAfter<int>>(nameof(Count));
+        public static int CountOver(IAsterisk asterisk, IPartitionBy partitionBy, IOrderBy orderBy, IRows rows) => InvalitContext.Throw<int>(nameof(CountOver));
 
         /// <summary>
         /// COUNT function.
         /// </summary>
         /// <param name="aggregatePredicate">Specify All or Distinct.</param>
         /// <param name="column">The column or expression that is function target.</param>
+        /// <param name="partitionBy">PARTITION BY keyword.</param>
+        /// <param name="orderBy">ORDER BY keyword.</param>
+        /// <param name="rows">ROWS keyword.</param>
         /// <returns>Count.</returns>
         [MethodGroup(nameof(Window))]
-        public static IFuncAfter<int> Count(AggregatePredicate aggregatePredicate, object column) => InvalitContext.Throw<IFuncAfter<int>>(nameof(Count));
+        public static int CountOver(AggregatePredicate aggregatePredicate, object column, IPartitionBy partitionBy, IOrderBy orderBy, IRows rows) => InvalitContext.Throw<int>(nameof(CountOver));
 
         /// <summary>
         /// COUNT function.
         /// </summary>
         /// <param name="aggregatePredicate">Specify All or Distinct.</param>
         /// <param name="asterisk">*</param>
+        /// <param name="partitionBy">PARTITION BY keyword.</param>
+        /// <param name="orderBy">ORDER BY keyword.</param>
+        /// <param name="rows">ROWS keyword.</param>
         /// <returns>Count.</returns>
         [MethodGroup(nameof(Window))]
-        public static IFuncAfter<int> Count(AggregatePredicate aggregatePredicate, Asterisk asterisk) => InvalitContext.Throw<IFuncAfter<int>>(nameof(Count));
+        public static int CountOver(AggregatePredicate aggregatePredicate, IAsterisk asterisk, IPartitionBy partitionBy, IOrderBy orderBy, IRows rows) => InvalitContext.Throw<int>(nameof(CountOver));
 
         /// <summary>
         /// AVG function.
         /// </summary>
         /// <param name="column">The column or expression that is function target.</param>
+        /// <param name="partitionBy">PARTITION BY keyword.</param>
+        /// <param name="orderBy">ORDER BY keyword.</param>
+        /// <param name="rows">ROWS keyword.</param>
         /// <returns>It is an object for describing the continuation of the OVER expression.</returns>
         [MethodGroup(nameof(Window))]
-        public static IFuncAfter<double> Avg(object column) => InvalitContext.Throw<IFuncAfter<double>>(nameof(Avg));
+        public static double AvgOver(object column, IPartitionBy partitionBy, IOrderBy orderBy, IRows rows) => InvalitContext.Throw<double>(nameof(AvgOver));
 
         /// <summary>
         /// MIN function.
         /// </summary>
         /// <typeparam name="T">Type represented by expression.</typeparam>
         /// <param name="column">The column or expression that is function target.</param>
+        /// <param name="partitionBy">PARTITION BY keyword.</param>
+        /// <param name="orderBy">ORDER BY keyword.</param>
+        /// <param name="rows">ROWS keyword.</param>
         /// <returns>It is an object for describing the continuation of the OVER expression.</returns>
         [MethodGroup(nameof(Window))]
-        public static IFuncAfter<T> Min<T>(T column) => InvalitContext.Throw<IFuncAfter<T>>(nameof(Min));
+        public static T MinOver<T>(T column, IPartitionBy partitionBy, IOrderBy orderBy, IRows rows) => InvalitContext.Throw<T>(nameof(MinOver));
 
         /// <summary>
         /// MAX function.
         /// </summary>
         /// <typeparam name="T">Type represented by expression.</typeparam>
         /// <param name="column">The column or expression that is function target.</param>
+        /// <param name="partitionBy">PARTITION BY keyword.</param>
+        /// <param name="orderBy">ORDER BY keyword.</param>
+        /// <param name="rows">ROWS keyword.</param>
         /// <returns>It is an object for describing the continuation of the OVER expression.</returns>
         [MethodGroup(nameof(Window))]
-        public static IFuncAfter<T> Max<T>(T column) => InvalitContext.Throw<IFuncAfter<T>>(nameof(Max));
+        public static T MaxOver<T>(T column, IPartitionBy partitionBy, IOrderBy orderBy, IRows rows) => InvalitContext.Throw<T>(nameof(MaxOver));
 
         /// <summary>
         /// FIRST_VALUE function.
         /// </summary>
         /// <typeparam name="T">Type represented by expression.</typeparam>
         /// <param name="column">The column or expression that is function target.</param>
+        /// <param name="partitionBy">PARTITION BY keyword.</param>
+        /// <param name="orderBy">ORDER BY keyword.</param>
+        /// <param name="rows">ROWS keyword.</param>
         /// <returns>It is an object for describing the continuation of the OVER expression.</returns>
         [MethodGroup(nameof(Window))]
-        public static IFuncAfter<T> First_Value<T>(T column) => InvalitContext.Throw<IFuncAfter<T>>(nameof(Min));
+        public static T First_Value_Over<T>(T column, IPartitionBy partitionBy, IOrderBy orderBy, IRows rows) => InvalitContext.Throw<T>(nameof(First_Value_Over));
 
         /// <summary>
         /// LAST_VALUE function.
         /// </summary>
         /// <typeparam name="T">Type represented by expression.</typeparam>
         /// <param name="column">The column or expression that is function target.</param>
+        /// <param name="partitionBy">PARTITION BY keyword.</param>
+        /// <param name="orderBy">ORDER BY keyword.</param>
+        /// <param name="rows">ROWS keyword.</param>
         /// <returns>It is an object for describing the continuation of the OVER expression.</returns>
         [MethodGroup(nameof(Window))]
-        public static IFuncAfter<T> Last_Value<T>(T column) => InvalitContext.Throw<IFuncAfter<T>>(nameof(Min));
+        public static T Last_Value_Over<T>(T column, IPartitionBy partitionBy, IOrderBy orderBy, IRows rows) => InvalitContext.Throw<T>(nameof(Last_Value_Over));
 
         /// <summary>
         /// RANK function.
         /// </summary>
+        /// <param name="partitionBy">PARTITION BY keyword.</param>
+        /// <param name="orderBy">ORDER BY keyword.</param>
+        /// <param name="rows">ROWS keyword.</param>
         /// <returns>It is an object for describing the continuation of the OVER expression.</returns>
         [MethodGroup(nameof(Window))]
-        public static IFuncAfter<int> Rank() => InvalitContext.Throw<IFuncAfter<int>>(nameof(Min));
+        public static int RankOver(IPartitionBy partitionBy, IOrderBy orderBy, IRows rows) => InvalitContext.Throw<int>(nameof(RankOver));
 
         /// <summary>
         /// DENSE_RANK function.
         /// </summary>
+        /// <param name="partitionBy">PARTITION BY keyword.</param>
+        /// <param name="orderBy">ORDER BY keyword.</param>
+        /// <param name="rows">ROWS keyword.</param>
         /// <returns>It is an object for describing the continuation of the OVER expression.</returns>
         [MethodGroup(nameof(Window))]
-        public static IFuncAfter<int> Dense_Rank() => InvalitContext.Throw<IFuncAfter<int>>(nameof(Min));
+        public static int Dense_Rank_Over(IPartitionBy partitionBy, IOrderBy orderBy, IRows rows) => InvalitContext.Throw<int>(nameof(Dense_Rank_Over));
 
         /// <summary>
         /// PERCENT_RANK function.
         /// </summary>
+        /// <param name="partitionBy">PARTITION BY keyword.</param>
+        /// <param name="orderBy">ORDER BY keyword.</param>
+        /// <param name="rows">ROWS keyword.</param>
         /// <returns>It is an object for describing the continuation of the OVER expression.</returns>
         [MethodGroup(nameof(Window))]
-        public static IFuncAfter<double> Percent_Rank() => InvalitContext.Throw<IFuncAfter<double>>(nameof(Min));
+        public static double Percent_Rank_Over(IPartitionBy partitionBy, IOrderBy orderBy, IRows rows) => InvalitContext.Throw<double>(nameof(Percent_Rank_Over));
 
         /// <summary>
         /// CUME_DIST function.
         /// </summary>
+        /// <param name="partitionBy">PARTITION BY keyword.</param>
+        /// <param name="orderBy">ORDER BY keyword.</param>
+        /// <param name="rows">ROWS keyword.</param>
         /// <returns>It is an object for describing the continuation of the OVER expression.</returns>
         [MethodGroup(nameof(Window))]
-        public static IFuncAfter<double> Cume_Dist() => InvalitContext.Throw<IFuncAfter<double>>(nameof(Min));
+        public static double Cume_Dist_Over(IPartitionBy partitionBy, IOrderBy orderBy, IRows rows) => InvalitContext.Throw<double>(nameof(Cume_Dist_Over));
 
         /// <summary>
         /// NTILE function.
         /// </summary>
         /// <param name="groupCount">The number of ranking groups.</param>
+        /// <param name="partitionBy">PARTITION BY keyword.</param>
+        /// <param name="orderBy">ORDER BY keyword.</param>
+        /// <param name="rows">ROWS keyword.</param>
         /// <returns>It is an object for describing the continuation of the OVER expression.</returns>
         [MethodGroup(nameof(Window))]
-        public static IFuncAfter<int> Ntile(object groupCount) => InvalitContext.Throw<IFuncAfter<int>>(nameof(Min));
+        public static int NtileOver(object groupCount, IPartitionBy partitionBy, IOrderBy orderBy, IRows rows) => InvalitContext.Throw<int>(nameof(NtileOver));
 
         /// <summary>
         /// NTH_VALUE function.
         /// </summary>
         /// <param name="column">The column or expression that is function target.</param>
         /// <param name="offset">Specify the number of lines associated with the first line of the window that returns the expression.</param>
+        /// <param name="partitionBy">PARTITION BY keyword.</param>
+        /// <param name="orderBy">ORDER BY keyword.</param>
+        /// <param name="rows">ROWS keyword.</param>
         /// <returns>It is an object for describing the continuation of the OVER expression.</returns>
         [MethodGroup(nameof(Window))]
-        public static IFuncAfter<int> Nth_Value(object column, object offset) => InvalitContext.Throw<IFuncAfter<int>>(nameof(Min));
+        public static int Nth_Value_Over(object column, object offset, IPartitionBy partitionBy, IOrderBy orderBy, IRows rows) => InvalitContext.Throw<int>(nameof(Nth_Value_Over));
 
         /// <summary>
         /// LAG function.
         /// </summary>
         /// <typeparam name="T">Type represented by expression.</typeparam>
         /// <param name="column">The column or expression that is function target.</param>
+        /// <param name="partitionBy">PARTITION BY keyword.</param>
+        /// <param name="orderBy">ORDER BY keyword.</param>
+        /// <param name="rows">ROWS keyword.</param>
         /// <returns>It is an object for describing the continuation of the OVER expression.</returns>
         [MethodGroup(nameof(Window))]
-        public static IFuncAfter<T> Lag<T>(T column) => InvalitContext.Throw<IFuncAfter<T>>(nameof(Lag));
+        public static T LagOver<T>(T column, IPartitionBy partitionBy, IOrderBy orderBy, IRows rows) => InvalitContext.Throw<T>(nameof(LagOver));
 
         /// <summary>
         /// LAG function.
@@ -179,9 +227,12 @@ namespace LambdicSql
         /// <typeparam name="T">Type represented by expression.</typeparam>
         /// <param name="column">The column or expression that is function target.</param>
         /// <param name="offset">An optional parameter that specifies the number of lines before the current line that returns a value.</param>
+        /// <param name="partitionBy">PARTITION BY keyword.</param>
+        /// <param name="orderBy">ORDER BY keyword.</param>
+        /// <param name="rows">ROWS keyword.</param>
         /// <returns>It is an object for describing the continuation of the OVER expression.</returns>
         [MethodGroup(nameof(Window))]
-        public static IFuncAfter<T> Lag<T>(T column, object offset) => InvalitContext.Throw<IFuncAfter<T>>(nameof(Lag));
+        public static T LagOver<T>(T column, object offset, IPartitionBy partitionBy, IOrderBy orderBy, IRows rows) => InvalitContext.Throw<T>(nameof(LagOver));
 
         /// <summary>
         /// LAG function.
@@ -190,102 +241,118 @@ namespace LambdicSql
         /// <param name="column">The column or expression that is function target.</param>
         /// <param name="offset">An optional parameter that specifies the number of lines before the current line that returns a value.</param>
         /// <param name="default">The value returned if the value specified by offset is NULL.</param>
+        /// <param name="partitionBy">PARTITION BY keyword.</param>
+        /// <param name="orderBy">ORDER BY keyword.</param>
+        /// <param name="rows">ROWS keyword.</param>
         /// <returns>It is an object for describing the continuation of the OVER expression.</returns>
         [MethodGroup(nameof(Window))]
-        public static IFuncAfter<T> Lag<T>(T column, object offset, T @default) => InvalitContext.Throw<IFuncAfter<T>>(nameof(Lag));
+        public static T LagOver<T>(T column, object offset, T @default, IPartitionBy partitionBy, IOrderBy orderBy, IRows rows) => InvalitContext.Throw<T>(nameof(LagOver));
 
         /// <summary>
-        /// OVER function.
+        /// Constructor.
         /// </summary>
-        /// <typeparam name="T">Type represented by expression.</typeparam>
-        /// <param name="before">It is an before expression in the Windwo function.</param>
-        /// <param name="partitionBy">PARTITION BY keyword.</param>
-        /// <returns>It is the result of Window function.</returns>
-        [MethodGroup(nameof(Window))]
-        public static T Over<T>(this IFuncAfter<T> before, PartitionBy partitionBy) => InvalitContext.Throw<T>(nameof(Over));
+        /// <param name="preceding">Preceding row count.</param>
+        public static IRows Rows(int preceding) => InvalitContext.Throw<IRows>(nameof(Rows));
 
         /// <summary>
-        /// OVER function.
+        /// Constructor.
         /// </summary>
-        /// <typeparam name="T">Type represented by expression.</typeparam>
-        /// <param name="before">It is an before expression in the Windwo function.</param>
-        /// <param name="partitionBy">PARTITION BY keyword.</param>
-        /// <param name="orderBy">ORDER BY keyword.</param>
-        /// <returns>It is the result of Window function.</returns>
-        [MethodGroup(nameof(Window))]
-        public static T Over<T>(this IFuncAfter<T> before, PartitionBy partitionBy, OrderBy orderBy) => InvalitContext.Throw<T>(nameof(Over));
+        /// <param name="preceding">Preceding row count.</param>
+        /// <param name="following">Following row count.</param>
+        public static IRows Rows(int preceding, int following) => InvalitContext.Throw<IRows>(nameof(Rows));
 
-        /// <summary>
-        /// OVER function.
-        /// </summary>
-        /// <typeparam name="T">Type represented by expression.</typeparam>
-        /// <param name="before">It is an before expression in the Windwo function.</param>
-        /// <param name="partitionBy">PARTITION BY keyword.</param>
-        /// <param name="rows">ROWS keyword.</param>
-        /// <returns>It is the result of Window function.</returns>
-        [MethodGroup(nameof(Window))]
-        public static T Over<T>(this IFuncAfter<T> before, PartitionBy partitionBy, Rows rows) => InvalitContext.Throw<T>(nameof(Over));
+        static SqlText ConvertRows(ISqlStringConverter converter, MethodCallExpression[] methods)
+        {
+            var exp = methods[0];
+            var args = exp.Arguments.Select(e => converter.Convert(e)).ToArray();
 
-        /// <summary>
-        /// OVER function.
-        /// </summary>
-        /// <typeparam name="T">Type represented by expression.</typeparam>
-        /// <param name="before">It is an before expression in the Windwo function.</param>
-        /// <param name="partitionBy">PARTITION BY keyword.</param>
-        /// <param name="orderBy">ORDER BY keyword.</param>
-        /// <param name="rows">ROWS keyword.</param>
-        /// <returns>It is the result of Window function.</returns>
-        [MethodGroup(nameof(Window))]
-        public static T Over<T>(this IFuncAfter<T> before, PartitionBy partitionBy, OrderBy orderBy, Rows rows) => InvalitContext.Throw<T>(nameof(Over));
+            //Sql server can't use parameter.
+            if (exp.Arguments.Count == 1)
+            {
+                return LineSpace("ROWS", args[0].Customize(new CustomizeParameterToObject()), "PRECEDING");
+            }
+            else
+            {
+                return LineSpace("ROWS BETWEEN", args[0].Customize(new CustomizeParameterToObject()),
+                    "PRECEDING AND", args[1].Customize(new CustomizeParameterToObject()), "FOLLOWING");
+            }
+        }
 
+        
         /// <summary>
-        /// OVER function.
+        /// Constructor.
         /// </summary>
-        /// <typeparam name="T">Type represented by expression.</typeparam>
-        /// <param name="before">It is an before expression in the Windwo function.</param>
-        /// <param name="orderBy">ORDER BY keyword.</param>
-        /// <returns>It is the result of Window function.</returns>
-        [MethodGroup(nameof(Window))]
-        public static T Over<T>(this IFuncAfter<T> before, OrderBy orderBy) => InvalitContext.Throw<T>(nameof(Over));
+        /// <param name="columns">Specify column or expression.</param>
+        public static IPartitionBy PartitionBy(params object[] columns) => InvalitContext.Throw<IPartitionBy>(nameof(PartitionBy));
 
-        /// <summary>
-        /// OVER function.
-        /// </summary>
-        /// <typeparam name="T">Type represented by expression.</typeparam>
-        /// <param name="before">It is an before expression in the Windwo function.</param>
-        /// <param name="orderBy">ORDER BY keyword.</param>
-        /// <param name="rows">Getting row order.</param>
-        /// <returns>It is the result of Window function.</returns>
-        [MethodGroup(nameof(Window))]
-        public static T Over<T>(this IFuncAfter<T> before, OrderBy orderBy, Rows rows) => InvalitContext.Throw<T>(nameof(Over));
+        static SqlText ConvertPartitionBy(ISqlStringConverter converter, MethodCallExpression[] methods)
+        {
+            var exp = methods[0];
 
+            var partitionBy = new VText();
+            partitionBy.Add("PARTITION BY");
+
+            var elements = new VText() { Indent = 1, Separator = "," };
+            var array = exp.Arguments[0] as NewArrayExpression;
+            foreach (var e in array.Expressions.Select(e => converter.Convert(e)))
+            {
+                elements.Add(e);
+            }
+            partitionBy.Add(elements);
+
+            return partitionBy;
+        }
+        /*
         /// <summary>
-        /// OVER function.
+        /// Constructor.
         /// </summary>
-        /// <typeparam name="T">Type represented by expression.</typeparam>
-        /// <param name="before">It is an before expression in the Windwo function.</param>
-        /// <param name="rows">Getting row order.</param>
-        /// <returns>It is the result of Window function.</returns>
-        [MethodGroup(nameof(Window))]
-        public static T Over<T>(this IFuncAfter<T> before, Rows rows) => InvalitContext.Throw<T>(nameof(Over));
+        /// <param name="elements">Specify column and sort order. Asc(column) or Desc(column).</param>
+        public static IOrderBy OrderBy(params ISortedBy[] elements) => InvalitContext.Throw<IOrderBy>(nameof(OrderBy));
+
+        static SqlText ConvertOrderBy(ISqlStringConverter converter, MethodCallExpression[] methods)
+        {
+            var exp = methods[0];
+            var orderBy = new VText();
+            orderBy.Add("ORDER BY");
+
+            var elements = new VText() { Indent = 1, Separator = "," };
+            var array = exp.Arguments[0] as NewArrayExpression;
+            foreach (var e in array.Expressions.Select(e => converter.Convert(e)))
+            {
+                elements.Add(e);
+            }
+            orderBy.Add(elements);
+
+            return orderBy;
+        }*/
 
         static SqlText Convert(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var v = new VText();
+            var argCount = methods[0].Arguments.Count - 3;
+
+            //TODO refactoring.
+            //あーなるほど、nullはここで止めてたのか。
+            var method = methods[0];
+
             switch (methods[0].Method.Name)
             {
-                case nameof(Sum):
-                case nameof(Count):
-                    v.Add(Funcs.Convert(converter, new[] { methods[0] }));
+                case nameof(Rows):
+                    return ConvertRows(converter, methods);
+                case nameof(PartitionBy):
+                    return ConvertPartitionBy(converter, methods);
+                case nameof(SumOver):
+                case nameof(CountOver):
+                    var args = method.Arguments.Select(e => converter.Convert(e));
+                    if (method.Arguments.Count == 5) v.Add(FuncSpace(method.Method.Name.ToUpper().Replace("OVER", string.Empty), args.Take(2).ToArray()));
+                    else v.Add(FuncSpace(method.Method.Name.ToUpper().Replace("OVER", string.Empty), args.Take(1).ToArray()));
                     break;
                 default:
-                    var method = methods[0];
-                    v.Add(Func(method.Method.Name.ToUpper(), method.Arguments.Skip(method.SkipMethodChain(0)).Select(e => converter.Convert(e)).ToArray()));
+                    v.Add(Func(method.Method.Name.ToUpper().Replace("_OVER", string.Empty).Replace("OVER", string.Empty), method.Arguments.Take(argCount).Select(e => converter.Convert(e)).ToArray()));
                     break;
             }
-            var overMethod = methods[1];
-            v.Add(overMethod.Method.Name.ToUpper() + "(");
-            v.AddRange(1, overMethod.Arguments.Skip(1).
+            v.Add("OVER(");
+            v.AddRange(1, methods[0].Arguments.Skip(argCount).
                 Where(e => !(e is ConstantExpression)). //Skip null.
                 Select(e => converter.Convert(e)).ToArray());
             return v.ConcatToBack(")");

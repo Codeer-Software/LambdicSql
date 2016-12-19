@@ -166,8 +166,7 @@ namespace LambdicSql.Inside
             //sub.Body
             var body = ResolveSqlExpressionBody(member);
             if (body != null) return body;
-
-            //TODO ややこしいから methodとenum以外はやめとこ
+            
             //sql syntax.
             if (member.Member.DeclaringType.IsSqlSyntax())
             {

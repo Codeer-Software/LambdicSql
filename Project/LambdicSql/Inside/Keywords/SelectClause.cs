@@ -28,10 +28,10 @@ namespace LambdicSql.Inside.Keywords
             ObjectCreateInfo createInfo = null;
 
             //*
-            if (typeof(Asterisk).IsAssignableFrom(selectTargets.Type))
+            if (typeof(IAsterisk).IsAssignableFrom(selectTargets.Type))
             {
                 var asteriskType = selectTargets.Type.IsGenericType ? selectTargets.Type.GetGenericTypeDefinition() : null;
-                if (asteriskType == typeof(Asterisk<>)) createInfo = ObjectCreateAnalyzer.MakeSelectInfo(asteriskType);
+                if (asteriskType == typeof(IAsterisk<>)) createInfo = ObjectCreateAnalyzer.MakeSelectInfo(asteriskType);
                 select.Add("*");
             }
             //new { item = db.tbl.column }

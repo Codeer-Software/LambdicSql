@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 
 namespace LambdicSql
 {
+    /*
     /// <summary>
     /// PARTITION BY keyword.
     /// Use it with the OVER function.
@@ -34,5 +35,10 @@ namespace LambdicSql
 
             return partitionBy;
         }
-    }
+    }*/
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public interface IPartitionBy { }
 }

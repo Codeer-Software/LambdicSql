@@ -6,6 +6,12 @@ using System.Linq.Expressions;
 
 namespace LambdicSql
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    public interface IOrderBy : IClauseChain<Non> { }
+
+    /*
     //TODO この辺全部関数化
     /// <summary>
     /// ORDERBY keyword.
@@ -35,5 +41,5 @@ namespace LambdicSql
 
             return orderBy;
         }
-    }
+    }*/
 }
