@@ -464,7 +464,17 @@ namespace LambdicSql.Inside
 
                     group.Add(curent);
                     var ps = curent.Method.GetParameters();
-                    bool isSqlSyntax = curent.Method.IsDefined(typeof(ExtensionAttribute), false) && 0 < ps.Length && typeof(IMethodChain).IsAssignableFrom(ps[0].ParameterType);
+                    
+                    bool isSqlSyntax = curent.Method.IsDefined(typeof(ExtensionAttribute), false)
+                        && 0 < ps.Length 
+                        && typeof(IMethodChain).IsAssignableFrom(ps[0].ParameterType);
+
+                    //TODO
+                    //あれ？本当にいるか？別の方法で解決できるんじゃ？
+                    //それかForceMethodChainにするかやな！
+                    isSqlSyntax |= curent.Method.IsDefined(typeof(MethodChainAttribute), false);
+
+
                     var next = isSqlSyntax ? curent.Arguments[0] as MethodCallExpression : null;
 
                     //end of syntax

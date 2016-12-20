@@ -6,6 +6,7 @@ using static Test.Helper.DBProviderInfo;
 using LambdicSql;
 using LambdicSql.feat.Dapper;
 using static LambdicSql.Keywords;
+using System.Diagnostics;
 
 namespace TestCheck35
 {
@@ -39,8 +40,8 @@ namespace TestCheck35
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = (decimal)AvgOver(db.tbl_remuneration.money,
-                                PartitionBy(db.tbl_remuneration.payment_date),
+                    Val = (decimal)Avg(db.tbl_remuneration.money).
+                            Over(PartitionBy(db.tbl_remuneration.payment_date),
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 Rows(1, 5))
                 }).
@@ -71,8 +72,8 @@ FROM tbl_remuneration");
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = (decimal)AvgOver(3,
-                                PartitionBy(db.tbl_remuneration.payment_date),
+                    Val = (decimal)Avg(3).
+                            Over(PartitionBy(db.tbl_remuneration.payment_date),
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 Rows(1, 5))
                 }).
@@ -102,8 +103,8 @@ FROM tbl_remuneration", 3);
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = (decimal)AvgOver(exp,
-                                PartitionBy(db.tbl_remuneration.payment_date),
+                    Val = (decimal)Avg(exp).
+                            Over(PartitionBy(db.tbl_remuneration.payment_date),
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 Rows(1, 5))
                 }).
@@ -132,8 +133,8 @@ FROM tbl_remuneration");
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = SumOver(db.tbl_remuneration.money,
-                                PartitionBy(db.tbl_remuneration.payment_date),
+                    Val = Sum(db.tbl_remuneration.money).
+                            Over(PartitionBy(db.tbl_remuneration.payment_date),
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 Rows(1, 5))
                 }).
@@ -162,8 +163,8 @@ FROM tbl_remuneration");
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = SumOver(3,
-                                PartitionBy(db.tbl_remuneration.payment_date),
+                    Val = Sum(3).
+                            Over(PartitionBy(db.tbl_remuneration.payment_date),
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 Rows(1, 5))
                 }).
@@ -193,8 +194,8 @@ FROM tbl_remuneration", 3);
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = SumOver(exp,
-                                PartitionBy(db.tbl_remuneration.payment_date),
+                    Val = Sum(exp).
+                            Over(PartitionBy(db.tbl_remuneration.payment_date),
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 Rows(1, 5))
                 }).
@@ -224,8 +225,8 @@ FROM tbl_remuneration");
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = SumOver(AggregatePredicate.All, exp,
-                                PartitionBy(db.tbl_remuneration.payment_date),
+                    Val = Sum(AggregatePredicate.All, exp).
+                            Over(PartitionBy(db.tbl_remuneration.payment_date),
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 Rows(1, 5))
                 }).
@@ -254,8 +255,8 @@ FROM tbl_remuneration");
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = CountOver(db.tbl_remuneration.money,
-                                PartitionBy(db.tbl_remuneration.payment_date),
+                    Val = Count(db.tbl_remuneration.money).
+                            Over(PartitionBy(db.tbl_remuneration.payment_date),
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 Rows(1, 5))
                 }).
@@ -263,6 +264,9 @@ FROM tbl_remuneration");
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
+
+            query.Gen(_connection);
+
             AssertEx.AreEqual(query, _connection,
 @"SELECT
 	COUNT(tbl_remuneration.money)
@@ -284,8 +288,8 @@ FROM tbl_remuneration");
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = CountOver(3,
-                                PartitionBy(db.tbl_remuneration.payment_date),
+                    Val = Count(3).
+                            Over(PartitionBy(db.tbl_remuneration.payment_date),
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 Rows(1, 5))
                 }).
@@ -315,8 +319,8 @@ FROM tbl_remuneration", 3);
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = CountOver(exp,
-                                PartitionBy(db.tbl_remuneration.payment_date),
+                    Val = Count(exp).
+                            Over(PartitionBy(db.tbl_remuneration.payment_date),
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 Rows(1, 5))
                 }).
@@ -345,8 +349,8 @@ FROM tbl_remuneration");
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = CountOver(Asterisk(),
-                                PartitionBy(db.tbl_remuneration.payment_date),
+                    Val = Count(Asterisk()).
+                            Over(PartitionBy(db.tbl_remuneration.payment_date),
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 Rows(1, 5))
                 }).
@@ -375,9 +379,8 @@ FROM tbl_remuneration");
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = CountOver(AggregatePredicate.All,
-                                db.tbl_remuneration.money,
-                                PartitionBy(db.tbl_remuneration.payment_date),
+                    Val = Count(AggregatePredicate.All, db.tbl_remuneration.money).
+                            Over(PartitionBy(db.tbl_remuneration.payment_date),
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 Rows(1, 5))
                 }).
@@ -405,8 +408,8 @@ FROM tbl_remuneration");
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = CountOver(AggregatePredicate.All, Asterisk(),
-                                PartitionBy(db.tbl_remuneration.payment_date),
+                    Val = Count(AggregatePredicate.All, Asterisk()).
+                            Over(PartitionBy(db.tbl_remuneration.payment_date),
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 Rows(1, 5))
                 }).
@@ -435,8 +438,8 @@ FROM tbl_remuneration");
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = MaxOver(db.tbl_remuneration.money,
-                                PartitionBy(db.tbl_remuneration.payment_date),
+                    Val = Max(db.tbl_remuneration.money).
+                            Over(PartitionBy(db.tbl_remuneration.payment_date),
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 Rows(1, 5))
                 }).
@@ -465,8 +468,8 @@ FROM tbl_remuneration");
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = MaxOver(3,
-                                PartitionBy(db.tbl_remuneration.payment_date),
+                    Val = Max(3).
+                            Over(PartitionBy(db.tbl_remuneration.payment_date),
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 Rows(1, 5))
                 }).
@@ -496,8 +499,8 @@ FROM tbl_remuneration", 3);
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = MaxOver(exp,
-                                PartitionBy(db.tbl_remuneration.payment_date),
+                    Val = Max(exp).
+                            Over(PartitionBy(db.tbl_remuneration.payment_date),
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 Rows(1, 5))
                 }).
@@ -526,8 +529,8 @@ FROM tbl_remuneration");
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = MinOver(db.tbl_remuneration.money,
-                                PartitionBy(db.tbl_remuneration.payment_date),
+                    Val = Min(db.tbl_remuneration.money).
+                            Over(PartitionBy(db.tbl_remuneration.payment_date),
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 Rows(1, 5))
                 }).
@@ -556,8 +559,8 @@ FROM tbl_remuneration");
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = MinOver(3,
-                                PartitionBy(db.tbl_remuneration.payment_date),
+                    Val = Min(3).
+                            Over(PartitionBy(db.tbl_remuneration.payment_date),
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 Rows(1, 5))
                 }).
@@ -587,8 +590,8 @@ FROM tbl_remuneration", 3);
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = MinOver(exp,
-                                PartitionBy(db.tbl_remuneration.payment_date),
+                    Val = Min(exp).
+                            Over(PartitionBy(db.tbl_remuneration.payment_date),
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 Rows(1, 5))
                 }).
@@ -617,8 +620,8 @@ FROM tbl_remuneration");
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = First_Value_Over(db.tbl_remuneration.money,
-                                PartitionBy(db.tbl_remuneration.payment_date),
+                    Val = First_Value(db.tbl_remuneration.money).
+                            Over(PartitionBy(db.tbl_remuneration.payment_date),
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 Rows(1, 5))
                 }).
@@ -648,8 +651,8 @@ FROM tbl_remuneration");
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = First_Value_Over(3,
-                                PartitionBy(db.tbl_remuneration.payment_date),
+                    Val = First_Value(3).
+                            Over(PartitionBy(db.tbl_remuneration.payment_date),
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 Rows(1, 5))
                 }).
@@ -679,8 +682,8 @@ FROM tbl_remuneration", 3);
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = First_Value_Over(exp,
-                                PartitionBy(db.tbl_remuneration.payment_date),
+                    Val = First_Value(exp).
+                            Over(PartitionBy(db.tbl_remuneration.payment_date),
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 Rows(1, 5))
                 }).
@@ -709,8 +712,8 @@ FROM tbl_remuneration");
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = Last_Value_Over(db.tbl_remuneration.money,
-                                PartitionBy(db.tbl_remuneration.payment_date),
+                    Val = Last_Value(db.tbl_remuneration.money).
+                            Over(PartitionBy(db.tbl_remuneration.payment_date),
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 Rows(1, 5))
                 }).
@@ -739,8 +742,8 @@ FROM tbl_remuneration");
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = Last_Value_Over(3,
-                                PartitionBy(db.tbl_remuneration.payment_date),
+                    Val = Last_Value(3).
+                            Over(PartitionBy(db.tbl_remuneration.payment_date),
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 Rows(1, 5))
                 }).
@@ -770,8 +773,8 @@ FROM tbl_remuneration", 3);
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = Last_Value_Over(exp,
-                                PartitionBy(db.tbl_remuneration.payment_date),
+                    Val = Last_Value(exp).
+                            Over(PartitionBy(db.tbl_remuneration.payment_date),
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 Rows(1, 5))
                 }).
@@ -800,8 +803,8 @@ FROM tbl_remuneration");
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = RankOver(
-                                null,
+                    Val = Rank().
+                            Over(null,
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 null)
                 }).
@@ -827,8 +830,8 @@ FROM tbl_remuneration");
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = Dense_Rank_Over(
-                                null,
+                    Val = Dense_Rank().
+                            Over(null,
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 null)
                 }).
@@ -855,8 +858,8 @@ FROM tbl_remuneration");
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData
                 {
-                    Val = (decimal)Percent_Rank_Over(
-                                null,
+                    Val = (decimal)Percent_Rank().
+                            Over(null,
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 null)
                 }).
@@ -882,8 +885,8 @@ FROM tbl_remuneration");
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = (decimal)Cume_Dist_Over(
-                                null,
+                    Val = (decimal)Cume_Dist().
+                            Over(null,
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 null)
                 }).
@@ -910,8 +913,8 @@ FROM tbl_remuneration");
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = NtileOver(2,
-                                null,
+                    Val = Ntile(2).
+                            Over(null,
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 null)
                 }).
@@ -939,8 +942,8 @@ FROM tbl_remuneration", 2);
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = NtileOver(exp,
-                                null,
+                    Val = Ntile(exp).
+                            Over(null,
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 null)
                 }).
@@ -966,8 +969,8 @@ FROM tbl_remuneration", 2);
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = Nth_Value_Over(db.tbl_remuneration.money, 2,
-                                null,
+                    Val = Nth_Value(db.tbl_remuneration.money, 2).
+                            Over(null,
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 Rows(1, 5))
                 }).
@@ -993,8 +996,8 @@ FROM tbl_remuneration", 2);
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = Nth_Value_Over(2, (long)db.tbl_remuneration.money,
-                                null,
+                    Val = Nth_Value(2, (long)db.tbl_remuneration.money).
+                            Over(null,
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 Rows(1, 5))
                 }).
@@ -1018,13 +1021,13 @@ FROM tbl_remuneration", 2);
             if (_connection.GetType().Name != "OracleConnection" &&
                 _connection.GetType().Name != "DB2Connection") return;
 
-            var exp1  = Sql<DB>.Create(db => db.tbl_remuneration.money);
-            var exp2  = Sql<DB>.Create(db => (long)2);
+            var exp1 = Sql<DB>.Create(db => db.tbl_remuneration.money);
+            var exp2 = Sql<DB>.Create(db => (long)2);
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = Nth_Value_Over(exp1, exp2,
-                                null,
+                    Val = Nth_Value(exp1, exp2).
+                            Over(null,
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 Rows(1, 5))
                 }).
@@ -1051,8 +1054,8 @@ FROM tbl_remuneration", (long)2);
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = LagOver(db.tbl_remuneration.money,
-                                null,
+                    Val = Lag(db.tbl_remuneration.money).
+                            Over(null,
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 null)
                 }).
@@ -1078,8 +1081,8 @@ FROM tbl_remuneration");
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = LagOver(3,
-                                null,
+                    Val = Lag(3).
+                            Over(null,
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 null)
                 }).
@@ -1106,8 +1109,8 @@ FROM tbl_remuneration", 3);
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = LagOver(exp,
-                                null,
+                    Val = Lag(exp).
+                            Over(null,
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 null)
                 }).
@@ -1134,8 +1137,8 @@ FROM tbl_remuneration");
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = LagOver(db.tbl_remuneration.money, 2,
-                                null,
+                    Val = Lag(db.tbl_remuneration.money, 2).
+                            Over(null,
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 null)
                 }).
@@ -1164,8 +1167,8 @@ FROM tbl_remuneration", 2);
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = LagOver(3, db.tbl_remuneration.id,
-                                null,
+                    Val = Lag(3, db.tbl_remuneration.id).
+                            Over(null,
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 null)
                 }).
@@ -1181,7 +1184,7 @@ FROM tbl_remuneration", 2);
 			tbl_remuneration.money ASC) AS Val
 FROM tbl_remuneration", 3);
         }
-        
+
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Lag2_3()
         {
@@ -1194,8 +1197,8 @@ FROM tbl_remuneration", 3);
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = LagOver(exp1, exp2,
-                                null,
+                    Val = Lag(exp1, exp2).
+                            Over(null,
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 null)
                 }).
@@ -1223,8 +1226,8 @@ FROM tbl_remuneration", 2);
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = LagOver(db.tbl_remuneration.money, 2, 100,
-                                null,
+                    Val = Lag(db.tbl_remuneration.money, 2, 100).
+                            Over(null,
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 null)
                 }).
@@ -1252,8 +1255,8 @@ FROM tbl_remuneration", 2, (decimal)100);
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = LagOver(2000, db.tbl_remuneration.id, db.tbl_remuneration.id,
-                                null,
+                    Val = Lag(2000, db.tbl_remuneration.id, db.tbl_remuneration.id).
+                            Over(null,
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 null)
                 }).
@@ -1284,8 +1287,8 @@ FROM tbl_remuneration", 2000);
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = LagOver(exp1.Body, exp2, exp3,
-                                null,
+                    Val = Lag(exp1.Body, exp2, exp3).
+                            Over(null,
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 null)
                 }).
@@ -1301,7 +1304,7 @@ FROM tbl_remuneration", 2000);
 			tbl_remuneration.money ASC) AS Val
 FROM tbl_remuneration", 2, 100);
         }
-        
+
         //TODO PARTITION BY のテストが少し弱いかな？
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_PartitionBy()
@@ -1312,8 +1315,8 @@ FROM tbl_remuneration", 2, 100);
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = CountOver(db.tbl_remuneration.money,
-                                PartitionBy(db.tbl_staff.name, db.tbl_remuneration.payment_date),
+                    Val = Count(db.tbl_remuneration.money).
+                            Over(PartitionBy(db.tbl_staff.name, db.tbl_remuneration.payment_date),
                                 OrderBy(Asc(db.tbl_remuneration.money), Desc(db.tbl_remuneration.payment_date)),
                                 Rows(1, 5))
                 }).
@@ -1346,8 +1349,8 @@ FROM tbl_remuneration
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = CountOver(db.tbl_remuneration.money,
-                                PartitionBy(db.tbl_remuneration.payment_date),
+                    Val = Count(db.tbl_remuneration.money).
+                            Over(PartitionBy(db.tbl_remuneration.payment_date),
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 Rows(1))
                 }).
@@ -1375,8 +1378,8 @@ FROM tbl_remuneration");
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = CountOver(db.tbl_remuneration.money,
-                                PartitionBy(db.tbl_remuneration.payment_date),
+                    Val = Count(db.tbl_remuneration.money).
+                            Over(PartitionBy(db.tbl_remuneration.payment_date),
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 Rows((int)db.tbl_remuneration.money))
                 }).
@@ -1408,8 +1411,8 @@ FROM tbl_remuneration");
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = CountOver(db.tbl_remuneration.money,
-                                PartitionBy(db.tbl_remuneration.payment_date),
+                    Val = Count(db.tbl_remuneration.money).
+                            Over(PartitionBy(db.tbl_remuneration.payment_date),
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 Rows(exp))
                 }).
@@ -1440,8 +1443,8 @@ FROM tbl_remuneration");
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = CountOver(db.tbl_remuneration.money,
-                                PartitionBy(db.tbl_remuneration.payment_date),
+                    Val = Count(db.tbl_remuneration.money).
+                            Over(PartitionBy(db.tbl_remuneration.payment_date),
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 Rows(1, 3))
                 }).
@@ -1469,8 +1472,8 @@ FROM tbl_remuneration");
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = CountOver(db.tbl_remuneration.money,
-                                PartitionBy(db.tbl_remuneration.payment_date),
+                    Val = Count(db.tbl_remuneration.money).
+                            Over(PartitionBy(db.tbl_remuneration.payment_date),
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 Rows((int)db.tbl_remuneration.money, (int)db.tbl_remuneration.money))
                 }).
@@ -1503,8 +1506,8 @@ FROM tbl_remuneration");
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = CountOver(db.tbl_remuneration.money,
-                                PartitionBy(db.tbl_remuneration.payment_date),
+                    Val = Count(db.tbl_remuneration.money).
+                            Over(PartitionBy(db.tbl_remuneration.payment_date),
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 Rows(exp1, exp2))
                 }).
@@ -1533,8 +1536,8 @@ FROM tbl_remuneration");
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = CountOver(db.tbl_remuneration.money,
-                                PartitionBy(db.tbl_remuneration.payment_date),
+                    Val = Count(db.tbl_remuneration.money).
+                            Over(PartitionBy(db.tbl_remuneration.payment_date),
                                 OrderBy(Asc(db.tbl_remuneration.money), Desc(db.tbl_remuneration.payment_date)),
                                 Rows(1, 5))
                 }).
@@ -1566,8 +1569,8 @@ FROM tbl_remuneration");
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = CountOver(db.tbl_remuneration.money,
-                                PartitionBy(db.tbl_remuneration.payment_date),
+                    Val = Count(db.tbl_remuneration.money).
+                            Over(PartitionBy(db.tbl_remuneration.payment_date),
                                 OrderBy(exp1.Cast<ISortedBy>(), exp2.Cast<ISortedBy>()),
                                 Rows(1, 5))
                 }).
@@ -1589,6 +1592,169 @@ FROM tbl_remuneration");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Over1_1()
+        {
+            if (_connection.GetType().Name == "SQLiteConnection") return;
+            if (_connection.GetType().Name == "MySqlConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData()
+                {
+                    Val = Count(db.tbl_remuneration.money).
+                            Over(PartitionBy(db.tbl_remuneration.payment_date))
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	COUNT(tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date) AS Val
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Over1_2()
+        {
+            if (_connection.GetType().Name == "SQLiteConnection") return;
+            if (_connection.GetType().Name == "MySqlConnection") return;
+
+            var partitionBy = Sql<DB>.Create(db => PartitionBy(db.tbl_remuneration.payment_date));
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData()
+                {
+                    Val = Count(db.tbl_remuneration.money).
+                            Over(partitionBy.Body)
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	COUNT(tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date) AS Val
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Over2_1()
+        {
+            if (_connection.GetType().Name == "SQLiteConnection") return;
+            if (_connection.GetType().Name == "MySqlConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData()
+                {
+                    Val = Count(db.tbl_remuneration.money).
+                            Over(PartitionBy(db.tbl_remuneration.payment_date),
+                                OrderBy(Asc(db.tbl_remuneration.money)))
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	COUNT(tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC) AS Val
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Over2_2()
+        {
+            if (_connection.GetType().Name == "SQLiteConnection") return;
+            if (_connection.GetType().Name == "MySqlConnection") return;
+
+            var partitionBy = Sql<DB>.Create(db => PartitionBy(db.tbl_remuneration.payment_date));
+            var orderBy = Sql<DB>.Create(db => OrderBy(Asc(db.tbl_remuneration.money)));
+
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData()
+                {
+                    Val = Count(db.tbl_remuneration.money).
+                            Over(partitionBy.Body, orderBy.Body)
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	COUNT(tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC) AS Val
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Over3_1()
+        {
+            if (_connection.GetType().Name != "NpgsqlConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData()
+                {
+                    Val = Count(db.tbl_remuneration.money).
+                            Over(PartitionBy(db.tbl_remuneration.payment_date),
+                                Rows(1, 5))
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	COUNT(tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Over3_2()
+        {
+            if (_connection.GetType().Name != "NpgsqlConnection") return;
+
+            var partitionBy = Sql<DB>.Create(db => PartitionBy(db.tbl_remuneration.payment_date));
+            var rows = Sql<DB>.Create(db => Rows(1, 5));
+
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData()
+                {
+                    Val = Count(db.tbl_remuneration.money).
+                            Over(partitionBy.Body, rows.Body)
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	COUNT(tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Over4_1()
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
@@ -1597,8 +1763,8 @@ FROM tbl_remuneration");
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = CountOver(db.tbl_remuneration.money,
-                                PartitionBy(db.tbl_remuneration.payment_date),
+                    Val = Count(db.tbl_remuneration.money).
+                            Over(PartitionBy(db.tbl_remuneration.payment_date),
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 Rows(1, 5))
                 }).
@@ -1623,11 +1789,15 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
-            
+
+            var partitionBy = Sql<DB>.Create(db => PartitionBy(db.tbl_remuneration.payment_date));
+            var orderBy = Sql<DB>.Create(db => OrderBy(Asc(db.tbl_remuneration.money)));
+            var rows = Sql<DB>.Create(db => Rows(1, 5));
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = CountOver(db.tbl_remuneration.money, PartitionBy(db.tbl_remuneration.payment_date), OrderBy(Asc(db.tbl_remuneration.money)), Rows(1, 5))
+                    Val = Count(db.tbl_remuneration.money).
+                            Over(partitionBy.Body, orderBy.Body, rows.Body)
                 }).
                 From(db.tbl_remuneration));
 
@@ -1641,6 +1811,163 @@ FROM tbl_remuneration");
 			tbl_remuneration.payment_date
 		ORDER BY
 			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Over5_1()
+        {
+            if (_connection.GetType().Name == "SQLiteConnection") return;
+            if (_connection.GetType().Name == "MySqlConnection") return;
+
+            var partitionBy = Sql<DB>.Create(db => PartitionBy(db.tbl_remuneration.payment_date));
+            var orderBy = Sql<DB>.Create(db => OrderBy(Asc(db.tbl_remuneration.money)));
+            var rows = Sql<DB>.Create(db => Rows(1, 5));
+
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData()
+                {
+                    Val = Count(db.tbl_remuneration.money).
+                            Over(OrderBy(Asc(db.tbl_remuneration.money)))
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	COUNT(tbl_remuneration.money)
+	OVER(
+		ORDER BY
+			tbl_remuneration.money ASC) AS Val
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Over5_2()
+        {
+            if (_connection.GetType().Name == "SQLiteConnection") return;
+            if (_connection.GetType().Name == "MySqlConnection") return;
+
+            var orderBy = Sql<DB>.Create(db => OrderBy(Asc(db.tbl_remuneration.money)));
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData()
+                {
+                    Val = Count(db.tbl_remuneration.money).
+                            Over(orderBy.Body)
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	COUNT(tbl_remuneration.money)
+	OVER(
+		ORDER BY
+			tbl_remuneration.money ASC) AS Val
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Over6_1()
+        {
+            if (_connection.GetType().Name == "SQLiteConnection") return;
+            if (_connection.GetType().Name == "MySqlConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData()
+                {
+                    Val = Count(db.tbl_remuneration.money).
+                            Over(OrderBy(Asc(db.tbl_remuneration.money)),
+                                Rows(1, 5))
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	COUNT(tbl_remuneration.money)
+	OVER(
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Over6_2()
+        {
+            if (_connection.GetType().Name == "SQLiteConnection") return;
+            if (_connection.GetType().Name == "MySqlConnection") return;
+
+            var orderBy = Sql<DB>.Create(db => OrderBy(Asc(db.tbl_remuneration.money)));
+            var rows = Sql<DB>.Create(db => Rows(1, 5));
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData()
+                {
+                    Val = Count(db.tbl_remuneration.money).
+                            Over(orderBy.Body, rows.Body)
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	COUNT(tbl_remuneration.money)
+	OVER(
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Over7_1()
+        {
+            if (_connection.GetType().Name != "NpgsqlConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData()
+                {
+                    Val = Count(db.tbl_remuneration.money).
+                            Over(Rows(1, 5))
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	COUNT(tbl_remuneration.money)
+	OVER(
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Over7_2()
+        {
+            if (_connection.GetType().Name != "NpgsqlConnection") return;
+
+            var rows = Sql<DB>.Create(db => Rows(1, 5));
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData()
+                {
+                    Val = Count(db.tbl_remuneration.money).
+                            Over(rows.Body)
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	COUNT(tbl_remuneration.money)
+	OVER(
 		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
 FROM tbl_remuneration");
         }

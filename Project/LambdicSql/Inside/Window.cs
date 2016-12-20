@@ -49,30 +49,7 @@ namespace LambdicSql.Inside
 
             return partitionBy;
         }
-        /*
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        /// <param name="elements">Specify column and sort order. Asc(column) or Desc(column).</param>
-        public static IOrderBy OrderBy(params ISortedBy[] elements) => InvalitContext.Throw<IOrderBy>(nameof(OrderBy));
 
-        static SqlText ConvertOrderBy(ISqlStringConverter converter, MethodCallExpression[] methods)
-        {
-            var exp = methods[0];
-            var orderBy = new VText();
-            orderBy.Add("ORDER BY");
-
-            var elements = new VText() { Indent = 1, Separator = "," };
-            var array = exp.Arguments[0] as NewArrayExpression;
-            foreach (var e in array.Expressions.Select(e => converter.Convert(e)))
-            {
-                elements.Add(e);
-            }
-            orderBy.Add(elements);
-
-            return orderBy;
-        }*/
-        
         internal static SqlText MakeOver(ISqlStringConverter converter, MethodCallExpression[] methods, VText v, int argCount)
         {
             v.Add("OVER(");

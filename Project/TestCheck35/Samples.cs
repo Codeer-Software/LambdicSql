@@ -731,7 +731,7 @@ namespace TestCheck35
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData8()
                 {
-                    Avg = AvgOver(db.tbl_remuneration.money,
+                    Avg = Avg(db.tbl_remuneration.money).Over(
                                 PartitionBy(db.tbl_staff.name, db.tbl_remuneration.payment_date),
                                 OrderBy(Asc(db.tbl_remuneration.money), Desc(db.tbl_remuneration.payment_date)),
                                 Rows(1, 5)),
