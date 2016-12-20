@@ -44,9 +44,7 @@
     <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assign.cs" />
     <Compile Include="KeywordsSub.cs" />
-    <Compile Include="DateTimeElement.cs" />
     <Compile Include="feat\Dapper\DapperApaptExtensions.cs" />
     <Compile Include="feat\Dapper\DapperWrapper.cs" />
     <Compile Include="feat\EntityFramework\EFAdaptSqlSyntaxExtensions.cs" />
@@ -86,7 +84,6 @@
     <Compile Include="SqlBase\ISqlExpressionBase.cs" />
     <Compile Include="ISqlQuery.cs" />
     <Compile Include="SqlBase\IClauseChain.cs" />
-    <Compile Include="AggregatePredicate.cs" />
     <Compile Include="ISqlExpression.cs" />
     <Compile Include="DbParam.cs" />
     <Compile Include="SqlBase\MethodGroupAttribute.cs" />
@@ -102,7 +99,6 @@
     <Compile Include="SqlBase\SqlConvertOption.cs" />
     <Compile Include="SqlInfo.cs" />
     <Compile Include="SqlExpressionExtensions.cs" />
-    <Compile Include="SysibmType.cs" />
     <Compile Include="Inside\Utils.cs" />
     <Compile Include="Inside\Window.cs" />
     <Compile Include="Inside\Keywords\FromClause.cs" />

@@ -1,4 +1,7 @@
-﻿using LambdicSql.SqlBase;
+﻿using LambdicSql.Inside;
+using LambdicSql.SqlBase;
+using LambdicSql.SqlBase.TextParts;
+using System.Linq.Expressions;
 
 namespace LambdicSql
 {
@@ -51,5 +54,138 @@ namespace LambdicSql
     public class Non
     {
         private Non() { }
+    }
+
+    /// <summary>
+    /// Aggregation predicate.
+    /// </summary>
+    [SqlSyntax]
+    public enum AggregatePredicate
+    {
+        /// <summary>
+        /// All.
+        /// </summary>
+        All,
+
+        /// <summary>
+        /// Distinct.
+        /// </summary>
+        Distinct
+    }
+
+    /// <summary>
+    /// Element of DateTime.
+    /// </summary>
+    [SqlSyntax]
+    public enum DateTimeElement
+    {
+        /// <summary>
+        /// Year.
+        /// </summary>
+        Year,
+
+        /// <summary>
+        /// Quarter.
+        /// </summary>
+        Quarter,
+
+        /// <summary>
+        /// Month.
+        /// </summary>
+        Month,
+
+        /// <summary>
+        /// Dayofyear.
+        /// </summary>
+        Dayofyear,
+
+        /// <summary>
+        /// Day.
+        /// </summary>
+        Day,
+
+        /// <summary>
+        /// Week.
+        /// </summary>
+        Week,
+
+        /// <summary>
+        /// Weekday.
+        /// </summary>
+        Weekday,
+
+        /// <summary>
+        /// Hour.
+        /// </summary>
+        Hour,
+
+        /// <summary>
+        /// Minute.
+        /// </summary>
+        Minute,
+
+        /// <summary>
+        /// Second.
+        /// </summary>
+        Second,
+
+        /// <summary>
+        /// Millisecond.
+        /// </summary>
+        Millisecond,
+
+        /// <summary>
+        /// Microsecond.
+        /// </summary>
+        Microsecond,
+
+        /// <summary>
+        /// Nanosecond.
+        /// </summary>
+        Nanosecond,
+
+        /// <summary>
+        /// ISO_WEEK.
+        /// </summary>
+        ISO_WEEK,
+    }
+
+    //TODO 若干残念な感はある・・・
+    /// <summary>
+    /// It represents assignment. It is used in the Set clause.
+    /// new Assign(db.tbl_staff.name, name) -> tbl_staff.name = "@name"
+    /// </summary>
+    [SqlSyntax]
+    public class Assign
+    {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="rhs">Rvalue</param>
+        /// <param name="lhs">Lvalue</param>
+        public Assign(object rhs, object lhs) { InvalitContext.Throw("new " + nameof(Assign)); }
+
+        static SqlText Convert(ISqlStringConverter converter, NewExpression exp)
+        {
+            SqlText arg1 = converter.Convert(exp.Arguments[0]).Customize(new CustomizeColumnOnly());
+            return new HText(arg1, "=", converter.Convert(exp.Arguments[1])) { Separator = " " };
+        }
+    }
+
+    /// <summary>
+    /// SYSIBM keyword.
+    /// </summary>
+    [SqlSyntax]
+    public class SysibmType
+    {
+        internal SysibmType() { }
+
+        /// <summary>
+        /// SYSDUMMY1 keyword.
+        /// </summary>
+        public object Sysdummy1 => InvalitContext.Throw<long>(nameof(Sysdummy1));
+
+        static SqlText Convert(ISqlStringConverter converter, MemberExpression member)
+            => "SYSIBM." + member.Member.Name.ToUpper();
     }
 }

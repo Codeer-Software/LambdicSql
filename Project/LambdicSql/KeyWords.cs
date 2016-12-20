@@ -979,6 +979,7 @@ namespace LambdicSql
         /// <typeparam name="T">Type represented by expression.</typeparam>
         /// <param name="column">The column or expression that is function target.</param>
         /// <returns>Total.</returns>
+        //TODO Windowじゃなくて、集約だったらいいんかな？
         [MethodGroup(nameof(Window))]
         public static T Sum<T>(T column) => InvalitContext.Throw<T>(nameof(Sum));
 
