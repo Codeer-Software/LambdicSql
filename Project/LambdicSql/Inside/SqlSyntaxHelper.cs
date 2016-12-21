@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Linq;
 using System.Reflection;
 using LambdicSql.SqlBase.TextParts;
+using System.Runtime.CompilerServices;
 
 namespace LambdicSql.Inside
 {
@@ -16,6 +17,8 @@ namespace LambdicSql.Inside
         static Dictionary<Type, Func<ISqlStringConverter, MemberExpression, SqlText>> _memberToStrings = new Dictionary<Type, Func<ISqlStringConverter, MemberExpression, SqlText>>();
         static Dictionary<Type, Func<ISqlStringConverter, NewExpression, SqlText>> _newToStrings = new Dictionary<Type, Func<ISqlStringConverter, NewExpression, SqlText>>();
         static Dictionary<Type, bool> _isSqlSyntax = new Dictionary<Type, bool>();
+        static Dictionary<MetaId, bool> _isForcedMethodGroup = new Dictionary<MetaId, bool>();
+        static Dictionary<MetaId, bool> _isExtension = new Dictionary<MetaId, bool>();
         static Dictionary<MetaId, bool> _canResolveSqlSyntaxMethodChain = new Dictionary<MetaId, bool>();
         static Dictionary<MetaId, string> _methodGroup = new Dictionary<MetaId, string>();
 
@@ -26,8 +29,38 @@ namespace LambdicSql.Inside
                 bool check;
                 if (!_isSqlSyntax.TryGetValue(type, out check))
                 {
-                    check = type.GetCustomAttributes(true).Any(e=>e is SqlSyntaxAttribute);
+                    check = type.GetCustomAttributes(true).Any(e => e is SqlSyntaxAttribute);
                     _isSqlSyntax[type] = check;
+                }
+                return check;
+            }
+        }
+        
+        internal static bool IsForcedMethodGroup(this MethodInfo methodInfo)
+        {
+            var id = new MetaId(methodInfo);
+            lock (_isForcedMethodGroup)
+            {
+                bool check;
+                if (!_isForcedMethodGroup.TryGetValue(id, out check))
+                {
+                    check = methodInfo.IsDefined(typeof(ForcedMethodGroupAttribute), false);
+                    _isForcedMethodGroup[id] = check;
+                }
+                return check;
+            }
+        }
+
+        internal static bool IsExtension(this MethodInfo methodInfo)
+        {
+            var id = new MetaId(methodInfo);
+            lock (_isExtension)
+            {
+                bool check;
+                if (!_isExtension.TryGetValue(id, out check))
+                {
+                    check = methodInfo.IsDefined(typeof(ExtensionAttribute), false);
+                    _isExtension[id] = check;
                 }
                 return check;
             }
@@ -35,9 +68,9 @@ namespace LambdicSql.Inside
 
         internal static bool CanResolveSqlSyntaxMethodChain(this MethodInfo methodInfo)
         {
+            var id = new MetaId(methodInfo);
             lock (_canResolveSqlSyntaxMethodChain)
             {
-                var id = new MetaId(methodInfo);
                 bool check;
                 if (!_canResolveSqlSyntaxMethodChain.TryGetValue(id, out check))
                 {
@@ -130,10 +163,10 @@ namespace LambdicSql.Inside
 
         internal static string GetMethodGroupName(this MethodInfo methodInfo)
         {
+            var id = new MetaId(methodInfo);
             lock (_methodGroup)
             {
                 string groupName;
-                var id = new MetaId(methodInfo);
                 if (_methodGroup.TryGetValue(id, out groupName)) return groupName;
 
                 var attr = methodInfo.GetCustomAttributes(typeof(MethodGroupAttribute), true).Cast<MethodGroupAttribute>().FirstOrDefault();

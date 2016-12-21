@@ -979,8 +979,6 @@ namespace LambdicSql
         /// <typeparam name="T">Type represented by expression.</typeparam>
         /// <param name="column">The column or expression that is function target.</param>
         /// <returns>Total.</returns>
-        //TODO Windowじゃなくて、集約だったらいいんかな？
-        [MethodGroup(nameof(Window))]
         public static T Sum<T>(T column) => InvalitContext.Throw<T>(nameof(Sum));
 
         /// <summary>
@@ -990,7 +988,6 @@ namespace LambdicSql
         /// <param name="aggregatePredicate">Specify All or Distinct.</param>
         /// <param name="column">The column or expression that is function target.</param>
         /// <returns>Total.</returns>
-        [MethodGroup(nameof(Window))]
         public static T Sum<T>(AggregatePredicate aggregatePredicate, T column) => InvalitContext.Throw<T>(nameof(Sum));
 
         /// <summary>
@@ -998,7 +995,6 @@ namespace LambdicSql
         /// </summary>
         /// <param name="column">The column or expression that is function target.</param>
         /// <returns>Count.</returns>
-        [MethodGroup(nameof(Window))]
         public static int Count(object column) => InvalitContext.Throw<int>(nameof(Count));
 
         /// <summary>
@@ -1006,7 +1002,6 @@ namespace LambdicSql
         /// </summary>
         /// <param name="asterisk">*</param>
         /// <returns>Count.</returns>
-        [MethodGroup(nameof(Window))]
         public static int Count(IAsterisk asterisk) => InvalitContext.Throw<int>(nameof(Count));
 
         /// <summary>
@@ -1015,7 +1010,6 @@ namespace LambdicSql
         /// <param name="aggregatePredicate">Specify All or Distinct.</param>
         /// <param name="column">The column or expression that is function target.</param>
         /// <returns>Count.</returns>
-        [MethodGroup(nameof(Window))]
         public static int Count(AggregatePredicate aggregatePredicate, object column) => InvalitContext.Throw<int>(nameof(Count));
 
         /// <summary>
@@ -1024,7 +1018,6 @@ namespace LambdicSql
         /// <param name="aggregatePredicate">Specify All or Distinct.</param>
         /// <param name="asterisk">*</param>
         /// <returns>Count.</returns>
-        [MethodGroup(nameof(Window))]
         public static int Count(AggregatePredicate aggregatePredicate, IAsterisk asterisk) => InvalitContext.Throw<int>(nameof(Count));
 
         /// <summary>
@@ -1032,7 +1025,6 @@ namespace LambdicSql
         /// </summary>
         /// <param name="column">The column or expression that is function target.</param>
         /// <returns>Average.</returns>
-        [MethodGroup(nameof(Window))]
         public static double Avg(object column) => InvalitContext.Throw<double>(nameof(Avg));
 
         /// <summary>
@@ -1041,7 +1033,6 @@ namespace LambdicSql
         /// <typeparam name="T">Type represented by expression.</typeparam>
         /// <param name="column">The column or expression that is function target.</param>
         /// <returns>Minimum.</returns>
-        [MethodGroup(nameof(Window))]
         public static T Min<T>(T column) => InvalitContext.Throw<T>(nameof(Min));
 
         /// <summary>
@@ -1050,7 +1041,6 @@ namespace LambdicSql
         /// <typeparam name="T">Type represented by expression.</typeparam>
         /// <param name="column">The column or expression that is function target.</param>
         /// <returns>Maximum.</returns>
-        [MethodGroup(nameof(Window))]
         public static T Max<T>(T column) => InvalitContext.Throw<T>(nameof(Max));
 
         /// <summary>
@@ -1059,7 +1049,6 @@ namespace LambdicSql
         /// <typeparam name="T">Type represented by expression.</typeparam>
         /// <param name="column">The column or expression that is function target.</param>
         /// <returns>Absolute value.</returns>
-        [MethodGroup(nameof(Window))]
         public static T Abs<T>(T column) => InvalitContext.Throw<T>(nameof(Abs));
 
         /// <summary>
@@ -1183,7 +1172,6 @@ namespace LambdicSql
         /// <typeparam name="T">Type represented by expression.</typeparam>
         /// <param name="column">The column or expression that is function target.</param>
         /// <returns>It is an object for describing the continuation of the OVER expression.</returns>
-        [MethodGroup(nameof(Window))]
         public static T First_Value<T>(T column) => InvalitContext.Throw<T>(nameof(First_Value));
 
         /// <summary>
@@ -1192,35 +1180,30 @@ namespace LambdicSql
         /// <typeparam name="T">Type represented by expression.</typeparam>
         /// <param name="column">The column or expression that is function target.</param>
         /// <returns>It is an object for describing the continuation of the OVER expression.</returns>
-        [MethodGroup(nameof(Window))]
         public static T Last_Value<T>(T column) => InvalitContext.Throw<T>(nameof(Last_Value));
 
         /// <summary>
         /// RANK function.
         /// </summary>
         /// <returns>It is an object for describing the continuation of the OVER expression.</returns>
-        [MethodGroup(nameof(Window))]
         public static int Rank() => InvalitContext.Throw<int>(nameof(Rank));
 
         /// <summary>
         /// DENSE_RANK function.
         /// </summary>
         /// <returns>It is an object for describing the continuation of the OVER expression.</returns>
-        [MethodGroup(nameof(Window))]
         public static int Dense_Rank() => InvalitContext.Throw<int>(nameof(Dense_Rank));
 
         /// <summary>
         /// PERCENT_RANK function.
         /// </summary>
         /// <returns>It is an object for describing the continuation of the OVER expression.</returns>
-        [MethodGroup(nameof(Window))]
         public static double Percent_Rank() => InvalitContext.Throw<double>(nameof(Percent_Rank));
 
         /// <summary>
         /// CUME_DIST function.
         /// </summary>
         /// <returns>It is an object for describing the continuation of the OVER expression.</returns>
-        [MethodGroup(nameof(Window))]
         public static double Cume_Dist() => InvalitContext.Throw<double>(nameof(Cume_Dist));
 
         /// <summary>
@@ -1228,7 +1211,6 @@ namespace LambdicSql
         /// </summary>
         /// <param name="groupCount">The number of ranking groups.</param>
         /// <returns>It is an object for describing the continuation of the OVER expression.</returns>
-        [MethodGroup(nameof(Window))]
         public static int Ntile(object groupCount) => InvalitContext.Throw<int>(nameof(Ntile));
 
         /// <summary>
@@ -1237,7 +1219,6 @@ namespace LambdicSql
         /// <param name="column">The column or expression that is function target.</param>
         /// <param name="offset">Specify the number of lines associated with the first line of the window that returns the expression.</param>
         /// <returns>It is an object for describing the continuation of the OVER expression.</returns>
-        [MethodGroup(nameof(Window))]
         public static int Nth_Value(object column, object offset) => InvalitContext.Throw<int>(nameof(Nth_Value));
 
         /// <summary>
@@ -1246,7 +1227,6 @@ namespace LambdicSql
         /// <typeparam name="T">Type represented by expression.</typeparam>
         /// <param name="column">The column or expression that is function target.</param>
         /// <returns>It is an object for describing the continuation of the OVER expression.</returns>
-        [MethodGroup(nameof(Window))]
         public static T Lag<T>(T column) => InvalitContext.Throw<T>(nameof(Lag));
 
         /// <summary>
@@ -1256,7 +1236,6 @@ namespace LambdicSql
         /// <param name="column">The column or expression that is function target.</param>
         /// <param name="offset">An optional parameter that specifies the number of lines before the current line that returns a value.</param>
         /// <returns>It is an object for describing the continuation of the OVER expression.</returns>
-        [MethodGroup(nameof(Window))]
         public static T Lag<T>(T column, object offset) => InvalitContext.Throw<T>(nameof(Lag));
 
         /// <summary>
@@ -1267,7 +1246,6 @@ namespace LambdicSql
         /// <param name="offset">An optional parameter that specifies the number of lines before the current line that returns a value.</param>
         /// <param name="default">The value returned if the value specified by offset is NULL.</param>
         /// <returns>It is an object for describing the continuation of the OVER expression.</returns>
-        [MethodGroup(nameof(Window))]
         public static T Lag<T>(T column, object offset, T @default) => InvalitContext.Throw<T>(nameof(Lag));
 
         /// <summary>
@@ -1298,7 +1276,7 @@ namespace LambdicSql
         /// <param name="orderBy">ORDER BY keyword.</param>
         /// <param name="rows">ROWS keyword.</param>
         /// <returns>It is the result of Window function.</returns>
-        [MethodGroup(nameof(Window)), MethodChain]
+        [ForcedMethodGroup]
         public static T Over<T>(this T before, IPartitionBy partitionBy, IOrderBy orderBy, IRows rows) => InvalitContext.Throw<T>(nameof(Over));
 
         /// <summary>
@@ -1309,7 +1287,7 @@ namespace LambdicSql
         /// <param name="partitionBy">PARTITION BY keyword.</param>
         /// <param name="orderBy">ORDER BY keyword.</param>
         /// <returns>It is the result of Window function.</returns>
-        [MethodGroup(nameof(Window)), MethodChain]
+        [ForcedMethodGroup]
         public static T Over<T>(this T before, IPartitionBy partitionBy, IOrderBy orderBy) => InvalitContext.Throw<T>(nameof(Over));
 
         /// <summary>
@@ -1320,7 +1298,7 @@ namespace LambdicSql
         /// <param name="partitionBy">PARTITION BY keyword.</param>
         /// <param name="rows">ROWS keyword.</param>
         /// <returns>It is the result of Window function.</returns>
-        [MethodGroup(nameof(Window)), MethodChain]
+        [ForcedMethodGroup]
         public static T Over<T>(this T before, IPartitionBy partitionBy, IRows rows) => InvalitContext.Throw<T>(nameof(Over));
 
         /// <summary>
@@ -1331,7 +1309,7 @@ namespace LambdicSql
         /// <param name="orderBy">ORDER BY keyword.</param>
         /// <param name="rows">Getting row order.</param>
         /// <returns>It is the result of Window function.</returns>
-        [MethodGroup(nameof(Window)), MethodChain]
+        [ForcedMethodGroup]
         public static T Over<T>(this T before, IOrderBy orderBy, IRows rows) => InvalitContext.Throw<T>(nameof(Over));
 
         /// <summary>
@@ -1341,7 +1319,7 @@ namespace LambdicSql
         /// <param name="before">It is an before expression in the Windwo function.</param>
         /// <param name="partitionBy">PARTITION BY keyword.</param>
         /// <returns>It is the result of Window function.</returns>
-        [MethodGroup(nameof(Window)), MethodChain]
+        [ForcedMethodGroup]
         public static T Over<T>(this T before, IPartitionBy partitionBy) => InvalitContext.Throw<T>(nameof(Over));
 
         /// <summary>
@@ -1351,7 +1329,7 @@ namespace LambdicSql
         /// <param name="before">It is an before expression in the Windwo function.</param>
         /// <param name="orderBy">ORDER BY keyword.</param>
         /// <returns>It is the result of Window function.</returns>
-        [MethodGroup(nameof(Window)), MethodChain]
+        [ForcedMethodGroup]
         public static T Over<T>(this T before, IOrderBy orderBy) => InvalitContext.Throw<T>(nameof(Over));
 
         /// <summary>
@@ -1361,7 +1339,7 @@ namespace LambdicSql
         /// <param name="before">It is an before expression in the Windwo function.</param>
         /// <param name="rows">Getting row order.</param>
         /// <returns>It is the result of Window function.</returns>
-        [MethodGroup(nameof(Window)), MethodChain]
+        [ForcedMethodGroup]
         public static T Over<T>(this T before, IRows rows) => InvalitContext.Throw<T>(nameof(Over));
         #endregion
 

@@ -436,6 +436,7 @@ namespace LambdicSql.Inside
             }
         }
 
+        //TODO refactoring.
         static List<List<MethodCallExpression>> GetMethodChains(MethodCallExpression end)
         {
             //resolve chain.
@@ -451,16 +452,18 @@ namespace LambdicSql.Inside
                 var type = curent.Method.DeclaringType;
                 var group = new List<MethodCallExpression>();
                 string groupName = string.Empty;
+                bool forcedMethodGroup = false;
                 while (true)
                 {
                     var oldGroupName = groupName;
                     var currentGroupName = curent.Method.GetMethodGroupName();
                     groupName = currentGroupName;
-                    if (!string.IsNullOrEmpty(oldGroupName) && oldGroupName != currentGroupName)
+                    if (!forcedMethodGroup && !string.IsNullOrEmpty(oldGroupName) && oldGroupName != currentGroupName)
                     {
                         groupName = string.Empty;
                         break;
                     }
+                    forcedMethodGroup = false;
 
                     group.Add(curent);
                     var ps = curent.Method.GetParameters();
@@ -469,13 +472,9 @@ namespace LambdicSql.Inside
                         && 0 < ps.Length 
                         && typeof(IMethodChain).IsAssignableFrom(ps[0].ParameterType);
 
-                    //TODO
-                    //あれ？本当にいるか？別の方法で解決できるんじゃ？
-                    //それかForceMethodChainにするかやな！
-                    isSqlSyntax |= curent.Method.IsDefined(typeof(MethodChainAttribute), false);
+                    forcedMethodGroup = curent.Method.IsDefined(typeof(ForcedMethodGroupAttribute), false);
 
-
-                    var next = isSqlSyntax ? curent.Arguments[0] as MethodCallExpression : null;
+                    var next = (isSqlSyntax || forcedMethodGroup) ? curent.Arguments[0] as MethodCallExpression : null;
 
                     //end of syntax
                     if (next == null)
@@ -488,7 +487,7 @@ namespace LambdicSql.Inside
 
                     curent = next;
                     //end of chain
-                    if (string.IsNullOrEmpty(currentGroupName))
+                    if (!forcedMethodGroup && string.IsNullOrEmpty(currentGroupName))
                     {
                         groupName = string.Empty;
                         break;

@@ -250,7 +250,7 @@ paket-files/
 # JetBrains Rider
 .idea/
 *.sln.iml
-
+*.db
 Project/Test/db.txt
 Project/Test/ef.txt
 Project/TestCheck35/db.txt
