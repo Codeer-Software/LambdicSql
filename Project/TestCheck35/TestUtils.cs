@@ -367,7 +367,7 @@ WHERE (@p_0) < (tbl_remuneration.money)",
 
         //TODO こことは関係ないけどSqlTextがイミュータブルであることのテスト
 
-
+        //TODO Cast Bodyと同等にふるまえること ★今はバグっている
 
     }
 }

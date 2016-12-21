@@ -782,7 +782,7 @@ namespace LambdicSql
         /// <param name="assigns">Assignment in the SET clause.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
         [MethodGroup(nameof(Update))]
-        public static IClauseChain<TSelected> Set<TSelected>(this IClauseChain<TSelected> before, params IAssign[] assigns) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(Set));
+        public static IClauseChain<TSelected> Set<TSelected>(this IClauseChain<TSelected> before, params Assign[] assigns) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(Set));
 
         /// <summary>
         /// DELETE clause.
@@ -1350,15 +1350,12 @@ namespace LambdicSql
         #endregion
 
         //TODO あー。。。
-        /// <summary>
-        /// It represents assignment. It is used in the Set clause.
-        /// _(db.tbl_staff.name, name) -> tbl_staff.name = "@name"
-        /// if use in Set Clause,  -> name = "@name"
-        /// </summary>
-        /// <param name="lhs">Lvalue</param>
-        /// <param name="rhs">Rvalue</param>
-        /// <returns>IAssign</returns>
-        public static IAssign _<T>(T lhs, T rhs) => InvalitContext.Throw<IAssign>(nameof(_));
+        //これは多分かぶるやろ
+        
+        //CAST句は出ない方に掛けるけど
+
+        //AssignとConditionは難しいな
+
 
         #region Utility
         /// <summary>
@@ -1523,11 +1520,6 @@ namespace LambdicSql
                     return NullCheck.ConvertIsNotNull(converter, methods);
                 case nameof(Asterisk):
                     return "*";
-                case nameof(_):
-                    {
-                        SqlText arg1 = converter.Convert(method.Arguments[0]).Customize(new CustomizeColumnOnly());
-                        return new HText(arg1, "=", converter.Convert(method.Arguments[1])) { Separator = " " };
-                    }
 
                 //Functions
                 case nameof(Sum):
