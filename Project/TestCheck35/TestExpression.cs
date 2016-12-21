@@ -158,8 +158,6 @@ FROM tbl_staff
 WHERE (@p_0) = (@obj)", new Params { { "@p_0", 1 }, { "@obj", 1 } });
         }
 
-        //TODO as のテストやってなかった
-
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_ImplicitConvertOperator3()
         {
@@ -168,6 +166,23 @@ WHERE (@p_0) = (@obj)", new Params { { "@p_0", 1 }, { "@obj", 1 } });
                 Select(Asterisk(db.tbl_staff)).
                 From(db.tbl_staff).
                 Where(1 == (IntObjectImplicit1)obj));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT *
+FROM tbl_staff
+WHERE (@p_0) = (@obj)", new Params { { "@p_0", 1 }, { "@obj", 1 } });
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_ImplicitConvertOperator4()
+        {
+            var obj = new IntObjectImplicit1();
+            var query = Sql<DB>.Create(db =>
+                Select(Asterisk(db.tbl_staff)).
+                From(db.tbl_staff).
+                Where(1 == (obj as IntObjectImplicit1)));
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -409,7 +424,7 @@ new Params()
 });
         }
 
-        //TODO Test_ArrayLength  [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_ArrayLength()
         {
             var x = new[] { 1, 2, 3 };
@@ -417,7 +432,7 @@ new Params()
             query.Gen(_connection);
         }
 
-        //TODO  Test_ArrayIndex   [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_ArrayIndex()
         {
             var x = new[] { 1, 2, 3 };

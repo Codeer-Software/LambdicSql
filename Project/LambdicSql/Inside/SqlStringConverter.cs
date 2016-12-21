@@ -116,6 +116,7 @@ namespace LambdicSql.Inside
             return new DecodedInfo(infos[0].Type, Arguments(infos.Select(e=>e.Text).ToArray()));
         }
 
+        //TODO refactoring.
         DecodedInfo Convert(UnaryExpression unary)
         {
             switch (unary.NodeType)
@@ -134,11 +135,12 @@ namespace LambdicSql.Inside
                         }
                     }
                     return ret;
-                //TODO
                 case ExpressionType.ArrayLength:
-                    throw new NotSupportedException();
-                case ExpressionType.ArrayIndex:
-                    throw new NotSupportedException();
+                    {
+                        object obj;
+                        ExpressionToObject.GetExpressionObject(unary.Operand, out obj);
+                        return new DecodedInfo(typeof(int), new ParameterText(((Array)obj).Length));
+                    }
                 default:
                     return Convert(unary.Operand);
             }
@@ -146,6 +148,15 @@ namespace LambdicSql.Inside
 
         DecodedInfo Convert(BinaryExpression binary)
         {
+            if (binary.NodeType == ExpressionType.ArrayIndex)
+            {
+                object ary;
+                ExpressionToObject.GetExpressionObject(binary.Left, out ary);
+                object index;
+                ExpressionToObject.GetExpressionObject(binary.Right, out index);
+                return new DecodedInfo(typeof(int), new ParameterText(((Array)ary).GetValue((int)index)));
+            }
+
             var left = Convert(binary.Left);
             var right = Convert(binary.Right);
 

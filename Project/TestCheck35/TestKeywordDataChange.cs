@@ -33,7 +33,7 @@ namespace TestCheck35
             Test_InsertInto_Values1();
 
             var query = Sql<DB>.Create(db =>
-                Update(db.tbl_data).Set(new Assign(db.tbl_data.val1, 100), new Assign(db.tbl_data.val2, "200")).
+                Update(db.tbl_data).Set(_(db.tbl_data.val1, 100), _(db.tbl_data.val2, "200")).
                 Where(db.tbl_data.id == 1));
 
             query.Gen(_connection);
@@ -54,10 +54,10 @@ WHERE (tbl_data.id) = (@p_2)",
             Test_InsertInto_Values1();
 
             var exp1 = Sql<DB>.Create(db => db.tbl_data);
-            var exp2 = Sql<DB>.Create(db => new Assign(db.tbl_data.val1, 100));
-            var exp3 = Sql<DB>.Create(db => new Assign(db.tbl_data.val2, "200"));
+            var exp2 = Sql<DB>.Create(db => _(db.tbl_data.val1, 100));
+            var exp3 = Sql<DB>.Create(db => _(db.tbl_data.val2, "200"));
             var query = Sql<DB>.Create(db =>
-                Update(exp1).Set(exp2, exp3).
+                Update(exp1).Set(exp2.Body, exp3.Body).
                 Where(db.tbl_data.id == 1));
 
             Assert.AreEqual(1, _connection.Execute(query));

@@ -524,7 +524,7 @@ namespace TestCheck35
         {
             //make sql.
             var query = Sql<DB>.Create(db =>
-                Update(db.tbl_data).Set(new Assign(db.tbl_data.val1, 100), new Assign(db.tbl_data.val2, "200")).
+                Update(db.tbl_data).Set(_(db.tbl_data.val1, 100), _(db.tbl_data.val2, "200")).
                 Where(db.tbl_data.id == 1));
 
             //to string and params.
@@ -543,7 +543,7 @@ namespace TestCheck35
         {
             //make sql.
             var query = Sql<DB>.Create(db =>
-                Update(db.tbl_data).Set(new Assign(db.tbl_data.val1, db.tbl_data.val1 * 2)).
+                Update(db.tbl_data).Set(_(db.tbl_data.val1, db.tbl_data.val1 * 2)).
                 Where(db.tbl_data.id == 1));
 
             //to string and params.

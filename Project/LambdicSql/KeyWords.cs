@@ -9,6 +9,12 @@ using System.Linq;
 
 namespace LambdicSql
 {
+
+    //TODO 改行をいれながらドキュメントというかサンプルを書く！
+    //<para>paraを</para>
+
+
+    //TODO ファイル分割
     /// <summary>
     /// SQL Keywords.
     /// It can only be used within methods of the LambdicSql.Sql class.
@@ -776,7 +782,7 @@ namespace LambdicSql
         /// <param name="assigns">Assignment in the SET clause.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
         [MethodGroup(nameof(Update))]
-        public static IClauseChain<TSelected> Set<TSelected>(this IClauseChain<TSelected> before, params Assign[] assigns) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(Set));
+        public static IClauseChain<TSelected> Set<TSelected>(this IClauseChain<TSelected> before, params IAssign[] assigns) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(Set));
 
         /// <summary>
         /// DELETE clause.
@@ -906,8 +912,8 @@ namespace LambdicSql
         /// <returns>Date and time of executing SQL.</returns>
         public static DateTime Current_TimeStamp => InvalitContext.Throw<DateTime>(nameof(Current_TimeStamp));
 
-        //TODO この辺嫌な感じやけど DB2だけやからね。少し考えてこのままにするかな
-        //基本書き分けさせるというルールを曲げてまでやることじゃないよね
+        //TODO いやーやっぱり、オプションで何とかしようかなー
+        //他の関数見てからにするかー
         //-----------------------------------------------------------------------------------
         /// <summary>
         /// CURRENT DATE function.
@@ -1343,6 +1349,17 @@ namespace LambdicSql
         public static T Over<T>(this T before, IRows rows) => InvalitContext.Throw<T>(nameof(Over));
         #endregion
 
+        //TODO あー。。。
+        /// <summary>
+        /// It represents assignment. It is used in the Set clause.
+        /// _(db.tbl_staff.name, name) -> tbl_staff.name = "@name"
+        /// if use in Set Clause,  -> name = "@name"
+        /// </summary>
+        /// <param name="lhs">Lvalue</param>
+        /// <param name="rhs">Rvalue</param>
+        /// <returns>IAssign</returns>
+        public static IAssign _<T>(T lhs, T rhs) => InvalitContext.Throw<IAssign>(nameof(_));
+
         #region Utility
         /// <summary>
         /// Cast.
@@ -1506,7 +1523,12 @@ namespace LambdicSql
                     return NullCheck.ConvertIsNotNull(converter, methods);
                 case nameof(Asterisk):
                     return "*";
-                
+                case nameof(_):
+                    {
+                        SqlText arg1 = converter.Convert(method.Arguments[0]).Customize(new CustomizeColumnOnly());
+                        return new HText(arg1, "=", converter.Convert(method.Arguments[1])) { Separator = " " };
+                    }
+
                 //Functions
                 case nameof(Sum):
                 case nameof(Count):
@@ -1592,26 +1614,6 @@ namespace LambdicSql
                     return Window.ConvertRows(converter, methods);
                 case nameof(PartitionBy):
                     return Window.ConvertPartitionBy(converter, methods);
-                    /*
-                case nameof(SumOver):
-                case nameof(CountOver):
-                    {
-                        var v = new VText();
-                        var argCount = methods[0].Arguments.Count - 3;
-                        var args = method.Arguments.Select(e => converter.Convert(e));
-                        if (method.Arguments.Count == 5) v.Add(FuncSpace(method.Method.Name.ToUpper().Replace("OVER", string.Empty), args.Take(2).ToArray()));
-                        else v.Add(FuncSpace(method.Method.Name.ToUpper().Replace("OVER", string.Empty), args.Take(1).ToArray()));
-                        return Window.MakeOver(converter, methods, v, argCount);
-                    }
-
-                    {
-                        var v = new VText();
-                        var argCount = methods[0].Arguments.Count - 3;
-                        v.Add(Func(method.Method.Name.ToUpper().Replace("_OVER", string.Empty).Replace("OVER", string.Empty), method.Arguments.Take(argCount).Select(e => converter.Convert(e)).ToArray()));
-                        return Window.MakeOver(converter, methods, v, argCount);
-                    }*/
-
-
                 //Utility
                 case nameof(Condition): return Utils.Condition(converter, method);
                 case nameof(TextSql): return Utils.TextSql(converter, method);
