@@ -24,7 +24,7 @@ namespace LambdicSql.SqlBase.TextParts
         /// <summary>
         /// Is single line.
         /// </summary>
-        public override bool IsSingleLine => _texts.Count <= 1 && !_texts.Any(e => !e.IsSingleLine);
+        public override bool IsSingleLine(SqlConvertingContext context) => _texts.Count <= 1 && !_texts.Any(e => !e.IsSingleLine(context));
 
         /// <summary>
         /// Is empty.

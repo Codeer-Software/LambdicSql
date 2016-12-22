@@ -9,7 +9,7 @@
             Core = core;
         }
 
-        public override bool IsSingleLine => Core.IsSingleLine;
+        public override bool IsSingleLine(SqlConvertingContext context) => Core.IsSingleLine(context);
 
         public override bool IsEmpty => Core.IsEmpty;
 

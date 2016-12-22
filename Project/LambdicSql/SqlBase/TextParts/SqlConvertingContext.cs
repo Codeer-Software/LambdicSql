@@ -1,4 +1,6 @@
-﻿namespace LambdicSql.SqlBase.TextParts
+﻿using System.Collections.Generic;
+
+namespace LambdicSql.SqlBase.TextParts
 {
     /// <summary>
     /// Context of SQL conversion.
@@ -19,6 +21,11 @@
         /// Object creat info.
         /// </summary>
         public ObjectCreateInfo ObjectCreateInfo { get; internal set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public Dictionary<string, bool> WithEntied { get; } = new Dictionary<string, bool>();
 
         internal SqlConvertingContext(SqlConvertOption option)
         {

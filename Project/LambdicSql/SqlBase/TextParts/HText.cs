@@ -34,7 +34,7 @@ namespace LambdicSql.SqlBase.TextParts
         /// <summary>
         /// Is single line.
         /// </summary>
-        public override bool IsSingleLine => !_texts.Any(e => !e.IsSingleLine);
+        public override bool IsSingleLine(SqlConvertingContext context) => !_texts.Any(e => !e.IsSingleLine(context));
 
         /// <summary>
         /// Is empty.
@@ -72,7 +72,7 @@ namespace LambdicSql.SqlBase.TextParts
             if (_texts.Count == 0) return string.Empty;
             if (_texts.Count == 1) return _texts[0].ToString(isTopLevel, indent, context);
 
-            if (IsSingleLine || !EnableChangeLine)
+            if (IsSingleLine(context) || !EnableChangeLine)
             {
                 return _texts[0].ToString(isTopLevel, indent, context) + Separator
                     + string.Join(Separator, _texts.Skip(1).Select(e => e.ToString(isTopLevel, 0, context)).ToArray());

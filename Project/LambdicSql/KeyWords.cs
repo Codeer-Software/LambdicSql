@@ -25,6 +25,13 @@ namespace LambdicSql
     {
         #region Keywords
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="subQuerys"></param>
+        /// <returns></returns>
+        public static IClauseChain<Non> With(params ISqlExpressionBase[] subQuerys) => InvalitContext.Throw<IClauseChain<Non>>(nameof(With));
+
+        /// <summary>
         /// This is the SELECT clause.
         /// </summary>
         /// <typeparam name="TSelected">Type of selected.</typeparam>
@@ -1349,6 +1356,7 @@ namespace LambdicSql
         public static T Over<T>(this T before, IRows rows) => InvalitContext.Throw<T>(nameof(Over));
         #endregion
         
+
         static SqlText ConvertTop(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var args = methods[0].Arguments.Select(e => converter.Convert(e)).ToArray();
@@ -1374,6 +1382,8 @@ namespace LambdicSql
             var method = methods[0];
             switch (method.Method.Name)
             {
+                case nameof(With):
+                    return FromClause.ConvertWith(converter, methods);
                 case nameof(Asc):
                     return LineSpace(converter.Convert(methods[0].Arguments[0]), "ASC");
                 case nameof(Desc):

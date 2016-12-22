@@ -32,7 +32,7 @@ namespace LambdicSql.feat.Dapper
         /// </returns>
         public static IEnumerable<T> Query<T>(this IDbConnection cnn, ISqlExpressionBase<IClauseChain<T>> query, IDbTransaction transaction = null, bool buffered = true, int? commandTimeout = default(int?), CommandType? commandType = default(CommandType?))
             => Query<T>(cnn, (ISqlExpressionBase)query, transaction, buffered, commandTimeout, commandType);
-
+ 
         /// <summary>
         /// Executes a query, returning the data typed as per T.
         /// For details, refer to the document of Dapper.

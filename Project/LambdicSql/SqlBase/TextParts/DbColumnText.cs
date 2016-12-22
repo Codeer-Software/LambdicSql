@@ -35,7 +35,7 @@ namespace LambdicSql.SqlBase.TextParts
             _columnOnly = columnOnly;
         }
 
-        public override bool IsSingleLine => true;
+        public override bool IsSingleLine(SqlConvertingContext context) => true;
 
         public override bool IsEmpty => false;
 

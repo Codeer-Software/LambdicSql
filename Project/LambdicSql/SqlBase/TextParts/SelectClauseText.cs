@@ -11,7 +11,7 @@
             _createInfo = createInfo;
         }
 
-        public override bool IsSingleLine => _core.IsSingleLine;
+        public override bool IsSingleLine(SqlConvertingContext context) => _core.IsSingleLine(context);
 
         public override bool IsEmpty => _core.IsEmpty;
 

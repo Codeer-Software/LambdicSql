@@ -16,7 +16,7 @@
         /// <summary>
         /// Is single line.
         /// </summary>
-        public abstract bool IsSingleLine { get; }
+        public abstract bool IsSingleLine(SqlConvertingContext context);
 
         /// <summary>
         /// Is empty.

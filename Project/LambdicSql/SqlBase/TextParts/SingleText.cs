@@ -33,7 +33,7 @@ namespace LambdicSql.SqlBase.TextParts
         /// <summary>
         /// Is single line.
         /// </summary>
-        public override bool IsSingleLine => true;
+        public override bool IsSingleLine(SqlConvertingContext context) => true;
 
         /// <summary>
         /// Is empty.

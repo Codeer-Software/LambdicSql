@@ -169,7 +169,7 @@ HAVING (@p_0) < (SUM(tbl_remuneration.money))",
                 From(db.tbl_remuneration).
                 GroupBy(db.tbl_remuneration.staff_id).
                 Having(condition.Body));
-            
+
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
@@ -178,7 +178,7 @@ HAVING (@p_0) < (SUM(tbl_remuneration.money))",
 FROM tbl_remuneration
 GROUP BY tbl_remuneration.staff_id");
         }
-        
+
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Condition5()
         {
@@ -267,11 +267,11 @@ FROM tbl_staff");
 	tbl_staff.name AS name
 FROM tbl_staff");
         }
-        
+
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Format2WaySql1()
         {
-            var sql = 
+            var sql =
 @"SELECT
 	tbl_staff.name AS name,
     tbl_remuneration.payment_date AS payment_date,
@@ -297,13 +297,13 @@ FROM tbl_remuneration
 WHERE (@p_1) < (tbl_remuneration.money)",
 100, (decimal)3000);
         }
-        
+
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Format2WaySql2()
         {
             var exp1 = Sql<DB>.Create(db => 100);
             var exp2 = Sql<DB>.Create(db => Where(3000 < db.tbl_remuneration.money));
-            var sql = 
+            var sql =
 @"SELECT
 	tbl_staff.name AS name,
     tbl_remuneration.payment_date AS payment_date,
@@ -333,7 +333,7 @@ WHERE (@p_1) < (tbl_remuneration.money)",
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_ColumnOnly()
         {
-            var sql = 
+            var sql =
 @"SELECT
 	tbl_staff.name AS name,
     tbl_remuneration.payment_date AS payment_date,
@@ -401,5 +401,87 @@ FROM
         //TODO こことは関係ないけどSqlTextがイミュータブルであることのテスト
 
 
+        //TODO 移動
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void XXX()
+        {
+            var name = _connection.GetType().Name;
+            if (name == "MySqlConnection") return;
+
+            var sub1 = Sql<DB>.Create(db =>
+                Select(Asterisk(db.tbl_staff)).
+                From(db.tbl_staff));
+
+            var sub2 = Sql<DB>.Create(db =>
+                Select(Asterisk(sub1.Body)).
+                From(sub1));
+
+            var b = Sql<DB>.Create(db => sub2);
+
+            var query = Sql<DB>.Create(db =>
+                With(sub1, sub2).
+                Select(new SelectedData
+                {
+                    id = b.Body.id
+                }).
+                From(b)
+            );
+
+            query.Gen(_connection);
+
+            var datas = _connection.Query<SelectedData>(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"WITH
+	sub1 AS
+		(SELECT *
+		FROM tbl_staff),
+	sub2 AS
+		(SELECT *
+		FROM sub1)
+SELECT
+	b.id AS id
+FROM sub2 b");
+        }
+
+
+        //このテストをどっかにおいておかないと
+        class YData
+        {
+            public int StaffId { get; set; }
+            public int AId { get; set; }
+            public int BId { get; set; }
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void YYY()
+        {
+            var a = Sql<DB>.Create(db => db.tbl_remuneration);
+            var b = Sql<DB>.Create(db => db.tbl_remuneration);
+
+            var query = Sql<DB>.Create(db =>
+                Select(new YData
+                {
+                    StaffId = db.tbl_staff.id,
+                    AId = a.Body.id,
+                    BId = b.Body.id
+                }).
+                From(db.tbl_staff).
+                Join(a, a.Body.id == 2).
+                Join(b, b.Body.id == 3)
+            );
+
+            query.Gen(_connection);
+            var datas = _connection.Query<SelectedData>(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	tbl_staff.id AS StaffId,
+	a.id AS AId,
+	b.id AS BId
+FROM tbl_staff
+	JOIN tbl_remuneration a ON (a.id) = (@p_0)
+	JOIN tbl_remuneration b ON (b.id) = (@p_1)", 2, 3);
+        }
     }
 }

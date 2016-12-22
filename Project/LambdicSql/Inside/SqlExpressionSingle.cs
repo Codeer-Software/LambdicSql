@@ -16,5 +16,11 @@ namespace LambdicSql.Inside
             if (core == null) SqlText = string.Empty;
             else SqlText = converter.Convert(core);
         }
+
+        public SqlExpressionSingle(DbInfo dbInfo, SqlText core)
+        {
+            DbInfo = dbInfo;
+            SqlText = core;
+        }
     }
 }
