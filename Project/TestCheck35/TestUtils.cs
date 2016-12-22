@@ -427,6 +427,11 @@ FROM
                 From(b)
             );
 
+
+            var x = Sql<DB>.Create(db =>
+                With(sub1)
+            );
+
             query.Gen(_connection);
 
             var datas = _connection.Query<SelectedData>(query).ToList();
@@ -482,6 +487,133 @@ FROM sub2 b");
 FROM tbl_staff
 	JOIN tbl_remuneration a ON (a.id) = (@p_0)
 	JOIN tbl_remuneration b ON (b.id) = (@p_1)", 2, 3);
+        }
+
+
+        //TODO あれ？DV2って再帰かけないんだっけ？
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void ZZZ()
+        {
+            var name = _connection.GetType().Name;
+            if (name == "MySqlConnection") return;
+            if (name == "OracleConnection") return;
+            if (name == "DB2Connection") return;
+            if (name == "NpgsqlConnection") return;
+
+
+            var rec = Sql<DB>.Create(db => Recursive(new { val = 0 }));
+            
+            var select = Sql<DB>.Create(db =>
+                Select(new object[] { 1 }).
+                Union(true).
+                Select(new object[] { rec.Body.val + 1}).
+                From(rec).
+                Where(rec.Body.val + 1 <= 5)
+                );
+
+            var query = Sql<DB>.Create(db => 
+                With(rec, select).
+                Select(rec.Body.val).
+                From(rec)
+                );
+
+            var datas = _connection.Query<SelectedData>(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"WITH
+	rec(val) AS
+		(SELECT
+			@p_0
+		UNION ALL
+		SELECT
+			(rec.val) + (@p_1)
+		FROM rec
+		WHERE ((rec.val) + (@p_2)) <= (@p_3))
+SELECT
+	rec.val
+FROM rec", 1, 1, 1, 5);
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void ZZZ2()
+        {
+            var name = _connection.GetType().Name;
+            if (name != "NpgsqlConnection") return;
+
+
+            var rec = Sql<DB>.Create(db => Recursive(new { val = 0 }));
+
+            var select = Sql<DB>.Create(db =>
+                Select(new object[] { 1 }).
+                Union(true).
+                Select(new object[] { rec.Body.val + 1 }).
+                From(rec).
+                Where(rec.Body.val + 1 <= 5)
+                );
+
+            var query = Sql<DB>.Create(db =>
+                With(rec, select).
+                Select(rec.Body.val).
+                From(rec)
+                );
+
+            var datas = _connection.Query<SelectedData>(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"WITH
+	RECURSIVE rec(val) AS
+		(SELECT
+			@p_0
+		UNION ALL
+		SELECT
+			(rec.val) + (@p_1)
+		FROM rec
+		WHERE ((rec.val) + (@p_2)) <= (@p_3))
+SELECT
+	rec.val
+FROM rec", 1, 1, 1, 5);
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void ZZZ3()
+        {
+            var name = _connection.GetType().Name;
+            if (name != "OracleConnection") return;
+
+            var rec = Sql<DB>.Create(db => Recursive(new { val = 0 }));
+
+            var select = Sql<DB>.Create(db =>
+                Select(new object[] { 1 }).
+                From(Dual).
+                Union(true).
+                Select(new object[] { rec.Body.val + 1 }).
+                From(rec).
+                Where(rec.Body.val + 1 <= 5)
+                );
+
+            var query = Sql<DB>.Create(db =>
+                With(rec, select).
+                Select(rec.Body.val).
+                From(rec)
+                );
+            
+            var datas = _connection.Query<SelectedData>(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+ @"WITH
+	rec(val) AS
+		(SELECT
+			:p_0
+		FROM DUAL
+		UNION ALL
+		SELECT
+			(rec.val) + (:p_1)
+		FROM rec
+		WHERE ((rec.val) + (:p_2)) <= (:p_3))
+SELECT
+	rec.val
+FROM rec", 1, 1, 1, 5);
         }
     }
 }

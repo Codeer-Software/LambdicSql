@@ -16,5 +16,10 @@
         /// Defualt is @.
         /// </summary>
         public string ParameterPrefix { get; set; } = "@";
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool ExistRecursive { get; set; }
     }
 }

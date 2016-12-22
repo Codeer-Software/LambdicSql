@@ -29,16 +29,28 @@ namespace LambdicSql.Inside.Keywords
         {
             var method = methods[0];
             var arry = method.Arguments[0] as NewArrayExpression;
-            var v = new VText() { Indent = 1, Separator = "," };
-            var names = new List<string>();
-            foreach (var e in arry.Expressions)
+            if (arry != null)
             {
-                var table = converter.Convert(e);
-                var body = GetSqlExpressionBody(e);
-                names.Add(body);
-                v.Add(Clause(LineSpace(body, "AS"), table));
+                var v = new VText() { Indent = 1, Separator = "," };
+                var names = new List<string>();
+                foreach (var e in arry.Expressions)
+                {
+                    var table = converter.Convert(e);
+                    var body = GetSqlExpressionBody(e);
+                    names.Add(body);
+                    v.Add(Clause(LineSpace(body, "AS"), table));
+                }
+                return new WithEntriedText(new VText("WITH", v), names.ToArray());
             }
-            return new WithEntriedText(new VText("WITH", v), names.ToArray());
+
+            //引数を二つにせなあかんのか？
+            {
+                var table = converter.Convert(method.Arguments[0]);
+                var body = GetSqlExpressionBody(method.Arguments[0]);
+                var v = new VText() { Indent = 1 };
+                v.Add(Clause(LineSpace(new RecursiveTargetText(Line(body, table)), "AS"), converter.Convert(method.Arguments[1])));
+                return new WithEntriedText(new VText("WITH", v), new[] { body });
+            }
         }
 
         static SqlText ConvertNonCodition(Func<SqlText, SqlText[], HText> makeSqlText, string name, ISqlStringConverter converter, MethodCallExpression[] methods)
@@ -154,8 +166,7 @@ namespace LambdicSql.Inside.Keywords
     {
         SqlText _core;
         string[] _names;
-
-        internal ColumnInfo Info { get; private set; }
+       
 
         internal WithEntriedText(SqlText core, string[] names)
         {
@@ -182,6 +193,41 @@ namespace LambdicSql.Inside.Keywords
 
         public override SqlText ConcatToBack(string back)
             => new WithEntriedText(_core.ConcatToBack(back), _names);
+
+        public override SqlText Customize(ISqlTextCustomizer customizer)
+            => customizer.Custom(this);
+    }
+    class RecursiveTargetText : SqlText
+    {
+        SqlText _core;
+
+        internal RecursiveTargetText(SqlText core)
+        {
+            _core = core;
+        }
+
+        public override bool IsSingleLine(SqlConvertingContext context)
+            => _core.IsSingleLine(context);
+
+        public override bool IsEmpty => false;
+
+        public override string ToString(bool isTopLevel, int indent, SqlConvertingContext context)
+        {
+            if ( context.Option.ExistRecursive)
+            {
+                return _core.ConcatToFront("RECURSIVE ").ToString(isTopLevel, indent, context);
+            }
+            return _core.ToString(isTopLevel, indent, context);
+        }
+
+        public override SqlText ConcatAround(string front, string back)
+            => new RecursiveTargetText(_core.ConcatAround(front, back));
+
+        public override SqlText ConcatToFront(string front)
+            => new RecursiveTargetText(_core.ConcatToFront(front));
+
+        public override SqlText ConcatToBack(string back)
+            => new RecursiveTargetText(_core.ConcatToBack(back));
 
         public override SqlText Customize(ISqlTextCustomizer customizer)
             => customizer.Custom(this);

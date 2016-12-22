@@ -1,6 +1,6 @@
 ﻿namespace LambdicSql.SqlBase.TextParts
 {
-    internal class SelectClauseText : SqlText
+    class SelectClauseText : SqlText
     {
         SqlText _core;
         ObjectCreateInfo _createInfo;

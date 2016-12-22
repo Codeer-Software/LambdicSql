@@ -9,6 +9,7 @@ namespace LambdicSql.Inside
             switch (connectionTypeFullName)
             {
                 case "Npgsql.NpgsqlConnection":
+                    return new SqlConvertOption() { StringAddOperator = "||", ExistRecursive = true };
                 case "System.Data.SQLite.SQLiteConnection":
                 case "IBM.Data.DB2.DB2Connection":
                     return new SqlConvertOption() { StringAddOperator = "||" };

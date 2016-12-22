@@ -24,12 +24,39 @@ namespace LambdicSql
     public static class Keywords
     {
         #region Keywords
+        //あー、WITH、ASかな
         /// <summary>
         /// 
         /// </summary>
         /// <param name="subQuerys"></param>
         /// <returns></returns>
         public static IClauseChain<Non> With(params ISqlExpressionBase[] subQuerys) => InvalitContext.Throw<IClauseChain<Non>>(nameof(With));
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TSelected"></typeparam>
+        /// <param name="args"></param>
+        /// <param name="select"></param>
+        /// <returns></returns>
+        public static IClauseChain<TSelected> With<TSelected>(SqlExpression<TSelected> args, ISqlExpressionBase select) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(With));
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TSelected"></typeparam>
+        /// <param name="selected"></param>
+        /// <returns></returns>
+        public static TSelected Recursive<TSelected>(TSelected selected) => InvalitContext.Throw<TSelected>(nameof(Select));
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TSelected"></typeparam>
+        /// <param name="before"></param>
+        /// <param name="items"></param>
+        /// <returns></returns>
+        public static IClauseChain<TSelected> Select<TSelected>(this IClauseChain<TSelected> before, object[] items) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(Select));
 
         /// <summary>
         /// This is the SELECT clause.
@@ -1384,6 +1411,8 @@ namespace LambdicSql
             {
                 case nameof(With):
                     return FromClause.ConvertWith(converter, methods);
+                case nameof(Recursive):
+                    return SelectClause.ConvertRecursive(converter, methods);
                 case nameof(Asc):
                     return LineSpace(converter.Convert(methods[0].Arguments[0]), "ASC");
                 case nameof(Desc):
