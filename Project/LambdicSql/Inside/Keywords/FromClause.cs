@@ -47,7 +47,7 @@ namespace LambdicSql.Inside.Keywords
 
             var table = decoder.Convert(exp);
 
-            //sub query. add alias.
+            //TODO refactoring.
             var body = GetSqlExpressionBody(exp);
             if (body != null) return new HText(table, body) { Separator = " ", EnableChangeLine = false };
 
@@ -61,6 +61,17 @@ namespace LambdicSql.Inside.Keywords
             {
                 if (typeof(ISqlExpressionBase).IsAssignableFrom(member.Type)) return member.Member.Name;
                 member = member.Expression as MemberExpression;
+            }
+
+            var method = exp as MethodCallExpression;
+            if (method != null)
+            {
+                member = method.Arguments[0] as MemberExpression;
+                if (member != null)
+                {
+                    if (typeof(ISqlExpressionBase).IsAssignableFrom(member.Type)) return member.Member.Name;
+                }
+            //    return ((MemberExpression)method.Arguments[0]).Member.Name;
             }
             return null;
         }

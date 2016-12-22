@@ -190,13 +190,23 @@ namespace LambdicSql.Inside
             if (method != null && method.Method.DeclaringType.IsSqlSyntax())
             {
                 var ret = method.GetConverotrMethod()(this, new[] { method });
+                //T()
                 var tbl = ret as DbTableText;
-                if (tbl == null)
+                if (tbl != null)
                 {
-                    throw new NotSupportedException();
+                    var memberName = tbl.Info.LambdaFullName + "." + member.Member.Name;
+                    return ResolveLambdicElement(memberName);
                 }
-                var memberName = tbl.Info.LambdaFullName + "." + member.Member.Name;
-                return ResolveLambdicElement(memberName);
+                //Cast()
+                var selectQuery = ret as SelectQueryText;
+                if (selectQuery != null)
+                {
+                    //TODO 第一引数の変数名を使うしかない、それは嫌やな refactoring.
+                    var subName = ((MemberExpression)method.Arguments[0]).Member.Name;
+                    var memberName = subName + "." + member.Member.Name;
+                    return ResolveLambdicElement(memberName);
+                }
+                throw new NotSupportedException();
             }
 
             //db element.

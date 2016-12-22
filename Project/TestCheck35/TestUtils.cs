@@ -363,11 +363,43 @@ WHERE (@p_0) < (tbl_remuneration.money)",
 (decimal)3000);
         }
 
+        class SelectedData
+        {
+            public int id { get; set; }
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Cast()
+        {
+            var sub = Sql<DB>.Create(db =>
+                Select(Asterisk(db.tbl_staff)).
+                From(db.tbl_staff));
+
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectedData
+                {
+                    id = sub.Cast<Staff>().id
+                }).
+                From(sub.Cast<Staff>()));
+
+            query.Gen(_connection);
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            query.Gen(_connection);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	sub.id AS id
+FROM
+	(SELECT *
+	FROM tbl_staff) sub");
+        }
+
+
         //TODO ConcatでSelectが正しくでることのテスト
 
         //TODO こことは関係ないけどSqlTextがイミュータブルであることのテスト
 
-        //TODO Cast Bodyと同等にふるまえること ★今はバグっている
 
     }
 }
