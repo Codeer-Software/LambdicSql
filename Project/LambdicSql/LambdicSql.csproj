@@ -99,7 +99,7 @@
     <Compile Include="SqlBase\SqlConvertOption.cs" />
     <Compile Include="SqlInfo.cs" />
     <Compile Include="SqlExpressionExtensions.cs" />
-    <Compile Include="Inside\Utils.cs" />
+    <Compile Include="Utils.cs" />
     <Compile Include="Inside\Window.cs" />
     <Compile Include="Inside\Keywords\FromClause.cs" />
     <Compile Include="Inside\Keywords\GroupByClause.cs" />

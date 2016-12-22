@@ -5,6 +5,9 @@
     //string.joinもEX
     //Linqをなくしても早くなる
 
+    //SqlPartsかな
+    //でネームスペースはSqlBuilder
+
     /// <summary>
     /// Text.
     /// </summary>

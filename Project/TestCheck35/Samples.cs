@@ -660,8 +660,8 @@ namespace TestCheck35
         {
             //make sql.
             var exp = Sql<DB>.Create(db =>
-                Condition(minCondition, 3000 < db.tbl_remuneration.money) &&
-                Condition(maxCondition, db.tbl_remuneration.money < 4000));
+                new Condition(minCondition, 3000 < db.tbl_remuneration.money) &&
+                new Condition(maxCondition, db.tbl_remuneration.money < 4000));
 
             var query = Sql<DB>.Create(db => Select(Asterisk()).From(db.tbl_remuneration).Where(exp));
 
@@ -913,7 +913,7 @@ namespace TestCheck35
                 {
                     name = db.tbl_staff.name,
                     payment_date = db.tbl_remuneration.payment_date,
-                    money = TextSql<decimal>("{0} + {1}", db.tbl_remuneration.money, 1000),
+                    money = "{0} + {1}".ToSql<decimal>(db.tbl_remuneration.money, 1000),
                 }).
                 From(db.tbl_remuneration).
                     Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
@@ -950,11 +950,11 @@ FROM tbl_remuneration
     JOIN tbl_staff ON tbl_staff.id = tbl_remuneration.staff_id
 /*1*/WHERE tbl_remuneration.money = 100/**/";
 
-            var query = Sql<DB>.Create(db => TwoWaySql(sql,
+            var query = Sql<DB>.Create(db => sql.TwoWaySql(
                 bonus,
                 Where(
-                    Condition(minCondition, 3000 < db.tbl_remuneration.money) &&
-                    Condition(maxCondition, db.tbl_remuneration.money < 4000))
+                    new Condition(minCondition, 3000 < db.tbl_remuneration.money) &&
+                    new Condition(maxCondition, db.tbl_remuneration.money < 4000))
                 ));
             var info = query.ToSqlInfo(_connection.GetType());
             Debug.Print(info.SqlText);
@@ -965,10 +965,10 @@ FROM tbl_remuneration
 
             //pattern2 building.
             var where = Sql<DB>.Create(db => Where(
-                    Condition(minCondition, 3000 < db.tbl_remuneration.money) &&
-                    Condition(maxCondition, db.tbl_remuneration.money < 4000)));
+                    new Condition(minCondition, 3000 < db.tbl_remuneration.money) &&
+                    new Condition(maxCondition, db.tbl_remuneration.money < 4000)));
 
-            var query2 = Sql<DB>.Create(db => TwoWaySql(sql, bonus, where));
+            var query2 = Sql<DB>.Create(db => sql.TwoWaySql(bonus, where));
             info = query2.ToSqlInfo(_connection.GetType());
             Debug.Print(info.SqlText);
 
@@ -1128,7 +1128,7 @@ FROM tbl_remuneration
                     Select(new
                     {
                         Dst = Current_Date
-                    }).From(TextSql("dual")));
+                    }).From("dual".ToSql()));
                 ExecuteRead(query);
             }
             if (name == "IBM.Data.DB2.DB2Connection")
@@ -1137,7 +1137,7 @@ FROM tbl_remuneration
                     Select(new
                     {
                         Dst = CurrentSpaceDate
-                    }).From(TextSql("sysibm.sysdummy1")));
+                    }).From("sysibm.sysdummy1".ToSql()));
                 ExecuteRead(query);
             }
 
@@ -1158,7 +1158,7 @@ FROM tbl_remuneration
                     Select(new
                     {
                         Dst = CurrentSpaceTime
-                    }).From(TextSql("sysibm.sysdummy1")));
+                    }).From("sysibm.sysdummy1".ToSql()));
                 var x = ExecuteRead(query);
             }
 
@@ -1180,7 +1180,7 @@ FROM tbl_remuneration
                     Select(new
                     {
                         Dst = Current_TimeStamp
-                    }).From(TextSql("dual")));
+                    }).From("dual".ToSql()));
                 ExecuteRead(query);
             }
             if (name == "Oracle.ManagedDataAccess.Client.OracleConnection")
@@ -1189,7 +1189,7 @@ FROM tbl_remuneration
                     Select(new
                     {
                         Dst = Current_TimeStamp
-                    }).From(TextSql("dual")));
+                    }).From("dual".ToSql()));
                 ExecuteRead(query);
             }
             if (name == "IBM.Data.DB2.DB2Connection")
@@ -1198,7 +1198,7 @@ FROM tbl_remuneration
                     Select(new
                     {
                         Dst = CurrentSpaceTimeStamp
-                    }).From(TextSql("sysibm.sysdummy1")));
+                    }).From("sysibm.sysdummy1".ToSql()));
                 var x = ExecuteRead(query);
             }
             if (name == "IBM.Data.DB2.DB2Connection")
@@ -1207,7 +1207,7 @@ FROM tbl_remuneration
                     Select(new
                     {
                         Dst = CurrentSpaceTimeStamp
-                    }).From(TextSql("sysibm.sysdummy1")));
+                    }).From("sysibm.sysdummy1".ToSql()));
                 var x = ExecuteRead(query);
             }
 

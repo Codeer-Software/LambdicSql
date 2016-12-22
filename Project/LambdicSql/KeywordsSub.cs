@@ -172,6 +172,34 @@ namespace LambdicSql
     }
 
     /// <summary>
+    /// Condition building helper.
+    /// condition is used if enable is valid.
+    /// </summary>
+    [SqlSyntax]
+    public class Condition
+    {
+        /// <summary>
+        /// Condition building helper.
+        /// condition is used if enable is valid.
+        /// </summary>
+        /// <param name="enable">Whether condition is valid.</param>
+        /// <param name="condition">Condition expression.</param>
+        public Condition(object enable, object condition) { InvalitContext.Throw("new " + nameof(Condition)); }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="src"></param>
+        public static implicit operator bool(Condition src) => InvalitContext.Throw<bool>("implicit operator bool(Condition src)");
+
+        static SqlText Convert(ISqlStringConverter converter, NewExpression exp)
+        {
+            var obj = converter.ToObject(exp.Arguments[0]);
+            return (bool)obj ? converter.Convert(exp.Arguments[1]) : (SqlText)string.Empty;
+        }
+    }
+
+    /// <summary>
     /// SYSIBM keyword.
     /// </summary>
     [SqlSyntax]

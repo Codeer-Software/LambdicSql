@@ -185,7 +185,7 @@ WHERE (tbl_staff.id) = (@p_0)",
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Union_Exp()
         {
-            var query = Sql<DB>.Create(db => TextSql("SELECT * FROM tbl_staff"));
+            var query = Sql<DB>.Create(db => "SELECT * FROM tbl_staff".ToSql());
             query = query.Union(query);
 
             var datas = _connection.Query<Staff>(query).ToList();
@@ -199,7 +199,7 @@ SELECT * FROM tbl_staff");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Union_All_Exp()
         {
-            var query = Sql<DB>.Create(db => TextSql("SELECT * FROM tbl_staff"));
+            var query = Sql<DB>.Create(db => "SELECT * FROM tbl_staff".ToSql());
             query = query.Union(true, query);
 
             var datas = _connection.Query<Staff>(query).ToList();
@@ -213,7 +213,7 @@ SELECT * FROM tbl_staff");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Union_All_False_Exp()
         {
-            var query = Sql<DB>.Create(db => TextSql("SELECT * FROM tbl_staff"));
+            var query = Sql<DB>.Create(db => "SELECT * FROM tbl_staff".ToSql());
             query = query.Union(false, query);
 
             var datas = _connection.Query<Staff>(query).ToList();
@@ -229,7 +229,7 @@ SELECT * FROM tbl_staff");
         {
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var query = Sql<DB>.Create(db => TextSql("SELECT * FROM tbl_staff"));
+            var query = Sql<DB>.Create(db => "SELECT * FROM tbl_staff".ToSql());
             query = query.Intersect(query);
 
             var datas = _connection.Query<Staff>(query).ToList();
@@ -246,8 +246,8 @@ SELECT * FROM tbl_staff");
             if (_connection.GetType().Name == "MySqlConnection") return;
             if (_connection.GetType().Name == "OracleConnection") return;
 
-            var query = Sql<DB>.Create(db => TextSql("SELECT * FROM tbl_staff"));
-            var queryAfter = Sql<DB>.Create(db => TextSql("SELECT * FROM tbl_staff WHERE (tbl_staff.id) = (1)"));
+            var query = Sql<DB>.Create(db => "SELECT * FROM tbl_staff".ToSql());
+            var queryAfter = Sql<DB>.Create(db => "SELECT * FROM tbl_staff WHERE (tbl_staff.id) = (1)".ToSql());
             query = query.Except(queryAfter);
 
             var datas = _connection.Query<Staff>(query).ToList();
@@ -266,8 +266,8 @@ SELECT * FROM tbl_staff WHERE (tbl_staff.id) = (1)");
             if (_connection.GetType().Name == "MySqlConnection") return;
             if (_connection.GetType().Name == "OracleConnection") return;
 
-            var query = Sql<DB>.Create(db => TextSql("SELECT * FROM tbl_staff"));
-            var queryAfter = Sql<DB>.Create(db => TextSql("SELECT * FROM tbl_staff WHERE (tbl_staff.id) = (1)"));
+            var query = Sql<DB>.Create(db => "SELECT * FROM tbl_staff".ToSql());
+            var queryAfter = Sql<DB>.Create(db => "SELECT * FROM tbl_staff WHERE (tbl_staff.id) = (1)".ToSql());
             query = query.Except(true, queryAfter);
 
             var datas = _connection.Query<Staff>(query).ToList();
@@ -284,8 +284,8 @@ SELECT * FROM tbl_staff WHERE (tbl_staff.id) = (1)");
             if (_connection.GetType().Name == "MySqlConnection") return;
             if (_connection.GetType().Name == "OracleConnection") return;
 
-            var query = Sql<DB>.Create(db => TextSql("SELECT * FROM tbl_staff"));
-            var queryAfter = Sql<DB>.Create(db => TextSql("SELECT * FROM tbl_staff WHERE (tbl_staff.id) = (1)"));
+            var query = Sql<DB>.Create(db => "SELECT * FROM tbl_staff".ToSql());
+            var queryAfter = Sql<DB>.Create(db => "SELECT * FROM tbl_staff WHERE (tbl_staff.id) = (1)".ToSql());
             query = query.Except(false, queryAfter);
 
             var datas = _connection.Query<Staff>(query).ToList();
@@ -303,8 +303,8 @@ SELECT * FROM tbl_staff WHERE (tbl_staff.id) = (1)");
             if (_connection.GetType().Name == "MySqlConnection") return;
             if (_connection.GetType().Name == "NpgsqlConnection") return;
 
-            var query = Sql<DB>.Create(db => TextSql("SELECT * FROM tbl_staff"));
-            var queryAfter = Sql<DB>.Create(db => TextSql("SELECT * FROM tbl_staff WHERE (tbl_staff.id) = (1)"));
+            var query = Sql<DB>.Create(db => "SELECT * FROM tbl_staff".ToSql());
+            var queryAfter = Sql<DB>.Create(db => "SELECT * FROM tbl_staff WHERE (tbl_staff.id) = (1)".ToSql());
             query = query.Minus(queryAfter);
 
             var datas = _connection.Query<Staff>(query).ToList();
@@ -333,8 +333,8 @@ FROM tbl_staff");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Concat_Exp()
         {
-            var select = Sql<DB>.Create(db => TextSql("SELECT tbl_staff.name AS name"));
-            var from = Sql<DB>.Create(db => TextSql("FROM tbl_staff"));
+            var select = Sql<DB>.Create(db => "SELECT tbl_staff.name AS name".ToSql());
+            var from = Sql<DB>.Create(db => "FROM tbl_staff".ToSql());
             var query = select.Concat(from);
 
             var datas = _connection.Query<Staff>(query).ToList();

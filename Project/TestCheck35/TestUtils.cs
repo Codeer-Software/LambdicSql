@@ -86,7 +86,7 @@ FROM tbl_remuneration");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Condition1()
         {
-            var condition = Sql<DB>.Create(db => Condition(true, db.tbl_staff.id == 1) || (Condition(true, db.tbl_staff.id == 2) && Condition(false, db.tbl_staff.id == 3) && Condition(true, db.tbl_staff.id == 4)));
+            var condition = Sql<DB>.Create(db => new Condition(true, db.tbl_staff.id == 1) || (new Condition(true, db.tbl_staff.id == 2) && new Condition(false, db.tbl_staff.id == 3) && new Condition(true, db.tbl_staff.id == 4)));
             var query = Sql<DB>.Create(db =>
                 Select(new
                 {
@@ -108,7 +108,7 @@ WHERE ((tbl_staff.id) = (@p_0)) OR (((tbl_staff.id) = (@p_1)) AND ((tbl_staff.id
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Condition2()
         {
-            var condition = Sql<DB>.Create(db => Condition(false, db.tbl_staff.id == 2) && Condition(false, db.tbl_staff.id == 3) && Condition(false, db.tbl_staff.id == 4));
+            var condition = Sql<DB>.Create(db => new Condition(false, db.tbl_staff.id == 2) && new Condition(false, db.tbl_staff.id == 3) && new Condition(false, db.tbl_staff.id == 4));
             var query = Sql<DB>.Create(db =>
                 Select(new
                 {
@@ -131,7 +131,7 @@ FROM tbl_staff");
             var name = _connection.GetType().Name;
             if (name == "SQLiteConnection") return;
 
-            var condition = Sql<DB>.Create(db => Condition(true, 100 < Sum(db.tbl_remuneration.money)));
+            var condition = Sql<DB>.Create(db => new Condition(true, 100 < Sum(db.tbl_remuneration.money)));
 
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData2
@@ -140,7 +140,7 @@ FROM tbl_staff");
                 }).
                 From(db.tbl_remuneration).
                 GroupBy(db.tbl_remuneration.staff_id).
-                Having(condition));
+                Having(condition.Body));
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -159,7 +159,7 @@ HAVING (@p_0) < (SUM(tbl_remuneration.money))",
             var name = _connection.GetType().Name;
             if (name == "SQLiteConnection") return;
 
-            var condition = Sql<DB>.Create(db => Condition(false, 100 < Sum(db.tbl_remuneration.money)));
+            var condition = Sql<DB>.Create(db => new Condition(false, 100 < Sum(db.tbl_remuneration.money)));
 
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData2
@@ -168,7 +168,7 @@ HAVING (@p_0) < (SUM(tbl_remuneration.money))",
                 }).
                 From(db.tbl_remuneration).
                 GroupBy(db.tbl_remuneration.staff_id).
-                Having(condition));
+                Having(condition.Body));
             
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -186,7 +186,7 @@ GROUP BY tbl_remuneration.staff_id");
             if (name == "SQLiteConnection") return;
 
             var exp = Sql<DB>.Create(db => 100 < Sum(db.tbl_remuneration.money));
-            var condition = Sql<DB>.Create(db => Condition(false, exp));
+            var condition = Sql<DB>.Create(db => new Condition(false, exp));
 
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData2
@@ -195,7 +195,7 @@ GROUP BY tbl_remuneration.staff_id");
                 }).
                 From(db.tbl_remuneration).
                 GroupBy(db.tbl_remuneration.staff_id).
-                Having(condition));
+                Having(condition.Body));
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -212,8 +212,8 @@ GROUP BY tbl_remuneration.staff_id");
             var query = Sql<DB>.Create(db =>
                 Select(new Staff
                 {
-                    id = (int)TextSql("tbl_staff.id"),
-                    name = TextSql<string>("tbl_staff.name"),
+                    id = (int)"tbl_staff.id".ToSql(),
+                    name = "tbl_staff.name".ToSql<string>(),
                 }).
                 From(db.tbl_staff));
 
@@ -232,8 +232,8 @@ FROM tbl_staff");
             var query = Sql<DB>.Create(db =>
                 Select(new Staff
                 {
-                    id = (int)TextSql("{0}", db.tbl_staff.id),
-                    name = TextSql<string>("{0}", db.tbl_staff.name),
+                    id = (int)"{0}".ToSql(db.tbl_staff.id),
+                    name = "{0}".ToSql<string>(db.tbl_staff.name),
                 }).
                 From(db.tbl_staff));
 
@@ -254,8 +254,8 @@ FROM tbl_staff");
             var query = Sql<DB>.Create(db =>
                 Select(new Staff
                 {
-                    id = (int)TextSql("{0}", exp1),
-                    name = TextSql<string>("{0}", exp2),
+                    id = (int)"{0}".ToSql(exp1),
+                    name = "{0}".ToSql<string>(exp2),
                 }).
                 From(db.tbl_staff));
 
@@ -280,7 +280,7 @@ FROM tbl_remuneration
     JOIN tbl_staff ON tbl_staff.id = tbl_remuneration.staff_id
 /*1*/WHERE tbl_remuneration.money = 100/**/";
 
-            var query = Sql<DB>.Create(db => TwoWaySql(sql,
+            var query = Sql<DB>.Create(db => sql.TwoWaySql(
                 100,
                 Where(3000 < db.tbl_remuneration.money)
                 ));
@@ -312,7 +312,7 @@ FROM tbl_remuneration
     JOIN tbl_staff ON tbl_staff.id = tbl_remuneration.staff_id
 /*1*/WHERE tbl_remuneration.money = 100/**/";
 
-            var query = Sql<DB>.Create(db => TwoWaySql(sql,
+            var query = Sql<DB>.Create(db => sql.TwoWaySql(
                 exp1,
                 exp2
                 ));
@@ -342,9 +342,9 @@ FROM tbl_remuneration
     JOIN tbl_staff ON tbl_staff.id = tbl_remuneration.staff_id
 /*2*/WHERE tbl_remuneration.money = 100/**/";
 
-            var query = Sql<DB>.Create(db => TwoWaySql(sql,
+            var query = Sql<DB>.Create(db => sql.TwoWaySql(
                 db.tbl_remuneration.money,
-                ColumnOnly(db.tbl_remuneration.money),
+                db.tbl_remuneration.money.ColumnOnly(),
                 Where(3000 < db.tbl_remuneration.money)
                 ));
 
