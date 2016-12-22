@@ -327,6 +327,83 @@ FROM tbl_remuneration
 	RIGHT JOIN tbl_staff expStaff ON (tbl_remuneration.staff_id) = (expStaff.id)");
         }
 
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Full_Join1()
+        {
+            if (_connection.GetType().Name == "SQLiteConnection") return;
+            if (_connection.GetType().Name == "MySqlConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData
+                {
+                    PaymentDate = db.tbl_remuneration.payment_date,
+                    Money = db.tbl_remuneration.money,
+                }).
+                From(db.tbl_remuneration).
+                    FullJoin(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+@"SELECT
+	tbl_remuneration.payment_date AS PaymentDate,
+	tbl_remuneration.money AS Money
+FROM tbl_remuneration
+	FULL JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Full_Join2()
+        {
+            if (_connection.GetType().Name == "SQLiteConnection") return;
+            if (_connection.GetType().Name == "MySqlConnection") return;
+
+            var expStaff = Sql<DB>.Create(db => db.tbl_staff);
+            var exp2 = Sql<DB>.Create(db => db.tbl_remuneration.staff_id == expStaff.Body.id);
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData
+                {
+                    PaymentDate = db.tbl_remuneration.payment_date,
+                    Money = db.tbl_remuneration.money,
+                }).
+                From(db.tbl_remuneration).
+                    FullJoin(expStaff, exp2));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+@"SELECT
+	tbl_remuneration.payment_date AS PaymentDate,
+	tbl_remuneration.money AS Money
+FROM tbl_remuneration
+	FULL JOIN tbl_staff expStaff ON (tbl_remuneration.staff_id) = (expStaff.id)");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Continue_Join1()
+        {
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData
+                {
+                    PaymentDate = db.tbl_remuneration.payment_date,
+                    Money = db.tbl_remuneration.money,
+                }).
+                From(db.tbl_remuneration));
+
+            var target = Sql<DB>.Create(db => Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id));
+            query = query.Concat(target);
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+@"SELECT
+	tbl_remuneration.payment_date AS PaymentDate,
+	tbl_remuneration.money AS Money
+FROM tbl_remuneration
+	JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)");
+        }
+
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_CrossJoin1()
         {
@@ -374,30 +451,6 @@ FROM tbl_remuneration
 	tbl_remuneration.money AS Money
 FROM tbl_remuneration
 	CROSS JOIN tbl_staff expStaff");
-        }
-
-        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_Continue_Join1()
-        {
-            var query = Sql<DB>.Create(db =>
-                Select(new SelectData
-                {
-                    PaymentDate = db.tbl_remuneration.payment_date,
-                    Money = db.tbl_remuneration.money,
-                }).
-                From(db.tbl_remuneration));
-
-            var target = Sql<DB>.Create(db => Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id));
-            query = query.Concat(target);
-
-            var datas = _connection.Query(query).ToList();
-            Assert.IsTrue(0 < datas.Count);
-            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
-@"SELECT
-	tbl_remuneration.payment_date AS PaymentDate,
-	tbl_remuneration.money AS Money
-FROM tbl_remuneration
-	JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -528,6 +581,62 @@ FROM tbl_remuneration
 	tbl_remuneration.money AS Money
 FROM tbl_remuneration
 	RIGHT JOIN tbl_staff expStaff ON (tbl_remuneration.staff_id) = (expStaff.id)");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Continue_FullJoin1()
+        {
+            if (_connection.GetType().Name == "SQLiteConnection") return;
+            if (_connection.GetType().Name == "MySqlConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData
+                {
+                    PaymentDate = db.tbl_remuneration.payment_date,
+                    Money = db.tbl_remuneration.money,
+                }).
+                From(db.tbl_remuneration));
+
+            var target = Sql<DB>.Create(db => FullJoin(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id));
+            query = query.Concat(target);
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+@"SELECT
+	tbl_remuneration.payment_date AS PaymentDate,
+	tbl_remuneration.money AS Money
+FROM tbl_remuneration
+	FULL JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Continue_FullJoin2()
+        {
+            if (_connection.GetType().Name == "SQLiteConnection") return;
+            if (_connection.GetType().Name == "MySqlConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+                Select(new SelectData
+                {
+                    PaymentDate = db.tbl_remuneration.payment_date,
+                    Money = db.tbl_remuneration.money,
+                }).
+                From(db.tbl_remuneration));
+
+            var expStaff = Sql<DB>.Create(db => db.tbl_staff);
+            var exp2 = Sql<DB>.Create(db => db.tbl_remuneration.staff_id == expStaff.Body.id);
+            var target = Sql<DB>.Create(db => FullJoin(expStaff, exp2));
+            query = query.Concat(target);
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+@"SELECT
+	tbl_remuneration.payment_date AS PaymentDate,
+	tbl_remuneration.money AS Money
+FROM tbl_remuneration
+	FULL JOIN tbl_staff expStaff ON (tbl_remuneration.staff_id) = (expStaff.id)");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]

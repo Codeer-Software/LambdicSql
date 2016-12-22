@@ -22,6 +22,9 @@ namespace LambdicSql.Inside.Keywords
         internal static SqlText ConvertRightJoin(ISqlStringConverter converter, MethodCallExpression[] methods)
             => ConvertCondition("RIGHT JOIN", converter, methods);
 
+        internal static SqlText ConvertFullJoin(ISqlStringConverter converter, MethodCallExpression[] methods)
+            => ConvertCondition("FULL JOIN", converter, methods);
+
         internal static SqlText ConvertJoin(ISqlStringConverter converter, MethodCallExpression[] methods)
             => ConvertCondition("JOIN", converter, methods);
 

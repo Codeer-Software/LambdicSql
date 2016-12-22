@@ -471,6 +471,24 @@ namespace LambdicSql
         public static IClauseChain<TSelected> RightJoin<TSelected>(this IClauseChain<TSelected> before, object table, bool condition) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(RightJoin));
 
         /// <summary>
+        /// FULL JOIN clause.
+        /// </summary>
+        /// <param name="table">Table or subquery.</param>
+        /// <param name="condition">It is a condition of RIGHT JOIN.</param>
+        /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
+        public static IClauseChain<Non> FullJoin(object table, bool condition) => InvalitContext.Throw<IClauseChain<Non>>(nameof(FullJoin));
+
+        /// <summary>
+        /// FULL JOIN clause.
+        /// </summary>
+        /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
+        /// <param name="before">It is the previous clause.</param>
+        /// <param name="table">Table or subquery.</param>>
+        /// <param name="condition">It is a condition of RIGHT JOIN.</param>
+        /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
+        public static IClauseChain<TSelected> FullJoin<TSelected>(this IClauseChain<TSelected> before, object table, bool condition) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(FullJoin));
+
+        /// <summary>
         /// CROSS JOIN clause.
         /// </summary>
         /// <param name="expression">Table or subquery.</param>
@@ -1433,6 +1451,8 @@ namespace LambdicSql
                     return FromClause.ConvertLeftJoin(converter, methods);
                 case nameof(RightJoin):
                     return FromClause.ConvertRightJoin(converter, methods);
+                case nameof(FullJoin):
+                    return FromClause.ConvertFullJoin(converter, methods);
                 case nameof(CrossJoin):
                     return FromClause.ConvertCrossJoin(converter, methods);
                 case nameof(GroupBy):

@@ -615,5 +615,7 @@ SELECT
 	rec.val
 FROM rec", 1, 1, 1, 5);
         }
+
+        //TODO テスト WHERE句の比較にサブクエリを入れる 直とsubと両方
     }
 }
