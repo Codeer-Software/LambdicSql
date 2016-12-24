@@ -247,6 +247,13 @@ namespace LambdicSql.Inside
                 ret.Add(chain[0].GetConverotrMethod()(this, c.ToArray()));
             }
 
+            //TODO ちょっと嫌すぎる。括弧を付けない方法を何か確立せねば
+            if (ret.Count == 1 && typeof(Keywords.DisableBracketsText).IsAssignableFrom(ret[0].GetType()))
+            {
+                return new DecodedInfo(method.Method.ReturnType, ret[0]);
+            }
+
+
             SqlText text = new VText(ret.ToArray());
             if (typeof(SelectClauseText).IsAssignableFrom(ret[0].GetType()))
             {

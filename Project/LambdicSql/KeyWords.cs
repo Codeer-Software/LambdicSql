@@ -904,6 +904,14 @@ namespace LambdicSql
         public static bool In(object target, IClauseChain canditates) => InvalitContext.Throw<bool>(nameof(In));
 
         /// <summary>
+        /// ALL Keyword
+        /// </summary>
+        /// <typeparam name="T">Retunn type.</typeparam>
+        /// <param name="sub">Sub query.</param>
+        /// <returns>Sub query's selected value.</returns>
+        public static T All<T>(object sub) => InvalitContext.Throw<T>(nameof(In));
+
+        /// <summary>
         /// EXISTS keyword.
         /// </summary>
         /// <param name="expression">Sub query.</param>
@@ -1485,6 +1493,8 @@ namespace LambdicSql
                     return WhereClause.Convert(converter, methods);
                 case nameof(In):
                     return ConditionKeyWords.ConvertIn(converter, methods);
+                case nameof(All):
+                    return ConditionKeyWords.ConvertAll(converter, methods);
                 case nameof(Like):
                     return ConditionKeyWords.ConvertLike(converter, methods);
                 case nameof(Between):

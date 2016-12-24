@@ -540,5 +540,30 @@ WHERE tbl_staff.name IS NOT NULL");
 FROM tbl_staff
 WHERE @val IS NOT NULL", new Params() { { "@val", "" } });
         }
+
+
+        //TODO
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void XXX()
+        {
+            var name = _connection.GetType().Name;
+            if (name == "NpgsqlConnection") return;
+            if (name == "SQLiteConnection") return;
+
+            var query = Sql<DB>.Create(db =>
+            Select(new SelectData
+            {
+                Id = db.tbl_staff.id
+            }).
+            From(db.tbl_staff).
+            Where(db.tbl_staff.id < All<int>(Select(db.tbl_staff.id).From(db.tbl_staff)))
+            );
+            query.Gen(_connection);
+            var datas = _connection.Query(query).ToList();
+        }
+
+
+
+
     }
 }

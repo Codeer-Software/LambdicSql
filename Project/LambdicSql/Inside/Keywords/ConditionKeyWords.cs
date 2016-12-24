@@ -31,5 +31,38 @@ namespace LambdicSql.Inside.Keywords
             var args = methods[0].Arguments.Select(e => converter.Convert(e)).ToArray();
             return Clause("EXISTS", args[0]);
         }
+
+        internal static SqlText ConvertAll(ISqlStringConverter converter, MethodCallExpression[] methods)
+        {
+            var args = methods[0].Arguments.Select(e => converter.Convert(e)).ToArray();
+            return new DisableBracketsText(Func("ALL", args[0]));
+        }
+    }
+
+    class DisableBracketsText : SqlText
+    {
+        SqlText _core;
+
+        internal DisableBracketsText(SqlText core)
+        {
+            _core = core;
+        }
+
+        public override bool IsSingleLine(SqlConvertingContext context) => _core.IsSingleLine(context);
+
+        public override bool IsEmpty => _core.IsEmpty;
+
+        public override string ToString(bool isTopLevel, int indent, SqlConvertingContext context)
+        {
+            return _core.ToString(false, indent, context);
+        }
+
+        public override SqlText ConcatAround(string front, string back) => this;
+
+        public override SqlText ConcatToFront(string front) => new DisableBracketsText(_core.ConcatToFront(front));
+
+        public override SqlText ConcatToBack(string back) => new DisableBracketsText(_core.ConcatToBack(back));
+
+        public override SqlText Customize(ISqlTextCustomizer customizer) => customizer.Custom(this);
     }
 }
