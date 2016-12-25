@@ -1,4 +1,4 @@
-﻿LambdicSql_β 0.13.0
+﻿LambdicSql_β 0.15.0
 ======================
 
 ## Features ...
@@ -15,6 +15,48 @@ And execut and map to object, recommend using dapper.
     PM> Install-Package Dapper
 
 https://www.nuget.org/packages/LambdicSql/
+
+## Summary Code.
+Standard code.
+```cs
+using LambdicSql;
+using LambdicSql.feat.Dapper;
+using static LambdicSql.Keywords;
+
+public void TestStandard()
+{
+	var min = 3000;
+	
+    //make sql.
+    var query = Sql<DB>.Create(db =>
+        Select(new SelectData()
+        {
+            Name = db.tbl_staff.name,
+            PaymentDate = db.tbl_remuneration.payment_date,
+            Money = db.tbl_remuneration.money,
+        }).
+        From(db.tbl_remuneration).
+            Join(db.tbl_staff, db.tbl_staff.id == db.tbl_remuneration.staff_id).
+        Where(min < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
+
+    //to string and params.
+    var info = query.ToSqlInfo(_connection.GetType());
+    Debug.Print(info.SqlText);
+
+    //if you installed dapper, use this extension.
+    var datas = _connection.Query(query).ToList();
+}
+```
+```sql
+SELECT
+	tbl_staff.name AS Name,
+	tbl_remuneration.payment_date AS PaymentDate,
+	tbl_remuneration.money AS Money
+FROM tbl_remuneration
+	JOIN tbl_staff ON (tbl_staff.id) = (tbl_remuneration.staff_id)
+WHERE ((@min) < (tbl_remuneration.money)) AND ((tbl_remuneration.money) < (@p_1))
+```
+
 ## Supported Keywords.
 - SELECT
 - FROM
@@ -159,50 +201,6 @@ Do you know 2 way sql?
 It's executable sql text.
 And change by condition and keyword.
 
-## Summary Code.
-Standard code.
-```cs
-//important
-using Dapper;
-using LambdicSql;
-using LambdicSql.feat.Dapper;
-using static LambdicSql.Keywords;
-using static LambdicSql.Funcs;
-using static LambdicSql.Utils;
-
-public void TestStandard()
-{
-	var min = 3000;
-	
-    //make sql.
-    var query = Sql<DB>.Create(db =>
-        Select(new SelectData()
-        {
-            Name = db.tbl_staff.name,
-            PaymentDate = db.tbl_remuneration.payment_date,
-            Money = db.tbl_remuneration.money,
-        }).
-        From(db.tbl_remuneration).
-            Join(db.tbl_staff, db.tbl_staff.id == db.tbl_remuneration.staff_id).
-        Where(min < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
-
-    //to string and params.
-    var info = query.ToSqlInfo(_connection.GetType());
-    Debug.Print(info.SqlText);
-
-    //if you installed dapper, use this extension.
-    var datas = _connection.Query(query).ToList();
-}
-```
-```sql
-SELECT
-	tbl_staff.name AS Name,
-	tbl_remuneration.payment_date AS PaymentDate,
-	tbl_remuneration.money AS Money
-FROM tbl_remuneration
-	JOIN tbl_staff ON (tbl_staff.id) = (tbl_remuneration.staff_id)
-WHERE ((@min) < (tbl_remuneration.money)) AND ((tbl_remuneration.money) < (@p_1))
-```
 And building sql is freedom.<br>
 Concat query.
 ```cs

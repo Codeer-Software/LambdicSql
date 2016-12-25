@@ -5,13 +5,14 @@ using System.Linq;
 using static Test.Helper.DBProviderInfo;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Test.Helper;
+using System.Collections.Generic;
+using LambdicSql.SqlBase;
+
 
 //important
 using LambdicSql;
 using LambdicSql.feat.Dapper;
 using static LambdicSql.Keywords;
-using System.Collections.Generic;
-using LambdicSql.SqlBase;
 
 //TODO Make this a more practical sample.
 //Add better data for sample
