@@ -23,6 +23,27 @@ using LambdicSql;
 using LambdicSql.feat.Dapper;
 using static LambdicSql.Keywords;
 
+//tables.
+public class Staff
+{
+    public int id { get; set; }
+    public string name { get; set; }
+}
+
+public class Remuneration
+{
+    public int id { get; set; }
+    public int staff_id { get; set; }
+    public DateTime payment_date { get; set; }
+    public decimal money { get; set; }
+}
+
+public class DB
+{
+    public Staff tbl_staff { get; set; }
+    public Remuneration tbl_remuneration { get; set; }
+}
+
 public void TestStandard()
 {
 	var min = 3000;
@@ -191,18 +212,6 @@ https://github.com/Codeer-Software/LambdicSql/blob/master/Project/TestCheck35/Sa
 It can be combined parts.
 Query, Sub query, Expression.
 You can write DRY code.
-
-## Support for combination of the text.
-You can insert text to expression.
-And insert expression to text.
-
-## 2 way sql.
-Do you know 2 way sql?
-It's executable sql text.
-And change by condition and keyword.
-
-And building sql is freedom.<br>
-Concat query.
 ```cs
 public void TestQueryConcat()
 {
@@ -309,7 +318,9 @@ FROM
 		JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)
 	WHERE ((@p_2) < (tbl_remuneration.money)) AND ((tbl_remuneration.money) < (@p_3))) AS subQuery
 ```
-Use text.
+## Support for combination of the text.
+You can insert text to expression.
+And insert expression to text.
 ```cs
 //You can use text.
 public void TestFormatText()
@@ -343,7 +354,10 @@ FROM tbl_remuneration
 	JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)
 WHERE ((@p_0) < (tbl_remuneration.money)) AND ((tbl_remuneration.money) < (@p_1))
 ```
-2 way sql.
+## 2 way sql.
+Do you know 2 way sql?
+It's executable sql text.
+And change by condition and keyword.
 ```cs
 //2 way sql
 public void TestFormat2WaySql()
