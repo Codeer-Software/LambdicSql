@@ -331,7 +331,7 @@ public void TestFormatText()
         {
             name = db.tbl_staff.name,
             payment_date = db.tbl_remuneration.payment_date,
-            money = Text<decimal>("{0} + 1000", db.tbl_remuneration.money),
+            money = "{0} + 1000".TextSql(db.tbl_remuneration.money),
         }).
         From(db.tbl_remuneration).
             Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
@@ -378,7 +378,7 @@ FROM tbl_remuneration
 JOIN tbl_staff ON tbl_staff.id = tbl_remuneration.staff_id
 /*1*/WHERE tbl_remuneration.money = 100/**/";
     
-    var query = Sql<DB>.Create(db => TwoWaySql(sql,
+    var query = Sql<DB>.Create(db => sql.TwoWaySql(
         bonus,
         Where(
             Condition(minCondition, 3000 < db.tbl_remuneration.money) &&
