@@ -36,9 +36,6 @@ namespace TestCheck35
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Normal()
         {
-            var name = _connection.GetType().Name;
-            if (name != "SqlConnection") return;
-
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData
                 {

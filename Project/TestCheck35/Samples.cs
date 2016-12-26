@@ -1483,13 +1483,7 @@ FROM tbl_remuneration
             Debug.Print(info.SqlText);
             return _connection.Query<T>(exp).ToList();
         }
-
-        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void XXX()
-        {
-            var min = 0;
-            var query = Sql<DB>.Create(db => min < 4000);
-        }
+        
         /*
         [TestMethod]
         public void TestAlias()

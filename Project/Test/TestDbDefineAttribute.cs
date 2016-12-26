@@ -95,9 +95,6 @@ namespace Test
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Normal()
         {
-            var name = _connection.GetType().Name;
-            if (name != "SqlConnection") return;
-
             var query = Sql<DBX>.Create(db =>
                 Select(new SelectData
                 {

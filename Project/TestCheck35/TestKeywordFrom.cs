@@ -50,7 +50,7 @@ namespace TestCheck35
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
-            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+            AssertEx.AreEqual(query, _connection,
 @"SELECT
 	tbl_remuneration.payment_date AS PaymentDate,
 	tbl_remuneration.money AS Money
@@ -199,7 +199,7 @@ WHERE (expRemuneration.staff_id) = (expStaff.id)");
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
-            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+            AssertEx.AreEqual(query, _connection,
 @"SELECT
 	tbl_remuneration.payment_date AS PaymentDate,
 	tbl_remuneration.money AS Money
@@ -223,7 +223,7 @@ FROM tbl_remuneration
             
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
-            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+            AssertEx.AreEqual(query, _connection,
 @"SELECT
 	tbl_remuneration.payment_date AS PaymentDate,
 	tbl_remuneration.money AS Money
@@ -245,7 +245,7 @@ FROM tbl_remuneration
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
-            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+            AssertEx.AreEqual(query, _connection,
 @"SELECT
 	tbl_remuneration.payment_date AS PaymentDate,
 	tbl_remuneration.money AS Money
@@ -269,7 +269,7 @@ FROM tbl_remuneration
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
-            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+            AssertEx.AreEqual(query, _connection,
 @"SELECT
 	tbl_remuneration.payment_date AS PaymentDate,
 	tbl_remuneration.money AS Money
@@ -293,7 +293,7 @@ FROM tbl_remuneration
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
-            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+            AssertEx.AreEqual(query, _connection,
 @"SELECT
 	tbl_remuneration.payment_date AS PaymentDate,
 	tbl_remuneration.money AS Money
@@ -319,7 +319,7 @@ FROM tbl_remuneration
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
-            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+            AssertEx.AreEqual(query, _connection,
 @"SELECT
 	tbl_remuneration.payment_date AS PaymentDate,
 	tbl_remuneration.money AS Money
@@ -345,7 +345,7 @@ FROM tbl_remuneration
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
-            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+            AssertEx.AreEqual(query, _connection,
 @"SELECT
 	tbl_remuneration.payment_date AS PaymentDate,
 	tbl_remuneration.money AS Money
@@ -372,7 +372,7 @@ FROM tbl_remuneration
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
-            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+            AssertEx.AreEqual(query, _connection,
 @"SELECT
 	tbl_remuneration.payment_date AS PaymentDate,
 	tbl_remuneration.money AS Money
@@ -396,7 +396,7 @@ FROM tbl_remuneration
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
-            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+            AssertEx.AreEqual(query, _connection,
 @"SELECT
 	tbl_remuneration.payment_date AS PaymentDate,
 	tbl_remuneration.money AS Money
@@ -420,7 +420,7 @@ FROM tbl_remuneration
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
-            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+            AssertEx.AreEqual(query, _connection,
 @"SELECT
 	tbl_remuneration.payment_date AS PaymentDate,
 	tbl_remuneration.money AS Money
@@ -445,7 +445,7 @@ FROM tbl_remuneration
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
-            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+            AssertEx.AreEqual(query, _connection,
 @"SELECT
 	tbl_remuneration.payment_date AS PaymentDate,
 	tbl_remuneration.money AS Money
@@ -471,7 +471,7 @@ FROM tbl_remuneration
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
-            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+            AssertEx.AreEqual(query, _connection,
 @"SELECT
 	tbl_remuneration.payment_date AS PaymentDate,
 	tbl_remuneration.money AS Money
@@ -495,7 +495,7 @@ FROM tbl_remuneration
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
-            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+            AssertEx.AreEqual(query, _connection,
 @"SELECT
 	tbl_remuneration.payment_date AS PaymentDate,
 	tbl_remuneration.money AS Money
@@ -521,7 +521,7 @@ FROM tbl_remuneration
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
-            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+            AssertEx.AreEqual(query, _connection,
 @"SELECT
 	tbl_remuneration.payment_date AS PaymentDate,
 	tbl_remuneration.money AS Money
@@ -547,7 +547,7 @@ FROM tbl_remuneration
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
-            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+            AssertEx.AreEqual(query, _connection,
 @"SELECT
 	tbl_remuneration.payment_date AS PaymentDate,
 	tbl_remuneration.money AS Money
@@ -575,7 +575,7 @@ FROM tbl_remuneration
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
-            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+            AssertEx.AreEqual(query, _connection,
 @"SELECT
 	tbl_remuneration.payment_date AS PaymentDate,
 	tbl_remuneration.money AS Money
@@ -602,7 +602,7 @@ FROM tbl_remuneration
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
-            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+            AssertEx.AreEqual(query, _connection,
 @"SELECT
 	tbl_remuneration.payment_date AS PaymentDate,
 	tbl_remuneration.money AS Money
@@ -631,7 +631,7 @@ FROM tbl_remuneration
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
-            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+            AssertEx.AreEqual(query, _connection,
 @"SELECT
 	tbl_remuneration.payment_date AS PaymentDate,
 	tbl_remuneration.money AS Money
@@ -657,7 +657,7 @@ FROM tbl_remuneration
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
-            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+            AssertEx.AreEqual(query, _connection,
 @"SELECT
 	tbl_remuneration.payment_date AS PaymentDate,
 	tbl_remuneration.money AS Money
@@ -684,7 +684,7 @@ FROM tbl_remuneration
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
-            Assert.AreEqual(query.ToSqlInfo(_connection.GetType()).SqlText,
+            AssertEx.AreEqual(query, _connection,
 @"SELECT
 	tbl_remuneration.payment_date AS PaymentDate,
 	tbl_remuneration.money AS Money

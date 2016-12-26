@@ -156,9 +156,6 @@ HAVING (@p_0) < (SUM(tbl_remuneration.money))",
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Condition4()
         {
-            var name = _connection.GetType().Name;
-            if (name == "SQLiteConnection") return;
-
             var condition = Sql<DB>.Create(db => new Condition(false, 100 < Sum(db.tbl_remuneration.money)));
 
             var query = Sql<DB>.Create(db =>
@@ -182,9 +179,6 @@ GROUP BY tbl_remuneration.staff_id");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Condition5()
         {
-            var name = _connection.GetType().Name;
-            if (name == "SQLiteConnection") return;
-
             var exp = Sql<DB>.Create(db => 100 < Sum(db.tbl_remuneration.money));
             var condition = Sql<DB>.Create(db => new Condition(false, exp));
 
