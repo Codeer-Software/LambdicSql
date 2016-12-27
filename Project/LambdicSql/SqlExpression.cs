@@ -20,7 +20,7 @@ namespace LambdicSql
         /// <returns>text.</returns>
         SqlText SqlText { get; }
     }
-
+    
     /// <summary>
     /// Expressions that represent part of the query.
     /// </summary>
