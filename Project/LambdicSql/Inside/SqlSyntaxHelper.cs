@@ -20,7 +20,6 @@ namespace LambdicSql.Inside
         static Dictionary<MetaId, bool> _isForcedMethodGroup = new Dictionary<MetaId, bool>();
         static Dictionary<MetaId, bool> _isExtension = new Dictionary<MetaId, bool>();
         static Dictionary<MetaId, bool> _canResolveSqlSyntaxMethodChain = new Dictionary<MetaId, bool>();
-        static Dictionary<MetaId, string> _methodGroup = new Dictionary<MetaId, string>();
 
         internal static bool IsSqlSyntax(this Type type)
         {
@@ -160,22 +159,7 @@ namespace LambdicSql.Inside
                 return func;
             }
         }
-
-        internal static string GetMethodGroupName(this MethodInfo methodInfo)
-        {
-            var id = new MetaId(methodInfo);
-            lock (_methodGroup)
-            {
-                string groupName;
-                if (_methodGroup.TryGetValue(id, out groupName)) return groupName;
-
-                var attr = methodInfo.GetCustomAttributes(typeof(MethodGroupAttribute), true).Cast<MethodGroupAttribute>().FirstOrDefault();
-                groupName = attr == null ? string.Empty : attr.GroupName;
-                _methodGroup[id] = groupName;
-                return groupName;
-            }
-        }
-
+        
         internal static int SkipMethodChain(this MethodCallExpression exp, int index)
         {
             var ps = exp.Method.GetParameters();

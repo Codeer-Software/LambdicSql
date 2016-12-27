@@ -485,18 +485,16 @@ namespace LambdicSql.Inside
                 var type = curent.Method.DeclaringType;
                 var group = new List<MethodCallExpression>();
                 string groupName = string.Empty;
-                bool forcedMethodGroup = false;
                 while (true)
                 {
                     var oldGroupName = groupName;
-                    var currentGroupName = curent.Method.GetMethodGroupName();
+                    var currentGroupName = string.Empty;// curent.Method.GetMethodGroupName();
                     groupName = currentGroupName;
-                    if (!forcedMethodGroup && !string.IsNullOrEmpty(oldGroupName) && oldGroupName != currentGroupName)
+                    if (!string.IsNullOrEmpty(oldGroupName) && oldGroupName != currentGroupName)
                     {
                         groupName = string.Empty;
                         break;
                     }
-                    forcedMethodGroup = false;
 
                     group.Add(curent);
                     var ps = curent.Method.GetParameters();
@@ -505,9 +503,9 @@ namespace LambdicSql.Inside
                         && 0 < ps.Length 
                         && typeof(IMethodChain).IsAssignableFrom(ps[0].ParameterType);
 
-                    forcedMethodGroup = curent.Method.IsDefined(typeof(ForcedMethodGroupAttribute), false);
+                    var methodX = curent.Method.IsDefined(typeof(ForcedMethodGroupAttribute), false);
 
-                    var next = (isSqlSyntax || forcedMethodGroup) ? curent.Arguments[0] as MethodCallExpression : null;
+                    var next = (isSqlSyntax || methodX) ? curent.Arguments[0] as MethodCallExpression : null;
 
                     //end of syntax
                     if (next == null)
@@ -520,7 +518,7 @@ namespace LambdicSql.Inside
 
                     curent = next;
                     //end of chain
-                    if (!forcedMethodGroup && string.IsNullOrEmpty(currentGroupName))
+                    if (string.IsNullOrEmpty(currentGroupName))
                     {
                         groupName = string.Empty;
                         break;

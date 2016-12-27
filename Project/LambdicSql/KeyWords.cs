@@ -322,7 +322,6 @@ namespace LambdicSql
         /// CASE clause.
         /// </summary>
         /// <returns>It is an object for describing the continuation of the CASE expression.</returns>
-        [MethodGroup(nameof(Case))]
         public static ICaseAfter Case() => InvalitContext.Throw<ICaseAfter>(nameof(Case));
 
         /// <summary>
@@ -330,7 +329,6 @@ namespace LambdicSql
         /// </summary>
         /// <param name="target">It's target of CASE branch.</param>
         /// <returns>It is an object for describing the continuation of the CASE expression.</returns>
-        [MethodGroup(nameof(Case))]
         public static ICaseAfter Case(object target) => InvalitContext.Throw<ICaseAfter>(nameof(Case));
 
         /// <summary>
@@ -339,7 +337,6 @@ namespace LambdicSql
         /// <param name="before">It is an before expression in the CASE clause.</param>
         /// <param name="expression">It is a conditional expression of the WHEN clause.</param>
         /// <returns>It is an object for describing the continuation of the CASE expression.</returns>
-        [MethodGroup(nameof(Case))]
         public static IWhenAfter When(this ICaseAfter before, object expression) => InvalitContext.Throw<IWhenAfter>(nameof(When));
 
         /// <summary>
@@ -349,7 +346,6 @@ namespace LambdicSql
         /// <param name="before">It is an before expression in the CASE clause.</param>
         /// <param name="expression">It is a conditional expression of the WHEN clause.</param>
         /// <returns>It is an object for describing the continuation of the CASE expression.</returns>
-        [MethodGroup(nameof(Case))]
         public static IWhenAfter<T> When<T>(this IThenAfter<T> before, object expression) => InvalitContext.Throw<IWhenAfter<T>>(nameof(When));
 
         /// <summary>
@@ -359,7 +355,6 @@ namespace LambdicSql
         /// <param name="before">It is an before expression in the CASE clause.</param>
         /// <param name="result">It is an item to return to when the THEN clause is valid.</param>
         /// <returns>It is an object for describing the continuation of the CASE expression.</returns>
-        [MethodGroup(nameof(Case))]
         public static IThenAfter<T> Then<T>(this IWhenAfter before, T result) => InvalitContext.Throw<IThenAfter<T>>(nameof(Then));
 
         /// <summary>
@@ -369,7 +364,6 @@ namespace LambdicSql
         /// <param name="before">It is an before expression in the CASE clause.</param>
         /// <param name="result">It is an item to return to when the THEN clause is valid.</param>
         /// <returns>It is an object for describing the continuation of the CASE expression.</returns>
-        [MethodGroup(nameof(Case))]
         public static IThenAfter<T> Then<T>(this IWhenAfter<T> before, T result) => InvalitContext.Throw<IThenAfter<T>>(nameof(Then));
 
         /// <summary>
@@ -379,7 +373,6 @@ namespace LambdicSql
         /// <param name="before">It is an before expression in the CASE clause.</param>
         /// <param name="result">It is an item to return to when the ELSE clause is valid.</param>
         /// <returns>It is an object for describing the continuation of the CASE expression.</returns>
-        [MethodGroup(nameof(Case))]
         public static IElseAfter<T> Else<T>(this IThenAfter<T> before, T result) => InvalitContext.Throw<IElseAfter<T>>(nameof(Then));
 
         /// <summary>
@@ -388,7 +381,6 @@ namespace LambdicSql
         /// <typeparam name="T">Type represented by CASE expression.</typeparam>
         /// <param name="before">It is an before expression in the CASE clause.</param>
         /// <returns>It is the result of CASE expression.</returns>
-        [MethodGroup(nameof(Case))]
         public static T End<T>(this IThenAfter<T> before) => InvalitContext.Throw<T>(nameof(End));
 
         /// <summary>
@@ -397,7 +389,6 @@ namespace LambdicSql
         /// <typeparam name="T">Type represented by CASE expression.</typeparam>
         /// <param name="before">It is an before expression in the CASE clause.</param>
         /// <returns>It is the result of CASE expression.</returns>
-        [MethodGroup(nameof(Case))]
         public static T End<T>(this IElseAfter<T> before) => InvalitContext.Throw<T>(nameof(End));
 
         /// <summary>
@@ -823,7 +814,6 @@ namespace LambdicSql
         /// </summary>
         /// <param name="table">Table for UPDATE.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        [MethodGroup(nameof(Update))]
         public static IClauseChain<Non> Update(object table) => InvalitContext.Throw<IClauseChain<Non>>(nameof(Update));
 
         /// <summary>
@@ -833,7 +823,6 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="assigns">Assignment in the SET clause.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        [MethodGroup(nameof(Update))]
         public static IClauseChain<TSelected> Set<TSelected>(this IClauseChain<TSelected> before, params Assign[] assigns) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(Set));
 
         /// <summary>
@@ -848,7 +837,6 @@ namespace LambdicSql
         /// <param name="table">Table for INSERT.</param>
         /// <param name="columns">It is a column that performs INSERT.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        [MethodGroup(nameof(InsertInto))]
         public static IClauseChain<Non> InsertInto(object table, params object[] columns) => InvalitContext.Throw<IClauseChain<Non>>(nameof(InsertInto));
 
         /// <summary>
@@ -858,7 +846,6 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="values">It is the value to be Inserted.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        [MethodGroup(nameof(InsertInto))]
         public static IClauseChain<TSelected> Values<TSelected>(this IClauseChain<TSelected> before, params object[] values)
              => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(Values));
 
@@ -1450,6 +1437,10 @@ namespace LambdicSql
                 case nameof(Select):
                     return SelectClause.Convert(converter, methods);
                 case nameof(Case):
+                case nameof(When):
+                case nameof(Then):
+                case nameof(Else):
+                case nameof(End):
                     return CaseClause.Convert(converter, methods);
                 case nameof(Delete):
                     return DeleteClause.Convert(converter, methods);
@@ -1478,6 +1469,7 @@ namespace LambdicSql
                 case nameof(Having):
                     return HavingClause.Convert(converter, methods);
                 case nameof(InsertInto):
+                case nameof(Values):
                     return InsertIntoClause.Convert(converter, methods);
                 case nameof(OrderBy):
                     return OrderByWordsClause.Convert(converter, methods);
@@ -1490,6 +1482,7 @@ namespace LambdicSql
                 case nameof(Offset):
                     return OffsetClause.Convert(converter, methods);
                 case nameof(Update):
+                case nameof(Set):
                     return UpdateClause.Convert(converter, methods);
                 case nameof(Where):
                     return WhereClause.Convert(converter, methods);
@@ -1520,8 +1513,10 @@ namespace LambdicSql
                 case nameof(Count):
                     {
                         var args = method.Arguments.Select(e => converter.Convert(e)).ToArray();
-                        var func = (method.Arguments.Count == 2) ? FuncSpace(method.Method.Name.ToUpper(), args):
+                        return (method.Arguments.Count == 2) ? FuncSpace(method.Method.Name.ToUpper(), args):
                                                                     Func(method.Method.Name.ToUpper(), args);
+
+                        /*
                         if (methods.Length == 1)
                         {
                             return func;
@@ -1533,7 +1528,7 @@ namespace LambdicSql
                         v.AddRange(1, overMethod.Arguments.Skip(1).
                             Where(e => !(e is ConstantExpression)). //Skip null.
                             Select(e => converter.Convert(e)).ToArray());
-                        return v.ConcatToBack(")");
+                        return v.ConcatToBack(")");*/
                     }
                 case nameof(Extract):
                     {
@@ -1572,7 +1567,9 @@ namespace LambdicSql
                 case nameof(Lag):
                     {
                         var args = method.Arguments.Select(e => converter.Convert(e)).ToArray();
-                        var func = Func(method.Method.Name.ToUpper(), args);
+                        return Func(method.Method.Name.ToUpper(), args);
+
+                        /*
                         if (methods.Length == 1)
                         {
                             return func;
@@ -1584,9 +1581,18 @@ namespace LambdicSql
                         v.AddRange(1, overMethod.Arguments.Skip(1).
                             Where(e => !(e is ConstantExpression)). //Skip null.
                             Select(e => converter.Convert(e)).ToArray());
+                        return v.ConcatToBack(")");*/
+                    }
+                case nameof(Over):
+                    {
+                        var v = new VText();
+                        var overMethod = methods[0];
+                        v.Add(overMethod.Method.Name.ToUpper() + "(");
+                        v.AddRange(1, overMethod.Arguments.Skip(1).
+                            Where(e => !(e is ConstantExpression)). //Skip null.
+                            Select(e => converter.Convert(e)).ToArray());
                         return v.ConcatToBack(")");
                     }
-
                 case nameof(Rows):
                     return Window.ConvertRows(converter, methods);
                 case nameof(PartitionBy):

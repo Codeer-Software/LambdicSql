@@ -288,7 +288,7 @@ public void TestSubQueryAtFrom()
 {
     //make sql.
     var subQuery = Sql<DB>.Create(db => 
-        Select(new
+        Select(new SelectedData
         {
             name_sub = db.tbl_staff.name,
             PaymentDate = db.tbl_remuneration.payment_date,
@@ -327,11 +327,11 @@ public void TestFormatText()
 {
     //make sql.
     var query = Sql<DB>.Create(db =>
-        Select(new
+        Select(new SelectedData
         {
             name = db.tbl_staff.name,
             payment_date = db.tbl_remuneration.payment_date,
-            money = "{0} + 1000".ToSql(db.tbl_remuneration.money),
+            money = (decimal)"{0} + 1000".ToSql(db.tbl_remuneration.money),
         }).
         From(db.tbl_remuneration).
             Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
@@ -388,7 +388,7 @@ JOIN tbl_staff ON tbl_staff.id = tbl_remuneration.staff_id
     Debug.Print(info.SqlText);
 
     //if you installed dapper, use this extension.
-    var datas = _connection.Query(query).ToList();
+    var datas = _connection.Query<SelectedData>(query).ToList();
 }
 ```
 min max enable.

@@ -12,7 +12,6 @@ namespace LambdicSql.Inside.Keywords
         internal static SqlText Convert(ISqlStringConverter converter, MethodCallExpression[] methods)
         {
             var texts = new VText();
-            HText whenThen = null;
             foreach(var m in methods)
             {
                 var argSrc = m.Arguments.Skip(m.SkipMethodChain(0)).Select(e => converter.Convert(e)).ToArray();
@@ -20,23 +19,15 @@ namespace LambdicSql.Inside.Keywords
                 switch (m.Method.Name)
                 {
                     case nameof(LambdicSql.Keywords.Case):
-                        texts.Add(Clause("CASE", argSrc));
-                        break;
+                        return Clause("CASE", argSrc);
                     case nameof(LambdicSql.Keywords.When):
-                        whenThen = SubClause("WHEN", argSrc);
-                        break;
+                        return SubClause("WHEN", argSrc);
                     case nameof(LambdicSql.Keywords.Then):
-                        if (whenThen == null) throw new NotSupportedException();
-                        whenThen.Add(Clause("THEN", argSrc));
-                        texts.Add(whenThen);
-                        whenThen = null;
-                        break;
+                        return SubClause("THEN", argSrc);
                     case nameof(LambdicSql.Keywords.Else):
-                        texts.Add(SubClause("ELSE", argSrc));
-                        break;
+                        return SubClause("ELSE", argSrc);
                     case nameof(LambdicSql.Keywords.End):
-                        texts.Add("END");
-                        break;
+                        return "END";
                     default:
                         throw new NotSupportedException();
                 }

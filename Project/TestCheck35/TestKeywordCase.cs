@@ -46,15 +46,15 @@ namespace TestCheck35
                 }).
                 From(db.tbl_staff));
 
-            query.Gen(_connection);
-
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
- @"SELECT
+@"SELECT
 	CASE
-		WHEN (tbl_staff.id) = (@p_0) THEN @p_1
-		WHEN (tbl_staff.id) = (@p_2) THEN @p_3
+		WHEN (tbl_staff.id) = (@p_0)
+		THEN @p_1
+		WHEN (tbl_staff.id) = (@p_2)
+		THEN @p_3
 		ELSE @p_4
 	END AS Type
 FROM tbl_staff",
@@ -76,10 +76,12 @@ FROM tbl_staff",
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
-@"SELECT
+ @"SELECT
 	CASE
-		WHEN (tbl_staff.id) = (@p_0) THEN @p_1
-		WHEN (tbl_staff.id) = (@p_2) THEN @p_3
+		WHEN (tbl_staff.id) = (@p_0)
+		THEN @p_1
+		WHEN (tbl_staff.id) = (@p_2)
+		THEN @p_3
 	END AS Type
 FROM tbl_staff",
 3, "x", 4, "y");
@@ -99,15 +101,15 @@ FROM tbl_staff",
                 }).
                 From(db.tbl_staff));
 
-            query.Gen(_connection);
-
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
 	CASE tbl_staff.id
-		WHEN @p_0 THEN @p_1
-		WHEN @p_2 THEN @p_3
+		WHEN @p_0
+		THEN @p_1
+		WHEN @p_2
+		THEN @p_3
 		ELSE @p_4
 	END AS Type
 FROM tbl_staff",
@@ -131,8 +133,10 @@ FROM tbl_staff",
             AssertEx.AreEqual(query, _connection,
 @"SELECT
 	CASE tbl_staff.id
-		WHEN @p_0 THEN @p_1
-		WHEN @p_2 THEN @p_3
+		WHEN @p_0
+		THEN @p_1
+		WHEN @p_2
+		THEN @p_3
 	END AS Type
 FROM tbl_staff",
 3, "x", 4, "y");
@@ -155,13 +159,16 @@ FROM tbl_staff",
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
-@"SELECT
+ @"SELECT
 	CASE
-		WHEN (@val) = (@p_0) THEN tbl_staff.name
-		WHEN (@val) = (@p_1) THEN tbl_staff.name
+		WHEN (@val) = (@p_0)
+		THEN tbl_staff.name
+		WHEN (@val) = (@p_1)
+		THEN tbl_staff.name
 		ELSE tbl_staff.name
 	END AS Type
-FROM tbl_staff", new Params()
+FROM tbl_staff", 
+new Params()
 {
     { "@val", 0 },
     { "@p_0", 3 },
@@ -190,10 +197,12 @@ FROM tbl_staff", new Params()
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
- @"SELECT
+@"SELECT
 	CASE
-		WHEN (tbl_staff.id) = (@p_0) THEN @p_1
-		WHEN (tbl_staff.id) = (@p_2) THEN @p_3
+		WHEN (tbl_staff.id) = (@p_0)
+		THEN @p_1
+		WHEN (tbl_staff.id) = (@p_2)
+		THEN @p_3
 		ELSE @p_4
 	END AS Type
 FROM tbl_staff",
@@ -216,14 +225,18 @@ FROM tbl_staff",
                 From(db.tbl_staff));
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
+
             AssertEx.AreEqual(query, _connection,
 @"SELECT
 	CASE @val
-		WHEN tbl_staff.id THEN tbl_staff.name
-		WHEN tbl_staff.id THEN tbl_staff.name
+		WHEN tbl_staff.id
+		THEN tbl_staff.name
+		WHEN tbl_staff.id
+		THEN tbl_staff.name
 		ELSE tbl_staff.name
 	END AS Type
-FROM tbl_staff", new Params { { "@val", 0 } });
+FROM tbl_staff",
+new Params { { "@val", 0 } });
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -250,8 +263,10 @@ FROM tbl_staff", new Params { { "@val", 0 } });
             AssertEx.AreEqual(query, _connection,
 @"SELECT
 	CASE tbl_staff.id
-		WHEN @p_0 THEN @p_1
-		WHEN @p_2 THEN @p_3
+		WHEN @p_0
+		THEN @p_1
+		WHEN @p_2
+		THEN @p_3
 		ELSE @p_4
 	END AS Type
 FROM tbl_staff",
@@ -285,8 +300,10 @@ FROM tbl_staff",
             AssertEx.AreEqual(query, _connection,
 @"SELECT
 	CASE tbl_staff.id
-		WHEN @p_0 THEN @p_1
-		WHEN @p_2 THEN @p_3
+		WHEN @p_0
+		THEN @p_1
+		WHEN @p_2
+		THEN @p_3
 		ELSE @p_4
 	END AS Type
 FROM tbl_staff",
@@ -320,10 +337,11 @@ FROM tbl_staff",
 			FROM tbl_staff))
 			 = 
 			(@p_0)
-			THEN @p_1
+		THEN @p_1
 		ELSE @p_2
 	END AS Type
-FROM tbl_staff", 1, "x", "z");
+FROM tbl_staff",
+1, "x", "z");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -352,10 +370,11 @@ FROM tbl_staff", 1, "x", "z");
 			((SELECT
 				COUNT(*)
 			FROM tbl_staff))
-			THEN @p_1
+		THEN @p_1
 		ELSE @p_2
 	END AS Type
-FROM tbl_staff", 1, "x", "z");
+FROM tbl_staff",
+1, "x", "z");
         }
     }
 }

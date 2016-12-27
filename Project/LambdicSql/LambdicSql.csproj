@@ -86,7 +86,6 @@
     <Compile Include="SqlBase\IClauseChain.cs" />
     <Compile Include="ISqlExpression.cs" />
     <Compile Include="DbParam.cs" />
-    <Compile Include="SqlBase\MethodGroupAttribute.cs" />
     <Compile Include="SqlBase\TextParts\SqlTextUtils.cs" />
     <Compile Include="SqlBase\TextParts\StringAddOperatorText.cs" />
     <Compile Include="SqlBase\TextParts\StringFormatText.cs" />
