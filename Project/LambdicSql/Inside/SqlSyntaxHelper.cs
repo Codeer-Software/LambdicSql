@@ -19,7 +19,6 @@ namespace LambdicSql.Inside
         static Dictionary<Type, bool> _isSqlSyntax = new Dictionary<Type, bool>();
         static Dictionary<MetaId, bool> _isForcedMethodGroup = new Dictionary<MetaId, bool>();
         static Dictionary<MetaId, bool> _isExtension = new Dictionary<MetaId, bool>();
-        static Dictionary<MetaId, bool> _canResolveSqlSyntaxMethodChain = new Dictionary<MetaId, bool>();
 
         internal static bool IsSqlSyntax(this Type type)
         {
@@ -60,21 +59,6 @@ namespace LambdicSql.Inside
                 {
                     check = methodInfo.IsDefined(typeof(ExtensionAttribute), false);
                     _isExtension[id] = check;
-                }
-                return check;
-            }
-        }
-
-        internal static bool CanResolveSqlSyntaxMethodChain(this MethodInfo methodInfo)
-        {
-            var id = new MetaId(methodInfo);
-            lock (_canResolveSqlSyntaxMethodChain)
-            {
-                bool check;
-                if (!_canResolveSqlSyntaxMethodChain.TryGetValue(id, out check))
-                {
-                    check = methodInfo.GetCustomAttributes(true).Any(e => e is ResolveSqlSyntaxMethodChainAttribute);
-                    _canResolveSqlSyntaxMethodChain[id] = check;
                 }
                 return check;
             }

@@ -234,8 +234,9 @@ namespace LambdicSql.Inside
             var ret = new List<SqlText>();
             foreach (var c in GetMethodChains(method))
             {
-                var chain = c.ToArray();
-                ret.Add(chain[0].GetConverotrMethod()(this, c.ToArray()));
+                //TODO @@@
+                var chain = new[] { c };
+                ret.Add(chain[0].GetConverotrMethod()(this, chain));
             }
 
             //TODO ちょっと嫌すぎる。括弧を付けない方法を何か確立せねば
@@ -470,63 +471,21 @@ namespace LambdicSql.Inside
         }
 
         //TODO refactoring.
-        static List<List<MethodCallExpression>> GetMethodChains(MethodCallExpression end)
+        static List<MethodCallExpression> GetMethodChains(MethodCallExpression end)
         {
-            //resolve chain.
-            if (end.Method.CanResolveSqlSyntaxMethodChain())
-            {
-                return new List<List<MethodCallExpression>> { new List<MethodCallExpression> { end } };
-            }
-
-            var chains = new List<List<MethodCallExpression>>();
+            var chains = new List<MethodCallExpression>();
             var curent = end;
-            while (true)
+            while (curent != null && curent.Method.DeclaringType.IsSqlSyntax())
             {
-                var type = curent.Method.DeclaringType;
-                var group = new List<MethodCallExpression>();
-                string groupName = string.Empty;
-                while (true)
-                {
-                    var oldGroupName = groupName;
-                    var currentGroupName = string.Empty;// curent.Method.GetMethodGroupName();
-                    groupName = currentGroupName;
-                    if (!string.IsNullOrEmpty(oldGroupName) && oldGroupName != currentGroupName)
-                    {
-                        groupName = string.Empty;
-                        break;
-                    }
+                chains.Add(curent);
+                
+                if (!curent.Method.IsDefined(typeof(ExtensionAttribute), false)) break;
 
-                    group.Add(curent);
-                    var ps = curent.Method.GetParameters();
-                    
-                    bool isSqlSyntax = curent.Method.IsDefined(typeof(ExtensionAttribute), false)
-                        && 0 < ps.Length 
-                        && typeof(IMethodChain).IsAssignableFrom(ps[0].ParameterType);
-
-                    var methodX = curent.Method.IsDefined(typeof(ForcedMethodGroupAttribute), false);
-
-                    var next = (isSqlSyntax || methodX) ? curent.Arguments[0] as MethodCallExpression : null;
-
-                    //end of syntax
-                    if (next == null)
-                    {
-                        group.Reverse();
-                        chains.Add(group);
-                        chains.Reverse();
-                        return chains;
-                    }
-
-                    curent = next;
-                    //end of chain
-                    if (string.IsNullOrEmpty(currentGroupName))
-                    {
-                        groupName = string.Empty;
-                        break;
-                    }
-                }
-                group.Reverse();
-                chains.Add(group);
+                var next = (0 < curent.Arguments.Count) ? curent.Arguments[0] as MethodCallExpression : null;
+                curent = next;
             }
+            chains.Reverse();
+            return chains;
         }
     }
 }

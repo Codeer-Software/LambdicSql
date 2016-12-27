@@ -80,7 +80,6 @@
     <Compile Include="SqlBase\TextParts\SelectQueryText.cs" />
     <Compile Include="SqlBase\TextParts\SqlConvertingContext.cs" />
     <Compile Include="SqlBase\TextParts\SqlText.cs" />
-    <Compile Include="SqlBase\ResolveSqlSyntaxMethodChainAttribute.cs" />
     <Compile Include="SqlBase\ISqlExpressionBase.cs" />
     <Compile Include="ISqlQuery.cs" />
     <Compile Include="SqlBase\IClauseChain.cs" />
