@@ -914,7 +914,7 @@ namespace TestCheck35
                 {
                     name = db.tbl_staff.name,
                     payment_date = db.tbl_remuneration.payment_date,
-                    money = "{0} + {1}".ToSql<decimal>(db.tbl_remuneration.money, 1000),
+                    money = (decimal)"{0} + {1}".ToSql(db.tbl_remuneration.money, 1000),
                 }).
                 From(db.tbl_remuneration).
                     Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
@@ -961,7 +961,7 @@ FROM tbl_remuneration
             Debug.Print(info.SqlText);
 
             //dapper
-            var datas = _connection.Query(query).ToList();
+            var datas = _connection.Query<Non>(query).ToList();
 
 
             //pattern2 building.
@@ -974,7 +974,7 @@ FROM tbl_remuneration
             Debug.Print(info.SqlText);
 
             //dapper
-            datas = _connection.Query(query2).ToList();
+            datas = _connection.Query<Non>(query2).ToList();
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]

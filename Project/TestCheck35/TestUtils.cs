@@ -208,7 +208,7 @@ GROUP BY tbl_remuneration.staff_id");
                 Select(new Staff
                 {
                     id = (int)"tbl_staff.id".ToSql(),
-                    name = "tbl_staff.name".ToSql<string>(),
+                    name = (string)"tbl_staff.name".ToSql(),
                 }).
                 From(db.tbl_staff));
 
@@ -228,7 +228,7 @@ FROM tbl_staff");
                 Select(new Staff
                 {
                     id = (int)"{0}".ToSql(db.tbl_staff.id),
-                    name = "{0}".ToSql<string>(db.tbl_staff.name),
+                    name = (string)"{0}".ToSql(db.tbl_staff.name),
                 }).
                 From(db.tbl_staff));
 
@@ -250,7 +250,7 @@ FROM tbl_staff");
                 Select(new Staff
                 {
                     id = (int)"{0}".ToSql(exp1),
-                    name = "{0}".ToSql<string>(exp2),
+                    name = (string)"{0}".ToSql(exp2),
                 }).
                 From(db.tbl_staff));
 
@@ -280,7 +280,7 @@ FROM tbl_remuneration
                 Where(3000 < db.tbl_remuneration.money)
                 ));
 
-            var datas = _connection.Query(query).ToList();
+            var datas = _connection.Query<Non>(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
@@ -312,7 +312,7 @@ FROM tbl_remuneration
                 exp2
                 ));
 
-            var datas = _connection.Query(query).ToList();
+            var datas = _connection.Query<Non>(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
@@ -345,7 +345,7 @@ FROM tbl_remuneration
 
             query.Gen(_connection);
 
-            var datas = _connection.Query(query).ToList();
+            var datas = _connection.Query<Non>(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT

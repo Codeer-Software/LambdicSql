@@ -24,15 +24,6 @@ namespace LambdicSql
 
         /// <summary>
         /// Put the text in the expression of LamblicSql.
-        /// </summary>
-        /// <typeparam name="T">Destination type.</typeparam>
-        /// <param name="text">Text.You can use the same format as System.String's Format method.</param>
-        /// <param name="args">Format arguments.</param>
-        /// <returns>LamblicSql's expression.</returns>
-        public static T ToSql<T>(this string text, params object[] args) => InvalitContext.Throw<T>(nameof(ToSql));
-
-        /// <summary>
-        /// Put the text in the expression of LamblicSql.
         /// You can use TwoWaySql text format.
         /// It's ...
         /// TwoWaySql(@"SELECT money + /*0*/1000/**/ FROM tbl_remuneration WHERE /*1*/tbl_remuneration.money = 100/**/", 1000, tbl_remuneration.staff_id == 10)
@@ -41,7 +32,7 @@ namespace LambdicSql
         /// <param name="text">Text.</param>
         /// <param name="args">Format arguments.</param>
         /// <returns>LamblicSql's expression.</returns>
-        public static IClauseChain<Non> TwoWaySql(this string text, params object[] args) => InvalitContext.Throw<IClauseChain<Non>>(nameof(ToSql));
+        public static object TwoWaySql(this string text, params object[] args) => InvalitContext.Throw<IClauseChain<Non>>(nameof(ToSql));
 
         /// <summary>
         /// Get column name only.
