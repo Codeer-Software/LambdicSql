@@ -40,7 +40,7 @@ namespace TestCheck35
                 Money = db.tbl_remuneration.money,
             }));
 
-        public static readonly ISqlExpressionBase From = Sql<DB>.Create(db =>
+        public static readonly ISqlExpression From = Sql<DB>.Create(db =>
             From(db.tbl_remuneration));
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]

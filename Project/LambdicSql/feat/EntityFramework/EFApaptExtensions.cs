@@ -22,8 +22,8 @@ namespace LambdicSql.feat.EntityFramework
         /// <param name="query">Query.</param>
         /// <param name="dbContext">DbContext object.</param>
         /// <returns>Query result.</returns>
-        public static IEnumerable<T> SqlQuery<T>(this ISqlExpressionBase<T> query, object dbContext)
-            => SqlQuery<T>((ISqlExpressionBase)query, dbContext);
+        public static IEnumerable<T> SqlQuery<T>(this ISqlExpression<T> query, object dbContext)
+            => SqlQuery<T>((ISqlExpression)query, dbContext);
 
         /// <summary>
         /// Execute query.
@@ -32,7 +32,7 @@ namespace LambdicSql.feat.EntityFramework
         /// <param name="query">Query.</param>
         /// <param name="dbContext">DbContext object.</param>
         /// <returns>Query result.</returns>
-        public static IEnumerable<T> SqlQuery<T>(this ISqlExpressionBase query, object dbContext)
+        public static IEnumerable<T> SqlQuery<T>(this ISqlExpression query, object dbContext)
         {
             var cnn = EFWrapper.GetConnection(dbContext);
             var info = query.ToSqlInfo(cnn.GetType());
@@ -59,7 +59,7 @@ namespace LambdicSql.feat.EntityFramework
         /// <param name="query">Query.</param>
         /// <param name="dbContext">DbContext object.</param>
         /// <returns>Number of rows affected.</returns>
-        public static int ExecuteSqlCommand(this ISqlExpressionBase query, object dbContext)
+        public static int ExecuteSqlCommand(this ISqlExpression query, object dbContext)
         {
             var cnn = EFWrapper.GetConnection(dbContext);
             var info = query.ToSqlInfo(cnn.GetType());

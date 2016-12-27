@@ -290,7 +290,7 @@ namespace LambdicSql.Inside
             members.Reverse();
             
             //check SqlExpression's Body
-            if (!typeof(ISqlExpressionBase).IsAssignableFrom(members[0].Type) ||
+            if (!typeof(ISqlExpression).IsAssignableFrom(members[0].Type) ||
                 members[1].Member.Name != "Body") return null;
 
             //for example, sub.Body
@@ -447,7 +447,7 @@ namespace LambdicSql.Inside
             
             //SqlExpression.
             //example [ from(exp) ]
-            var sqlExp = obj as ISqlExpressionBase;
+            var sqlExp = obj as ISqlExpression;
             if (sqlExp != null)
             {
                 Type type = null;

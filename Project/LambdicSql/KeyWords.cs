@@ -34,7 +34,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="subQuerys"></param>
         /// <returns></returns>
-        public static IClauseChain<Non> With(params ISqlExpressionBase[] subQuerys) => InvalitContext.Throw<IClauseChain<Non>>(nameof(With));
+        public static IClauseChain<Non> With(params ISqlExpression[] subQuerys) => InvalitContext.Throw<IClauseChain<Non>>(nameof(With));
 
         /// <summary>
         /// 
@@ -43,7 +43,7 @@ namespace LambdicSql
         /// <param name="args"></param>
         /// <param name="select"></param>
         /// <returns></returns>
-        public static IClauseChain<TSelected> With<TSelected>(SqlRecursiveArgumentsExpression<TSelected> args, ISqlExpressionBase select) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(With));
+        public static IClauseChain<TSelected> With<TSelected>(SqlRecursiveArgumentsExpression<TSelected> args, ISqlExpression select) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(With));
 
         /// <summary>
         /// 
@@ -884,7 +884,7 @@ namespace LambdicSql
         /// <param name="target">Target of IN check.</param>
         /// <param name="canditates">Candidates expected for target.</param>
         /// <returns>Returns TRUE if target is included in the candidate represented by expression.</returns>
-        public static bool In(object target, ISqlExpressionBase canditates) => InvalitContext.Throw<bool>(nameof(In));
+        public static bool In(object target, ISqlExpression canditates) => InvalitContext.Throw<bool>(nameof(In));
 
         /// <summary>
         /// IN keyword.
@@ -907,7 +907,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="expression">Sub query.</param>
         /// <returns>Returns TRUE if there is at least one record returned by expression, FALSE otherwise.</returns>
-        public static bool Exists(ISqlExpressionBase expression) => InvalitContext.Throw<bool>(nameof(Exists));
+        public static bool Exists(ISqlExpression expression) => InvalitContext.Throw<bool>(nameof(Exists));
 
         /// <summary>
         /// EXISTS keyword.

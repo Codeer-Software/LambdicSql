@@ -1470,14 +1470,14 @@ FROM tbl_remuneration
             }
         }
 
-        public IEnumerable<T> ExecuteRead<T>(ISqlExpressionBase<T> exp)
+        public IEnumerable<T> ExecuteRead<T>(LambdicSql.ISqlExpression<T> exp)
         {
             var info = exp.ToSqlInfo(_connection.GetType());
             Debug.Print(info.SqlText);
             return _connection.Query(exp).ToList();
         }
 
-        public IEnumerable<T> ExecuteRead<T>(ISqlExpressionBase exp)
+        public IEnumerable<T> ExecuteRead<T>(ISqlExpression exp)
         {
             var info = exp.ToSqlInfo(_connection.GetType());
             Debug.Print(info.SqlText);

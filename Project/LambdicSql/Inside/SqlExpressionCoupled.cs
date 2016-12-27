@@ -8,7 +8,7 @@ namespace LambdicSql.Inside
         public override DbInfo DbInfo { get; protected set; }
         public override SqlText SqlText { get; }
 
-        public SqlExpressionCoupled(ISqlExpressionBase before, ISqlExpressionBase after)
+        public SqlExpressionCoupled(ISqlExpression before, ISqlExpression after)
         {
             if (before.DbInfo != null) DbInfo = before.DbInfo;
             else if (before.DbInfo != null) DbInfo = before.DbInfo;

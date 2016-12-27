@@ -93,7 +93,7 @@ namespace LambdicSql.Inside.Keywords
             var member = exp as MemberExpression;
             while (member != null)
             {
-                if (typeof(ISqlExpressionBase).IsAssignableFrom(member.Type)) return member.Member.Name;
+                if (typeof(ISqlExpression).IsAssignableFrom(member.Type)) return member.Member.Name;
                 member = member.Expression as MemberExpression;
             }
 
@@ -103,7 +103,7 @@ namespace LambdicSql.Inside.Keywords
                 member = method.Arguments[0] as MemberExpression;
                 if (member != null)
                 {
-                    if (typeof(ISqlExpressionBase).IsAssignableFrom(member.Type)) return member.Member.Name;
+                    if (typeof(ISqlExpression).IsAssignableFrom(member.Type)) return member.Member.Name;
                 }
             }
             return null;

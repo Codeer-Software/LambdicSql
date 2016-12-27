@@ -22,7 +22,7 @@ namespace TestCheck35
     {
         public static string Flat(this string text)=> text.Replace(Environment.NewLine, " ").Replace("\t", " ");
 
-        public static void Gen(this ISqlExpressionBase query, IDbConnection con)
+        public static void Gen(this ISqlExpression query, IDbConnection con)
         {
             Debug.Print("AssertEx.AreEqual(query, _connection," + 
                 Environment.NewLine + "@\"" + query.ToSqlInfo(con.GetType()).SqlText + "\");");
@@ -45,22 +45,22 @@ namespace TestCheck35
 
     public static class AssertEx
     {
-        public static void AreEqual(ISqlExpressionBase query, IDbConnection con, string expected, params object[] args)
+        public static void AreEqual(ISqlExpression query, IDbConnection con, string expected, params object[] args)
         {
             int i = 0;
             AreEqual(query, con, expected, args.ToDictionary(e => "@p_" + i++, e => new DbParam { Value = e }));
         }
 
-        public static void AreEqual(ISqlExpressionBase query, IDbConnection con, string expected, Params args)
+        public static void AreEqual(ISqlExpression query, IDbConnection con, string expected, Params args)
             => AreEqual(query, con, expected, (Dictionary<string, object>)args);
 
-        public static void AreEqual(ISqlExpressionBase query, IDbConnection con, string expected, DbParams args)
+        public static void AreEqual(ISqlExpression query, IDbConnection con, string expected, DbParams args)
             => AreEqual(query, con, expected, (Dictionary<string, DbParam>)args);
 
-        public static void AreEqual(ISqlExpressionBase query, IDbConnection con, string expected, Dictionary<string, object> args)
+        public static void AreEqual(ISqlExpression query, IDbConnection con, string expected, Dictionary<string, object> args)
             => AreEqual(query, con, expected, args.ToDictionary(e => e.Key, e => new DbParam { Value = e.Value }));
 
-        static void AreEqual(ISqlExpressionBase query, IDbConnection con, string expected, Dictionary<string, DbParam> args)
+        static void AreEqual(ISqlExpression query, IDbConnection con, string expected, Dictionary<string, DbParam> args)
         {
             var info = query.ToSqlInfo(con.GetType());
             if (con.GetType().Name == "OracleConnection")
