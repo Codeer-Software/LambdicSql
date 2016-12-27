@@ -65,7 +65,7 @@ FROM tbl_remuneration");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Cast2()
         {
-            //TODO IClauseChainじゃなくて実体返したら、暗黙キャストもできるよね。
+            //TODO 暗黙キャスト
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData
                 {

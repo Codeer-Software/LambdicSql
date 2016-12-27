@@ -665,13 +665,12 @@ FROM tbl_remuneration");
                 From(db.tbl_remuneration));
 
             var exp = Sql<DB>.Create(db => db.tbl_remuneration.payment_date);
-
-            //TODO 暗黙キャスト
+            
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData
                 {
                     PaymentDate = exp,
-                    Money = sub.Body
+                    Money = sub
                 }).
                 From(db.tbl_remuneration));
 

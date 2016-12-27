@@ -347,13 +347,12 @@ FROM tbl_staff",
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Sub2()
         {
-            //TODO これは暗黙キャストを作りたいなー
             var sub = Sql<DB>.Create(db => Select(Count(Asterisk())).From(db.tbl_staff));
             var query = Sql<DB>.Create(db =>
                 Select(new
                 {
                     Type = Case().
-                                When(1 == sub.Body).Then("x").
+                                When(1 == sub).Then("x").
                                 Else("z").
                             End()
                 }).

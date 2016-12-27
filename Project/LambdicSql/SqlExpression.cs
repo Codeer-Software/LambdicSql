@@ -5,10 +5,27 @@ using LambdicSql.SqlBase.TextParts;
 namespace LambdicSql
 {
     /// <summary>
+    /// Expression.
+    /// </summary>
+    public interface ISqlExpression
+    {
+        /// <summary>
+        /// Data Base info.
+        /// </summary>
+        DbInfo DbInfo { get; }
+
+        /// <summary>
+        /// Data converted from Expression to a form close to a string representation.
+        /// </summary>
+        /// <returns>text.</returns>
+        SqlText SqlText { get; }
+    }
+
+    /// <summary>
     /// Expressions that represent part of the query.
     /// </summary>
     /// <typeparam name="T">The type represented by SqlExpression.</typeparam>
-    public abstract class SqlExpression<T> : ISqlExpression<T>
+    public abstract class SqlExpression<T> : ISqlExpression
     {
         /// <summary>
         /// DB information.
