@@ -70,7 +70,7 @@ FROM tbl_remuneration");
                 Select(new SelectData
                 {
                     Total = Select(Sum(db.tbl_remuneration.money)).
-                                From(db.tbl_remuneration).Body
+                                From(db.tbl_remuneration)
                 }).
                 From(db.tbl_remuneration));
 

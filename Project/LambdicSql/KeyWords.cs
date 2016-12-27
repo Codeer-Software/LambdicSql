@@ -34,7 +34,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="subQuerys"></param>
         /// <returns></returns>
-        public static IClauseChain<Non> With(params ISqlExpression[] subQuerys) => InvalitContext.Throw<IClauseChain<Non>>(nameof(With));
+        public static ClauseChain<Non> With(params ISqlExpression[] subQuerys) => InvalitContext.Throw<ClauseChain<Non>>(nameof(With));
 
         /// <summary>
         /// 
@@ -43,7 +43,7 @@ namespace LambdicSql
         /// <param name="args"></param>
         /// <param name="select"></param>
         /// <returns></returns>
-        public static IClauseChain<TSelected> With<TSelected>(SqlRecursiveArgumentsExpression<TSelected> args, ISqlExpression select) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(With));
+        public static ClauseChain<TSelected> With<TSelected>(SqlRecursiveArgumentsExpression<TSelected> args, ISqlExpression select) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(With));
 
         /// <summary>
         /// 
@@ -60,7 +60,7 @@ namespace LambdicSql
         /// <param name="before"></param>
         /// <param name="items"></param>
         /// <returns></returns>
-        public static IClauseChain<TSelected> Select<TSelected>(this IClauseChain<TSelected> before, object[] items) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(Select));
+        public static ClauseChain<TSelected> Select<TSelected>(this IClauseChain<TSelected> before, object[] items) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Select));
 
         /// <summary>
         /// This is the SELECT clause.
@@ -68,7 +68,7 @@ namespace LambdicSql
         /// <typeparam name="TSelected">Type of selected.</typeparam>
         /// <param name="selected">Specify a new expression to represent the selection.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> Select<TSelected>(TSelected selected) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(Select));
+        public static ClauseChain<TSelected> Select<TSelected>(TSelected selected) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Select));
 
         /// <summary>
         /// This is the SELECT clause.
@@ -78,7 +78,7 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="selected">Specify a new expression to represent the selection.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> Select<TSrcSelected, TSelected>(this IClauseChain<TSrcSelected> before, TSelected selected) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(Select));
+        public static ClauseChain<TSelected> Select<TSrcSelected, TSelected>(this IClauseChain<TSrcSelected> before, TSelected selected) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Select));
 
         /// <summary>
         /// This is the SELECT clause.
@@ -87,7 +87,7 @@ namespace LambdicSql
         /// <param name="top">TOP keyword.</param>
         /// <param name="selected">Specify a new expression to represent the selection.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> Select<TSelected>(ITop top, TSelected selected) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(Select));
+        public static ClauseChain<TSelected> Select<TSelected>(ITop top, TSelected selected) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Select));
 
         /// <summary>
         /// This is the SELECT clause.
@@ -98,14 +98,14 @@ namespace LambdicSql
         /// <param name="top">TOP keyword.</param>
         /// <param name="selected">Specify a new expression to represent the selection.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> Select<TSrcSelected, TSelected>(this IClauseChain<TSrcSelected> before, ITop top, TSelected selected) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(Select));
+        public static ClauseChain<TSelected> Select<TSrcSelected, TSelected>(this IClauseChain<TSrcSelected> before, ITop top, TSelected selected) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Select));
 
         /// <summary>
         /// This is the SELECT clause.
         /// </summary>
         /// <param name="asterisk">*</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<Non> Select(IAsterisk asterisk) => InvalitContext.Throw<IClauseChain<Non>>(nameof(Select));
+        public static ClauseChain<Non> Select(IAsterisk asterisk) => InvalitContext.Throw<ClauseChain<Non>>(nameof(Select));
 
         /// <summary>
         /// This is the SELECT clause.
@@ -114,7 +114,7 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="asterisk">*</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<Non> Select<TSrcSelected>(this IClauseChain<TSrcSelected> before, IAsterisk asterisk) => InvalitContext.Throw<IClauseChain<Non>>(nameof(Select));
+        public static ClauseChain<Non> Select<TSrcSelected>(this IClauseChain<TSrcSelected> before, IAsterisk asterisk) => InvalitContext.Throw<ClauseChain<Non>>(nameof(Select));
 
         /// <summary>
         /// This is the SELECT clause.
@@ -122,7 +122,7 @@ namespace LambdicSql
         /// <typeparam name="TSelected">Type of selected.</typeparam>
         /// <param name="asterisk">*</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> Select<TSelected>(IAsterisk<TSelected> asterisk) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(Select));
+        public static ClauseChain<TSelected> Select<TSelected>(IAsterisk<TSelected> asterisk) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Select));
 
         /// <summary>
         /// This is the SELECT clause.
@@ -132,7 +132,7 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="asterisk">*</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> Select<TSrcSelected, TSelected>(this IClauseChain<TSrcSelected> before, IAsterisk<TSelected> asterisk) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(Select));
+        public static ClauseChain<TSelected> Select<TSrcSelected, TSelected>(this IClauseChain<TSrcSelected> before, IAsterisk<TSelected> asterisk) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Select));
 
         /// <summary>
         /// This is the SELECT clause.
@@ -140,7 +140,7 @@ namespace LambdicSql
         /// <param name="top">TOP keyword.</param>
         /// <param name="asterisk">*</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<Non> Select(ITop top, IAsterisk asterisk) => InvalitContext.Throw<IClauseChain<Non>>(nameof(Select));
+        public static ClauseChain<Non> Select(ITop top, IAsterisk asterisk) => InvalitContext.Throw<ClauseChain<Non>>(nameof(Select));
 
         /// <summary>
         /// This is the SELECT clause.
@@ -150,7 +150,7 @@ namespace LambdicSql
         /// <param name="top">TOP keyword.</param>
         /// <param name="asterisk">*</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<Non> Select<TSrcSelected>(this IClauseChain<TSrcSelected> before, ITop top, IAsterisk asterisk) => InvalitContext.Throw<IClauseChain<Non>>(nameof(Select));
+        public static ClauseChain<Non> Select<TSrcSelected>(this IClauseChain<TSrcSelected> before, ITop top, IAsterisk asterisk) => InvalitContext.Throw<ClauseChain<Non>>(nameof(Select));
 
         /// <summary>
         /// This is the SELECT clause.
@@ -159,7 +159,7 @@ namespace LambdicSql
         /// <param name="top">TOP keyword.</param>
         /// <param name="asterisk">*</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> Select<TSelected>(ITop top, IAsterisk<TSelected> asterisk) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(Select));
+        public static ClauseChain<TSelected> Select<TSelected>(ITop top, IAsterisk<TSelected> asterisk) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Select));
 
         /// <summary>
         /// This is the SELECT clause.
@@ -170,7 +170,7 @@ namespace LambdicSql
         /// <param name="top">TOP keyword.</param>
         /// <param name="asterisk">*</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> Select<TSrcSelected, TSelected>(this IClauseChain<TSrcSelected> before, ITop top, IAsterisk<TSelected> asterisk) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(Select));
+        public static ClauseChain<TSelected> Select<TSrcSelected, TSelected>(this IClauseChain<TSrcSelected> before, ITop top, IAsterisk<TSelected> asterisk) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Select));
 
         /// <summary>
         /// This is the SELECT clause.
@@ -179,7 +179,7 @@ namespace LambdicSql
         /// <param name="predicate">ALL or DISTINCT.</param>
         /// <param name="selected">Specify a new expression to represent the selection.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> Select<TSelected>(AggregatePredicate predicate, TSelected selected) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(Select));
+        public static ClauseChain<TSelected> Select<TSelected>(AggregatePredicate predicate, TSelected selected) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Select));
 
         /// <summary>
         /// This is the SELECT clause.
@@ -190,7 +190,7 @@ namespace LambdicSql
         /// <param name="predicate">ALL or DISTINCT.</param>
         /// <param name="selected">Specify a new expression to represent the selection.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> Select<TSrcSelected, TSelected>(this IClauseChain<TSrcSelected> before, AggregatePredicate predicate, TSelected selected) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(Select));
+        public static ClauseChain<TSelected> Select<TSrcSelected, TSelected>(this IClauseChain<TSrcSelected> before, AggregatePredicate predicate, TSelected selected) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Select));
 
         /// <summary>
         /// This is the SELECT clause.
@@ -200,7 +200,7 @@ namespace LambdicSql
         /// <param name="top">TOP keyword.</param>
         /// <param name="selected">Specify a new expression to represent the selection.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> Select<TSelected>(AggregatePredicate predicate, ITop top, TSelected selected) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(Select));
+        public static ClauseChain<TSelected> Select<TSelected>(AggregatePredicate predicate, ITop top, TSelected selected) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Select));
 
         /// <summary>
         /// This is the SELECT clause.
@@ -212,7 +212,7 @@ namespace LambdicSql
         /// <param name="top">TOP keyword.</param>
         /// <param name="selected">Specify a new expression to represent the selection.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> Select<TSrcSelected, TSelected>(this IClauseChain<TSrcSelected> before, AggregatePredicate predicate, ITop top, TSelected selected) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(Select));
+        public static ClauseChain<TSelected> Select<TSrcSelected, TSelected>(this IClauseChain<TSrcSelected> before, AggregatePredicate predicate, ITop top, TSelected selected) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Select));
 
         /// <summary>
         /// This is the SELECT clause.
@@ -220,7 +220,7 @@ namespace LambdicSql
         /// <param name="predicate">ALL or DISTINCT.</param>
         /// <param name="asterisk">*</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<Non> Select(AggregatePredicate predicate, IAsterisk asterisk) => InvalitContext.Throw<IClauseChain<Non>>(nameof(Select));
+        public static ClauseChain<Non> Select(AggregatePredicate predicate, IAsterisk asterisk) => InvalitContext.Throw<ClauseChain<Non>>(nameof(Select));
 
         /// <summary>
         /// This is the SELECT clause.
@@ -230,7 +230,7 @@ namespace LambdicSql
         /// <param name="predicate">ALL or DISTINCT.</param>
         /// <param name="asterisk">*</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<Non> Select<TSrcSelected>(this IClauseChain<TSrcSelected> before, AggregatePredicate predicate, IAsterisk asterisk) => InvalitContext.Throw<IClauseChain<Non>>(nameof(Select));
+        public static ClauseChain<Non> Select<TSrcSelected>(this IClauseChain<TSrcSelected> before, AggregatePredicate predicate, IAsterisk asterisk) => InvalitContext.Throw<ClauseChain<Non>>(nameof(Select));
 
         /// <summary>
         /// This is the SELECT clause.
@@ -239,7 +239,7 @@ namespace LambdicSql
         /// <param name="predicate">ALL or DISTINCT.</param>
         /// <param name="asterisk">*</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> Select<TSelected>(AggregatePredicate predicate, IAsterisk<TSelected> asterisk) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(Select));
+        public static ClauseChain<TSelected> Select<TSelected>(AggregatePredicate predicate, IAsterisk<TSelected> asterisk) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Select));
 
         /// <summary>
         /// This is the SELECT clause.
@@ -250,7 +250,7 @@ namespace LambdicSql
         /// <param name="predicate">ALL or DISTINCT.</param>
         /// <param name="asterisk">*</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> Select<TSrcSelected, TSelected>(this IClauseChain<TSrcSelected> before, AggregatePredicate predicate, IAsterisk<TSelected> asterisk) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(Select));
+        public static ClauseChain<TSelected> Select<TSrcSelected, TSelected>(this IClauseChain<TSrcSelected> before, AggregatePredicate predicate, IAsterisk<TSelected> asterisk) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Select));
 
         /// <summary>
         /// This is the SELECT clause.
@@ -259,7 +259,7 @@ namespace LambdicSql
         /// <param name="top">TOP keyword.</param>
         /// <param name="asterisk">*</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<Non> Select(AggregatePredicate predicate, ITop top, IAsterisk asterisk) => InvalitContext.Throw<IClauseChain<Non>>(nameof(Select));
+        public static ClauseChain<Non> Select(AggregatePredicate predicate, ITop top, IAsterisk asterisk) => InvalitContext.Throw<ClauseChain<Non>>(nameof(Select));
 
         /// <summary>
         /// This is the SELECT clause.
@@ -270,7 +270,7 @@ namespace LambdicSql
         /// <param name="top">TOP keyword.</param>
         /// <param name="asterisk">*</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<Non> Select<TSrcSelected>(this IClauseChain<TSrcSelected> before, AggregatePredicate predicate, ITop top, IAsterisk asterisk) => InvalitContext.Throw<IClauseChain<Non>>(nameof(Select));
+        public static ClauseChain<Non> Select<TSrcSelected>(this IClauseChain<TSrcSelected> before, AggregatePredicate predicate, ITop top, IAsterisk asterisk) => InvalitContext.Throw<ClauseChain<Non>>(nameof(Select));
 
         /// <summary>
         /// This is the SELECT clause.
@@ -280,7 +280,7 @@ namespace LambdicSql
         /// <param name="top">TOP keyword.</param>
         /// <param name="asterisk">*</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> Select<TSelected>(AggregatePredicate predicate, ITop top, IAsterisk<TSelected> asterisk) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(Select));
+        public static ClauseChain<TSelected> Select<TSelected>(AggregatePredicate predicate, ITop top, IAsterisk<TSelected> asterisk) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Select));
 
         /// <summary>
         /// This is the SELECT clause.
@@ -292,7 +292,7 @@ namespace LambdicSql
         /// <param name="top">TOP keyword.</param>
         /// <param name="asterisk">*</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> Select<TSrcSelected, TSelected>(this IClauseChain<TSrcSelected> before, AggregatePredicate predicate, ITop top, IAsterisk<TSelected> asterisk) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(Select));
+        public static ClauseChain<TSelected> Select<TSrcSelected, TSelected>(this IClauseChain<TSrcSelected> before, AggregatePredicate predicate, ITop top, IAsterisk<TSelected> asterisk) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Select));
 
         /// <summary>
         /// Return value of CASE clause.
@@ -400,7 +400,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="expressions">Table or subquery.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<Non> From(params object[] expressions) => InvalitContext.Throw<IClauseChain<Non>>(nameof(From));
+        public static ClauseChain<Non> From(params object[] expressions) => InvalitContext.Throw<ClauseChain<Non>>(nameof(From));
 
         /// <summary>
         /// FROM clause.
@@ -409,7 +409,7 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="tables">Table or subquery.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> From<TSelected>(this IClauseChain<TSelected> before, params object[] tables) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(From));
+        public static ClauseChain<TSelected> From<TSelected>(this IClauseChain<TSelected> before, params object[] tables) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(From));
 
         /// <summary>
         /// JOIN clause.
@@ -417,7 +417,7 @@ namespace LambdicSql
         /// <param name="table">Table or subquery.</param>
         /// <param name="condition">It is a condition of JOIN.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<Non> Join(object table, bool condition) => InvalitContext.Throw<IClauseChain<Non>>(nameof(Join));
+        public static ClauseChain<Non> Join(object table, bool condition) => InvalitContext.Throw<ClauseChain<Non>>(nameof(Join));
 
         /// <summary>
         /// JOIN clause.
@@ -427,7 +427,7 @@ namespace LambdicSql
         /// <param name="table">Table or subquery.</param>
         /// <param name="condition">It is a condition of JOIN.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> Join<TSelected>(this IClauseChain<TSelected> before, object table, bool condition) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(Join));
+        public static ClauseChain<TSelected> Join<TSelected>(this IClauseChain<TSelected> before, object table, bool condition) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Join));
 
         /// <summary>
         /// JOIN clause.
@@ -435,7 +435,7 @@ namespace LambdicSql
         /// <param name="table">Table or subquery.</param>
         /// <param name="condition">It is a condition of LEFT JOIN.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<Non> LeftJoin(object table, bool condition) => InvalitContext.Throw<IClauseChain<Non>>(nameof(LeftJoin));
+        public static ClauseChain<Non> LeftJoin(object table, bool condition) => InvalitContext.Throw<ClauseChain<Non>>(nameof(LeftJoin));
 
         /// <summary>
         /// LEFT JOIN clause.
@@ -445,7 +445,7 @@ namespace LambdicSql
         /// <param name="table">Table or subquery.</param>
         /// <param name="condition">It is a condition of LEFT JOIN.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> LeftJoin<TSelected>(this IClauseChain<TSelected> before, object table, bool condition) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(LeftJoin));
+        public static ClauseChain<TSelected> LeftJoin<TSelected>(this IClauseChain<TSelected> before, object table, bool condition) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(LeftJoin));
 
         /// <summary>
         /// RIGHT JOIN clause.
@@ -453,7 +453,7 @@ namespace LambdicSql
         /// <param name="table">Table or subquery.</param>
         /// <param name="condition">It is a condition of RIGHT JOIN.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<Non> RightJoin(object table, bool condition) => InvalitContext.Throw<IClauseChain<Non>>(nameof(RightJoin));
+        public static ClauseChain<Non> RightJoin(object table, bool condition) => InvalitContext.Throw<ClauseChain<Non>>(nameof(RightJoin));
 
         /// <summary>
         /// RIGHT JOIN clause.
@@ -463,7 +463,7 @@ namespace LambdicSql
         /// <param name="table">Table or subquery.</param>>
         /// <param name="condition">It is a condition of RIGHT JOIN.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> RightJoin<TSelected>(this IClauseChain<TSelected> before, object table, bool condition) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(RightJoin));
+        public static ClauseChain<TSelected> RightJoin<TSelected>(this IClauseChain<TSelected> before, object table, bool condition) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(RightJoin));
 
         /// <summary>
         /// FULL JOIN clause.
@@ -471,7 +471,7 @@ namespace LambdicSql
         /// <param name="table">Table or subquery.</param>
         /// <param name="condition">It is a condition of RIGHT JOIN.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<Non> FullJoin(object table, bool condition) => InvalitContext.Throw<IClauseChain<Non>>(nameof(FullJoin));
+        public static ClauseChain<Non> FullJoin(object table, bool condition) => InvalitContext.Throw<ClauseChain<Non>>(nameof(FullJoin));
 
         /// <summary>
         /// FULL JOIN clause.
@@ -481,14 +481,14 @@ namespace LambdicSql
         /// <param name="table">Table or subquery.</param>>
         /// <param name="condition">It is a condition of RIGHT JOIN.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> FullJoin<TSelected>(this IClauseChain<TSelected> before, object table, bool condition) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(FullJoin));
+        public static ClauseChain<TSelected> FullJoin<TSelected>(this IClauseChain<TSelected> before, object table, bool condition) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(FullJoin));
 
         /// <summary>
         /// CROSS JOIN clause.
         /// </summary>
         /// <param name="expression">Table or subquery.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<Non> CrossJoin(object expression) => InvalitContext.Throw<IClauseChain<Non>>(nameof(CrossJoin));
+        public static ClauseChain<Non> CrossJoin(object expression) => InvalitContext.Throw<ClauseChain<Non>>(nameof(CrossJoin));
 
         /// <summary>
         /// CROSS JOIN clause.
@@ -497,14 +497,14 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="table">Table or subquery.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> CrossJoin<TSelected>(this IClauseChain<TSelected> before, object table) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(CrossJoin));
+        public static ClauseChain<TSelected> CrossJoin<TSelected>(this IClauseChain<TSelected> before, object table) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(CrossJoin));
 
         /// <summary>
         /// WHERE clause.
         /// </summary>
         /// <param name="condition">It is a conditional expression of WHERE.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<Non> Where(bool condition) => InvalitContext.Throw<IClauseChain<Non>>(nameof(Where));
+        public static ClauseChain<Non> Where(bool condition) => InvalitContext.Throw<ClauseChain<Non>>(nameof(Where));
 
         /// <summary>
         /// WHERE clause.
@@ -513,14 +513,14 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="condition">It is a conditional expression of WHERE.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> Where<TSelected>(this IClauseChain<TSelected> before, bool condition) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(Where));
+        public static ClauseChain<TSelected> Where<TSelected>(this IClauseChain<TSelected> before, bool condition) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Where));
 
         /// <summary>
         /// GROUP BY clause.
         /// </summary>
         /// <param name="columns">Specify the target column of GROUP BY.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<Non> GroupBy(params object[] columns) => InvalitContext.Throw<IClauseChain<Non>>(nameof(GroupBy));
+        public static ClauseChain<Non> GroupBy(params object[] columns) => InvalitContext.Throw<ClauseChain<Non>>(nameof(GroupBy));
 
         /// <summary>
         /// GROUP BY clause.
@@ -529,14 +529,14 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="columns">Specify the target column of GROUP BY.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> GroupBy<TSelected>(this IClauseChain<TSelected> before, params object[] columns) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(GroupBy));
+        public static ClauseChain<TSelected> GroupBy<TSelected>(this IClauseChain<TSelected> before, params object[] columns) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(GroupBy));
 
         /// <summary>
         /// GROUP BY ROLLUP clause.
         /// </summary>
         /// <param name="columns">Specify the target column of GROUP BY.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<Non> GroupByRollup(params object[] columns) => InvalitContext.Throw<IClauseChain<Non>>(nameof(GroupByRollup));
+        public static ClauseChain<Non> GroupByRollup(params object[] columns) => InvalitContext.Throw<ClauseChain<Non>>(nameof(GroupByRollup));
 
         /// <summary>
         /// GROUP BY ROLLUP clause.
@@ -545,14 +545,14 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="columns">Specify the target column of GROUP BY.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> GroupByRollup<TSelected>(this IClauseChain<TSelected> before, params object[] columns) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(GroupByRollup));
+        public static ClauseChain<TSelected> GroupByRollup<TSelected>(this IClauseChain<TSelected> before, params object[] columns) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(GroupByRollup));
 
         /// <summary>
         /// GROUP BY columns WITH ROLLUP clause.
         /// </summary>
         /// <param name="columns">Specify the target column of GROUP BY.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<Non> GroupByWithRollup(params object[] columns) => InvalitContext.Throw<IClauseChain<Non>>(nameof(GroupByRollup));
+        public static ClauseChain<Non> GroupByWithRollup(params object[] columns) => InvalitContext.Throw<ClauseChain<Non>>(nameof(GroupByRollup));
 
         /// <summary>
         /// GROUP BY columns WITH ROLLUP clause.
@@ -561,14 +561,14 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="columns">Specify the target column of GROUP BY.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> GroupByWithRollup<TSelected>(this IClauseChain<TSelected> before, params object[] columns) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(GroupByRollup));
+        public static ClauseChain<TSelected> GroupByWithRollup<TSelected>(this IClauseChain<TSelected> before, params object[] columns) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(GroupByRollup));
 
         /// <summary>
         /// GROUP BY CUBE clause.
         /// </summary>
         /// <param name="columns">Specify the target column of GROUP BY.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<Non> GroupByCube(params object[] columns) => InvalitContext.Throw<IClauseChain<Non>>(nameof(GroupByCube));
+        public static ClauseChain<Non> GroupByCube(params object[] columns) => InvalitContext.Throw<ClauseChain<Non>>(nameof(GroupByCube));
 
         /// <summary>
         /// GROUP BY CUBE clause.
@@ -577,14 +577,14 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="columns">Specify the target column of GROUP BY.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> GroupByCube<TSelected>(this IClauseChain<TSelected> before, params object[] columns) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(GroupByCube));
+        public static ClauseChain<TSelected> GroupByCube<TSelected>(this IClauseChain<TSelected> before, params object[] columns) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(GroupByCube));
 
         /// <summary>
         /// GROUP BY GROUPING SETS clause.
         /// </summary>
         /// <param name="columns">Specify the target column of GROUP BY.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<Non> GroupByGroupingSets(params object[] columns) => InvalitContext.Throw<IClauseChain<Non>>(nameof(GroupByGroupingSets));
+        public static ClauseChain<Non> GroupByGroupingSets(params object[] columns) => InvalitContext.Throw<ClauseChain<Non>>(nameof(GroupByGroupingSets));
 
         /// <summary>
         /// GROUP BY GROUPING SETS clause.
@@ -593,14 +593,14 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="columns">Specify the target column of GROUP BY.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> GroupByGroupingSets<TSelected>(this IClauseChain<TSelected> before, params object[] columns) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(GroupByGroupingSets));
+        public static ClauseChain<TSelected> GroupByGroupingSets<TSelected>(this IClauseChain<TSelected> before, params object[] columns) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(GroupByGroupingSets));
 
         /// <summary>
         /// HAVING clause.
         /// </summary>
         /// <param name="condition">It is a conditional expression of HAVING.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<Non> Having(bool condition) => InvalitContext.Throw<IClauseChain<Non>>(nameof(Having));
+        public static ClauseChain<Non> Having(bool condition) => InvalitContext.Throw<ClauseChain<Non>>(nameof(Having));
 
         /// <summary>
         /// HAVING clause.
@@ -609,7 +609,7 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="condition">It is a conditional expression of HAVING.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> Having<TSelected>(this IClauseChain<TSelected> before, bool condition) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(Having));
+        public static ClauseChain<TSelected> Having<TSelected>(this IClauseChain<TSelected> before, bool condition) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Having));
 
         /// <summary>
         /// ORDER BY clause.
@@ -625,14 +625,14 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="elements">Specify column and sort order. Asc(column) or Desc(column).</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> OrderBy<TSelected>(this IClauseChain<TSelected> before, params ISortedBy[] elements) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(OrderBy));
+        public static ClauseChain<TSelected> OrderBy<TSelected>(this IClauseChain<TSelected> before, params ISortedBy[] elements) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(OrderBy));
 
         /// <summary>
         /// LIMIT clause.
         /// </summary>
         /// <param name="count">Number of rows to acquire.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<Non> Limit(object count) => InvalitContext.Throw<IClauseChain<Non>>(nameof(OrderBy));
+        public static ClauseChain<Non> Limit(object count) => InvalitContext.Throw<ClauseChain<Non>>(nameof(OrderBy));
 
         /// <summary>
         /// LIMIT clause.
@@ -641,7 +641,7 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="count">Number of rows to acquire.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> Limit<TSelected>(this IClauseChain<TSelected> before, object count) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(OrderBy));
+        public static ClauseChain<TSelected> Limit<TSelected>(this IClauseChain<TSelected> before, object count) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(OrderBy));
 
         /// <summary>
         /// LIMIT clause.
@@ -649,7 +649,7 @@ namespace LambdicSql
         /// <param name="offset">Start position.</param>
         /// <param name="count">Number of rows to acquire.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<Non> Limit(object offset, object count) => InvalitContext.Throw<IClauseChain<Non>>(nameof(OrderBy));
+        public static ClauseChain<Non> Limit(object offset, object count) => InvalitContext.Throw<ClauseChain<Non>>(nameof(OrderBy));
 
         /// <summary>
         /// LIMIT clause.
@@ -659,14 +659,14 @@ namespace LambdicSql
         /// <param name="offset">Start position.</param>
         /// <param name="count">Number of rows to acquire.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> Limit<TSelected>(this IClauseChain<TSelected> before, object offset, object count) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(OrderBy));
+        public static ClauseChain<TSelected> Limit<TSelected>(this IClauseChain<TSelected> before, object offset, object count) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(OrderBy));
 
         /// <summary>
         /// OFFSET clause.
         /// </summary>
         /// <param name="offset">Start position.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<Non> Offset(object offset) => InvalitContext.Throw<IClauseChain<Non>>(nameof(OrderBy));
+        public static ClauseChain<Non> Offset(object offset) => InvalitContext.Throw<ClauseChain<Non>>(nameof(OrderBy));
 
         /// <summary>
         /// OFFSET clause.
@@ -675,14 +675,14 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="offset">Start position.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> Offset<TSelected>(this IClauseChain<TSelected> before, object offset) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(OrderBy));
+        public static ClauseChain<TSelected> Offset<TSelected>(this IClauseChain<TSelected> before, object offset) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(OrderBy));
 
         /// <summary>
         /// OFFSET count ROWS clause.
         /// </summary>
         /// <param name="count">Number of rows to acquire.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<Non> OffsetRows(object count) => InvalitContext.Throw<IClauseChain<Non>>(nameof(OrderBy));
+        public static ClauseChain<Non> OffsetRows(object count) => InvalitContext.Throw<ClauseChain<Non>>(nameof(OrderBy));
 
         /// <summary>
         /// OFFSET count ROWS clause.
@@ -691,14 +691,14 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="count">Number of rows to acquire.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> OffsetRows<TSelected>(this IClauseChain<TSelected> before, object count) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(OrderBy));
+        public static ClauseChain<TSelected> OffsetRows<TSelected>(this IClauseChain<TSelected> before, object count) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(OrderBy));
 
         /// <summary>
         /// FETCH NEXT count ROWS ONLY clause.
         /// </summary>
         /// <param name="count">Number of rows to acquire.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<Non> FetchNextRowsOnly(object count) => InvalitContext.Throw<IClauseChain<Non>>(nameof(OrderBy));
+        public static ClauseChain<Non> FetchNextRowsOnly(object count) => InvalitContext.Throw<ClauseChain<Non>>(nameof(OrderBy));
 
         /// <summary>
         /// FETCH NEXT count ROWS ONLY clause.
@@ -707,43 +707,43 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="count">Number of rows to acquire.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> FetchNextRowsOnly<TSelected>(this IClauseChain<TSelected> before, object count) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(OrderBy));
+        public static ClauseChain<TSelected> FetchNextRowsOnly<TSelected>(this IClauseChain<TSelected> before, object count) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(OrderBy));
 
         /// <summary>
         /// UNION clause.
         /// </summary>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<Non> Union() => InvalitContext.Throw<IClauseChain<Non>>(nameof(Union));
-
-        /// <summary>
-        /// UNION clause.
-        /// </summary>
-        /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
-        /// <param name="before">It is the previous clause.</param>
-        /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> Union<TSelected>(this IClauseChain<TSelected> before) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(Union));
-
-        /// <summary>
-        /// UNION clause.
-        /// </summary>
-        /// <param name="isAll">If isAll is true, add an ALL predicate.</param>
-        /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<Non> Union(bool isAll) => InvalitContext.Throw<IClauseChain<Non>>(nameof(Union));
+        public static ClauseChain<Non> Union() => InvalitContext.Throw<ClauseChain<Non>>(nameof(Union));
 
         /// <summary>
         /// UNION clause.
         /// </summary>
         /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
+        /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
+        public static ClauseChain<TSelected> Union<TSelected>(this IClauseChain<TSelected> before) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Union));
+
+        /// <summary>
+        /// UNION clause.
+        /// </summary>
         /// <param name="isAll">If isAll is true, add an ALL predicate.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> Union<TSelected>(this IClauseChain<TSelected> before, bool isAll) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(Union));
+        public static ClauseChain<Non> Union(bool isAll) => InvalitContext.Throw<ClauseChain<Non>>(nameof(Union));
+
+        /// <summary>
+        /// UNION clause.
+        /// </summary>
+        /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
+        /// <param name="before">It is the previous clause.</param>
+        /// <param name="isAll">If isAll is true, add an ALL predicate.</param>
+        /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
+        public static ClauseChain<TSelected> Union<TSelected>(this IClauseChain<TSelected> before, bool isAll) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Union));
 
         /// <summary>
         /// INTERSECT clause.
         /// </summary>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<Non> Intersect() => InvalitContext.Throw<IClauseChain<Non>>(nameof(Intersect));
+        public static ClauseChain<Non> Intersect() => InvalitContext.Throw<ClauseChain<Non>>(nameof(Intersect));
 
         /// <summary>
         /// INTERSECT clause.
@@ -751,14 +751,14 @@ namespace LambdicSql
         /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> Intersect<TSelected>(this IClauseChain<TSelected> before) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(Intersect));
+        public static ClauseChain<TSelected> Intersect<TSelected>(this IClauseChain<TSelected> before) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Intersect));
 
         /// <summary>
         /// INTERSECT clause.
         /// </summary>
         /// <param name="isAll">If isAll is true, add an ALL predicate.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<Non> Intersect(bool isAll) => InvalitContext.Throw<IClauseChain<Non>>(nameof(Intersect));
+        public static ClauseChain<Non> Intersect(bool isAll) => InvalitContext.Throw<ClauseChain<Non>>(nameof(Intersect));
 
         /// <summary>
         /// INTERSECT clause.
@@ -767,43 +767,43 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="isAll">If isAll is true, add an ALL predicate.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> Intersect<TSelected>(this IClauseChain<TSelected> before, bool isAll) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(Intersect));
+        public static ClauseChain<TSelected> Intersect<TSelected>(this IClauseChain<TSelected> before, bool isAll) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Intersect));
 
         /// <summary>
         /// EXCEPT clause.
         /// </summary>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<Non> Except() => InvalitContext.Throw<IClauseChain<Non>>(nameof(Except));
-
-        /// <summary>
-        /// EXCEPT clause.
-        /// </summary>
-        /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
-        /// <param name="before">It is the previous clause.</param>
-        /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> Except<TSelected>(this IClauseChain<TSelected> before) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(Except));
-
-        /// <summary>
-        /// EXCEPT clause.
-        /// </summary>
-        /// <param name="isAll">If isAll is true, add an ALL predicate.</param>
-        /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<Non> Except(bool isAll) => InvalitContext.Throw<IClauseChain<Non>>(nameof(Except));
+        public static ClauseChain<Non> Except() => InvalitContext.Throw<ClauseChain<Non>>(nameof(Except));
 
         /// <summary>
         /// EXCEPT clause.
         /// </summary>
         /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
+        /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
+        public static ClauseChain<TSelected> Except<TSelected>(this IClauseChain<TSelected> before) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Except));
+
+        /// <summary>
+        /// EXCEPT clause.
+        /// </summary>
         /// <param name="isAll">If isAll is true, add an ALL predicate.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> Except<TSelected>(this IClauseChain<TSelected> before, bool isAll) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(Except));
+        public static ClauseChain<Non> Except(bool isAll) => InvalitContext.Throw<ClauseChain<Non>>(nameof(Except));
+
+        /// <summary>
+        /// EXCEPT clause.
+        /// </summary>
+        /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
+        /// <param name="before">It is the previous clause.</param>
+        /// <param name="isAll">If isAll is true, add an ALL predicate.</param>
+        /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
+        public static ClauseChain<TSelected> Except<TSelected>(this IClauseChain<TSelected> before, bool isAll) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Except));
 
         /// <summary>
         /// MINUS clause.
         /// </summary>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<Non> Minus() => InvalitContext.Throw<IClauseChain<Non>>(nameof(Minus));
+        public static ClauseChain<Non> Minus() => InvalitContext.Throw<ClauseChain<Non>>(nameof(Minus));
 
         /// <summary>
         /// MINUS clause.
@@ -811,14 +811,14 @@ namespace LambdicSql
         /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> Minus<TSelected>(this IClauseChain<TSelected> before) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(Minus));
+        public static ClauseChain<TSelected> Minus<TSelected>(this IClauseChain<TSelected> before) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Minus));
 
         /// <summary>
         /// UPDATE clause.
         /// </summary>
         /// <param name="table">Table for UPDATE.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<Non> Update(object table) => InvalitContext.Throw<IClauseChain<Non>>(nameof(Update));
+        public static ClauseChain<Non> Update(object table) => InvalitContext.Throw<ClauseChain<Non>>(nameof(Update));
 
         /// <summary>
         /// SET clause.
@@ -827,13 +827,13 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="assigns">Assignment in the SET clause.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> Set<TSelected>(this IClauseChain<TSelected> before, params Assign[] assigns) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(Set));
+        public static ClauseChain<TSelected> Set<TSelected>(this IClauseChain<TSelected> before, params Assign[] assigns) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Set));
 
         /// <summary>
         /// DELETE clause.
         /// </summary>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<Non> Delete() => InvalitContext.Throw<IClauseChain<Non>>(nameof(Delete));
+        public static ClauseChain<Non> Delete() => InvalitContext.Throw<ClauseChain<Non>>(nameof(Delete));
 
         /// <summary>
         /// INSERT INTO clause.
@@ -841,7 +841,7 @@ namespace LambdicSql
         /// <param name="table">Table for INSERT.</param>
         /// <param name="columns">It is a column that performs INSERT.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<Non> InsertInto(object table, params object[] columns) => InvalitContext.Throw<IClauseChain<Non>>(nameof(InsertInto));
+        public static ClauseChain<Non> InsertInto(object table, params object[] columns) => InvalitContext.Throw<ClauseChain<Non>>(nameof(InsertInto));
 
         /// <summary>
         /// INSERT INTO clause.
@@ -850,8 +850,8 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="values">It is the value to be Inserted.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static IClauseChain<TSelected> Values<TSelected>(this IClauseChain<TSelected> before, params object[] values)
-             => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(Values));
+        public static ClauseChain<TSelected> Values<TSelected>(this IClauseChain<TSelected> before, params object[] values)
+             => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Values));
 
         /// <summary>
         /// LIKE keyword.

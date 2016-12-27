@@ -31,7 +31,7 @@ namespace LambdicSql
         /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
         /// <param name="expression">An expression expressing a query by C #.</param>
         /// <returns>A query.</returns>
-        public static SqlExpression<TSelected> Create<TSelected>(Expression<Func<TDB, IClauseChain<TSelected>>> expression)
+        public static SqlExpression<TSelected> Create<TSelected>(Expression<Func<TDB, ClauseChain<TSelected>>> expression)
         {
             var db = DBDefineAnalyzer.GetDbInfo<TDB>();
             return new SqlExpressionSingle<TSelected>(db, expression.Body);
