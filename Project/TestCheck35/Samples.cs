@@ -824,7 +824,7 @@ namespace TestCheck35
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData6 { Name = db.tbl_staff.name }).
                 From(db.tbl_staff).
-                Where(In(db.tbl_staff.id, sub.Cast<int>())));//sub query.
+                Where(In(db.tbl_staff.id, sub.Body)));//sub query.
 
             //to string and params.
             var info = query.ToSqlInfo(_connection.GetType());
@@ -839,14 +839,14 @@ namespace TestCheck35
         {
             //make sql.
             var sub = Sql<DB>.Create(db =>
-                Select(new SelectData6 { Total = Sum(db.tbl_remuneration.money) }).
+                Select(Sum(db.tbl_remuneration.money)).
                 From(db.tbl_remuneration));
 
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData6
                 {
                     Name = db.tbl_staff.name,
-                    Total = sub.Cast<decimal>()//sub query.
+                    Total = sub.Body//sub query.
                 }).
                 From(db.tbl_staff));
 

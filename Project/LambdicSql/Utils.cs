@@ -15,25 +15,6 @@ namespace LambdicSql
     public static class Utils
     {
         /// <summary>
-        /// Cast.
-        /// Used to place an ISqlExpressionBase object in a C # expression.
-        /// </summary>
-        /// <typeparam name="T">Destination type.</typeparam>
-        /// <param name="expression">Expression.</param>
-        /// <returns>Casted object.</returns>
-        public static T Cast<T>(this ISqlExpressionBase expression) => InvalitContext.Throw<T>(nameof(Cast));
-
-        /// <summary>
-        /// Cast.
-        /// Used to place an IMethodChain object in a C # expression.
-        /// </summary>
-        /// <typeparam name="T">Destination type.</typeparam>
-        /// <param name="expression">Expression.</param>
-        /// <returns>Casted object.</returns>
-        [ResolveSqlSyntaxMethodChain]
-        public static T Cast<T>(this IMethodChain expression) => InvalitContext.Throw<T>(nameof(Cast));
-
-        /// <summary>
         /// Put the text in the expression of LamblicSql.
         /// </summary>
         /// <param name="text">Text.You can use the same format as System.String's Format method.</param>
@@ -76,15 +57,9 @@ namespace LambdicSql
             var method = methods[0];
             switch (method.Method.Name)
             {
-                case nameof(Cast):
-                    if (typeof(IMethodChain).IsAssignableFrom(method.Arguments[0].Type))
-                    {
-                        return converter.Convert(method.Arguments[0]);
-                    }
-                    return converter.Convert(method.Arguments[0]);
-                case nameof(ToSql): return Utils.TextSql(converter, method);
-                case nameof(TwoWaySql): return Utils.TwoWaySql(converter, method);
-                case nameof(ColumnOnly): return Utils.ColumnOnly(converter, method);
+                case nameof(ToSql): return TextSql(converter, method);
+                case nameof(TwoWaySql): return TwoWaySql(converter, method);
+                case nameof(ColumnOnly): return ColumnOnly(converter, method);
             }
             throw new NotSupportedException();
         }

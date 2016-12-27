@@ -39,11 +39,11 @@ namespace TestCheck35
         public void Test_Cast1()
         {
             var sub = Sql<DB>.Create(db =>
-                Select(new { total = Sum(db.tbl_remuneration.money) }).
+                Select(Sum(db.tbl_remuneration.money)).
                 From(db.tbl_remuneration));
 
             var query = Sql<DB>.Create(db =>
-                Select(new SelectData { Total = sub.Cast<decimal>() }).
+                Select(new SelectData { Total = sub.Body }).
                 From(db.tbl_remuneration));
 
             var datas = _connection.Query(query).ToList();
@@ -56,7 +56,7 @@ namespace TestCheck35
             AssertEx.AreEqual(query, _connection,
 @"SELECT
 	(SELECT
-		SUM(tbl_remuneration.money) AS total
+		SUM(tbl_remuneration.money)
 	FROM tbl_remuneration) AS Total
 FROM tbl_remuneration");
         }
@@ -64,11 +64,12 @@ FROM tbl_remuneration");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Cast2()
         {
+            //TODO IClauseChainじゃなくて実体返したら、暗黙キャストもできるよね。
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData
                 {
-                    Total = Select(new { total = Sum(db.tbl_remuneration.money) }).
-                                From(db.tbl_remuneration).Cast<decimal>()
+                    Total = Select(Sum(db.tbl_remuneration.money)).
+                                From(db.tbl_remuneration).Body
                 }).
                 From(db.tbl_remuneration));
 
@@ -78,11 +79,11 @@ FROM tbl_remuneration");
             AssertEx.AreEqual(query, _connection,
 @"SELECT
 	(SELECT
-		SUM(tbl_remuneration.money) AS total
+		SUM(tbl_remuneration.money)
 	FROM tbl_remuneration) AS Total
 FROM tbl_remuneration");
         }
-
+        
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Condition1()
         {
@@ -361,34 +362,7 @@ WHERE (@p_0) < (tbl_remuneration.money)",
         {
             public int id { get; set; }
         }
-
-        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_Cast()
-        {
-            var sub = Sql<DB>.Create(db =>
-                Select(Asterisk(db.tbl_staff)).
-                From(db.tbl_staff));
-
-            var query = Sql<DB>.Create(db =>
-                Select(new SelectedData
-                {
-                    id = sub.Cast<Staff>().id
-                }).
-                From(sub.Cast<Staff>()));
-
-            query.Gen(_connection);
-
-            var datas = _connection.Query(query).ToList();
-            Assert.IsTrue(0 < datas.Count);
-            query.Gen(_connection);
-            AssertEx.AreEqual(query, _connection,
-@"SELECT
-	sub.id AS id
-FROM
-	(SELECT *
-	FROM tbl_staff) sub");
-        }
-
+        
 
         //TODO ConcatでSelectが正しくでることのテスト
 

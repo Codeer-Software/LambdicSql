@@ -1571,7 +1571,7 @@ FROM tbl_remuneration");
                 {
                     Val = Count(db.tbl_remuneration.money).
                             Over(PartitionBy(db.tbl_remuneration.payment_date),
-                                OrderBy(exp1.Cast<ISortedBy>(), exp2.Cast<ISortedBy>()),
+                                OrderBy(exp1.Body, exp2.Body),
                                 Rows(1, 5))
                 }).
                 From(db.tbl_remuneration));

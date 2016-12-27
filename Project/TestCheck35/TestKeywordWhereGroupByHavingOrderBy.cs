@@ -420,7 +420,7 @@ ORDER BY
                     Id = db.tbl_remuneration.staff_id
                 }).
                 From(db.tbl_remuneration).
-                OrderBy(exp3.Cast<ISortedBy>(), exp4.Cast<ISortedBy>()));
+                OrderBy(exp3.Body, exp4.Body));
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -848,7 +848,7 @@ ORDER BY
                 }).
                 From(db.tbl_remuneration));
 
-            var target = Sql<DB>.Create(db => OrderBy(exp3.Cast<ISortedBy>(), exp4.Cast<ISortedBy>()));
+            var target = Sql<DB>.Create(db => OrderBy(exp3.Body, exp4.Body));
             query = query.Concat(target);
 
             var datas = _connection.Query(query).ToList();

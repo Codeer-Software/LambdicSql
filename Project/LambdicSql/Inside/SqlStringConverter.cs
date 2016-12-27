@@ -197,15 +197,6 @@ namespace LambdicSql.Inside
                     var memberName = tbl.Info.LambdaFullName + "." + member.Member.Name;
                     return ResolveLambdicElement(memberName);
                 }
-                //Cast()
-                var selectQuery = ret as SelectQueryText;
-                if (selectQuery != null)
-                {
-                    //TODO 第一引数の変数名を使うしかない、それは嫌やな refactoring.
-                    var subName = ((MemberExpression)method.Arguments[0]).Member.Name;
-                    var memberName = subName + "." + member.Member.Name;
-                    return ResolveLambdicElement(memberName);
-                }
                 throw new NotSupportedException();
             }
 
@@ -276,10 +267,24 @@ namespace LambdicSql.Inside
             {
                 members.Add(exp);
                 exp = exp.Expression as MemberExpression;
+                if (exp != null)
+                {
+                    member = exp;
+                }
             }
+
+            //check IClauseChain's Body.
+            var method = member.Expression as MethodCallExpression;
+            if (method != null)
+            {
+                if (!typeof(IClauseChain).IsAssignableFrom(method.Type) ||
+                     member.Member.Name != "Body") return null;
+                return Convert(method);
+            }
+
             if (members.Count < 2) return null;
             members.Reverse();
-
+            
             //check SqlExpression's Body
             if (!typeof(ISqlExpressionBase).IsAssignableFrom(members[0].Type) ||
                 members[1].Member.Name != "Body") return null;

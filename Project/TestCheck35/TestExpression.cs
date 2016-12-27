@@ -394,7 +394,7 @@ WHERE (@p_0) <> (@p_1)", 3, 1);
             var query = Sql<Data>.Create(db => instance.GetValue(instance.GetValue()));
             AssertEx.AreEqual(query, _connection, @"@p_0", 1);
         }
-
+        
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Nest_Exp()
         {
@@ -406,7 +406,7 @@ WHERE (@p_0) <> (@p_1)", 3, 1);
             var query = Sql<DB>.Create(db =>
                 Select(Asterisk(db.tbl_staff)).
                 From(db.tbl_staff).
-                Where(exp2.Cast<bool>()));
+                Where(exp2));
             
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);

@@ -1287,6 +1287,8 @@ namespace LambdicSql
         /// <returns>It is an object for describing the continuation of the OVER expression.</returns>
         public static int Nth_Value(object column, object offset) => InvalitContext.Throw<int>(nameof(Nth_Value));
 
+        //TODO Window関数で Row_Numerってのがあるらしい
+
         /// <summary>
         /// LAG function.
         /// </summary>

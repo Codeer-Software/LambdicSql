@@ -301,7 +301,7 @@ FROM tbl_staff",
                 Select(new
                 {
                     Type = Case().
-                                When(sub.Cast<int>() == 1).Then("x").
+                                When(sub.Body == 1).Then("x").
                                 Else("z").
                             End()
                 }).
@@ -329,12 +329,13 @@ FROM tbl_staff", 1, "x", "z");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Sub2()
         {
+            //TODO これは暗黙キャストを作りたいなー
             var sub = Sql<DB>.Create(db => Select(Count(Asterisk())).From(db.tbl_staff));
             var query = Sql<DB>.Create(db =>
                 Select(new
                 {
                     Type = Case().
-                                When(1 == sub.Cast<int>()).Then("x").
+                                When(1 == sub.Body).Then("x").
                                 Else("z").
                             End()
                 }).

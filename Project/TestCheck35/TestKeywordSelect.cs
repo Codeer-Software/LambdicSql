@@ -661,16 +661,17 @@ FROM tbl_remuneration");
         public void Test_SubQuery_Exp()
         {
             var sub = Sql<DB>.Create(db =>
-                Select(new { Total = Sum(db.tbl_remuneration.money) }).
+                Select(Sum(db.tbl_remuneration.money)).
                 From(db.tbl_remuneration));
 
             var exp = Sql<DB>.Create(db => db.tbl_remuneration.payment_date);
 
+            //TODO 暗黙キャスト
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData
                 {
                     PaymentDate = exp,
-                    Money = sub.Cast<decimal>()
+                    Money = sub.Body
                 }).
                 From(db.tbl_remuneration));
 
@@ -680,7 +681,7 @@ FROM tbl_remuneration");
 @"SELECT
 	tbl_remuneration.payment_date AS PaymentDate,
 	(SELECT
-		SUM(tbl_remuneration.money) AS Total
+		SUM(tbl_remuneration.money)
 	FROM tbl_remuneration) AS Money
 FROM tbl_remuneration");
         }
