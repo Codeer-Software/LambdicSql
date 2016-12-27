@@ -81,7 +81,6 @@
     <Compile Include="SqlBase\TextParts\SqlConvertingContext.cs" />
     <Compile Include="SqlBase\TextParts\SqlText.cs" />
     <Compile Include="SqlBase\ISqlExpressionBase.cs" />
-    <Compile Include="ISqlQuery.cs" />
     <Compile Include="SqlBase\IClauseChain.cs" />
     <Compile Include="ISqlExpression.cs" />
     <Compile Include="DbParam.cs" />
@@ -91,7 +90,6 @@
     <Compile Include="SqlBase\TextParts\TextWrapper.cs" />
     <Compile Include="SqlBase\TextParts\VText.cs" />
     <Compile Include="SqlExpression.cs" />
-    <Compile Include="SqlQuery.cs" />
     <Compile Include="SqlBase\SqlSyntaxAttribute.cs" />
     <Compile Include="Inside\SqlExpressionSingle.cs" />
     <Compile Include="SqlBase\SqlConvertOption.cs" />

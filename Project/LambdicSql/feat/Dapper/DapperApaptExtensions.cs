@@ -30,7 +30,7 @@ namespace LambdicSql.feat.Dapper
         ///     is created per row, and a direct column-name===member-name mapping is assumed
         ///     (case insensitive).
         /// </returns>
-        public static IEnumerable<T> Query<T>(this IDbConnection cnn, ISqlExpressionBase<IClauseChain<T>> query, IDbTransaction transaction = null, bool buffered = true, int? commandTimeout = default(int?), CommandType? commandType = default(CommandType?))
+        public static IEnumerable<T> Query<T>(this IDbConnection cnn, ISqlExpressionBase<T> query, IDbTransaction transaction = null, bool buffered = true, int? commandTimeout = default(int?), CommandType? commandType = default(CommandType?))
             => Query<T>(cnn, (ISqlExpressionBase)query, transaction, buffered, commandTimeout, commandType);
  
         /// <summary>

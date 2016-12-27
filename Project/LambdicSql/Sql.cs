@@ -31,14 +31,15 @@ namespace LambdicSql
         /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
         /// <param name="expression">An expression expressing a query by C #.</param>
         /// <returns>A query.</returns>
-        public static SqlQuery<TSelected> Create<TSelected>(Expression<Func<TDB, IClauseChain<TSelected>>> expression)
+        public static SqlExpression<TSelected> Create<TSelected>(Expression<Func<TDB, IClauseChain<TSelected>>> expression)
         {
             var db = DBDefineAnalyzer.GetDbInfo<TDB>();
-            return new SqlQuery<TSelected>(new SqlExpressionSingle<IClauseChain<TSelected>>(db, expression.Body));
+            return new SqlExpressionSingle<TSelected>(db, expression.Body);
         }
 
         /// <summary>
         /// Create a query.
+        /// Add name.
         /// </summary>
         /// <typeparam name="TResult"></typeparam>
         /// <param name="expression">An expression expressing a query by C #.</param>
@@ -53,17 +54,46 @@ namespace LambdicSql
         /// <summary>
         /// Create a query.
         /// </summary>
-        /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
+        /// <typeparam name="TResult"></typeparam>
         /// <param name="expression">An expression expressing a query by C #.</param>
         /// <returns>A query.</returns>
-        public static SqlQuery<TSelected> Create<TSelected>(Expression<Func<TDB, SqlQuery<TSelected>>> expression)
+        public static SqlRecursiveArgumentsExpression<TResult> Create<TResult>(Expression<Func<TDB, RecursiveArguments<TResult>>> expression)
         {
             var db = DBDefineAnalyzer.GetDbInfo<TDB>();
-            var core = expression.Body as MemberExpression;
-            return new SqlQuery<TSelected>(new SqlExpressionSingle<IClauseChain<TSelected>>(db, new AliasText(core.Member.Name)));
+            return new SqlRecursiveArgumentsExpression<TResult>(db, expression.Body);
         }
     }
 
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="TSelected"></typeparam>
+    public class SqlRecursiveArgumentsExpression<TSelected> : SqlExpression<TSelected>
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public override DbInfo DbInfo { get; protected set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public override SqlText SqlText { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dbInfo"></param>
+        /// <param name="core"></param>
+        public SqlRecursiveArgumentsExpression(DbInfo dbInfo, Expression core)
+        {
+            DbInfo = dbInfo;
+            var converter = new SqlStringConverter(dbInfo);
+            if (core == null) SqlText = string.Empty;
+            else SqlText = converter.Convert(core);
+        }
+    }
 
     //TODO
     class AliasText : SingleText

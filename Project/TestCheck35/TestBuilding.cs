@@ -7,6 +7,7 @@ using LambdicSql;
 using LambdicSql.feat.Dapper;
 using static LambdicSql.Keywords;
 using System;
+using LambdicSql.SqlBase;
 
 namespace TestCheck35
 {
@@ -32,14 +33,14 @@ namespace TestCheck35
             public decimal Money { get; set; }
         }
 
-        public static readonly SqlQuery<SelectData> Select = Sql<DB>.Create(db =>
+        public static readonly SqlExpression<SelectData> Select = Sql<DB>.Create(db =>
             Select(new SelectData
             {
                 PaymentDate = db.tbl_remuneration.payment_date,
                 Money = db.tbl_remuneration.money,
             }));
 
-        public static readonly ISqlQuery From = Sql<DB>.Create(db =>
+        public static readonly ISqlExpressionBase From = Sql<DB>.Create(db =>
             From(db.tbl_remuneration));
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]

@@ -22,7 +22,7 @@ namespace LambdicSql.feat.EntityFramework
         /// <param name="query">Query.</param>
         /// <param name="dbContext">DbContext object.</param>
         /// <returns>Query result.</returns>
-        public static IEnumerable<T> SqlQuery<T>(this ISqlExpressionBase<IClauseChain<T>> query, object dbContext)
+        public static IEnumerable<T> SqlQuery<T>(this ISqlExpressionBase<T> query, object dbContext)
             => SqlQuery<T>((ISqlExpressionBase)query, dbContext);
 
         /// <summary>

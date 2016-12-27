@@ -6,6 +6,7 @@ using static Test.Helper.DBProviderInfo;
 using LambdicSql;
 using LambdicSql.feat.Dapper;
 using static LambdicSql.Keywords;
+using LambdicSql.SqlBase;
 
 namespace TestCheck35
 {
@@ -386,6 +387,7 @@ WHERE (@p_0) < (tbl_remuneration.money)",
 
             var b = Sql<DB>.Create(db => sub2);
 
+            //TODO あー、分けることができないなー
             var query = Sql<DB>.Create(db =>
                 With(sub1, sub2).
                 Select(new SelectedData
@@ -394,15 +396,10 @@ WHERE (@p_0) < (tbl_remuneration.money)",
                 }).
                 From(b)
             );
-
-
-            var x = Sql<DB>.Create(db =>
-                With(sub1)
-            );
-
+            
             query.Gen(_connection);
 
-            var datas = _connection.Query<SelectedData>(query).ToList();
+            var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"WITH

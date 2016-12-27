@@ -12,7 +12,11 @@ namespace LambdicSql
 
     //TODO 改行をいれながらドキュメントというかサンプルを書く！
     //<para>paraを</para>
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class RecursiveArguments<T> { }
 
     //TODO ファイル分割
     /// <summary>
@@ -39,7 +43,7 @@ namespace LambdicSql
         /// <param name="args"></param>
         /// <param name="select"></param>
         /// <returns></returns>
-        public static IClauseChain<TSelected> With<TSelected>(SqlExpression<TSelected> args, ISqlExpressionBase select) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(With));
+        public static IClauseChain<TSelected> With<TSelected>(SqlRecursiveArgumentsExpression<TSelected> args, ISqlExpressionBase select) => InvalitContext.Throw<IClauseChain<TSelected>>(nameof(With));
 
         /// <summary>
         /// 
@@ -47,7 +51,7 @@ namespace LambdicSql
         /// <typeparam name="TSelected"></typeparam>
         /// <param name="selected"></param>
         /// <returns></returns>
-        public static TSelected Recursive<TSelected>(TSelected selected) => InvalitContext.Throw<TSelected>(nameof(Select));
+        public static RecursiveArguments<TSelected> Recursive<TSelected>(TSelected selected) => InvalitContext.Throw<RecursiveArguments<TSelected>>(nameof(Select));
 
         /// <summary>
         /// 
