@@ -234,7 +234,10 @@ namespace LambdicSql.Inside
             var ret = new List<SqlText>();
             foreach (var c in GetMethodChains(method))
             {
-                //TODO @@@
+                //TODO @@@ GetConvertMethodEx();
+
+
+
                 var chain = new[] { c };
                 ret.Add(chain[0].GetConverotrMethod()(this, chain));
             }
