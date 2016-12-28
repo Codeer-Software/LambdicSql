@@ -98,7 +98,7 @@ namespace LambdicSql.Inside.Keywords
             }
 
             var method = exp as MethodCallExpression;
-            if (method != null)
+            if (method != null && 0 < method.Arguments.Count)
             {
                 member = method.Arguments[0] as MemberExpression;
                 if (member != null)

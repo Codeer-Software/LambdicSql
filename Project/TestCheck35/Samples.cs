@@ -1119,7 +1119,7 @@ FROM tbl_remuneration
                 var query = Sql<DB>.Create(db =>
                     Select(new
                     {
-                        Dst = Current_Date
+                        Dst = CurrentDate()
                     }));
                 ExecuteRead(query);
             }
@@ -1128,7 +1128,7 @@ FROM tbl_remuneration
                 var query = Sql<DB>.Create(db =>
                     Select(new
                     {
-                        Dst = Current_Date
+                        Dst = CurrentDate()
                     }).From("dual".ToSql()));
                 ExecuteRead(query);
             }
@@ -1137,7 +1137,7 @@ FROM tbl_remuneration
                 var query = Sql<DB>.Create(db =>
                     Select(new
                     {
-                        Dst = CurrentSpaceDate
+                        Dst = CurrentDate()
                     }).From("sysibm.sysdummy1".ToSql()));
                 ExecuteRead(query);
             }
@@ -1148,7 +1148,7 @@ FROM tbl_remuneration
                 var query = Sql<DB>.Create(db =>
                     Select(new
                     {
-                        Dst = Current_Time
+                        Dst = CurrentTime()
                     }));
                 var x = ExecuteRead(query);
             }
@@ -1158,7 +1158,7 @@ FROM tbl_remuneration
                 var query = Sql<DB>.Create(db =>
                     Select(new
                     {
-                        Dst = CurrentSpaceTime
+                        Dst = CurrentTime()
                     }).From("sysibm.sysdummy1".ToSql()));
                 var x = ExecuteRead(query);
             }
@@ -1171,7 +1171,7 @@ FROM tbl_remuneration
                 var query = Sql<DB>.Create(db =>
                     Select(new
                     {
-                        Dst = Current_TimeStamp
+                        Dst = CurrentTimeStamp()
                     }));
                 ExecuteRead(query);
             }
@@ -1180,7 +1180,7 @@ FROM tbl_remuneration
                 var query = Sql<DB>.Create(db =>
                     Select(new
                     {
-                        Dst = Current_TimeStamp
+                        Dst = CurrentTimeStamp()
                     }).From("dual".ToSql()));
                 ExecuteRead(query);
             }
@@ -1189,7 +1189,7 @@ FROM tbl_remuneration
                 var query = Sql<DB>.Create(db =>
                     Select(new
                     {
-                        Dst = Current_TimeStamp
+                        Dst = CurrentTimeStamp()
                     }).From("dual".ToSql()));
                 ExecuteRead(query);
             }
@@ -1198,7 +1198,7 @@ FROM tbl_remuneration
                 var query = Sql<DB>.Create(db =>
                     Select(new
                     {
-                        Dst = CurrentSpaceTimeStamp
+                        Dst = CurrentTimeStamp()
                     }).From("sysibm.sysdummy1".ToSql()));
                 var x = ExecuteRead(query);
             }
@@ -1207,7 +1207,7 @@ FROM tbl_remuneration
                 var query = Sql<DB>.Create(db =>
                     Select(new
                     {
-                        Dst = CurrentSpaceTimeStamp
+                        Dst = CurrentTimeStamp()
                     }).From("sysibm.sysdummy1".ToSql()));
                 var x = ExecuteRead(query);
             }
@@ -1218,16 +1218,16 @@ FROM tbl_remuneration
                 var query = Sql<DB>.Create(db =>
                     Select(new
                     {
-                        Dst1 = Extract(DateTimeElement.Year, Current_TimeStamp),
-                        Dst2 = Extract(DateTimeElement.Month, Current_TimeStamp),
-                        Dst3 = Extract(DateTimeElement.Day, Current_TimeStamp),
-                        Dst4 = Extract(DateTimeElement.Hour, Current_TimeStamp),
-                        Dst5 = Extract(DateTimeElement.Minute, Current_TimeStamp),
-                        Dst6 = Extract(DateTimeElement.Second, Current_TimeStamp),
-                        Dst7 = Extract(DateTimeElement.Millisecond, Current_TimeStamp),
-                        Dst8 = Extract(DateTimeElement.Microsecond, Current_TimeStamp),
-                        Dst9 = Extract(DateTimeElement.Quarter, Current_TimeStamp),
-                        Dst10 = Extract(DateTimeElement.Week, Current_TimeStamp)
+                        Dst1 = Extract(DateTimeElement.Year, CurrentTimeStamp()),
+                        Dst2 = Extract(DateTimeElement.Month, CurrentTimeStamp()),
+                        Dst3 = Extract(DateTimeElement.Day, CurrentTimeStamp()),
+                        Dst4 = Extract(DateTimeElement.Hour, CurrentTimeStamp()),
+                        Dst5 = Extract(DateTimeElement.Minute, CurrentTimeStamp()),
+                        Dst6 = Extract(DateTimeElement.Second, CurrentTimeStamp()),
+                        Dst7 = Extract(DateTimeElement.Millisecond, CurrentTimeStamp()),
+                        Dst8 = Extract(DateTimeElement.Microsecond, CurrentTimeStamp()),
+                        Dst9 = Extract(DateTimeElement.Quarter, CurrentTimeStamp()),
+                        Dst10 = Extract(DateTimeElement.Week, CurrentTimeStamp())
                     }));
                 var x = ExecuteRead(query);
             }
@@ -1236,14 +1236,14 @@ FROM tbl_remuneration
                 var query = Sql<DB>.Create(db =>
                     Select(new
                     {
-                        Dst1 = (long)Extract(DateTimeElement.Year, Current_TimeStamp),
-                        Dst2 = (long)Extract(DateTimeElement.Month, Current_TimeStamp),
-                        Dst3 = (long)Extract(DateTimeElement.Day, Current_TimeStamp),
-                        Dst4 = (long)Extract(DateTimeElement.Hour, Current_TimeStamp),
-                        Dst5 = (long)Extract(DateTimeElement.Minute, Current_TimeStamp),
-                        Dst6 = (long)Extract(DateTimeElement.Second, Current_TimeStamp),
-                        Dst9 = (long)Extract(DateTimeElement.Quarter, Current_TimeStamp),
-                        Dst10 = (long)Extract(DateTimeElement.Week, Current_TimeStamp)
+                        Dst1 = (long)Extract(DateTimeElement.Year, CurrentTimeStamp()),
+                        Dst2 = (long)Extract(DateTimeElement.Month, CurrentTimeStamp()),
+                        Dst3 = (long)Extract(DateTimeElement.Day, CurrentTimeStamp()),
+                        Dst4 = (long)Extract(DateTimeElement.Hour, CurrentTimeStamp()),
+                        Dst5 = (long)Extract(DateTimeElement.Minute, CurrentTimeStamp()),
+                        Dst6 = (long)Extract(DateTimeElement.Second, CurrentTimeStamp()),
+                        Dst9 = (long)Extract(DateTimeElement.Quarter, CurrentTimeStamp()),
+                        Dst10 = (long)Extract(DateTimeElement.Week, CurrentTimeStamp())
                     }));
                 var x = ExecuteRead(query);
             }
@@ -1252,20 +1252,20 @@ FROM tbl_remuneration
                 var query = Sql<DB>.Create(db =>
                     Select(new
                     {
-                        Year = DatePart(DateTimeElement.Year, Current_TimeStamp),
-                        Quarter = DatePart(DateTimeElement.Quarter, Current_TimeStamp),
-                        Month = DatePart(DateTimeElement.Month, Current_TimeStamp),
-                        Dayofyear = DatePart(DateTimeElement.Dayofyear, Current_TimeStamp),
-                        Day = DatePart(DateTimeElement.Day, Current_TimeStamp),
-                        Week = DatePart(DateTimeElement.Week, Current_TimeStamp),
-                        Weekday = DatePart(DateTimeElement.Weekday, Current_TimeStamp),
-                        Hour = DatePart(DateTimeElement.Hour, Current_TimeStamp),
-                        Minute = DatePart(DateTimeElement.Minute, Current_TimeStamp),
-                        Second = DatePart(DateTimeElement.Second, Current_TimeStamp),
-                        Millisecond = DatePart(DateTimeElement.Millisecond, Current_TimeStamp),
-                        Microsecond = DatePart(DateTimeElement.Microsecond, Current_TimeStamp),
-                        Nanosecond = DatePart(DateTimeElement.Nanosecond, Current_TimeStamp),
-                        ISO_WEEK = DatePart(DateTimeElement.ISO_WEEK, Current_TimeStamp)
+                        Year = DatePart(DateTimeElement.Year, CurrentTimeStamp()),
+                        Quarter = DatePart(DateTimeElement.Quarter, CurrentTimeStamp()),
+                        Month = DatePart(DateTimeElement.Month, CurrentTimeStamp()),
+                        Dayofyear = DatePart(DateTimeElement.Dayofyear, CurrentTimeStamp()),
+                        Day = DatePart(DateTimeElement.Day, CurrentTimeStamp()),
+                        Week = DatePart(DateTimeElement.Week, CurrentTimeStamp()),
+                        Weekday = DatePart(DateTimeElement.Weekday, CurrentTimeStamp()),
+                        Hour = DatePart(DateTimeElement.Hour, CurrentTimeStamp()),
+                        Minute = DatePart(DateTimeElement.Minute, CurrentTimeStamp()),
+                        Second = DatePart(DateTimeElement.Second, CurrentTimeStamp()),
+                        Millisecond = DatePart(DateTimeElement.Millisecond, CurrentTimeStamp()),
+                        Microsecond = DatePart(DateTimeElement.Microsecond, CurrentTimeStamp()),
+                        Nanosecond = DatePart(DateTimeElement.Nanosecond, CurrentTimeStamp()),
+                        ISO_WEEK = DatePart(DateTimeElement.ISO_WEEK, CurrentTimeStamp())
                     }));
                 var x = ExecuteRead(query);
             }
@@ -1412,7 +1412,7 @@ FROM tbl_remuneration
             var query = Sql<DB>.Create(db =>
                  Select(Asterisk()).
                  From(db.tbl_remuneration).
-                 Where(Between(RowNum, 1, 5)).
+                 Where(Between(RowNum(), 1, 5)).
                  OrderBy(Asc(db.tbl_remuneration.id))
                  );
        //     Debug.Print(query.ToSqlInfo().SqlText);

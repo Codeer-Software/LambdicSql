@@ -9,14 +9,15 @@ namespace LambdicSql.Inside
             switch (connectionTypeFullName)
             {
                 case "Npgsql.NpgsqlConnection":
-                    return new DialectOption() { StringAddOperator = "||", ExistRecursive = true };
+                    return new DialectOption() { ConnectionTypeFullName = connectionTypeFullName, StringAddOperator = "||", ExistRecursive = true };
                 case "System.Data.SQLite.SQLiteConnection":
+                    return new DialectOption() { ConnectionTypeFullName = connectionTypeFullName, StringAddOperator = "||" };
                 case "IBM.Data.DB2.DB2Connection":
-                    return new DialectOption() { StringAddOperator = "||" };
+                    return new DialectOption() { ConnectionTypeFullName = connectionTypeFullName, StringAddOperator = "||", CurrentDateTimeSeparator = " " };
                 case "Oracle.ManagedDataAccess.Client.OracleConnection":
-                    return new DialectOption() { StringAddOperator = "||", ParameterPrefix = ":" };
+                    return new DialectOption() { ConnectionTypeFullName = connectionTypeFullName, StringAddOperator = "||", ParameterPrefix = ":" };
                 default:
-                    return new DialectOption();
+                    return new DialectOption() { ConnectionTypeFullName = connectionTypeFullName };
             }
         }
     }

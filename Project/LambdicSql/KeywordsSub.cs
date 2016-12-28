@@ -56,6 +56,7 @@ namespace LambdicSql
     /// </summary>
     public interface IRows { }
 
+    //TODO enumはやめる
     /// <summary>
     /// Aggregation predicate.
     /// </summary>
@@ -203,16 +204,16 @@ namespace LambdicSql
     /// SYSIBM keyword.
     /// </summary>
     [SqlSyntax]
-    public class SysibmType
+    public class SysIBM
     {
-        internal SysibmType() { }
+        internal SysIBM() { }
 
         /// <summary>
         /// SYSDUMMY1 keyword.
         /// </summary>
-        public object Sysdummy1 => InvalitContext.Throw<long>(nameof(Sysdummy1));
+        public static object SysDummy1() => InvalitContext.Throw<long>(nameof(SysDummy1));
 
-        static ExpressionElement Convert(IExpressionConverter converter, MemberExpression member)
-            => "SYSIBM." + member.Member.Name.ToUpper();
+        static ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression[] methods)
+            => "SYSIBM." + methods[0].Method.Name.ToUpper();
     }
 }

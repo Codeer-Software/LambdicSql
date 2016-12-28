@@ -6,6 +6,11 @@
     public class DialectOption
     {
         /// <summary>
+        /// 
+        /// </summary>
+        public string ConnectionTypeFullName { get; set; }
+
+        /// <summary>
         /// String addtional operator.
         /// Default is +.
         /// </summary>
@@ -21,5 +26,10 @@
         /// 
         /// </summary>
         public bool ExistRecursive { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string CurrentDateTimeSeparator { get; set; } = "_";
     }
 }

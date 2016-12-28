@@ -373,7 +373,7 @@ FETCH NEXT @p_1 ROWS ONLY",
             var query = Sql<DB>.Create(db =>
                  Select(Asterisk(db.tbl_remuneration)).
                  From(db.tbl_remuneration).
-                 Where(Between(RowNum, 1, 3)).
+                 Where(Between(RowNum(), 1, 3)).
                  OrderBy(Asc(db.tbl_remuneration.id))
                  );
 
@@ -394,7 +394,7 @@ ORDER BY
             var name = _connection.GetType().FullName;
             if (name != "Oracle.ManagedDataAccess.Client.OracleConnection") return;
 
-            var exp1 = Sql<DB>.Create(db => RowNum);
+            var exp1 = Sql<DB>.Create(db => RowNum());
             var exp2 = Sql<DB>.Create(db => (long)1);
             var exp3 = Sql<DB>.Create(db => (long)3);
             var query = Sql<DB>.Create(db =>

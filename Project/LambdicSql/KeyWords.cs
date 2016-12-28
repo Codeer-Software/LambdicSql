@@ -931,64 +931,6 @@ namespace LambdicSql
         public static bool IsNotNull(object target) => InvalitContext.Throw<bool>(nameof(IsNotNull));
 
         /// <summary>
-        /// ROWNUM BETWEEN keyword.
-        /// </summary>
-        public static object RowNum => InvalitContext.Throw<object>(nameof(RowNum));
-
-        /// <summary>
-        /// DUAL keyword.
-        /// </summary>
-        public static object Dual => InvalitContext.Throw<object>(nameof(Dual));
-
-        /// <summary>
-        /// SYSIBM keyword.
-        /// </summary>
-        public static SysibmType Sysibm => InvalitContext.Throw<SysibmType>(nameof(Sysibm));
-
-        /// <summary>
-        /// CURREN_TDATE function.
-        /// </summary>
-        /// <returns>Date of executing SQL.</returns>
-        public static DateTime Current_Date => InvalitContext.Throw<DateTime>(nameof(Current_Date));
-
-        /// <summary>
-        /// CURRENT_TIME function.
-        /// </summary>
-        /// <returns>Date of executing SQL.</returns>
-        public static TimeSpan Current_Time => InvalitContext.Throw<TimeSpan>(nameof(DateTimeOffset));
-
-        /// <summary>
-        /// CURRENT_TIMESTAMP function.
-        /// </summary>
-        /// <returns>Date and time of executing SQL.</returns>
-        public static DateTime Current_TimeStamp => InvalitContext.Throw<DateTime>(nameof(Current_TimeStamp));
-
-        //TODO いやーやっぱり、オプションで何とかしようかなー
-        //他の関数見てからにするかー
-        //-----------------------------------------------------------------------------------
-        /// <summary>
-        /// CURRENT DATE function.
-        /// Get date and time of executing SQL.
-        /// </summary>
-        /// <returns>Date and time of executing SQL.</returns>
-        public static DateTime CurrentSpaceDate => InvalitContext.Throw<DateTime>(nameof(CurrentSpaceDate));
-
-        /// <summary>
-        /// CURRENT TIME function.
-        /// Get date and time of executing SQL.
-        /// </summary>
-        /// <returns>Date and time of executing SQL.</returns>
-        public static TimeSpan CurrentSpaceTime => InvalitContext.Throw<TimeSpan>(nameof(CurrentSpaceTime));
-
-        /// <summary>
-        /// CURRENT TIMESTAMP function.
-        /// Get date and time of executing SQL.
-        /// </summary>
-        /// <returns>Date and time of executing SQL.</returns>
-        public static DateTime CurrentSpaceTimeStamp => InvalitContext.Throw<DateTime>(nameof(CurrentSpaceTimeStamp));
-        //----------------------------------------------------------------------------------
-
-        /// <summary>
         /// It's *.
         /// </summary>
         /// <typeparam name="TSelected">Type of selected.</typeparam>
@@ -1020,13 +962,46 @@ namespace LambdicSql
         /// </summary>
         /// <param name="target">target column.</param>
         public static ISortedBy Desc(object target) => InvalitContext.Throw<ISortedBy>(nameof(Desc));
-
-
+        
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="count">cout.</param>
         public static ITop Top(long count) => InvalitContext.Throw<ITop>(nameof(Top));
+
+
+        //TODO やっぱりやめておこうかな。だって、CurrentDateとか精度を渡せるって噂やし
+        /// <summary>
+        /// ROWNUM BETWEEN keyword.
+        /// </summary>
+        public static object RowNum() => InvalitContext.Throw<object>(nameof(RowNum));
+
+        /// <summary>
+        /// DUAL keyword.
+        /// </summary>
+        public static object Dual() => InvalitContext.Throw<object>(nameof(Dual));
+
+
+
+
+        /// <summary>
+        /// CURREN_TDATE function.
+        /// </summary>
+        /// <returns>Date of executing SQL.</returns>
+        public static DateTime CurrentDate() => InvalitContext.Throw<DateTime>(nameof(CurrentDate));
+
+        /// <summary>
+        /// CURRENT_TIME function.
+        /// </summary>
+        /// <returns>Date of executing SQL.</returns>
+        public static TimeSpan CurrentTime() => InvalitContext.Throw<TimeSpan>(nameof(DateTimeOffset));
+
+        /// <summary>
+        /// CURRENT_TIMESTAMP function.
+        /// </summary>
+        /// <returns>Date and time of executing SQL.</returns>
+        public static DateTime CurrentTimeStamp() => InvalitContext.Throw<DateTime>(nameof(CurrentTimeStamp));
+
         #endregion
 
         #region SQL Functions
@@ -1220,9 +1195,7 @@ namespace LambdicSql
         /// <param name="expression2">expression.</param>
         /// <returns>expression1 or expression2.</returns>
         public static T NVL<T>(T expression1, T expression2) => InvalitContext.Throw<T>(nameof(NVL));
-        #endregion
 
-        #region Window Functions
         /// <summary>
         /// FIRST_VALUE function.
         /// </summary>
@@ -1409,18 +1382,42 @@ namespace LambdicSql
             return LineSpace("TOP", args[0].Customize(new CustomizeParameterToObject()));
         }
 
-        static ExpressionElement Convert(IExpressionConverter converter, MemberExpression member)
+        class CurrentDateTimeExpressionElement : ExpressionElement
         {
-            switch (member.Member.Name)
+            string _front = string.Empty;
+            string _back = string.Empty;
+            string _core;
+
+            internal CurrentDateTimeExpressionElement(string core)
             {
-                case nameof(CurrentSpaceDate):
-                    return "CURRENT DATE";
-                case nameof(CurrentSpaceTime):
-                    return "CURRENT TIME";
-                case nameof(CurrentSpaceTimeStamp):
-                    return "CURRENT TIMESTAMP";
+                _core = core;
             }
-            return member.Member.Name.ToUpper();
+
+            CurrentDateTimeExpressionElement(string core, string front, string back)
+            {
+                _core = core;
+                _front = front;
+                _back = back;
+            }
+
+            public override bool IsSingleLine(ExpressionConvertingContext context) => true;
+
+            public override bool IsEmpty => false;
+
+            public override string ToString(bool isTopLevel, int indent, ExpressionConvertingContext context)
+                => string.Join(string.Empty, Enumerable.Range(0, indent).Select(e => "\t").ToArray()) + _front + "CURRENT" +  context.Option.CurrentDateTimeSeparator + _core + _back;
+
+            public override ExpressionElement ConcatAround(string front, string back)
+                => new CurrentDateTimeExpressionElement(_core, front + _front, _back + back);
+
+            public override ExpressionElement ConcatToFront(string front)
+                => new CurrentDateTimeExpressionElement(_core, front + _front, _back);
+
+            public override ExpressionElement ConcatToBack(string back)
+                => new CurrentDateTimeExpressionElement(_core, _front, _back + back);
+
+            public override ExpressionElement Customize(ISqlTextCustomizer customizer)
+                => customizer.Custom(this);
         }
 
         static ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression[] methods)
@@ -1428,6 +1425,12 @@ namespace LambdicSql
             var method = methods[0];
             switch (method.Method.Name)
             {
+                case nameof(Dual):
+                case nameof(RowNum):
+                    return method.Method.Name.ToUpper();
+                case nameof(CurrentDate): return new CurrentDateTimeExpressionElement("DATE");
+                case nameof(CurrentTime): return new CurrentDateTimeExpressionElement("TIME");
+                case nameof(CurrentTimeStamp): return new CurrentDateTimeExpressionElement("TIMESTAMP");
                 case nameof(With):
                     return FromClause.ConvertWith(converter, methods);
                 case nameof(Recursive):
@@ -1519,20 +1522,6 @@ namespace LambdicSql
                         var args = method.Arguments.Select(e => converter.Convert(e)).ToArray();
                         return (method.Arguments.Count == 2) ? FuncSpace(method.Method.Name.ToUpper(), args):
                                                                     Func(method.Method.Name.ToUpper(), args);
-
-                        /*
-                        if (methods.Length == 1)
-                        {
-                            return func;
-                        }
-                        var v = new VText();
-                        v.Add(func);
-                        var overMethod = methods[1];
-                        v.Add(overMethod.Method.Name.ToUpper() + "(");
-                        v.AddRange(1, overMethod.Arguments.Skip(1).
-                            Where(e => !(e is ConstantExpression)). //Skip null.
-                            Select(e => converter.Convert(e)).ToArray());
-                        return v.ConcatToBack(")");*/
                     }
                 case nameof(Extract):
                     {
@@ -1572,20 +1561,6 @@ namespace LambdicSql
                     {
                         var args = method.Arguments.Select(e => converter.Convert(e)).ToArray();
                         return Func(method.Method.Name.ToUpper(), args);
-
-                        /*
-                        if (methods.Length == 1)
-                        {
-                            return func;
-                        }
-                        var v = new VText();
-                        v.Add(func);
-                        var overMethod = methods[1];
-                        v.Add(overMethod.Method.Name.ToUpper() + "(");
-                        v.AddRange(1, overMethod.Arguments.Skip(1).
-                            Where(e => !(e is ConstantExpression)). //Skip null.
-                            Select(e => converter.Convert(e)).ToArray());
-                        return v.ConcatToBack(")");*/
                     }
                 case nameof(Over):
                     {
