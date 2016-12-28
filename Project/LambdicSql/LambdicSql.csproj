@@ -80,7 +80,7 @@
     <Compile Include="SqlBase\TextParts\SelectQueryText.cs" />
     <Compile Include="SqlBase\TextParts\SqlConvertingContext.cs" />
     <Compile Include="SqlBase\TextParts\SqlText.cs" />
-    <Compile Include="SqlBase\IClauseChain.cs" />
+    <Compile Include="SqlBase\ClauseChain.cs" />
     <Compile Include="DbParam.cs" />
     <Compile Include="SqlBase\TextParts\SqlTextUtils.cs" />
     <Compile Include="SqlBase\TextParts\StringAddOperatorText.cs" />
@@ -104,7 +104,6 @@
     <Compile Include="SqlBase\ObjectCreateMemberInfo.cs" />
     <Compile Include="Inside\ExpressionToObject.cs" />
     <Compile Include="Inside\SqlSyntaxHelper.cs" />
-    <Compile Include="SqlBase\IMethodChain.cs" />
     <Compile Include="SqlBase\ISqlStringConverter.cs" />
     <Compile Include="Inside\SqlStringConverter.cs" />
     <Compile Include="Inside\DBDefineAnalyzer.cs" />

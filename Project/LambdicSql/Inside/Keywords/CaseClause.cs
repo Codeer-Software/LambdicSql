@@ -14,7 +14,8 @@ namespace LambdicSql.Inside.Keywords
             var texts = new VText();
             foreach(var m in methods)
             {
-                var argSrc = m.Arguments.Skip(m.SkipMethodChain(0)).Select(e => converter.Convert(e)).ToArray();
+                var index = m.Method.Name == nameof(LambdicSql.Keywords.Case) ? 0 : 1;
+                var argSrc = m.Arguments.Skip(index).Select(e => converter.Convert(e)).ToArray();
 
                 switch (m.Method.Name)
                 {

@@ -5,7 +5,7 @@ namespace LambdicSql.SqlBase
     /// <summary>
     /// Query.
     /// </summary>
-    public interface IClauseChain : IMethodChain { }
+    public interface IClauseChain { }
     
     /// <summary>
     /// 
