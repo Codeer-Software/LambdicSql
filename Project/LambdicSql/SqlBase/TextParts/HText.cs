@@ -7,9 +7,9 @@ namespace LambdicSql.SqlBase.TextParts
     /// <summary>
     /// Horizontal text.
     /// </summary>
-    public class HText : SqlText
+    public class HText : ExpressionElement
     {
-        List<SqlText> _texts = new List<SqlText>();
+        List<ExpressionElement> _texts = new List<ExpressionElement>();
 
         /// <summary>
         /// Separator.
@@ -34,7 +34,7 @@ namespace LambdicSql.SqlBase.TextParts
         /// <summary>
         /// Is single line.
         /// </summary>
-        public override bool IsSingleLine(SqlConvertingContext context) => !_texts.Any(e => !e.IsSingleLine(context));
+        public override bool IsSingleLine(ExpressionConvertingContext context) => !_texts.Any(e => !e.IsSingleLine(context));
 
         /// <summary>
         /// Is empty.
@@ -45,7 +45,7 @@ namespace LambdicSql.SqlBase.TextParts
         /// Constructor.
         /// </summary>
         /// <param name="texts">Horizontal texts.</param>
-        public HText(params SqlText[] texts)
+        public HText(params ExpressionElement[] texts)
         {
             _texts.AddRange(texts.Where(e => !e.IsEmpty));
         }
@@ -54,7 +54,7 @@ namespace LambdicSql.SqlBase.TextParts
         /// Constructor.
         /// </summary>
         /// <param name="texts">Horizontal texts.</param>
-        public HText(IEnumerable<SqlText> texts)
+        public HText(IEnumerable<ExpressionElement> texts)
         {
             _texts.AddRange(texts.Where(e => !e.IsEmpty));
         }
@@ -66,7 +66,7 @@ namespace LambdicSql.SqlBase.TextParts
         /// <param name="indent">Indent.</param>
         /// <param name="context">Context.</param>
         /// <returns>Text.</returns>
-        public override string ToString(bool isTopLevel, int indent, SqlConvertingContext context)
+        public override string ToString(bool isTopLevel, int indent, ExpressionConvertingContext context)
         {
             indent += Indent;
             if (_texts.Count == 0) return string.Empty;
@@ -93,14 +93,14 @@ namespace LambdicSql.SqlBase.TextParts
         public void Add(string text, int indent)
         {
             if (string.IsNullOrEmpty(text.Trim())) return;
-            _texts.Add(new SingleText(text, indent));
+            _texts.Add(new SingleTextElement(text, indent));
         }
 
         /// <summary>
         /// Add text.
         /// </summary>
         /// <param name="text">Text.</param>
-        public void Add(SqlText text)
+        public void Add(ExpressionElement text)
         {
             if (text.IsEmpty) return;
             _texts.Add(text);
@@ -110,14 +110,14 @@ namespace LambdicSql.SqlBase.TextParts
         /// Add text.
         /// </summary>
         /// <param name="texts">Texts.</param>
-        public void AddRange(IEnumerable<SqlText> texts)
+        public void AddRange(IEnumerable<ExpressionElement> texts)
             => _texts.AddRange(texts.Where(e => !e.IsEmpty));
 
         /// <summary>
         /// Add text.
         /// </summary>
         /// <param name="texts">Texts.</param>
-        public void AddRange(params SqlText[] texts)
+        public void AddRange(params ExpressionElement[] texts)
             => _texts.AddRange(texts.Where(e => !e.IsEmpty));
 
         /// <summary>
@@ -126,7 +126,7 @@ namespace LambdicSql.SqlBase.TextParts
         /// <param name="front">Front.</param>
         /// <param name="back">Back.</param>
         /// <returns>Text.</returns>
-        public override SqlText ConcatAround(string front, string back)
+        public override ExpressionElement ConcatAround(string front, string back)
         {
             if (_texts.Count == 0) return CopyProperty(front + back);
 
@@ -141,7 +141,7 @@ namespace LambdicSql.SqlBase.TextParts
         /// </summary>
         /// <param name="front">Front.</param>
         /// <returns>Text.</returns>
-        public override SqlText ConcatToFront(string front)
+        public override ExpressionElement ConcatToFront(string front)
         {
             if (_texts.Count == 0) return CopyProperty(front);
 
@@ -155,7 +155,7 @@ namespace LambdicSql.SqlBase.TextParts
         /// </summary>
         /// <param name="back"></param>
         /// <returns></returns>
-        public override SqlText ConcatToBack(string back)
+        public override ExpressionElement ConcatToBack(string back)
         {
             if (_texts.Count == 0) return CopyProperty(back);
 
@@ -169,13 +169,13 @@ namespace LambdicSql.SqlBase.TextParts
         /// </summary>
         /// <param name="customizer">Customizer.</param>
         /// <returns>Customized SqlText.</returns>
-        public override SqlText Customize(ISqlTextCustomizer customizer)
+        public override ExpressionElement Customize(ISqlTextCustomizer customizer)
         {
             var dst = _texts.Select(e => customizer.Custom(e));
             return CopyProperty(dst.ToArray());
         }
 
-        HText CopyProperty(params SqlText[] texts)
+        HText CopyProperty(params ExpressionElement[] texts)
              => new HText(texts) { Indent = Indent, IsFunctional = IsFunctional, EnableChangeLine = EnableChangeLine, Separator = Separator };
     }
 }

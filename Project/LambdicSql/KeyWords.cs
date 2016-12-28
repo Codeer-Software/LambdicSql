@@ -1403,13 +1403,13 @@ namespace LambdicSql
         #endregion
         
 
-        static SqlText ConvertTop(ISqlStringConverter converter, MethodCallExpression[] methods)
+        static ExpressionElement ConvertTop(IExpressionConverter converter, MethodCallExpression[] methods)
         {
             var args = methods[0].Arguments.Select(e => converter.Convert(e)).ToArray();
             return LineSpace("TOP", args[0].Customize(new CustomizeParameterToObject()));
         }
 
-        static SqlText Convert(ISqlStringConverter converter, MemberExpression member)
+        static ExpressionElement Convert(IExpressionConverter converter, MemberExpression member)
         {
             switch (member.Member.Name)
             {
@@ -1423,7 +1423,7 @@ namespace LambdicSql
             return member.Member.Name.ToUpper();
         }
 
-        static SqlText Convert(ISqlStringConverter converter, MethodCallExpression[] methods)
+        static ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
             switch (method.Method.Name)

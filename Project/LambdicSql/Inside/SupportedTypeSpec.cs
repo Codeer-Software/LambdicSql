@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace LambdicSql.Inside
 {
+    //TODO これっているんだっけ？
     static class SupportedTypeSpec
     {
         static List<Type> _supported = new List<Type>();

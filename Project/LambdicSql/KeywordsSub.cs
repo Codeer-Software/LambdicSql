@@ -173,9 +173,9 @@ namespace LambdicSql
         /// <param name="lhs">Lvalue</param>
         public Assign(object rhs, object lhs) { InvalitContext.Throw("new " + nameof(Assign)); }
 
-        static SqlText Convert(ISqlStringConverter converter, NewExpression exp)
+        static ExpressionElement Convert(IExpressionConverter converter, NewExpression exp)
         {
-            SqlText arg1 = converter.Convert(exp.Arguments[0]).Customize(new CustomizeColumnOnly());
+            ExpressionElement arg1 = converter.Convert(exp.Arguments[0]).Customize(new CustomizeColumnOnly());
             return new HText(arg1, "=", converter.Convert(exp.Arguments[1])) { Separator = " " };
         }
     }
@@ -201,10 +201,10 @@ namespace LambdicSql
         /// <param name="src"></param>
         public static implicit operator bool(Condition src) => InvalitContext.Throw<bool>("implicit operator bool(Condition src)");
 
-        static SqlText Convert(ISqlStringConverter converter, NewExpression exp)
+        static ExpressionElement Convert(IExpressionConverter converter, NewExpression exp)
         {
             var obj = converter.ToObject(exp.Arguments[0]);
-            return (bool)obj ? converter.Convert(exp.Arguments[1]) : (SqlText)string.Empty;
+            return (bool)obj ? converter.Convert(exp.Arguments[1]) : (ExpressionElement)string.Empty;
         }
     }
 
@@ -221,7 +221,7 @@ namespace LambdicSql
         /// </summary>
         public object Sysdummy1 => InvalitContext.Throw<long>(nameof(Sysdummy1));
 
-        static SqlText Convert(ISqlStringConverter converter, MemberExpression member)
+        static ExpressionElement Convert(IExpressionConverter converter, MemberExpression member)
             => "SYSIBM." + member.Member.Name.ToUpper();
     }
 }

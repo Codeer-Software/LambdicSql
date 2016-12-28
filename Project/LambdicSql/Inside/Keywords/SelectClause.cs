@@ -11,7 +11,7 @@ namespace LambdicSql.Inside.Keywords
 {
     static class SelectClause
     {
-        internal static SqlText Convert(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
 
@@ -30,11 +30,11 @@ namespace LambdicSql.Inside.Keywords
                 modify.Add(method.Arguments[i]);
             }
 
-            var select = LineSpace(new SqlText[] { "SELECT" }.Concat(modify.Select(e => converter.Convert(e))).ToArray());
+            var select = LineSpace(new ExpressionElement[] { "SELECT" }.Concat(modify.Select(e => converter.Convert(e))).ToArray());
 
             //select elemnts.
             var selectTargets = method.Arguments[method.Arguments.Count - 1];
-            SqlText selectTargetText = null;
+            ExpressionElement selectTargetText = null;
             ObjectCreateInfo createInfo = null;
 
             //*
@@ -52,10 +52,10 @@ namespace LambdicSql.Inside.Keywords
                     new VText(createInfo.Members.Select(e => ToStringSelectedElement(converter, e)).ToArray()) { Indent = 1, Separator = "," };
             }
 
-            return new SelectClauseText(createInfo, selectTargetText == null ? (SqlText)select : new VText(select, selectTargetText));
+            return new SelectClauseText(createInfo, selectTargetText == null ? (ExpressionElement)select : new VText(select, selectTargetText));
         }
 
-        static SqlText ToStringSelectedElement(ISqlStringConverter converter, ObjectCreateMemberInfo element)
+        static ExpressionElement ToStringSelectedElement(IExpressionConverter converter, ObjectCreateMemberInfo element)
         {
             //single select.
             //for example, COUNT(*).
@@ -65,42 +65,42 @@ namespace LambdicSql.Inside.Keywords
             return LineSpace(converter.Convert(element.Expression), "AS", element.Name);
         }
 
-        internal static SqlText ConvertRecursive(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static ExpressionElement ConvertRecursive(IExpressionConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
             var selectTargets = method.Arguments[method.Arguments.Count - 1];
             var createInfo = ObjectCreateAnalyzer.MakeSelectInfo(selectTargets);
-            return new RecursiveClauseText(createInfo, Blanket(createInfo.Members.Select(e => (SqlText)e.Name).ToArray()));
+            return new RecursiveClauseText(createInfo, Blanket(createInfo.Members.Select(e => (ExpressionElement)e.Name).ToArray()));
         }
     }
 
-    class RecursiveClauseText : SqlText
+    class RecursiveClauseText : ExpressionElement
     {
-        SqlText _core;
+        ExpressionElement _core;
         ObjectCreateInfo _createInfo;
 
-        internal RecursiveClauseText(ObjectCreateInfo createInfo, SqlText core)
+        internal RecursiveClauseText(ObjectCreateInfo createInfo, ExpressionElement core)
         {
             _core = core;
             _createInfo = createInfo;
         }
 
-        public override bool IsSingleLine(SqlConvertingContext context) => _core.IsSingleLine(context);
+        public override bool IsSingleLine(ExpressionConvertingContext context) => _core.IsSingleLine(context);
 
         public override bool IsEmpty => _core.IsEmpty;
 
-        public override string ToString(bool isTopLevel, int indent, SqlConvertingContext context)
+        public override string ToString(bool isTopLevel, int indent, ExpressionConvertingContext context)
         {
             context.ObjectCreateInfo = _createInfo;
             return _core.ToString(isTopLevel, indent, context);
         }
 
-        public override SqlText ConcatAround(string front, string back) => new SelectClauseText(_createInfo, _core.ConcatAround(front, back));
+        public override ExpressionElement ConcatAround(string front, string back) => new SelectClauseText(_createInfo, _core.ConcatAround(front, back));
 
-        public override SqlText ConcatToFront(string front) => new SelectClauseText(_createInfo, _core.ConcatToFront(front));
+        public override ExpressionElement ConcatToFront(string front) => new SelectClauseText(_createInfo, _core.ConcatToFront(front));
 
-        public override SqlText ConcatToBack(string back) => new SelectClauseText(_createInfo, _core.ConcatToBack(back));
+        public override ExpressionElement ConcatToBack(string back) => new SelectClauseText(_createInfo, _core.ConcatToBack(back));
 
-        public override SqlText Customize(ISqlTextCustomizer customizer) => customizer.Custom(this);
+        public override ExpressionElement Customize(ISqlTextCustomizer customizer) => customizer.Custom(this);
     }
 }

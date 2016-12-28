@@ -15,6 +15,6 @@ namespace LambdicSql
         public static ISqlExecutor<TSelected> ToExecutor<TSelected>
             (this SqlExpression<TSelected> exp, IDbConnection connection)
         where TSelected : class
-            => new SqlExecutor<TSelected>(connection, exp.ToSqlInfo(connection.GetType()));
+            => new SqlExecutor<TSelected>(connection, exp.Build(connection.GetType()));
     }
 }

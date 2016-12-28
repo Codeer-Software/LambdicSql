@@ -3,7 +3,7 @@
     /// <summary>
     /// Option of to convert expression to sql text.
     /// </summary>
-    public class SqlConvertOption
+    public class DialectOption
     {
         /// <summary>
         /// String addtional operator.

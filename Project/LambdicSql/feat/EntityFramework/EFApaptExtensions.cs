@@ -35,7 +35,7 @@ namespace LambdicSql.feat.EntityFramework
         public static IEnumerable<T> SqlQuery<T>(this ISqlExpression query, object dbContext)
         {
             var cnn = EFWrapper.GetConnection(dbContext);
-            var info = query.ToSqlInfo(cnn.GetType());
+            var info = query.Build(cnn.GetType());
             
             object[] args;
             using (var com = cnn.CreateCommand())
@@ -62,7 +62,7 @@ namespace LambdicSql.feat.EntityFramework
         public static int ExecuteSqlCommand(this ISqlExpression query, object dbContext)
         {
             var cnn = EFWrapper.GetConnection(dbContext);
-            var info = query.ToSqlInfo(cnn.GetType());
+            var info = query.Build(cnn.GetType());
 
             object[] args;
             using (var com = cnn.CreateCommand())

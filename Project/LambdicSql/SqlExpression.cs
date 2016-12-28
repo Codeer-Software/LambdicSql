@@ -18,7 +18,7 @@ namespace LambdicSql
         /// Data converted from Expression to a form close to a string representation.
         /// </summary>
         /// <returns>text.</returns>
-        SqlText SqlText { get; }
+        ExpressionElement ExpressionElement { get; }
     }
     
     /// <summary>
@@ -36,7 +36,7 @@ namespace LambdicSql
         /// Data converted from Expression to a form close to a string representation.
         /// </summary>
         /// <returns>text.</returns>
-        public abstract SqlText SqlText { get; }
+        public abstract ExpressionElement ExpressionElement { get; }
 
         /// <summary>
         /// Entity represented by SqlExpression.

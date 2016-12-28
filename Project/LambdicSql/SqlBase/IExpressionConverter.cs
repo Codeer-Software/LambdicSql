@@ -3,10 +3,11 @@ using LambdicSql.SqlBase.TextParts;
 
 namespace LambdicSql.SqlBase
 {
+    //TODO del
     /// <summary>
     /// Helper to convert expression to text. 
     /// </summary>
-    public interface ISqlStringConverter
+    public interface IExpressionConverter
     {
         /// <summary>
         /// Data base info.
@@ -18,7 +19,7 @@ namespace LambdicSql.SqlBase
         /// </summary>
         /// <param name="obj">object.</param>
         /// <returns>text.</returns>
-        SqlText Convert(object obj);
+        ExpressionElement Convert(object obj);
 
         /// <summary>
         /// Get object in expression.

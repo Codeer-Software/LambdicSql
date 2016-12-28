@@ -8,15 +8,21 @@
     //SqlPartsかな
     //でネームスペースはSqlBuilder
 
+    //どの辺まで公開するか決めないと
+
+    //それから大幅にフォルダ構成を変える
+    //Baseとかは良くない
+    //Insideもね
+
     /// <summary>
     /// Text.
     /// </summary>
-    public abstract class SqlText
+    public abstract class ExpressionElement
     {
         /// <summary>
         /// Is single line.
         /// </summary>
-        public abstract bool IsSingleLine(SqlConvertingContext context);
+        public abstract bool IsSingleLine(ExpressionConvertingContext context);
 
         /// <summary>
         /// Is empty.
@@ -30,7 +36,7 @@
         /// <param name="indent">Indent.</param>
         /// <param name="context">Context.</param>
         /// <returns>Text.</returns>
-        public abstract string ToString(bool isTopLevel, int indent, SqlConvertingContext context);
+        public abstract string ToString(bool isTopLevel, int indent, ExpressionConvertingContext context);
 
         /// <summary>
         /// Concat to front and back.
@@ -38,33 +44,33 @@
         /// <param name="front">Front.</param>
         /// <param name="back">Back.</param>
         /// <returns>Text.</returns>
-        public abstract SqlText ConcatAround(string front, string back);
+        public abstract ExpressionElement ConcatAround(string front, string back);
 
         /// <summary>
         /// Concat to front.
         /// </summary>
         /// <param name="front">Front.</param>
         /// <returns>Text.</returns>
-        public abstract SqlText ConcatToFront(string front);
+        public abstract ExpressionElement ConcatToFront(string front);
 
         /// <summary>
         /// Concat to back.
         /// </summary>
         /// <param name="back"></param>
         /// <returns></returns>
-        public abstract SqlText ConcatToBack(string back);
+        public abstract ExpressionElement ConcatToBack(string back);
 
         /// <summary>
         /// Customize.
         /// </summary>
         /// <param name="customizer">Customizer.</param>
         /// <returns>Customized SqlText.</returns>
-        public abstract SqlText Customize(ISqlTextCustomizer customizer);
+        public abstract ExpressionElement Customize(ISqlTextCustomizer customizer);
 
         /// <summary>
         /// Convert string to IText.
         /// </summary>
         /// <param name="text">string.</param>
-        public static implicit operator SqlText(string text) => new SingleText(text);
+        public static implicit operator ExpressionElement(string text) => new SingleTextElement(text);
     }
 }

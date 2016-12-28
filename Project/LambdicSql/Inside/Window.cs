@@ -14,7 +14,7 @@ namespace LambdicSql.Inside
     static class Window
     {
 
-        internal static SqlText ConvertRows(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static ExpressionElement ConvertRows(IExpressionConverter converter, MethodCallExpression[] methods)
         {
             var exp = methods[0];
             var args = exp.Arguments.Select(e => converter.Convert(e)).ToArray();
@@ -32,7 +32,7 @@ namespace LambdicSql.Inside
         }
 
 
-        internal static SqlText ConvertPartitionBy(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static ExpressionElement ConvertPartitionBy(IExpressionConverter converter, MethodCallExpression[] methods)
         {
             var exp = methods[0];
 
@@ -50,7 +50,7 @@ namespace LambdicSql.Inside
             return partitionBy;
         }
 
-        internal static SqlText MakeOver(ISqlStringConverter converter, MethodCallExpression[] methods, VText v, int argCount)
+        internal static ExpressionElement MakeOver(IExpressionConverter converter, MethodCallExpression[] methods, VText v, int argCount)
         {
             v.Add("OVER(");
             v.AddRange(1, methods[0].Arguments.Skip(argCount).

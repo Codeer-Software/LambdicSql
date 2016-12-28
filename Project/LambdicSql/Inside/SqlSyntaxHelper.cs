@@ -13,9 +13,9 @@ namespace LambdicSql.Inside
     {
         const BindingFlags MethodFindFlags = BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
 
-        static Dictionary<Type, Func<ISqlStringConverter, MethodCallExpression[], SqlText>> _methodToStrings = new Dictionary<Type, Func<ISqlStringConverter, MethodCallExpression[], SqlText>>();
-        static Dictionary<Type, Func<ISqlStringConverter, MemberExpression, SqlText>> _memberToStrings = new Dictionary<Type, Func<ISqlStringConverter, MemberExpression, SqlText>>();
-        static Dictionary<Type, Func<ISqlStringConverter, NewExpression, SqlText>> _newToStrings = new Dictionary<Type, Func<ISqlStringConverter, NewExpression, SqlText>>();
+        static Dictionary<Type, Func<IExpressionConverter, MethodCallExpression[], ExpressionElement>> _methodToStrings = new Dictionary<Type, Func<IExpressionConverter, MethodCallExpression[], ExpressionElement>>();
+        static Dictionary<Type, Func<IExpressionConverter, MemberExpression, ExpressionElement>> _memberToStrings = new Dictionary<Type, Func<IExpressionConverter, MemberExpression, ExpressionElement>>();
+        static Dictionary<Type, Func<IExpressionConverter, NewExpression, ExpressionElement>> _newToStrings = new Dictionary<Type, Func<IExpressionConverter, NewExpression, ExpressionElement>>();
         static Dictionary<Type, bool> _isSqlSyntax = new Dictionary<Type, bool>();
         static Dictionary<MetaId, bool> _isForcedMethodGroup = new Dictionary<MetaId, bool>();
         static Dictionary<MetaId, bool> _isExtension = new Dictionary<MetaId, bool>();
@@ -64,25 +64,25 @@ namespace LambdicSql.Inside
             }
         }
         
-        internal static Func<ISqlStringConverter, MethodCallExpression[], SqlText> GetConverotrMethod(this MethodCallExpression exp)
+        internal static Func<IExpressionConverter, MethodCallExpression[], ExpressionElement> GetConverotrMethod(this MethodCallExpression exp)
         {
             var type = exp.Method.DeclaringType;
             lock (_methodToStrings)
             {
-                Func<ISqlStringConverter, MethodCallExpression[], SqlText> func;
+                Func<IExpressionConverter, MethodCallExpression[], ExpressionElement> func;
                 if (_methodToStrings.TryGetValue(type, out func)) return func;
                 
                 var methodToString = type.GetMethod("Convert", MethodFindFlags,
                     null,
-                    new Type[] { typeof(ISqlStringConverter), typeof(MethodCallExpression[]) },
+                    new Type[] { typeof(IExpressionConverter), typeof(MethodCallExpression[]) },
                     new ParameterModifier[0]);
 
                 var arguments = new[] {
-                    Expression.Parameter(typeof(ISqlStringConverter), "cnv"),
+                    Expression.Parameter(typeof(IExpressionConverter), "cnv"),
                     Expression.Parameter(typeof(MethodCallExpression[]), "exps")
                 };
 
-                func = Expression.Lambda<Func<ISqlStringConverter, MethodCallExpression[], SqlText>>
+                func = Expression.Lambda<Func<IExpressionConverter, MethodCallExpression[], ExpressionElement>>
                     (Expression.Call(null, methodToString, arguments), arguments).Compile();
 
                 _methodToStrings.Add(type, func);
@@ -91,25 +91,25 @@ namespace LambdicSql.Inside
             }
         }
         
-        internal static Func<ISqlStringConverter, MemberExpression, SqlText> GetConverotrMethod(this MemberExpression exp)
+        internal static Func<IExpressionConverter, MemberExpression, ExpressionElement> GetConverotrMethod(this MemberExpression exp)
         {
             var type = exp.Member.DeclaringType;
             lock (_memberToStrings) 
             {
-                Func<ISqlStringConverter, MemberExpression, SqlText> func;
+                Func<IExpressionConverter, MemberExpression, ExpressionElement> func;
                 if (_memberToStrings.TryGetValue(type, out func)) return func;
 
                 var methodToString = type.GetMethod("Convert", MethodFindFlags,
                     null,
-                    new Type[] { typeof(ISqlStringConverter), typeof(MemberExpression) },
+                    new Type[] { typeof(IExpressionConverter), typeof(MemberExpression) },
                     new ParameterModifier[0]);
 
                 var arguments = new[] {
-                    Expression.Parameter(typeof(ISqlStringConverter), "cnv"),
+                    Expression.Parameter(typeof(IExpressionConverter), "cnv"),
                     Expression.Parameter(typeof(MemberExpression), "exps")
                 };
 
-                func = Expression.Lambda<Func<ISqlStringConverter, MemberExpression, SqlText>>
+                func = Expression.Lambda<Func<IExpressionConverter, MemberExpression, ExpressionElement>>
                     (Expression.Call(null, methodToString, arguments), arguments).Compile();
 
                 _memberToStrings.Add(type, func);
@@ -118,25 +118,25 @@ namespace LambdicSql.Inside
             }
         }
 
-        internal static Func<ISqlStringConverter, NewExpression, SqlText> GetConverotrMethod(this NewExpression exp)
+        internal static Func<IExpressionConverter, NewExpression, ExpressionElement> GetConverotrMethod(this NewExpression exp)
         {
             var type = exp.Constructor.DeclaringType;
             lock (_newToStrings)
             {
-                Func<ISqlStringConverter, NewExpression, SqlText> func;
+                Func<IExpressionConverter, NewExpression, ExpressionElement> func;
                 if (_newToStrings.TryGetValue(type, out func)) return func;
 
                 var newToString = type.GetMethod("Convert", MethodFindFlags,
                     null,
-                    new Type[] { typeof(ISqlStringConverter), typeof(NewExpression) },
+                    new Type[] { typeof(IExpressionConverter), typeof(NewExpression) },
                     new ParameterModifier[0]);
 
                 var arguments = new[] {
-                    Expression.Parameter(typeof(ISqlStringConverter), "cnv"),
+                    Expression.Parameter(typeof(IExpressionConverter), "cnv"),
                     Expression.Parameter(typeof(NewExpression), "exps")
                 };
 
-                func = Expression.Lambda<Func<ISqlStringConverter, NewExpression, SqlText>>
+                func = Expression.Lambda<Func<IExpressionConverter, NewExpression, ExpressionElement>>
                     (Expression.Call(null, newToString, arguments), arguments).Compile();
                 _newToStrings.Add(type, func);
 

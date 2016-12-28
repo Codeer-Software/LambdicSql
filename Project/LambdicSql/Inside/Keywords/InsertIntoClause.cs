@@ -9,10 +9,10 @@ namespace LambdicSql.Inside.Keywords
 {
     static class InsertIntoClause
     {
-        internal static SqlText Convert(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression[] methods)
             => new VText(methods.Select(m => MethodToString(converter, m)).ToArray());
 
-        static SqlText MethodToString(ISqlStringConverter converter, MethodCallExpression method)
+        static ExpressionElement MethodToString(IExpressionConverter converter, MethodCallExpression method)
         {
             switch (method.Method.Name)
             {
@@ -22,14 +22,14 @@ namespace LambdicSql.Inside.Keywords
             throw new NotSupportedException();
         }
 
-        static SqlText MethodToStringValues(ISqlStringConverter converter, MethodCallExpression method)
+        static ExpressionElement MethodToStringValues(IExpressionConverter converter, MethodCallExpression method)
         {
             var values = Func("VALUES", converter.Convert(method.Arguments[1]));
             values.Indent = 1;
             return values;
         }
 
-        static SqlText MethodToStringInsertInto(ISqlStringConverter converter, MethodCallExpression method)
+        static ExpressionElement MethodToStringInsertInto(IExpressionConverter converter, MethodCallExpression method)
         {
             var table = converter.Convert(method.Arguments[0]);
 

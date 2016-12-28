@@ -79,7 +79,7 @@ namespace LambdicSql
         /// <summary>
         /// 
         /// </summary>
-        public override SqlText SqlText { get; }
+        public override ExpressionElement ExpressionElement { get; }
 
         /// <summary>
         /// 
@@ -89,14 +89,14 @@ namespace LambdicSql
         public SqlRecursiveArgumentsExpression(DbInfo dbInfo, Expression core)
         {
             DbInfo = dbInfo;
-            var converter = new SqlStringConverter(dbInfo);
-            if (core == null) SqlText = string.Empty;
-            else SqlText = converter.Convert(core);
+            var converter = new ExpressionConverter(dbInfo);
+            if (core == null) ExpressionElement = string.Empty;
+            else ExpressionElement = converter.Convert(core);
         }
     }
 
     //TODO
-    class AliasText : SingleText
+    class AliasText : SingleTextElement
     {
         public AliasText(string text) : base(text) { }
     }

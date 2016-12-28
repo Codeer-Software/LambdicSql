@@ -4,7 +4,7 @@ using System;
 
 namespace LambdicSql.SqlBase.TextParts
 {
-    class ParameterText : SqlText
+    class ParameterText : ExpressionElement
     {
         internal string Name { get; private set; }
         internal MetaId MetaId { get; private set; }
@@ -39,29 +39,29 @@ namespace LambdicSql.SqlBase.TextParts
             _displayValue = displayValue;
         }
 
-        public override bool IsSingleLine(SqlConvertingContext context) => true;
+        public override bool IsSingleLine(ExpressionConvertingContext context) => true;
 
         public override bool IsEmpty => false;
 
-        public override string ToString(bool isTopLevel, int indent, SqlConvertingContext context)
+        public override string ToString(bool isTopLevel, int indent, ExpressionConvertingContext context)
             => string.Join(string.Empty, Enumerable.Range(0, indent).Select(e => "\t").ToArray()) + _front + GetDisplayText(context) + _back;
 
-        public override SqlText ConcatAround(string front, string back)
+        public override ExpressionElement ConcatAround(string front, string back)
             => new ParameterText(Name, MetaId, _param, front + _front, _back + back, _displayValue);
 
-        public override SqlText ConcatToFront(string front)
+        public override ExpressionElement ConcatToFront(string front)
             => new ParameterText(Name, MetaId, _param, front + _front, _back, _displayValue);
 
-        public override SqlText ConcatToBack(string back)
+        public override ExpressionElement ConcatToBack(string back)
             => new ParameterText(Name, MetaId, _param, _front, _back + back, _displayValue);
 
-        public override SqlText Customize(ISqlTextCustomizer customizer)
+        public override ExpressionElement Customize(ISqlTextCustomizer customizer)
             => customizer.Custom(this);
 
-        internal SqlText ToDisplayValue() =>
+        internal ExpressionElement ToDisplayValue() =>
             new ParameterText(Name, MetaId, _param, _front, _back, true);
 
-        string GetDisplayText(SqlConvertingContext context)
+        string GetDisplayText(ExpressionConvertingContext context)
         {
             return _displayValue ? Value.ToString() : context.ParameterInfo.Push(_param.Value, Name, MetaId, _param);
         }

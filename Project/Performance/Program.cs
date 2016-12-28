@@ -49,7 +49,7 @@ namespace Performance
 
             Console.ReadKey();
             Console.WriteLine("Start");
-            SqlInfo info = null;
+            BuildedSql info = null;
             var times = new List<double>();
             var watch = new Stopwatch();
 
@@ -72,7 +72,7 @@ namespace Performance
                     Where(3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
 
 
-                info = query.ToSqlInfo(typeof(SqlConnection));
+                info = query.Build(typeof(SqlConnection));
 
                 watch.Stop();
                 if (i != 0)

@@ -6,7 +6,7 @@ namespace LambdicSql.Inside.Keywords
 {
     static class SetOperation
     {
-        internal static SqlText Convert(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
             var clause = method.Method.Name.ToUpper();

@@ -43,7 +43,7 @@ namespace LambdicSql
         /// <returns>Column name only.</returns>
         public static T ColumnOnly<T>(this T column) => InvalitContext.Throw<T>(nameof(ColumnOnly));
 
-        static SqlText Convert(ISqlStringConverter converter, MethodCallExpression[] methods)
+        static ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
             switch (method.Method.Name)
@@ -55,14 +55,14 @@ namespace LambdicSql
             throw new NotSupportedException();
         }
 
-        static SqlText TextSql(ISqlStringConverter converter, MethodCallExpression method)
+        static ExpressionElement TextSql(IExpressionConverter converter, MethodCallExpression method)
         {
             var text = (string)converter.ToObject(method.Arguments[0]);
             var array = method.Arguments[1] as NewArrayExpression;
             return new StringFormatText(text, array.Expressions.Select(e => converter.Convert(e)).ToArray());
         }
 
-        static SqlText TwoWaySql(ISqlStringConverter converter, MethodCallExpression method)
+        static ExpressionElement TwoWaySql(IExpressionConverter converter, MethodCallExpression method)
         {
             var obj = converter.ToObject(method.Arguments[0]);
             var text = TowWaySqlSpec.ToStringFormat((string)obj);
@@ -70,7 +70,7 @@ namespace LambdicSql
             return new StringFormatText(text, array.Expressions.Select(e => converter.Convert(e)).ToArray());
         }
 
-        static SqlText ColumnOnly(ISqlStringConverter converter, MethodCallExpression method)
+        static ExpressionElement ColumnOnly(IExpressionConverter converter, MethodCallExpression method)
         {
             var col = converter.Convert(method.Arguments[0]) as DbColumnText;
             if (col == null) throw new NotSupportedException("invalid column.");

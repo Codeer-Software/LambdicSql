@@ -1,14 +1,15 @@
 ﻿using LambdicSql.SqlBase;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace LambdicSql
 {
     /// <summary>
     /// SQL information.
     /// </summary>
-    public class SqlInfo
+    public class BuildedSql
     {
-        ParameterInfo _parameters;
+        Dictionary<string, DbParam> _dbParams;
 
         /// <summary>
         /// Object create information.
@@ -20,6 +21,7 @@ namespace LambdicSql
         /// </summary>
         public DbInfo DbInfo { get; }
 
+        //単なるTextでいいか
         /// <summary>
         /// Sql text.
         /// </summary>
@@ -28,7 +30,7 @@ namespace LambdicSql
         /// <summary>
         /// Parameters.
         /// </summary>
-        public Dictionary<string, DbParam> DbParams => _parameters.GetDbParams();
+        public Dictionary<string, DbParam> DbParams => _dbParams.ToDictionary(e => e.Key, e => e.Value);
 
         /// <summary>
         /// Constructor.
@@ -36,25 +38,25 @@ namespace LambdicSql
         /// <param name="dbInfo">DataBase information.</param>
         /// <param name="sqlText">Sql text.</param>
         /// <param name="selectClauseInfo">Object create information.</param>
-        /// <param name="parameters">Parameters.</param>
-        public SqlInfo(DbInfo dbInfo, string sqlText, ObjectCreateInfo selectClauseInfo, ParameterInfo parameters)
+        /// <param name="dbParams">Parameters.</param>
+        public BuildedSql(DbInfo dbInfo, string sqlText, ObjectCreateInfo selectClauseInfo, Dictionary<string, DbParam> dbParams)
         {
             DbInfo = dbInfo;
             SqlText = sqlText;
             SelectClauseInfo = selectClauseInfo;
-            _parameters = parameters;
+            _dbParams = dbParams;
         }
 
         /// <summary>
         /// Copy constructor.
         /// </summary>
         /// <param name="src">Source.</param>
-        public SqlInfo(SqlInfo src)
+        public BuildedSql(BuildedSql src)
         {
             DbInfo = src.DbInfo;
             SqlText = src.SqlText;
             SelectClauseInfo = src.SelectClauseInfo;
-            _parameters = src._parameters;
+            _dbParams = src._dbParams;
         }
     }
 
@@ -62,7 +64,7 @@ namespace LambdicSql
     /// SQL information.
     /// </summary>
     /// <typeparam name="TSelected">Type of selected at SELECT clause.</typeparam>
-    public class SqlInfo<TSelected> : SqlInfo
+    public class BuildedSql<TSelected> : BuildedSql
     {
         /// <summary>
         /// Constructor.
@@ -70,14 +72,14 @@ namespace LambdicSql
         /// <param name="dbInfo">DataBase information.</param>
         /// <param name="sqlText">Sql text.</param>
         /// <param name="selectClauseInfo">Object create information.</param>
-        /// <param name="parameters">Parameters.</param>
-        public SqlInfo(DbInfo dbInfo, string sqlText, ObjectCreateInfo selectClauseInfo, ParameterInfo parameters)
-            : base(dbInfo, sqlText, selectClauseInfo, parameters) { }
+        /// <param name="dbParams">Parameters.</param>
+        public BuildedSql(DbInfo dbInfo, string sqlText, ObjectCreateInfo selectClauseInfo, Dictionary<string, DbParam> dbParams)
+            : base(dbInfo, sqlText, selectClauseInfo, dbParams) { }
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="src">Source.</param>
-        public SqlInfo(SqlInfo src) : base(src) { }
+        public BuildedSql(BuildedSql src) : base(src) { }
     }
 }

@@ -10,6 +10,6 @@
         /// </summary>
         /// <param name="src">Source.</param>
         /// <returns>Result.</returns>
-        SqlText Custom(SqlText src);
+        ExpressionElement Custom(ExpressionElement src);
     }
 }

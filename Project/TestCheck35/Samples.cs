@@ -193,7 +193,7 @@ namespace TestCheck35
                 Where(min < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
 
             //to string and params.
-            var info = query.ToSqlInfo(_connection.GetType());
+            var info = query.Build(_connection.GetType());
             Debug.Print(info.SqlText);
 
             //dapper
@@ -208,7 +208,7 @@ namespace TestCheck35
             var query = Sql<DB>.Create(db => Select(Asterisk()).From(db.tbl_staff));
 
             //to string and params.
-            var info = query.ToSqlInfo(_connection.GetType());
+            var info = query.Build(_connection.GetType());
             Debug.Print(info.SqlText);
 
             //dapper
@@ -237,7 +237,7 @@ namespace TestCheck35
             var query = query1.Concat(query2);
 
             //to string and params.
-            var info = query.ToSqlInfo(_connection.GetType());
+            var info = query.Build(_connection.GetType());
             Debug.Print(info.SqlText);
 
             //dapper
@@ -264,7 +264,7 @@ namespace TestCheck35
                GroupBy(db.tbl_staff.id, db.tbl_staff.name));
 
             //to string and params.
-            var info = query.ToSqlInfo(_connection.GetType());
+            var info = query.Build(_connection.GetType());
             Debug.Print(info.SqlText);
 
             //dapper
@@ -289,7 +289,7 @@ namespace TestCheck35
                 GroupBy(db.tbl_staff.id, db.tbl_staff.name));
 
             //to string and params.
-            var info = query.ToSqlInfo(_connection.GetType());
+            var info = query.Build(_connection.GetType());
             Debug.Print(info.SqlText);
 
             //dapper
@@ -313,7 +313,7 @@ namespace TestCheck35
                 GroupBy(db.tbl_staff.id, db.tbl_staff.name));
 
             //to string and params.
-            var info = query.ToSqlInfo(_connection.GetType());
+            var info = query.Build(_connection.GetType());
             Debug.Print(info.SqlText);
 
             //dapper
@@ -338,7 +338,7 @@ namespace TestCheck35
                 Having(10000 < Sum(db.tbl_remuneration.money)));
 
             //to string and params.
-            var info = query.ToSqlInfo(_connection.GetType());
+            var info = query.Build(_connection.GetType());
             Debug.Print(info.SqlText);
 
             //dapper
@@ -355,7 +355,7 @@ namespace TestCheck35
                 Where(Like(db.tbl_staff.name, "%son%")));
 
             //to string and params.
-            var info = query.ToSqlInfo(_connection.GetType());
+            var info = query.Build(_connection.GetType());
             Debug.Print(info.SqlText);
 
             //dapper
@@ -371,7 +371,7 @@ namespace TestCheck35
                 Where(In(db.tbl_staff.id, 1, 3)));
 
             //to string and params.
-            var info = query.ToSqlInfo(_connection.GetType());
+            var info = query.Build(_connection.GetType());
             Debug.Print(info.SqlText);
 
             //dapper
@@ -387,7 +387,7 @@ namespace TestCheck35
                 Where(Between(db.tbl_staff.id, 1, 3)));
 
             //to string and params.
-            var info = query.ToSqlInfo(_connection.GetType());
+            var info = query.Build(_connection.GetType());
             Debug.Print(info.SqlText);
 
             //dapper
@@ -408,7 +408,7 @@ namespace TestCheck35
                 Where(Exists(sub)));//sub query.
 
             //to string and params.
-            var info = query.ToSqlInfo(_connection.GetType());
+            var info = query.Build(_connection.GetType());
             Debug.Print(info.SqlText);
 
             //dapper
@@ -430,7 +430,7 @@ namespace TestCheck35
                 From(db.tbl_remuneration));
 
             //to string and params.
-            var info = query.ToSqlInfo(_connection.GetType());
+            var info = query.Build(_connection.GetType());
             Debug.Print(info.SqlText);
 
             //dapper
@@ -452,7 +452,7 @@ namespace TestCheck35
                 From(db.tbl_remuneration));
 
             //to string and params.
-            var info = query.ToSqlInfo(_connection.GetType());
+            var info = query.Build(_connection.GetType());
             Debug.Print(info.SqlText);
 
             //dapper
@@ -471,7 +471,7 @@ namespace TestCheck35
                 From(db.tbl_data));
 
             //to string and params.
-            var info = query.ToSqlInfo(_connection.GetType());
+            var info = query.Build(_connection.GetType());
             Debug.Print(info.SqlText);
 
             //dapper
@@ -491,7 +491,7 @@ namespace TestCheck35
                 Where(db.tbl_data.id == 3));
 
             //to string and params.
-            var info = query.ToSqlInfo(_connection.GetType());
+            var info = query.Build(_connection.GetType());
             Debug.Print(info.SqlText);
 
             //dapper
@@ -511,7 +511,7 @@ namespace TestCheck35
                    InsertInto(db.tbl_data, db.tbl_data.id, db.tbl_data.val2).Values(1, "val2"));
 
             //to string and params.
-            var info = query.ToSqlInfo(_connection.GetType());
+            var info = query.Build(_connection.GetType());
             Debug.Print(info.SqlText);
 
             //dapper
@@ -529,7 +529,7 @@ namespace TestCheck35
                 Where(db.tbl_data.id == 1));
 
             //to string and params.
-            var info = query.ToSqlInfo(_connection.GetType());
+            var info = query.Build(_connection.GetType());
             Debug.Print(info.SqlText);
 
             //dapper
@@ -548,7 +548,7 @@ namespace TestCheck35
                 Where(db.tbl_data.id == 1));
 
             //to string and params.
-            var info = query.ToSqlInfo(_connection.GetType());
+            var info = query.Build(_connection.GetType());
             Debug.Print(info.SqlText);
 
             //dapper
@@ -574,7 +574,7 @@ namespace TestCheck35
                Where(db.tbl_staff.name == null || db.tbl_remuneration.money == val));
 
             //to string and params.
-            var info = query.ToSqlInfo(_connection.GetType());
+            var info = query.Build(_connection.GetType());
             Debug.Print(info.SqlText);
 
             //dapper
@@ -599,7 +599,7 @@ namespace TestCheck35
                Where(db.tbl_staff.name != null || db.tbl_remuneration.money != val));
 
             //to string and params.
-            var info = query.ToSqlInfo(_connection.GetType());
+            var info = query.Build(_connection.GetType());
             Debug.Print(info.SqlText);
 
             //dapper
@@ -622,7 +622,7 @@ namespace TestCheck35
                     Where(db.tbl_remuneration.money != null));
 
             //to string and params.
-            var info = query.ToSqlInfo(_connection.GetType());
+            var info = query.Build(_connection.GetType());
             Debug.Print(info.SqlText);
 
             //dapper
@@ -641,7 +641,7 @@ namespace TestCheck35
             From(db.tbl_staff));
 
             //to string and params.
-            var info = query.ToSqlInfo(_connection.GetType());
+            var info = query.Build(_connection.GetType());
             Debug.Print(info.SqlText);
 
             //dapper
@@ -667,7 +667,7 @@ namespace TestCheck35
             var query = Sql<DB>.Create(db => Select(Asterisk()).From(db.tbl_remuneration).Where(exp));
 
             //to string and params.
-            var info = query.ToSqlInfo(_connection.GetType());
+            var info = query.Build(_connection.GetType());
             Debug.Print(info.SqlText);
 
             //dapper
@@ -690,7 +690,7 @@ namespace TestCheck35
                 From(db.tbl_staff));
 
             //to string and params.
-            var info = query.ToSqlInfo(_connection.GetType());
+            var info = query.Build(_connection.GetType());
             Debug.Print(info.SqlText);
 
             //dapper
@@ -713,7 +713,7 @@ namespace TestCheck35
                 From(db.tbl_staff));
 
             //to string and params.
-            var info = query.ToSqlInfo(_connection.GetType());
+            var info = query.Build(_connection.GetType());
             Debug.Print(info.SqlText);
 
             //dapper
@@ -743,7 +743,7 @@ namespace TestCheck35
                 Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id));
 
             //to string and params.
-            var info = query.ToSqlInfo(_connection.GetType());
+            var info = query.Build(_connection.GetType());
             Debug.Print(info.SqlText);
 
             //dapper
@@ -777,7 +777,7 @@ namespace TestCheck35
             var query = select.Concat(from).Concat(where).Concat(orderby);
 
             //to string and params.
-            var info = query.ToSqlInfo(_connection.GetType());
+            var info = query.Build(_connection.GetType());
             Debug.Print(info.SqlText);
 
             //dapper
@@ -805,7 +805,7 @@ namespace TestCheck35
                OrderBy(Asc(db.tbl_staff.name)));
 
             //to string and params.
-            var info = query.ToSqlInfo(_connection.GetType());
+            var info = query.Build(_connection.GetType());
             Debug.Print(info.SqlText);
 
             //dapper
@@ -827,7 +827,7 @@ namespace TestCheck35
                 Where(In(db.tbl_staff.id, sub.Body)));//sub query.
 
             //to string and params.
-            var info = query.ToSqlInfo(_connection.GetType());
+            var info = query.Build(_connection.GetType());
             Debug.Print(info.SqlText);
 
             //dapper
@@ -851,7 +851,7 @@ namespace TestCheck35
                 From(db.tbl_staff));
 
             //to string and params.
-            var info = query.ToSqlInfo(_connection.GetType());
+            var info = query.Build(_connection.GetType());
             Debug.Print(info.SqlText);
 
             //dapper
@@ -881,7 +881,7 @@ namespace TestCheck35
                     From(subQuery.Body));
 
                 //to string and params.
-                var info = query.ToSqlInfo(_connection.GetType());
+                var info = query.Build(_connection.GetType());
                 Debug.Print(info.SqlText);
 
                 //dapper
@@ -896,7 +896,7 @@ namespace TestCheck35
                     From(subQuery));
 
                 //to string and params.
-                var info = query.ToSqlInfo(_connection.GetType());
+                var info = query.Build(_connection.GetType());
                 Debug.Print(info.SqlText);
 
                 //dapper
@@ -921,7 +921,7 @@ namespace TestCheck35
                 Where(3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
 
             //to string and params.
-            var info = query.ToSqlInfo(_connection.GetType());
+            var info = query.Build(_connection.GetType());
             Debug.Print(info.SqlText);
 
             //dapper
@@ -957,7 +957,7 @@ FROM tbl_remuneration
                     new Condition(minCondition, 3000 < db.tbl_remuneration.money) &&
                     new Condition(maxCondition, db.tbl_remuneration.money < 4000))
                 ));
-            var info = query.ToSqlInfo(_connection.GetType());
+            var info = query.Build(_connection.GetType());
             Debug.Print(info.SqlText);
 
             //dapper
@@ -970,7 +970,7 @@ FROM tbl_remuneration
                     new Condition(maxCondition, db.tbl_remuneration.money < 4000)));
 
             var query2 = Sql<DB>.Create(db => sql.TwoWaySql(bonus, where));
-            info = query2.ToSqlInfo(_connection.GetType());
+            info = query2.Build(_connection.GetType());
             Debug.Print(info.SqlText);
 
             //dapper
@@ -993,7 +993,7 @@ FROM tbl_remuneration
                 Where(db.tbl_remuneration.money != 100));
 
             //to string and params.
-            var info = query.ToSqlInfo(_connection.GetType());
+            var info = query.Build(_connection.GetType());
             Debug.Print(info.SqlText);
 
             //dapper
@@ -1013,7 +1013,7 @@ FROM tbl_remuneration
                 From(db.tbl_staff, db.tbl_remuneration));
 
             //to string and params.
-            var info = query.ToSqlInfo(_connection.GetType());
+            var info = query.Build(_connection.GetType());
             Debug.Print(info.SqlText);
 
             //dapper
@@ -1472,14 +1472,14 @@ FROM tbl_remuneration
 
         public IEnumerable<T> ExecuteRead<T>(LambdicSql.SqlExpression<T> exp)
         {
-            var info = exp.ToSqlInfo(_connection.GetType());
+            var info = exp.Build(_connection.GetType());
             Debug.Print(info.SqlText);
             return _connection.Query(exp).ToList();
         }
 
         public IEnumerable<T> ExecuteRead<T>(ISqlExpression exp)
         {
-            var info = exp.ToSqlInfo(_connection.GetType());
+            var info = exp.Build(_connection.GetType());
             Debug.Print(info.SqlText);
             return _connection.Query<T>(exp).ToList();
         }

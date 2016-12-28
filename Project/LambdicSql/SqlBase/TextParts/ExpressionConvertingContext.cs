@@ -5,12 +5,12 @@ namespace LambdicSql.SqlBase.TextParts
     /// <summary>
     /// Context of SQL conversion.
     /// </summary>
-    public class SqlConvertingContext
+    public class ExpressionConvertingContext
     {
         /// <summary>
         /// Option
         /// </summary>
-        public SqlConvertOption Option { get; }
+        public DialectOption Option { get; }
 
         /// <summary>
         /// Parameter info.
@@ -27,7 +27,7 @@ namespace LambdicSql.SqlBase.TextParts
         /// </summary>
         public Dictionary<string, bool> WithEntied { get; } = new Dictionary<string, bool>();
 
-        internal SqlConvertingContext(SqlConvertOption option)
+        internal ExpressionConvertingContext(DialectOption option)
         {
             Option = option;
             ParameterInfo = new ParameterInfo(option.ParameterPrefix);

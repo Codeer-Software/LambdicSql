@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace LambdicSql.SqlBase.TextParts
 {
-    class DbColumnText : SqlText
+    class DbColumnText : ExpressionElement
     {
         string _front = string.Empty;
         string _back = string.Empty;
@@ -13,7 +13,7 @@ namespace LambdicSql.SqlBase.TextParts
 
         string ColumnName => _columnOnly ? Info.SqlColumnName : Info.SqlFullName;
 
-        internal SqlText ToColumnOnly() =>
+        internal ExpressionElement ToColumnOnly() =>
             new DbColumnText(Info, true, _front, _back);
 
         internal DbColumnText(ColumnInfo info)
@@ -35,23 +35,23 @@ namespace LambdicSql.SqlBase.TextParts
             _columnOnly = columnOnly;
         }
 
-        public override bool IsSingleLine(SqlConvertingContext context) => true;
+        public override bool IsSingleLine(ExpressionConvertingContext context) => true;
 
         public override bool IsEmpty => false;
 
-        public override string ToString(bool isTopLevel, int indent, SqlConvertingContext context)
+        public override string ToString(bool isTopLevel, int indent, ExpressionConvertingContext context)
             => string.Join(string.Empty, Enumerable.Range(0, indent).Select(e => "\t").ToArray()) + _front + ColumnName + _back;
 
-        public override SqlText ConcatAround(string front, string back) 
+        public override ExpressionElement ConcatAround(string front, string back) 
             => new DbColumnText(Info, _columnOnly, front + _front, _back + back);
 
-        public override SqlText ConcatToFront(string front) 
+        public override ExpressionElement ConcatToFront(string front) 
             => new DbColumnText(Info, _columnOnly, front + _front, _back);
 
-        public override SqlText ConcatToBack(string back) 
+        public override ExpressionElement ConcatToBack(string back) 
             => new DbColumnText(Info, _columnOnly, _front, _back + back);
 
-        public override SqlText Customize(ISqlTextCustomizer customizer) 
+        public override ExpressionElement Customize(ISqlTextCustomizer customizer) 
             => customizer.Custom(this);
     }
 }

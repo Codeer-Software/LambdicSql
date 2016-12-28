@@ -9,7 +9,7 @@ namespace LambdicSql.Inside.Keywords
 {
     static class UpdateClause
     {
-        internal static SqlText Convert(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression[] methods)
         {
             var clause = new VText();
             foreach (var m in methods)
@@ -19,7 +19,7 @@ namespace LambdicSql.Inside.Keywords
             return clause;
         }
 
-        static SqlText MethodToString(ISqlStringConverter converter, MethodCallExpression method)
+        static ExpressionElement MethodToString(IExpressionConverter converter, MethodCallExpression method)
         {
             switch (method.Method.Name)
             {

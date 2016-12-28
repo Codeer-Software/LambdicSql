@@ -10,25 +10,25 @@ namespace LambdicSql.Inside.Keywords
 {
     static class FromClause
     {
-        internal static SqlText ConvertFrom(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static ExpressionElement ConvertFrom(IExpressionConverter converter, MethodCallExpression[] methods)
             => ConvertNonCodition(Clause, "FROM", converter, methods);
 
-        internal static SqlText ConvertCrossJoin(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static ExpressionElement ConvertCrossJoin(IExpressionConverter converter, MethodCallExpression[] methods)
             => ConvertNonCodition(SubClause, "CROSS JOIN", converter, methods);
 
-        internal static SqlText ConvertLeftJoin(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static ExpressionElement ConvertLeftJoin(IExpressionConverter converter, MethodCallExpression[] methods)
             => ConvertCondition("LEFT JOIN", converter, methods);
 
-        internal static SqlText ConvertRightJoin(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static ExpressionElement ConvertRightJoin(IExpressionConverter converter, MethodCallExpression[] methods)
             => ConvertCondition("RIGHT JOIN", converter, methods);
 
-        internal static SqlText ConvertFullJoin(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static ExpressionElement ConvertFullJoin(IExpressionConverter converter, MethodCallExpression[] methods)
             => ConvertCondition("FULL JOIN", converter, methods);
 
-        internal static SqlText ConvertJoin(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static ExpressionElement ConvertJoin(IExpressionConverter converter, MethodCallExpression[] methods)
             => ConvertCondition("JOIN", converter, methods);
 
-        internal static SqlText ConvertWith(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static ExpressionElement ConvertWith(IExpressionConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
             var arry = method.Arguments[0] as NewArrayExpression;
@@ -56,7 +56,7 @@ namespace LambdicSql.Inside.Keywords
             }
         }
 
-        static SqlText ConvertNonCodition(Func<SqlText, SqlText[], HText> makeSqlText, string name, ISqlStringConverter converter, MethodCallExpression[] methods)
+        static ExpressionElement ConvertNonCodition(Func<ExpressionElement, ExpressionElement[], HText> makeSqlText, string name, IExpressionConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
             var startIndex = method.SkipMethodChain(0);
@@ -64,7 +64,7 @@ namespace LambdicSql.Inside.Keywords
             return makeSqlText(name, new[] { table });
         }
 
-        static SqlText ConvertCondition(string name, ISqlStringConverter converter, MethodCallExpression[] methods)
+        static ExpressionElement ConvertCondition(string name, IExpressionConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
             var startIndex = method.SkipMethodChain(0);
@@ -73,7 +73,7 @@ namespace LambdicSql.Inside.Keywords
             return SubClause(name, table, "ON", condition);
         }
 
-        static SqlText ToTableName(ISqlStringConverter decoder, Expression exp)
+        static ExpressionElement ToTableName(IExpressionConverter decoder, Expression exp)
         {
             //where query, write tables side by side
             var arry = exp as NewArrayExpression;
@@ -113,20 +113,20 @@ namespace LambdicSql.Inside.Keywords
     //TODO あれー、それでいくと、事前のCustomは破綻してんじゃない？
 
 
-    class SubQueryAndNameText : SqlText
+    class SubQueryAndNameText : ExpressionElement
     {
         string _front = string.Empty;
         string _back = string.Empty;
         string _body;
-        SqlText _define;
+        ExpressionElement _define;
 
-        internal SubQueryAndNameText(string body, SqlText table)
+        internal SubQueryAndNameText(string body, ExpressionElement table)
         {
             _body = body;
             _define = new HText(table, _body) { Separator = " ", EnableChangeLine = false };
         }
 
-        SubQueryAndNameText(string body, SqlText define, string front, string back)
+        SubQueryAndNameText(string body, ExpressionElement define, string front, string back)
         {
             _body = body;
             _define = define;
@@ -134,11 +134,11 @@ namespace LambdicSql.Inside.Keywords
             _back = back;
         }
         
-        public override bool IsSingleLine(SqlConvertingContext context) => context.WithEntied.ContainsKey(_body) ? true : _define.IsSingleLine(context);
+        public override bool IsSingleLine(ExpressionConvertingContext context) => context.WithEntied.ContainsKey(_body) ? true : _define.IsSingleLine(context);
 
         public override bool IsEmpty => false;
 
-        public override string ToString(bool isTopLevel, int indent, SqlConvertingContext context)
+        public override string ToString(bool isTopLevel, int indent, ExpressionConvertingContext context)
         {
             if (context.WithEntied.ContainsKey(_body))
             {
@@ -152,69 +152,69 @@ namespace LambdicSql.Inside.Keywords
 
         }
 
-        public override SqlText ConcatAround(string front, string back)
+        public override ExpressionElement ConcatAround(string front, string back)
             => new SubQueryAndNameText(_body, _define.ConcatAround(front, back), front + _front, _back + back);
 
-        public override SqlText ConcatToFront(string front)
+        public override ExpressionElement ConcatToFront(string front)
             => new SubQueryAndNameText(_body, _define.ConcatToFront(front), front + _front, _back);
 
-        public override SqlText ConcatToBack(string back)
+        public override ExpressionElement ConcatToBack(string back)
             => new SubQueryAndNameText(_body, _define.ConcatToBack(back), _front, _back + back);
 
-        public override SqlText Customize(ISqlTextCustomizer customizer)
+        public override ExpressionElement Customize(ISqlTextCustomizer customizer)
             => customizer.Custom(this);
     }
 
-    class WithEntriedText : SqlText
+    class WithEntriedText : ExpressionElement
     {
-        SqlText _core;
+        ExpressionElement _core;
         string[] _names;
        
 
-        internal WithEntriedText(SqlText core, string[] names)
+        internal WithEntriedText(ExpressionElement core, string[] names)
         {
             _core = core;
             _names = names;
         }
 
-        public override bool IsSingleLine(SqlConvertingContext context)
+        public override bool IsSingleLine(ExpressionConvertingContext context)
             => _core.IsSingleLine(context);
 
         public override bool IsEmpty => false;
 
-        public override string ToString(bool isTopLevel, int indent, SqlConvertingContext context)
+        public override string ToString(bool isTopLevel, int indent, ExpressionConvertingContext context)
         {
             foreach (var e in _names) context.WithEntied[e] = true;
             return _core.ToString(isTopLevel, indent, context);
         }
 
-        public override SqlText ConcatAround(string front, string back)
+        public override ExpressionElement ConcatAround(string front, string back)
             => new WithEntriedText(_core.ConcatAround(front, back), _names);
 
-        public override SqlText ConcatToFront(string front)
+        public override ExpressionElement ConcatToFront(string front)
             => new WithEntriedText(_core.ConcatToFront(front), _names);
 
-        public override SqlText ConcatToBack(string back)
+        public override ExpressionElement ConcatToBack(string back)
             => new WithEntriedText(_core.ConcatToBack(back), _names);
 
-        public override SqlText Customize(ISqlTextCustomizer customizer)
+        public override ExpressionElement Customize(ISqlTextCustomizer customizer)
             => customizer.Custom(this);
     }
-    class RecursiveTargetText : SqlText
+    class RecursiveTargetText : ExpressionElement
     {
-        SqlText _core;
+        ExpressionElement _core;
 
-        internal RecursiveTargetText(SqlText core)
+        internal RecursiveTargetText(ExpressionElement core)
         {
             _core = core;
         }
 
-        public override bool IsSingleLine(SqlConvertingContext context)
+        public override bool IsSingleLine(ExpressionConvertingContext context)
             => _core.IsSingleLine(context);
 
         public override bool IsEmpty => false;
 
-        public override string ToString(bool isTopLevel, int indent, SqlConvertingContext context)
+        public override string ToString(bool isTopLevel, int indent, ExpressionConvertingContext context)
         {
             if ( context.Option.ExistRecursive)
             {
@@ -223,16 +223,16 @@ namespace LambdicSql.Inside.Keywords
             return _core.ToString(isTopLevel, indent, context);
         }
 
-        public override SqlText ConcatAround(string front, string back)
+        public override ExpressionElement ConcatAround(string front, string back)
             => new RecursiveTargetText(_core.ConcatAround(front, back));
 
-        public override SqlText ConcatToFront(string front)
+        public override ExpressionElement ConcatToFront(string front)
             => new RecursiveTargetText(_core.ConcatToFront(front));
 
-        public override SqlText ConcatToBack(string back)
+        public override ExpressionElement ConcatToBack(string back)
             => new RecursiveTargetText(_core.ConcatToBack(back));
 
-        public override SqlText Customize(ISqlTextCustomizer customizer)
+        public override ExpressionElement Customize(ISqlTextCustomizer customizer)
             => customizer.Custom(this);
     }
 }

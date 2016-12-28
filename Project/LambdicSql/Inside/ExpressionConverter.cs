@@ -10,13 +10,13 @@ using static LambdicSql.SqlBase.TextParts.SqlTextUtils;
 
 namespace LambdicSql.Inside
 {
-    class SqlStringConverter : ISqlStringConverter
+    class ExpressionConverter : IExpressionConverter
     {
         class DecodedInfo
         {
             internal Type Type { get; }
-            internal SqlText Text { get; }
-            internal DecodedInfo(Type type, SqlText text)
+            internal ExpressionElement Text { get; }
+            internal DecodedInfo(Type type, ExpressionElement text)
             {
                 Type = type;
                 Text = text;
@@ -25,7 +25,7 @@ namespace LambdicSql.Inside
         
         public DbInfo DbInfo { get; }
 
-        internal SqlStringConverter(DbInfo info)
+        internal ExpressionConverter(DbInfo info)
         {
             DbInfo = info;
         }
@@ -37,7 +37,7 @@ namespace LambdicSql.Inside
             return obj;
         }
 
-        public SqlText Convert(object obj)
+        public ExpressionElement Convert(object obj)
         {
             var exp = obj as Expression;
             if (exp != null) return Convert(exp).Text;
@@ -231,7 +231,7 @@ namespace LambdicSql.Inside
             //not sql syntax.
             if (!method.Method.DeclaringType.IsSqlSyntax()) return ResolveExpressionObject(method);
 
-            var ret = new List<SqlText>();
+            var ret = new List<ExpressionElement>();
             foreach (var c in GetMethodChains(method))
             {
                 //TODO @@@ GetConvertMethodEx();
@@ -249,7 +249,7 @@ namespace LambdicSql.Inside
             }
 
 
-            SqlText text = new VText(ret.ToArray());
+            ExpressionElement text = new VText(ret.ToArray());
             if (typeof(SelectClauseText).IsAssignableFrom(ret[0].GetType()))
             {
                 text = new SelectQueryText(text);
@@ -398,7 +398,7 @@ namespace LambdicSql.Inside
             //array.
             if (obj != null && obj.GetType().IsArray)
             {
-                var list = new List<SqlText>();
+                var list = new List<ExpressionElement>();
                 foreach (var e in (IEnumerable)obj)
                 {
                     list.Add(Convert(e));
@@ -453,7 +453,7 @@ namespace LambdicSql.Inside
                 Type type = null;
                 var types = sqlExp.GetType().GetGenericArguments();
                 if (0 < types.Length) type = types[0];
-                return new DecodedInfo(type, sqlExp.SqlText);
+                return new DecodedInfo(type, sqlExp.ExpressionElement);
             }
 
             //others.

@@ -4,19 +4,19 @@ namespace LambdicSql.Inside
 {
     static class DialectResolver
     {
-        internal static SqlConvertOption CreateCustomizer(string connectionTypeFullName)
+        internal static DialectOption CreateCustomizer(string connectionTypeFullName)
         {
             switch (connectionTypeFullName)
             {
                 case "Npgsql.NpgsqlConnection":
-                    return new SqlConvertOption() { StringAddOperator = "||", ExistRecursive = true };
+                    return new DialectOption() { StringAddOperator = "||", ExistRecursive = true };
                 case "System.Data.SQLite.SQLiteConnection":
                 case "IBM.Data.DB2.DB2Connection":
-                    return new SqlConvertOption() { StringAddOperator = "||" };
+                    return new DialectOption() { StringAddOperator = "||" };
                 case "Oracle.ManagedDataAccess.Client.OracleConnection":
-                    return new SqlConvertOption() { StringAddOperator = "||", ParameterPrefix = ":" };
+                    return new DialectOption() { StringAddOperator = "||", ParameterPrefix = ":" };
                 default:
-                    return new SqlConvertOption();
+                    return new DialectOption();
             }
         }
     }

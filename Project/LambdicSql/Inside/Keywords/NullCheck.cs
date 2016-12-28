@@ -7,10 +7,10 @@ namespace LambdicSql.Inside.Keywords
 {
     static class NullCheck
     {
-        internal static SqlText ConvertIsNull(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static ExpressionElement ConvertIsNull(IExpressionConverter converter, MethodCallExpression[] methods)
             => LineSpace(converter.Convert(methods[0].Arguments[0]), "IS NULL");
 
-        internal static SqlText ConvertIsNotNull(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static ExpressionElement ConvertIsNotNull(IExpressionConverter converter, MethodCallExpression[] methods)
             => LineSpace(converter.Convert(methods[0].Arguments[0]), "IS NOT NULL");
     }
 }

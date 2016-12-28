@@ -15,7 +15,7 @@ namespace TestCheck35
     public static class TestSynatax
     {
         public static ClauseChain<Non> Empty() => null;
-        static SqlText Convert(ISqlStringConverter converter, MethodCallExpression[] methods) => new SingleText(string.Empty);
+        static ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression[] methods) => new SingleTextElement(string.Empty);
     }
 
     public static class TestExtensions
@@ -25,7 +25,7 @@ namespace TestCheck35
         public static void Gen(this ISqlExpression query, IDbConnection con)
         {
             Debug.Print("AssertEx.AreEqual(query, _connection," + 
-                Environment.NewLine + "@\"" + query.ToSqlInfo(con.GetType()).SqlText + "\");");
+                Environment.NewLine + "@\"" + query.Build(con.GetType()).SqlText + "\");");
         }
 
         public static string GetStringAddExp(this IDbConnection con)
@@ -62,7 +62,7 @@ namespace TestCheck35
 
         static void AreEqual(ISqlExpression query, IDbConnection con, string expected, Dictionary<string, DbParam> args)
         {
-            var info = query.ToSqlInfo(con.GetType());
+            var info = query.Build(con.GetType());
             if (con.GetType().Name == "OracleConnection")
             {
                 expected = expected.Replace("@", ":");

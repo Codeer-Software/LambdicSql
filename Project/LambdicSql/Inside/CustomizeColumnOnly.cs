@@ -4,7 +4,7 @@ namespace LambdicSql.Inside
 {
     class CustomizeColumnOnly : ISqlTextCustomizer
     {
-        public SqlText Custom(SqlText src)
+        public ExpressionElement Custom(ExpressionElement src)
         {
             var col = src as DbColumnText;
             if (col == null) return src;

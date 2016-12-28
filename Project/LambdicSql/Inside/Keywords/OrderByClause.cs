@@ -7,7 +7,7 @@ namespace LambdicSql.Inside.Keywords
 {
     static class OrderByWordsClause
     {
-        internal static SqlText Convert(ISqlStringConverter converter, MethodCallExpression[] methods)
+        internal static ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression[] methods)
         {
             var method = methods[0];
             var arg = method.Arguments[method.SkipMethodChain(0)];

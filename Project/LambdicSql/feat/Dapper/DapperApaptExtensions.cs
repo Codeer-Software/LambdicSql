@@ -52,7 +52,7 @@ namespace LambdicSql.feat.Dapper
         /// </returns>
         public static IEnumerable<T> Query<T>(this IDbConnection cnn, ISqlExpression query, IDbTransaction transaction = null, bool buffered = true, int? commandTimeout = default(int?), CommandType? commandType = default(CommandType?))
         {
-            var info = query.ToSqlInfo(cnn.GetType());
+            var info = query.Build(cnn.GetType());
 
             //for testing.
             if (DapperApaptExtensionsForTest.Query != null) return new T[DapperApaptExtensionsForTest.Query(cnn, info)];
@@ -79,7 +79,7 @@ namespace LambdicSql.feat.Dapper
         /// <returns>Number of rows affected.</returns>
         public static int Execute(this IDbConnection cnn, ISqlExpression exp, IDbTransaction transaction = null, int? commandTimeout = default(int?), CommandType? commandType = default(CommandType?))
         {
-            var info = exp.ToSqlInfo(cnn.GetType());
+            var info = exp.Build(cnn.GetType());
 
             //for testing.
             if (DapperApaptExtensionsForTest.Execute != null) return DapperApaptExtensionsForTest.Execute(cnn, info);
@@ -125,7 +125,7 @@ namespace LambdicSql.feat.Dapper
         /// <param name="cnn">For testing.</param>
         /// <param name="info">For testing.</param>
         /// <returns>For testing.</returns>
-        public delegate int QueryDelegate(IDbConnection cnn, SqlInfo info);
+        public delegate int QueryDelegate(IDbConnection cnn, BuildedSql info);
 
         /// <summary>
         /// For testing.
@@ -133,7 +133,7 @@ namespace LambdicSql.feat.Dapper
         /// <param name="cnn">For testing.</param>
         /// <param name="info">For testing.</param>
         /// <returns>For testing.</returns>
-        public delegate int ExecuteDelegate(IDbConnection cnn, SqlInfo info);
+        public delegate int ExecuteDelegate(IDbConnection cnn, BuildedSql info);
 
         /// <summary>
         /// For testing.
