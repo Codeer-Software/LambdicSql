@@ -39,7 +39,7 @@ namespace LambdicSql
     /// ORDERBY keyword.
     /// Use it with the OVER function.
     /// </summary>
-    public class OrderBy : ClauseChain<Non>, IOrderBy
+    public class OrderBy : ClauseChain<object>, IOrderBy
     {
         internal OrderBy() { }
     }
@@ -55,15 +55,6 @@ namespace LambdicSql
     /// Use it with the OVER function.
     /// </summary>
     public interface IRows { }
-
-    /// <summary>
-    /// Non.
-    /// This is entered if there is no type selected in the SELECT clause.
-    /// </summary>
-    public class Non
-    {
-        private Non() { }
-    }
 
     /// <summary>
     /// Aggregation predicate.

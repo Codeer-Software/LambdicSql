@@ -8,6 +8,8 @@ namespace LambdicSql
     /// </summary>
     public static class SetOperationExtensions
     {
+        class Non { }
+
         /// <summary>
         /// Concatenate expression1 and expression2.
         /// </summary>

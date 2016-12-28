@@ -961,7 +961,7 @@ FROM tbl_remuneration
             Debug.Print(info.SqlText);
 
             //dapper
-            var datas = _connection.Query<Non>(query).ToList();
+            var datas = _connection.Query(query).ToList();
 
 
             //pattern2 building.
@@ -974,7 +974,7 @@ FROM tbl_remuneration
             Debug.Print(info.SqlText);
 
             //dapper
-            datas = _connection.Query<Non>(query2).ToList();
+            datas = _connection.Query(query2).ToList();
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]

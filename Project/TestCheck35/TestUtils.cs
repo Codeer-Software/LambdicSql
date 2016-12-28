@@ -281,7 +281,7 @@ FROM tbl_remuneration
                 Where(3000 < db.tbl_remuneration.money)
                 ));
 
-            var datas = _connection.Query<Non>(query).ToList();
+            var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
@@ -313,7 +313,7 @@ FROM tbl_remuneration
                 exp2
                 ));
 
-            var datas = _connection.Query<Non>(query).ToList();
+            var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
@@ -346,7 +346,7 @@ FROM tbl_remuneration
 
             query.Gen(_connection);
 
-            var datas = _connection.Query<Non>(query).ToList();
+            var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT

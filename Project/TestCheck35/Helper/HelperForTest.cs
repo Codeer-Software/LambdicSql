@@ -14,7 +14,7 @@ namespace TestCheck35
     [SqlSyntax]
     public static class TestSynatax
     {
-        public static ClauseChain<Non> Empty() => null;
+        public static ClauseChain<object> Empty() => null;
         static ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression[] methods) => new SingleTextElement(string.Empty);
     }
 
