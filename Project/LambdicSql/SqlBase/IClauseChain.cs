@@ -6,25 +6,12 @@ namespace LambdicSql.SqlBase
     /// Query.
     /// </summary>
     public interface IClauseChain : IMethodChain { }
-
-    /// <summary>
-    /// Query.
-    /// </summary>
-    /// <typeparam name="TSelected">Type of selected at SELECT clause.</typeparam>
-    public interface IClauseChain<out TSelected> : IClauseChain
-    {
-        /// <summary>
-        /// Entity represented by SqlExpression.
-        /// It can only be used within methods of the LambdicSql.Sql class.
-        /// </summary>
-        TSelected Body { get; }
-    }
-
+    
     /// <summary>
     /// 
     /// </summary>
     /// <typeparam name="TSelected"></typeparam>
-    public class ClauseChain<TSelected> : IClauseChain<TSelected>
+    public class ClauseChain<TSelected> : IClauseChain
     {
         /// <summary>
         /// Entity represented by SqlExpression.
@@ -32,7 +19,7 @@ namespace LambdicSql.SqlBase
         /// </summary>
         public TSelected Body { get; }
 
-        private ClauseChain() { }
+        internal ClauseChain() { }
 
         /// <summary>
         /// Implicitly convert to the type represented by SqlExpression.

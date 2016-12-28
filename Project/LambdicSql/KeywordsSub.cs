@@ -33,7 +33,16 @@ namespace LambdicSql
     /// ORDERBY keyword.
     /// Use it with the OVER function.
     /// </summary>
-    public interface IOrderBy : IClauseChain<Non> { }
+    public interface IOrderBy { }
+
+    /// <summary>
+    /// ORDERBY keyword.
+    /// Use it with the OVER function.
+    /// </summary>
+    public class OrderBy : ClauseChain<Non>, IOrderBy
+    {
+        internal OrderBy() { }
+    }
 
     /// <summary>
     /// PARTITION BY keyword.

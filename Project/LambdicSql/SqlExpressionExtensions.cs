@@ -20,7 +20,7 @@ namespace LambdicSql
         /// <param name="expression">Object with information of expression representing SQL.</param>
         /// <param name="connectionType">IDbConnection's type.</param>
         /// <returns>Sql information.</returns>
-        public static SqlInfo<TSelected> ToSqlInfo<TSelected>(this SqlExpression<IClauseChain<TSelected>> expression, Type connectionType)
+        public static SqlInfo<TSelected> ToSqlInfo<TSelected>(this SqlExpression<TSelected> expression, Type connectionType)
           => new SqlInfo<TSelected>(ToSqlInfo((ISqlExpression)expression, connectionType));
 
         /// <summary>

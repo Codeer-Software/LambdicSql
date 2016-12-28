@@ -32,7 +32,7 @@ namespace LambdicSql
         /// <param name="text">Text.</param>
         /// <param name="args">Format arguments.</param>
         /// <returns>LamblicSql's expression.</returns>
-        public static object TwoWaySql(this string text, params object[] args) => InvalitContext.Throw<IClauseChain<Non>>(nameof(ToSql));
+        public static object TwoWaySql(this string text, params object[] args) => InvalitContext.Throw<object>(nameof(ToSql));
 
         /// <summary>
         /// Get column name only.
