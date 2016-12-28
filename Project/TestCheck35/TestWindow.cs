@@ -225,7 +225,7 @@ FROM tbl_remuneration");
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = Sum(AggregatePredicate.All, exp).
+                    Val = Sum(All(), exp).
                             Over(PartitionBy(db.tbl_remuneration.payment_date),
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 Rows(1, 5))
@@ -379,7 +379,7 @@ FROM tbl_remuneration");
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = Count(AggregatePredicate.All, db.tbl_remuneration.money).
+                    Val = Count(All(), db.tbl_remuneration.money).
                             Over(PartitionBy(db.tbl_remuneration.payment_date),
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 Rows(1, 5))
@@ -408,7 +408,7 @@ FROM tbl_remuneration");
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData()
                 {
-                    Val = Count(AggregatePredicate.All, Asterisk()).
+                    Val = Count(All(), Asterisk()).
                             Over(PartitionBy(db.tbl_remuneration.payment_date),
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 Rows(1, 5))

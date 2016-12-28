@@ -464,11 +464,11 @@ new Params()
         {
             var data = new
             {
-                val = AggregatePredicate.All
+                val = DateTimeElement.Day
             };
 
             var query = Sql<Data>.Create(db => data.val);
-            AssertEx.AreEqual(query, _connection, @"ALL");
+            AssertEx.AreEqual(query, _connection, @"DAY");
         }
 
         //TODO ExpressionToObjectがテストされるだけのテストを書くこと

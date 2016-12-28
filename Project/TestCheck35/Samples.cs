@@ -275,14 +275,13 @@ namespace TestCheck35
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestGroupByPredicateDistinct()
         {
-            var distinct = AggregatePredicate.Distinct;
             //make sql.
             var query = Sql<DB>.Create(db =>
                 Select(new SelectData3()
                 {
                     Name = db.tbl_staff.name,
-                    Count = Count(distinct, db.tbl_remuneration.money),
-                    Total = Sum(AggregatePredicate.Distinct, db.tbl_remuneration.money)
+                    Count = Count(Distinct(), db.tbl_remuneration.money),
+                    Total = Sum(Distinct(), db.tbl_remuneration.money)
                 }).
                 From(db.tbl_remuneration).
                     Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
@@ -305,8 +304,8 @@ namespace TestCheck35
                 Select(new SelectData3()
                 {
                     Name = db.tbl_staff.name,
-                    Count = Count(AggregatePredicate.All, db.tbl_remuneration.money),
-                    Total = Sum(AggregatePredicate.All, db.tbl_remuneration.money)
+                    Count = Count(All(), db.tbl_remuneration.money),
+                    Total = Sum(All(), db.tbl_remuneration.money)
                 }).
                 From(db.tbl_remuneration).
                     Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
@@ -423,7 +422,7 @@ namespace TestCheck35
         {
             //make sql.
             var query = Sql<DB>.Create(db =>
-                Select(AggregatePredicate.Distinct, new SelectData4()
+                Select(Distinct(), new SelectData4()
                 {
                     Id = db.tbl_remuneration.staff_id
                 }).
@@ -445,7 +444,7 @@ namespace TestCheck35
         {
             //make sql.
             var query = Sql<DB>.Create(db =>
-                Select(AggregatePredicate.All, new SelectData4()
+                Select(All(), new SelectData4()
                 {
                     Id = db.tbl_remuneration.staff_id
                 }).
@@ -1448,7 +1447,7 @@ FROM tbl_remuneration
             {
                 var query = Sql<DB>.Create(db =>
                       Select(
-                          AggregatePredicate.Distinct,
+                          Distinct(),
                           Top(10),
                           new
                           {
@@ -1461,7 +1460,7 @@ FROM tbl_remuneration
             {
                 var query = Sql<DB>.Create(db =>
                       Select(
-                          AggregatePredicate.Distinct,
+                          Distinct(),
                           Top(10),
                           Asterisk()).
                       From(db.tbl_remuneration));

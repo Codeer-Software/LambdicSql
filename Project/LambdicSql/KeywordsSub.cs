@@ -56,23 +56,11 @@ namespace LambdicSql
     /// </summary>
     public interface IRows { }
 
-    //TODO enumはやめる
     /// <summary>
     /// Aggregation predicate.
+    /// All or Distinct.
     /// </summary>
-    [SqlSyntax]
-    public enum AggregatePredicate
-    {
-        /// <summary>
-        /// All.
-        /// </summary>
-        All,
-
-        /// <summary>
-        /// Distinct.
-        /// </summary>
-        Distinct
-    }
+    public interface IAggregatePredicate { }
 
     /// <summary>
     /// Element of DateTime.

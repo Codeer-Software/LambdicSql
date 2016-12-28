@@ -179,7 +179,7 @@ namespace LambdicSql
         /// <param name="predicate">ALL or DISTINCT.</param>
         /// <param name="selected">Specify a new expression to represent the selection.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static ClauseChain<TSelected> Select<TSelected>(AggregatePredicate predicate, TSelected selected) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Select));
+        public static ClauseChain<TSelected> Select<TSelected>(IAggregatePredicate predicate, TSelected selected) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Select));
 
         /// <summary>
         /// This is the SELECT clause.
@@ -190,7 +190,7 @@ namespace LambdicSql
         /// <param name="predicate">ALL or DISTINCT.</param>
         /// <param name="selected">Specify a new expression to represent the selection.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static ClauseChain<TSelected> Select<TSrcSelected, TSelected>(this ClauseChain<TSrcSelected> before, AggregatePredicate predicate, TSelected selected) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Select));
+        public static ClauseChain<TSelected> Select<TSrcSelected, TSelected>(this ClauseChain<TSrcSelected> before, IAggregatePredicate predicate, TSelected selected) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Select));
 
         /// <summary>
         /// This is the SELECT clause.
@@ -200,7 +200,7 @@ namespace LambdicSql
         /// <param name="top">TOP keyword.</param>
         /// <param name="selected">Specify a new expression to represent the selection.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static ClauseChain<TSelected> Select<TSelected>(AggregatePredicate predicate, ITop top, TSelected selected) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Select));
+        public static ClauseChain<TSelected> Select<TSelected>(IAggregatePredicate predicate, ITop top, TSelected selected) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Select));
 
         /// <summary>
         /// This is the SELECT clause.
@@ -212,7 +212,7 @@ namespace LambdicSql
         /// <param name="top">TOP keyword.</param>
         /// <param name="selected">Specify a new expression to represent the selection.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static ClauseChain<TSelected> Select<TSrcSelected, TSelected>(this ClauseChain<TSrcSelected> before, AggregatePredicate predicate, ITop top, TSelected selected) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Select));
+        public static ClauseChain<TSelected> Select<TSrcSelected, TSelected>(this ClauseChain<TSrcSelected> before, IAggregatePredicate predicate, ITop top, TSelected selected) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Select));
 
         /// <summary>
         /// This is the SELECT clause.
@@ -220,7 +220,7 @@ namespace LambdicSql
         /// <param name="predicate">ALL or DISTINCT.</param>
         /// <param name="asterisk">*</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static ClauseChain<object> Select(AggregatePredicate predicate, IAsterisk asterisk) => InvalitContext.Throw<ClauseChain<object>>(nameof(Select));
+        public static ClauseChain<object> Select(IAggregatePredicate predicate, IAsterisk asterisk) => InvalitContext.Throw<ClauseChain<object>>(nameof(Select));
 
         /// <summary>
         /// This is the SELECT clause.
@@ -230,7 +230,7 @@ namespace LambdicSql
         /// <param name="predicate">ALL or DISTINCT.</param>
         /// <param name="asterisk">*</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static ClauseChain<object> Select<TSrcSelected>(this ClauseChain<TSrcSelected> before, AggregatePredicate predicate, IAsterisk asterisk) => InvalitContext.Throw<ClauseChain<object>>(nameof(Select));
+        public static ClauseChain<object> Select<TSrcSelected>(this ClauseChain<TSrcSelected> before, IAggregatePredicate predicate, IAsterisk asterisk) => InvalitContext.Throw<ClauseChain<object>>(nameof(Select));
 
         /// <summary>
         /// This is the SELECT clause.
@@ -239,7 +239,7 @@ namespace LambdicSql
         /// <param name="predicate">ALL or DISTINCT.</param>
         /// <param name="asterisk">*</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static ClauseChain<TSelected> Select<TSelected>(AggregatePredicate predicate, IAsterisk<TSelected> asterisk) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Select));
+        public static ClauseChain<TSelected> Select<TSelected>(IAggregatePredicate predicate, IAsterisk<TSelected> asterisk) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Select));
 
         /// <summary>
         /// This is the SELECT clause.
@@ -250,7 +250,7 @@ namespace LambdicSql
         /// <param name="predicate">ALL or DISTINCT.</param>
         /// <param name="asterisk">*</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static ClauseChain<TSelected> Select<TSrcSelected, TSelected>(this ClauseChain<TSrcSelected> before, AggregatePredicate predicate, IAsterisk<TSelected> asterisk) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Select));
+        public static ClauseChain<TSelected> Select<TSrcSelected, TSelected>(this ClauseChain<TSrcSelected> before, IAggregatePredicate predicate, IAsterisk<TSelected> asterisk) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Select));
 
         /// <summary>
         /// This is the SELECT clause.
@@ -259,7 +259,7 @@ namespace LambdicSql
         /// <param name="top">TOP keyword.</param>
         /// <param name="asterisk">*</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static ClauseChain<object> Select(AggregatePredicate predicate, ITop top, IAsterisk asterisk) => InvalitContext.Throw<ClauseChain<object>>(nameof(Select));
+        public static ClauseChain<object> Select(IAggregatePredicate predicate, ITop top, IAsterisk asterisk) => InvalitContext.Throw<ClauseChain<object>>(nameof(Select));
 
         /// <summary>
         /// This is the SELECT clause.
@@ -270,7 +270,7 @@ namespace LambdicSql
         /// <param name="top">TOP keyword.</param>
         /// <param name="asterisk">*</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static ClauseChain<object> Select<TSrcSelected>(this ClauseChain<TSrcSelected> before, AggregatePredicate predicate, ITop top, IAsterisk asterisk) => InvalitContext.Throw<ClauseChain<object>>(nameof(Select));
+        public static ClauseChain<object> Select<TSrcSelected>(this ClauseChain<TSrcSelected> before, IAggregatePredicate predicate, ITop top, IAsterisk asterisk) => InvalitContext.Throw<ClauseChain<object>>(nameof(Select));
 
         /// <summary>
         /// This is the SELECT clause.
@@ -280,7 +280,7 @@ namespace LambdicSql
         /// <param name="top">TOP keyword.</param>
         /// <param name="asterisk">*</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static ClauseChain<TSelected> Select<TSelected>(AggregatePredicate predicate, ITop top, IAsterisk<TSelected> asterisk) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Select));
+        public static ClauseChain<TSelected> Select<TSelected>(IAggregatePredicate predicate, ITop top, IAsterisk<TSelected> asterisk) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Select));
 
         /// <summary>
         /// This is the SELECT clause.
@@ -292,7 +292,7 @@ namespace LambdicSql
         /// <param name="top">TOP keyword.</param>
         /// <param name="asterisk">*</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        public static ClauseChain<TSelected> Select<TSrcSelected, TSelected>(this ClauseChain<TSrcSelected> before, AggregatePredicate predicate, ITop top, IAsterisk<TSelected> asterisk) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Select));
+        public static ClauseChain<TSelected> Select<TSrcSelected, TSelected>(this ClauseChain<TSrcSelected> before, IAggregatePredicate predicate, ITop top, IAsterisk<TSelected> asterisk) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Select));
 
         /// <summary>
         /// Return value of CASE clause.
@@ -897,10 +897,22 @@ namespace LambdicSql
         /// <summary>
         /// ALL Keyword
         /// </summary>
+        /// <returns></returns>
+        public static IAggregatePredicate All() => InvalitContext.Throw<IAggregatePredicate>(nameof(All));
+
+        /// <summary>
+        /// Distinct Keyword
+        /// </summary>
+        /// <returns></returns>
+        public static IAggregatePredicate Distinct() => InvalitContext.Throw<IAggregatePredicate>(nameof(All));
+
+        /// <summary>
+        /// ALL Keyword
+        /// </summary>
         /// <typeparam name="T">Retunn type.</typeparam>
         /// <param name="sub">Sub query.</param>
         /// <returns>Sub query's selected value.</returns>
-        public static T All<T>(object sub) => InvalitContext.Throw<T>(nameof(In));
+        public static T All<T>(object sub) => InvalitContext.Throw<T>(nameof(All));
 
         /// <summary>
         /// EXISTS keyword.
@@ -1020,7 +1032,7 @@ namespace LambdicSql
         /// <param name="aggregatePredicate">Specify All or Distinct.</param>
         /// <param name="column">The column or expression that is function target.</param>
         /// <returns>Total.</returns>
-        public static T Sum<T>(AggregatePredicate aggregatePredicate, T column) => InvalitContext.Throw<T>(nameof(Sum));
+        public static T Sum<T>(IAggregatePredicate aggregatePredicate, T column) => InvalitContext.Throw<T>(nameof(Sum));
 
         /// <summary>
         /// COUNT function.
@@ -1042,7 +1054,7 @@ namespace LambdicSql
         /// <param name="aggregatePredicate">Specify All or Distinct.</param>
         /// <param name="column">The column or expression that is function target.</param>
         /// <returns>Count.</returns>
-        public static int Count(AggregatePredicate aggregatePredicate, object column) => InvalitContext.Throw<int>(nameof(Count));
+        public static int Count(IAggregatePredicate aggregatePredicate, object column) => InvalitContext.Throw<int>(nameof(Count));
 
         /// <summary>
         /// COUNT function.
@@ -1050,7 +1062,7 @@ namespace LambdicSql
         /// <param name="aggregatePredicate">Specify All or Distinct.</param>
         /// <param name="asterisk">*</param>
         /// <returns>Count.</returns>
-        public static int Count(AggregatePredicate aggregatePredicate, IAsterisk asterisk) => InvalitContext.Throw<int>(nameof(Count));
+        public static int Count(IAggregatePredicate aggregatePredicate, IAsterisk asterisk) => InvalitContext.Throw<int>(nameof(Count));
 
         /// <summary>
         /// AVG function.
@@ -1496,7 +1508,10 @@ namespace LambdicSql
                 case nameof(In):
                     return ConditionKeyWords.ConvertIn(converter, methods);
                 case nameof(All):
+                    if (method.Arguments.Count == 0) return method.Method.Name.ToUpper();
                     return ConditionKeyWords.ConvertAll(converter, methods);
+                case nameof(Distinct):
+                    return method.Method.Name.ToUpper();
                 case nameof(Like):
                     return ConditionKeyWords.ConvertLike(converter, methods);
                 case nameof(Between):

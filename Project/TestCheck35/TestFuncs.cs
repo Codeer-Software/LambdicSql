@@ -68,12 +68,12 @@ namespace TestCheck35
                Select(new SelectData1
                {
                    Val1 = Sum(db.tbl_remuneration.money),
-                   Val2 = Sum(AggregatePredicate.All, db.tbl_remuneration.money),
-                   Val3 = Sum(AggregatePredicate.Distinct, db.tbl_remuneration.money),
+                   Val2 = Sum(All(), db.tbl_remuneration.money),
+                   Val3 = Sum(Distinct(), db.tbl_remuneration.money),
                    Val4 = Count(db.tbl_remuneration.money),
                    Val5 = Count(Asterisk()),
-                   Val6 = Count(AggregatePredicate.All, db.tbl_remuneration.money),
-                   Val7 = Count(AggregatePredicate.Distinct, db.tbl_remuneration.money),
+                   Val6 = Count(All(), db.tbl_remuneration.money),
+                   Val7 = Count(Distinct(), db.tbl_remuneration.money),
                    Val8 = (decimal)Avg(db.tbl_remuneration.money),
                    Val9 = Min(db.tbl_remuneration.money),
                    Val10 = Max(db.tbl_remuneration.money),
@@ -110,12 +110,12 @@ GROUP BY tbl_staff.id, tbl_staff.name");
                Select(new SelectData1
                {
                    Val1 = Sum(1),
-                   Val2 = Sum(AggregatePredicate.All, 2),
-                   Val3 = Sum(AggregatePredicate.Distinct, 3),
+                   Val2 = Sum(All(), 2),
+                   Val3 = Sum(Distinct(), 3),
                    Val4 = Count(4),
                    Val5 = Count(Asterisk()),
-                   Val6 = Count(AggregatePredicate.All, 5),
-                   Val7 = Count(AggregatePredicate.Distinct, 6),
+                   Val6 = Count(All(), 5),
+                   Val7 = Count(Distinct(), 6),
                    Val8 = (decimal)Avg(7),
                    Val9 = Min(8),
                    Val10 = Max(9),
@@ -147,18 +147,18 @@ GROUP BY tbl_staff.id, tbl_staff.name", 1, 2, 3, 4, 5, 6, 7, 8, 9);
         public void Test_Aggregate3()
         {
             var exp1 = Sql<DB>.Create(db => db.tbl_remuneration.money);
-            var exp2 = Sql<DB>.Create(db => AggregatePredicate.All);
-            var exp3 = Sql<DB>.Create(db => AggregatePredicate.Distinct);
+            var exp2 = Sql<DB>.Create(db => All());
+            var exp3 = Sql<DB>.Create(db => Distinct());
             var query = Sql<DB>.Create(db =>
                Select(new SelectData1
                {
                    Val1 = Sum(exp1),
-                   Val2 = Sum(exp2, exp1),
-                   Val3 = Sum(exp3, exp1),
+                   Val2 = Sum(exp2.Body, exp1),
+                   Val3 = Sum(exp3.Body, exp1),
                    Val4 = Count(exp1),
                    Val5 = Count(Asterisk()),
-                   Val6 = Count(exp2, exp1),
-                   Val7 = Count(exp3, exp1),
+                   Val6 = Count(exp2.Body, exp1),
+                   Val7 = Count(exp3.Body, exp1),
                    Val8 = (decimal)Avg(exp1),
                    Val9 = Min(exp1),
                    Val10 = Max(exp1),
@@ -196,7 +196,7 @@ GROUP BY tbl_staff.id, tbl_staff.name");
             var query = Sql<DB>.Create(db =>
                Select(new SelectData1
                {
-                   Val1 = Count(AggregatePredicate.All, Asterisk())
+                   Val1 = Count(All(), Asterisk())
                }).
                From(db.tbl_remuneration).
                    Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
