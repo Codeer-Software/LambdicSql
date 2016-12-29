@@ -436,7 +436,9 @@ WHERE
                         Join(db.tbl_staff, db.tbl_staff.id == db.tbl_staff.id).
                         Where(1000 < db.tbl_remuneration.money)
                    )));
-            
+
+            query.Gen(_connection);
+
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
@@ -462,7 +464,7 @@ WHERE
                    Id = db.tbl_staff.id
                }).
                From(db.tbl_staff).
-               Where(!IsNull(db.tbl_staff.name)));
+               Where(!(db.tbl_staff.name == null)));
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -470,7 +472,7 @@ WHERE
  @"SELECT
 	tbl_staff.id AS Id
 FROM tbl_staff
-WHERE NOT (tbl_staff.name IS NULL)");
+WHERE NOT ((tbl_staff.name) IS NULL)");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -486,7 +488,7 @@ WHERE NOT (tbl_staff.name IS NULL)");
                    Id = db.tbl_staff.id
                }).
                From(db.tbl_staff).
-               Where(!IsNull(val)));
+               Where(!(val == null)));
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -494,7 +496,7 @@ WHERE NOT (tbl_staff.name IS NULL)");
  @"SELECT
 	tbl_staff.id AS Id
 FROM tbl_staff
-WHERE NOT (@val IS NULL)", new Params() { { "@val", ""} });
+WHERE NOT ((@val) IS NULL)", new Params() { { "@val", ""} });
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -506,7 +508,7 @@ WHERE NOT (@val IS NULL)", new Params() { { "@val", ""} });
                    Id = db.tbl_staff.id
                }).
                From(db.tbl_staff).
-               Where(IsNotNull(db.tbl_staff.name)));
+               Where(db.tbl_staff.name != null));
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -514,7 +516,7 @@ WHERE NOT (@val IS NULL)", new Params() { { "@val", ""} });
  @"SELECT
 	tbl_staff.id AS Id
 FROM tbl_staff
-WHERE tbl_staff.name IS NOT NULL");
+WHERE (tbl_staff.name) IS NOT NULL");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -530,7 +532,7 @@ WHERE tbl_staff.name IS NOT NULL");
                    Id = db.tbl_staff.id
                }).
                From(db.tbl_staff).
-               Where(IsNotNull(val)));
+               Where(val != null));
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -538,7 +540,7 @@ WHERE tbl_staff.name IS NOT NULL");
  @"SELECT
 	tbl_staff.id AS Id
 FROM tbl_staff
-WHERE @val IS NOT NULL", new Params() { { "@val", "" } });
+WHERE (@val) IS NOT NULL", new Params() { { "@val", "" } });
         }
 
 

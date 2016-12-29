@@ -1,6 +1,7 @@
 ﻿using LambdicSql.Inside;
 using LambdicSql.SqlBase.TextParts;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using static LambdicSql.SqlBase.TextParts.SqlTextUtils;
@@ -64,13 +65,20 @@ namespace LambdicSql.SqlBase
         /// <summary>
         /// 
         /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="converter"></param>
         /// <param name="method"></param>
         /// <returns></returns>
         public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method)
         {
-            var args = method.Arguments.Select(e => converter.Convert(e)).ToArray();
-            return Func(method.Method.Name.ToUpper(), args);
+            var index = method.SkipMethodChain(0);
+            var args = method.Arguments.Skip(index).Select(e => converter.Convert(e)).ToArray();
+            var name = string.IsNullOrEmpty(Name) ? method.Method.Name.ToUpper() : Name;
+            return Func(name, args);
         }
     }
 
@@ -121,6 +129,21 @@ namespace LambdicSql.SqlBase
         /// <summary>
         /// 
         /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Separator { get; set; } = " ";
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string AfterPredicate { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="converter"></param>
         /// <param name="method"></param>
         /// <returns></returns>
@@ -128,7 +151,17 @@ namespace LambdicSql.SqlBase
         {
             var index = method.SkipMethodChain(0);
             var args = method.Arguments.Skip(index).Select(e => converter.Convert(e)).ToArray();
-            return new HText(new ExpressionElement[] { method.Method.Name.ToUpper() }.Concat(args)) { IsFunctional = true, Separator = " ", Indent = Indent};
+            var name = string.IsNullOrEmpty(Name) ? method.Method.Name.ToUpper() : Name;
+
+            var elements = new List<ExpressionElement>();
+         //   elements.Add(name);
+            elements.AddRange(args);
+            if (!string.IsNullOrEmpty(AfterPredicate)) elements.Add(AfterPredicate);
+
+            var arguments = new HText(elements) { Separator = Separator };
+         //   => Clause("LIMIT", Arguments(methods[0].Arguments.Skip(methods[0].SkipMethodChain(0)).Select(e => converter.Convert(e)).ToArray()));
+
+            return new HText(name, arguments) { IsFunctional = true, Separator = " ", Indent = Indent};
         }
     }
 

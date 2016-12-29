@@ -25,13 +25,7 @@ namespace LambdicSql.Inside.Keywords
             var args = methods[0].Arguments.Select(e => converter.Convert(e)).ToArray();
             return Func(LineSpace(args[0], "IN"), args[1]);
         }
-
-        internal static ExpressionElement ConvertExists(IExpressionConverter converter, MethodCallExpression[] methods)
-        {
-            var args = methods[0].Arguments.Select(e => converter.Convert(e)).ToArray();
-            return Clause("EXISTS", args[0]);
-        }
-
+        
         internal static ExpressionElement ConvertAll(IExpressionConverter converter, MethodCallExpression[] methods)
         {
             var args = methods[0].Arguments.Select(e => converter.Convert(e)).ToArray();

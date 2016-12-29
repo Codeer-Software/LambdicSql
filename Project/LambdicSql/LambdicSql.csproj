@@ -54,11 +54,7 @@
     <Compile Include="Inside\CustomizeColumnOnly.cs" />
     <Compile Include="Inside\InvalitContext.cs" />
     <Compile Include="Inside\DecodingParameterInfo.cs" />
-    <Compile Include="Inside\Keywords\FetchNextRowsOnlyClause.cs" />
-    <Compile Include="Inside\Keywords\LimitClause.cs" />
     <Compile Include="Inside\Keywords\NullCheck.cs" />
-    <Compile Include="Inside\Keywords\OffsetClause.cs" />
-    <Compile Include="Inside\Keywords\OffsetRowsClause.cs" />
     <Compile Include="Inside\Keywords\SetOperation.cs" />
     <Compile Include="Inside\MetaId.cs" />
     <Compile Include="Inside\TowWaySqlSpec.cs" />
@@ -95,7 +91,6 @@
     <Compile Include="Utils.cs" />
     <Compile Include="Inside\Window.cs" />
     <Compile Include="Inside\Keywords\FromClause.cs" />
-    <Compile Include="Inside\Keywords\GroupByClause.cs" />
     <Compile Include="Inside\Keywords\HavingClause.cs" />
     <Compile Include="Inside\Keywords\InsertIntoClause.cs" />
     <Compile Include="Inside\Keywords\OrderByClause.cs" />
