@@ -1148,7 +1148,7 @@ namespace LambdicSql
         /// <typeparam name="T">Type represented by expression.</typeparam>
         /// <param name="column">The column or expression that is function target.</param>
         /// <returns>Total.</returns>
-        [SqlSyntaxTmp]
+        [SqlSyntaxFunc(Separator =" ")]
         public static T Sum<T>(T column) => InvalitContext.Throw<T>(nameof(Sum));
 
         /// <summary>
@@ -1158,7 +1158,7 @@ namespace LambdicSql
         /// <param name="aggregatePredicate">Specify All or Distinct.</param>
         /// <param name="column">The column or expression that is function target.</param>
         /// <returns>Total.</returns>
-        [SqlSyntaxTmp]
+        [SqlSyntaxFunc(Separator = " ")]
         public static T Sum<T>(IAggregatePredicate aggregatePredicate, T column) => InvalitContext.Throw<T>(nameof(Sum));
 
         /// <summary>
@@ -1166,7 +1166,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="column">The column or expression that is function target.</param>
         /// <returns>Count.</returns>
-        [SqlSyntaxTmp]
+        [SqlSyntaxFunc(Separator = " ")]
         public static int Count(object column) => InvalitContext.Throw<int>(nameof(Count));
 
         /// <summary>
@@ -1174,7 +1174,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="asterisk">*</param>
         /// <returns>Count.</returns>
-        [SqlSyntaxTmp]
+        [SqlSyntaxFunc(Separator = " ")]
         public static int Count(IAsterisk asterisk) => InvalitContext.Throw<int>(nameof(Count));
 
         /// <summary>
@@ -1183,7 +1183,7 @@ namespace LambdicSql
         /// <param name="aggregatePredicate">Specify All or Distinct.</param>
         /// <param name="column">The column or expression that is function target.</param>
         /// <returns>Count.</returns>
-        [SqlSyntaxTmp]
+        [SqlSyntaxFunc(Separator = " ")]
         public static int Count(IAggregatePredicate aggregatePredicate, object column) => InvalitContext.Throw<int>(nameof(Count));
 
         /// <summary>
@@ -1192,7 +1192,7 @@ namespace LambdicSql
         /// <param name="aggregatePredicate">Specify All or Distinct.</param>
         /// <param name="asterisk">*</param>
         /// <returns>Count.</returns>
-        [SqlSyntaxTmp]
+        [SqlSyntaxFunc(Separator = " ")]
         public static int Count(IAggregatePredicate aggregatePredicate, IAsterisk asterisk) => InvalitContext.Throw<int>(nameof(Count));
 
         /// <summary>
@@ -1456,7 +1456,7 @@ namespace LambdicSql
         /// Constructor.
         /// </summary>
         /// <param name="preceding">Preceding row count.</param>
-        [SqlSyntaxTmp]
+        [SqlSyntaxRows]
         public static IRows Rows(int preceding) => InvalitContext.Throw<IRows>(nameof(Rows));
 
         /// <summary>
@@ -1464,14 +1464,14 @@ namespace LambdicSql
         /// </summary>
         /// <param name="preceding">Preceding row count.</param>
         /// <param name="following">Following row count.</param>
-        [SqlSyntaxTmp]
+        [SqlSyntaxRows]
         public static IRows Rows(int preceding, int following) => InvalitContext.Throw<IRows>(nameof(Rows));
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="columns">Specify column or expression.</param>
-        [SqlSyntaxTmp]
+        [SqlSyntaxPartitionBy]
         public static IPartitionBy PartitionBy(params object[] columns) => InvalitContext.Throw<IPartitionBy>(nameof(PartitionBy));
 
         /// <summary>
@@ -1483,7 +1483,7 @@ namespace LambdicSql
         /// <param name="orderBy">ORDER BY keyword.</param>
         /// <param name="rows">ROWS keyword.</param>
         /// <returns>It is the result of Window function.</returns>
-        [SqlSyntaxTmp]
+        [SqlSyntaxOver]
         public static T Over<T>(this T before, IPartitionBy partitionBy, IOrderBy orderBy, IRows rows) => InvalitContext.Throw<T>(nameof(Over));
 
         /// <summary>
@@ -1494,7 +1494,7 @@ namespace LambdicSql
         /// <param name="partitionBy">PARTITION BY keyword.</param>
         /// <param name="orderBy">ORDER BY keyword.</param>
         /// <returns>It is the result of Window function.</returns>
-        [SqlSyntaxTmp]
+        [SqlSyntaxOver]
         public static T Over<T>(this T before, IPartitionBy partitionBy, IOrderBy orderBy) => InvalitContext.Throw<T>(nameof(Over));
 
         /// <summary>
@@ -1505,7 +1505,7 @@ namespace LambdicSql
         /// <param name="partitionBy">PARTITION BY keyword.</param>
         /// <param name="rows">ROWS keyword.</param>
         /// <returns>It is the result of Window function.</returns>
-        [SqlSyntaxTmp]
+        [SqlSyntaxOver]
         public static T Over<T>(this T before, IPartitionBy partitionBy, IRows rows) => InvalitContext.Throw<T>(nameof(Over));
 
         /// <summary>
@@ -1516,7 +1516,7 @@ namespace LambdicSql
         /// <param name="orderBy">ORDER BY keyword.</param>
         /// <param name="rows">Getting row order.</param>
         /// <returns>It is the result of Window function.</returns>
-        [SqlSyntaxTmp]
+        [SqlSyntaxOver]
         public static T Over<T>(this T before, IOrderBy orderBy, IRows rows) => InvalitContext.Throw<T>(nameof(Over));
 
         /// <summary>
@@ -1526,7 +1526,7 @@ namespace LambdicSql
         /// <param name="before">It is an before expression in the Windwo function.</param>
         /// <param name="partitionBy">PARTITION BY keyword.</param>
         /// <returns>It is the result of Window function.</returns>
-        [SqlSyntaxTmp]
+        [SqlSyntaxOver]
         public static T Over<T>(this T before, IPartitionBy partitionBy) => InvalitContext.Throw<T>(nameof(Over));
 
         /// <summary>
@@ -1536,7 +1536,7 @@ namespace LambdicSql
         /// <param name="before">It is an before expression in the Windwo function.</param>
         /// <param name="orderBy">ORDER BY keyword.</param>
         /// <returns>It is the result of Window function.</returns>
-        [SqlSyntaxTmp]
+        [SqlSyntaxOver]
         public static T Over<T>(this T before, IOrderBy orderBy) => InvalitContext.Throw<T>(nameof(Over));
 
         /// <summary>
@@ -1546,7 +1546,7 @@ namespace LambdicSql
         /// <param name="before">It is an before expression in the Windwo function.</param>
         /// <param name="rows">Getting row order.</param>
         /// <returns>It is the result of Window function.</returns>
-        [SqlSyntaxTmp]
+        [SqlSyntaxOver]
         public static T Over<T>(this T before, IRows rows) => InvalitContext.Throw<T>(nameof(Over));
         #endregion
     }
@@ -1563,15 +1563,6 @@ namespace LambdicSql
                 case nameof(Keywords.InsertInto):
                 case nameof(Keywords.Values):
                     return InsertIntoClause.Convert(converter, methods);
-
-                //Functions
-                case nameof(Keywords.Sum):
-                case nameof(Keywords.Count):
-                    {
-                        var args = method.Arguments.Select(e => converter.Convert(e)).ToArray();
-                        return (method.Arguments.Count == 2) ? FuncSpace(method.Method.Name.ToUpper(), args):
-                                                                    Func(method.Method.Name.ToUpper(), args);
-                    }
                 case nameof(Keywords.Extract):
                     {
                         var args = method.Arguments.Select(e => converter.Convert(e)).ToArray();
@@ -1582,20 +1573,6 @@ namespace LambdicSql
                         var args = method.Arguments.Select(e => converter.Convert(e)).ToArray();
                         return FuncSpace("CAST", args[0], "AS", args[1].Customize(new CustomizeParameterToObject()));
                     }
-                case nameof(Keywords.Over):
-                    {
-                        var v = new VText();
-                        var overMethod = method;
-                        v.Add(overMethod.Method.Name.ToUpper() + "(");
-                        v.AddRange(1, overMethod.Arguments.Skip(1).
-                            Where(e => !(e is ConstantExpression)). //Skip null.
-                            Select(e => converter.Convert(e)).ToArray());
-                        return v.ConcatToBack(")");
-                    }
-                case nameof(Keywords.Rows):
-                    return Window.ConvertRows(converter, new[] { method });
-                case nameof(Keywords.PartitionBy):
-                    return Window.ConvertPartitionBy(converter, new[] { method });
             }
             throw new NotSupportedException();
         }

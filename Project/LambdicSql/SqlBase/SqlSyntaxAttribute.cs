@@ -70,6 +70,11 @@ namespace LambdicSql.SqlBase
         /// <summary>
         /// 
         /// </summary>
+        public string Separator { get; set; } = ", ";
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="converter"></param>
         /// <param name="method"></param>
         /// <returns></returns>
@@ -78,7 +83,9 @@ namespace LambdicSql.SqlBase
             var index = method.SkipMethodChain(0);
             var args = method.Arguments.Skip(index).Select(e => converter.Convert(e)).ToArray();
             var name = string.IsNullOrEmpty(Name) ? method.Method.Name.ToUpper() : Name;
-            return Func(name, args);
+
+            var hArgs = new HText(args) { Separator = Separator }.ConcatToBack(")");
+            return new HText(Line(name, "("), hArgs) { IsFunctional = true };
         }
     }
 
@@ -658,6 +665,58 @@ namespace LambdicSql.SqlBase
             public override ExpressionElement ConcatToBack(string back) => new SelectClauseText(_createInfo, _core.ConcatToBack(back));
 
             public override ExpressionElement Customize(ISqlTextCustomizer customizer) => customizer.Custom(this);
+        }
+    }
+
+    class SqlSyntaxRowsAttribute : SqlSyntaxConverterAttribute
+    {
+        public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method)
+        {
+            var args = method.Arguments.Select(e => converter.Convert(e)).ToArray();
+
+            //Sql server can't use parameter.
+            if (method.Arguments.Count == 1)
+            {
+                return LineSpace("ROWS", args[0].Customize(new CustomizeParameterToObject()), "PRECEDING");
+            }
+            else
+            {
+                return LineSpace("ROWS BETWEEN", args[0].Customize(new CustomizeParameterToObject()),
+                    "PRECEDING AND", args[1].Customize(new CustomizeParameterToObject()), "FOLLOWING");
+            }
+        }
+    }
+
+    class SqlSyntaxPartitionByAttribute : SqlSyntaxConverterAttribute
+    {
+        public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method)
+        {
+            var partitionBy = new VText();
+            partitionBy.Add("PARTITION BY");
+
+            var elements = new VText() { Indent = 1, Separator = "," };
+            var array = method.Arguments[0] as NewArrayExpression;
+            foreach (var e in array.Expressions.Select(e => converter.Convert(e)))
+            {
+                elements.Add(e);
+            }
+            partitionBy.Add(elements);
+
+            return partitionBy;
+        }
+    }
+
+    class SqlSyntaxOverAttribute : SqlSyntaxConverterAttribute
+    {
+        public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method)
+        {
+            var v = new VText();
+            var overMethod = method;
+            v.Add(overMethod.Method.Name.ToUpper() + "(");
+            v.AddRange(1, overMethod.Arguments.Skip(1).
+                Where(e => !(e is ConstantExpression)). //Skip null.
+                Select(e => converter.Convert(e)).ToArray());
+            return v.ConcatToBack(")");
         }
     }
 }
