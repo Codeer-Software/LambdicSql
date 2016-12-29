@@ -86,7 +86,8 @@ namespace LambdicSql.Inside
         DecodedInfo Convert(ConstantExpression constant)
         {
             //sql syntax.
-            if (constant.Type.IsSqlSyntax()) return new DecodedInfo(constant.Type, constant.Value.ToString().ToUpper());
+            var cnv = constant.Type.GetSqlSyntaxObject();
+            if (cnv != null) return new DecodedInfo(constant.Type, cnv.Convert(constant.Value));
 
             //normal object.
             if (SupportedTypeSpec.IsSupported(constant.Type)) return new DecodedInfo(constant.Type, Convert(constant.Value));
@@ -97,11 +98,10 @@ namespace LambdicSql.Inside
         DecodedInfo Convert(NewExpression newExp)
         {
             //syntax.
-            if (newExp.Type.IsSqlSyntax())
+            var cnv = newExp.GetSqlSyntaxNew();
+            if (cnv != null)
             {
-                //convert expression to text.
-                var func = newExp.GetConverotrMethod();
-                return new DecodedInfo(null, func(this, newExp));
+                return new DecodedInfo(null, cnv.Convert(this, newExp));
             }
 
             //object.
@@ -177,12 +177,13 @@ namespace LambdicSql.Inside
             //sub.Body
             var body = ResolveSqlExpressionBody(member);
             if (body != null) return body;
-            
+
             //sql syntax.
-            if (member.Member.DeclaringType.IsSqlSyntax())
+            var cnvMember = member.GetSqlSyntaxMember();
+            if (cnvMember != null)
             {
                 //convert.
-                return new DecodedInfo(member.Type, member.GetConverotrMethod()(this, member));
+                return new DecodedInfo(member.Type, cnvMember.Convert(this, member));
             }
             
             //sql syntax extension method
@@ -407,9 +408,10 @@ namespace LambdicSql.Inside
 
             //value type is SqlSyntax
             //for example [ enum ]
-            if (exp.Type.IsSqlSyntax())
+            var cnv = exp.Type.GetSqlSyntaxObject();
+            if (cnv != null) 
             {
-                return new DecodedInfo(exp.Type, obj.ToString().ToUpper());
+                return new DecodedInfo(exp.Type, cnv.Convert(obj));
             }
 
             //normal object.

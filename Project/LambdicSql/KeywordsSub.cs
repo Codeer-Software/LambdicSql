@@ -65,7 +65,7 @@ namespace LambdicSql
     /// <summary>
     /// Element of DateTime.
     /// </summary>
-    [SqlSyntax]
+    [SqlSyntaxToString]
     public enum DateTimeElement
     {
         /// <summary>
@@ -143,7 +143,6 @@ namespace LambdicSql
     /// It represents assignment. It is used in the Set clause.
     /// new Assign(db.tbl_staff.name, name) -> tbl_staff.name = "@name"
     /// </summary>
-    [SqlSyntax]
     public class Assign
     {
         /// <summary>
@@ -151,9 +150,13 @@ namespace LambdicSql
         /// </summary>
         /// <param name="rhs">Rvalue</param>
         /// <param name="lhs">Lvalue</param>
+        [SqlSyntaxAssign]
         public Assign(object rhs, object lhs) { InvalitContext.Throw("new " + nameof(Assign)); }
+    }
 
-        static ExpressionElement Convert(IExpressionConverter converter, NewExpression exp)
+    class SqlSyntaxAssignAttribute : SqlSyntaxNewAttribute
+    {
+        public override ExpressionElement Convert(IExpressionConverter converter, NewExpression exp)
         {
             ExpressionElement arg1 = converter.Convert(exp.Arguments[0]).Customize(new CustomizeColumnOnly());
             return new HText(arg1, "=", converter.Convert(exp.Arguments[1])) { Separator = " " };
@@ -164,7 +167,6 @@ namespace LambdicSql
     /// Condition building helper.
     /// condition is used if enable is valid.
     /// </summary>
-    [SqlSyntax]
     public class Condition
     {
         /// <summary>
@@ -173,6 +175,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="enable">Whether condition is valid.</param>
         /// <param name="condition">Condition expression.</param>
+        [SqlSyntaxCondition]
         public Condition(object enable, object condition) { InvalitContext.Throw("new " + nameof(Condition)); }
 
         /// <summary>
@@ -180,8 +183,11 @@ namespace LambdicSql
         /// </summary>
         /// <param name="src"></param>
         public static implicit operator bool(Condition src) => InvalitContext.Throw<bool>("implicit operator bool(Condition src)");
+    }
 
-        static ExpressionElement Convert(IExpressionConverter converter, NewExpression exp)
+    class SqlSyntaxConditionAttribute : SqlSyntaxNewAttribute
+    {
+        public override ExpressionElement Convert(IExpressionConverter converter, NewExpression exp)
         {
             var obj = converter.ToObject(exp.Arguments[0]);
             return (bool)obj ? converter.Convert(exp.Arguments[1]) : (ExpressionElement)string.Empty;
@@ -199,12 +205,12 @@ namespace LambdicSql
         /// SYSDUMMY1 keyword.
         /// </summary>
         [SqlSyntaxSysIBM]
-        public static object SysDummy1() => InvalitContext.Throw<long>(nameof(SysDummy1));
+        public static object SysDummy1 => InvalitContext.Throw<long>(nameof(SysDummy1));
     }
-    
-    class SqlSyntaxSysIBMAttribute : SqlSyntaxMethodAttribute
+
+    class SqlSyntaxSysIBMAttribute : SqlSyntaxMemberAttribute
     {
-        public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method) 
-            => "SYSIBM." + method.Method.Name.ToUpper();
+        public override ExpressionElement Convert(IExpressionConverter converter, MemberExpression member) 
+            => "SYSIBM." + member.Member.Name.ToUpper();
     }
 }

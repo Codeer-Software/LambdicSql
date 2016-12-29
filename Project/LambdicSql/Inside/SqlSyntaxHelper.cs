@@ -15,25 +15,14 @@ namespace LambdicSql.Inside
 
         static Dictionary<Type, Func<IExpressionConverter, MemberExpression, ExpressionElement>> _memberToStrings = new Dictionary<Type, Func<IExpressionConverter, MemberExpression, ExpressionElement>>();
         static Dictionary<Type, Func<IExpressionConverter, NewExpression, ExpressionElement>> _newToStrings = new Dictionary<Type, Func<IExpressionConverter, NewExpression, ExpressionElement>>();
-        static Dictionary<Type, bool> _isSqlSyntax = new Dictionary<Type, bool>();
+
         static Dictionary<MetaId, bool> _isForcedMethodGroup = new Dictionary<MetaId, bool>();
         static Dictionary<MetaId, bool> _isExtension = new Dictionary<MetaId, bool>();
         static Dictionary<MetaId, SqlSyntaxMethodAttribute> _sqlSyntaxMethodAttribute = new Dictionary<MetaId, SqlSyntaxMethodAttribute>();
+        static Dictionary<MetaId, SqlSyntaxMemberAttribute> _sqlSyntaxMemberAttribute = new Dictionary<MetaId, SqlSyntaxMemberAttribute>();
+        static Dictionary<MetaId, SqlSyntaxNewAttribute> _sqlSyntaxNewAttribute = new Dictionary<MetaId, SqlSyntaxNewAttribute>();
+        static Dictionary<Type, SqlSyntaxObjectAttribute> _sqlSyntaxObjectAttribute = new Dictionary<Type, SqlSyntaxObjectAttribute>();
 
-        internal static bool IsSqlSyntax(this Type type)
-        {
-            lock (_isSqlSyntax)
-            {
-                bool check;
-                if (!_isSqlSyntax.TryGetValue(type, out check))
-                {
-                    check = type.GetCustomAttributes(true).Any(e => e is SqlSyntaxAttribute);
-                    _isSqlSyntax[type] = check;
-                }
-                return check;
-            }
-        }
-        
         internal static bool IsForcedMethodGroup(this MethodInfo methodInfo)
         {
             var id = new MetaId(methodInfo);
@@ -80,6 +69,57 @@ namespace LambdicSql.Inside
                 return attr;
             }
         }
+        
+        internal static SqlSyntaxMemberAttribute GetSqlSyntaxMember(this MemberExpression exp)
+        {
+            var member = exp.Member;
+            var id = new MetaId(member);
+            lock (_sqlSyntaxMemberAttribute)
+            {
+                SqlSyntaxMemberAttribute attr;
+                if (_sqlSyntaxMemberAttribute.TryGetValue(id, out attr)) return attr;
+
+                var attrs = member.GetCustomAttributes(typeof(SqlSyntaxMemberAttribute), true);
+                if (attrs.Length == 1) attr = attrs[0] as SqlSyntaxMemberAttribute;
+                else attr = null;
+                _sqlSyntaxMemberAttribute.Add(id, attr);
+                return attr;
+            }
+        }
+
+
+        internal static SqlSyntaxNewAttribute GetSqlSyntaxNew(this NewExpression exp)
+        {
+            var constructor = exp.Constructor;
+            var id = new MetaId(constructor);
+            lock (_sqlSyntaxNewAttribute)
+            {
+                SqlSyntaxNewAttribute attr;
+                if (_sqlSyntaxNewAttribute.TryGetValue(id, out attr)) return attr;
+
+                var attrs = constructor.GetCustomAttributes(typeof(SqlSyntaxNewAttribute), true);
+                if (attrs.Length == 1) attr = attrs[0] as SqlSyntaxNewAttribute;
+                else attr = null;
+                _sqlSyntaxNewAttribute.Add(id, attr);
+                return attr;
+            }
+        }
+
+        internal static SqlSyntaxObjectAttribute GetSqlSyntaxObject(this Type type)
+        {
+            lock (_sqlSyntaxObjectAttribute)
+            {
+                SqlSyntaxObjectAttribute attr;
+                if (_sqlSyntaxObjectAttribute.TryGetValue(type, out attr)) return attr;
+
+                var attrs = type.GetCustomAttributes(typeof(SqlSyntaxObjectAttribute), true);
+                if (attrs.Length == 1) attr = attrs[0] as SqlSyntaxObjectAttribute;
+                else attr = null;
+                _sqlSyntaxObjectAttribute.Add(type, attr);
+                return attr;
+            }
+        }
+
 
         internal static Func<IExpressionConverter, MemberExpression, ExpressionElement> GetConverotrMethod(this MemberExpression exp)
         {

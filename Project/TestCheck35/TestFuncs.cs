@@ -909,7 +909,7 @@ FROM DUAL");
                 {
                     Val = CurrentDate()
                 }).
-                From(SysIBM.SysDummy1()));
+                From(SysIBM.SysDummy1));
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -930,7 +930,7 @@ FROM SYSIBM.SYSDUMMY1");
                 {
                     Val = CurrentTime()
                 }).
-                From(SysIBM.SysDummy1()));
+                From(SysIBM.SysDummy1));
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -951,7 +951,7 @@ FROM SYSIBM.SYSDUMMY1");
                 {
                     Val = CurrentTimeStamp()
                 }).
-                From(SysIBM.SysDummy1()));
+                From(SysIBM.SysDummy1));
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);

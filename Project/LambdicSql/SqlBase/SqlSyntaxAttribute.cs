@@ -20,9 +20,63 @@ namespace LambdicSql.SqlBase
         /// 
         /// </summary>
         /// <param name="converter"></param>
-        /// <param name="method"></param>
+        /// <param name="exp"></param>
         /// <returns></returns>
-        public abstract ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method);
+        public abstract ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression exp);
+    }
+
+    /// <summary>
+    /// SQL syntax attribute.
+    /// </summary>
+    public abstract class SqlSyntaxNewAttribute : Attribute
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="converter"></param>
+        /// <param name="exp"></param>
+        /// <returns></returns>
+        public abstract ExpressionElement Convert(IExpressionConverter converter, NewExpression exp);
+    }
+
+    /// <summary>
+    /// SQL syntax attribute.
+    /// </summary>
+    public abstract class SqlSyntaxMemberAttribute : Attribute
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="converter"></param>
+        /// <param name="exp"></param>
+        /// <returns></returns>
+        public abstract ExpressionElement Convert(IExpressionConverter converter, MemberExpression exp);
+    }
+
+    /// <summary>
+    /// SQL syntax attribute.
+    /// </summary>
+    public abstract class SqlSyntaxObjectAttribute : Attribute
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public abstract ExpressionElement Convert(object obj);
+    }
+
+    /// <summary>
+    /// SQL syntax attribute.
+    /// </summary>
+    public class SqlSyntaxToStringAttribute : SqlSyntaxObjectAttribute
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override ExpressionElement Convert(object obj) => obj == null ? string.Empty : obj.ToString().ToUpper();
     }
 
     /// <summary>
