@@ -1277,7 +1277,7 @@ FROM tbl_remuneration
         {
             var query = Sql<DB>.Create(db => Select(Asterisk()).From(db.tbl_staff).Union().Select(Asterisk()).From(db.tbl_staff));
             ExecuteRead<Staff>(query);
-            query = Sql<DB>.Create(db => Select(Asterisk()).From(db.tbl_staff).Union(true).Select(Asterisk()).From(db.tbl_staff));
+            query = Sql<DB>.Create(db => Select(Asterisk()).From(db.tbl_staff).Union(All()).Select(Asterisk()).From(db.tbl_staff));
             ExecuteRead<Staff>(query);
         }
 
@@ -1291,7 +1291,7 @@ FROM tbl_remuneration
             if (name == "System.Data.SqlClient.SqlConnection") return;
             if (name == "System.Data.SQLite.SQLiteConnection") return;
             if (name == "Oracle.ManagedDataAccess.Client.OracleConnection") return;
-            query = Sql<DB>.Create(db => Select(Asterisk()).From(db.tbl_staff).Intersect(true).Select(Asterisk()).From(db.tbl_staff));
+            query = Sql<DB>.Create(db => Select(Asterisk()).From(db.tbl_staff).Intersect(All()).Select(Asterisk()).From(db.tbl_staff));
             ExecuteRead<Staff>(query);
         }
 
@@ -1305,7 +1305,7 @@ FROM tbl_remuneration
             ExecuteRead<Staff>(query);
             if (name == "System.Data.SqlClient.SqlConnection") return;
             if (name == "System.Data.SQLite.SQLiteConnection") return;
-            query = Sql<DB>.Create(db => Select(Asterisk()).From(db.tbl_staff).Except(true).Select(Asterisk()).From(db.tbl_staff));
+            query = Sql<DB>.Create(db => Select(Asterisk()).From(db.tbl_staff).Except(All()).Select(Asterisk()).From(db.tbl_staff));
             ExecuteRead<Staff>(query);
         }
 

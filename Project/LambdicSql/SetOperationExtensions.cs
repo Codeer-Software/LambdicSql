@@ -35,11 +35,11 @@ namespace LambdicSql
         /// </summary>
         /// <typeparam name="TResult">The type represented by SqlExpression.</typeparam>
         /// <param name="expression1">Expression 1.</param>
-        /// <param name="isAll">If isAll is true, add an ALL predicate.</param>
+        /// <param name="all">If isAll is true, add an ALL predicate.</param>
         /// <param name="expression2">Exppresion 2.</param>
         /// <returns>Concatenated result.</returns>
-        public static SqlExpression<TResult> Union<TResult>(this SqlExpression<TResult> expression1, bool isAll, ISqlExpression expression2)
-            => expression1.Concat(Sql<Non>.Create(db => Keywords.Union(isAll))).Concat(expression2);
+        public static SqlExpression<TResult> Union<TResult>(this SqlExpression<TResult> expression1, IAggregatePredicateAll all, ISqlExpression expression2)
+            => expression1.Concat(Sql<Non>.Create(db => Keywords.Union(Keywords.All()))).Concat(expression2);
 
         /// <summary>
         /// Concatenate expression1 and expression2 using INTERSECT clause.
@@ -56,11 +56,11 @@ namespace LambdicSql
         /// </summary>
         /// <typeparam name="TResult">The type represented by SqlExpression.</typeparam>
         /// <param name="expression1">Expression 1.</param>
-        /// <param name="isAll">If isAll is true, add an ALL predicate.</param>
+        /// <param name="all">If isAll is true, add an ALL predicate.</param>
         /// <param name="expression2">Exppresion 2.</param>
         /// <returns>Concatenated result.</returns>
-        public static SqlExpression<TResult> Intersect<TResult>(this SqlExpression<TResult> expression1, bool isAll, ISqlExpression expression2)
-            => expression1.Concat(Sql<Non>.Create(db => Keywords.Intersect(isAll))).Concat(expression2);
+        public static SqlExpression<TResult> Intersect<TResult>(this SqlExpression<TResult> expression1, IAggregatePredicateAll all, ISqlExpression expression2)
+            => expression1.Concat(Sql<Non>.Create(db => Keywords.Intersect(Keywords.All()))).Concat(expression2);
 
         /// <summary>
         /// Concatenate expression1 and expression2 using EXCEPT clause.
@@ -77,11 +77,11 @@ namespace LambdicSql
         /// </summary>
         /// <typeparam name="TResult">The type represented by SqlExpression.</typeparam>
         /// <param name="expression1">Expression 1.</param>
-        /// <param name="isAll">If isAll is true, add an ALL predicate.</param>
+        /// <param name="all">If isAll is true, add an ALL predicate.</param>
         /// <param name="expression2">Exppresion 2.</param>
         /// <returns>Concatenated result.</returns>
-        public static SqlExpression<TResult> Except<TResult>(this SqlExpression<TResult> expression1, bool isAll, ISqlExpression expression2)
-            => expression1.Concat(Sql<Non>.Create(db => Keywords.Except(isAll))).Concat(expression2);
+        public static SqlExpression<TResult> Except<TResult>(this SqlExpression<TResult> expression1, IAggregatePredicateAll all, ISqlExpression expression2)
+            => expression1.Concat(Sql<Non>.Create(db => Keywords.Except(Keywords.All()))).Concat(expression2);
 
         /// <summary>
         /// Concatenate expression1 and expression2 using MINUS clause.

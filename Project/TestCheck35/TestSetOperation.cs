@@ -45,7 +45,7 @@ FROM tbl_staff");
         public void Test_Union_All()
         {
             var query = Sql<DB>.Create(db => Select(Asterisk(db.tbl_staff)).From(db.tbl_staff));
-            query = query.Union(true, query);
+            query = query.Union(All(), query);
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -53,22 +53,6 @@ FROM tbl_staff");
 @"SELECT *
 FROM tbl_staff
 UNION ALL
-SELECT *
-FROM tbl_staff");
-        }
-
-        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_Union_All_False()
-        {
-            var query = Sql<DB>.Create(db => Select(Asterisk(db.tbl_staff)).From(db.tbl_staff));
-            query = query.Union(false, query);
-
-            var datas = _connection.Query(query).ToList();
-            Assert.IsTrue(0 < datas.Count);
-            AssertEx.AreEqual(query, _connection,
-@"SELECT *
-FROM tbl_staff
-UNION
 SELECT *
 FROM tbl_staff");
         }
@@ -123,7 +107,7 @@ WHERE (tbl_staff.id) = (@p_0)",
 
             var query = Sql<DB>.Create(db => Select(Asterisk(db.tbl_staff)).From(db.tbl_staff));
             var queryAfter = Sql<DB>.Create(db => Select(Asterisk(db.tbl_staff)).From(db.tbl_staff).Where(db.tbl_staff.id == 1));
-            query = query.Except(true, queryAfter);
+            query = query.Except(All(), queryAfter);
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -131,28 +115,6 @@ WHERE (tbl_staff.id) = (@p_0)",
 @"SELECT *
 FROM tbl_staff
 EXCEPT ALL
-SELECT *
-FROM tbl_staff
-WHERE (tbl_staff.id) = (@p_0)",
-1);
-        }
-
-        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_Except_All_False()
-        {
-            if (_connection.GetType().Name == "MySqlConnection") return;
-            if (_connection.GetType().Name == "OracleConnection") return;
-
-            var query = Sql<DB>.Create(db => Select(Asterisk(db.tbl_staff)).From(db.tbl_staff));
-            var queryAfter = Sql<DB>.Create(db => Select(Asterisk(db.tbl_staff)).From(db.tbl_staff).Where(db.tbl_staff.id == 1));
-            query = query.Except(false, queryAfter);
-
-            var datas = _connection.Query(query).ToList();
-            Assert.IsTrue(0 < datas.Count);
-            AssertEx.AreEqual(query, _connection,
-@"SELECT *
-FROM tbl_staff
-EXCEPT
 SELECT *
 FROM tbl_staff
 WHERE (tbl_staff.id) = (@p_0)",
@@ -200,27 +162,13 @@ SELECT * FROM tbl_staff");
         public void Test_Union_All_Exp()
         {
             var query = Sql<DB>.Create(db => "SELECT * FROM tbl_staff".ToSql());
-            query = query.Union(true, query);
+            query = query.Union(All(), query);
 
             var datas = _connection.Query<Staff>(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT * FROM tbl_staff
 UNION ALL
-SELECT * FROM tbl_staff");
-        }
-
-        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_Union_All_False_Exp()
-        {
-            var query = Sql<DB>.Create(db => "SELECT * FROM tbl_staff".ToSql());
-            query = query.Union(false, query);
-
-            var datas = _connection.Query<Staff>(query).ToList();
-            Assert.IsTrue(0 < datas.Count);
-            AssertEx.AreEqual(query, _connection,
-@"SELECT * FROM tbl_staff
-UNION
 SELECT * FROM tbl_staff");
         }
 
@@ -268,31 +216,13 @@ SELECT * FROM tbl_staff WHERE (tbl_staff.id) = (1)");
 
             var query = Sql<DB>.Create(db => "SELECT * FROM tbl_staff".ToSql());
             var queryAfter = Sql<DB>.Create(db => "SELECT * FROM tbl_staff WHERE (tbl_staff.id) = (1)".ToSql());
-            query = query.Except(true, queryAfter);
+            query = query.Except(All(), queryAfter);
 
             var datas = _connection.Query<Staff>(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT * FROM tbl_staff
 EXCEPT ALL
-SELECT * FROM tbl_staff WHERE (tbl_staff.id) = (1)");
-        }
-
-        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_Except_All_False_Exp()
-        {
-            if (_connection.GetType().Name == "MySqlConnection") return;
-            if (_connection.GetType().Name == "OracleConnection") return;
-
-            var query = Sql<DB>.Create(db => "SELECT * FROM tbl_staff".ToSql());
-            var queryAfter = Sql<DB>.Create(db => "SELECT * FROM tbl_staff WHERE (tbl_staff.id) = (1)".ToSql());
-            query = query.Except(false, queryAfter);
-
-            var datas = _connection.Query<Staff>(query).ToList();
-            Assert.IsTrue(0 < datas.Count);
-            AssertEx.AreEqual(query, _connection,
-@"SELECT * FROM tbl_staff
-EXCEPT
 SELECT * FROM tbl_staff WHERE (tbl_staff.id) = (1)");
         }
 

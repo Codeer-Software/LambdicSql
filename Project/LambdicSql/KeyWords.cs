@@ -9,14 +9,10 @@ using System.Linq;
 
 namespace LambdicSql
 {
-    //TODO 改行をいれながらドキュメントというかサンプルを書く！
-
+    //TODO 改行を入れながらドキュメントを書く
     //<para>paraを</para>
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public class RecursiveArguments<T> { }
+
+    //TODO ALLだけ例外である旨のコメント
 
     /// <summary>
     /// SQL Keywords.
@@ -28,7 +24,19 @@ namespace LambdicSql
         /// <summary>
         /// 
         /// </summary>
-        public class Non { }
+        public class Non
+        {
+            Non() { }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        public class RecursiveArguments<T>
+        {
+            RecursiveArguments() { }
+        }
 
         #region Keywords
         /// <summary>
@@ -36,7 +44,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="subQuerys"></param>
         /// <returns></returns>
-        [SqlSyntaxTmp]
+        [SqlSyntaxWith]
         public static ClauseChain<Non> With(params ISqlExpression[] subQuerys) => InvalitContext.Throw<ClauseChain<Non>>(nameof(With));
 
         /// <summary>
@@ -46,7 +54,7 @@ namespace LambdicSql
         /// <param name="args"></param>
         /// <param name="select"></param>
         /// <returns></returns>
-        [SqlSyntaxTmp]
+        [SqlSyntaxWith]
         public static ClauseChain<TSelected> With<TSelected>(SqlRecursiveArgumentsExpression<TSelected> args, ISqlExpression select) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(With));
 
         /// <summary>
@@ -55,7 +63,7 @@ namespace LambdicSql
         /// <typeparam name="TSelected"></typeparam>
         /// <param name="selected"></param>
         /// <returns></returns>
-        [SqlSyntaxTmp]
+        [SqlSyntaxRecursive]
         public static RecursiveArguments<TSelected> Recursive<TSelected>(TSelected selected) => InvalitContext.Throw<RecursiveArguments<TSelected>>(nameof(Select));
 
         /// <summary>
@@ -681,7 +689,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="elements">Specify column and sort order. Asc(column) or Desc(column).</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        [SqlSyntaxTmp]
+        [SqlSyntaxOrderBy]
         public static OrderBy OrderBy(params ISortedBy[] elements) => InvalitContext.Throw<OrderBy>(nameof(OrderBy));
 
         /// <summary>
@@ -691,7 +699,7 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="elements">Specify column and sort order. Asc(column) or Desc(column).</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        [SqlSyntaxTmp]
+        [SqlSyntaxOrderBy]
         public static ClauseChain<TSelected> OrderBy<TSelected>(this ClauseChain<TSelected> before, params ISortedBy[] elements) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(OrderBy));
 
         /// <summary>
@@ -805,20 +813,20 @@ namespace LambdicSql
         /// <summary>
         /// UNION clause.
         /// </summary>
-        /// <param name="isAll">If isAll is true, add an ALL predicate.</param>
+        /// <param name="all">If isAll is true, add an ALL predicate.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        [SqlSyntaxTmp]
-        public static ClauseChain<Non> Union(bool isAll) => InvalitContext.Throw<ClauseChain<Non>>(nameof(Union));
+        [SqlSyntaxClause]
+        public static ClauseChain<Non> Union(IAggregatePredicateAll all) => InvalitContext.Throw<ClauseChain<Non>>(nameof(Union));
 
         /// <summary>
         /// UNION clause.
         /// </summary>
         /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
-        /// <param name="isAll">If isAll is true, add an ALL predicate.</param>
+        /// <param name="all">If isAll is true, add an ALL predicate.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        [SqlSyntaxTmp]
-        public static ClauseChain<TSelected> Union<TSelected>(this ClauseChain<TSelected> before, bool isAll) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Union));
+        [SqlSyntaxClause]
+        public static ClauseChain<TSelected> Union<TSelected>(this ClauseChain<TSelected> before, IAggregatePredicateAll all) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Union));
 
         /// <summary>
         /// INTERSECT clause.
@@ -839,20 +847,20 @@ namespace LambdicSql
         /// <summary>
         /// INTERSECT clause.
         /// </summary>
-        /// <param name="isAll">If isAll is true, add an ALL predicate.</param>
+        /// <param name="all">If isAll is true, add an ALL predicate.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        [SqlSyntaxTmp]
-        public static ClauseChain<Non> Intersect(bool isAll) => InvalitContext.Throw<ClauseChain<Non>>(nameof(Intersect));
+        [SqlSyntaxClause]
+        public static ClauseChain<Non> Intersect(IAggregatePredicateAll all) => InvalitContext.Throw<ClauseChain<Non>>(nameof(Intersect));
 
         /// <summary>
         /// INTERSECT clause.
         /// </summary>
         /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
-        /// <param name="isAll">If isAll is true, add an ALL predicate.</param>
+        /// <param name="all">If isAll is true, add an ALL predicate.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        [SqlSyntaxTmp]
-        public static ClauseChain<TSelected> Intersect<TSelected>(this ClauseChain<TSelected> before, bool isAll) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Intersect));
+        [SqlSyntaxClause]
+        public static ClauseChain<TSelected> Intersect<TSelected>(this ClauseChain<TSelected> before, IAggregatePredicateAll all) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Intersect));
 
         /// <summary>
         /// EXCEPT clause.
@@ -873,20 +881,20 @@ namespace LambdicSql
         /// <summary>
         /// EXCEPT clause.
         /// </summary>
-        /// <param name="isAll">If isAll is true, add an ALL predicate.</param>
+        /// <param name="all">If isAll is true, add an ALL predicate.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        [SqlSyntaxTmp]
-        public static ClauseChain<Non> Except(bool isAll) => InvalitContext.Throw<ClauseChain<Non>>(nameof(Except));
+        [SqlSyntaxClause]
+        public static ClauseChain<Non> Except(IAggregatePredicateAll all) => InvalitContext.Throw<ClauseChain<Non>>(nameof(Except));
 
         /// <summary>
         /// EXCEPT clause.
         /// </summary>
         /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
-        /// <param name="isAll">If isAll is true, add an ALL predicate.</param>
+        /// <param name="all">If isAll is true, add an ALL predicate.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        [SqlSyntaxTmp]
-        public static ClauseChain<TSelected> Except<TSelected>(this ClauseChain<TSelected> before, bool isAll) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Except));
+        [SqlSyntaxClause]
+        public static ClauseChain<TSelected> Except<TSelected>(this ClauseChain<TSelected> before, IAggregatePredicateAll all) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Except));
 
         /// <summary>
         /// MINUS clause.
@@ -912,6 +920,16 @@ namespace LambdicSql
         [SqlSyntaxClause]
         public static ClauseChain<Non> Update(object table) => InvalitContext.Throw<ClauseChain<Non>>(nameof(Update));
 
+        //TODO Test
+        /// <summary>
+        /// SET clause.
+        /// </summary>
+        /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
+        /// <param name="assigns">Assignment in the SET clause.</param>
+        /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
+        [SqlSyntaxSet]
+        public static ClauseChain<TSelected> Set<TSelected>(params Assign[] assigns) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Set));
+
         /// <summary>
         /// SET clause.
         /// </summary>
@@ -919,7 +937,7 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="assigns">Assignment in the SET clause.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        [SqlSyntaxTmp]
+        [SqlSyntaxSet]
         public static ClauseChain<TSelected> Set<TSelected>(this ClauseChain<TSelected> before, params Assign[] assigns) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Set));
 
         /// <summary>
@@ -1009,7 +1027,7 @@ namespace LambdicSql
         /// </summary>
         /// <returns></returns>
         [SqlSyntaxKeyword]
-        public static IAggregatePredicate All() => InvalitContext.Throw<IAggregatePredicate>(nameof(All));
+        public static IAggregatePredicateAll All() => null;
 
         /// <summary>
         /// Distinct Keyword
@@ -1542,27 +1560,9 @@ namespace LambdicSql
             var methods = new[] { method };
             switch (method.Method.Name)
             {
-                case nameof(Keywords.With):
-                    return FromClause.ConvertWith(converter, methods);
-                case nameof(Keywords.Recursive):
-                    return SelectClause.ConvertRecursive(converter, methods);
                 case nameof(Keywords.InsertInto):
                 case nameof(Keywords.Values):
                     return InsertIntoClause.Convert(converter, methods);
-                case nameof(Keywords.OrderBy):
-                    return OrderByWordsClause.Convert(converter, methods);
-                case nameof(Keywords.Update):
-                case nameof(Keywords.Set):
-                    return UpdateClause.Convert(converter, methods);
-                case nameof(Keywords.Union):
-                case nameof(Keywords.Intersect):
-                case nameof(Keywords.Except):
-                case nameof(Keywords.Minus):
-                    //TODO ALLはALLって書かせる。 trueではない　あー、でも外側でやるのとねー
-                    //あー、外側でやるのをやめて、sqlexpressionにchainを継承させたら、外側のconcatはいらなくなるのか
-                    return SetOperation.Convert(converter, methods);
-                case nameof(Keywords.Asterisk):
-                    return "*";
 
                 //Functions
                 case nameof(Keywords.Sum):

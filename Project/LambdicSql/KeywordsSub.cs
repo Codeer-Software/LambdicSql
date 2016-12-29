@@ -63,6 +63,12 @@ namespace LambdicSql
     public interface IAggregatePredicate { }
 
     /// <summary>
+    /// Aggregation predicate.
+    /// All or Distinct.
+    /// </summary>
+    public interface IAggregatePredicateAll : IAggregatePredicate { }
+
+    /// <summary>
     /// Element of DateTime.
     /// </summary>
     [SqlSyntaxKeyword]

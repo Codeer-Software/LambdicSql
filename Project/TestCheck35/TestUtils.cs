@@ -471,7 +471,7 @@ FROM tbl_staff
             
             var select = Sql<DB>.Create(db =>
                 Select(new object[] { 1 }).
-                Union(true).
+                Union(All()).
                 Select(new object[] { rec.Body.val + 1}).
                 From(rec).
                 Where(rec.Body.val + 1 <= 5)
@@ -511,7 +511,7 @@ FROM rec", 1, 1, 1, 5);
 
             var select = Sql<DB>.Create(db =>
                 Select(new object[] { 1 }).
-                Union(true).
+                Union(All()).
                 Select(new object[] { rec.Body.val + 1 }).
                 From(rec).
                 Where(rec.Body.val + 1 <= 5)
@@ -551,7 +551,7 @@ FROM rec", 1, 1, 1, 5);
             var select = Sql<DB>.Create(db =>
                 Select(new object[] { 1 }).
                 From(Dual()).
-                Union(true).
+                Union(All()).
                 Select(new object[] { rec.Body.val + 1 }).
                 From(rec).
                 Where(rec.Body.val + 1 <= 5)

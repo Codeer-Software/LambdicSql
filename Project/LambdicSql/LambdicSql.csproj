@@ -54,7 +54,6 @@
     <Compile Include="Inside\CustomizeColumnOnly.cs" />
     <Compile Include="Inside\InvalitContext.cs" />
     <Compile Include="Inside\DecodingParameterInfo.cs" />
-    <Compile Include="Inside\Keywords\SetOperation.cs" />
     <Compile Include="Inside\MetaId.cs" />
     <Compile Include="Inside\TowWaySqlSpec.cs" />
     <Compile Include="Keywords.cs" />
@@ -89,9 +88,7 @@
     <Compile Include="SqlExpressionExtensions.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="Inside\Window.cs" />
-    <Compile Include="Inside\Keywords\FromClause.cs" />
     <Compile Include="Inside\Keywords\InsertIntoClause.cs" />
-    <Compile Include="Inside\Keywords\OrderByClause.cs" />
     <Compile Include="SqlBase\ObjectCreateInfo.cs" />
     <Compile Include="SqlBase\ObjectCreateMemberInfo.cs" />
     <Compile Include="Inside\ExpressionToObject.cs" />
@@ -109,7 +106,6 @@
     <Compile Include="Inside\DialectResolver.cs" />
     <Compile Include="Sql.cs" />
     <Compile Include="Inside\Keywords\SelectClause.cs" />
-    <Compile Include="Inside\Keywords\UpdateClause.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="LambdicSql.snk" />
