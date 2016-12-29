@@ -67,7 +67,6 @@
     <Compile Include="Inside\ExpressionToObject.CreateGetter.cs" />
     <Compile Include="Inside\ExpressionToObject.Getter.cs" />
     <Compile Include="Inside\SqlExpressionCoupled.cs" />
-    <Compile Include="SqlBase\ForcedMethodGroupAttribute.cs" />
     <Compile Include="SqlBase\TextParts\CustomizeParameterToObject.cs" />
     <Compile Include="SqlBase\TextParts\DbColumnText.cs" />
     <Compile Include="SqlBase\TextParts\DbTableText.cs" />

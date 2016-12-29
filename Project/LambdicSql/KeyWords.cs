@@ -1467,7 +1467,7 @@ namespace LambdicSql
         /// <param name="orderBy">ORDER BY keyword.</param>
         /// <param name="rows">ROWS keyword.</param>
         /// <returns>It is the result of Window function.</returns>
-        [ForcedMethodGroup, SqlSyntaxTmp]
+        [SqlSyntaxTmp]
         public static T Over<T>(this T before, IPartitionBy partitionBy, IOrderBy orderBy, IRows rows) => InvalitContext.Throw<T>(nameof(Over));
 
         /// <summary>
@@ -1478,7 +1478,7 @@ namespace LambdicSql
         /// <param name="partitionBy">PARTITION BY keyword.</param>
         /// <param name="orderBy">ORDER BY keyword.</param>
         /// <returns>It is the result of Window function.</returns>
-        [ForcedMethodGroup, SqlSyntaxTmp]
+        [SqlSyntaxTmp]
         public static T Over<T>(this T before, IPartitionBy partitionBy, IOrderBy orderBy) => InvalitContext.Throw<T>(nameof(Over));
 
         /// <summary>
@@ -1489,7 +1489,7 @@ namespace LambdicSql
         /// <param name="partitionBy">PARTITION BY keyword.</param>
         /// <param name="rows">ROWS keyword.</param>
         /// <returns>It is the result of Window function.</returns>
-        [ForcedMethodGroup, SqlSyntaxTmp]
+        [SqlSyntaxTmp]
         public static T Over<T>(this T before, IPartitionBy partitionBy, IRows rows) => InvalitContext.Throw<T>(nameof(Over));
 
         /// <summary>
@@ -1500,7 +1500,7 @@ namespace LambdicSql
         /// <param name="orderBy">ORDER BY keyword.</param>
         /// <param name="rows">Getting row order.</param>
         /// <returns>It is the result of Window function.</returns>
-        [ForcedMethodGroup, SqlSyntaxTmp]
+        [SqlSyntaxTmp]
         public static T Over<T>(this T before, IOrderBy orderBy, IRows rows) => InvalitContext.Throw<T>(nameof(Over));
 
         /// <summary>
@@ -1510,7 +1510,7 @@ namespace LambdicSql
         /// <param name="before">It is an before expression in the Windwo function.</param>
         /// <param name="partitionBy">PARTITION BY keyword.</param>
         /// <returns>It is the result of Window function.</returns>
-        [ForcedMethodGroup, SqlSyntaxTmp]
+        [SqlSyntaxTmp]
         public static T Over<T>(this T before, IPartitionBy partitionBy) => InvalitContext.Throw<T>(nameof(Over));
 
         /// <summary>
@@ -1520,7 +1520,7 @@ namespace LambdicSql
         /// <param name="before">It is an before expression in the Windwo function.</param>
         /// <param name="orderBy">ORDER BY keyword.</param>
         /// <returns>It is the result of Window function.</returns>
-        [ForcedMethodGroup, SqlSyntaxTmp]
+        [SqlSyntaxTmp]
         public static T Over<T>(this T before, IOrderBy orderBy) => InvalitContext.Throw<T>(nameof(Over));
 
         /// <summary>
@@ -1530,7 +1530,7 @@ namespace LambdicSql
         /// <param name="before">It is an before expression in the Windwo function.</param>
         /// <param name="rows">Getting row order.</param>
         /// <returns>It is the result of Window function.</returns>
-        [ForcedMethodGroup, SqlSyntaxTmp]
+        [SqlSyntaxTmp]
         public static T Over<T>(this T before, IRows rows) => InvalitContext.Throw<T>(nameof(Over));
         #endregion
     }
