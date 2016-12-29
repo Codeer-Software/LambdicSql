@@ -54,7 +54,6 @@
     <Compile Include="Inside\CustomizeColumnOnly.cs" />
     <Compile Include="Inside\InvalitContext.cs" />
     <Compile Include="Inside\DecodingParameterInfo.cs" />
-    <Compile Include="Inside\Keywords\NullCheck.cs" />
     <Compile Include="Inside\Keywords\SetOperation.cs" />
     <Compile Include="Inside\MetaId.cs" />
     <Compile Include="Inside\TowWaySqlSpec.cs" />
@@ -109,10 +108,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Inside\DialectResolver.cs" />
     <Compile Include="Sql.cs" />
-    <Compile Include="Inside\Keywords\DeleteClause.cs" />
     <Compile Include="Inside\Keywords\SelectClause.cs" />
     <Compile Include="Inside\Keywords\UpdateClause.cs" />
-    <Compile Include="Inside\Keywords\ConditionKeyWords.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="LambdicSql.snk" />

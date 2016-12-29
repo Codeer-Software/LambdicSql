@@ -243,7 +243,7 @@ namespace LambdicSql.Inside
                 ret.Add(c.GetSqlSyntaxMethod().Convert(this, c));
             }
             //TODO ちょっと嫌すぎる。括弧を付けない方法を何か確立せねば
-            if (ret.Count == 1 && typeof(Keywords.DisableBracketsText).IsAssignableFrom(ret[0].GetType()))
+            if (ret.Count == 1 && typeof(SqlSyntaxAllAttribute.DisableBracketsText).IsAssignableFrom(ret[0].GetType()))
             {
                 return new DecodedInfo(method.Method.ReturnType, ret[0]);
             }

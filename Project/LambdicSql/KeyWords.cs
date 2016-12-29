@@ -790,7 +790,7 @@ namespace LambdicSql
         /// UNION clause.
         /// </summary>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        [SqlSyntaxTmp]
+        [SqlSyntaxClause]
         public static ClauseChain<Non> Union() => InvalitContext.Throw<ClauseChain<Non>>(nameof(Union));
 
         /// <summary>
@@ -799,7 +799,7 @@ namespace LambdicSql
         /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        [SqlSyntaxTmp]
+        [SqlSyntaxClause]
         public static ClauseChain<TSelected> Union<TSelected>(this ClauseChain<TSelected> before) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Union));
 
         /// <summary>
@@ -824,7 +824,7 @@ namespace LambdicSql
         /// INTERSECT clause.
         /// </summary>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        [SqlSyntaxTmp]
+        [SqlSyntaxClause]
         public static ClauseChain<Non> Intersect() => InvalitContext.Throw<ClauseChain<Non>>(nameof(Intersect));
 
         /// <summary>
@@ -833,7 +833,7 @@ namespace LambdicSql
         /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        [SqlSyntaxTmp]
+        [SqlSyntaxClause]
         public static ClauseChain<TSelected> Intersect<TSelected>(this ClauseChain<TSelected> before) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Intersect));
 
         /// <summary>
@@ -858,7 +858,7 @@ namespace LambdicSql
         /// EXCEPT clause.
         /// </summary>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        [SqlSyntaxTmp]
+        [SqlSyntaxClause]
         public static ClauseChain<Non> Except() => InvalitContext.Throw<ClauseChain<Non>>(nameof(Except));
 
         /// <summary>
@@ -867,7 +867,7 @@ namespace LambdicSql
         /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        [SqlSyntaxTmp]
+        [SqlSyntaxClause]
         public static ClauseChain<TSelected> Except<TSelected>(this ClauseChain<TSelected> before) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Except));
 
         /// <summary>
@@ -892,7 +892,7 @@ namespace LambdicSql
         /// MINUS clause.
         /// </summary>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        [SqlSyntaxTmp]
+        [SqlSyntaxClause]
         public static ClauseChain<Non> Minus() => InvalitContext.Throw<ClauseChain<Non>>(nameof(Minus));
 
         /// <summary>
@@ -901,7 +901,7 @@ namespace LambdicSql
         /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        [SqlSyntaxTmp]
+        [SqlSyntaxClause]
         public static ClauseChain<TSelected> Minus<TSelected>(this ClauseChain<TSelected> before) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Minus));
 
         /// <summary>
@@ -909,7 +909,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="table">Table for UPDATE.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        [SqlSyntaxTmp]
+        [SqlSyntaxClause]
         public static ClauseChain<Non> Update(object table) => InvalitContext.Throw<ClauseChain<Non>>(nameof(Update));
 
         /// <summary>
@@ -926,7 +926,7 @@ namespace LambdicSql
         /// DELETE clause.
         /// </summary>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        [SqlSyntaxTmp]
+        [SqlSyntaxClause]
         public static ClauseChain<Non> Delete() => InvalitContext.Throw<ClauseChain<Non>>(nameof(Delete));
 
         /// <summary>
@@ -937,6 +937,16 @@ namespace LambdicSql
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
         [SqlSyntaxTmp]
         public static ClauseChain<Non> InsertInto(object table, params object[] columns) => InvalitContext.Throw<ClauseChain<Non>>(nameof(InsertInto));
+
+        //TODO テスト
+        /// <summary>
+        /// INSERT INTO clause.
+        /// </summary>
+        /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
+        /// <param name="values">It is the value to be Inserted.</param>
+        /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
+        [SqlSyntaxTmp]
+        public static ClauseChain<TSelected> Values<TSelected>(params object[] values) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Values));
 
         /// <summary>
         /// INSERT INTO clause.
@@ -954,7 +964,7 @@ namespace LambdicSql
         /// <param name="target">Target text.</param>
         /// <param name="pattern">Text that represents pattern matching.</param>
         /// <returns>If target matches the specified pattern, LIKE returns TRUE.</returns>
-        [SqlSyntaxTmp]
+        [SqlSyntaxLike]
         public static bool Like(object target, object pattern) => InvalitContext.Throw<bool>(nameof(Like));
 
         /// <summary>
@@ -964,7 +974,7 @@ namespace LambdicSql
         /// <param name="min">Minimum value.</param>
         /// <param name="max">Maxmum value.</param>
         /// <returns>Returns TRUE if target is included in the range of min and max.</returns>
-        [SqlSyntaxTmp]
+        [SqlSyntaxBetween]
         public static bool Between(object target, object min, object max) => InvalitContext.Throw<bool>(nameof(Between));
 
         /// <summary>
@@ -973,7 +983,7 @@ namespace LambdicSql
         /// <param name="target">Target of IN check.</param>
         /// <param name="canditates">Canditates.</param>
         /// <returns>Returns TRUE if target is included in the canditates represented by expression.</returns>
-        [SqlSyntaxTmp]
+        [SqlSyntaxIn]
         public static bool In(object target, params object[] canditates) => InvalitContext.Throw<bool>(nameof(In));
 
         /// <summary>
@@ -982,7 +992,7 @@ namespace LambdicSql
         /// <param name="target">Target of IN check.</param>
         /// <param name="canditates">Candidates expected for target.</param>
         /// <returns>Returns TRUE if target is included in the candidate represented by expression.</returns>
-        [SqlSyntaxTmp]
+        [SqlSyntaxIn]
         public static bool In(object target, ISqlExpression canditates) => InvalitContext.Throw<bool>(nameof(In));
 
         /// <summary>
@@ -991,7 +1001,7 @@ namespace LambdicSql
         /// <param name="target">Target of IN check.</param>
         /// <param name="canditates">Table or subquery.</param>
         /// <returns>Returns TRUE if target is included in the candidate represented by expression.</returns>
-        [SqlSyntaxTmp]
+        [SqlSyntaxIn]
         public static bool In(object target, IClauseChain canditates) => InvalitContext.Throw<bool>(nameof(In));
 
         /// <summary>
@@ -1014,7 +1024,7 @@ namespace LambdicSql
         /// <typeparam name="T">Retunn type.</typeparam>
         /// <param name="sub">Sub query.</param>
         /// <returns>Sub query's selected value.</returns>
-        [SqlSyntaxTmp]
+        [SqlSyntaxAll]
         public static T All<T>(object sub) => InvalitContext.Throw<T>(nameof(All));
 
         /// <summary>
@@ -1054,21 +1064,21 @@ namespace LambdicSql
         /// It's *.
         /// </summary>
         /// <returns>*</returns>
-        [SqlSyntaxTmp]
+        [SqlSyntaxKeyword(Name = "*")]
         public static IAsterisk Asterisk() => InvalitContext.Throw<IAsterisk>(nameof(Asterisk));
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="target">target column.</param>
-        [SqlSyntaxTmp]
+        [SqlSyntaxSortedBy]
         public static ISortedBy Asc(object target) => InvalitContext.Throw<ISortedBy>(nameof(Asc));
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="target">target column.</param>
-        [SqlSyntaxTmp]
+        [SqlSyntaxSortedBy]
         public static ISortedBy Desc(object target) => InvalitContext.Throw<ISortedBy>(nameof(Desc));
 
         /// <summary>
@@ -1536,12 +1546,6 @@ namespace LambdicSql
                     return FromClause.ConvertWith(converter, methods);
                 case nameof(Keywords.Recursive):
                     return SelectClause.ConvertRecursive(converter, methods);
-                case nameof(Keywords.Asc):
-                    return LineSpace(converter.Convert(methods[0].Arguments[0]), "ASC");
-                case nameof(Keywords.Desc):
-                    return LineSpace(converter.Convert(methods[0].Arguments[0]), "DESC");
-                case nameof(Keywords.Delete):
-                    return DeleteClause.Convert(converter, methods);
                 case nameof(Keywords.InsertInto):
                 case nameof(Keywords.Values):
                     return InsertIntoClause.Convert(converter, methods);
@@ -1550,17 +1554,6 @@ namespace LambdicSql
                 case nameof(Keywords.Update):
                 case nameof(Keywords.Set):
                     return UpdateClause.Convert(converter, methods);
-                case nameof(Keywords.In):
-                    return ConditionKeyWords.ConvertIn(converter, methods);
-                case nameof(Keywords.All):
-                    if (method.Arguments.Count == 0) return method.Method.Name.ToUpper();
-                    return ConditionKeyWords.ConvertAll(converter, methods);
-                case nameof(Keywords.Distinct):
-                    return method.Method.Name.ToUpper();
-                case nameof(Keywords.Like):
-                    return ConditionKeyWords.ConvertLike(converter, methods);
-                case nameof(Keywords.Between):
-                    return ConditionKeyWords.ConvertBetween(converter, methods);
                 case nameof(Keywords.Union):
                 case nameof(Keywords.Intersect):
                 case nameof(Keywords.Except):
