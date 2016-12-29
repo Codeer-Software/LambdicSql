@@ -1,11 +1,6 @@
 ﻿using LambdicSql.Inside;
-using LambdicSql.Inside.Keywords;
 using LambdicSql.SqlBase;
 using System;
-using System.Linq.Expressions;
-using LambdicSql.SqlBase.TextParts;
-using static LambdicSql.SqlBase.TextParts.SqlTextUtils;
-using System.Linq;
 
 namespace LambdicSql
 {
@@ -953,7 +948,7 @@ namespace LambdicSql
         /// <param name="table">Table for INSERT.</param>
         /// <param name="columns">It is a column that performs INSERT.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        [SqlSyntaxTmp]
+        [SqlSyntaxInsertInto]
         public static ClauseChain<Non> InsertInto(object table, params object[] columns) => InvalitContext.Throw<ClauseChain<Non>>(nameof(InsertInto));
 
         //TODO テスト
@@ -963,7 +958,7 @@ namespace LambdicSql
         /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
         /// <param name="values">It is the value to be Inserted.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        [SqlSyntaxTmp]
+        [SqlSyntaxValues]
         public static ClauseChain<TSelected> Values<TSelected>(params object[] values) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Values));
 
         /// <summary>
@@ -973,7 +968,7 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="values">It is the value to be Inserted.</param>
         /// <returns>SQL Query. You can write SQL statements in succession, of course you can end it.</returns>
-        [SqlSyntaxTmp]
+        [SqlSyntaxValues]
         public static ClauseChain<TSelected> Values<TSelected>(this ClauseChain<TSelected> before, params object[] values) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Values));
 
         /// <summary>
@@ -1112,6 +1107,7 @@ namespace LambdicSql
         [SqlSyntaxKeyword]
         public static object RowNum() => InvalitContext.Throw<Non>(nameof(RowNum));
 
+        //TODO 異質だなー
         /// <summary>
         /// DUAL keyword.
         /// </summary>
@@ -1316,7 +1312,7 @@ namespace LambdicSql
         /// <param name="element">Part type.</param>
         /// <param name="src">The date data.</param>
         /// <returns>A part from the date data.</returns>
-        [SqlSyntaxTmp]
+        [SqlSyntaxExtract]
         public static double Extract(DateTimeElement element, DateTime src) => InvalitContext.Throw<double>(nameof(Extract));
 
         /// <summary>
@@ -1335,7 +1331,7 @@ namespace LambdicSql
         /// <param name="target"></param>
         /// <param name="destinationType">Type of destination.</param>
         /// <returns>Converted data.</returns>
-        [SqlSyntaxTmp]
+        [SqlSyntaxCast]
         public static TDst Cast<TDst>(object target, string destinationType) => InvalitContext.Throw<TDst>(nameof(Cast));
 
         /// <summary>
@@ -1549,32 +1545,5 @@ namespace LambdicSql
         [SqlSyntaxOver]
         public static T Over<T>(this T before, IRows rows) => InvalitContext.Throw<T>(nameof(Over));
         #endregion
-    }
-
-
-
-    class SqlSyntaxTmpAttribute : SqlSyntaxConverterAttribute
-    {
-        public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method)
-        {
-            var methods = new[] { method };
-            switch (method.Method.Name)
-            {
-                case nameof(Keywords.InsertInto):
-                case nameof(Keywords.Values):
-                    return InsertIntoClause.Convert(converter, methods);
-                case nameof(Keywords.Extract):
-                    {
-                        var args = method.Arguments.Select(e => converter.Convert(e)).ToArray();
-                        return FuncSpace(method.Method.Name.ToUpper(), args[0], "FROM", args[1]);
-                    }
-                case nameof(Keywords.Cast):
-                    {
-                        var args = method.Arguments.Select(e => converter.Convert(e)).ToArray();
-                        return FuncSpace("CAST", args[0], "AS", args[1].Customize(new CustomizeParameterToObject()));
-                    }
-            }
-            throw new NotSupportedException();
-        }
     }
 }

@@ -87,7 +87,6 @@
     <Compile Include="BuildedSql.cs" />
     <Compile Include="SqlExpressionExtensions.cs" />
     <Compile Include="Utils.cs" />
-    <Compile Include="Inside\Keywords\InsertIntoClause.cs" />
     <Compile Include="SqlBase\ObjectCreateInfo.cs" />
     <Compile Include="SqlBase\ObjectCreateMemberInfo.cs" />
     <Compile Include="Inside\ExpressionToObject.cs" />

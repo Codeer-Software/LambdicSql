@@ -719,4 +719,44 @@ namespace LambdicSql.SqlBase
             return v.ConcatToBack(")");
         }
     }
+
+    class SqlSyntaxInsertIntoAttribute : SqlSyntaxConverterAttribute
+    {
+        public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method)
+        {
+            var table = converter.Convert(method.Arguments[0]);
+
+            //column should not have a table name.
+            var arg = converter.Convert(method.Arguments[1]).Customize(new CustomizeColumnOnly());
+            return Func(LineSpace("INSERT INTO", table), arg);
+        }
+    }
+
+    class SqlSyntaxValuesAttribute : SqlSyntaxConverterAttribute
+    {
+        public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method)
+        {
+            var values = Func("VALUES", converter.Convert(method.Arguments[1]));
+            values.Indent = 1;
+            return values;
+        }
+    }
+
+    class SqlSyntaxExtractAttribute : SqlSyntaxConverterAttribute
+    {
+        public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method)
+        {
+            var args = method.Arguments.Select(e => converter.Convert(e)).ToArray();
+            return FuncSpace(method.Method.Name.ToUpper(), args[0], "FROM", args[1]);
+        }
+    }
+
+    class SqlSyntaxCastAttribute : SqlSyntaxConverterAttribute
+    {
+        public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method)
+        {
+            var args = method.Arguments.Select(e => converter.Convert(e)).ToArray();
+            return FuncSpace("CAST", args[0], "AS", args[1].Customize(new CustomizeParameterToObject()));
+        }
+    }
 }
