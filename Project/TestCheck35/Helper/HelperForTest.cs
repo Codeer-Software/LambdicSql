@@ -11,11 +11,15 @@ using System.Linq;
 
 namespace TestCheck35
 {
-    [SqlSyntax]
     public static class TestSynatax
     {
+        [SqlSyntaxTest]
         public static ClauseChain<object> Empty() => null;
-        static ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression[] methods) => new SingleTextElement(string.Empty);
+    }
+
+    class SqlSyntaxTestAttribute : SqlSyntaxMethodAttribute
+    {
+        public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method) => string.Empty;
     }
 
     public static class TestExtensions

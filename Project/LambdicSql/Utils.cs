@@ -11,7 +11,6 @@ namespace LambdicSql
     /// Utility.
     /// It can only be used within methods of the LambdicSql.Sql class.
     /// </summary>
-    [SqlSyntax]
     public static class Utils
     {
         /// <summary>
@@ -20,6 +19,7 @@ namespace LambdicSql
         /// <param name="text">Text.You can use the same format as System.String's Format method.</param>
         /// <param name="args">Format arguments.</param>
         /// <returns>LamblicSql's expression.</returns>
+        [SqlSyntaxToSql]
         public static object ToSql(this string text, params object[] args) => InvalitContext.Throw<object>(nameof(ToSql));
 
         /// <summary>
@@ -32,6 +32,7 @@ namespace LambdicSql
         /// <param name="text">Text.</param>
         /// <param name="args">Format arguments.</param>
         /// <returns>LamblicSql's expression.</returns>
+        [SqlSyntaxTwoWaySql]
         public static object TwoWaySql(this string text, params object[] args) => InvalitContext.Throw<object>(nameof(ToSql));
 
         /// <summary>
@@ -41,36 +42,34 @@ namespace LambdicSql
         /// <typeparam name="T">column type.</typeparam>
         /// <param name="column">column.</param>
         /// <returns>Column name only.</returns>
+        [SqlSyntaxColumnOnly]
         public static T ColumnOnly<T>(this T column) => InvalitContext.Throw<T>(nameof(ColumnOnly));
-
-        static ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression[] methods)
-        {
-            var method = methods[0];
-            switch (method.Method.Name)
-            {
-                case nameof(ToSql): return TextSql(converter, method);
-                case nameof(TwoWaySql): return TwoWaySql(converter, method);
-                case nameof(ColumnOnly): return ColumnOnly(converter, method);
-            }
-            throw new NotSupportedException();
-        }
-
-        static ExpressionElement TextSql(IExpressionConverter converter, MethodCallExpression method)
+    }
+    
+    class SqlSyntaxToSqlAttribute : SqlSyntaxMethodAttribute
+    {
+        public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method)
         {
             var text = (string)converter.ToObject(method.Arguments[0]);
             var array = method.Arguments[1] as NewArrayExpression;
             return new StringFormatText(text, array.Expressions.Select(e => converter.Convert(e)).ToArray());
         }
+    }
 
-        static ExpressionElement TwoWaySql(IExpressionConverter converter, MethodCallExpression method)
+    class SqlSyntaxTwoWaySqlAttribute : SqlSyntaxMethodAttribute
+    {
+        public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method)
         {
             var obj = converter.ToObject(method.Arguments[0]);
             var text = TowWaySqlSpec.ToStringFormat((string)obj);
             var array = method.Arguments[1] as NewArrayExpression;
             return new StringFormatText(text, array.Expressions.Select(e => converter.Convert(e)).ToArray());
         }
+    }
 
-        static ExpressionElement ColumnOnly(IExpressionConverter converter, MethodCallExpression method)
+    class SqlSyntaxColumnOnlyAttribute : SqlSyntaxMethodAttribute
+    {
+        public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method)
         {
             var col = converter.Convert(method.Arguments[0]) as DbColumnText;
             if (col == null) throw new NotSupportedException("invalid column.");

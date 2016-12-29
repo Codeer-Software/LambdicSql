@@ -187,17 +187,21 @@ namespace LambdicSql.Inside
             
             //sql syntax extension method
             var method = member.Expression as MethodCallExpression;
-            if (method != null && method.Method.DeclaringType.IsSqlSyntax())
+            if (method != null)
             {
-                var ret = method.GetConverotrMethod()(this, new[] { method });
-                //T()
-                var tbl = ret as DbTableText;
-                if (tbl != null)
+                var cnv = method.GetSqlSyntaxMethod();
+                if (cnv != null)
                 {
-                    var memberName = tbl.Info.LambdaFullName + "." + member.Member.Name;
-                    return ResolveLambdicElement(memberName);
+                    var ret = cnv.Convert(this, method);
+                    //T()
+                    var tbl = ret as DbTableText;
+                    if (tbl != null)
+                    {
+                        var memberName = tbl.Info.LambdaFullName + "." + member.Member.Name;
+                        return ResolveLambdicElement(memberName);
+                    }
+                    throw new NotSupportedException();
                 }
-                throw new NotSupportedException();
             }
 
             //db element.
@@ -226,22 +230,17 @@ namespace LambdicSql.Inside
             return new DecodedInfo(null, name);
         }
 
+        //TODO
         DecodedInfo Convert(MethodCallExpression method)
         {
             //not sql syntax.
-            if (!method.Method.DeclaringType.IsSqlSyntax()) return ResolveExpressionObject(method);
+            if (method.GetSqlSyntaxMethod() == null) return ResolveExpressionObject(method);
 
             var ret = new List<ExpressionElement>();
             foreach (var c in GetMethodChains(method))
             {
-                //TODO @@@ GetConvertMethodEx();
-
-
-
-                var chain = new[] { c };
-                ret.Add(chain[0].GetConverotrMethod()(this, chain));
+                ret.Add(c.GetSqlSyntaxMethod().Convert(this, c));
             }
-
             //TODO ちょっと嫌すぎる。括弧を付けない方法を何か確立せねば
             if (ret.Count == 1 && typeof(Keywords.DisableBracketsText).IsAssignableFrom(ret[0].GetType()))
             {
@@ -478,7 +477,7 @@ namespace LambdicSql.Inside
         {
             var chains = new List<MethodCallExpression>();
             var curent = end;
-            while (curent != null && curent.Method.DeclaringType.IsSqlSyntax())
+            while (curent != null && curent.GetSqlSyntaxMethod() != null)
             {
                 chains.Add(curent);
                 

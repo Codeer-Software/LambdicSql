@@ -191,7 +191,6 @@ namespace LambdicSql
     /// <summary>
     /// SYSIBM keyword.
     /// </summary>
-    [SqlSyntax]
     public class SysIBM
     {
         internal SysIBM() { }
@@ -199,9 +198,13 @@ namespace LambdicSql
         /// <summary>
         /// SYSDUMMY1 keyword.
         /// </summary>
+        [SqlSyntaxSysIBM]
         public static object SysDummy1() => InvalitContext.Throw<long>(nameof(SysDummy1));
-
-        static ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression[] methods)
-            => "SYSIBM." + methods[0].Method.Name.ToUpper();
+    }
+    
+    class SqlSyntaxSysIBMAttribute : SqlSyntaxMethodAttribute
+    {
+        public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method) 
+            => "SYSIBM." + method.Method.Name.ToUpper();
     }
 }
