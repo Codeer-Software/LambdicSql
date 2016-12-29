@@ -46,7 +46,7 @@ namespace LambdicSql
         public static T ColumnOnly<T>(this T column) => InvalitContext.Throw<T>(nameof(ColumnOnly));
     }
     
-    class SqlSyntaxToSqlAttribute : SqlSyntaxAttribute
+    class SqlSyntaxToSqlAttribute : SqlSyntaxConverterAttribute
     {
         public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method)
         {
@@ -56,7 +56,7 @@ namespace LambdicSql
         }
     }
 
-    class SqlSyntaxTwoWaySqlAttribute : SqlSyntaxAttribute
+    class SqlSyntaxTwoWaySqlAttribute : SqlSyntaxConverterAttribute
     {
         public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method)
         {
@@ -67,7 +67,7 @@ namespace LambdicSql
         }
     }
 
-    class SqlSyntaxColumnOnlyAttribute : SqlSyntaxAttribute
+    class SqlSyntaxColumnOnlyAttribute : SqlSyntaxConverterAttribute
     {
         public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method)
         {

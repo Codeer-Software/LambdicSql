@@ -65,7 +65,7 @@ namespace LambdicSql
     /// <summary>
     /// Element of DateTime.
     /// </summary>
-    [SqlSyntaxName]
+    [SqlSyntaxKeyword]
     public enum DateTimeElement
     {
         /// <summary>
@@ -154,15 +154,6 @@ namespace LambdicSql
         public Assign(object rhs, object lhs) { InvalitContext.Throw("new " + nameof(Assign)); }
     }
 
-    class SqlSyntaxAssignAttribute : SqlSyntaxAttribute
-    {
-        public override ExpressionElement Convert(IExpressionConverter converter, NewExpression exp)
-        {
-            ExpressionElement arg1 = converter.Convert(exp.Arguments[0]).Customize(new CustomizeColumnOnly());
-            return new HText(arg1, "=", converter.Convert(exp.Arguments[1])) { Separator = " " };
-        }
-    }
-
     /// <summary>
     /// Condition building helper.
     /// condition is used if enable is valid.
@@ -185,15 +176,6 @@ namespace LambdicSql
         public static implicit operator bool(Condition src) => InvalitContext.Throw<bool>("implicit operator bool(Condition src)");
     }
 
-    class SqlSyntaxConditionAttribute : SqlSyntaxAttribute
-    {
-        public override ExpressionElement Convert(IExpressionConverter converter, NewExpression exp)
-        {
-            var obj = converter.ToObject(exp.Arguments[0]);
-            return (bool)obj ? converter.Convert(exp.Arguments[1]) : (ExpressionElement)string.Empty;
-        }
-    }
-
     /// <summary>
     /// SYSIBM keyword.
     /// </summary>
@@ -204,13 +186,7 @@ namespace LambdicSql
         /// <summary>
         /// SYSDUMMY1 keyword.
         /// </summary>
-        [SqlSyntaxSysIBM]
+        [SqlSyntaxKeyword(Name = "SYSIBM.SYSDUMMY1")]
         public static object SysDummy1 => InvalitContext.Throw<long>(nameof(SysDummy1));
-    }
-
-    class SqlSyntaxSysIBMAttribute : SqlSyntaxAttribute
-    {
-        public override ExpressionElement Convert(IExpressionConverter converter, MemberExpression member) 
-            => "SYSIBM." + member.Member.Name.ToUpper();
     }
 }

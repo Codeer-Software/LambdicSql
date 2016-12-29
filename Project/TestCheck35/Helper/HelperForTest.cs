@@ -17,7 +17,7 @@ namespace TestCheck35
         public static ClauseChain<object> Empty() => null;
     }
 
-    class SqlSyntaxTestAttribute : SqlSyntaxAttribute
+    class SqlSyntaxTestAttribute : SqlSyntaxConverterAttribute
     {
         public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method) => string.Empty;
     }

@@ -91,7 +91,6 @@
     <Compile Include="Utils.cs" />
     <Compile Include="Inside\Window.cs" />
     <Compile Include="Inside\Keywords\FromClause.cs" />
-    <Compile Include="Inside\Keywords\HavingClause.cs" />
     <Compile Include="Inside\Keywords\InsertIntoClause.cs" />
     <Compile Include="Inside\Keywords\OrderByClause.cs" />
     <Compile Include="SqlBase\ObjectCreateInfo.cs" />
@@ -113,7 +112,6 @@
     <Compile Include="Inside\Keywords\DeleteClause.cs" />
     <Compile Include="Inside\Keywords\SelectClause.cs" />
     <Compile Include="Inside\Keywords\UpdateClause.cs" />
-    <Compile Include="Inside\Keywords\WhereClause.cs" />
     <Compile Include="Inside\Keywords\ConditionKeyWords.cs" />
   </ItemGroup>
   <ItemGroup>

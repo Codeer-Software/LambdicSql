@@ -50,6 +50,8 @@ namespace Test
                 From(db.tbl_remuneration).
                 Join(db.tbl_staff, db.tbl_staff.T().id == db.tbl_remuneration.T().staff_id));
 
+            query.Gen(_connection);
+
             var datas = query.SqlQuery(new ModelLambdicSqlTestDB()).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
