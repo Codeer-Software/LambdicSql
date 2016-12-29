@@ -115,7 +115,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Inside\DialectResolver.cs" />
     <Compile Include="Sql.cs" />
-    <Compile Include="Inside\Keywords\CaseClause.cs" />
     <Compile Include="Inside\Keywords\DeleteClause.cs" />
     <Compile Include="Inside\Keywords\SelectClause.cs" />
     <Compile Include="Inside\Keywords\UpdateClause.cs" />

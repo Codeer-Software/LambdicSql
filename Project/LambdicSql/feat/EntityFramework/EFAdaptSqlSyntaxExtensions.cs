@@ -24,7 +24,7 @@ namespace LambdicSql.feat.EntityFramework
         public static TEntity T<TEntity>(this IQueryable<TEntity> queryable) => InvalitContext.Throw<TEntity>(nameof(T));
     }
 
-    class SqlSyntaxTAttribute : SqlSyntaxMethodAttribute
+    class SqlSyntaxTAttribute : SqlSyntaxAttribute
     {
         public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method)
             => converter.Convert(method.Arguments[0]);

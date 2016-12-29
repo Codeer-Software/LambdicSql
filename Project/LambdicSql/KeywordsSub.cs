@@ -65,7 +65,7 @@ namespace LambdicSql
     /// <summary>
     /// Element of DateTime.
     /// </summary>
-    [SqlSyntaxToString]
+    [SqlSyntaxName]
     public enum DateTimeElement
     {
         /// <summary>
@@ -154,7 +154,7 @@ namespace LambdicSql
         public Assign(object rhs, object lhs) { InvalitContext.Throw("new " + nameof(Assign)); }
     }
 
-    class SqlSyntaxAssignAttribute : SqlSyntaxNewAttribute
+    class SqlSyntaxAssignAttribute : SqlSyntaxAttribute
     {
         public override ExpressionElement Convert(IExpressionConverter converter, NewExpression exp)
         {
@@ -185,7 +185,7 @@ namespace LambdicSql
         public static implicit operator bool(Condition src) => InvalitContext.Throw<bool>("implicit operator bool(Condition src)");
     }
 
-    class SqlSyntaxConditionAttribute : SqlSyntaxNewAttribute
+    class SqlSyntaxConditionAttribute : SqlSyntaxAttribute
     {
         public override ExpressionElement Convert(IExpressionConverter converter, NewExpression exp)
         {
@@ -208,7 +208,7 @@ namespace LambdicSql
         public static object SysDummy1 => InvalitContext.Throw<long>(nameof(SysDummy1));
     }
 
-    class SqlSyntaxSysIBMAttribute : SqlSyntaxMemberAttribute
+    class SqlSyntaxSysIBMAttribute : SqlSyntaxAttribute
     {
         public override ExpressionElement Convert(IExpressionConverter converter, MemberExpression member) 
             => "SYSIBM." + member.Member.Name.ToUpper();
