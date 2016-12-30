@@ -82,7 +82,7 @@ namespace TestCheck35
             {
                 using (var com = cnn.CreateCommand())
                 {
-                    com.CommandText = info.SqlText;
+                    com.CommandText = info.Text;
                     com.Connection = cnn;
                     foreach (var obj in info.DbParams.Select(e => CreateParameter(com, e.Key, e.Value)).ToArray())
                     {
@@ -120,7 +120,7 @@ namespace TestCheck35
             {
                 using (var com = cnn.CreateCommand())
                 {
-                    com.CommandText = info.SqlText;
+                    com.CommandText = info.Text;
                     com.Connection = cnn;
                     foreach (var obj in info.DbParams.Select(e => CreateParameter(com, e.Key, e.Value)).ToArray())
                     {

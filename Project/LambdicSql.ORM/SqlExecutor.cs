@@ -16,7 +16,7 @@ namespace LambdicSql.ORM
         {
             _connection = connection;
             _info = info;
-            SqlOption.Log?.Invoke(_info.SqlText);
+            SqlOption.Log?.Invoke(_info.Text);
         }
 
         public IEnumerable<TSelect> Read()
@@ -34,7 +34,7 @@ namespace LambdicSql.ORM
 
                 using (var com = _connection.CreateCommand())
                 {
-                    com.CommandText = _info.SqlText;
+                    com.CommandText = _info.Text;
                     com.Connection = _connection;
                     foreach (var obj in _info.DbParams.Select(e => CreateParameter(com, e.Key, e.Value.Value)))
                     {
@@ -74,7 +74,7 @@ namespace LambdicSql.ORM
             {
                 using (var com = _connection.CreateCommand())
                 {
-                    com.CommandText = _info.SqlText;
+                    com.CommandText = _info.Text;
                     com.Connection = _connection;
                     foreach (var obj in _info.DbParams.Select(e => CreateParameter(com, e.Key, e.Value.Value)))
                     {

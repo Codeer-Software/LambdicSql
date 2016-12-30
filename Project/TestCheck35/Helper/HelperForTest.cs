@@ -30,7 +30,7 @@ namespace TestCheck35
         public static void Gen(this ISqlExpression query, IDbConnection con)
         {
             Debug.Print("AssertEx.AreEqual(query, _connection," + 
-                Environment.NewLine + "@\"" + query.Build(con.GetType()).SqlText + "\");");
+                Environment.NewLine + "@\"" + query.Build(con.GetType()).Text + "\");");
         }
 
         public static string GetStringAddExp(this IDbConnection con)
@@ -73,7 +73,7 @@ namespace TestCheck35
                 expected = expected.Replace("@", ":");
                 args = args.ToDictionary(e => e.Key.Replace("@", ":"), e => e.Value);
             }
-            Assert.AreEqual(expected, info.SqlText);
+            Assert.AreEqual(expected, info.Text);
             
             var dbParams = info.DbParams;
             Assert.AreEqual(args.Count, dbParams.Count);

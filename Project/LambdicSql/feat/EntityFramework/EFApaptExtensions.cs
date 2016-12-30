@@ -44,7 +44,7 @@ namespace LambdicSql.feat.EntityFramework
 
                 try
                 {
-                    return EFWrapper<T>.SqlQuery(dbContext, info.SqlText, args);
+                    return EFWrapper<T>.SqlQuery(dbContext, info.Text, args);
                 }
                 catch (Exception e)
                 {
@@ -72,7 +72,7 @@ namespace LambdicSql.feat.EntityFramework
 
             try
             {
-                return EFWrapper.ExecuteSqlCommand(dbContext, info.SqlText, args);
+                return EFWrapper.ExecuteSqlCommand(dbContext, info.Text, args);
             }
             catch (Exception e)
             {

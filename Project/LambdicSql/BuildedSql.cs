@@ -25,7 +25,7 @@ namespace LambdicSql
         /// <summary>
         /// Sql text.
         /// </summary>
-        public string SqlText { get; }
+        public string Text { get; }
 
         /// <summary>
         /// Parameters.
@@ -42,7 +42,7 @@ namespace LambdicSql
         public BuildedSql(DbInfo dbInfo, string sqlText, ObjectCreateInfo selectClauseInfo, Dictionary<string, DbParam> dbParams)
         {
             DbInfo = dbInfo;
-            SqlText = sqlText;
+            Text = sqlText;
             SelectClauseInfo = selectClauseInfo;
             _dbParams = dbParams;
         }
@@ -54,7 +54,7 @@ namespace LambdicSql
         public BuildedSql(BuildedSql src)
         {
             DbInfo = src.DbInfo;
-            SqlText = src.SqlText;
+            Text = src.Text;
             SelectClauseInfo = src.SelectClauseInfo;
             _dbParams = src._dbParams;
         }
