@@ -10,10 +10,10 @@ namespace LambdicSql.Inside
     static class SqlSyntaxHelper
     {
         static Dictionary<MetaId, bool> _isExtension = new Dictionary<MetaId, bool>();
-        static Dictionary<MetaId, SqlSyntaxConverterAttribute> _sqlSyntaxMethodAttribute = new Dictionary<MetaId, SqlSyntaxConverterAttribute>();
-        static Dictionary<MetaId, SqlSyntaxConverterAttribute> _sqlSyntaxMemberAttribute = new Dictionary<MetaId, SqlSyntaxConverterAttribute>();
-        static Dictionary<MetaId, SqlSyntaxConverterAttribute> _sqlSyntaxNewAttribute = new Dictionary<MetaId, SqlSyntaxConverterAttribute>();
-        static Dictionary<Type, SqlSyntaxConverterAttribute> _sqlSyntaxObjectAttribute = new Dictionary<Type, SqlSyntaxConverterAttribute>();
+        static Dictionary<MetaId, SqlSyntaxMethodAttribute> _sqlSyntaxMethodAttribute = new Dictionary<MetaId, SqlSyntaxMethodAttribute>();
+        static Dictionary<MetaId, SqlSyntaxMemberAttribute> _sqlSyntaxMemberAttribute = new Dictionary<MetaId, SqlSyntaxMemberAttribute>();
+        static Dictionary<MetaId, SqlSyntaxNewAttribute> _sqlSyntaxNewAttribute = new Dictionary<MetaId, SqlSyntaxNewAttribute>();
+        static Dictionary<Type, SqlSyntaxObjectAttribute> _sqlSyntaxObjectAttribute = new Dictionary<Type, SqlSyntaxObjectAttribute>();
         
         internal static bool IsExtension(this MethodInfo methodInfo)
         {
@@ -30,40 +30,40 @@ namespace LambdicSql.Inside
             }
         }
 
-        internal static SqlSyntaxConverterAttribute GetSqlSyntaxObject(this Type type)
+        internal static SqlSyntaxObjectAttribute GetSqlSyntaxObject(this Type type)
         {
             lock (_sqlSyntaxObjectAttribute)
             {
-                SqlSyntaxConverterAttribute attr;
+                SqlSyntaxObjectAttribute attr;
                 if (_sqlSyntaxObjectAttribute.TryGetValue(type, out attr)) return attr;
 
-                var attrs = type.GetCustomAttributes(typeof(SqlSyntaxConverterAttribute), true);
-                if (attrs.Length == 1) attr = attrs[0] as SqlSyntaxConverterAttribute;
+                var attrs = type.GetCustomAttributes(typeof(SqlSyntaxObjectAttribute), true);
+                if (attrs.Length == 1) attr = attrs[0] as SqlSyntaxObjectAttribute;
                 else attr = null;
                 _sqlSyntaxObjectAttribute.Add(type, attr);
                 return attr;
             }
         }
 
-        internal static SqlSyntaxConverterAttribute GetSqlSyntaxMethod(this MethodCallExpression exp)
+        internal static SqlSyntaxMethodAttribute GetSqlSyntaxMethod(this MethodCallExpression exp)
             => GetSqlSyntaxMember(exp.Method, _sqlSyntaxMethodAttribute);
         
-        internal static SqlSyntaxConverterAttribute GetSqlSyntaxMember(this MemberExpression exp)
+        internal static SqlSyntaxMemberAttribute GetSqlSyntaxMember(this MemberExpression exp)
             => GetSqlSyntaxMember(exp.Member, _sqlSyntaxMemberAttribute);
 
-        internal static SqlSyntaxConverterAttribute GetSqlSyntaxNew(this NewExpression exp)
+        internal static SqlSyntaxNewAttribute GetSqlSyntaxNew(this NewExpression exp)
             => GetSqlSyntaxMember(exp.Constructor, _sqlSyntaxNewAttribute);
 
-        static SqlSyntaxConverterAttribute GetSqlSyntaxMember(MemberInfo member, Dictionary<MetaId, SqlSyntaxConverterAttribute> cache)
+        static T GetSqlSyntaxMember<T>(MemberInfo member, Dictionary<MetaId, T> cache) where T : class
         {
             var id = new MetaId(member);
             lock (cache)
             {
-                SqlSyntaxConverterAttribute attr;
+                T attr;
                 if (cache.TryGetValue(id, out attr)) return attr;
 
-                var attrs = member.GetCustomAttributes(typeof(SqlSyntaxConverterAttribute), true);
-                if (attrs.Length == 1) attr = attrs[0] as SqlSyntaxConverterAttribute;
+                var attrs = member.GetCustomAttributes(typeof(T), true);
+                if (attrs.Length == 1) attr = attrs[0] as T;
                 else attr = null;
                 cache.Add(id, attr);
                 return attr;

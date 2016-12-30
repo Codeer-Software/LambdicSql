@@ -11,7 +11,8 @@ namespace LambdicSql.SqlBase
     /// <summary>
     /// SQL syntax attribute.
     /// </summary>
-    public abstract class SqlSyntaxConverterAttribute : Attribute
+    [AttributeUsage(AttributeTargets.Method)]
+    public abstract class SqlSyntaxMethodAttribute : Attribute
     {
         /// <summary>
         /// 
@@ -23,7 +24,14 @@ namespace LambdicSql.SqlBase
         {
             throw new NotImplementedException();
         }
+    }
 
+    /// <summary>
+    /// SQL syntax attribute.
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Constructor)]
+    public abstract class SqlSyntaxNewAttribute : Attribute
+    {
         /// <summary>
         /// 
         /// </summary>
@@ -34,7 +42,14 @@ namespace LambdicSql.SqlBase
         {
             throw new NotImplementedException();
         }
+    }
 
+    /// <summary>
+    /// SQL syntax attribute.
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
+    public abstract class SqlSyntaxMemberAttribute : Attribute
+    {
         /// <summary>
         /// 
         /// </summary>
@@ -45,7 +60,13 @@ namespace LambdicSql.SqlBase
         {
             throw new NotImplementedException();
         }
+    }
 
+    /// <summary>
+    /// SQL syntax attribute.
+    /// </summary>
+    public abstract class SqlSyntaxObjectAttribute : Attribute
+    {
         /// <summary>
         /// 
         /// </summary>
@@ -60,7 +81,7 @@ namespace LambdicSql.SqlBase
     /// <summary>
     /// 
     /// </summary>
-    public class SqlSyntaxFuncAttribute : SqlSyntaxConverterAttribute
+    public class SqlSyntaxFuncAttribute : SqlSyntaxMethodAttribute
     {
         /// <summary>
         /// 
@@ -92,7 +113,7 @@ namespace LambdicSql.SqlBase
     /// <summary>
     /// 
     /// </summary>
-    public class SqlSyntaxTopAttribute : SqlSyntaxConverterAttribute
+    public class SqlSyntaxTopAttribute : SqlSyntaxMethodAttribute
     {
         /// <summary>
         /// 
@@ -110,7 +131,7 @@ namespace LambdicSql.SqlBase
     /// <summary>
     /// 
     /// </summary>
-    public class SqlSyntaxClauseAttribute : SqlSyntaxConverterAttribute
+    public class SqlSyntaxClauseAttribute : SqlSyntaxMethodAttribute
     {
         /// <summary>
         /// 
@@ -153,7 +174,7 @@ namespace LambdicSql.SqlBase
         }
     }
 
-    class SqlSyntaxLikeAttribute : SqlSyntaxConverterAttribute
+    class SqlSyntaxLikeAttribute : SqlSyntaxMethodAttribute
     {
         public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method)
         {
@@ -162,7 +183,7 @@ namespace LambdicSql.SqlBase
         }
     }
 
-    class SqlSyntaxBetweenAttribute : SqlSyntaxConverterAttribute
+    class SqlSyntaxBetweenAttribute : SqlSyntaxMethodAttribute
     {
         public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method)
         {
@@ -171,7 +192,7 @@ namespace LambdicSql.SqlBase
         }
     }
 
-    class SqlSyntaxInAttribute : SqlSyntaxConverterAttribute
+    class SqlSyntaxInAttribute : SqlSyntaxMethodAttribute
     {
         public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method)
         {
@@ -180,7 +201,7 @@ namespace LambdicSql.SqlBase
         }
     }
 
-    class SqlSyntaxAllAttribute : SqlSyntaxConverterAttribute
+    class SqlSyntaxAllAttribute : SqlSyntaxMethodAttribute
     {
         public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method)
         {
@@ -216,12 +237,7 @@ namespace LambdicSql.SqlBase
         }
     }
 
-
-
-
-
-
-    class SqlSyntaxAssignAttribute : SqlSyntaxConverterAttribute
+    class SqlSyntaxAssignAttribute : SqlSyntaxNewAttribute
     {
         public override ExpressionElement Convert(IExpressionConverter converter, NewExpression exp)
         {
@@ -230,7 +246,7 @@ namespace LambdicSql.SqlBase
         }
     }
 
-    class SqlSyntaxConditionAttribute : SqlSyntaxConverterAttribute
+    class SqlSyntaxConditionAttribute : SqlSyntaxNewAttribute
     {
         public override ExpressionElement Convert(IExpressionConverter converter, NewExpression exp)
         {
@@ -242,7 +258,7 @@ namespace LambdicSql.SqlBase
     /// <summary>
     /// 
     /// </summary>
-    public class SqlSyntaxKeywordAttribute : SqlSyntaxConverterAttribute
+    public class SqlSyntaxKeywordMethodAttribute : SqlSyntaxMethodAttribute
     {
         /// <summary>
         /// 
@@ -257,15 +273,17 @@ namespace LambdicSql.SqlBase
         /// <returns></returns>
         public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method)
             => string.IsNullOrEmpty(Name) ? method.Method.Name.ToUpper() : Name;
+    }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    public class SqlSyntaxKeywordMemberAttribute : SqlSyntaxMemberAttribute
+    {
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public override ExpressionElement Convert(object obj) 
-            => obj == null ? string.Empty : 
-               string.IsNullOrEmpty(Name) ? obj.ToString().ToUpper() : Name;
+        public string Name { get; set; }
 
         /// <summary>
         /// 
@@ -277,7 +295,27 @@ namespace LambdicSql.SqlBase
             => string.IsNullOrEmpty(Name) ? member.Member.Name.ToUpper() : Name;
     }
 
-    class SqlSyntaxCurrentDateTimeAttribute : SqlSyntaxConverterAttribute
+    /// <summary>
+    /// 
+    /// </summary>
+    public class SqlSyntaxKeywordObjectAttribute : SqlSyntaxObjectAttribute
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override ExpressionElement Convert(object obj)
+            => obj == null ? string.Empty :
+               string.IsNullOrEmpty(Name) ? obj.ToString().ToUpper() : Name;
+    }
+
+    class SqlSyntaxCurrentDateTimeAttribute : SqlSyntaxMethodAttribute
     {
         class CurrentDateTimeExpressionElement : ExpressionElement
         {
@@ -323,7 +361,7 @@ namespace LambdicSql.SqlBase
             => new CurrentDateTimeExpressionElement(Name);
     }
 
-    class SqlSyntaxConditionClauseAttribute : SqlSyntaxConverterAttribute
+    class SqlSyntaxConditionClauseAttribute : SqlSyntaxMethodAttribute
     {
         public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method)
         {
@@ -334,7 +372,7 @@ namespace LambdicSql.SqlBase
     }
 
 
-    class SqlSyntaxSelectAttribute : SqlSyntaxConverterAttribute
+    class SqlSyntaxSelectAttribute : SqlSyntaxMethodAttribute
     {
         public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method)
         {
@@ -381,7 +419,7 @@ namespace LambdicSql.SqlBase
         }
         
     }
-    class SqlSyntaxFromAttribute : SqlSyntaxConverterAttribute
+    class SqlSyntaxFromAttribute : SqlSyntaxMethodAttribute
     {
         public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method)
         {
@@ -474,7 +512,7 @@ namespace LambdicSql.SqlBase
         }
     }
 
-    class SqlSyntaxJoinAttribute : SqlSyntaxConverterAttribute
+    class SqlSyntaxJoinAttribute : SqlSyntaxMethodAttribute
     {
         public string Name { get; set; }
         public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method)
@@ -495,13 +533,13 @@ namespace LambdicSql.SqlBase
         }
     }
 
-    class SqlSyntaxSortedByAttribute : SqlSyntaxConverterAttribute
+    class SqlSyntaxSortedByAttribute : SqlSyntaxMethodAttribute
     {
         public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method)
             => LineSpace(converter.Convert(method.Arguments[0]), method.Method.Name.ToUpper());
     }
 
-    class SqlSyntaxSetAttribute : SqlSyntaxConverterAttribute
+    class SqlSyntaxSetAttribute : SqlSyntaxMethodAttribute
     {
         public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method)
         {
@@ -513,7 +551,7 @@ namespace LambdicSql.SqlBase
         }
     }
 
-    class SqlSyntaxOrderByAttribute : SqlSyntaxConverterAttribute
+    class SqlSyntaxOrderByAttribute : SqlSyntaxMethodAttribute
     {
         public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method)
         {
@@ -529,7 +567,7 @@ namespace LambdicSql.SqlBase
         }
     }
 
-    class SqlSyntaxWithAttribute : SqlSyntaxConverterAttribute
+    class SqlSyntaxWithAttribute : SqlSyntaxMethodAttribute
     {
         public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method)
         {
@@ -628,7 +666,7 @@ namespace LambdicSql.SqlBase
                 => customizer.Custom(this);
         }
     }
-    class SqlSyntaxRecursiveAttribute : SqlSyntaxConverterAttribute
+    class SqlSyntaxRecursiveAttribute : SqlSyntaxMethodAttribute
     {
         public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method)
         {
@@ -668,7 +706,7 @@ namespace LambdicSql.SqlBase
         }
     }
 
-    class SqlSyntaxRowsAttribute : SqlSyntaxConverterAttribute
+    class SqlSyntaxRowsAttribute : SqlSyntaxMethodAttribute
     {
         public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method)
         {
@@ -687,7 +725,7 @@ namespace LambdicSql.SqlBase
         }
     }
 
-    class SqlSyntaxPartitionByAttribute : SqlSyntaxConverterAttribute
+    class SqlSyntaxPartitionByAttribute : SqlSyntaxMethodAttribute
     {
         public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method)
         {
@@ -706,7 +744,7 @@ namespace LambdicSql.SqlBase
         }
     }
 
-    class SqlSyntaxOverAttribute : SqlSyntaxConverterAttribute
+    class SqlSyntaxOverAttribute : SqlSyntaxMethodAttribute
     {
         public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method)
         {
@@ -720,7 +758,7 @@ namespace LambdicSql.SqlBase
         }
     }
 
-    class SqlSyntaxInsertIntoAttribute : SqlSyntaxConverterAttribute
+    class SqlSyntaxInsertIntoAttribute : SqlSyntaxMethodAttribute
     {
         public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method)
         {
@@ -732,7 +770,7 @@ namespace LambdicSql.SqlBase
         }
     }
 
-    class SqlSyntaxValuesAttribute : SqlSyntaxConverterAttribute
+    class SqlSyntaxValuesAttribute : SqlSyntaxMethodAttribute
     {
         public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method)
         {
@@ -742,7 +780,7 @@ namespace LambdicSql.SqlBase
         }
     }
 
-    class SqlSyntaxExtractAttribute : SqlSyntaxConverterAttribute
+    class SqlSyntaxExtractAttribute : SqlSyntaxMethodAttribute
     {
         public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method)
         {
@@ -751,7 +789,7 @@ namespace LambdicSql.SqlBase
         }
     }
 
-    class SqlSyntaxCastAttribute : SqlSyntaxConverterAttribute
+    class SqlSyntaxCastAttribute : SqlSyntaxMethodAttribute
     {
         public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method)
         {

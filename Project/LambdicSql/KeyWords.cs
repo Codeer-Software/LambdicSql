@@ -1021,14 +1021,14 @@ namespace LambdicSql
         /// ALL Keyword
         /// </summary>
         /// <returns></returns>
-        [SqlSyntaxKeyword]
+        [SqlSyntaxKeywordMethod]
         public static IAggregatePredicateAll All() => null;
 
         /// <summary>
         /// Distinct Keyword
         /// </summary>
         /// <returns></returns>
-        [SqlSyntaxKeyword]
+        [SqlSyntaxKeywordMethod]
         public static IAggregatePredicate Distinct() => InvalitContext.Throw<IAggregatePredicate>(nameof(All));
 
         /// <summary>
@@ -1062,7 +1062,7 @@ namespace LambdicSql
         /// <typeparam name="TSelected">Type of selected.</typeparam>
         /// <param name="selected">The type you want to obtain with the SELECT clause. Usually you specify a table element.</param>
         /// <returns>*</returns>
-        [SqlSyntaxKeyword(Name = "*")]
+        [SqlSyntaxKeywordMethod(Name = "*")]
         public static IAsterisk<TSelected> Asterisk<TSelected>(TSelected selected) => InvalitContext.Throw<IAsterisk<TSelected>>(nameof(Asterisk));
 
         /// <summary>
@@ -1070,14 +1070,14 @@ namespace LambdicSql
         /// </summary>
         /// <typeparam name="TSelected">Type of selected.</typeparam>
         /// <returns>*</returns>
-        [SqlSyntaxKeyword(Name = "*")]
+        [SqlSyntaxKeywordMethod(Name = "*")]
         public static IAsterisk<TSelected> Asterisk<TSelected>() => InvalitContext.Throw<IAsterisk<TSelected>>(nameof(Asterisk));
 
         /// <summary>
         /// It's *.
         /// </summary>
         /// <returns>*</returns>
-        [SqlSyntaxKeyword(Name = "*")]
+        [SqlSyntaxKeywordMethod(Name = "*")]
         public static IAsterisk Asterisk() => InvalitContext.Throw<IAsterisk>(nameof(Asterisk));
 
         /// <summary>
@@ -1104,7 +1104,7 @@ namespace LambdicSql
         /// <summary>
         /// ROWNUM BETWEEN keyword.
         /// </summary>
-        [SqlSyntaxKeyword]
+        [SqlSyntaxKeywordMethod]
         public static object RowNum() => InvalitContext.Throw<Non>(nameof(RowNum));
 
         /// <summary>
@@ -1131,7 +1131,7 @@ namespace LambdicSql
         /// <summary>
         /// DUAL keyword.
         /// </summary>
-        [SqlSyntaxKeyword]
+        [SqlSyntaxKeywordMember]
         public static object Dual => InvalitContext.Throw<Non>(nameof(Dual));
         #endregion
 
