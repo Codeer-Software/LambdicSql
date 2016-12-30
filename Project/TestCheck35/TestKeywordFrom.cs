@@ -38,7 +38,7 @@ namespace TestCheck35
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_From1()
         {
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData
                 {
                     PaymentDate = db.tbl_remuneration.payment_date,
@@ -60,11 +60,11 @@ FROM tbl_remuneration");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_From2()
         {
-            var sub = Sql<DB>.Create(db =>
+            var sub = Sql<DB>.Of(db =>
                 Select(Asterisk(db.tbl_remuneration)).
                 From(db.tbl_remuneration));
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData
                 {
                     PaymentDate = sub.Body.payment_date,
@@ -87,11 +87,11 @@ FROM
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_From2_2()
         {
-            var sub = Sql<DB>.Create(db =>
+            var sub = Sql<DB>.Of(db =>
                 Select(Asterisk(db.tbl_remuneration)).
                 From(db.tbl_remuneration));
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData
                 {
                     PaymentDate = sub.Body.payment_date,
@@ -119,7 +119,7 @@ FROM
             if (name == "NpgsqlConnection") return;
             if (name == "MySqlConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(Asterisk(db.tbl_remuneration)).
                 From(
                     Select(Asterisk(db.tbl_remuneration)).
@@ -138,7 +138,7 @@ FROM
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_From4()
         {
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData
                 {
                     Name = db.tbl_staff.name,
@@ -162,9 +162,9 @@ WHERE (tbl_remuneration.staff_id) = (tbl_staff.id)");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_From5()
         {
-            var expRemuneration = Sql<DB>.Create(db => db.tbl_remuneration);
-            var expStaff = Sql<DB>.Create(db => db.tbl_staff);
-            var query = Sql<DB>.Create(db =>
+            var expRemuneration = Sql<DB>.Of(db => db.tbl_remuneration);
+            var expStaff = Sql<DB>.Of(db => db.tbl_staff);
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData
                 {
                     Name = expStaff.Body.name,
@@ -188,7 +188,7 @@ WHERE (expRemuneration.staff_id) = (expStaff.id)");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Join1()
         {
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData
                 {
                     PaymentDate = db.tbl_remuneration.payment_date,
@@ -210,9 +210,9 @@ FROM tbl_remuneration
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Join2()
         {
-            var expStaff = Sql<DB>.Create(db => db.tbl_staff);
-            var exp2 = Sql<DB>.Create(db => db.tbl_remuneration.staff_id == expStaff.Body.id);
-            var query = Sql<DB>.Create(db =>
+            var expStaff = Sql<DB>.Of(db => db.tbl_staff);
+            var exp2 = Sql<DB>.Of(db => db.tbl_remuneration.staff_id == expStaff.Body.id);
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData
                 {
                     PaymentDate = db.tbl_remuneration.payment_date,
@@ -234,7 +234,7 @@ FROM tbl_remuneration
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_LeftJoin1()
         {
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData
                 {
                     PaymentDate = db.tbl_remuneration.payment_date,
@@ -256,9 +256,9 @@ FROM tbl_remuneration
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_LeftJoin2()
         {
-            var expStaff = Sql<DB>.Create(db => db.tbl_staff);
-            var exp2 = Sql<DB>.Create(db => db.tbl_remuneration.staff_id == expStaff.Body.id);
-            var query = Sql<DB>.Create(db =>
+            var expStaff = Sql<DB>.Of(db => db.tbl_staff);
+            var exp2 = Sql<DB>.Of(db => db.tbl_remuneration.staff_id == expStaff.Body.id);
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData
                 {
                     PaymentDate = db.tbl_remuneration.payment_date,
@@ -282,7 +282,7 @@ FROM tbl_remuneration
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData
                 {
                     PaymentDate = db.tbl_remuneration.payment_date,
@@ -306,9 +306,9 @@ FROM tbl_remuneration
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
 
-            var expStaff = Sql<DB>.Create(db => db.tbl_staff);
-            var exp2 = Sql<DB>.Create(db => db.tbl_remuneration.staff_id == expStaff.Body.id);
-            var query = Sql<DB>.Create(db =>
+            var expStaff = Sql<DB>.Of(db => db.tbl_staff);
+            var exp2 = Sql<DB>.Of(db => db.tbl_remuneration.staff_id == expStaff.Body.id);
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData
                 {
                     PaymentDate = db.tbl_remuneration.payment_date,
@@ -334,7 +334,7 @@ FROM tbl_remuneration
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData
                 {
                     PaymentDate = db.tbl_remuneration.payment_date,
@@ -359,9 +359,9 @@ FROM tbl_remuneration
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var expStaff = Sql<DB>.Create(db => db.tbl_staff);
-            var exp2 = Sql<DB>.Create(db => db.tbl_remuneration.staff_id == expStaff.Body.id);
-            var query = Sql<DB>.Create(db =>
+            var expStaff = Sql<DB>.Of(db => db.tbl_staff);
+            var exp2 = Sql<DB>.Of(db => db.tbl_remuneration.staff_id == expStaff.Body.id);
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData
                 {
                     PaymentDate = db.tbl_remuneration.payment_date,
@@ -383,7 +383,7 @@ FROM tbl_remuneration
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Join1()
         {
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData
                 {
                     PaymentDate = db.tbl_remuneration.payment_date,
@@ -391,7 +391,7 @@ FROM tbl_remuneration
                 }).
                 From(db.tbl_remuneration));
 
-            var target = Sql<DB>.Create(db => Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id));
+            var target = Sql<DB>.Of(db => Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id));
             query = query.Concat(target);
 
             var datas = _connection.Query(query).ToList();
@@ -409,7 +409,7 @@ FROM tbl_remuneration
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData
                 {
                     PaymentDate = db.tbl_remuneration.payment_date,
@@ -433,8 +433,8 @@ FROM tbl_remuneration
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
 
-            var expStaff = Sql<DB>.Create(db => db.tbl_staff);
-            var query = Sql<DB>.Create(db =>
+            var expStaff = Sql<DB>.Of(db => db.tbl_staff);
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData
                 {
                     PaymentDate = db.tbl_remuneration.payment_date,
@@ -456,7 +456,7 @@ FROM tbl_remuneration
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Join2()
         {
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData
                 {
                     PaymentDate = db.tbl_remuneration.payment_date,
@@ -464,9 +464,9 @@ FROM tbl_remuneration
                 }).
                 From(db.tbl_remuneration));
 
-            var expStaff = Sql<DB>.Create(db => db.tbl_staff);
-            var exp2 = Sql<DB>.Create(db => db.tbl_remuneration.staff_id == expStaff.Body.id);
-            var target = Sql<DB>.Create(db => Join(expStaff, exp2));
+            var expStaff = Sql<DB>.Of(db => db.tbl_staff);
+            var exp2 = Sql<DB>.Of(db => db.tbl_remuneration.staff_id == expStaff.Body.id);
+            var target = Sql<DB>.Of(db => Join(expStaff, exp2));
             query = query.Concat(target);
 
             var datas = _connection.Query(query).ToList();
@@ -482,7 +482,7 @@ FROM tbl_remuneration
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_LeftJoin1()
         {
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData
                 {
                     PaymentDate = db.tbl_remuneration.payment_date,
@@ -490,7 +490,7 @@ FROM tbl_remuneration
                 }).
                 From(db.tbl_remuneration));
 
-            var target = Sql<DB>.Create(db => LeftJoin(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id));
+            var target = Sql<DB>.Of(db => LeftJoin(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id));
             query = query.Concat(target);
 
             var datas = _connection.Query(query).ToList();
@@ -506,7 +506,7 @@ FROM tbl_remuneration
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_LeftJoin2()
         {
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData
                 {
                     PaymentDate = db.tbl_remuneration.payment_date,
@@ -514,9 +514,9 @@ FROM tbl_remuneration
                 }).
                 From(db.tbl_remuneration));
 
-            var expStaff = Sql<DB>.Create(db => db.tbl_staff);
-            var exp2 = Sql<DB>.Create(db => db.tbl_remuneration.staff_id == expStaff.Body.id);
-            var target = Sql<DB>.Create(db => LeftJoin(expStaff, exp2));
+            var expStaff = Sql<DB>.Of(db => db.tbl_staff);
+            var exp2 = Sql<DB>.Of(db => db.tbl_remuneration.staff_id == expStaff.Body.id);
+            var target = Sql<DB>.Of(db => LeftJoin(expStaff, exp2));
             query = query.Concat(target);
 
             var datas = _connection.Query(query).ToList();
@@ -534,7 +534,7 @@ FROM tbl_remuneration
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData
                 {
                     PaymentDate = db.tbl_remuneration.payment_date,
@@ -542,7 +542,7 @@ FROM tbl_remuneration
                 }).
                 From(db.tbl_remuneration));
 
-            var target = Sql<DB>.Create(db => RightJoin(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id));
+            var target = Sql<DB>.Of(db => RightJoin(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id));
             query = query.Concat(target);
 
             var datas = _connection.Query(query).ToList();
@@ -560,7 +560,7 @@ FROM tbl_remuneration
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData
                 {
                     PaymentDate = db.tbl_remuneration.payment_date,
@@ -568,9 +568,9 @@ FROM tbl_remuneration
                 }).
                 From(db.tbl_remuneration));
 
-            var expStaff = Sql<DB>.Create(db => db.tbl_staff);
-            var exp2 = Sql<DB>.Create(db => db.tbl_remuneration.staff_id == expStaff.Body.id);
-            var target = Sql<DB>.Create(db => RightJoin(expStaff, exp2));
+            var expStaff = Sql<DB>.Of(db => db.tbl_staff);
+            var exp2 = Sql<DB>.Of(db => db.tbl_remuneration.staff_id == expStaff.Body.id);
+            var target = Sql<DB>.Of(db => RightJoin(expStaff, exp2));
             query = query.Concat(target);
 
             var datas = _connection.Query(query).ToList();
@@ -589,7 +589,7 @@ FROM tbl_remuneration
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData
                 {
                     PaymentDate = db.tbl_remuneration.payment_date,
@@ -597,7 +597,7 @@ FROM tbl_remuneration
                 }).
                 From(db.tbl_remuneration));
 
-            var target = Sql<DB>.Create(db => FullJoin(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id));
+            var target = Sql<DB>.Of(db => FullJoin(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id));
             query = query.Concat(target);
 
             var datas = _connection.Query(query).ToList();
@@ -616,7 +616,7 @@ FROM tbl_remuneration
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData
                 {
                     PaymentDate = db.tbl_remuneration.payment_date,
@@ -624,9 +624,9 @@ FROM tbl_remuneration
                 }).
                 From(db.tbl_remuneration));
 
-            var expStaff = Sql<DB>.Create(db => db.tbl_staff);
-            var exp2 = Sql<DB>.Create(db => db.tbl_remuneration.staff_id == expStaff.Body.id);
-            var target = Sql<DB>.Create(db => FullJoin(expStaff, exp2));
+            var expStaff = Sql<DB>.Of(db => db.tbl_staff);
+            var exp2 = Sql<DB>.Of(db => db.tbl_remuneration.staff_id == expStaff.Body.id);
+            var target = Sql<DB>.Of(db => FullJoin(expStaff, exp2));
             query = query.Concat(target);
 
             var datas = _connection.Query(query).ToList();
@@ -644,7 +644,7 @@ FROM tbl_remuneration
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData
                 {
                     PaymentDate = db.tbl_remuneration.payment_date,
@@ -652,7 +652,7 @@ FROM tbl_remuneration
                 }).
                 From(db.tbl_remuneration));
 
-            var target = Sql<DB>.Create(db => CrossJoin(db.tbl_staff));
+            var target = Sql<DB>.Of(db => CrossJoin(db.tbl_staff));
             query = query.Concat(target);
 
             var datas = _connection.Query(query).ToList();
@@ -670,8 +670,8 @@ FROM tbl_remuneration
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
 
-            var exp = Sql<DB>.Create(db => db.tbl_staff);
-            var query = Sql<DB>.Create(db =>
+            var exp = Sql<DB>.Of(db => db.tbl_staff);
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData
                 {
                     PaymentDate = db.tbl_remuneration.payment_date,
@@ -679,7 +679,7 @@ FROM tbl_remuneration
                 }).
                 From(db.tbl_remuneration));
 
-            var target = Sql<DB>.Create(db => CrossJoin(exp));
+            var target = Sql<DB>.Of(db => CrossJoin(exp));
             query = query.Concat(target);
 
             var datas = _connection.Query(query).ToList();

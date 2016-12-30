@@ -40,7 +40,7 @@ namespace Test
             var name = _connection.GetType().Name;
             if (name != "SqlConnection") return;
 
-            var query = Sql<ModelLambdicSqlTestDB>.Create(db =>
+            var query = Sql<ModelLambdicSqlTestDB>.Of(db =>
                 Select(new SelectData
                 {
                     name = db.tbl_staff.T().name,

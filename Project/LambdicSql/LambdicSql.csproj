@@ -44,6 +44,7 @@
     <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExpressionConverterService\SqlRecursiveArgumentsExpression.cs" />
     <Compile Include="ExpressionConverterService\SqlSyntaxConverter\Inside\SqlSyntaxAllAttribute.cs" />
     <Compile Include="ExpressionConverterService\SqlSyntaxConverter\Inside\SqlSyntaxAssignAttribute.cs" />
     <Compile Include="ExpressionConverterService\SqlSyntaxConverter\Inside\SqlSyntaxBetweenAttribute.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="ExpressionConverterService\Inside\ExpressionToObject.CreateGetter.cs" />
     <Compile Include="ExpressionConverterService\Inside\ExpressionToObject.Getter.cs" />
     <Compile Include="Inside\SqlExpressionCoupled.cs" />
+    <Compile Include="SqlBuilder\AliasText.cs" />
     <Compile Include="SqlBuilder\CustomizeParameterToObject.cs" />
     <Compile Include="SqlBuilder\DbColumnText.cs" />
     <Compile Include="SqlBuilder\DbTableText.cs" />

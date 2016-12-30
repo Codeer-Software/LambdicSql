@@ -37,7 +37,7 @@ namespace TestCheck35
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Select()
         {
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData
                 {
                     PaymentDate = db.tbl_remuneration.payment_date,
@@ -59,7 +59,7 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType() != typeof(SqlConnection)) return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(Top(1), new SelectData
                 {
                     PaymentDate = db.tbl_remuneration.payment_date,
@@ -81,9 +81,9 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType() != typeof(SqlConnection)) return;
 
-            var exp1 = Sql<DB>.Create(db => 1);
-            var exp2 = Sql<DB>.Create(db => Top(exp1));
-            var query = Sql<DB>.Create(db =>
+            var exp1 = Sql<DB>.Of(db => 1);
+            var exp2 = Sql<DB>.Of(db => Top(exp1));
+            var query = Sql<DB>.Of(db =>
                 Select(exp2.Body, new SelectData
                 {
                     PaymentDate = db.tbl_remuneration.payment_date,
@@ -103,7 +103,7 @@ FROM tbl_remuneration");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Select_Asterisk_Non1()
         {
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(Asterisk()).
                 From(db.tbl_remuneration));
 
@@ -117,8 +117,8 @@ FROM tbl_remuneration");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Select_Asterisk_Non2()
         {
-            var exp = Sql<DB>.Create(db => Asterisk());
-            var query = Sql<DB>.Create(db =>
+            var exp = Sql<DB>.Of(db => Asterisk());
+            var query = Sql<DB>.Of(db =>
                 Select(exp.Body).
                 From(db.tbl_remuneration));
 
@@ -132,7 +132,7 @@ FROM tbl_remuneration");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Select_Asterisk1()
         {
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(Asterisk<Remuneration>()).
                 From(db.tbl_remuneration));
 
@@ -146,9 +146,9 @@ FROM tbl_remuneration");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Select_Asterisk2()
         {
-            var exp = Sql<DB>.Create(db => Asterisk<Remuneration>());
+            var exp = Sql<DB>.Of(db => Asterisk<Remuneration>());
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(exp.Body).
                 From(db.tbl_remuneration));
 
@@ -162,7 +162,7 @@ FROM tbl_remuneration");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Select_Asterisk_Helper1()
         {
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(Asterisk(db.tbl_remuneration)).
                 From(db.tbl_remuneration));
 
@@ -176,9 +176,9 @@ FROM tbl_remuneration");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Select_Asterisk_Helper2()
         {
-            var exp = Sql<DB>.Create(db => Asterisk(db.tbl_remuneration));
+            var exp = Sql<DB>.Of(db => Asterisk(db.tbl_remuneration));
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(exp.Body).
                 From(db.tbl_remuneration));
 
@@ -194,7 +194,7 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType() != typeof(SqlConnection)) return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(Top(2), Asterisk()).
                 From(db.tbl_remuneration));
 
@@ -210,7 +210,7 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType() != typeof(SqlConnection)) return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(Top(2), Asterisk<Remuneration>()).
                 From(db.tbl_remuneration));
 
@@ -224,7 +224,7 @@ FROM tbl_remuneration");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Select_All()
         {
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(All(), new SelectData
                 {
                     PaymentDate = db.tbl_remuneration.payment_date,
@@ -244,7 +244,7 @@ FROM tbl_remuneration");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Select_Distinct()
         {
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(Distinct(), new SelectData
                 {
                     PaymentDate = db.tbl_remuneration.payment_date,
@@ -264,7 +264,7 @@ FROM tbl_remuneration");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Select_All_Asterisk_Non()
         {
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(All(), Asterisk()).
                 From(db.tbl_remuneration));
 
@@ -278,7 +278,7 @@ FROM tbl_remuneration");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Select_Distinct_Asterisk_Non()
         {
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(Distinct(), Asterisk()).
                 From(db.tbl_remuneration));
 
@@ -292,7 +292,7 @@ FROM tbl_remuneration");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Select_All_Asterisk()
         {
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(All(), Asterisk(db.tbl_remuneration)).
                 From(db.tbl_remuneration));
 
@@ -306,7 +306,7 @@ FROM tbl_remuneration");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Select_Distinct_Asterisk()
         {
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(Distinct(), Asterisk(db.tbl_remuneration)).
                 From(db.tbl_remuneration));
 
@@ -322,7 +322,7 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType() != typeof(SqlConnection)) return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(All(), Top(2), Asterisk()).
                 From(db.tbl_remuneration));
 
@@ -338,7 +338,7 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType() != typeof(SqlConnection)) return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(Distinct(), Top(2), Asterisk()).
                 From(db.tbl_remuneration));
 
@@ -354,7 +354,7 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType() != typeof(SqlConnection)) return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(All(), Top(2), Asterisk(db.tbl_remuneration)).
                 From(db.tbl_remuneration));
 
@@ -370,7 +370,7 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType() != typeof(SqlConnection)) return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(Distinct(), Top(2), Asterisk(db.tbl_remuneration)).
                 From(db.tbl_remuneration));
 
@@ -384,7 +384,7 @@ FROM tbl_remuneration");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Select()
         {
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Empty().Select(new SelectData
                 {
                     PaymentDate = db.tbl_remuneration.payment_date,
@@ -406,7 +406,7 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType() != typeof(SqlConnection)) return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Empty().Select(Top(1), new SelectData
                 {
                     PaymentDate = db.tbl_remuneration.payment_date,
@@ -426,7 +426,7 @@ FROM tbl_remuneration");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Select_Asterisk_Non()
         {
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Empty().Select(Asterisk()).
                 From(db.tbl_remuneration));
 
@@ -440,7 +440,7 @@ FROM tbl_remuneration");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Select_Asterisk()
         {
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Empty().Select(Asterisk<Remuneration>()).
                 From(db.tbl_remuneration));
 
@@ -454,7 +454,7 @@ FROM tbl_remuneration");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Select_Asterisk_Helper()
         {
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Empty().Select(Asterisk(db.tbl_remuneration)).
                 From(db.tbl_remuneration));
 
@@ -470,7 +470,7 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType() != typeof(SqlConnection)) return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Empty().Select(Top(2), Asterisk()).
                 From(db.tbl_remuneration));
 
@@ -486,7 +486,7 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType() != typeof(SqlConnection)) return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Empty().Select(Top(2), Asterisk<Remuneration>()).
                 From(db.tbl_remuneration));
 
@@ -500,7 +500,7 @@ FROM tbl_remuneration");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Select_All()
         {
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Empty().Select(All(), new SelectData
                 {
                     PaymentDate = db.tbl_remuneration.payment_date,
@@ -520,7 +520,7 @@ FROM tbl_remuneration");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Select_Distinct()
         {
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Empty().Select(Distinct(), new SelectData
                 {
                     PaymentDate = db.tbl_remuneration.payment_date,
@@ -540,7 +540,7 @@ FROM tbl_remuneration");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Select_All_Asterisk_Non()
         {
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Empty().Select(All(), Asterisk()).
                 From(db.tbl_remuneration));
 
@@ -554,7 +554,7 @@ FROM tbl_remuneration");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Select_Distinct_Asterisk_Non()
         {
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Empty().Select(Distinct(), Asterisk()).
                 From(db.tbl_remuneration));
 
@@ -568,7 +568,7 @@ FROM tbl_remuneration");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Select_All_Asterisk()
         {
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Empty().Select(All(), Asterisk(db.tbl_remuneration)).
                 From(db.tbl_remuneration));
 
@@ -582,7 +582,7 @@ FROM tbl_remuneration");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Select_Distinct_Asterisk()
         {
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Empty().Select(Distinct(), Asterisk(db.tbl_remuneration)).
                 From(db.tbl_remuneration));
 
@@ -598,7 +598,7 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType() != typeof(SqlConnection)) return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Empty().Select(All(), Top(2), Asterisk()).
                 From(db.tbl_remuneration));
 
@@ -614,7 +614,7 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType() != typeof(SqlConnection)) return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Empty().Select(Distinct(), Top(2), Asterisk()).
                 From(db.tbl_remuneration));
 
@@ -630,7 +630,7 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType() != typeof(SqlConnection)) return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Empty().Select(All(), Top(2), Asterisk(db.tbl_remuneration)).
                 From(db.tbl_remuneration));
 
@@ -646,7 +646,7 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType() != typeof(SqlConnection)) return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Empty().Select(Distinct(), Top(2), Asterisk(db.tbl_remuneration)).
                 From(db.tbl_remuneration));
 
@@ -660,13 +660,13 @@ FROM tbl_remuneration");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_SubQuery_Exp()
         {
-            var sub = Sql<DB>.Create(db =>
+            var sub = Sql<DB>.Of(db =>
                 Select(Sum(db.tbl_remuneration.money)).
                 From(db.tbl_remuneration));
 
-            var exp = Sql<DB>.Create(db => db.tbl_remuneration.payment_date);
+            var exp = Sql<DB>.Of(db => db.tbl_remuneration.payment_date);
             
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData
                 {
                     PaymentDate = exp,
@@ -688,7 +688,7 @@ FROM tbl_remuneration");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Single1()
         {
-            var query = Sql<DB>.Create(db => Select(db.tbl_staff.id).From(db.tbl_staff));
+            var query = Sql<DB>.Of(db => Select(db.tbl_staff.id).From(db.tbl_staff));
             
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -701,7 +701,7 @@ FROM tbl_staff");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Single2()
         {
-            var query = Sql<DB>.Create(db => Select(Count(Asterisk())).From(db.tbl_staff));
+            var query = Sql<DB>.Of(db => Select(Count(Asterisk())).From(db.tbl_staff));
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);

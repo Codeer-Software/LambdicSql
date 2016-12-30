@@ -78,7 +78,7 @@ namespace TestCheck35
         {
             var condition = new ValuesInstance();
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(Asterisk(db.tbl_staff)).
                 From(db.tbl_staff).
                 Where(condition.field == 1 || condition.Property == 20 || condition.Method() == 30));
@@ -103,7 +103,7 @@ new Params()
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Static()
         {
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(Asterisk(db.tbl_staff)).
                 From(db.tbl_staff).
                 Where(ValuesStatic.field == 1 || ValuesStatic.Property == 20 || ValuesStatic.Method() == 30));
@@ -128,7 +128,7 @@ new Params()
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_ImplicitConvertOperator1()
         {
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(Asterisk(db.tbl_staff)).
                 From(db.tbl_staff).
                 Where(1 == new IntObjectImplicit1()));
@@ -145,7 +145,7 @@ WHERE (@p_0) = (@p_1)", 1, 1);
         public void Test_ImplicitConvertOperator2()
         {
             var obj = new IntObjectImplicit1();
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(Asterisk(db.tbl_staff)).
                 From(db.tbl_staff).
                 Where(1 == (IntObjectImplicit1)obj));
@@ -162,7 +162,7 @@ WHERE (@p_0) = (@obj)", new Params { { "@p_0", 1 }, { "@obj", 1 } });
         public void Test_ImplicitConvertOperator3()
         {
             var obj = new IntObjectImplicit2();
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(Asterisk(db.tbl_staff)).
                 From(db.tbl_staff).
                 Where(1 == (IntObjectImplicit1)obj));
@@ -179,7 +179,7 @@ WHERE (@p_0) = (@obj)", new Params { { "@p_0", 1 }, { "@obj", 1 } });
         public void Test_ImplicitConvertOperator4()
         {
             var obj = new IntObjectImplicit1();
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(Asterisk(db.tbl_staff)).
                 From(db.tbl_staff).
                 Where(1 == (obj as IntObjectImplicit1)));
@@ -195,7 +195,7 @@ WHERE (@p_0) = (@obj)", new Params { { "@p_0", 1 }, { "@obj", 1 } });
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_ExplicitConvertOperator1()
         {
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(Asterisk(db.tbl_staff)).
                 From(db.tbl_staff).
                 Where(1 == (int)new IntObjectExplicit1()));
@@ -211,7 +211,7 @@ WHERE (@p_0) = (@p_1)", 1, 1);
         public void Test_ExplicitConvertOperator2()
         {
             var obj = new IntObjectExplicit1();
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(Asterisk(db.tbl_staff)).
                 From(db.tbl_staff).
                 Where(1 == (int)(IntObjectExplicit1)obj));
@@ -227,7 +227,7 @@ WHERE (@p_0) = (@obj)", new Params { { "@p_0", 1 }, { "@obj", 1 } });
         public void Test_ExplicitConvertOperator3()
         {
             var obj = new IntObjectExplicit2();
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(Asterisk(db.tbl_staff)).
                 From(db.tbl_staff).
                 Where(1 == (int)(IntObjectExplicit1)(IntObjectExplicit2)obj));
@@ -244,7 +244,7 @@ WHERE (@p_0) = (@obj)", new Params { { "@p_0", 1 }, { "@obj", 1 } });
         {
             long val1 = 1;
             int val2 = 1;
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(Asterisk(db.tbl_staff)).
                 From(db.tbl_staff).
                 Where(val1 == (long)(short)val2));
@@ -264,7 +264,7 @@ WHERE (@val1) = (@val2)", new Params { { "@val1", (long)1 }, { "@val2", 1 } });
             long val2 = 1;
             var obj1 = new IntObjectExplicit2();
             var obj2 = new IntObjectImplicit2();
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(Asterisk(db.tbl_staff)).
                 From(db.tbl_staff).
                 Where(val1 == (int)(short)val2 + 3 + (IntObjectImplicit1)obj2 + (int)(IntObjectExplicit1)obj1));
@@ -291,7 +291,7 @@ new Params
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_New()
         {
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(Asterisk(db.tbl_staff)).
                 From(db.tbl_staff).
                 Where(new ValuesInstance().field == 1));
@@ -309,7 +309,7 @@ WHERE (@field) = (@p_0)", new Params { { "@field", 1 }, { "@p_0", 1 } });
         {
             var obj = new Objects();
             obj.fieldObject = new Objects();
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(Asterisk(db.tbl_staff)).
                 From(db.tbl_staff).
                 Where(obj.fieldObject.fieldValue.field == 1));
@@ -327,7 +327,7 @@ WHERE (@field) = (@p_0)", new Params { { "@field", 1 }, { "@p_0", 1 } });
         {
             var obj = new Objects();
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(Asterisk(db.tbl_staff)).
                 From(db.tbl_staff).
                 Where(obj.PropertyObject.PropertyValue.Property != 1));
@@ -345,7 +345,7 @@ WHERE (@Property) <> (@p_0)", new Params { { "@Property", 2 }, { "@p_0", 1 } });
         {
             var obj = new Objects();
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(Asterisk(db.tbl_staff)).
                 From(db.tbl_staff).
                 Where(obj.MethodObject().MethodValue().Method() != 1));
@@ -361,7 +361,7 @@ WHERE (@p_0) <> (@p_1)", 3, 1);
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestNull1()
         {
-            var query = Sql<DB>.Create(db => (string)null);
+            var query = Sql<DB>.Of(db => (string)null);
             AssertEx.AreEqual(query, _connection, @"@p_0", new Params { { @"@p_0", null } });
         }
 
@@ -369,21 +369,21 @@ WHERE (@p_0) <> (@p_1)", 3, 1);
         public void TestNull2()
         {
             string val = null;
-            var query = Sql<DB>.Create(db => val);
+            var query = Sql<DB>.Of(db => val);
             AssertEx.AreEqual(query, _connection, @"@val", new Params { { @"@val", null } });
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_New_Object()
         {
-            var query = Sql<Data>.Create(db => new DateTime(1999, 1, 1));
+            var query = Sql<Data>.Of(db => new DateTime(1999, 1, 1));
             AssertEx.AreEqual(query, _connection, @"@p_0", new DateTime(1999, 1, 1));
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_NestMethods_Static()
         {
-            var query = Sql<Data>.Create(db => this.GetValue(TestExpressionEx.GetValue()));
+            var query = Sql<Data>.Of(db => this.GetValue(TestExpressionEx.GetValue()));
             AssertEx.AreEqual(query, _connection, @"@p_0", 1);
         }
 
@@ -391,7 +391,7 @@ WHERE (@p_0) <> (@p_1)", 3, 1);
         public void Test_NestMethods_Instance()
         {
             var instance = new ValuesInstance();
-            var query = Sql<Data>.Create(db => instance.GetValue(instance.GetValue()));
+            var query = Sql<Data>.Of(db => instance.GetValue(instance.GetValue()));
             AssertEx.AreEqual(query, _connection, @"@p_0", 1);
         }
         
@@ -400,10 +400,10 @@ WHERE (@p_0) <> (@p_1)", 3, 1);
         {
             var condition = new ValuesInstance();
 
-            var exp1 = Sql<DB>.Create(db => condition.field == 1 || condition.Property == 20 || condition.Method() == 30);
+            var exp1 = Sql<DB>.Of(db => condition.field == 1 || condition.Property == 20 || condition.Method() == 30);
             int a = 1;
-            var exp2 = Sql<DB>.Create(db => exp1 && a == 1);
-            var query = Sql<DB>.Create(db =>
+            var exp2 = Sql<DB>.Of(db => exp1 && a == 1);
+            var query = Sql<DB>.Of(db =>
                 Select(Asterisk(db.tbl_staff)).
                 From(db.tbl_staff).
                 Where(exp2));
@@ -431,7 +431,7 @@ new Params()
         public void Test_ArrayLength()
         {
             var x = new[] { 1, 2, 3 };
-            var query = Sql<Data>.Create(db => x.Length);
+            var query = Sql<Data>.Of(db => x.Length);
             query.Gen(_connection);
         }
 
@@ -439,7 +439,7 @@ new Params()
         public void Test_ArrayIndex()
         {
             var x = new[] { 1, 2, 3 };
-            var query = Sql<Data>.Create(db => x[0]);
+            var query = Sql<Data>.Of(db => x[0]);
             query.Gen(_connection);
         }
 
@@ -447,7 +447,7 @@ new Params()
         public void Test_ListCount()
         {
             var x = new List<int> { 1, 2, 3 };
-            var query = Sql<Data>.Create(db => x.Count);
+            var query = Sql<Data>.Of(db => x.Count);
             AssertEx.AreEqual(query, _connection, @"@Count", new Params { { "@Count", 3 } });
         }
 
@@ -455,7 +455,7 @@ new Params()
         public void Test_ListIndex()
         {
             var x = new List<int> { 1, 2, 3 };
-            var query = Sql<Data>.Create(db => x[0]);
+            var query = Sql<Data>.Of(db => x[0]);
             AssertEx.AreEqual(query, _connection, @"@p_0", 1);
         }
 
@@ -467,7 +467,7 @@ new Params()
                 val = DateTimeElement.Day
             };
 
-            var query = Sql<Data>.Create(db => data.val);
+            var query = Sql<Data>.Of(db => data.val);
             AssertEx.AreEqual(query, _connection, @"DAY");
         }
 

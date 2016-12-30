@@ -35,7 +35,7 @@ namespace TestCheck35
             if (name == "OracleConnection") return;
             if (name == "NpgsqlConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                  Select(Asterisk(db.tbl_remuneration)).
                  From(db.tbl_remuneration).
                  OrderBy(Asc(db.tbl_remuneration.id)).
@@ -63,9 +63,9 @@ LIMIT @p_0, @p_1",
             if (name == "OracleConnection") return;
             if (name == "NpgsqlConnection") return;
 
-            var exp1 = Sql<DB>.Create(db => (long)1);
-            var exp2 = Sql<DB>.Create(db => (long)3);
-            var query = Sql<DB>.Create(db =>
+            var exp1 = Sql<DB>.Of(db => (long)1);
+            var exp2 = Sql<DB>.Of(db => (long)3);
+            var query = Sql<DB>.Of(db =>
                  Select(Asterisk(db.tbl_remuneration)).
                  From(db.tbl_remuneration).
                  OrderBy(Asc(db.tbl_remuneration.id)).
@@ -90,7 +90,7 @@ LIMIT @p_0, @p_1",
             if (name == "System.Data.SqlClient.SqlConnection") return;
             if (name == "Oracle.ManagedDataAccess.Client.OracleConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                  Select(Asterisk(db.tbl_remuneration)).
                  From(db.tbl_remuneration).
                  OrderBy(Asc(db.tbl_remuneration.id)).
@@ -117,9 +117,9 @@ OFFSET @p_1",
             if (name == "System.Data.SqlClient.SqlConnection") return;
             if (name == "Oracle.ManagedDataAccess.Client.OracleConnection") return;
 
-            var exp1 = Sql<DB>.Create(db =>(long)1);
-            var exp2 = Sql<DB>.Create(db => (long)3);
-            var query = Sql<DB>.Create(db =>
+            var exp1 = Sql<DB>.Of(db =>(long)1);
+            var exp2 = Sql<DB>.Of(db => (long)3);
+            var query = Sql<DB>.Of(db =>
                  Select(Asterisk(db.tbl_remuneration)).
                  From(db.tbl_remuneration).
                  OrderBy(Asc(db.tbl_remuneration.id)).
@@ -146,7 +146,7 @@ OFFSET @p_1",
             if (name != "System.Data.SqlClient.SqlConnection" &&
                 name != "IBM.Data.DB2.DB2Connection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                  Select(Asterisk(db.tbl_remuneration)).
                  From(db.tbl_remuneration).
                  OrderBy(Asc(db.tbl_remuneration.id)).
@@ -173,9 +173,9 @@ FETCH NEXT @p_1 ROWS ONLY",
             if (name != "System.Data.SqlClient.SqlConnection" &&
                 name != "IBM.Data.DB2.DB2Connection") return;
 
-            var exp1 = Sql<DB>.Create(db => 1);
-            var exp2 = Sql<DB>.Create(db => 3);
-            var query = Sql<DB>.Create(db =>
+            var exp1 = Sql<DB>.Of(db => 1);
+            var exp2 = Sql<DB>.Of(db => 3);
+            var query = Sql<DB>.Of(db =>
                  Select(Asterisk(db.tbl_remuneration)).
                  From(db.tbl_remuneration).
                  OrderBy(Asc(db.tbl_remuneration.id)).
@@ -203,11 +203,11 @@ FETCH NEXT @p_1 ROWS ONLY",
             if (name == "OracleConnection") return;
             if (name == "NpgsqlConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                  Select(Asterisk(db.tbl_remuneration)).
                  From(db.tbl_remuneration).
                  OrderBy(Asc(db.tbl_remuneration.id)));
-            var limit = Sql<DB>.Create(db => Limit(1, 3));
+            var limit = Sql<DB>.Of(db => Limit(1, 3));
             query = query.Concat(limit);
 
             query.Gen(_connection);
@@ -231,14 +231,14 @@ LIMIT @p_0, @p_1",
             if (name == "OracleConnection") return;
             if (name == "NpgsqlConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                  Select(Asterisk(db.tbl_remuneration)).
                  From(db.tbl_remuneration).
                  OrderBy(Asc(db.tbl_remuneration.id)));
 
-            var exp1 = Sql<DB>.Create(db => (long)1);
-            var exp2 = Sql<DB>.Create(db => (long)3);
-            var limit = Sql<DB>.Create(db => Limit(exp1, exp2));
+            var exp1 = Sql<DB>.Of(db => (long)1);
+            var exp2 = Sql<DB>.Of(db => (long)3);
+            var limit = Sql<DB>.Of(db => Limit(exp1, exp2));
             query = query.Concat(limit);
 
             var datas = _connection.Query(query).ToList();
@@ -259,12 +259,12 @@ LIMIT @p_0, @p_1",
             if (name == "System.Data.SqlClient.SqlConnection") return;
             if (name == "Oracle.ManagedDataAccess.Client.OracleConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                  Select(Asterisk(db.tbl_remuneration)).
                  From(db.tbl_remuneration).
                  OrderBy(Asc(db.tbl_remuneration.id)));
-            var limit = Sql<DB>.Create(db => Limit(1));
-            var offset = Sql<DB>.Create(db => Offset(3));
+            var limit = Sql<DB>.Of(db => Limit(1));
+            var offset = Sql<DB>.Of(db => Offset(3));
             query = query.Concat(limit).Concat(offset);
 
             var datas = _connection.Query(query).ToList();
@@ -286,14 +286,14 @@ OFFSET @p_1",
             if (name == "System.Data.SqlClient.SqlConnection") return;
             if (name == "Oracle.ManagedDataAccess.Client.OracleConnection") return;
 
-            var exp1 = Sql<DB>.Create(db => 1);
-            var exp2 = Sql<DB>.Create(db => 3);
-            var query = Sql<DB>.Create(db =>
+            var exp1 = Sql<DB>.Of(db => 1);
+            var exp2 = Sql<DB>.Of(db => 3);
+            var query = Sql<DB>.Of(db =>
                  Select(Asterisk(db.tbl_remuneration)).
                  From(db.tbl_remuneration).
                  OrderBy(Asc(db.tbl_remuneration.id)));
-            var limit = Sql<DB>.Create(db => Limit(exp1));
-            var offset = Sql<DB>.Create(db => Offset(exp2));
+            var limit = Sql<DB>.Of(db => Limit(exp1));
+            var offset = Sql<DB>.Of(db => Offset(exp2));
             query = query.Concat(limit).Concat(offset);
 
             var datas = _connection.Query(query).ToList();
@@ -315,12 +315,12 @@ OFFSET @p_1",
             if (name != "System.Data.SqlClient.SqlConnection" &&
                 name != "IBM.Data.DB2.DB2Connection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                  Select(Asterisk(db.tbl_remuneration)).
                  From(db.tbl_remuneration).
                  OrderBy(Asc(db.tbl_remuneration.id)));
-            var offsetRows = Sql<DB>.Create(db => OffsetRows(1));
-            var fetchNextRowOnly = Sql<DB>.Create(db => FetchNextRowsOnly(3));
+            var offsetRows = Sql<DB>.Of(db => OffsetRows(1));
+            var fetchNextRowOnly = Sql<DB>.Of(db => FetchNextRowsOnly(3));
             query = query.Concat(offsetRows).Concat(fetchNextRowOnly);
 
             var datas = _connection.Query(query).ToList();
@@ -342,14 +342,14 @@ FETCH NEXT @p_1 ROWS ONLY",
             if (name != "System.Data.SqlClient.SqlConnection" &&
                 name != "IBM.Data.DB2.DB2Connection") return;
 
-            var exp1 = Sql<DB>.Create(db => (long)1);
-            var exp2 = Sql<DB>.Create(db => (long)3);
-            var query = Sql<DB>.Create(db =>
+            var exp1 = Sql<DB>.Of(db => (long)1);
+            var exp2 = Sql<DB>.Of(db => (long)3);
+            var query = Sql<DB>.Of(db =>
                  Select(Asterisk(db.tbl_remuneration)).
                  From(db.tbl_remuneration).
                  OrderBy(Asc(db.tbl_remuneration.id)));
-            var offsetRows = Sql<DB>.Create(db => OffsetRows(exp1));
-            var fetchNextRowOnly = Sql<DB>.Create(db => FetchNextRowsOnly(exp2));
+            var offsetRows = Sql<DB>.Of(db => OffsetRows(exp1));
+            var fetchNextRowOnly = Sql<DB>.Of(db => FetchNextRowsOnly(exp2));
             query = query.Concat(offsetRows).Concat(fetchNextRowOnly);
 
             var datas = _connection.Query(query).ToList();
@@ -370,7 +370,7 @@ FETCH NEXT @p_1 ROWS ONLY",
             var name = _connection.GetType().FullName;
             if (name != "Oracle.ManagedDataAccess.Client.OracleConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                  Select(Asterisk(db.tbl_remuneration)).
                  From(db.tbl_remuneration).
                  Where(Between(RowNum(), 1, 3)).
@@ -394,10 +394,10 @@ ORDER BY
             var name = _connection.GetType().FullName;
             if (name != "Oracle.ManagedDataAccess.Client.OracleConnection") return;
 
-            var exp1 = Sql<DB>.Create(db => RowNum());
-            var exp2 = Sql<DB>.Create(db => (long)1);
-            var exp3 = Sql<DB>.Create(db => (long)3);
-            var query = Sql<DB>.Create(db =>
+            var exp1 = Sql<DB>.Of(db => RowNum());
+            var exp2 = Sql<DB>.Of(db => (long)1);
+            var exp3 = Sql<DB>.Of(db => (long)3);
+            var query = Sql<DB>.Of(db =>
                  Select(Asterisk(db.tbl_remuneration)).
                  From(db.tbl_remuneration).
                  Where(Between(exp1, exp2, exp3)).

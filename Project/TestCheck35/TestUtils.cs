@@ -39,11 +39,11 @@ namespace TestCheck35
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Cast1()
         {
-            var sub = Sql<DB>.Create(db =>
+            var sub = Sql<DB>.Of(db =>
                 Select(Sum(db.tbl_remuneration.money)).
                 From(db.tbl_remuneration));
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData { Total = sub.Body }).
                 From(db.tbl_remuneration));
 
@@ -66,7 +66,7 @@ FROM tbl_remuneration");
         public void Test_Cast2()
         {
             //TODO 暗黙キャスト
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData
                 {
                     Total = Select(Sum(db.tbl_remuneration.money)).
@@ -88,8 +88,8 @@ FROM tbl_remuneration");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Condition1()
         {
-            var condition = Sql<DB>.Create(db => new Condition(true, db.tbl_staff.id == 1) || (new Condition(true, db.tbl_staff.id == 2) && new Condition(false, db.tbl_staff.id == 3) && new Condition(true, db.tbl_staff.id == 4)));
-            var query = Sql<DB>.Create(db =>
+            var condition = Sql<DB>.Of(db => new Condition(true, db.tbl_staff.id == 1) || (new Condition(true, db.tbl_staff.id == 2) && new Condition(false, db.tbl_staff.id == 3) && new Condition(true, db.tbl_staff.id == 4)));
+            var query = Sql<DB>.Of(db =>
                 Select(new
                 {
                     name = db.tbl_staff.name
@@ -110,8 +110,8 @@ WHERE ((tbl_staff.id) = (@p_0)) OR (((tbl_staff.id) = (@p_1)) AND ((tbl_staff.id
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Condition2()
         {
-            var condition = Sql<DB>.Create(db => new Condition(false, db.tbl_staff.id == 2) && new Condition(false, db.tbl_staff.id == 3) && new Condition(false, db.tbl_staff.id == 4));
-            var query = Sql<DB>.Create(db =>
+            var condition = Sql<DB>.Of(db => new Condition(false, db.tbl_staff.id == 2) && new Condition(false, db.tbl_staff.id == 3) && new Condition(false, db.tbl_staff.id == 4));
+            var query = Sql<DB>.Of(db =>
                 Select(new
                 {
                     name = db.tbl_staff.name
@@ -133,9 +133,9 @@ FROM tbl_staff");
             var name = _connection.GetType().Name;
             if (name == "SQLiteConnection") return;
 
-            var condition = Sql<DB>.Create(db => new Condition(true, 100 < Sum(db.tbl_remuneration.money)));
+            var condition = Sql<DB>.Of(db => new Condition(true, 100 < Sum(db.tbl_remuneration.money)));
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData2
                 {
                     Id = db.tbl_remuneration.staff_id
@@ -158,9 +158,9 @@ HAVING (@p_0) < (SUM(tbl_remuneration.money))",
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Condition4()
         {
-            var condition = Sql<DB>.Create(db => new Condition(false, 100 < Sum(db.tbl_remuneration.money)));
+            var condition = Sql<DB>.Of(db => new Condition(false, 100 < Sum(db.tbl_remuneration.money)));
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData2
                 {
                     Id = db.tbl_remuneration.staff_id
@@ -181,10 +181,10 @@ GROUP BY tbl_remuneration.staff_id");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Condition5()
         {
-            var exp = Sql<DB>.Create(db => 100 < Sum(db.tbl_remuneration.money));
-            var condition = Sql<DB>.Create(db => new Condition(false, exp));
+            var exp = Sql<DB>.Of(db => 100 < Sum(db.tbl_remuneration.money));
+            var condition = Sql<DB>.Of(db => new Condition(false, exp));
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData2
                 {
                     Id = db.tbl_remuneration.staff_id
@@ -205,7 +205,7 @@ GROUP BY tbl_remuneration.staff_id");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Text1()
         {
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new Staff
                 {
                     id = (int)"tbl_staff.id".ToSql(),
@@ -225,7 +225,7 @@ FROM tbl_staff");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Text2()
         {
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new Staff
                 {
                     id = (int)"{0}".ToSql(db.tbl_staff.id),
@@ -245,9 +245,9 @@ FROM tbl_staff");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Text3()
         {
-            var exp1 = Sql<DB>.Create(db => db.tbl_staff.id);
-            var exp2 = Sql<DB>.Create(db => db.tbl_staff.name);
-            var query = Sql<DB>.Create(db =>
+            var exp1 = Sql<DB>.Of(db => db.tbl_staff.id);
+            var exp2 = Sql<DB>.Of(db => db.tbl_staff.name);
+            var query = Sql<DB>.Of(db =>
                 Select(new Staff
                 {
                     id = (int)"{0}".ToSql(exp1),
@@ -276,7 +276,7 @@ FROM tbl_remuneration
     JOIN tbl_staff ON tbl_staff.id = tbl_remuneration.staff_id
 /*1*/WHERE tbl_remuneration.money = 100/**/";
 
-            var query = Sql<DB>.Create(db => sql.TwoWaySql(
+            var query = Sql<DB>.Of(db => sql.TwoWaySql(
                 100,
                 Where(3000 < db.tbl_remuneration.money)
                 ));
@@ -297,8 +297,8 @@ WHERE (@p_1) < (tbl_remuneration.money)",
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Format2WaySql2()
         {
-            var exp1 = Sql<DB>.Create(db => 100);
-            var exp2 = Sql<DB>.Create(db => Where(3000 < db.tbl_remuneration.money));
+            var exp1 = Sql<DB>.Of(db => 100);
+            var exp2 = Sql<DB>.Of(db => Where(3000 < db.tbl_remuneration.money));
             var sql =
 @"SELECT
 	tbl_staff.name AS name,
@@ -308,7 +308,7 @@ FROM tbl_remuneration
     JOIN tbl_staff ON tbl_staff.id = tbl_remuneration.staff_id
 /*1*/WHERE tbl_remuneration.money = 100/**/";
 
-            var query = Sql<DB>.Create(db => sql.TwoWaySql(
+            var query = Sql<DB>.Of(db => sql.TwoWaySql(
                 exp1,
                 exp2
                 ));
@@ -338,7 +338,7 @@ FROM tbl_remuneration
     JOIN tbl_staff ON tbl_staff.id = tbl_remuneration.staff_id
 /*2*/WHERE tbl_remuneration.money = 100/**/";
 
-            var query = Sql<DB>.Create(db => sql.TwoWaySql(
+            var query = Sql<DB>.Of(db => sql.TwoWaySql(
                 db.tbl_remuneration.money,
                 db.tbl_remuneration.money.ColumnOnly(),
                 Where(3000 < db.tbl_remuneration.money)
@@ -377,18 +377,18 @@ WHERE (@p_0) < (tbl_remuneration.money)",
             var name = _connection.GetType().Name;
             if (name == "MySqlConnection") return;
 
-            var sub1 = Sql<DB>.Create(db =>
+            var sub1 = Sql<DB>.Of(db =>
                 Select(Asterisk(db.tbl_staff)).
                 From(db.tbl_staff));
 
-            var sub2 = Sql<DB>.Create(db =>
+            var sub2 = Sql<DB>.Of(db =>
                 Select(Asterisk(sub1.Body)).
                 From(sub1));
 
-            var b = Sql<DB>.Create(db => sub2);
+            var b = Sql<DB>.Of(db => sub2);
 
             //TODO あー、分けることができないなー
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 With(sub1, sub2).
                 Select(new SelectedData
                 {
@@ -426,10 +426,10 @@ FROM sub2 b");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void YYY()
         {
-            var a = Sql<DB>.Create(db => db.tbl_remuneration);
-            var b = Sql<DB>.Create(db => db.tbl_remuneration);
+            var a = Sql<DB>.Of(db => db.tbl_remuneration);
+            var b = Sql<DB>.Of(db => db.tbl_remuneration);
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new YData
                 {
                     StaffId = db.tbl_staff.id,
@@ -467,9 +467,9 @@ FROM tbl_staff
             if (name == "NpgsqlConnection") return;
 
 
-            var rec = Sql<DB>.Create(db => Recursive(new { val = 0 }));
+            var rec = Sql<DB>.Of(db => Recursive(new { val = 0 }));
             
-            var select = Sql<DB>.Create(db =>
+            var select = Sql<DB>.Of(db =>
                 Select(new object[] { 1 }).
                 Union(All()).
                 Select(new object[] { rec.Body.val + 1}).
@@ -477,7 +477,7 @@ FROM tbl_staff
                 Where(rec.Body.val + 1 <= 5)
                 );
 
-            var query = Sql<DB>.Create(db => 
+            var query = Sql<DB>.Of(db => 
                 With(rec, select).
                 Select(rec.Body.val).
                 From(rec)
@@ -507,9 +507,9 @@ FROM rec", 1, 1, 1, 5);
             if (name != "NpgsqlConnection") return;
 
 
-            var rec = Sql<DB>.Create(db => Recursive(new { val = 0 }));
+            var rec = Sql<DB>.Of(db => Recursive(new { val = 0 }));
 
-            var select = Sql<DB>.Create(db =>
+            var select = Sql<DB>.Of(db =>
                 Select(new object[] { 1 }).
                 Union(All()).
                 Select(new object[] { rec.Body.val + 1 }).
@@ -517,7 +517,7 @@ FROM rec", 1, 1, 1, 5);
                 Where(rec.Body.val + 1 <= 5)
                 );
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 With(rec, select).
                 Select(rec.Body.val).
                 From(rec)
@@ -546,9 +546,9 @@ FROM rec", 1, 1, 1, 5);
             var name = _connection.GetType().Name;
             if (name != "OracleConnection") return;
 
-            var rec = Sql<DB>.Create(db => Recursive(new { val = 0 }));
+            var rec = Sql<DB>.Of(db => Recursive(new { val = 0 }));
 
-            var select = Sql<DB>.Create(db =>
+            var select = Sql<DB>.Of(db =>
                 Select(new object[] { 1 }).
                 From(Dual).
                 Union(All()).
@@ -557,7 +557,7 @@ FROM rec", 1, 1, 1, 5);
                 Where(rec.Body.val + 1 <= 5)
                 );
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 With(rec, select).
                 Select(rec.Body.val).
                 From(rec)

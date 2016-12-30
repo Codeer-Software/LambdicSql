@@ -35,7 +35,7 @@ namespace TestCheck35
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Case1()
         {
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Type = Case().
@@ -64,7 +64,7 @@ FROM tbl_staff",
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Case2()
         {
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Type = Case().
@@ -90,7 +90,7 @@ FROM tbl_staff",
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Case3()
         {
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Type = Case(db.tbl_staff.id).
@@ -119,7 +119,7 @@ FROM tbl_staff",
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Case4()
         {
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Type = Case(db.tbl_staff.id).
@@ -146,7 +146,7 @@ FROM tbl_staff",
         public void Test_Case5()
         {
             var val = 0;
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Type = Case().
@@ -179,12 +179,12 @@ new Params()
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Case6()
         {
-            var exp1 = Sql<DB>.Create(db => db.tbl_staff.id == 3);
-            var exp2 = Sql<DB>.Create(db => "x");
-            var exp3 = Sql<DB>.Create(db => db.tbl_staff.id == 4);
-            var exp4 = Sql<DB>.Create(db => "y");
-            var exp5 = Sql<DB>.Create(db => "z");
-            var query = Sql<DB>.Create(db =>
+            var exp1 = Sql<DB>.Of(db => db.tbl_staff.id == 3);
+            var exp2 = Sql<DB>.Of(db => "x");
+            var exp3 = Sql<DB>.Of(db => db.tbl_staff.id == 4);
+            var exp4 = Sql<DB>.Of(db => "y");
+            var exp5 = Sql<DB>.Of(db => "z");
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Type = Case().
@@ -213,7 +213,7 @@ FROM tbl_staff",
         public void Test_Case7()
         {
             var val = 0;
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Type = Case(val).
@@ -242,13 +242,13 @@ new Params { { "@val", 0 } });
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Case8()
         {
-            var exp1 = Sql<DB>.Create(db => db.tbl_staff.id);
-            var exp2 = Sql<DB>.Create(db => 3);
-            var exp3 = Sql<DB>.Create(db => "x");
-            var exp4 = Sql<DB>.Create(db => 4);
-            var exp5 = Sql<DB>.Create(db => "y");
-            var exp6 = Sql<DB>.Create(db => "z");
-            var query = Sql<DB>.Create(db =>
+            var exp1 = Sql<DB>.Of(db => db.tbl_staff.id);
+            var exp2 = Sql<DB>.Of(db => 3);
+            var exp3 = Sql<DB>.Of(db => "x");
+            var exp4 = Sql<DB>.Of(db => 4);
+            var exp5 = Sql<DB>.Of(db => "y");
+            var exp6 = Sql<DB>.Of(db => "z");
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Type = Case(exp1).
@@ -276,20 +276,20 @@ FROM tbl_staff",
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Case9()
         {
-            var exp1 = Sql<DB>.Create(db => db.tbl_staff.id);
-            var exp2 = Sql<DB>.Create(db => 3);
-            var exp3 = Sql<DB>.Create(db => "x");
-            var exp4 = Sql<DB>.Create(db => 4);
-            var exp5 = Sql<DB>.Create(db => "y");
-            var exp6 = Sql<DB>.Create(db => "z");
-            var caseQuery = Sql<DB>.Create(db =>
+            var exp1 = Sql<DB>.Of(db => db.tbl_staff.id);
+            var exp2 = Sql<DB>.Of(db => 3);
+            var exp3 = Sql<DB>.Of(db => "x");
+            var exp4 = Sql<DB>.Of(db => 4);
+            var exp5 = Sql<DB>.Of(db => "y");
+            var exp6 = Sql<DB>.Of(db => "z");
+            var caseQuery = Sql<DB>.Of(db =>
                 Case(exp1).
                     When(exp2).Then(exp3.Body).
                     When(exp4).Then(exp5).
                     Else(exp6).
                 End()
                 );
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Type = caseQuery
@@ -313,8 +313,8 @@ FROM tbl_staff",
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Sub1()
         {
-            var sub = Sql<DB>.Create(db => Select(Count(Asterisk())).From(db.tbl_staff));
-            var query = Sql<DB>.Create(db =>
+            var sub = Sql<DB>.Of(db => Select(Count(Asterisk())).From(db.tbl_staff));
+            var query = Sql<DB>.Of(db =>
                 Select(new
                 {
                     Type = Case().
@@ -347,8 +347,8 @@ FROM tbl_staff",
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Sub2()
         {
-            var sub = Sql<DB>.Create(db => Select(Count(Asterisk())).From(db.tbl_staff));
-            var query = Sql<DB>.Create(db =>
+            var sub = Sql<DB>.Of(db => Select(Count(Asterisk())).From(db.tbl_staff));
+            var query = Sql<DB>.Of(db =>
                 Select(new
                 {
                     Type = Case().

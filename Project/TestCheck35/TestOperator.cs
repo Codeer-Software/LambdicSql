@@ -28,7 +28,7 @@ namespace TestCheck35
         public void Test_Operator_Calc()
         {
             int val1 =0, val2 =0, val3 = 0, val4 = 0, val5 = 0;
-            var query = Sql<DB>.Create(db => val1 + val2 - val3 / val4 * val5);
+            var query = Sql<DB>.Of(db => val1 + val2 - val3 / val4 * val5);
            
             AssertEx.AreEqual(query, _connection,
             @"((@val1) + (@val2)) - (((@val3) / (@val4)) * (@val5))", Zero(5));
@@ -44,7 +44,7 @@ namespace TestCheck35
             if (name == "NpgsqlConnection") return;
 
             string val1 = "", val2 = "";
-            var query = Sql<DB>.Create(db => val1 + val2);
+            var query = Sql<DB>.Of(db => val1 + val2);
             AssertEx.AreEqual(query, _connection,
             @"(@val1) + (@val2)", EmptyString(2));
         }
@@ -57,7 +57,7 @@ namespace TestCheck35
             if (name == "MySqlConnection") return;
 
             string val1 = "", val2 = "";
-            var query = Sql<DB>.Create(db => val1 + val2);
+            var query = Sql<DB>.Of(db => val1 + val2);
             AssertEx.AreEqual(query, _connection,
             @"(@val1) || (@val2)", EmptyString(2));
         }
@@ -66,7 +66,7 @@ namespace TestCheck35
         public void Test_Operator_Condition1()
         {
             int val1 = 0, val2 = 0, val3 = 0, val4 = 0;
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 val1 == val2 &&
                 val3 != val4
                 );
@@ -78,7 +78,7 @@ namespace TestCheck35
         public void Test_Operator_Condition2()
         {
             int val1 = 0, val2 = 0, val3 = 0, val4 = 0, val5 = 0, val6 = 0, val7 = 0, val8 = 0;
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 val1 < val2 &&
                 val3 <= val4 &&
                 val5 > val6 &&
@@ -92,7 +92,7 @@ namespace TestCheck35
         public void Test_Operator_Condition3()
         {
             int val1 = 0, val2 = 0, val3 = 0, val4 = 0, val5 = 0, val6 = 0;
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 val1 == val2 &&
                 val3 == val4 ||
                 val5 == val6);
@@ -104,7 +104,7 @@ namespace TestCheck35
         public void Test_Brackets()
         {
             int val1 = 0, val2 = 0, val3 = 0, val4 = 0, val5 = 0, val6 = 0, val7 = 0, val8 = 0, val9 = 0, val10= 0;
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                ((val1 == val2 && val3 == val4) || (val5 == val6 && val7 == val8)) && (val9 == val10));
             AssertEx.AreEqual(query, _connection,
             @"((((@val1) = (@val2)) AND ((@val3) = (@val4))) OR (((@val5) = (@val6)) AND ((@val7) = (@val8)))) AND ((@val9) = (@val10))", Zero(10));

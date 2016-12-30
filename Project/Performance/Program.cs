@@ -59,7 +59,7 @@ namespace Performance
                 watch.Start();
 
 
-                var query = Sql<Data>.Create(db =>
+                var query = Sql<Data>.Of(db =>
 
                     Select(new SelectedData()
                     {

@@ -1,4 +1,5 @@
-﻿using LambdicSql.ExpressionConverterService.SqlSyntaxConverter;
+﻿using LambdicSql.ExpressionConverterService;
+using LambdicSql.ExpressionConverterService.SqlSyntaxConverter;
 using LambdicSql.ExpressionConverterService.SqlSyntaxConverter.Inside;
 using LambdicSql.Inside;
 using LambdicSql.SqlBase;

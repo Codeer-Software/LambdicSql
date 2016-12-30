@@ -37,7 +37,7 @@ namespace TestCheck35
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = (decimal)Avg(db.tbl_remuneration.money).
@@ -69,7 +69,7 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = (decimal)Avg(3).
@@ -99,8 +99,8 @@ FROM tbl_remuneration", 3);
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var exp = Sql<DB>.Create(db => db.tbl_remuneration.money);
-            var query = Sql<DB>.Create(db =>
+            var exp = Sql<DB>.Of(db => db.tbl_remuneration.money);
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = (decimal)Avg(exp).
@@ -130,7 +130,7 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Sum(db.tbl_remuneration.money).
@@ -160,7 +160,7 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Sum(3).
@@ -190,8 +190,8 @@ FROM tbl_remuneration", 3);
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var exp = Sql<DB>.Create(db => db.tbl_remuneration.money);
-            var query = Sql<DB>.Create(db =>
+            var exp = Sql<DB>.Of(db => db.tbl_remuneration.money);
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Sum(exp).
@@ -221,8 +221,8 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var exp = Sql<DB>.Create(db => db.tbl_remuneration.money);
-            var query = Sql<DB>.Create(db =>
+            var exp = Sql<DB>.Of(db => db.tbl_remuneration.money);
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Sum(All(), exp).
@@ -252,7 +252,7 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Count(db.tbl_remuneration.money).
@@ -285,7 +285,7 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Count(3).
@@ -315,8 +315,8 @@ FROM tbl_remuneration", 3);
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var exp = Sql<DB>.Create(db => db.tbl_remuneration.money);
-            var query = Sql<DB>.Create(db =>
+            var exp = Sql<DB>.Of(db => db.tbl_remuneration.money);
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Count(exp).
@@ -346,7 +346,7 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Count(Asterisk()).
@@ -376,7 +376,7 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Count(All(), db.tbl_remuneration.money).
@@ -405,7 +405,7 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType().Name != "OracleConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Count(All(), Asterisk()).
@@ -435,7 +435,7 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Max(db.tbl_remuneration.money).
@@ -465,7 +465,7 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Max(3).
@@ -495,8 +495,8 @@ FROM tbl_remuneration", 3);
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var exp = Sql<DB>.Create(db => db.tbl_remuneration.money);
-            var query = Sql<DB>.Create(db =>
+            var exp = Sql<DB>.Of(db => db.tbl_remuneration.money);
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Max(exp).
@@ -526,7 +526,7 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Min(db.tbl_remuneration.money).
@@ -556,7 +556,7 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Min(3).
@@ -586,8 +586,8 @@ FROM tbl_remuneration", 3);
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var exp = Sql<DB>.Create(db => db.tbl_remuneration.money);
-            var query = Sql<DB>.Create(db =>
+            var exp = Sql<DB>.Of(db => db.tbl_remuneration.money);
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Min(exp).
@@ -617,7 +617,7 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = First_Value(db.tbl_remuneration.money).
@@ -648,7 +648,7 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = First_Value(3).
@@ -678,8 +678,8 @@ FROM tbl_remuneration", 3);
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var exp = Sql<DB>.Create(db => db.tbl_remuneration.money);
-            var query = Sql<DB>.Create(db =>
+            var exp = Sql<DB>.Of(db => db.tbl_remuneration.money);
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = First_Value(exp).
@@ -709,7 +709,7 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Last_Value(db.tbl_remuneration.money).
@@ -739,7 +739,7 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Last_Value(3).
@@ -769,8 +769,8 @@ FROM tbl_remuneration", 3);
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var exp = Sql<DB>.Create(db => db.tbl_remuneration.money);
-            var query = Sql<DB>.Create(db =>
+            var exp = Sql<DB>.Of(db => db.tbl_remuneration.money);
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Last_Value(exp).
@@ -800,7 +800,7 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Rank().
@@ -827,7 +827,7 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Dense_Rank().
@@ -855,7 +855,7 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "MySqlConnection") return;
             if (_connection.GetType().Name == "OracleConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData
                 {
                     Val = (decimal)Percent_Rank().
@@ -882,7 +882,7 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = (decimal)Cume_Dist().
@@ -910,7 +910,7 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "MySqlConnection") return;
             if (_connection.GetType().Name == "NpgsqlConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Ntile(2).
@@ -938,8 +938,8 @@ FROM tbl_remuneration", 2);
             if (_connection.GetType().Name == "MySqlConnection") return;
             if (_connection.GetType().Name == "NpgsqlConnection") return;
 
-            var exp = Sql<DB>.Create(db => 2);
-            var query = Sql<DB>.Create(db =>
+            var exp = Sql<DB>.Of(db => 2);
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Ntile(exp).
@@ -966,7 +966,7 @@ FROM tbl_remuneration", 2);
             if (_connection.GetType().Name != "OracleConnection" &&
                 _connection.GetType().Name != "DB2Connection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Nth_Value(db.tbl_remuneration.money, 2).
@@ -993,7 +993,7 @@ FROM tbl_remuneration", 2);
         {
             if (_connection.GetType().Name != "OracleConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Nth_Value(2, (long)db.tbl_remuneration.money).
@@ -1021,9 +1021,9 @@ FROM tbl_remuneration", 2);
             if (_connection.GetType().Name != "OracleConnection" &&
                 _connection.GetType().Name != "DB2Connection") return;
 
-            var exp1 = Sql<DB>.Create(db => db.tbl_remuneration.money);
-            var exp2 = Sql<DB>.Create(db => (long)2);
-            var query = Sql<DB>.Create(db =>
+            var exp1 = Sql<DB>.Of(db => db.tbl_remuneration.money);
+            var exp2 = Sql<DB>.Of(db => (long)2);
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Nth_Value(exp1, exp2).
@@ -1051,7 +1051,7 @@ FROM tbl_remuneration", (long)2);
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Lag(db.tbl_remuneration.money).
@@ -1078,7 +1078,7 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Lag(3).
@@ -1105,8 +1105,8 @@ FROM tbl_remuneration", 3);
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var exp = Sql<DB>.Create(db => db.tbl_remuneration.money);
-            var query = Sql<DB>.Create(db =>
+            var exp = Sql<DB>.Of(db => db.tbl_remuneration.money);
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Lag(exp).
@@ -1134,7 +1134,7 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "MySqlConnection") return;
             if (_connection.GetType().Name == "DB2Connection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Lag(db.tbl_remuneration.money, 2).
@@ -1164,7 +1164,7 @@ FROM tbl_remuneration", 2);
             if (_connection.GetType().Name == "MySqlConnection") return;
             if (_connection.GetType().Name == "DB2Connection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Lag(3, db.tbl_remuneration.id).
@@ -1192,9 +1192,9 @@ FROM tbl_remuneration", 3);
             if (_connection.GetType().Name == "MySqlConnection") return;
             if (_connection.GetType().Name == "DB2Connection") return;
 
-            var exp1 = Sql<DB>.Create(db => db.tbl_remuneration.money);
-            var exp2 = Sql<DB>.Create(db => 2);
-            var query = Sql<DB>.Create(db =>
+            var exp1 = Sql<DB>.Of(db => db.tbl_remuneration.money);
+            var exp2 = Sql<DB>.Of(db => 2);
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Lag(exp1, exp2).
@@ -1223,7 +1223,7 @@ FROM tbl_remuneration", 2);
             if (_connection.GetType().Name == "DB2Connection") return;
             if (_connection.GetType().Name == "NpgsqlConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Lag(db.tbl_remuneration.money, 2, 100).
@@ -1252,7 +1252,7 @@ FROM tbl_remuneration", 2, (decimal)100);
             if (_connection.GetType().Name == "DB2Connection") return;
             if (_connection.GetType().Name == "NpgsqlConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Lag(2000, db.tbl_remuneration.id, db.tbl_remuneration.id).
@@ -1281,10 +1281,10 @@ FROM tbl_remuneration", 2000);
             if (_connection.GetType().Name == "DB2Connection") return;
             if (_connection.GetType().Name == "NpgsqlConnection") return;
 
-            var exp1 = Sql<DB>.Create(db => db.tbl_remuneration.money);
-            var exp2 = Sql<DB>.Create(db => 2);
-            var exp3 = Sql<DB>.Create(db => 100);
-            var query = Sql<DB>.Create(db =>
+            var exp1 = Sql<DB>.Of(db => db.tbl_remuneration.money);
+            var exp2 = Sql<DB>.Of(db => 2);
+            var exp3 = Sql<DB>.Of(db => 100);
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Lag(exp1.Body, exp2, exp3).
@@ -1312,7 +1312,7 @@ FROM tbl_remuneration", 2, 100);
             if (_connection.GetType().FullName == "System.Data.SQLite.SQLiteConnection") return;
             if (_connection.GetType().FullName == "MySql.Data.MySqlClient.MySqlConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Count(db.tbl_remuneration.money).
@@ -1346,7 +1346,7 @@ FROM tbl_remuneration
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Count(db.tbl_remuneration.money).
@@ -1375,7 +1375,7 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType().Name != "OracleConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Count(db.tbl_remuneration.money).
@@ -1407,8 +1407,8 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "MySqlConnection") return;
             if (_connection.GetType().Name == "DB2Connection") return;
 
-            var exp = Sql<DB>.Create(db => 1);
-            var query = Sql<DB>.Create(db =>
+            var exp = Sql<DB>.Of(db => 1);
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Count(db.tbl_remuneration.money).
@@ -1440,7 +1440,7 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "MySqlConnection") return;
             if (_connection.GetType().Name == "DB2Connection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Count(db.tbl_remuneration.money).
@@ -1469,7 +1469,7 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType().Name != "OracleConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Count(db.tbl_remuneration.money).
@@ -1501,9 +1501,9 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "MySqlConnection") return;
             if (_connection.GetType().Name == "DB2Connection") return;
 
-            var exp1 = Sql<DB>.Create(db => 1);
-            var exp2 = Sql<DB>.Create(db => 3);
-            var query = Sql<DB>.Create(db =>
+            var exp1 = Sql<DB>.Of(db => 1);
+            var exp2 = Sql<DB>.Of(db => 3);
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Count(db.tbl_remuneration.money).
@@ -1533,7 +1533,7 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Count(db.tbl_remuneration.money).
@@ -1564,9 +1564,9 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var exp1 = Sql<DB>.Create(db => Asc(db.tbl_remuneration.money));
-            var exp2 = Sql<DB>.Create(db => Desc(db.tbl_remuneration.payment_date));
-            var query = Sql<DB>.Create(db =>
+            var exp1 = Sql<DB>.Of(db => Asc(db.tbl_remuneration.money));
+            var exp2 = Sql<DB>.Of(db => Desc(db.tbl_remuneration.payment_date));
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Count(db.tbl_remuneration.money).
@@ -1597,7 +1597,7 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Count(db.tbl_remuneration.money).
@@ -1622,8 +1622,8 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var partitionBy = Sql<DB>.Create(db => PartitionBy(db.tbl_remuneration.payment_date));
-            var query = Sql<DB>.Create(db =>
+            var partitionBy = Sql<DB>.Of(db => PartitionBy(db.tbl_remuneration.payment_date));
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Count(db.tbl_remuneration.money).
@@ -1648,7 +1648,7 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Count(db.tbl_remuneration.money).
@@ -1676,10 +1676,10 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var partitionBy = Sql<DB>.Create(db => PartitionBy(db.tbl_remuneration.payment_date));
-            var orderBy = Sql<DB>.Create(db => OrderBy(Asc(db.tbl_remuneration.money)));
+            var partitionBy = Sql<DB>.Of(db => PartitionBy(db.tbl_remuneration.payment_date));
+            var orderBy = Sql<DB>.Of(db => OrderBy(Asc(db.tbl_remuneration.money)));
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Count(db.tbl_remuneration.money).
@@ -1705,7 +1705,7 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType().Name != "NpgsqlConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Count(db.tbl_remuneration.money).
@@ -1731,10 +1731,10 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType().Name != "NpgsqlConnection") return;
 
-            var partitionBy = Sql<DB>.Create(db => PartitionBy(db.tbl_remuneration.payment_date));
-            var rows = Sql<DB>.Create(db => Rows(1, 5));
+            var partitionBy = Sql<DB>.Of(db => PartitionBy(db.tbl_remuneration.payment_date));
+            var rows = Sql<DB>.Of(db => Rows(1, 5));
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Count(db.tbl_remuneration.money).
@@ -1760,7 +1760,7 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Count(db.tbl_remuneration.money).
@@ -1790,10 +1790,10 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var partitionBy = Sql<DB>.Create(db => PartitionBy(db.tbl_remuneration.payment_date));
-            var orderBy = Sql<DB>.Create(db => OrderBy(Asc(db.tbl_remuneration.money)));
-            var rows = Sql<DB>.Create(db => Rows(1, 5));
-            var query = Sql<DB>.Create(db =>
+            var partitionBy = Sql<DB>.Of(db => PartitionBy(db.tbl_remuneration.payment_date));
+            var orderBy = Sql<DB>.Of(db => OrderBy(Asc(db.tbl_remuneration.money)));
+            var rows = Sql<DB>.Of(db => Rows(1, 5));
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Count(db.tbl_remuneration.money).
@@ -1821,11 +1821,11 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var partitionBy = Sql<DB>.Create(db => PartitionBy(db.tbl_remuneration.payment_date));
-            var orderBy = Sql<DB>.Create(db => OrderBy(Asc(db.tbl_remuneration.money)));
-            var rows = Sql<DB>.Create(db => Rows(1, 5));
+            var partitionBy = Sql<DB>.Of(db => PartitionBy(db.tbl_remuneration.payment_date));
+            var orderBy = Sql<DB>.Of(db => OrderBy(Asc(db.tbl_remuneration.money)));
+            var rows = Sql<DB>.Of(db => Rows(1, 5));
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Count(db.tbl_remuneration.money).
@@ -1850,8 +1850,8 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var orderBy = Sql<DB>.Create(db => OrderBy(Asc(db.tbl_remuneration.money)));
-            var query = Sql<DB>.Create(db =>
+            var orderBy = Sql<DB>.Of(db => OrderBy(Asc(db.tbl_remuneration.money)));
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Count(db.tbl_remuneration.money).
@@ -1876,7 +1876,7 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Count(db.tbl_remuneration.money).
@@ -1903,9 +1903,9 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var orderBy = Sql<DB>.Create(db => OrderBy(Asc(db.tbl_remuneration.money)));
-            var rows = Sql<DB>.Create(db => Rows(1, 5));
-            var query = Sql<DB>.Create(db =>
+            var orderBy = Sql<DB>.Of(db => OrderBy(Asc(db.tbl_remuneration.money)));
+            var rows = Sql<DB>.Of(db => Rows(1, 5));
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Count(db.tbl_remuneration.money).
@@ -1930,7 +1930,7 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType().Name != "NpgsqlConnection") return;
 
-            var query = Sql<DB>.Create(db =>
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Count(db.tbl_remuneration.money).
@@ -1953,8 +1953,8 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType().Name != "NpgsqlConnection") return;
 
-            var rows = Sql<DB>.Create(db => Rows(1, 5));
-            var query = Sql<DB>.Create(db =>
+            var rows = Sql<DB>.Of(db => Rows(1, 5));
+            var query = Sql<DB>.Of(db =>
                 Select(new SelectData()
                 {
                     Val = Count(db.tbl_remuneration.money).
