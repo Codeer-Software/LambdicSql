@@ -1,6 +1,6 @@
 ﻿using LambdicSql.SqlBase.TextParts;
 
-namespace LambdicSql.Inside
+namespace LambdicSql.Expressions.SqlSyntax.Inside
 {
     class CustomizeColumnOnly : ISqlTextCustomizer
     {

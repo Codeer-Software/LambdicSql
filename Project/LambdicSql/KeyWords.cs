@@ -1,4 +1,6 @@
-﻿using LambdicSql.Inside;
+﻿using LambdicSql.Expressions.SqlSyntax;
+using LambdicSql.Expressions.SqlSyntax.Inside;
+using LambdicSql.Inside;
 using LambdicSql.SqlBase;
 using System;
 

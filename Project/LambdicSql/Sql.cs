@@ -89,7 +89,7 @@ namespace LambdicSql
         public SqlRecursiveArgumentsExpression(DbInfo dbInfo, Expression core)
         {
             DbInfo = dbInfo;
-            var converter = new ExpressionConverter(dbInfo);
+            var converter = new LambdicSql.Inside.ExpressionConverter(dbInfo);
             if (core == null) ExpressionElement = string.Empty;
             else ExpressionElement = converter.Convert(core);
         }

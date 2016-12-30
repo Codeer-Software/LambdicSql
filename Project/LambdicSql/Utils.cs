@@ -1,9 +1,5 @@
 ﻿using LambdicSql.Inside;
-using LambdicSql.SqlBase;
-using LambdicSql.SqlBase.TextParts;
-using System.Linq.Expressions;
-using System.Linq;
-using System;
+using LambdicSql.Expressions.SqlSyntax.Inside;
 
 namespace LambdicSql
 {
@@ -44,36 +40,5 @@ namespace LambdicSql
         /// <returns>Column name only.</returns>
         [SqlSyntaxColumnOnly]
         public static T ColumnOnly<T>(this T column) => InvalitContext.Throw<T>(nameof(ColumnOnly));
-    }
-    
-    class SqlSyntaxToSqlAttribute : SqlSyntaxMethodAttribute
-    {
-        public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method)
-        {
-            var text = (string)converter.ToObject(method.Arguments[0]);
-            var array = method.Arguments[1] as NewArrayExpression;
-            return new StringFormatText(text, array.Expressions.Select(e => converter.Convert(e)).ToArray());
-        }
-    }
-
-    class SqlSyntaxTwoWaySqlAttribute : SqlSyntaxMethodAttribute
-    {
-        public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method)
-        {
-            var obj = converter.ToObject(method.Arguments[0]);
-            var text = TowWaySqlSpec.ToStringFormat((string)obj);
-            var array = method.Arguments[1] as NewArrayExpression;
-            return new StringFormatText(text, array.Expressions.Select(e => converter.Convert(e)).ToArray());
-        }
-    }
-
-    class SqlSyntaxColumnOnlyAttribute : SqlSyntaxMethodAttribute
-    {
-        public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method)
-        {
-            var col = converter.Convert(method.Arguments[0]) as DbColumnText;
-            if (col == null) throw new NotSupportedException("invalid column.");
-            return col.Customize(new CustomizeColumnOnly());
-        }
     }
 }
