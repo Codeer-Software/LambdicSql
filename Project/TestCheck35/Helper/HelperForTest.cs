@@ -8,7 +8,7 @@ using System.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
-using LambdicSql.ExpressionConverterServices.SqlSyntax;
+using LambdicSql.ExpressionConverterService.SqlSyntaxConverter;
 
 namespace TestCheck35
 {
@@ -18,7 +18,7 @@ namespace TestCheck35
         public static ClauseChain<object> Empty() => null;
     }
 
-    class SqlSyntaxTestAttribute : SqlSyntaxMethodAttribute
+    class SqlSyntaxTestAttribute : SqlSyntaxConverterMethodAttribute
     {
         public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method) => string.Empty;
     }
