@@ -1,5 +1,5 @@
 ﻿using LambdicSql.Inside;
-using LambdicSql.Expressions.SqlSyntax.Inside;
+using LambdicSql.ExpressionConverterServices.SqlSyntax.Inside;
 
 namespace LambdicSql
 {

@@ -8,7 +8,7 @@ using System.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
-using LambdicSql.Expressions.SqlSyntax;
+using LambdicSql.ExpressionConverterServices.SqlSyntax;
 
 namespace TestCheck35
 {
