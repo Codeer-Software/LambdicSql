@@ -550,7 +550,7 @@ FROM rec", 1, 1, 1, 5);
 
             var select = Sql<DB>.Create(db =>
                 Select(new object[] { 1 }).
-                From(Dual()).
+                From(Dual).
                 Union(All()).
                 Select(new object[] { rec.Body.val + 1 }).
                 From(rec).

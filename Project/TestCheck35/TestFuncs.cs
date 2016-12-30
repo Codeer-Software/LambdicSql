@@ -827,7 +827,7 @@ FROM tbl_staff",
                 Select(new
                 {
                     Val = CurrentDate()
-                }).From(Dual()));
+                }).From(Dual));
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -888,7 +888,7 @@ FROM DUAL");
                 {
                     Val = CurrentTimeStamp()
                 }).
-                From(Dual()));
+                From(Dual));
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);

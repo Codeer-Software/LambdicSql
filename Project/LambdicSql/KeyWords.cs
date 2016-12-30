@@ -1107,13 +1107,6 @@ namespace LambdicSql
         [SqlSyntaxKeyword]
         public static object RowNum() => InvalitContext.Throw<Non>(nameof(RowNum));
 
-        //TODO 異質だなー
-        /// <summary>
-        /// DUAL keyword.
-        /// </summary>
-        [SqlSyntaxKeyword]
-        public static object Dual() => InvalitContext.Throw<Non>(nameof(Dual));
-
         /// <summary>
         /// CURREN_TDATE function.
         /// </summary>
@@ -1135,6 +1128,11 @@ namespace LambdicSql
         [SqlSyntaxCurrentDateTime(Name = "TIMESTAMP")]
         public static DateTime CurrentTimeStamp() => InvalitContext.Throw<DateTime>(nameof(CurrentTimeStamp));
 
+        /// <summary>
+        /// DUAL keyword.
+        /// </summary>
+        [SqlSyntaxKeyword]
+        public static object Dual => InvalitContext.Throw<Non>(nameof(Dual));
         #endregion
 
         #region SQL Functions
