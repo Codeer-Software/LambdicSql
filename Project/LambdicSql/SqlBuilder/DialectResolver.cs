@@ -1,6 +1,4 @@
-﻿using LambdicSql.SqlBase;
-
-namespace LambdicSql.Inside
+﻿namespace LambdicSql.SqlBuilder
 {
     static class DialectResolver
     {

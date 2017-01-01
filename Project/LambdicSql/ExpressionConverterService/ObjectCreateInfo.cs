@@ -2,7 +2,7 @@
 using System.Linq.Expressions;
 using System.Linq;
 
-namespace LambdicSql.SqlBase
+namespace LambdicSql.ExpressionConverterService
 {
     /// <summary>
     /// Object create info.

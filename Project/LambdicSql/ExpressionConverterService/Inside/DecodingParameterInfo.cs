@@ -1,4 +1,6 @@
-﻿namespace LambdicSql.Inside
+﻿using LambdicSql.Inside;
+
+namespace LambdicSql.ExpressionConverterService.Inside
 {
     class DecodingParameterInfo
     {

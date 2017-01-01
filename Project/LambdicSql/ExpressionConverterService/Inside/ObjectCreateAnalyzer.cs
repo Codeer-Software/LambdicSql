@@ -4,9 +4,8 @@ using System.Linq;
 using System;
 using LambdicSql;
 using System.Collections.Generic;
-using LambdicSql.SqlBase;
 
-namespace LambdicSql.Inside
+namespace LambdicSql.ExpressionConverterService.Inside
 {
     static class ObjectCreateAnalyzer
     {

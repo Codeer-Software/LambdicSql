@@ -1,6 +1,4 @@
 ﻿using LambdicSql;
-using LambdicSql.SqlBase;
-using LambdicSql.SqlBase.TextParts;
 using System.Linq.Expressions;
 using System;
 using System.Diagnostics;
@@ -8,7 +6,9 @@ using System.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
-using LambdicSql.ExpressionConverterService.SqlSyntaxConverter;
+using LambdicSql.ExpressionConverterService.SqlSyntaxes;
+using LambdicSql.ExpressionConverterService;
+using LambdicSql.SqlBuilder.ExpressionElements;
 
 namespace TestCheck35
 {

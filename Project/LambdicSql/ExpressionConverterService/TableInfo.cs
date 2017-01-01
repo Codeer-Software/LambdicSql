@@ -1,4 +1,4 @@
-﻿namespace LambdicSql.SqlBase
+﻿namespace LambdicSql.ExpressionConverterService
 {
     /// <summary>
     /// Table info.

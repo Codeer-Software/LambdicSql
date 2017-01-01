@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 using System.Linq;
 using System.Reflection;
 
-namespace LambdicSql.Inside
+namespace LambdicSql.ExpressionConverterService.Inside
 {
     internal static partial class ExpressionToObject
     {

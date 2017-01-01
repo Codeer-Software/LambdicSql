@@ -1,4 +1,4 @@
-﻿namespace LambdicSql.SqlBase
+﻿namespace LambdicSql.SqlBuilder
 {
     /// <summary>
     /// Option of to convert expression to sql text.

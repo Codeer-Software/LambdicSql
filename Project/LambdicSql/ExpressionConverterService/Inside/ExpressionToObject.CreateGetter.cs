@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LambdicSql.Inside
+namespace LambdicSql.ExpressionConverterService.Inside
 {
     internal static partial class ExpressionToObject
     {

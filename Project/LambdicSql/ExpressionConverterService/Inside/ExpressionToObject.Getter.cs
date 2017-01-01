@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace LambdicSql.Inside
+namespace LambdicSql.ExpressionConverterService.Inside
 {
     internal static partial class ExpressionToObject
     {

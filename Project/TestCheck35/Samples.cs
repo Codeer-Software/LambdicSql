@@ -6,7 +6,6 @@ using static Test.Helper.DBProviderInfo;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Test.Helper;
 using System.Collections.Generic;
-using LambdicSql.SqlBase;
 
 
 //important

@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
-using LambdicSql.SqlBase.TextParts;
+using LambdicSql.SqlBuilder.ExpressionElements;
 
-namespace LambdicSql.SqlBase
+namespace LambdicSql.ExpressionConverterService
 {
     //TODO del
     /// <summary>

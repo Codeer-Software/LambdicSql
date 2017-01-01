@@ -1,15 +1,16 @@
-﻿using LambdicSql.ExpressionConverterService.SqlSyntaxConverter.Inside;
-using LambdicSql.SqlBase;
-using LambdicSql.SqlBase.TextParts;
+﻿using LambdicSql.ExpressionConverterService.SqlSyntaxes.Inside;
+using LambdicSql.Inside;
+using LambdicSql.SqlBuilder.ExpressionElements;
+using LambdicSql.SqlBuilder.ExpressionElements.Inside;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
-using static LambdicSql.SqlBase.TextParts.SqlTextUtils;
+using static LambdicSql.SqlBuilder.ExpressionElements.Inside.SqlTextUtils;
 
-namespace LambdicSql.Inside
+namespace LambdicSql.ExpressionConverterService.Inside
 {
     class ExpressionConverter : IExpressionConverter
     {

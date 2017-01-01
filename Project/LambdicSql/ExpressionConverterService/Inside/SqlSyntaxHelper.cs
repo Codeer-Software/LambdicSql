@@ -1,12 +1,12 @@
-﻿using LambdicSql.ExpressionConverterService.SqlSyntaxConverter;
-using LambdicSql.SqlBase;
+﻿using LambdicSql.ExpressionConverterService.SqlSyntaxes;
+using LambdicSql.Inside;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-namespace LambdicSql.Inside
+namespace LambdicSql.ExpressionConverterService.Inside
 {
     static class SqlSyntaxHelper
     {

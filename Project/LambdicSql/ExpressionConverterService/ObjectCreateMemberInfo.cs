@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace LambdicSql.SqlBase
+namespace LambdicSql.ExpressionConverterService
 {
     /// <summary>
     /// Object create member info.

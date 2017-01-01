@@ -1,9 +1,5 @@
-﻿using LambdicSql.Inside;
-using LambdicSql.SqlBase;
-using LambdicSql.SqlBase.TextParts;
+﻿using LambdicSql.SqlBuilder;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace LambdicSql
 {

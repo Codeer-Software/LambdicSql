@@ -7,7 +7,6 @@ using LambdicSql;
 using LambdicSql.feat.Dapper;
 using static LambdicSql.Keywords;
 using System;
-using LambdicSql.SqlBase;
 
 namespace TestCheck35
 {

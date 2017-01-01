@@ -1,10 +1,9 @@
-﻿using LambdicSql.Inside;
-using LambdicSql.SqlBase.TextParts;
+﻿using LambdicSql.ExpressionConverterService.Inside;
+using LambdicSql.Inside;
 using System.Collections.Generic;
 using System.Linq;
-using System;
 
-namespace LambdicSql.SqlBase
+namespace LambdicSql.SqlBuilder
 {
     /// <summary>
     /// Parameter info.
@@ -66,41 +65,5 @@ namespace LambdicSql.SqlBase
             _parameters.Add(name, new DecodingParameterInfo() { MetadataToken = metadataToken, Detail = param });
             return name;
         }
-        /*
-        internal bool TryGetParam(SqlText key, out object leftObj)
-        {
-            leftObj = null;
-
-            var param = key as ParameterText;
-            if (param == null) return false;
-
-            DecodingParameterInfo val;
-            if (_parameters.TryGetValue(param.Text, out val))
-            {
-                leftObj = val.Detail.Value;
-                return true;
-            }
-            return false;
-        }
-
-        internal void Remove(SqlText key)
-        {
-            var param = key as ParameterText;
-            if (param != null) _parameters.Remove(param.Text);
-        }
-
-        internal string ResolvePrepare(SqlText key)
-        {
-            var param = key as ParameterText;
-            if (param == null) return key.ToString(false, 0);
-
-            DecodingParameterInfo val;
-            if (!_parameters.TryGetValue(param.Text, out val)) return key.ToString(false, 0);
-            _parameters.Remove(param.Text);
-            return val.Detail.Value.ToString();
-        }
-
-        internal void ChangeObject(SqlText key, object value)
-            => _parameters[((ParameterText)key).Text].Detail.Value = value;*/
     }
 }

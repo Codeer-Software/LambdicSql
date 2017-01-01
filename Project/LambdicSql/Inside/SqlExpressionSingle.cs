@@ -1,6 +1,7 @@
-﻿using LambdicSql.SqlBase;
+﻿using LambdicSql.ExpressionConverterService;
+using LambdicSql.ExpressionConverterService.Inside;
+using LambdicSql.SqlBuilder.ExpressionElements;
 using System.Linq.Expressions;
-using LambdicSql.SqlBase.TextParts;
 
 namespace LambdicSql.Inside
 {

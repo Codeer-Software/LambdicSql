@@ -1,4 +1,6 @@
-﻿namespace LambdicSql.SqlBase.TextParts
+﻿using LambdicSql.SqlBuilder.ExpressionElements;
+
+namespace LambdicSql.SqlBuilder
 {
     /// <summary>
     /// Customizer.

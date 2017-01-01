@@ -1,6 +1,6 @@
 ﻿using LambdicSql.Inside;
 
-namespace LambdicSql.SqlBase
+namespace LambdicSql.ExpressionConverterService
 {
     /// <summary>
     /// Query.

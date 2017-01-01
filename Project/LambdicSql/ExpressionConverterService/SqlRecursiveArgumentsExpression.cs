@@ -1,5 +1,5 @@
-﻿using LambdicSql.SqlBase;
-using LambdicSql.SqlBase.TextParts;
+﻿using LambdicSql.ExpressionConverterService.Inside;
+using LambdicSql.SqlBuilder.ExpressionElements;
 using System.Linq.Expressions;
 
 namespace LambdicSql.ExpressionConverterService
@@ -28,7 +28,7 @@ namespace LambdicSql.ExpressionConverterService
         public SqlRecursiveArgumentsExpression(DbInfo dbInfo, Expression core)
         {
             DbInfo = dbInfo;
-            var converter = new LambdicSql.Inside.ExpressionConverter(dbInfo);
+            var converter = new ExpressionConverter(dbInfo);
             if (core == null) ExpressionElement = string.Empty;
             else ExpressionElement = converter.Convert(core);
         }

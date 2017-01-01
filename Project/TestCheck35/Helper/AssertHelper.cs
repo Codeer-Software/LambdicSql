@@ -1,7 +1,4 @@
-﻿using LambdicSql;
-using LambdicSql.SqlBase;
-using System;
-using System.Data;
+﻿using System;
 
 namespace Microsoft.VisualStudio.TestTools.UnitTesting
 {

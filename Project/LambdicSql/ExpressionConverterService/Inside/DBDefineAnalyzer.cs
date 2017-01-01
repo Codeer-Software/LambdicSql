@@ -1,11 +1,10 @@
-﻿using LambdicSql.SqlBase;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace LambdicSql.Inside
+namespace LambdicSql.ExpressionConverterService.Inside
 {
     static class DBDefineAnalyzer
     {

@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using LambdicSql.ExpressionConverterService;
+using System.Collections.Generic;
 
-namespace LambdicSql.SqlBase.TextParts
+namespace LambdicSql.SqlBuilder
 {
     /// <summary>
     /// Context of SQL conversion.

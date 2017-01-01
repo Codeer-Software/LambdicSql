@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace LambdicSql.SqlBase
+namespace LambdicSql.ExpressionConverterService
 {
     /// <summary>
     /// Data Base info.

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LambdicSql.SqlBase
+namespace LambdicSql.ExpressionConverterService
 {
     /// <summary>
     /// Column info.
