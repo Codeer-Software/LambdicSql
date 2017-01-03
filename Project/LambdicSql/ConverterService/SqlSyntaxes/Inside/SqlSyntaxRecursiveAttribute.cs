@@ -34,7 +34,6 @@ namespace LambdicSql.ConverterService.SqlSyntaxes.Inside
 
             public override string ToString(bool isTopLevel, int indent, SqlBuildingContext context)
             {
-                context.ObjectCreateInfo = _createInfo;
                 return _core.ToString(isTopLevel, indent, context);
             }
 

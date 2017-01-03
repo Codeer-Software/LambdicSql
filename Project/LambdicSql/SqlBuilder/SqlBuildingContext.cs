@@ -19,11 +19,6 @@ namespace LambdicSql.SqlBuilder
         public ParameterInfo ParameterInfo { get; }
 
         /// <summary>
-        /// Object creat info.
-        /// </summary>
-        public ObjectCreateInfo ObjectCreateInfo { get; internal set; }
-
-        /// <summary>
         /// 
         /// </summary>
         public Dictionary<string, bool> WithEntied { get; } = new Dictionary<string, bool>();

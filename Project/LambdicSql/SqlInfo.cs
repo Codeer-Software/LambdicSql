@@ -11,12 +11,6 @@ namespace LambdicSql
     {
         Dictionary<string, DbParam> _dbParams;
 
-        //TODO これを排除  ORMは一旦削除の方向で
-        /// <summary>
-        /// Object create information.
-        /// </summary>
-        public ObjectCreateInfo SelectClauseInfo { get; }
-
         /// <summary>
         /// Sql text.
         /// </summary>
@@ -31,12 +25,10 @@ namespace LambdicSql
         /// Constructor.
         /// </summary>
         /// <param name="sqlText">Sql text.</param>
-        /// <param name="selectClauseInfo">Object create information.</param>
         /// <param name="dbParams">Parameters.</param>
-        public SqlInfo(string sqlText, ObjectCreateInfo selectClauseInfo, Dictionary<string, DbParam> dbParams)
+        public SqlInfo(string sqlText, Dictionary<string, DbParam> dbParams)
         {
             Text = sqlText;
-            SelectClauseInfo = selectClauseInfo;
             _dbParams = dbParams;
         }
 
@@ -47,7 +39,6 @@ namespace LambdicSql
         public SqlInfo(SqlInfo src)
         {
             Text = src.Text;
-            SelectClauseInfo = src.SelectClauseInfo;
             _dbParams = src._dbParams;
         }
     }
@@ -62,10 +53,9 @@ namespace LambdicSql
         /// Constructor.
         /// </summary>
         /// <param name="sqlText">Sql text.</param>
-        /// <param name="selectClauseInfo">Object create information.</param>
         /// <param name="dbParams">Parameters.</param>
-        public SqlInfo(string sqlText, ObjectCreateInfo selectClauseInfo, Dictionary<string, DbParam> dbParams)
-            : base(sqlText, selectClauseInfo, dbParams) { }
+        public SqlInfo(string sqlText, Dictionary<string, DbParam> dbParams)
+            : base(sqlText, dbParams) { }
 
         /// <summary>
         /// Constructor.

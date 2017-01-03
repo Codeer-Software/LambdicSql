@@ -12,7 +12,6 @@ namespace LambdicSql
     //とは言えこれでもいいといえばいい。
     //BuildingPartsのリファクタリング次第できめるしかないか・・・
 
-
     /// <summary>
     /// Expression.
     /// </summary>

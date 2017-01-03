@@ -19,8 +19,6 @@ namespace LambdicSql.SqlBuilder.Parts.Inside
 
         public override string ToString(bool isTopLevel, int indent, SqlBuildingContext context)
         {
-            //remember creat info.
-            if (context.ObjectCreateInfo == null) context.ObjectCreateInfo = _createInfo;
             return _core.ToString(isTopLevel, indent, context);
         }
 

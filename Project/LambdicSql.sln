@@ -17,8 +17,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCheck35", "TestCheck35\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Performance", "Performance\Performance.csproj", "{78A98BDE-6D67-40EF-BD40-705EA697ED2E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LambdicSql.ORM", "LambdicSql.ORM\LambdicSql.ORM.csproj", "{47719998-A412-4AB1-B264-2A055B5D092A}"
-EndProject
 Global
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true
@@ -80,18 +78,6 @@ Global
 		{78A98BDE-6D67-40EF-BD40-705EA697ED2E}.Release|x64.Build.0 = Release|Any CPU
 		{78A98BDE-6D67-40EF-BD40-705EA697ED2E}.Release|x86.ActiveCfg = Release|Any CPU
 		{78A98BDE-6D67-40EF-BD40-705EA697ED2E}.Release|x86.Build.0 = Release|Any CPU
-		{47719998-A412-4AB1-B264-2A055B5D092A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{47719998-A412-4AB1-B264-2A055B5D092A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{47719998-A412-4AB1-B264-2A055B5D092A}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{47719998-A412-4AB1-B264-2A055B5D092A}.Debug|x64.Build.0 = Debug|Any CPU
-		{47719998-A412-4AB1-B264-2A055B5D092A}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{47719998-A412-4AB1-B264-2A055B5D092A}.Debug|x86.Build.0 = Debug|Any CPU
-		{47719998-A412-4AB1-B264-2A055B5D092A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{47719998-A412-4AB1-B264-2A055B5D092A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{47719998-A412-4AB1-B264-2A055B5D092A}.Release|x64.ActiveCfg = Release|Any CPU
-		{47719998-A412-4AB1-B264-2A055B5D092A}.Release|x64.Build.0 = Release|Any CPU
-		{47719998-A412-4AB1-B264-2A055B5D092A}.Release|x86.ActiveCfg = Release|Any CPU
-		{47719998-A412-4AB1-B264-2A055B5D092A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
