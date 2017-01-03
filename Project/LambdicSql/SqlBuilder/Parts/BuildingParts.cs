@@ -1,4 +1,4 @@
-﻿namespace LambdicSql.SqlBuilder.Sentences
+﻿namespace LambdicSql.SqlBuilder.Parts
 {
     //TODO \tをテーブル化すると早くなる
     //抽象メソッドをなくしても早くなる
@@ -17,7 +17,7 @@
     /// <summary>
     /// Text.
     /// </summary>
-    public abstract class Sentence
+    public abstract class BuildingParts
     {
         /// <summary>
         /// Is single line.
@@ -44,33 +44,33 @@
         /// <param name="front">Front.</param>
         /// <param name="back">Back.</param>
         /// <returns>Text.</returns>
-        public abstract Sentence ConcatAround(string front, string back);
+        public abstract BuildingParts ConcatAround(string front, string back);
 
         /// <summary>
         /// Concat to front.
         /// </summary>
         /// <param name="front">Front.</param>
         /// <returns>Text.</returns>
-        public abstract Sentence ConcatToFront(string front);
+        public abstract BuildingParts ConcatToFront(string front);
 
         /// <summary>
         /// Concat to back.
         /// </summary>
         /// <param name="back"></param>
         /// <returns></returns>
-        public abstract Sentence ConcatToBack(string back);
+        public abstract BuildingParts ConcatToBack(string back);
 
         /// <summary>
         /// Customize.
         /// </summary>
         /// <param name="customizer">Customizer.</param>
         /// <returns>Customized SqlText.</returns>
-        public abstract Sentence Customize(ISqlTextCustomizer customizer);
+        public abstract BuildingParts Customize(ISqlTextCustomizer customizer);
 
         /// <summary>
         /// Convert string to IText.
         /// </summary>
         /// <param name="text">string.</param>
-        public static implicit operator Sentence(string text) => new SingleTextSentence(text);
+        public static implicit operator BuildingParts(string text) => new SingleTextBuildingParts(text);
     }
 }

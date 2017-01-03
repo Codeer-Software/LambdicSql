@@ -1,9 +1,10 @@
 ﻿using LambdicSql.ConverterService.Inside;
-using LambdicSql.SqlBuilder.Sentences;
+using LambdicSql.SqlBuilder.Parts;
 using System.Linq.Expressions;
 
 namespace LambdicSql.ConverterService
 {
+    //TODO これはいるけど、親に任せて空でよし
     /// <summary>
     /// 
     /// </summary>
@@ -13,12 +14,7 @@ namespace LambdicSql.ConverterService
         /// <summary>
         /// 
         /// </summary>
-        public override DbInfo DbInfo { get; protected set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public override Sentence Sentence { get; }
+        public override BuildingParts BuildingParts { get; }
 
         /// <summary>
         /// 
@@ -27,10 +23,9 @@ namespace LambdicSql.ConverterService
         /// <param name="core"></param>
         public SqlRecursiveArgumentsExpression(DbInfo dbInfo, Expression core)
         {
-            DbInfo = dbInfo;
             var converter = new ExpressionConverter(dbInfo);
-            if (core == null) Sentence = string.Empty;
-            else Sentence = converter.Convert(core);
+            if (core == null) BuildingParts = string.Empty;
+            else BuildingParts = converter.Convert(core);
         }
     }
 }

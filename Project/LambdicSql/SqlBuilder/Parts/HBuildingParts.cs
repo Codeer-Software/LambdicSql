@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace LambdicSql.SqlBuilder.Sentences
+namespace LambdicSql.SqlBuilder.Parts
 {
     /// <summary>
     /// Horizontal text.
     /// </summary>
-    public class HSentence : Sentence
+    public class HBuildingParts : BuildingParts
     {
-        List<Sentence> _texts = new List<Sentence>();
+        List<BuildingParts> _texts = new List<BuildingParts>();
 
         /// <summary>
         /// Separator.
@@ -45,7 +45,7 @@ namespace LambdicSql.SqlBuilder.Sentences
         /// Constructor.
         /// </summary>
         /// <param name="texts">Horizontal texts.</param>
-        public HSentence(params Sentence[] texts)
+        public HBuildingParts(params BuildingParts[] texts)
         {
             _texts.AddRange(texts.Where(e => !e.IsEmpty));
         }
@@ -54,7 +54,7 @@ namespace LambdicSql.SqlBuilder.Sentences
         /// Constructor.
         /// </summary>
         /// <param name="texts">Horizontal texts.</param>
-        public HSentence(IEnumerable<Sentence> texts)
+        public HBuildingParts(IEnumerable<BuildingParts> texts)
         {
             _texts.AddRange(texts.Where(e => !e.IsEmpty));
         }
@@ -93,14 +93,14 @@ namespace LambdicSql.SqlBuilder.Sentences
         public void Add(string text, int indent)
         {
             if (string.IsNullOrEmpty(text.Trim())) return;
-            _texts.Add(new SingleTextSentence(text, indent));
+            _texts.Add(new SingleTextBuildingParts(text, indent));
         }
 
         /// <summary>
         /// Add text.
         /// </summary>
         /// <param name="text">Text.</param>
-        public void Add(Sentence text)
+        public void Add(BuildingParts text)
         {
             if (text.IsEmpty) return;
             _texts.Add(text);
@@ -110,14 +110,14 @@ namespace LambdicSql.SqlBuilder.Sentences
         /// Add text.
         /// </summary>
         /// <param name="texts">Texts.</param>
-        public void AddRange(IEnumerable<Sentence> texts)
+        public void AddRange(IEnumerable<BuildingParts> texts)
             => _texts.AddRange(texts.Where(e => !e.IsEmpty));
 
         /// <summary>
         /// Add text.
         /// </summary>
         /// <param name="texts">Texts.</param>
-        public void AddRange(params Sentence[] texts)
+        public void AddRange(params BuildingParts[] texts)
             => _texts.AddRange(texts.Where(e => !e.IsEmpty));
 
         /// <summary>
@@ -126,7 +126,7 @@ namespace LambdicSql.SqlBuilder.Sentences
         /// <param name="front">Front.</param>
         /// <param name="back">Back.</param>
         /// <returns>Text.</returns>
-        public override Sentence ConcatAround(string front, string back)
+        public override BuildingParts ConcatAround(string front, string back)
         {
             if (_texts.Count == 0) return CopyProperty(front + back);
 
@@ -141,7 +141,7 @@ namespace LambdicSql.SqlBuilder.Sentences
         /// </summary>
         /// <param name="front">Front.</param>
         /// <returns>Text.</returns>
-        public override Sentence ConcatToFront(string front)
+        public override BuildingParts ConcatToFront(string front)
         {
             if (_texts.Count == 0) return CopyProperty(front);
 
@@ -155,7 +155,7 @@ namespace LambdicSql.SqlBuilder.Sentences
         /// </summary>
         /// <param name="back"></param>
         /// <returns></returns>
-        public override Sentence ConcatToBack(string back)
+        public override BuildingParts ConcatToBack(string back)
         {
             if (_texts.Count == 0) return CopyProperty(back);
 
@@ -169,13 +169,13 @@ namespace LambdicSql.SqlBuilder.Sentences
         /// </summary>
         /// <param name="customizer">Customizer.</param>
         /// <returns>Customized SqlText.</returns>
-        public override Sentence Customize(ISqlTextCustomizer customizer)
+        public override BuildingParts Customize(ISqlTextCustomizer customizer)
         {
             var dst = _texts.Select(e => customizer.Custom(e));
             return CopyProperty(dst.ToArray());
         }
 
-        HSentence CopyProperty(params Sentence[] texts)
-             => new HSentence(texts) { Indent = Indent, IsFunctional = IsFunctional, EnableChangeLine = EnableChangeLine, Separator = Separator };
+        HBuildingParts CopyProperty(params BuildingParts[] texts)
+             => new HBuildingParts(texts) { Indent = Indent, IsFunctional = IsFunctional, EnableChangeLine = EnableChangeLine, Separator = Separator };
     }
 }

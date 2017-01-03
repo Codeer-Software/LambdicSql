@@ -1,4 +1,4 @@
-﻿using LambdicSql.SqlBuilder.Sentences;
+﻿using LambdicSql.SqlBuilder.Parts;
 
 namespace LambdicSql.SqlBuilder
 {
@@ -12,6 +12,6 @@ namespace LambdicSql.SqlBuilder
         /// </summary>
         /// <param name="src">Source.</param>
         /// <returns>Result.</returns>
-        Sentence Custom(Sentence src);
+        BuildingParts Custom(BuildingParts src);
     }
 }

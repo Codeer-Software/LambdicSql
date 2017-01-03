@@ -1,7 +1,7 @@
 ﻿using LambdicSql.ConverterService;
 using LambdicSql.ConverterService.SqlSyntaxes;
 using LambdicSql.Inside;
-using LambdicSql.SqlBuilder.Sentences;
+using LambdicSql.SqlBuilder.Parts;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -26,7 +26,7 @@ namespace LambdicSql.feat.EntityFramework
 
     class SqlSyntaxTAttribute : SqlSyntaxConverterMethodAttribute
     {
-        public override Sentence Convert(ExpressionConverter converter, MethodCallExpression method)
+        public override BuildingParts Convert(ExpressionConverter converter, MethodCallExpression method)
             => converter.Convert(method.Arguments[0]);
     }
 }

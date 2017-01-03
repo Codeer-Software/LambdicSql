@@ -1,16 +1,16 @@
 ﻿using LambdicSql.ConverterService.Inside;
-using LambdicSql.SqlBuilder.Sentences;
-using LambdicSql.SqlBuilder.Sentences.Inside;
+using LambdicSql.SqlBuilder.Parts;
+using LambdicSql.SqlBuilder.Parts.Inside;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using static LambdicSql.SqlBuilder.Sentences.Inside.SqlTextUtils;
+using static LambdicSql.SqlBuilder.Parts.Inside.SqlTextUtils;
 
 namespace LambdicSql.ConverterService.SqlSyntaxes.Inside
 {
     class SqlSyntaxSelectAttribute : SqlSyntaxConverterMethodAttribute
     {
-        public override Sentence Convert(ExpressionConverter converter, MethodCallExpression method)
+        public override BuildingParts Convert(ExpressionConverter converter, MethodCallExpression method)
         {
             //ALL, DISTINCT
             var modify = new List<Expression>();
@@ -19,11 +19,11 @@ namespace LambdicSql.ConverterService.SqlSyntaxes.Inside
                 modify.Add(method.Arguments[i]);
             }
 
-            var select = LineSpace(new Sentence[] { "SELECT" }.Concat(modify.Select(e => converter.Convert(e))).ToArray());
+            var select = LineSpace(new BuildingParts[] { "SELECT" }.Concat(modify.Select(e => converter.Convert(e))).ToArray());
 
             //select elemnts.
             var selectTargets = method.Arguments[method.Arguments.Count - 1];
-            Sentence selectTargetText = null;
+            BuildingParts selectTargetText = null;
             ObjectCreateInfo createInfo = null;
 
             //*
@@ -38,13 +38,13 @@ namespace LambdicSql.ConverterService.SqlSyntaxes.Inside
             {
                 createInfo = ObjectCreateAnalyzer.MakeSelectInfo(selectTargets);
                 selectTargetText =
-                    new VSentence(createInfo.Members.Select(e => ToStringSelectedElement(converter, e)).ToArray()) { Indent = 1, Separator = "," };
+                    new VBuildingParts(createInfo.Members.Select(e => ToStringSelectedElement(converter, e)).ToArray()) { Indent = 1, Separator = "," };
             }
 
-            return new SelectClauseText(createInfo, selectTargetText == null ? (Sentence)select : new VSentence(select, selectTargetText));
+            return new SelectClauseText(createInfo, selectTargetText == null ? (BuildingParts)select : new VBuildingParts(select, selectTargetText));
         }
 
-        static Sentence ToStringSelectedElement(ExpressionConverter converter, ObjectCreateMemberInfo element)
+        static BuildingParts ToStringSelectedElement(ExpressionConverter converter, ObjectCreateMemberInfo element)
         {
             //single select.
             //for example, COUNT(*).

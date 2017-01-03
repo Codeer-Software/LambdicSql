@@ -58,7 +58,7 @@ namespace LambdicSql.feat.Dapper
 
             try
             {
-                return DapperWrapper<T>.Query(cnn, info.Text, CreateDynamicParam(info.DbParams), transaction, buffered, commandTimeout, commandType);
+                return DapperWrapper<T>.Query(cnn, info.Text, CreateDynamicParam(info.Params), transaction, buffered, commandTimeout, commandType);
             }
             catch (Exception e)
             {
@@ -85,7 +85,7 @@ namespace LambdicSql.feat.Dapper
 
             try
             {
-                return DapperWrapper.Execute(cnn, info.Text, CreateDynamicParam(info.DbParams), transaction, commandTimeout, commandType);
+                return DapperWrapper.Execute(cnn, info.Text, CreateDynamicParam(info.Params), transaction, commandTimeout, commandType);
             }
             catch (Exception e)
             {

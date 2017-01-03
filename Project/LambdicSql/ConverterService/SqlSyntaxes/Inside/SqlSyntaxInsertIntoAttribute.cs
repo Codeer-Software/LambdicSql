@@ -1,12 +1,12 @@
-﻿using LambdicSql.SqlBuilder.Sentences;
+﻿using LambdicSql.SqlBuilder.Parts;
 using System.Linq.Expressions;
-using static LambdicSql.SqlBuilder.Sentences.Inside.SqlTextUtils;
+using static LambdicSql.SqlBuilder.Parts.Inside.SqlTextUtils;
 
 namespace LambdicSql.ConverterService.SqlSyntaxes.Inside
 {
     class SqlSyntaxInsertIntoAttribute : SqlSyntaxConverterMethodAttribute
     {
-        public override Sentence Convert(ExpressionConverter converter, MethodCallExpression method)
+        public override BuildingParts Convert(ExpressionConverter converter, MethodCallExpression method)
         {
             var table = converter.Convert(method.Arguments[0]);
 

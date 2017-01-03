@@ -1,24 +1,24 @@
 ﻿using LambdicSql.SqlBuilder;
-using LambdicSql.SqlBuilder.Sentences;
+using LambdicSql.SqlBuilder.Parts;
 using System.Linq;
 using System.Linq.Expressions;
-using static LambdicSql.SqlBuilder.Sentences.Inside.SqlTextUtils;
+using static LambdicSql.SqlBuilder.Parts.Inside.SqlTextUtils;
 
 namespace LambdicSql.ConverterService.SqlSyntaxes.Inside
 {
     class SqlSyntaxAllAttribute : SqlSyntaxConverterMethodAttribute
     {
-        public override Sentence Convert(ExpressionConverter converter, MethodCallExpression method)
+        public override BuildingParts Convert(ExpressionConverter converter, MethodCallExpression method)
         {
             var args = method.Arguments.Select(e => converter.Convert(e)).ToArray();
             return new DisableBracketsText(Func("ALL", args[0]));
         }
 
-        internal class DisableBracketsText : Sentence
+        internal class DisableBracketsText : BuildingParts
         {
-            Sentence _core;
+            BuildingParts _core;
 
-            internal DisableBracketsText(Sentence core)
+            internal DisableBracketsText(BuildingParts core)
             {
                 _core = core;
             }
@@ -32,13 +32,13 @@ namespace LambdicSql.ConverterService.SqlSyntaxes.Inside
                 return _core.ToString(false, indent, context);
             }
 
-            public override Sentence ConcatAround(string front, string back) => this;
+            public override BuildingParts ConcatAround(string front, string back) => this;
 
-            public override Sentence ConcatToFront(string front) => new DisableBracketsText(_core.ConcatToFront(front));
+            public override BuildingParts ConcatToFront(string front) => new DisableBracketsText(_core.ConcatToFront(front));
 
-            public override Sentence ConcatToBack(string back) => new DisableBracketsText(_core.ConcatToBack(back));
+            public override BuildingParts ConcatToBack(string back) => new DisableBracketsText(_core.ConcatToBack(back));
 
-            public override Sentence Customize(ISqlTextCustomizer customizer) => customizer.Custom(this);
+            public override BuildingParts Customize(ISqlTextCustomizer customizer) => customizer.Custom(this);
         }
     }
 }

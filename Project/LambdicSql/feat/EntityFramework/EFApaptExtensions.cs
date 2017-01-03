@@ -39,7 +39,7 @@ namespace LambdicSql.feat.EntityFramework
             object[] args;
             using (var com = cnn.CreateCommand())
             {
-                args = info.DbParams.Select(e => CreateParameter(com, e.Key, e.Value)).ToArray();
+                args = info.Params.Select(e => CreateParameter(com, e.Key, e.Value)).ToArray();
 
                 try
                 {
@@ -66,7 +66,7 @@ namespace LambdicSql.feat.EntityFramework
             object[] args;
             using (var com = cnn.CreateCommand())
             {
-                args = info.DbParams.Select(e => CreateParameter(com, e.Key, e.Value)).ToArray();
+                args = info.Params.Select(e => CreateParameter(com, e.Key, e.Value)).ToArray();
             }
 
             try

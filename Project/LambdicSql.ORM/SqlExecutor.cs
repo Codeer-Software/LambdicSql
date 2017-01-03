@@ -36,7 +36,7 @@ namespace LambdicSql.ORM
                 {
                     com.CommandText = _info.Text;
                     com.Connection = _connection;
-                    foreach (var obj in _info.DbParams.Select(e => CreateParameter(com, e.Key, e.Value.Value)))
+                    foreach (var obj in _info.Params.Select(e => CreateParameter(com, e.Key, e.Value.Value)))
                     {
                         com.Parameters.Add(obj);
                     }
@@ -76,7 +76,7 @@ namespace LambdicSql.ORM
                 {
                     com.CommandText = _info.Text;
                     com.Connection = _connection;
-                    foreach (var obj in _info.DbParams.Select(e => CreateParameter(com, e.Key, e.Value.Value)))
+                    foreach (var obj in _info.Params.Select(e => CreateParameter(com, e.Key, e.Value.Value)))
                     {
                         com.Parameters.Add(obj);
                     }

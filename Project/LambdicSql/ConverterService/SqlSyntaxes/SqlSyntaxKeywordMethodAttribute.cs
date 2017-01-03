@@ -1,4 +1,4 @@
-﻿using LambdicSql.SqlBuilder.Sentences;
+﻿using LambdicSql.SqlBuilder.Parts;
 using System.Linq.Expressions;
 
 namespace LambdicSql.ConverterService.SqlSyntaxes
@@ -19,7 +19,7 @@ namespace LambdicSql.ConverterService.SqlSyntaxes
         /// <param name="converter"></param>
         /// <param name="method"></param>
         /// <returns></returns>
-        public override Sentence Convert(ExpressionConverter converter, MethodCallExpression method)
+        public override BuildingParts Convert(ExpressionConverter converter, MethodCallExpression method)
             => string.IsNullOrEmpty(Name) ? method.Method.Name.ToUpper() : Name;
     }
 }

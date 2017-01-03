@@ -42,7 +42,7 @@ namespace LambdicSql
         public static SqlInfo Build(this ISqlExpression expression, DialectOption option)
         {
             var context = new SqlBuildingContext(option);
-            return new SqlInfo(expression.DbInfo, expression.Sentence.ToString(true, 0, context), context.ObjectCreateInfo, context.ParameterInfo.GetDbParams());
+            return new SqlInfo(expression.BuildingParts.ToString(true, 0, context), context.ObjectCreateInfo, context.ParameterInfo.GetDbParams());
         }
 
         class Non { }

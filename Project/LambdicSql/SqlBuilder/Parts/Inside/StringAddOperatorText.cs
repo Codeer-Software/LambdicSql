@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 
-namespace LambdicSql.SqlBuilder.Sentences.Inside
+namespace LambdicSql.SqlBuilder.Parts.Inside
 {
-    class StringAddOperatorText : Sentence
+    class StringAddOperatorText : BuildingParts
     {
         string _front = string.Empty;
         string _back = string.Empty;
@@ -22,16 +22,16 @@ namespace LambdicSql.SqlBuilder.Sentences.Inside
         public override string ToString(bool isTopLevel, int indent, SqlBuildingContext context)
             => string.Join(string.Empty, Enumerable.Range(0, indent).Select(e => "\t").ToArray()) + _front + context.Option.StringAddOperator + _back;
 
-        public override Sentence ConcatAround(string front, string back)
+        public override BuildingParts ConcatAround(string front, string back)
             => new StringAddOperatorText(front + _front, _back + back);
 
-        public override Sentence ConcatToFront(string front)
+        public override BuildingParts ConcatToFront(string front)
             => new StringAddOperatorText(front + _front, _back);
 
-        public override Sentence ConcatToBack(string back)
+        public override BuildingParts ConcatToBack(string back)
             => new StringAddOperatorText(_front, _back + back);
 
-        public override Sentence Customize(ISqlTextCustomizer customizer)
+        public override BuildingParts Customize(ISqlTextCustomizer customizer)
             => customizer.Custom(this);
     }
 }

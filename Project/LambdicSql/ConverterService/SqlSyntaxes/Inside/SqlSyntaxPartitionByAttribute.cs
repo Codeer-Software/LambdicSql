@@ -1,4 +1,4 @@
-﻿using LambdicSql.SqlBuilder.Sentences;
+﻿using LambdicSql.SqlBuilder.Parts;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -6,12 +6,12 @@ namespace LambdicSql.ConverterService.SqlSyntaxes.Inside
 {
     class SqlSyntaxPartitionByAttribute : SqlSyntaxConverterMethodAttribute
     {
-        public override Sentence Convert(ExpressionConverter converter, MethodCallExpression method)
+        public override BuildingParts Convert(ExpressionConverter converter, MethodCallExpression method)
         {
-            var partitionBy = new VSentence();
+            var partitionBy = new VBuildingParts();
             partitionBy.Add("PARTITION BY");
 
-            var elements = new VSentence() { Indent = 1, Separator = "," };
+            var elements = new VBuildingParts() { Indent = 1, Separator = "," };
             var array = method.Arguments[0] as NewArrayExpression;
             foreach (var e in array.Expressions.Select(e => converter.Convert(e)))
             {

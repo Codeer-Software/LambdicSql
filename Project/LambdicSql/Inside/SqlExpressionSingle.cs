@@ -1,27 +1,25 @@
 ﻿using LambdicSql.ConverterService;
 using LambdicSql.ConverterService.Inside;
-using LambdicSql.SqlBuilder.Sentences;
+using LambdicSql.SqlBuilder.Parts;
 using System.Linq.Expressions;
 
 namespace LambdicSql.Inside
 {
+    //TODO こいつらいらんやろ
     class SqlExpressionSingle<TSelected> : SqlExpression<TSelected>
     {
-        public override DbInfo DbInfo { get; protected set; }
-        public override Sentence Sentence { get; }
+        public override BuildingParts BuildingParts { get; }
 
         public SqlExpressionSingle(DbInfo dbInfo, Expression core)
         {
-            DbInfo = dbInfo;
             var converter = new ExpressionConverter(dbInfo);
-            if (core == null) Sentence = string.Empty;
-            else Sentence = converter.Convert(core);
+            if (core == null) BuildingParts = string.Empty;
+            else BuildingParts = converter.Convert(core);
         }
 
-        public SqlExpressionSingle(DbInfo dbInfo, Sentence core)
+        public SqlExpressionSingle(DbInfo dbInfo, BuildingParts core)
         {
-            DbInfo = dbInfo;
-            Sentence = core;
+            BuildingParts = core;
         }
     }
 }

@@ -1,12 +1,12 @@
 ﻿using LambdicSql.SqlBuilder;
-using LambdicSql.SqlBuilder.Sentences;
-using LambdicSql.SqlBuilder.Sentences.Inside;
+using LambdicSql.SqlBuilder.Parts;
+using LambdicSql.SqlBuilder.Parts.Inside;
 
 namespace LambdicSql.ConverterService.SqlSyntaxes.Inside
 {
     class CustomizeColumnOnly : ISqlTextCustomizer
     {
-        public Sentence Custom(Sentence src)
+        public BuildingParts Custom(BuildingParts src)
         {
             var col = src as DbColumnText;
             if (col == null) return src;

@@ -1,11 +1,11 @@
 ﻿using System.Linq;
 
-namespace LambdicSql.SqlBuilder.Sentences
+namespace LambdicSql.SqlBuilder.Parts
 {
     /// <summary>
     /// Single text.
     /// </summary>
-    public class SingleTextSentence : Sentence
+    public class SingleTextBuildingParts : BuildingParts
     {
         string _text;
         int _indent;
@@ -14,7 +14,7 @@ namespace LambdicSql.SqlBuilder.Sentences
         /// Constructor.
         /// </summary>
         /// <param name="text">Text.</param>
-        public SingleTextSentence(string text)
+        public SingleTextBuildingParts(string text)
         {
             _text = text;
         }
@@ -24,7 +24,7 @@ namespace LambdicSql.SqlBuilder.Sentences
         /// </summary>
         /// <param name="text">Text.</param>
         /// <param name="indent">Indent.</param>
-        public SingleTextSentence(string text, int indent)
+        public SingleTextBuildingParts(string text, int indent)
         {
             _text = text;
             _indent = indent;
@@ -56,27 +56,27 @@ namespace LambdicSql.SqlBuilder.Sentences
         /// <param name="front">Front.</param>
         /// <param name="back">Back.</param>
         /// <returns>Text.</returns>
-        public override Sentence ConcatAround(string front, string back) => new SingleTextSentence(front + _text + back, _indent);
+        public override BuildingParts ConcatAround(string front, string back) => new SingleTextBuildingParts(front + _text + back, _indent);
 
         /// <summary>
         /// Concat to front.
         /// </summary>
         /// <param name="front">Front.</param>
         /// <returns>Text.</returns>
-        public override Sentence ConcatToFront(string front) => new SingleTextSentence(front + _text, _indent);
+        public override BuildingParts ConcatToFront(string front) => new SingleTextBuildingParts(front + _text, _indent);
 
         /// <summary>
         /// Concat to back.
         /// </summary>
         /// <param name="back"></param>
         /// <returns></returns>
-        public override Sentence ConcatToBack(string back) => new SingleTextSentence(_text + back, _indent);
+        public override BuildingParts ConcatToBack(string back) => new SingleTextBuildingParts(_text + back, _indent);
 
         /// <summary>
         /// Customize.
         /// </summary>
         /// <param name="customizer">Customizer.</param>
         /// <returns>Customized SqlText.</returns>
-        public override Sentence Customize(ISqlTextCustomizer customizer) => customizer.Custom(this);
+        public override BuildingParts Customize(ISqlTextCustomizer customizer) => customizer.Custom(this);
     }
 }

@@ -1,4 +1,4 @@
-﻿using LambdicSql.SqlBuilder.Sentences;
+﻿using LambdicSql.SqlBuilder.Parts;
 using System;
 
 namespace LambdicSql.ConverterService.SqlSyntaxes
@@ -13,6 +13,6 @@ namespace LambdicSql.ConverterService.SqlSyntaxes
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public abstract Sentence Convert(object obj);
+        public abstract BuildingParts Convert(object obj);
     }
 }

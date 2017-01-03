@@ -4,9 +4,6 @@ using System.Linq;
 
 namespace LambdicSql
 {
-    //TODO 型がないことってある？
-    //まずはそれを排除
-
     /// <summary>
     /// SQL information.
     /// </summary>
@@ -14,15 +11,11 @@ namespace LambdicSql
     {
         Dictionary<string, DbParam> _dbParams;
 
+        //TODO これを排除  ORMは一旦削除の方向で
         /// <summary>
         /// Object create information.
         /// </summary>
         public ObjectCreateInfo SelectClauseInfo { get; }
-
-        /// <summary>
-        /// DataBase information.
-        /// </summary>
-        public DbInfo DbInfo { get; }
 
         /// <summary>
         /// Sql text.
@@ -32,18 +25,16 @@ namespace LambdicSql
         /// <summary>
         /// Parameters.
         /// </summary>
-        public Dictionary<string, DbParam> DbParams => _dbParams.ToDictionary(e => e.Key, e => e.Value);
+        public Dictionary<string, DbParam> Params => _dbParams.ToDictionary(e => e.Key, e => e.Value);
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="dbInfo">DataBase information.</param>
         /// <param name="sqlText">Sql text.</param>
         /// <param name="selectClauseInfo">Object create information.</param>
         /// <param name="dbParams">Parameters.</param>
-        public SqlInfo(DbInfo dbInfo, string sqlText, ObjectCreateInfo selectClauseInfo, Dictionary<string, DbParam> dbParams)
+        public SqlInfo(string sqlText, ObjectCreateInfo selectClauseInfo, Dictionary<string, DbParam> dbParams)
         {
-            DbInfo = dbInfo;
             Text = sqlText;
             SelectClauseInfo = selectClauseInfo;
             _dbParams = dbParams;
@@ -55,7 +46,6 @@ namespace LambdicSql
         /// <param name="src">Source.</param>
         public SqlInfo(SqlInfo src)
         {
-            DbInfo = src.DbInfo;
             Text = src.Text;
             SelectClauseInfo = src.SelectClauseInfo;
             _dbParams = src._dbParams;
@@ -71,12 +61,11 @@ namespace LambdicSql
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="dbInfo">DataBase information.</param>
         /// <param name="sqlText">Sql text.</param>
         /// <param name="selectClauseInfo">Object create information.</param>
         /// <param name="dbParams">Parameters.</param>
-        public SqlInfo(DbInfo dbInfo, string sqlText, ObjectCreateInfo selectClauseInfo, Dictionary<string, DbParam> dbParams)
-            : base(dbInfo, sqlText, selectClauseInfo, dbParams) { }
+        public SqlInfo(string sqlText, ObjectCreateInfo selectClauseInfo, Dictionary<string, DbParam> dbParams)
+            : base(sqlText, selectClauseInfo, dbParams) { }
 
         /// <summary>
         /// Constructor.

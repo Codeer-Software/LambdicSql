@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using LambdicSql.ConverterService.SqlSyntaxes;
 using LambdicSql.ConverterService;
-using LambdicSql.SqlBuilder.Sentences;
+using LambdicSql.SqlBuilder.Parts;
 
 namespace TestCheck35
 {
@@ -20,7 +20,7 @@ namespace TestCheck35
 
     class SqlSyntaxTestAttribute : SqlSyntaxConverterMethodAttribute
     {
-        public override Sentence Convert(ExpressionConverter converter, MethodCallExpression method) => string.Empty;
+        public override BuildingParts Convert(ExpressionConverter converter, MethodCallExpression method) => string.Empty;
     }
 
     public static class TestExtensions
@@ -75,7 +75,7 @@ namespace TestCheck35
             }
             Assert.AreEqual(expected, info.Text);
             
-            var dbParams = info.DbParams;
+            var dbParams = info.Params;
             Assert.AreEqual(args.Count, dbParams.Count);
             for (int i = 0; i < dbParams.Count; i++)
             {

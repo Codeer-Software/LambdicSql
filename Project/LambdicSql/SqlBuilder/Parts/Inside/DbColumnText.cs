@@ -1,9 +1,9 @@
 ﻿using LambdicSql.ConverterService;
 using System.Linq;
 
-namespace LambdicSql.SqlBuilder.Sentences.Inside
+namespace LambdicSql.SqlBuilder.Parts.Inside
 {
-    class DbColumnText : Sentence
+    class DbColumnText : BuildingParts
     {
         string _front = string.Empty;
         string _back = string.Empty;
@@ -13,7 +13,7 @@ namespace LambdicSql.SqlBuilder.Sentences.Inside
 
         string ColumnName => _columnOnly ? Info.SqlColumnName : Info.SqlFullName;
 
-        internal Sentence ToColumnOnly() =>
+        internal BuildingParts ToColumnOnly() =>
             new DbColumnText(Info, true, _front, _back);
 
         internal DbColumnText(ColumnInfo info)
@@ -42,16 +42,16 @@ namespace LambdicSql.SqlBuilder.Sentences.Inside
         public override string ToString(bool isTopLevel, int indent, SqlBuildingContext context)
             => string.Join(string.Empty, Enumerable.Range(0, indent).Select(e => "\t").ToArray()) + _front + ColumnName + _back;
 
-        public override Sentence ConcatAround(string front, string back) 
+        public override BuildingParts ConcatAround(string front, string back) 
             => new DbColumnText(Info, _columnOnly, front + _front, _back + back);
 
-        public override Sentence ConcatToFront(string front) 
+        public override BuildingParts ConcatToFront(string front) 
             => new DbColumnText(Info, _columnOnly, front + _front, _back);
 
-        public override Sentence ConcatToBack(string back) 
+        public override BuildingParts ConcatToBack(string back) 
             => new DbColumnText(Info, _columnOnly, _front, _back + back);
 
-        public override Sentence Customize(ISqlTextCustomizer customizer) 
+        public override BuildingParts Customize(ISqlTextCustomizer customizer) 
             => customizer.Custom(this);
     }
 }

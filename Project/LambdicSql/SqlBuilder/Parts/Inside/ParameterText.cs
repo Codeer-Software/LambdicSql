@@ -1,9 +1,9 @@
 ﻿using LambdicSql.Inside;
 using System.Linq;
 
-namespace LambdicSql.SqlBuilder.Sentences.Inside
+namespace LambdicSql.SqlBuilder.Parts.Inside
 {
-    class ParameterText : Sentence
+    class ParameterText : BuildingParts
     {
         internal string Name { get; private set; }
         internal MetaId MetaId { get; private set; }
@@ -45,19 +45,19 @@ namespace LambdicSql.SqlBuilder.Sentences.Inside
         public override string ToString(bool isTopLevel, int indent, SqlBuildingContext context)
             => string.Join(string.Empty, Enumerable.Range(0, indent).Select(e => "\t").ToArray()) + _front + GetDisplayText(context) + _back;
 
-        public override Sentence ConcatAround(string front, string back)
+        public override BuildingParts ConcatAround(string front, string back)
             => new ParameterText(Name, MetaId, _param, front + _front, _back + back, _displayValue);
 
-        public override Sentence ConcatToFront(string front)
+        public override BuildingParts ConcatToFront(string front)
             => new ParameterText(Name, MetaId, _param, front + _front, _back, _displayValue);
 
-        public override Sentence ConcatToBack(string back)
+        public override BuildingParts ConcatToBack(string back)
             => new ParameterText(Name, MetaId, _param, _front, _back + back, _displayValue);
 
-        public override Sentence Customize(ISqlTextCustomizer customizer)
+        public override BuildingParts Customize(ISqlTextCustomizer customizer)
             => customizer.Custom(this);
 
-        internal Sentence ToDisplayValue() =>
+        internal BuildingParts ToDisplayValue() =>
             new ParameterText(Name, MetaId, _param, _front, _back, true);
 
         string GetDisplayText(SqlBuildingContext context)

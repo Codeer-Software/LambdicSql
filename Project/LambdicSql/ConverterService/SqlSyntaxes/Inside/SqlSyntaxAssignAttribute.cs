@@ -1,4 +1,4 @@
-﻿using LambdicSql.SqlBuilder.Sentences;
+﻿using LambdicSql.SqlBuilder.Parts;
 using System.Linq.Expressions;
 
 namespace LambdicSql.ConverterService.SqlSyntaxes.Inside
@@ -6,10 +6,10 @@ namespace LambdicSql.ConverterService.SqlSyntaxes.Inside
 
     class SqlSyntaxAssignAttribute : SqlSyntaxConverterNewAttribute
     {
-        public override Sentence Convert(ExpressionConverter converter, NewExpression exp)
+        public override BuildingParts Convert(ExpressionConverter converter, NewExpression exp)
         {
-            Sentence arg1 = converter.Convert(exp.Arguments[0]).Customize(new CustomizeColumnOnly());
-            return new HSentence(arg1, "=", converter.Convert(exp.Arguments[1])) { Separator = " " };
+            BuildingParts arg1 = converter.Convert(exp.Arguments[0]).Customize(new CustomizeColumnOnly());
+            return new HBuildingParts(arg1, "=", converter.Convert(exp.Arguments[1])) { Separator = " " };
         }
     }
 }

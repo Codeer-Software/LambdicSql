@@ -1,9 +1,9 @@
 ﻿using LambdicSql.ConverterService;
 using System.Linq;
 
-namespace LambdicSql.SqlBuilder.Sentences.Inside
+namespace LambdicSql.SqlBuilder.Parts.Inside
 {
-    class DbTableText : Sentence
+    class DbTableText : BuildingParts
     {
         internal TableInfo Info { get; private set; }
         string _front = string.Empty;
@@ -28,16 +28,16 @@ namespace LambdicSql.SqlBuilder.Sentences.Inside
         public override string ToString(bool isTopLevel, int indent, SqlBuildingContext context)
             => string.Join(string.Empty, Enumerable.Range(0, indent).Select(e => "\t").ToArray()) + _front + Info.SqlFullName + _back;
 
-        public override Sentence ConcatAround(string front, string back) 
+        public override BuildingParts ConcatAround(string front, string back) 
             => new DbTableText(Info, front + _front, _back + back);
 
-        public override Sentence ConcatToFront(string front) 
+        public override BuildingParts ConcatToFront(string front) 
             => new DbTableText(Info, front + _front, _back);
 
-        public override Sentence ConcatToBack(string back) 
+        public override BuildingParts ConcatToBack(string back) 
             => new DbTableText(Info, _front, _back + back);
 
-        public override Sentence Customize(ISqlTextCustomizer customizer)
+        public override BuildingParts Customize(ISqlTextCustomizer customizer)
             => customizer.Custom(this);
     }
 }

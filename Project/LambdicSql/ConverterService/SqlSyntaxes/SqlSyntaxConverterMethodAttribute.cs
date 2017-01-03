@@ -1,4 +1,4 @@
-﻿using LambdicSql.SqlBuilder.Sentences;
+﻿using LambdicSql.SqlBuilder.Parts;
 using System;
 using System.Linq.Expressions;
 
@@ -16,6 +16,6 @@ namespace LambdicSql.ConverterService.SqlSyntaxes
         /// <param name="converter"></param>
         /// <param name="exp"></param>
         /// <returns></returns>
-        public abstract Sentence Convert(ExpressionConverter converter, MethodCallExpression exp);
+        public abstract BuildingParts Convert(ExpressionConverter converter, MethodCallExpression exp);
     }
 }

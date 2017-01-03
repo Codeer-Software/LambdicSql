@@ -1,14 +1,14 @@
 ﻿using LambdicSql.ConverterService.SqlSyntaxes.Inside;
 using LambdicSql.Inside;
-using LambdicSql.SqlBuilder.Sentences;
-using LambdicSql.SqlBuilder.Sentences.Inside;
+using LambdicSql.SqlBuilder.Parts;
+using LambdicSql.SqlBuilder.Parts.Inside;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
-using static LambdicSql.SqlBuilder.Sentences.Inside.SqlTextUtils;
+using static LambdicSql.SqlBuilder.Parts.Inside.SqlTextUtils;
 using LambdicSql.ConverterService.Inside;
 
 namespace LambdicSql.ConverterService
@@ -21,8 +21,8 @@ namespace LambdicSql.ConverterService
         class DecodedInfo
         {
             internal Type Type { get; }
-            internal Sentence Text { get; }
-            internal DecodedInfo(Type type, Sentence text)
+            internal BuildingParts Text { get; }
+            internal DecodedInfo(Type type, BuildingParts text)
             {
                 Type = type;
                 Text = text;
@@ -53,7 +53,7 @@ namespace LambdicSql.ConverterService
         /// </summary>
         /// <param name="obj">object.</param>
         /// <returns>text.</returns>
-        public Sentence Convert(object obj)
+        public BuildingParts Convert(object obj)
         {
             var exp = obj as Expression;
             if (exp != null) return Convert(exp).Text;
@@ -185,7 +185,7 @@ namespace LambdicSql.ConverterService
             if (nullCheck != null) return nullCheck;
 
             var nodeType = Convert(left, binary.NodeType, right);
-            return new DecodedInfo(nodeType.Type, new HSentence(left.Text.ConcatAround("(", ")"), nodeType.Text.ConcatAround(" ", " "), right.Text.ConcatAround("(", ")")));
+            return new DecodedInfo(nodeType.Type, new HBuildingParts(left.Text.ConcatAround("(", ")"), nodeType.Text.ConcatAround(" ", " "), right.Text.ConcatAround("(", ")")));
         }
         
         DecodedInfo Convert(MemberExpression member)
@@ -253,7 +253,7 @@ namespace LambdicSql.ConverterService
             //not sql syntax.
             if (method.GetSqlSyntaxMethod() == null) return ResolveExpressionObject(method);
 
-            var ret = new List<Sentence>();
+            var ret = new List<BuildingParts>();
             foreach (var c in GetMethodChains(method))
             {
                 ret.Add(c.GetSqlSyntaxMethod().Convert(this, c));
@@ -265,7 +265,7 @@ namespace LambdicSql.ConverterService
             }
 
 
-            Sentence text = new VSentence(ret.ToArray());
+            BuildingParts text = new VBuildingParts(ret.ToArray());
             if (typeof(SelectClauseText).IsAssignableFrom(ret[0].GetType()))
             {
                 text = new SelectQueryText(text);
@@ -414,7 +414,7 @@ namespace LambdicSql.ConverterService
             //array.
             if (obj != null && obj.GetType().IsArray)
             {
-                var list = new List<Sentence>();
+                var list = new List<BuildingParts>();
                 foreach (var e in (IEnumerable)obj)
                 {
                     list.Add(Convert(e));
@@ -470,7 +470,7 @@ namespace LambdicSql.ConverterService
                 Type type = null;
                 var types = sqlExp.GetType().GetGenericArguments();
                 if (0 < types.Length) type = types[0];
-                return new DecodedInfo(type, sqlExp.Sentence);
+                return new DecodedInfo(type, sqlExp.BuildingParts);
             }
 
             //others.

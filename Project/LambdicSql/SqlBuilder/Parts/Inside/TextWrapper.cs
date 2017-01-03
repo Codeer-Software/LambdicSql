@@ -1,10 +1,10 @@
-﻿namespace LambdicSql.SqlBuilder.Sentences.Inside
+﻿namespace LambdicSql.SqlBuilder.Parts.Inside
 {
-    abstract class TextWrapper : Sentence
+    abstract class TextWrapper : BuildingParts
     {
-        protected Sentence Core { get; private set; }
+        protected BuildingParts Core { get; private set; }
 
-        public TextWrapper(Sentence core)
+        public TextWrapper(BuildingParts core)
         {
             Core = core;
         }

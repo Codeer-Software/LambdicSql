@@ -1,18 +1,15 @@
 ﻿using LambdicSql.ConverterService;
-using LambdicSql.SqlBuilder.Sentences;
+using LambdicSql.SqlBuilder.Parts;
 
 namespace LambdicSql.Inside
 {
     class SqlExpressionCoupled<TSelected> : SqlExpression<TSelected>
     {
-        public override DbInfo DbInfo { get; protected set; }
-        public override Sentence Sentence { get; }
+        public override BuildingParts BuildingParts { get; }
 
         public SqlExpressionCoupled(ISqlExpression before, ISqlExpression after)
         {
-            if (before.DbInfo != null) DbInfo = before.DbInfo;
-            else if (before.DbInfo != null) DbInfo = before.DbInfo;
-            Sentence = new VSentence(before.Sentence, after.Sentence);
+            BuildingParts = new VBuildingParts(before.BuildingParts, after.BuildingParts);
         }
     }
 }

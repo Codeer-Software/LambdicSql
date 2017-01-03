@@ -1,26 +1,31 @@
 ﻿using LambdicSql.ConverterService;
 using LambdicSql.Inside;
-using LambdicSql.SqlBuilder.Sentences;
+using LambdicSql.SqlBuilder.Parts;
 
 namespace LambdicSql
 {
+    //こいつの役割はBuildingPartsの複雑さをラッピングして消しているだけ
+    //Expressionという抽象的な名前のせいで役割が分からなくなっているが
+    //基本はSqlPartsでそれに型Tを持っているだけとうのが正しい
+    //だから統合してもいいくらいなんだけど・・・
+
+    //とは言えこれでもいいといえばいい。
+    //BuildingPartsのリファクタリング次第できめるしかないか・・・
+
+
     /// <summary>
     /// Expression.
     /// </summary>
     public interface ISqlExpression
     {
         /// <summary>
-        /// Data Base info.
-        /// </summary>
-        DbInfo DbInfo { get; }
-
-        /// <summary>
         /// Data converted from Expression to a form close to a string representation.
         /// </summary>
         /// <returns>text.</returns>
-        Sentence Sentence { get; }
+        BuildingParts BuildingParts { get; }
     }
 
+    //TODO 抽象である必要がない
     /// <summary>
     /// Expressions that represent part of the query.
     /// </summary>
@@ -28,15 +33,10 @@ namespace LambdicSql
     public abstract class SqlExpression<T> : ISqlExpression
     {
         /// <summary>
-        /// DB information.
-        /// </summary>
-        public abstract DbInfo DbInfo { get; protected set; }
-
-        /// <summary>
         /// Data converted from Expression to a form close to a string representation.
         /// </summary>
         /// <returns>text.</returns>
-        public abstract Sentence Sentence { get; }
+        public abstract BuildingParts BuildingParts { get; }
 
         /// <summary>
         /// Entity represented by SqlExpression.

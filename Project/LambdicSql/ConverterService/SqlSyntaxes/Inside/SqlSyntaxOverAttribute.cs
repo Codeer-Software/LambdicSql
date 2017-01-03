@@ -1,4 +1,4 @@
-﻿using LambdicSql.SqlBuilder.Sentences;
+﻿using LambdicSql.SqlBuilder.Parts;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -7,9 +7,9 @@ namespace LambdicSql.ConverterService.SqlSyntaxes.Inside
 
     class SqlSyntaxOverAttribute : SqlSyntaxConverterMethodAttribute
     {
-        public override Sentence Convert(ExpressionConverter converter, MethodCallExpression method)
+        public override BuildingParts Convert(ExpressionConverter converter, MethodCallExpression method)
         {
-            var v = new VSentence();
+            var v = new VBuildingParts();
             var overMethod = method;
             v.Add(overMethod.Method.Name.ToUpper() + "(");
             v.AddRange(1, overMethod.Arguments.Skip(1).
