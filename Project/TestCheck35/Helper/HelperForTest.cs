@@ -6,9 +6,9 @@ using System.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
-using LambdicSql.ConverterService.SqlSyntaxes;
-using LambdicSql.ConverterService;
-using LambdicSql.SqlBuilder.Parts;
+using LambdicSql.ConverterServices.SqlSyntaxes;
+using LambdicSql.ConverterServices;
+using LambdicSql.BuilderServices.Parts;
 
 namespace TestCheck35
 {

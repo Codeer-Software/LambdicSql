@@ -1,4 +1,4 @@
-﻿using LambdicSql.ConverterService;
+﻿using LambdicSql.ConverterServices;
 using System.Collections.Generic;
 using System.Linq;
 

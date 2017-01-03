@@ -1,5 +1,5 @@
 ﻿using LambdicSql.Inside;
-using LambdicSql.SqlBuilder;
+using LambdicSql.BuilderServices;
 using System;
 
 namespace LambdicSql
@@ -41,7 +41,7 @@ namespace LambdicSql
         /// <returns>Sql information.</returns>
         public static SqlInfo Build(this ISqlExpression expression, DialectOption option)
         {
-            var context = new SqlBuildingContext(option);
+            var context = new BuildingContext(option);
             return new SqlInfo(expression.BuildingParts.ToString(true, 0, context), context.ParameterInfo.GetDbParams());
         }
 
