@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
 
 namespace LambdicSql.ConverterServices.Inside
@@ -41,8 +40,7 @@ namespace LambdicSql.ConverterServices.Inside
         {
             //for entity framework.
             if (type.IsGenericType) type = type.GetGenericArguments()[0];
-
-            //TODO これは他に判定方法はないのかな？
+            
             if (SupportedTypeSpec.IsSupported(type))
             {
                 var lambdicName = string.Join(".", lambdicNames.ToArray());

@@ -23,12 +23,13 @@
         public string ParameterPrefix { get; set; } = "@";
 
         /// <summary>
-        /// 
+        /// Does a Recursive clause exist?
         /// </summary>
-        public bool ExistRecursive { get; set; }
+        public bool ExistRecursiveClause { get; set; }
 
         /// <summary>
-        /// 
+        /// Separator between Current and Date.
+        /// It affects CurrentDate, CurrentTime, CurrentTimeStamp.
         /// </summary>
         public string CurrentDateTimeSeparator { get; set; } = "_";
     }

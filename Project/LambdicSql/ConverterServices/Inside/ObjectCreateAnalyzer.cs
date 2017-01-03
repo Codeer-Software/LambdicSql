@@ -6,17 +6,21 @@ using System.Collections.Generic;
 
 namespace LambdicSql.ConverterServices.Inside
 {
-    //TODO キャッシュ
     static class ObjectCreateAnalyzer
     {
+        static Dictionary<Type, ObjectCreateInfo> _selectedTypeInfo = new Dictionary<Type, ObjectCreateInfo>();
+
         internal static ObjectCreateInfo MakeSelectInfo(Type type)
         {
-            var select = new List<ObjectCreateMemberInfo>();
-            foreach (var p in type.GetProperties())
+            lock (_selectedTypeInfo)
             {
-                select.Add(new ObjectCreateMemberInfo(p.Name, null));
+                ObjectCreateInfo info;
+                if (_selectedTypeInfo.TryGetValue(type, out info)) return info;
+
+                info = new ObjectCreateInfo(type.GetProperties().Select(e=> new ObjectCreateMemberInfo(e.Name, null)), null);
+                _selectedTypeInfo[type] = info;
+                return info;
             }
-            return new ObjectCreateInfo(select, null);
         }
 
         internal static ObjectCreateInfo MakeSelectInfo(Expression exp)
@@ -43,15 +47,13 @@ namespace LambdicSql.ConverterServices.Inside
                 }
                 return new ObjectCreateInfo(select, exp);
             }
+
             var initExp = exp as MemberInitExpression;
             if (initExp != null)
             {
-                foreach (var b in initExp.Bindings.Cast<MemberAssignment>())
-                {
-                    select.Add(new ObjectCreateMemberInfo(b.Member.Name, b.Expression));
-                }
-                return new ObjectCreateInfo(select, exp);
+                return new ObjectCreateInfo(initExp.Bindings.Cast<MemberAssignment>().Select(e=> new ObjectCreateMemberInfo(e.Member.Name, e.Expression)), exp);
             }
+
             var member = exp as MemberExpression;
             if (member != null)
             {
@@ -65,6 +67,7 @@ namespace LambdicSql.ConverterServices.Inside
                 else type = ((FieldInfo)member.Member).FieldType;
                 return MakeSelectInfo(type);
             }
+
             return new ObjectCreateInfo(new[] { new ObjectCreateMemberInfo(string.Empty, exp )}, exp);
         }
 

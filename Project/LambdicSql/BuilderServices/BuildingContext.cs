@@ -1,10 +1,9 @@
-﻿using LambdicSql.ConverterServices;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace LambdicSql.BuilderServices
 {
     /// <summary>
-    /// Context of SQL conversion.
+    /// Context of SQL building.
     /// </summary>
     public class BuildingContext
     {
@@ -19,7 +18,7 @@ namespace LambdicSql.BuilderServices
         public ParameterInfo ParameterInfo { get; }
 
         /// <summary>
-        /// 
+        /// Name of subquery entied in With clause.
         /// </summary>
         public Dictionary<string, bool> WithEntied { get; } = new Dictionary<string, bool>();
 

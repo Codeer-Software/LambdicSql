@@ -1,6 +1,7 @@
 ﻿using LambdicSql.Inside;
 using LambdicSql.BuilderServices;
 using System;
+using LambdicSql.BuilderServices.Parts;
 
 namespace LambdicSql
 {
@@ -58,7 +59,7 @@ namespace LambdicSql
         /// <param name="expression2">Exppresion 2.</param>
         /// <returns>Concatenated result.</returns>
         public static SqlExpression<TResult> Concat<TResult>(this SqlExpression<TResult> expression1, ISqlExpression expression2)
-          => new SqlExpressionCoupled<TResult>(expression1, expression2);
+          => new SqlExpression<TResult>(new VParts(expression1.BuildingParts, expression2.BuildingParts));
 
         /// <summary>
         /// Concatenate expression1 and expression2 using UNION clause.

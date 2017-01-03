@@ -10,6 +10,12 @@ namespace LambdicSql.BuilderServices
     /// </summary>
     public class ParameterInfo
     {
+        class DecodingParameterInfo
+        {
+            internal MetaId MetadataToken { get; set; }
+            internal DbParam Detail { get; set; }
+        }
+
         int _count;
         Dictionary<string, DecodingParameterInfo> _parameters = new Dictionary<string, DecodingParameterInfo>();
         string _prefix;
@@ -18,6 +24,9 @@ namespace LambdicSql.BuilderServices
         {
             _prefix = prefix;
         }
+
+        //TODO Performance tuning. 
+
         /// <summary>
         /// Get parameters.
         /// It's dictionary of name and parameter.

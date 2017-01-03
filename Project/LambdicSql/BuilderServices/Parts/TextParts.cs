@@ -1,5 +1,4 @@
 ﻿using LambdicSql.BuilderServices.Parts.Inside;
-using System.Linq;
 
 namespace LambdicSql.BuilderServices.Parts
 {

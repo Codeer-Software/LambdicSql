@@ -1,6 +1,4 @@
-﻿using LambdicSql.BuilderServices.Parts;
-
-namespace LambdicSql.BuilderServices
+﻿namespace LambdicSql.BuilderServices.Parts
 {
     /// <summary>
     /// Customizer.

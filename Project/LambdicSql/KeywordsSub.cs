@@ -41,7 +41,7 @@ namespace LambdicSql
     /// </summary>
     public class OrderBy : ClauseChain<object>, IOrderBy
     {
-        internal OrderBy() { }
+        OrderBy() { }
     }
 
     /// <summary>

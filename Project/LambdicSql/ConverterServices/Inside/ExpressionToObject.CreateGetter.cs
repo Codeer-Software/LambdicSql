@@ -39,7 +39,7 @@ namespace LambdicSql.ConverterServices.Inside
                 case 28: return Activator.CreateInstance(typeof(GetterCore<,,,,,,,,,,,,,,,,,,,,,,,,,,,>).MakeGenericType(args), true) as IGetter;
                 case 29: return Activator.CreateInstance(typeof(GetterCore<,,,,,,,,,,,,,,,,,,,,,,,,,,,,>).MakeGenericType(args), true) as IGetter;
             }
-            throw new NotSupportedException();
+            throw new NotSupportedException("The maximum number of methods arguments that can be used is 30.");
         }
     }
 }

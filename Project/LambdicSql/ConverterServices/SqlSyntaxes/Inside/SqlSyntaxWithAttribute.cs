@@ -85,7 +85,7 @@ namespace LambdicSql.ConverterServices.SqlSyntaxes.Inside
 
             public override string ToString(bool isTopLevel, int indent, BuildingContext context)
             {
-                if (context.Option.ExistRecursive)
+                if (context.Option.ExistRecursiveClause)
                 {
                     return _core.ConcatToFront("RECURSIVE ").ToString(isTopLevel, indent, context);
                 }
