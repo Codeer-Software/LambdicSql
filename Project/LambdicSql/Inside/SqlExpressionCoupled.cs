@@ -6,13 +6,13 @@ namespace LambdicSql.Inside
     class SqlExpressionCoupled<TSelected> : SqlExpression<TSelected>
     {
         public override DbInfo DbInfo { get; protected set; }
-        public override Sentence ExpressionElement { get; }
+        public override Sentence Sentence { get; }
 
         public SqlExpressionCoupled(ISqlExpression before, ISqlExpression after)
         {
             if (before.DbInfo != null) DbInfo = before.DbInfo;
             else if (before.DbInfo != null) DbInfo = before.DbInfo;
-            ExpressionElement = new VSentence(before.ExpressionElement, after.ExpressionElement);
+            Sentence = new VSentence(before.Sentence, after.Sentence);
         }
     }
 }

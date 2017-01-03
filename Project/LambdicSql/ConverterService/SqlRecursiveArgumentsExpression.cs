@@ -18,7 +18,7 @@ namespace LambdicSql.ConverterService
         /// <summary>
         /// 
         /// </summary>
-        public override Sentence ExpressionElement { get; }
+        public override Sentence Sentence { get; }
 
         /// <summary>
         /// 
@@ -29,8 +29,8 @@ namespace LambdicSql.ConverterService
         {
             DbInfo = dbInfo;
             var converter = new ExpressionConverter(dbInfo);
-            if (core == null) ExpressionElement = string.Empty;
-            else ExpressionElement = converter.Convert(core);
+            if (core == null) Sentence = string.Empty;
+            else Sentence = converter.Convert(core);
         }
     }
 }

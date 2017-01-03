@@ -470,7 +470,7 @@ namespace LambdicSql.ConverterService
                 Type type = null;
                 var types = sqlExp.GetType().GetGenericArguments();
                 if (0 < types.Length) type = types[0];
-                return new DecodedInfo(type, sqlExp.ExpressionElement);
+                return new DecodedInfo(type, sqlExp.Sentence);
             }
 
             //others.
