@@ -101,9 +101,9 @@
     <Compile Include="SqlBuilder\Parts\Inside\CustomizeParameterToObject.cs" />
     <Compile Include="SqlBuilder\Parts\Inside\DbColumnText.cs" />
     <Compile Include="SqlBuilder\Parts\Inside\DbTableText.cs" />
-    <Compile Include="SqlBuilder\Parts\HBuildingParts.cs" />
+    <Compile Include="SqlBuilder\Parts\HParts.cs" />
     <Compile Include="SqlBuilder\ISqlTextCustomizer.cs" />
-    <Compile Include="SqlBuilder\Parts\SingleTextBuildingParts.cs" />
+    <Compile Include="SqlBuilder\Parts\SingleTextParts.cs" />
     <Compile Include="SqlBuilder\Parts\Inside\ParameterText.cs" />
     <Compile Include="SqlBuilder\Parts\Inside\QueryText.cs" />
     <Compile Include="SqlBuilder\Parts\Inside\SelectClauseText.cs" />
@@ -116,7 +116,7 @@
     <Compile Include="SqlBuilder\Parts\Inside\StringAddOperatorText.cs" />
     <Compile Include="SqlBuilder\Parts\Inside\StringFormatText.cs" />
     <Compile Include="SqlBuilder\Parts\Inside\TextWrapper.cs" />
-    <Compile Include="SqlBuilder\Parts\VBuildingParts.cs" />
+    <Compile Include="SqlBuilder\Parts\VParts.cs" />
     <Compile Include="SqlExpression.cs" />
     <Compile Include="Inside\SqlExpressionSingle.cs" />
     <Compile Include="SqlBuilder\DialectOption.cs" />

@@ -42,6 +42,7 @@ namespace LambdicSql.ConverterService.Inside
             //for entity framework.
             if (type.IsGenericType) type = type.GetGenericArguments()[0];
 
+            //TODO これは他に判定方法はないのかな？
             if (SupportedTypeSpec.IsSupported(type))
             {
                 var lambdicName = string.Join(".", lambdicNames.ToArray());

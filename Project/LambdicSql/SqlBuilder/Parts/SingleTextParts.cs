@@ -5,7 +5,7 @@ namespace LambdicSql.SqlBuilder.Parts
     /// <summary>
     /// Single text.
     /// </summary>
-    public class SingleTextBuildingParts : BuildingParts
+    public class SingleTextParts : BuildingParts
     {
         string _text;
         int _indent;
@@ -14,7 +14,7 @@ namespace LambdicSql.SqlBuilder.Parts
         /// Constructor.
         /// </summary>
         /// <param name="text">Text.</param>
-        public SingleTextBuildingParts(string text)
+        public SingleTextParts(string text)
         {
             _text = text;
         }
@@ -24,7 +24,7 @@ namespace LambdicSql.SqlBuilder.Parts
         /// </summary>
         /// <param name="text">Text.</param>
         /// <param name="indent">Indent.</param>
-        public SingleTextBuildingParts(string text, int indent)
+        public SingleTextParts(string text, int indent)
         {
             _text = text;
             _indent = indent;
@@ -56,21 +56,21 @@ namespace LambdicSql.SqlBuilder.Parts
         /// <param name="front">Front.</param>
         /// <param name="back">Back.</param>
         /// <returns>Text.</returns>
-        public override BuildingParts ConcatAround(string front, string back) => new SingleTextBuildingParts(front + _text + back, _indent);
+        public override BuildingParts ConcatAround(string front, string back) => new SingleTextParts(front + _text + back, _indent);
 
         /// <summary>
         /// Concat to front.
         /// </summary>
         /// <param name="front">Front.</param>
         /// <returns>Text.</returns>
-        public override BuildingParts ConcatToFront(string front) => new SingleTextBuildingParts(front + _text, _indent);
+        public override BuildingParts ConcatToFront(string front) => new SingleTextParts(front + _text, _indent);
 
         /// <summary>
         /// Concat to back.
         /// </summary>
         /// <param name="back"></param>
         /// <returns></returns>
-        public override BuildingParts ConcatToBack(string back) => new SingleTextBuildingParts(_text + back, _indent);
+        public override BuildingParts ConcatToBack(string back) => new SingleTextParts(_text + back, _indent);
 
         /// <summary>
         /// Customize.

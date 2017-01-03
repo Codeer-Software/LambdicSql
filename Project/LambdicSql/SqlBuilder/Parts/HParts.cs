@@ -5,16 +5,16 @@ using System.Linq;
 namespace LambdicSql.SqlBuilder.Parts
 {
     /// <summary>
-    /// Vertical text.
+    /// Horizontal text.
     /// </summary>
-    public class VBuildingParts : BuildingParts
+    public class HParts : BuildingParts
     {
         List<BuildingParts> _texts = new List<BuildingParts>();
 
         /// <summary>
-        /// Separator
+        /// Separator.
         /// </summary>
-        public string Separator { get; set; }
+        public string Separator { get; set; } = string.Empty;
 
         /// <summary>
         /// Indent
@@ -22,9 +22,19 @@ namespace LambdicSql.SqlBuilder.Parts
         public int Indent { get; set; }
 
         /// <summary>
+        /// Is functional.
+        /// </summary>
+        public bool IsFunctional { get; set; }
+
+        /// <summary>
+        /// Enable change line.
+        /// </summary>
+        public bool EnableChangeLine { get; set; } = true;
+
+        /// <summary>
         /// Is single line.
         /// </summary>
-        public override bool IsSingleLine(SqlBuildingContext context) => _texts.Count <= 1 && !_texts.Any(e => !e.IsSingleLine(context));
+        public override bool IsSingleLine(SqlBuildingContext context) => !_texts.Any(e => !e.IsSingleLine(context));
 
         /// <summary>
         /// Is empty.
@@ -34,8 +44,17 @@ namespace LambdicSql.SqlBuilder.Parts
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="texts">Vertical texts.</param>
-        public VBuildingParts(params BuildingParts[] texts)
+        /// <param name="texts">Horizontal texts.</param>
+        public HParts(params BuildingParts[] texts)
+        {
+            _texts.AddRange(texts.Where(e => !e.IsEmpty));
+        }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="texts">Horizontal texts.</param>
+        public HParts(IEnumerable<BuildingParts> texts)
         {
             _texts.AddRange(texts.Where(e => !e.IsEmpty));
         }
@@ -48,7 +67,23 @@ namespace LambdicSql.SqlBuilder.Parts
         /// <param name="context">Context.</param>
         /// <returns>Text.</returns>
         public override string ToString(bool isTopLevel, int indent, SqlBuildingContext context)
-            => string.Join(Separator + Environment.NewLine, _texts.Select(e => e.ToString(isTopLevel, Indent + indent, context)).ToArray());
+        {
+            indent += Indent;
+            if (_texts.Count == 0) return string.Empty;
+            if (_texts.Count == 1) return _texts[0].ToString(isTopLevel, indent, context);
+
+            if (IsSingleLine(context) || !EnableChangeLine)
+            {
+                return _texts[0].ToString(isTopLevel, indent, context) + Separator
+                    + string.Join(Separator, _texts.Skip(1).Select(e => e.ToString(isTopLevel, 0, context)).ToArray());
+            }
+
+            //if IsFunctional is true, add Indent other than the first line.
+            var addIndentCount = IsFunctional ? 1 : 0;
+            var sep = Separator.TrimEnd();
+            return _texts[0].ToString(isTopLevel, indent, context) + sep + Environment.NewLine +
+                string.Join(sep + Environment.NewLine, _texts.Skip(1).Select(e => e.ToString(isTopLevel, indent + addIndentCount, context)).ToArray());
+        }
 
         /// <summary>
         /// Add text.
@@ -58,7 +93,7 @@ namespace LambdicSql.SqlBuilder.Parts
         public void Add(string text, int indent)
         {
             if (string.IsNullOrEmpty(text.Trim())) return;
-            _texts.Add(new SingleTextBuildingParts(text, indent));
+            _texts.Add(new SingleTextParts(text, indent));
         }
 
         /// <summary>
@@ -72,20 +107,18 @@ namespace LambdicSql.SqlBuilder.Parts
         }
 
         /// <summary>
-        /// Add texts.
+        /// Add text.
         /// </summary>
-        /// <param name="indent">Indent.</param>
         /// <param name="texts">Texts.</param>
-        public void AddRange(int indent, IEnumerable<BuildingParts> texts)
-            => _texts.AddRange(texts.Where(e => !e.IsEmpty).Select(e => new HBuildingParts(e) { Indent = 1 }).Cast<BuildingParts>());
+        public void AddRange(IEnumerable<BuildingParts> texts)
+            => _texts.AddRange(texts.Where(e => !e.IsEmpty));
 
         /// <summary>
-        /// Add texts.
+        /// Add text.
         /// </summary>
-        /// <param name="indent">Indent.</param>
         /// <param name="texts">Texts.</param>
-        public void AddRange(int indent, params BuildingParts[] texts)
-            => _texts.AddRange(texts.Where(e => !e.IsEmpty).Select(e => new HBuildingParts(e) { Indent = 1 }).Cast<BuildingParts>());
+        public void AddRange(params BuildingParts[] texts)
+            => _texts.AddRange(texts.Where(e => !e.IsEmpty));
 
         /// <summary>
         /// Concat to front and back.
@@ -97,12 +130,12 @@ namespace LambdicSql.SqlBuilder.Parts
         {
             if (_texts.Count == 0) return CopyProperty(front + back);
 
-            var dst = _texts.ToArray();
-            dst[0] = dst[0].ConcatToFront(front);
-            dst[dst.Length - 1] = dst[dst.Length - 1].ConcatToBack(back);
-            return CopyProperty(dst);
+            var newTexts = _texts.ToArray();
+            newTexts[0] = newTexts[0].ConcatToFront(front);
+            newTexts[newTexts.Length - 1] = newTexts[newTexts.Length - 1].ConcatToBack(back);
+            return CopyProperty(newTexts);
         }
-
+        
         /// <summary>
         /// Concat to front.
         /// </summary>
@@ -121,7 +154,7 @@ namespace LambdicSql.SqlBuilder.Parts
         /// Concat to back.
         /// </summary>
         /// <param name="back"></param>
-        /// <returns>Text.</returns>
+        /// <returns></returns>
         public override BuildingParts ConcatToBack(string back)
         {
             if (_texts.Count == 0) return CopyProperty(back);
@@ -142,7 +175,7 @@ namespace LambdicSql.SqlBuilder.Parts
             return CopyProperty(dst.ToArray());
         }
 
-        VBuildingParts CopyProperty(params BuildingParts[] texts)
-             => new VBuildingParts(texts) { Indent = Indent, Separator = Separator };
+        HParts CopyProperty(params BuildingParts[] texts)
+             => new HParts(texts) { Indent = Indent, IsFunctional = IsFunctional, EnableChangeLine = EnableChangeLine, Separator = Separator };
     }
 }

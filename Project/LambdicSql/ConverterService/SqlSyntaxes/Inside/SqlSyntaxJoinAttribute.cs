@@ -22,7 +22,7 @@ namespace LambdicSql.ConverterService.SqlSyntaxes.Inside
                 list.Add("ON");
                 list.Add(condition);
             }
-            return new HBuildingParts(list.ToArray()) { IsFunctional = true, Separator = " ", Indent = 1 };
+            return new HParts(list.ToArray()) { IsFunctional = true, Separator = " ", Indent = 1 };
         }
     }
 }

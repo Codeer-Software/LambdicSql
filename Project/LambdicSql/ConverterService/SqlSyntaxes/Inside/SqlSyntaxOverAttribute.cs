@@ -9,7 +9,7 @@ namespace LambdicSql.ConverterService.SqlSyntaxes.Inside
     {
         public override BuildingParts Convert(ExpressionConverter converter, MethodCallExpression method)
         {
-            var v = new VBuildingParts();
+            var v = new VParts();
             var overMethod = method;
             v.Add(overMethod.Method.Name.ToUpper() + "(");
             v.AddRange(1, overMethod.Arguments.Skip(1).

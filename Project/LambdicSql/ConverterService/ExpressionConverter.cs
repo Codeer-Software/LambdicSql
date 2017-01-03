@@ -185,7 +185,7 @@ namespace LambdicSql.ConverterService
             if (nullCheck != null) return nullCheck;
 
             var nodeType = Convert(left, binary.NodeType, right);
-            return new DecodedInfo(nodeType.Type, new HBuildingParts(left.Text.ConcatAround("(", ")"), nodeType.Text.ConcatAround(" ", " "), right.Text.ConcatAround("(", ")")));
+            return new DecodedInfo(nodeType.Type, new HParts(left.Text.ConcatAround("(", ")"), nodeType.Text.ConcatAround(" ", " "), right.Text.ConcatAround("(", ")")));
         }
         
         DecodedInfo Convert(MemberExpression member)
@@ -265,7 +265,7 @@ namespace LambdicSql.ConverterService
             }
 
 
-            BuildingParts text = new VBuildingParts(ret.ToArray());
+            BuildingParts text = new VParts(ret.ToArray());
             if (typeof(SelectClauseText).IsAssignableFrom(ret[0].GetType()))
             {
                 text = new SelectQueryText(text);

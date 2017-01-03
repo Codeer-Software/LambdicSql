@@ -13,7 +13,7 @@ namespace LambdicSql.ConverterService.SqlSyntaxes.Inside
         {
             var startIndex = method.SkipMethodChain(0);
             var table = ToTableName(converter, method.Arguments[startIndex]);
-            return new HBuildingParts(new BuildingParts[] { "FROM", table }) { IsFunctional = true, Separator = " " };
+            return new HParts(new BuildingParts[] { "FROM", table }) { IsFunctional = true, Separator = " " };
         }
 
         internal static BuildingParts ToTableName(ExpressionConverter decoder, Expression exp)
@@ -62,7 +62,7 @@ namespace LambdicSql.ConverterService.SqlSyntaxes.Inside
             internal SubQueryAndNameText(string body, BuildingParts table)
             {
                 _body = body;
-                _define = new HBuildingParts(table, _body) { Separator = " ", EnableChangeLine = false };
+                _define = new HParts(table, _body) { Separator = " ", EnableChangeLine = false };
             }
 
             SubQueryAndNameText(string body, BuildingParts define, string front, string back)

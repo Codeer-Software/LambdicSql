@@ -33,8 +33,8 @@ namespace LambdicSql.ConverterService.SqlSyntaxes
             var args = method.Arguments.Skip(index).Select(e => converter.Convert(e)).ToArray();
             var name = string.IsNullOrEmpty(Name) ? method.Method.Name.ToUpper() : Name;
 
-            var hArgs = new HBuildingParts(args) { Separator = Separator }.ConcatToBack(")");
-            return new HBuildingParts(Line(name, "("), hArgs) { IsFunctional = true };
+            var hArgs = new HParts(args) { Separator = Separator }.ConcatToBack(")");
+            return new HParts(Line(name, "("), hArgs) { IsFunctional = true };
         }
     }
 }

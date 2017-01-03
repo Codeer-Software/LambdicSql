@@ -47,8 +47,8 @@ namespace LambdicSql.ConverterService.SqlSyntaxes
             elements.AddRange(args);
             if (!string.IsNullOrEmpty(AfterPredicate)) elements.Add(AfterPredicate);
 
-            var arguments = new HBuildingParts(elements) { Separator = Separator };
-            return new HBuildingParts(name, arguments) { IsFunctional = true, Separator = " ", Indent = Indent };
+            var arguments = new HParts(elements) { Separator = Separator };
+            return new HParts(name, arguments) { IsFunctional = true, Separator = " ", Indent = Indent };
         }
     }
 }

@@ -13,7 +13,7 @@ namespace LambdicSql.ConverterService.SqlSyntaxes.Inside
             var arry = method.Arguments[0] as NewArrayExpression;
             if (arry != null)
             {
-                var v = new VBuildingParts() { Indent = 1, Separator = "," };
+                var v = new VParts() { Indent = 1, Separator = "," };
                 var names = new List<string>();
                 foreach (var e in arry.Expressions)
                 {
@@ -22,16 +22,16 @@ namespace LambdicSql.ConverterService.SqlSyntaxes.Inside
                     names.Add(body);
                     v.Add(Clause(LineSpace(body, "AS"), table));
                 }
-                return new WithEntriedText(new VBuildingParts("WITH", v), names.ToArray());
+                return new WithEntriedText(new VParts("WITH", v), names.ToArray());
             }
 
             //引数を二つにせなあかんのか？
             {
                 var table = converter.Convert(method.Arguments[0]);
                 var body = SqlSyntaxFromAttribute.GetSqlExpressionBody(method.Arguments[0]);
-                var v = new VBuildingParts() { Indent = 1 };
+                var v = new VParts() { Indent = 1 };
                 v.Add(Clause(LineSpace(new RecursiveTargetText(Line(body, table)), "AS"), converter.Convert(method.Arguments[1])));
-                return new WithEntriedText(new VBuildingParts("WITH", v), new[] { body });
+                return new WithEntriedText(new VParts("WITH", v), new[] { body });
             }
         }
         class WithEntriedText : BuildingParts

@@ -71,6 +71,6 @@
         /// Convert string to IText.
         /// </summary>
         /// <param name="text">string.</param>
-        public static implicit operator BuildingParts(string text) => new SingleTextBuildingParts(text);
+        public static implicit operator BuildingParts(string text) => new SingleTextParts(text);
     }
 }

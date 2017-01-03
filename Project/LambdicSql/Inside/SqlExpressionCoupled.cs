@@ -9,7 +9,7 @@ namespace LambdicSql.Inside
 
         public SqlExpressionCoupled(ISqlExpression before, ISqlExpression after)
         {
-            BuildingParts = new VBuildingParts(before.BuildingParts, after.BuildingParts);
+            BuildingParts = new VParts(before.BuildingParts, after.BuildingParts);
         }
     }
 }
