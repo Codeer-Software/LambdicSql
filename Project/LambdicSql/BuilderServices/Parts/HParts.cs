@@ -84,18 +84,7 @@ namespace LambdicSql.BuilderServices.Parts
             return _texts[0].ToString(isTopLevel, indent, context) + sep + Environment.NewLine +
                 string.Join(sep + Environment.NewLine, _texts.Skip(1).Select(e => e.ToString(isTopLevel, indent + addIndentCount, context)).ToArray());
         }
-
-        /// <summary>
-        /// Add text.
-        /// </summary>
-        /// <param name="text">Text.</param>
-        /// <param name="indent">Indent.</param>
-        public void Add(string text, int indent)
-        {
-            if (string.IsNullOrEmpty(text.Trim())) return;
-            _texts.Add(new SingleTextParts(text, indent));
-        }
-
+        
         /// <summary>
         /// Add text.
         /// </summary>
@@ -169,7 +158,7 @@ namespace LambdicSql.BuilderServices.Parts
         /// </summary>
         /// <param name="customizer">Customizer.</param>
         /// <returns>Customized SqlText.</returns>
-        public override BuildingParts Customize(ISqlTextCustomizer customizer)
+        public override BuildingParts Customize(IPartsCustomizer customizer)
         {
             var dst = _texts.Select(e => customizer.Custom(e));
             return CopyProperty(dst.ToArray());

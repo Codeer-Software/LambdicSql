@@ -4,7 +4,7 @@ using LambdicSql.BuilderServices.Parts.Inside;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using static LambdicSql.BuilderServices.Parts.Inside.SqlTextUtils;
+using static LambdicSql.BuilderServices.Parts.Inside.BuildingPartsUtils;
 
 namespace LambdicSql.ConverterServices.SqlSyntaxes.Inside
 {
@@ -41,7 +41,7 @@ namespace LambdicSql.ConverterServices.SqlSyntaxes.Inside
                     new VParts(createInfo.Members.Select(e => ToStringSelectedElement(converter, e)).ToArray()) { Indent = 1, Separator = "," };
             }
 
-            return new SelectClauseText(createInfo, selectTargetText == null ? (BuildingParts)select : new VParts(select, selectTargetText));
+            return new SelectClauseParts(createInfo, selectTargetText == null ? (BuildingParts)select : new VParts(select, selectTargetText));
         }
 
         static BuildingParts ToStringSelectedElement(ExpressionConverter converter, ObjectCreateMemberInfo element)

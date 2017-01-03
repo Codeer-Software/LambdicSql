@@ -1,34 +1,20 @@
 ﻿namespace LambdicSql.BuilderServices.Parts
 {
-    //TODO \tをテーブル化すると早くなる
-    //抽象メソッドをなくしても早くなる
-    //string.joinもEX
-    //Linqをなくしても早くなる
-
-    //SqlPartsかな
-    //でネームスペースはSqlBuilder
-
-    //どの辺まで公開するか決めないと
-
-    //それから大幅にフォルダ構成を変える
-    //Baseとかは良くない
-    //Insideもね
-
     /// <summary>
     /// Text.
     /// </summary>
     public abstract class BuildingParts
     {
         /// <summary>
+        /// Is empty.
+        /// </summary>
+        public abstract bool IsEmpty { get; }
+
+        /// <summary>
         /// Is single line.
         /// </summary>
         public abstract bool IsSingleLine(BuildingContext context);
 
-        /// <summary>
-        /// Is empty.
-        /// </summary>
-        public abstract bool IsEmpty { get; }
-        
         /// <summary>
         /// To string.
         /// </summary>
@@ -65,12 +51,12 @@
         /// </summary>
         /// <param name="customizer">Customizer.</param>
         /// <returns>Customized SqlText.</returns>
-        public abstract BuildingParts Customize(ISqlTextCustomizer customizer);
+        public abstract BuildingParts Customize(IPartsCustomizer customizer);
 
         /// <summary>
         /// Convert string to IText.
         /// </summary>
         /// <param name="text">string.</param>
-        public static implicit operator BuildingParts(string text) => new SingleTextParts(text);
+        public static implicit operator BuildingParts(string text) => new TextParts(text);
     }
 }

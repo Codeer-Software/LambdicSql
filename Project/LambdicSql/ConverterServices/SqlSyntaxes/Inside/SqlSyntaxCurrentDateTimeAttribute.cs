@@ -41,7 +41,7 @@ namespace LambdicSql.ConverterServices.SqlSyntaxes.Inside
             public override BuildingParts ConcatToBack(string back)
                 => new CurrentDateTimeExpressionElement(_core, _front, _back + back);
 
-            public override BuildingParts Customize(ISqlTextCustomizer customizer)
+            public override BuildingParts Customize(IPartsCustomizer customizer)
                 => customizer.Custom(this);
         }
 

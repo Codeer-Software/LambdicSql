@@ -13,7 +13,7 @@ namespace LambdicSql.ConverterServices.SqlSyntaxes.Inside
             var obj = converter.ToObject(method.Arguments[0]);
             var text = TowWaySqlSpec.ToStringFormat((string)obj);
             var array = method.Arguments[1] as NewArrayExpression;
-            return new StringFormatText(text, array.Expressions.Select(e => converter.Convert(e)).ToArray());
+            return new StringFormatParts(text, array.Expressions.Select(e => converter.Convert(e)).ToArray());
         }
     }
 }

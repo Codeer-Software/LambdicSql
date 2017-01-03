@@ -1,13 +1,11 @@
 ﻿namespace LambdicSql.BuilderServices.Parts.Inside
 {
-    //TODO 厳密に考えると、組み合わせ前にやっちゃったらばグル
-    class CustomizeParameterToObject : ISqlTextCustomizer
+    class CustomizeParameterToObject : IPartsCustomizer
     {
         public BuildingParts Custom(BuildingParts src)
         {
-            var col = src as ParameterText;
-            if (col == null) return src;
-            return col.ToDisplayValue();
+            var col = src as ParameterParts;
+            return col == null ? src : col.ToDisplayValue();
         }
     }
 }

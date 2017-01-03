@@ -4,7 +4,7 @@ using LambdicSql.BuilderServices.Parts;
 using LambdicSql.BuilderServices.Parts.Inside;
 using System.Linq;
 using System.Linq.Expressions;
-using static LambdicSql.BuilderServices.Parts.Inside.SqlTextUtils;
+using static LambdicSql.BuilderServices.Parts.Inside.BuildingPartsUtils;
 
 namespace LambdicSql.ConverterServices.SqlSyntaxes.Inside
 {
@@ -37,13 +37,13 @@ namespace LambdicSql.ConverterServices.SqlSyntaxes.Inside
                 return _core.ToString(isTopLevel, indent, context);
             }
 
-            public override BuildingParts ConcatAround(string front, string back) => new SelectClauseText(_createInfo, _core.ConcatAround(front, back));
+            public override BuildingParts ConcatAround(string front, string back) => new SelectClauseParts(_createInfo, _core.ConcatAround(front, back));
 
-            public override BuildingParts ConcatToFront(string front) => new SelectClauseText(_createInfo, _core.ConcatToFront(front));
+            public override BuildingParts ConcatToFront(string front) => new SelectClauseParts(_createInfo, _core.ConcatToFront(front));
 
-            public override BuildingParts ConcatToBack(string back) => new SelectClauseText(_createInfo, _core.ConcatToBack(back));
+            public override BuildingParts ConcatToBack(string back) => new SelectClauseParts(_createInfo, _core.ConcatToBack(back));
 
-            public override BuildingParts Customize(ISqlTextCustomizer customizer) => customizer.Custom(this);
+            public override BuildingParts Customize(IPartsCustomizer customizer) => customizer.Custom(this);
         }
     }
 }

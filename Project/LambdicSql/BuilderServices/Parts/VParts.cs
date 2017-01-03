@@ -58,7 +58,7 @@ namespace LambdicSql.BuilderServices.Parts
         public void Add(string text, int indent)
         {
             if (string.IsNullOrEmpty(text.Trim())) return;
-            _texts.Add(new SingleTextParts(text, indent));
+            _texts.Add(new TextParts(text, indent));
         }
 
         /// <summary>
@@ -136,7 +136,7 @@ namespace LambdicSql.BuilderServices.Parts
         /// </summary>
         /// <param name="customizer">Customizer.</param>
         /// <returns>Customized SqlText.</returns>
-        public override BuildingParts Customize(ISqlTextCustomizer customizer)
+        public override BuildingParts Customize(IPartsCustomizer customizer)
         {
             var dst = _texts.Select(e => customizer.Custom(e));
             return CopyProperty(dst.ToArray());

@@ -9,7 +9,7 @@ namespace LambdicSql.ConverterServices.SqlSyntaxes.Inside
     {
         public override BuildingParts Convert(ExpressionConverter converter, MethodCallExpression method)
         {
-            var col = converter.Convert(method.Arguments[0]) as DbColumnText;
+            var col = converter.Convert(method.Arguments[0]) as DbColumnParts;
             if (col == null) throw new NotSupportedException("invalid column.");
             return col.Customize(new CustomizeColumnOnly());
         }

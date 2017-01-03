@@ -2,7 +2,7 @@
 using LambdicSql.BuilderServices.Parts;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using static LambdicSql.BuilderServices.Parts.Inside.SqlTextUtils;
+using static LambdicSql.BuilderServices.Parts.Inside.BuildingPartsUtils;
 
 namespace LambdicSql.ConverterServices.SqlSyntaxes.Inside
 {
@@ -66,7 +66,7 @@ namespace LambdicSql.ConverterServices.SqlSyntaxes.Inside
             public override BuildingParts ConcatToBack(string back)
                 => new WithEntriedText(_core.ConcatToBack(back), _names);
 
-            public override BuildingParts Customize(ISqlTextCustomizer customizer)
+            public override BuildingParts Customize(IPartsCustomizer customizer)
                 => customizer.Custom(this);
         }
         class RecursiveTargetText : BuildingParts
@@ -101,7 +101,7 @@ namespace LambdicSql.ConverterServices.SqlSyntaxes.Inside
             public override BuildingParts ConcatToBack(string back)
                 => new RecursiveTargetText(_core.ConcatToBack(back));
 
-            public override BuildingParts Customize(ISqlTextCustomizer customizer)
+            public override BuildingParts Customize(IPartsCustomizer customizer)
                 => customizer.Custom(this);
         }
     }

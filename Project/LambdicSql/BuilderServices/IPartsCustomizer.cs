@@ -5,7 +5,7 @@ namespace LambdicSql.BuilderServices
     /// <summary>
     /// Customizer.
     /// </summary>
-    public interface ISqlTextCustomizer
+    public interface IPartsCustomizer
     {
         /// <summary>
         /// Coustom.

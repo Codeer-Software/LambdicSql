@@ -233,5 +233,7 @@ namespace LambdicSql
         /// <returns>Column name only.</returns>
         [SqlSyntaxColumnOnly]
         public static T ColumnOnly<T>(this T column) => InvalitContext.Throw<T>(nameof(ColumnOnly));
+
+        //TODO 強制でパラメータを値に変更する拡張
     }
 }
