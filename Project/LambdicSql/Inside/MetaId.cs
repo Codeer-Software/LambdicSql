@@ -1,24 +1,25 @@
-﻿using System.Linq.Expressions;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace LambdicSql.Inside
 {
     class MetaId
     {
+        readonly string _moduleFullyQualifiedName;
         readonly long _core;
 
-        public MetaId(MemberInfo member) : this(member.Module.MetadataToken, member.MetadataToken) { }
+        public MetaId(MemberInfo member) : this(member.Module.FullyQualifiedName, member.MetadataToken) { }
 
-        public MetaId(int modeule, int member)
+        public MetaId(string moduleFullyQualifiedName, int member)
         {
-            _core = ((long)modeule << 32) + member;
+            _moduleFullyQualifiedName = moduleFullyQualifiedName;
+            _core = ((long)moduleFullyQualifiedName.GetHashCode() << 32) + member;
         }
 
         public override bool Equals(object obj)
         {
             var target = obj as MetaId;
             if (target == null) return false;
-            return _core.Equals(target._core);
+            return _core == target._core && _moduleFullyQualifiedName == target._moduleFullyQualifiedName;
         }
 
         public override int GetHashCode() => _core.GetHashCode();

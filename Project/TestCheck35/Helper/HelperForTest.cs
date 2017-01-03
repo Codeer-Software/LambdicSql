@@ -6,9 +6,9 @@ using System.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
-using LambdicSql.ExpressionConverterService.SqlSyntaxes;
-using LambdicSql.ExpressionConverterService;
-using LambdicSql.SqlBuilder.ExpressionElements;
+using LambdicSql.ConverterService.SqlSyntaxes;
+using LambdicSql.ConverterService;
+using LambdicSql.SqlBuilder.Sentences;
 
 namespace TestCheck35
 {
@@ -20,7 +20,7 @@ namespace TestCheck35
 
     class SqlSyntaxTestAttribute : SqlSyntaxConverterMethodAttribute
     {
-        public override ExpressionElement Convert(IExpressionConverter converter, MethodCallExpression method) => string.Empty;
+        public override Sentence Convert(ExpressionConverter converter, MethodCallExpression method) => string.Empty;
     }
 
     public static class TestExtensions

@@ -1,7 +1,7 @@
-﻿using LambdicSql.ExpressionConverterService;
-using LambdicSql.ExpressionConverterService.Inside;
+﻿using LambdicSql.ConverterService;
+using LambdicSql.ConverterService.Inside;
 using LambdicSql.Inside;
-using LambdicSql.SqlBuilder.ExpressionElements.Inside;
+using LambdicSql.SqlBuilder.Sentences.Inside;
 using System;
 using System.Linq.Expressions;
 

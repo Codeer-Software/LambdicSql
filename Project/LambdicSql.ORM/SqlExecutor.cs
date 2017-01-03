@@ -10,9 +10,9 @@ namespace LambdicSql.ORM
         where TSelect : class
     {
         IDbConnection _connection;
-        BuildedSql<TSelect> _info;
+        SqlInfo<TSelect> _info;
 
-        internal SqlExecutor(IDbConnection connection, BuildedSql<TSelect> info)
+        internal SqlExecutor(IDbConnection connection, SqlInfo<TSelect> info)
         {
             _connection = connection;
             _info = info;

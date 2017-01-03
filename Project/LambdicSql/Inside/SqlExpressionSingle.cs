@@ -1,6 +1,6 @@
-﻿using LambdicSql.ExpressionConverterService;
-using LambdicSql.ExpressionConverterService.Inside;
-using LambdicSql.SqlBuilder.ExpressionElements;
+﻿using LambdicSql.ConverterService;
+using LambdicSql.ConverterService.Inside;
+using LambdicSql.SqlBuilder.Sentences;
 using System.Linq.Expressions;
 
 namespace LambdicSql.Inside
@@ -8,7 +8,7 @@ namespace LambdicSql.Inside
     class SqlExpressionSingle<TSelected> : SqlExpression<TSelected>
     {
         public override DbInfo DbInfo { get; protected set; }
-        public override ExpressionElement ExpressionElement { get; }
+        public override Sentence ExpressionElement { get; }
 
         public SqlExpressionSingle(DbInfo dbInfo, Expression core)
         {
@@ -18,7 +18,7 @@ namespace LambdicSql.Inside
             else ExpressionElement = converter.Convert(core);
         }
 
-        public SqlExpressionSingle(DbInfo dbInfo, ExpressionElement core)
+        public SqlExpressionSingle(DbInfo dbInfo, Sentence core)
         {
             DbInfo = dbInfo;
             ExpressionElement = core;

@@ -124,7 +124,7 @@ namespace LambdicSql.feat.Dapper
         /// <param name="cnn">For testing.</param>
         /// <param name="info">For testing.</param>
         /// <returns>For testing.</returns>
-        public delegate int QueryDelegate(IDbConnection cnn, BuildedSql info);
+        public delegate int QueryDelegate(IDbConnection cnn, SqlInfo info);
 
         /// <summary>
         /// For testing.
@@ -132,7 +132,7 @@ namespace LambdicSql.feat.Dapper
         /// <param name="cnn">For testing.</param>
         /// <param name="info">For testing.</param>
         /// <returns>For testing.</returns>
-        public delegate int ExecuteDelegate(IDbConnection cnn, BuildedSql info);
+        public delegate int ExecuteDelegate(IDbConnection cnn, SqlInfo info);
 
         /// <summary>
         /// For testing.

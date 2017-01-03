@@ -1,6 +1,6 @@
-﻿using LambdicSql.ExpressionConverterService;
-using LambdicSql.ExpressionConverterService.SqlSyntaxes;
-using LambdicSql.ExpressionConverterService.SqlSyntaxes.Inside;
+﻿using LambdicSql.ConverterService;
+using LambdicSql.ConverterService.SqlSyntaxes;
+using LambdicSql.ConverterService.SqlSyntaxes.Inside;
 using LambdicSql.Inside;
 using System;
 
@@ -1002,24 +1002,6 @@ namespace LambdicSql
         public static bool In(object target, params object[] canditates) => InvalitContext.Throw<bool>(nameof(In));
 
         /// <summary>
-        /// IN keyword.
-        /// </summary>
-        /// <param name="target">Target of IN check.</param>
-        /// <param name="canditates">Candidates expected for target.</param>
-        /// <returns>Returns TRUE if target is included in the candidate represented by expression.</returns>
-        [SqlSyntaxIn]
-        public static bool In(object target, ISqlExpression canditates) => InvalitContext.Throw<bool>(nameof(In));
-
-        /// <summary>
-        /// IN keyword.
-        /// </summary>
-        /// <param name="target">Target of IN check.</param>
-        /// <param name="canditates">Table or subquery.</param>
-        /// <returns>Returns TRUE if target is included in the candidate represented by expression.</returns>
-        [SqlSyntaxIn]
-        public static bool In(object target, IClauseChain canditates) => InvalitContext.Throw<bool>(nameof(In));
-
-        /// <summary>
         /// ALL Keyword
         /// </summary>
         /// <returns></returns>
@@ -1048,16 +1030,8 @@ namespace LambdicSql
         /// <param name="expression">Sub query.</param>
         /// <returns>Returns TRUE if there is at least one record returned by expression, FALSE otherwise.</returns>
         [SqlSyntaxClause]
-        public static bool Exists(ISqlExpression expression) => InvalitContext.Throw<bool>(nameof(Exists));
-
-        /// <summary>
-        /// EXISTS keyword.
-        /// </summary>
-        /// <param name="expression">Sub query.</param>
-        /// <returns>Returns TRUE if there is at least one record returned by expression, FALSE otherwise.</returns>
-        [SqlSyntaxClause]
-        public static bool Exists(IClauseChain expression) => InvalitContext.Throw<bool>(nameof(Exists));
-
+        public static bool Exists(object expression) => InvalitContext.Throw<bool>(nameof(Exists));
+        
         /// <summary>
         /// It's *.
         /// </summary>

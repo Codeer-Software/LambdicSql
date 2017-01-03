@@ -1,4 +1,4 @@
-﻿using LambdicSql.SqlBuilder.ExpressionElements;
+﻿using LambdicSql.SqlBuilder.Sentences;
 
 namespace LambdicSql.SqlBuilder
 {
@@ -12,6 +12,6 @@ namespace LambdicSql.SqlBuilder
         /// </summary>
         /// <param name="src">Source.</param>
         /// <returns>Result.</returns>
-        ExpressionElement Custom(ExpressionElement src);
+        Sentence Custom(Sentence src);
     }
 }

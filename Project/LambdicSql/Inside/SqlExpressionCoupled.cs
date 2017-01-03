@@ -1,18 +1,18 @@
-﻿using LambdicSql.ExpressionConverterService;
-using LambdicSql.SqlBuilder.ExpressionElements;
+﻿using LambdicSql.ConverterService;
+using LambdicSql.SqlBuilder.Sentences;
 
 namespace LambdicSql.Inside
 {
     class SqlExpressionCoupled<TSelected> : SqlExpression<TSelected>
     {
         public override DbInfo DbInfo { get; protected set; }
-        public override ExpressionElement ExpressionElement { get; }
+        public override Sentence ExpressionElement { get; }
 
         public SqlExpressionCoupled(ISqlExpression before, ISqlExpression after)
         {
             if (before.DbInfo != null) DbInfo = before.DbInfo;
             else if (before.DbInfo != null) DbInfo = before.DbInfo;
-            ExpressionElement = new VText(before.ExpressionElement, after.ExpressionElement);
+            ExpressionElement = new VSentence(before.ExpressionElement, after.ExpressionElement);
         }
     }
 }

@@ -49,7 +49,7 @@ namespace Performance
 
             Console.ReadKey();
             Console.WriteLine("Start");
-            BuildedSql info = null;
+            SqlInfo info = null;
             var times = new List<double>();
             var watch = new Stopwatch();
 
