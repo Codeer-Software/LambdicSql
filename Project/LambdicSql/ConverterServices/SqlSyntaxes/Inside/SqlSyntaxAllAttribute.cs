@@ -14,6 +14,7 @@ namespace LambdicSql.ConverterServices.SqlSyntaxes.Inside
             return new DisableBracketsText(Func("ALL", args[0]));
         }
 
+        //TODO そもそも括弧つけの手法が見直せたら良い
         internal class DisableBracketsText : BuildingParts
         {
             BuildingParts _core;
