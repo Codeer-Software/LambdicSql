@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LambdicSql.Inside
+namespace LambdicSql.ConverterServices.Inside
 {
     static class InvalitContext
     {

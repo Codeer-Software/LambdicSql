@@ -1,5 +1,4 @@
-﻿using LambdicSql.ConverterServices;
-using LambdicSql.Inside;
+﻿using LambdicSql.ConverterServices.Inside;
 using LambdicSql.BuilderServices.Parts;
 
 namespace LambdicSql
@@ -45,5 +44,14 @@ namespace LambdicSql
         {
             BuildingParts = parts;
         }
+    }
+
+    /// <summary>
+    /// Expressions that represent arguments of recursive SQL.
+    /// </summary>
+    /// <typeparam name="TSelected">The type represented by SqlExpression.</typeparam>
+    public class SqlRecursiveArgumentsExpression<TSelected> : SqlExpression<TSelected>
+    {
+        internal SqlRecursiveArgumentsExpression(BuildingParts parts) : base(parts) { }
     }
 }

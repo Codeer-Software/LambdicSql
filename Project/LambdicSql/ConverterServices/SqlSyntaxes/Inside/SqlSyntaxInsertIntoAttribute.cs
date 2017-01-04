@@ -1,7 +1,7 @@
 ﻿using LambdicSql.BuilderServices.Parts;
 using LambdicSql.BuilderServices.Parts.Inside;
 using System.Linq.Expressions;
-using static LambdicSql.BuilderServices.Parts.Inside.BuildingPartsUtils;
+using static LambdicSql.BuilderServices.Parts.Inside.BuildingPartsFactoryUtils;
 
 namespace LambdicSql.ConverterServices.SqlSyntaxes.Inside
 {

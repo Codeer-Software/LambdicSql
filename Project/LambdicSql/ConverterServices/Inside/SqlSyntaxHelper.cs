@@ -1,5 +1,5 @@
 ﻿using LambdicSql.ConverterServices.SqlSyntaxes;
-using LambdicSql.Inside;
+using LambdicSql.ConverterServices.Inside;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;

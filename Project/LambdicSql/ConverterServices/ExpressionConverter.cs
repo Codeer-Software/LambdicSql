@@ -1,5 +1,5 @@
 ﻿using LambdicSql.ConverterServices.SqlSyntaxes.Inside;
-using LambdicSql.Inside;
+using LambdicSql.ConverterServices.Inside;
 using LambdicSql.BuilderServices.Parts;
 using LambdicSql.BuilderServices.Parts.Inside;
 using System;
@@ -8,8 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
-using static LambdicSql.BuilderServices.Parts.Inside.BuildingPartsUtils;
-using LambdicSql.ConverterServices.Inside;
+using static LambdicSql.BuilderServices.Parts.Inside.BuildingPartsFactoryUtils;
 
 namespace LambdicSql.ConverterServices
 {
@@ -18,11 +17,11 @@ namespace LambdicSql.ConverterServices
     /// </summary>
     public class ExpressionConverter
     {
-        class DecodedInfo
+        class ConvertedResult
         {
             internal Type Type { get; }
             internal BuildingParts Text { get; }
-            internal DecodedInfo(Type type, BuildingParts text)
+            internal ConvertedResult(Type type, BuildingParts text)
             {
                 Type = type;
                 Text = text;
@@ -64,10 +63,22 @@ namespace LambdicSql.ConverterServices
             return new ParameterParts(obj);
         }
 
-        DecodedInfo Convert(Expression exp)
+        ConvertedResult Convert(Expression exp)
         {
+            var method = exp as MethodCallExpression;
+            if (method != null) return Convert(method);
+
             var constant = exp as ConstantExpression;
             if (constant != null) return Convert(constant);
+
+            var binary = exp as BinaryExpression;
+            if (binary != null) return Convert(binary);
+
+            var unary = exp as UnaryExpression;
+            if (unary != null) return Convert(unary);
+
+            var member = exp as MemberExpression;
+            if (member != null) return Convert(member);
 
             var newExp = exp as NewExpression;
             if (newExp != null) return Convert(newExp);
@@ -75,94 +86,71 @@ namespace LambdicSql.ConverterServices
             var array = exp as NewArrayExpression;
             if (array != null) return Convert(array);
 
-            var unary = exp as UnaryExpression;
-            if (unary != null) return Convert(unary);
-
-            var binary = exp as BinaryExpression;
-            if (binary != null) return Convert(binary);
-
-            var member = exp as MemberExpression;
-            if (member != null) return Convert(member);
-
-            var method = exp as MethodCallExpression;
-            if (method != null) return Convert(method);
-
             var memberInit = exp as MemberInitExpression;
             if (memberInit != null) return Convert(memberInit);
 
-            throw new NotSupportedException("Not suported expression at LambdicSql.");
+            throw new NotSupportedException("Its way of writing is not supported by LambdicSql.");
         }
 
-        DecodedInfo Convert(MemberInitExpression memberInit)
+        ConvertedResult Convert(MemberInitExpression memberInit)
         {
             var value = ExpressionToObject.GetMemberInitObject(memberInit);
-            return new DecodedInfo(memberInit.Type, Convert(value));
+            return new ConvertedResult(memberInit.Type, Convert(value));
         }
 
-        DecodedInfo Convert(ConstantExpression constant)
+        ConvertedResult Convert(ConstantExpression constant)
         {
             //sql syntax.
-            var cnv = constant.Type.GetSqlSyntaxObject();
-            if (cnv != null) return new DecodedInfo(constant.Type, cnv.Convert(constant.Value));
+            var syntax = constant.Type.GetSqlSyntaxObject();
+            if (syntax != null) return new ConvertedResult(constant.Type, syntax.Convert(constant.Value));
 
             //normal object.
-            if (SupportedTypeSpec.IsSupported(constant.Type)) return new DecodedInfo(constant.Type, Convert(constant.Value));
-
-            throw new NotSupportedException();
+            return new ConvertedResult(constant.Type, Convert(constant.Value));
         }
 
-        DecodedInfo Convert(NewExpression newExp)
+        ConvertedResult Convert(NewExpression newExp)
         {
             //syntax.
-            var cnv = newExp.GetSqlSyntaxNew();
-            if (cnv != null)
-            {
-                return new DecodedInfo(null, cnv.Convert(this, newExp));
-            }
+            var syntax = newExp.GetSqlSyntaxNew();
+            if (syntax != null) return new ConvertedResult(null, syntax.Convert(this, newExp));
 
             //object.
             var value = ExpressionToObject.GetNewObject(newExp);
-            return new DecodedInfo(newExp.Type, Convert(value));
+            return new ConvertedResult(newExp.Type, Convert(value));
         }
 
-        DecodedInfo Convert(NewArrayExpression array)
+        ConvertedResult Convert(NewArrayExpression array)
         {
-            if (array.Expressions.Count == 0) return new DecodedInfo(null, string.Empty);
+            if (array.Expressions.Count == 0) return new ConvertedResult(null, string.Empty);
             var infos = array.Expressions.Select(e => Convert(e)).ToArray();
-            return new DecodedInfo(infos[0].Type, Arguments(infos.Select(e=>e.Text).ToArray()));
+            return new ConvertedResult(infos[0].Type, Arguments(infos.Select(e => e.Text).ToArray()));
         }
-
-        //TODO refactoring.
-        DecodedInfo Convert(UnaryExpression unary)
+        
+        ConvertedResult Convert(UnaryExpression unary)
         {
             switch (unary.NodeType)
             {
                 case ExpressionType.Not:
-                    return new DecodedInfo(typeof(bool), Convert(unary.Operand).Text.ConcatAround("NOT (", ")"));
+                    return new ConvertedResult(typeof(bool), Convert(unary.Operand).Text.ConcatAround("NOT (", ")"));
                 case ExpressionType.Convert:
                     var ret = Convert(unary.Operand);
-                    var p = ret.Text as ParameterParts;
-                    if (p != null)
+                    var param = ret.Text as ParameterParts;
+                    if (param != null && param.Value != null && !SupportedTypeSpec.IsSupported(param.Value.GetType()))
                     {
-                        if (p.Value != null && !SupportedTypeSpec.IsSupported(p.Value.GetType()))
-                        {
-                            var casted = ExpressionToObject.ConvertObject(unary.Type, p.Value);
-                            return new DecodedInfo(ret.Type, new ParameterParts(p.Name, p.MetaId, new DbParam() { Value = casted }));
-                        }
+                        var casted = ExpressionToObject.ConvertObject(unary.Type, param.Value);
+                        return new ConvertedResult(ret.Type, new ParameterParts(param.Name, param.MetaId, new DbParam() { Value = casted }));
                     }
                     return ret;
                 case ExpressionType.ArrayLength:
-                    {
-                        object obj;
-                        ExpressionToObject.GetExpressionObject(unary.Operand, out obj);
-                        return new DecodedInfo(typeof(int), new ParameterParts(((Array)obj).Length));
-                    }
+                    object obj;
+                    ExpressionToObject.GetExpressionObject(unary.Operand, out obj);
+                    return new ConvertedResult(typeof(int), new ParameterParts(((Array)obj).Length));
                 default:
                     return Convert(unary.Operand);
             }
         }
 
-        DecodedInfo Convert(BinaryExpression binary)
+        ConvertedResult Convert(BinaryExpression binary)
         {
             if (binary.NodeType == ExpressionType.ArrayIndex)
             {
@@ -170,13 +158,13 @@ namespace LambdicSql.ConverterServices
                 ExpressionToObject.GetExpressionObject(binary.Left, out ary);
                 object index;
                 ExpressionToObject.GetExpressionObject(binary.Right, out index);
-                return new DecodedInfo(typeof(int), new ParameterParts(((Array)ary).GetValue((int)index)));
+                return new ConvertedResult(typeof(int), new ParameterParts(((Array)ary).GetValue((int)index)));
             }
 
             var left = Convert(binary.Left);
             var right = Convert(binary.Right);
 
-            if (left.Text.IsEmpty && right.Text.IsEmpty) return new DecodedInfo(null, string.Empty);
+            if (left.Text.IsEmpty && right.Text.IsEmpty) return new ConvertedResult(null, string.Empty);
             if (left.Text.IsEmpty) return right;
             if (right.Text.IsEmpty) return left;
 
@@ -185,31 +173,31 @@ namespace LambdicSql.ConverterServices
             if (nullCheck != null) return nullCheck;
 
             var nodeType = Convert(left, binary.NodeType, right);
-            return new DecodedInfo(nodeType.Type, new HParts(left.Text.ConcatAround("(", ")"), nodeType.Text.ConcatAround(" ", " "), right.Text.ConcatAround("(", ")")));
+            return new ConvertedResult(nodeType.Type, new HParts(left.Text.ConcatAround("(", ")"), nodeType.Text.ConcatAround(" ", " "), right.Text.ConcatAround("(", ")")));
         }
         
-        DecodedInfo Convert(MemberExpression member)
+        ConvertedResult Convert(MemberExpression member)
         {
             //sub.Body
             var body = ResolveSqlExpressionBody(member);
             if (body != null) return body;
 
             //sql syntax.
-            var cnvMember = member.GetSqlSyntaxMember();
-            if (cnvMember != null)
+            var syntaxMember = member.GetSqlSyntaxMember();
+            if (syntaxMember != null)
             {
                 //convert.
-                return new DecodedInfo(member.Type, cnvMember.Convert(this, member));
+                return new ConvertedResult(member.Type, syntaxMember.Convert(this, member));
             }
             
             //sql syntax extension method
             var method = member.Expression as MethodCallExpression;
             if (method != null)
             {
-                var cnv = method.GetSqlSyntaxMethod();
-                if (cnv != null)
+                var syntaxMethod = method.GetSqlSyntaxMethod();
+                if (syntaxMethod != null)
                 {
-                    var ret = cnv.Convert(this, method);
+                    var ret = syntaxMethod.Convert(this, method);
                     //T()
                     var tbl = ret as DbTableParts;
                     if (tbl != null)
@@ -232,53 +220,26 @@ namespace LambdicSql.ConverterServices
             return ResolveExpressionObject(member);
         }
 
-        private DecodedInfo ResolveLambdicElement(string name)
+        ConvertedResult Convert(MethodCallExpression method)
         {
-            TableInfo table;
-            if (DbInfo.GetLambdaNameAndTable().TryGetValue(name, out table))
-            {
-                return new DecodedInfo(null, new DbTableParts(table));
-            }
-            ColumnInfo col;
-            if (DbInfo.GetLambdaNameAndColumn().TryGetValue(name, out col))
-            {
-                return new DecodedInfo(col.Type, new DbColumnParts(col));
-            }
-            return new DecodedInfo(null, name);
-        }
+            //convert syntax.
+            var parts = GetMethodChains(method).Select(c=> c.GetSqlSyntaxMethod().Convert(this, c)).ToArray();
+            if (parts.Length == 0) return ResolveExpressionObject(method);
 
-        //TODO
-        DecodedInfo Convert(MethodCallExpression method)
-        {
-            //not sql syntax.
-            if (method.GetSqlSyntaxMethod() == null) return ResolveExpressionObject(method);
-
-            var ret = new List<BuildingParts>();
-            foreach (var c in GetMethodChains(method))
-            {
-                ret.Add(c.GetSqlSyntaxMethod().Convert(this, c));
-            }
             //TODO ちょっと嫌すぎる。括弧を付けない方法を何か確立せねば
-            if (ret.Count == 1 && typeof(SqlSyntaxAllAttribute.DisableBracketsText).IsAssignableFrom(ret[0].GetType()))
+            if (parts.Length == 1 && typeof(SqlSyntaxAllAttribute.DisableBracketsText).IsAssignableFrom(parts[0].GetType()))
             {
-                return new DecodedInfo(method.Method.ReturnType, ret[0]);
+                return new ConvertedResult(method.Method.ReturnType, parts[0]);
             }
 
+            var core = new VParts(parts);
 
-            BuildingParts text = new VParts(ret.ToArray());
-            if (typeof(SelectClauseParts).IsAssignableFrom(ret[0].GetType()))
-            {
-                text = new SelectQueryParts(text);
-            }
-            else
-            {
-                text = new QueryParts(text);
-            }
-
-            return new DecodedInfo(method.Method.ReturnType, text);
+            return (typeof(SelectClauseParts).IsAssignableFrom(parts[0].GetType())) ?
+                 new ConvertedResult(method.Method.ReturnType, new SelectQueryParts(core)) :
+                 new ConvertedResult(method.Method.ReturnType, new QueryParts(core));
         }
 
-        DecodedInfo ResolveSqlExpressionBody(MemberExpression member)
+        ConvertedResult ResolveSqlExpressionBody(MemberExpression member)
         {
             //get all members.
             var members = new List<MemberExpression>();
@@ -313,40 +274,74 @@ namespace LambdicSql.ConverterServices
             if (members.Count == 2) return ResolveExpressionObject(members[0]);
 
             //for example, sub.Body.column.
-            else return new DecodedInfo(member.Type, string.Join(".", members.Where((e, i) => i != 1).Select(e => e.Member.Name).ToArray()));
+            else return new ConvertedResult(member.Type, string.Join(".", members.Where((e, i) => i != 1).Select(e => e.Member.Name).ToArray()));
         }
 
-        DecodedInfo Convert(DecodedInfo left, ExpressionType nodeType, DecodedInfo right)
+        ConvertedResult Convert(ConvertedResult left, ExpressionType nodeType, ConvertedResult right)
         {
             switch (nodeType)
             {
-                case ExpressionType.Equal: return new DecodedInfo(typeof(bool), "=");
-                case ExpressionType.NotEqual: return new DecodedInfo(typeof(bool), "<>");
-                case ExpressionType.LessThan: return new DecodedInfo(typeof(bool), "<");
-                case ExpressionType.LessThanOrEqual: return new DecodedInfo(typeof(bool), "<=");
-                case ExpressionType.GreaterThan: return new DecodedInfo(typeof(bool), ">");
-                case ExpressionType.GreaterThanOrEqual: return new DecodedInfo(typeof(bool), ">=");
+                case ExpressionType.Equal: return new ConvertedResult(typeof(bool), "=");
+                case ExpressionType.NotEqual: return new ConvertedResult(typeof(bool), "<>");
+                case ExpressionType.LessThan: return new ConvertedResult(typeof(bool), "<");
+                case ExpressionType.LessThanOrEqual: return new ConvertedResult(typeof(bool), "<=");
+                case ExpressionType.GreaterThan: return new ConvertedResult(typeof(bool), ">");
+                case ExpressionType.GreaterThanOrEqual: return new ConvertedResult(typeof(bool), ">=");
                 case ExpressionType.Add:
                     {
                         if (left.Type == typeof(string) || right.Type == typeof(string))
                         {
-                            return new DecodedInfo(left.Type, new StringAddOperatorParts());
+                            return new ConvertedResult(left.Type, new StringAddOperatorParts());
                         }
-                        return new DecodedInfo(left.Type, "+");
+                        return new ConvertedResult(left.Type, "+");
                     }
-                case ExpressionType.Subtract: return new DecodedInfo(left.Type, "-");
-                case ExpressionType.Multiply: return new DecodedInfo(left.Type, "*");
-                case ExpressionType.Divide: return new DecodedInfo(left.Type, "/");
-                case ExpressionType.Modulo: return new DecodedInfo(left.Type, "%");
-                case ExpressionType.And: return new DecodedInfo(typeof(bool), "AND");
-                case ExpressionType.AndAlso: return new DecodedInfo(typeof(bool), "AND");
-                case ExpressionType.Or: return new DecodedInfo(typeof(bool), "OR");
-                case ExpressionType.OrElse: return new DecodedInfo(typeof(bool), "OR");
+                case ExpressionType.Subtract: return new ConvertedResult(left.Type, "-");
+                case ExpressionType.Multiply: return new ConvertedResult(left.Type, "*");
+                case ExpressionType.Divide: return new ConvertedResult(left.Type, "/");
+                case ExpressionType.Modulo: return new ConvertedResult(left.Type, "%");
+                case ExpressionType.And: return new ConvertedResult(typeof(bool), "AND");
+                case ExpressionType.AndAlso: return new ConvertedResult(typeof(bool), "AND");
+                case ExpressionType.Or: return new ConvertedResult(typeof(bool), "OR");
+                case ExpressionType.OrElse: return new ConvertedResult(typeof(bool), "OR");
             }
             throw new NotImplementedException();
         }
 
-        DecodedInfo ResolveNullCheck(DecodedInfo left, ExpressionType nodeType, DecodedInfo right)
+        static bool IsDbDesignParam(MemberExpression member, out string lambdaName)
+        {
+            lambdaName = string.Empty;
+            var names = new List<string>();
+            while (member != null)
+            {
+                names.Insert(0, member.Member.Name);
+                if (member.Expression is ParameterExpression)
+                {
+                    //using ParameterExpression with LambdicSql only when it represents a component of db.
+                    //for example, Sql<DB>.Create(db =>
+                    lambdaName = string.Join(".", names.ToArray());
+                    return true;
+                }
+                member = member.Expression as MemberExpression;
+            }
+            return false;
+        }
+
+        ConvertedResult ResolveLambdicElement(string name)
+        {
+            TableInfo table;
+            if (DbInfo.GetLambdaNameAndTable().TryGetValue(name, out table))
+            {
+                return new ConvertedResult(null, new DbTableParts(table));
+            }
+            ColumnInfo col;
+            if (DbInfo.GetLambdaNameAndColumn().TryGetValue(name, out col))
+            {
+                return new ConvertedResult(col.Type, new DbColumnParts(col));
+            }
+            return new ConvertedResult(null, name);
+        }
+
+        ConvertedResult ResolveNullCheck(ConvertedResult left, ExpressionType nodeType, ConvertedResult right)
         {
             string ope;
             switch (nodeType)
@@ -378,32 +373,13 @@ namespace LambdicSql.ConverterServices
                         if (bothParam) continue;
                         return null;
                     }
-                    return new DecodedInfo(null, targetTexts[i].ConcatAround("(", ")" + ope));
+                    return new ConvertedResult(null, targetTexts[i].ConcatAround("(", ")" + ope));
                 }
             }
             return null;
         }
 
-        static bool IsDbDesignParam(MemberExpression member, out string lambdaName)
-        {
-            lambdaName = string.Empty;
-            var names = new List<string>();
-            while (member != null)
-            {
-                names.Insert(0, member.Member.Name);
-                if (member.Expression is ParameterExpression)
-                {
-                    //using ParameterExpression with LambdicSql only when it represents a component of db.
-                    //for example, Sql<DB>.Create(db =>
-                    lambdaName = string.Join(".", names.ToArray());
-                    return true;
-                }
-                member = member.Expression as MemberExpression;
-            }
-            return false;
-        }
-
-        DecodedInfo ResolveExpressionObject(Expression exp)
+        ConvertedResult ResolveExpressionObject(Expression exp)
         {
             object obj;
             if (!ExpressionToObject.GetExpressionObject(exp, out obj))
@@ -419,32 +395,13 @@ namespace LambdicSql.ConverterServices
                 {
                     list.Add(Convert(e));
                 }
-                return new DecodedInfo(exp.Type, Arguments(list.ToArray()));
+                return new ConvertedResult(exp.Type, Arguments(list.ToArray()));
             }
 
-            //value type is SqlSyntax
-            //for example [ enum ]
-            var cnv = exp.Type.GetSqlSyntaxObject();
-            if (cnv != null) 
-            {
-                return new DecodedInfo(exp.Type, cnv.Convert(obj));
-            }
-
-            //normal object.
-            if (SupportedTypeSpec.IsSupported(exp.Type))
-            {
-                string name = string.Empty;
-                MetaId metaId = null;
-                var member = exp as MemberExpression;
-                if (member != null)
-                {
-                    name = member.Member.Name;
-                    metaId = new MetaId(member.Member);
-                }
-
-                //use field name.
-                return new DecodedInfo(exp.Type, new ParameterParts(name, metaId, new DbParam() { Value = obj }));
-            }
+            //object syntax.
+            //for example enum.
+            var syntax = exp.Type.GetSqlSyntaxObject();
+            if (syntax != null) return new ConvertedResult(exp.Type, syntax.Convert(obj));
 
             //DbParam.
             if (typeof(DbParam).IsAssignableFrom(exp.Type))
@@ -459,10 +416,10 @@ namespace LambdicSql.ConverterServices
                 }
                 var param = ((DbParam)obj);
                 //use field name.
-                return new DecodedInfo(exp.Type.GetGenericArguments()[0], new ParameterParts(name, metaId, param));
+                return new ConvertedResult(exp.Type.GetGenericArguments()[0], new ParameterParts(name, metaId, param));
             }
-            
-            //SqlExpression.
+
+            //ISqlExpression.
             //example [ from(exp) ]
             var sqlExp = obj as ISqlExpression;
             if (sqlExp != null)
@@ -470,11 +427,11 @@ namespace LambdicSql.ConverterServices
                 Type type = null;
                 var types = sqlExp.GetType().GetGenericArguments();
                 if (0 < types.Length) type = types[0];
-                return new DecodedInfo(type, sqlExp.BuildingParts);
+                return new ConvertedResult(type, sqlExp.BuildingParts);
             }
 
             //others.
-            //If it is correctly written it will be cast at the caller.
+            //Even if it is not a supported type, if it is correctly written it will be cast to the caller.
             {
                 string name = string.Empty;
                 MetaId metaId = null;
@@ -486,25 +443,21 @@ namespace LambdicSql.ConverterServices
                 }
 
                 //use field name.
-                return new DecodedInfo(exp.Type, new ParameterParts(name, metaId, new DbParam() { Value = obj }));
+                return new ConvertedResult(exp.Type, new ParameterParts(name, metaId, new DbParam() { Value = obj }));
             }
         }
-
-        //TODO refactoring.
-        static List<MethodCallExpression> GetMethodChains(MethodCallExpression end)
+        
+        static IEnumerable<MethodCallExpression> GetMethodChains(MethodCallExpression end)
         {
             var chains = new List<MethodCallExpression>();
             var curent = end;
             while (curent != null && curent.GetSqlSyntaxMethod() != null)
             {
-                chains.Add(curent);
-                
-                if (!curent.Method.IsDefined(typeof(ExtensionAttribute), false)) break;
-
-                var next = (0 < curent.Arguments.Count) ? curent.Arguments[0] as MethodCallExpression : null;
-                curent = next;
+                chains.Insert(0, curent);
+                curent = (curent.Method.IsExtension() && 0 < curent.Arguments.Count) ? 
+                            curent.Arguments[0] as MethodCallExpression :
+                            null;
             }
-            chains.Reverse();
             return chains;
         }
     }

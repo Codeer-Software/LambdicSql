@@ -1,4 +1,4 @@
-﻿using LambdicSql.Inside;
+﻿using LambdicSql.ConverterServices.Inside;
 using System.Data;
 
 namespace LambdicSql
