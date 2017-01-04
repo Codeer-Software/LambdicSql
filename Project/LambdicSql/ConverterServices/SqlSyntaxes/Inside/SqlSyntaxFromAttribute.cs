@@ -9,10 +9,10 @@ namespace LambdicSql.ConverterServices.SqlSyntaxes.Inside
 {
     class SqlSyntaxFromAttribute : SqlSyntaxConverterMethodAttribute
     {
-        public override BuildingParts Convert(ExpressionConverter converter, MethodCallExpression method)
+        public override BuildingParts Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
-            var startIndex = method.SkipMethodChain(0);
-            var table = ToTableName(converter, method.Arguments[startIndex]);
+            var startIndex = expression.SkipMethodChain(0);
+            var table = ToTableName(converter, expression.Arguments[startIndex]);
             return new HParts(new BuildingParts[] { "FROM", table }) { IsFunctional = true, Separator = " " };
         }
 

@@ -25,13 +25,13 @@ namespace LambdicSql.ConverterServices.SqlSyntaxes
         /// 
         /// </summary>
         /// <param name="converter"></param>
-        /// <param name="method"></param>
+        /// <param name="expression"></param>
         /// <returns></returns>
-        public override BuildingParts Convert(ExpressionConverter converter, MethodCallExpression method)
+        public override BuildingParts Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
-            var index = method.SkipMethodChain(0);
-            var args = method.Arguments.Skip(index).Select(e => converter.Convert(e)).ToArray();
-            var name = string.IsNullOrEmpty(Name) ? method.Method.Name.ToUpper() : Name;
+            var index = expression.SkipMethodChain(0);
+            var args = expression.Arguments.Skip(index).Select(e => converter.Convert(e)).ToArray();
+            var name = string.IsNullOrEmpty(Name) ? expression.Method.Name.ToUpper() : Name;
 
             var hArgs = new HParts(args) { Separator = Separator }.ConcatToBack(")");
             return new HParts(Line(name, "("), hArgs) { IsFunctional = true };

@@ -14,8 +14,8 @@ namespace LambdicSql.ConverterServices.SqlSyntaxes
         /// 
         /// </summary>
         /// <param name="converter"></param>
-        /// <param name="exp"></param>
+        /// <param name="expression"></param>
         /// <returns></returns>
-        public abstract BuildingParts Convert(ExpressionConverter converter, NewExpression exp);
+        public abstract BuildingParts Convert(NewExpression expression, ExpressionConverter converter);
     }
 }

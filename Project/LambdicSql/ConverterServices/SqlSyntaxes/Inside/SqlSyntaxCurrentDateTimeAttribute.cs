@@ -47,7 +47,7 @@ namespace LambdicSql.ConverterServices.SqlSyntaxes.Inside
 
         public string Name { get; set; }
 
-        public override BuildingParts Convert(ExpressionConverter converter, MethodCallExpression method)
+        public override BuildingParts Convert(MethodCallExpression expression, ExpressionConverter converter)
             => new CurrentDateTimeExpressionElement(Name);
     }
 

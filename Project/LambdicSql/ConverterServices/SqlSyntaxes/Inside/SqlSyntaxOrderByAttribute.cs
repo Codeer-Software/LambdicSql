@@ -7,9 +7,9 @@ namespace LambdicSql.ConverterServices.SqlSyntaxes.Inside
 {
     class SqlSyntaxOrderByAttribute : SqlSyntaxConverterMethodAttribute
     {
-        public override BuildingParts Convert(ExpressionConverter converter, MethodCallExpression method)
+        public override BuildingParts Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
-            var arg = method.Arguments[method.SkipMethodChain(0)];
+            var arg = expression.Arguments[expression.SkipMethodChain(0)];
             var array = arg as NewArrayExpression;
 
             var orderBy = new VParts();

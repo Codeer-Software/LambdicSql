@@ -8,9 +8,9 @@ namespace LambdicSql.ConverterServices.SqlSyntaxes.Inside
 {
     class SqlSyntaxAllAttribute : SqlSyntaxConverterMethodAttribute
     {
-        public override BuildingParts Convert(ExpressionConverter converter, MethodCallExpression method)
+        public override BuildingParts Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
-            var args = method.Arguments.Select(e => converter.Convert(e)).ToArray();
+            var args = expression.Arguments.Select(e => converter.Convert(e)).ToArray();
             return new DisableBracketsText(Func("ALL", args[0]));
         }
 

@@ -8,11 +8,11 @@ namespace LambdicSql.ConverterServices.SqlSyntaxes.Inside
 {
     class SqlSyntaxTwoWaySqlAttribute : SqlSyntaxConverterMethodAttribute
     {
-        public override BuildingParts Convert(ExpressionConverter converter, MethodCallExpression method)
+        public override BuildingParts Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
-            var obj = converter.ToObject(method.Arguments[0]);
+            var obj = converter.ToObject(expression.Arguments[0]);
             var text = TowWaySqlSpec.ToStringFormat((string)obj);
-            var array = method.Arguments[1] as NewArrayExpression;
+            var array = expression.Arguments[1] as NewArrayExpression;
             return new StringFormatParts(text, array.Expressions.Select(e => converter.Convert(e)).ToArray());
         }
     }

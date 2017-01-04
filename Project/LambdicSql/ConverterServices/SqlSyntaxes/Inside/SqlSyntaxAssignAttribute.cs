@@ -7,10 +7,10 @@ namespace LambdicSql.ConverterServices.SqlSyntaxes.Inside
 
     class SqlSyntaxAssignAttribute : SqlSyntaxConverterNewAttribute
     {
-        public override BuildingParts Convert(ExpressionConverter converter, NewExpression exp)
+        public override BuildingParts Convert(NewExpression expression, ExpressionConverter converter)
         {
-            BuildingParts arg1 = converter.Convert(exp.Arguments[0]).Customize(new CustomizeColumnOnly());
-            return new HParts(arg1, "=", converter.Convert(exp.Arguments[1])) { Separator = " " };
+            BuildingParts arg1 = converter.Convert(expression.Arguments[0]).Customize(new CustomizeColumnOnly());
+            return new HParts(arg1, "=", converter.Convert(expression.Arguments[1])) { Separator = " " };
         }
     }
 }

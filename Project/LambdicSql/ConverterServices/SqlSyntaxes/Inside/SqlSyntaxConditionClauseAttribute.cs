@@ -7,11 +7,11 @@ namespace LambdicSql.ConverterServices.SqlSyntaxes.Inside
 {
     class SqlSyntaxConditionClauseAttribute : SqlSyntaxConverterMethodAttribute
     {
-        public override BuildingParts Convert(ExpressionConverter converter, MethodCallExpression method)
+        public override BuildingParts Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
-            var condition = converter.Convert(method.Arguments[method.SkipMethodChain(0)]);
+            var condition = converter.Convert(expression.Arguments[expression.SkipMethodChain(0)]);
             if (condition.IsEmpty) return string.Empty;
-            return Clause(method.Method.Name.ToUpper(), condition);
+            return Clause(expression.Method.Name.ToUpper(), condition);
         }
     }
 }

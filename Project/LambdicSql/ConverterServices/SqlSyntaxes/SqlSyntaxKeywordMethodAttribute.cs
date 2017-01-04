@@ -16,10 +16,10 @@ namespace LambdicSql.ConverterServices.SqlSyntaxes
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="expression"></param>
         /// <param name="converter"></param>
-        /// <param name="method"></param>
         /// <returns></returns>
-        public override BuildingParts Convert(ExpressionConverter converter, MethodCallExpression method)
-            => string.IsNullOrEmpty(Name) ? method.Method.Name.ToUpper() : Name;
+        public override BuildingParts Convert(MethodCallExpression expression, ExpressionConverter converter)
+            => string.IsNullOrEmpty(Name) ? expression.Method.Name.ToUpper() : Name;
     }
 }

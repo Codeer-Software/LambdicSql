@@ -8,9 +8,9 @@ namespace LambdicSql.ConverterServices.SqlSyntaxes.Inside
 
     class SqlSyntaxInAttribute : SqlSyntaxConverterMethodAttribute
     {
-        public override BuildingParts Convert(ExpressionConverter converter, MethodCallExpression method)
+        public override BuildingParts Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
-            var args = method.Arguments.Select(e => converter.Convert(e)).ToArray();
+            var args = expression.Arguments.Select(e => converter.Convert(e)).ToArray();
             return Func(LineSpace(args[0], "IN"), args[1]);
         }
     }

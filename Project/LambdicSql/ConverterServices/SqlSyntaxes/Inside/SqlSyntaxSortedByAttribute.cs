@@ -7,7 +7,7 @@ namespace LambdicSql.ConverterServices.SqlSyntaxes.Inside
 
     class SqlSyntaxSortedByAttribute : SqlSyntaxConverterMethodAttribute
     {
-        public override BuildingParts Convert(ExpressionConverter converter, MethodCallExpression method)
-            => LineSpace(converter.Convert(method.Arguments[0]), method.Method.Name.ToUpper());
+        public override BuildingParts Convert(MethodCallExpression expression, ExpressionConverter converter)
+            => LineSpace(converter.Convert(expression.Arguments[0]), expression.Method.Name.ToUpper());
     }
 }

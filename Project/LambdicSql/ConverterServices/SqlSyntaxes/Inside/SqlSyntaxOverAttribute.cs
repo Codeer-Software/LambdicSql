@@ -7,12 +7,11 @@ namespace LambdicSql.ConverterServices.SqlSyntaxes.Inside
 
     class SqlSyntaxOverAttribute : SqlSyntaxConverterMethodAttribute
     {
-        public override BuildingParts Convert(ExpressionConverter converter, MethodCallExpression method)
+        public override BuildingParts Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var v = new VParts();
-            var overMethod = method;
-            v.Add(overMethod.Method.Name.ToUpper() + "(");
-            v.AddRange(1, overMethod.Arguments.Skip(1).
+            v.Add(expression.Method.Name.ToUpper() + "(");
+            v.AddRange(1, expression.Arguments.Skip(1).
                 Where(e => !(e is ConstantExpression)). //Skip null.
                 Select(e => converter.Convert(e)).ToArray());
             return v.ConcatToBack(")");

@@ -9,12 +9,12 @@ namespace LambdicSql.ConverterServices.SqlSyntaxes.Inside
 
     class SqlSyntaxRowsAttribute : SqlSyntaxConverterMethodAttribute
     {
-        public override BuildingParts Convert(ExpressionConverter converter, MethodCallExpression method)
+        public override BuildingParts Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
-            var args = method.Arguments.Select(e => converter.Convert(e)).ToArray();
+            var args = expression.Arguments.Select(e => converter.Convert(e)).ToArray();
 
             //Sql server can't use parameter.
-            if (method.Arguments.Count == 1)
+            if (expression.Arguments.Count == 1)
             {
                 return LineSpace("ROWS", args[0].Customize(new CustomizeParameterToObject()), "PRECEDING");
             }

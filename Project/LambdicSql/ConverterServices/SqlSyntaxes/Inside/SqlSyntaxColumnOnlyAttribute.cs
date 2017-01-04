@@ -7,9 +7,9 @@ namespace LambdicSql.ConverterServices.SqlSyntaxes.Inside
 {
     class SqlSyntaxColumnOnlyAttribute : SqlSyntaxConverterMethodAttribute
     {
-        public override BuildingParts Convert(ExpressionConverter converter, MethodCallExpression method)
+        public override BuildingParts Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
-            var col = converter.Convert(method.Arguments[0]) as DbColumnParts;
+            var col = converter.Convert(expression.Arguments[0]) as DbColumnParts;
             if (col == null) throw new NotSupportedException("invalid column.");
             return col.Customize(new CustomizeColumnOnly());
         }

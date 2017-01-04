@@ -20,7 +20,7 @@ namespace TestCheck35
 
     class SqlSyntaxTestAttribute : SqlSyntaxConverterMethodAttribute
     {
-        public override BuildingParts Convert(ExpressionConverter converter, MethodCallExpression method) => string.Empty;
+        public override BuildingParts Convert(MethodCallExpression expression, ExpressionConverter converter) => string.Empty;
     }
 
     public static class TestExtensions

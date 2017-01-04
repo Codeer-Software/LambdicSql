@@ -11,11 +11,11 @@ namespace LambdicSql.ConverterServices.SqlSyntaxes
     public abstract class SqlSyntaxConverterMemberAttribute : Attribute
     {
         /// <summary>
-        /// 
+        /// Convert expression to building parts.
         /// </summary>
-        /// <param name="converter"></param>
-        /// <param name="exp"></param>
-        /// <returns></returns>
-        public abstract BuildingParts Convert(ExpressionConverter converter, MemberExpression exp);
+        /// <param name="expression">Expression.</param>
+        /// <param name="converter">Expression converter.</param>
+        /// <returns>BuildingParts.</returns>
+        public abstract BuildingParts Convert(MemberExpression expression, ExpressionConverter converter);
     }
 }

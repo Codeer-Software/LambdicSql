@@ -6,13 +6,13 @@ namespace LambdicSql.ConverterServices.SqlSyntaxes.Inside
 {
     class SqlSyntaxPartitionByAttribute : SqlSyntaxConverterMethodAttribute
     {
-        public override BuildingParts Convert(ExpressionConverter converter, MethodCallExpression method)
+        public override BuildingParts Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var partitionBy = new VParts();
             partitionBy.Add("PARTITION BY");
 
             var elements = new VParts() { Indent = 1, Separator = "," };
-            var array = method.Arguments[0] as NewArrayExpression;
+            var array = expression.Arguments[0] as NewArrayExpression;
             foreach (var e in array.Expressions.Select(e => converter.Convert(e)))
             {
                 elements.Add(e);

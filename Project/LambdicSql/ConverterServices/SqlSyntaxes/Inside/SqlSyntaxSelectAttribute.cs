@@ -10,19 +10,19 @@ namespace LambdicSql.ConverterServices.SqlSyntaxes.Inside
 {
     class SqlSyntaxSelectAttribute : SqlSyntaxConverterMethodAttribute
     {
-        public override BuildingParts Convert(ExpressionConverter converter, MethodCallExpression method)
+        public override BuildingParts Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             //ALL, DISTINCT
             var modify = new List<Expression>();
-            for (int i = method.SkipMethodChain(0); i < method.Arguments.Count - 1; i++)
+            for (int i = expression.SkipMethodChain(0); i < expression.Arguments.Count - 1; i++)
             {
-                modify.Add(method.Arguments[i]);
+                modify.Add(expression.Arguments[i]);
             }
 
             var select = LineSpace(new BuildingParts[] { "SELECT" }.Concat(modify.Select(e => converter.Convert(e))).ToArray());
 
             //select elemnts.
-            var selectTargets = method.Arguments[method.Arguments.Count - 1];
+            var selectTargets = expression.Arguments[expression.Arguments.Count - 1];
             BuildingParts selectTargetText = null;
             ObjectCreateInfo createInfo = null;
 

@@ -26,7 +26,7 @@ namespace LambdicSql.feat.EntityFramework
 
     class SqlSyntaxTAttribute : SqlSyntaxConverterMethodAttribute
     {
-        public override BuildingParts Convert(ExpressionConverter converter, MethodCallExpression method)
-            => converter.Convert(method.Arguments[0]);
+        public override BuildingParts Convert(MethodCallExpression expression, ExpressionConverter converter)
+            => converter.Convert(expression.Arguments[0]);
     }
 }

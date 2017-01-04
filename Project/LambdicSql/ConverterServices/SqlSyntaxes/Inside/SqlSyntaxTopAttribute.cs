@@ -8,10 +8,10 @@ namespace LambdicSql.ConverterServices.SqlSyntaxes.Inside
 {
     class SqlSyntaxTopAttribute : SqlSyntaxConverterMethodAttribute
     {
-        public override BuildingParts Convert(ExpressionConverter converter, MethodCallExpression method)
+        public override BuildingParts Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
-            var args = method.Arguments.Select(e => converter.Convert(e)).ToArray();
-            return LineSpace(method.Method.Name.ToUpper(), args[0].Customize(new CustomizeParameterToObject()));
+            var args = expression.Arguments.Select(e => converter.Convert(e)).ToArray();
+            return LineSpace(expression.Method.Name.ToUpper(), args[0].Customize(new CustomizeParameterToObject()));
         }
     }
 }

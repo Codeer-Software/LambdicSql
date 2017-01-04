@@ -7,10 +7,10 @@ namespace LambdicSql.ConverterServices.SqlSyntaxes.Inside
 {
     class SqlSyntaxExtractAttribute : SqlSyntaxConverterMethodAttribute
     {
-        public override BuildingParts Convert(ExpressionConverter converter, MethodCallExpression method)
+        public override BuildingParts Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
-            var args = method.Arguments.Select(e => converter.Convert(e)).ToArray();
-            return FuncSpace(method.Method.Name.ToUpper(), args[0], "FROM", args[1]);
+            var args = expression.Arguments.Select(e => converter.Convert(e)).ToArray();
+            return FuncSpace(expression.Method.Name.ToUpper(), args[0], "FROM", args[1]);
         }
     }
 }

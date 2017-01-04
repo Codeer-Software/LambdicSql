@@ -8,9 +8,9 @@ namespace LambdicSql.ConverterServices.SqlSyntaxes.Inside
 {
     class SqlSyntaxWithAttribute : SqlSyntaxConverterMethodAttribute
     {
-        public override BuildingParts Convert(ExpressionConverter converter, MethodCallExpression method)
+        public override BuildingParts Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
-            var arry = method.Arguments[0] as NewArrayExpression;
+            var arry = expression.Arguments[0] as NewArrayExpression;
             if (arry != null)
             {
                 var v = new VParts() { Indent = 1, Separator = "," };
@@ -27,10 +27,10 @@ namespace LambdicSql.ConverterServices.SqlSyntaxes.Inside
 
             //引数を二つにせなあかんのか？
             {
-                var table = converter.Convert(method.Arguments[0]);
-                var body = SqlSyntaxFromAttribute.GetSqlExpressionBody(method.Arguments[0]);
+                var table = converter.Convert(expression.Arguments[0]);
+                var body = SqlSyntaxFromAttribute.GetSqlExpressionBody(expression.Arguments[0]);
                 var v = new VParts() { Indent = 1 };
-                v.Add(Clause(LineSpace(new RecursiveTargetText(Line(body, table)), "AS"), converter.Convert(method.Arguments[1])));
+                v.Add(Clause(LineSpace(new RecursiveTargetText(Line(body, table)), "AS"), converter.Convert(expression.Arguments[1])));
                 return new WithEntriedText(new VParts("WITH", v), new[] { body });
             }
         }

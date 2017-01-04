@@ -8,11 +8,11 @@ namespace LambdicSql.ConverterServices.SqlSyntaxes.Inside
     class SqlSyntaxJoinAttribute : SqlSyntaxConverterMethodAttribute
     {
         public string Name { get; set; }
-        public override BuildingParts Convert(ExpressionConverter converter, MethodCallExpression method)
+        public override BuildingParts Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
-            var startIndex = method.SkipMethodChain(0);
-            var table = SqlSyntaxFromAttribute.ToTableName(converter, method.Arguments[startIndex]);
-            var condition = (startIndex + 1) < method.Arguments.Count ? converter.Convert(method.Arguments[startIndex + 1]) : null;
+            var startIndex = expression.SkipMethodChain(0);
+            var table = SqlSyntaxFromAttribute.ToTableName(converter, expression.Arguments[startIndex]);
+            var condition = (startIndex + 1) < expression.Arguments.Count ? converter.Convert(expression.Arguments[startIndex + 1]) : null;
 
             var list = new List<BuildingParts>();
             list.Add(Name);

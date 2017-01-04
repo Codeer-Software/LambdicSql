@@ -112,7 +112,7 @@ namespace LambdicSql.ConverterServices
         {
             //syntax.
             var syntax = newExp.GetSqlSyntaxNew();
-            if (syntax != null) return new ConvertedResult(null, syntax.Convert(this, newExp));
+            if (syntax != null) return new ConvertedResult(null, syntax.Convert(newExp, this));
 
             //object.
             var value = ExpressionToObject.GetNewObject(newExp);
@@ -187,7 +187,7 @@ namespace LambdicSql.ConverterServices
             if (syntaxMember != null)
             {
                 //convert.
-                return new ConvertedResult(member.Type, syntaxMember.Convert(this, member));
+                return new ConvertedResult(member.Type, syntaxMember.Convert(member, this));
             }
             
             //sql syntax extension method
@@ -197,7 +197,7 @@ namespace LambdicSql.ConverterServices
                 var syntaxMethod = method.GetSqlSyntaxMethod();
                 if (syntaxMethod != null)
                 {
-                    var ret = syntaxMethod.Convert(this, method);
+                    var ret = syntaxMethod.Convert(method, this);
                     //T()
                     var tbl = ret as DbTableParts;
                     if (tbl != null)
@@ -223,7 +223,7 @@ namespace LambdicSql.ConverterServices
         ConvertedResult Convert(MethodCallExpression method)
         {
             //convert syntax.
-            var parts = GetMethodChains(method).Select(c=> c.GetSqlSyntaxMethod().Convert(this, c)).ToArray();
+            var parts = GetMethodChains(method).Select(c=> c.GetSqlSyntaxMethod().Convert(c, this)).ToArray();
             if (parts.Length == 0) return ResolveExpressionObject(method);
 
             //TODO ちょっと嫌すぎる。括弧を付けない方法を何か確立せねば

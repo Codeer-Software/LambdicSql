@@ -10,9 +10,9 @@ namespace LambdicSql.ConverterServices.SqlSyntaxes.Inside
 {
     class SqlSyntaxRecursiveAttribute : SqlSyntaxConverterMethodAttribute
     {
-        public override BuildingParts Convert(ExpressionConverter converter, MethodCallExpression method)
+        public override BuildingParts Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
-            var selectTargets = method.Arguments[method.Arguments.Count - 1];
+            var selectTargets = expression.Arguments[expression.Arguments.Count - 1];
             var createInfo = ObjectCreateAnalyzer.MakeSelectInfo(selectTargets);
             return new RecursiveClauseText(createInfo, Blanket(createInfo.Members.Select(e => (BuildingParts)e.Name).ToArray()));
         }

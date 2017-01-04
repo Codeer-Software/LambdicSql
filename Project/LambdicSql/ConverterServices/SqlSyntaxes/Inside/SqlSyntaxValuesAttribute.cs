@@ -6,9 +6,9 @@ namespace LambdicSql.ConverterServices.SqlSyntaxes.Inside
 {
     class SqlSyntaxValuesAttribute : SqlSyntaxConverterMethodAttribute
     {
-        public override BuildingParts Convert(ExpressionConverter converter, MethodCallExpression method)
+        public override BuildingParts Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
-            var values = Func("VALUES", converter.Convert(method.Arguments[1]));
+            var values = Func("VALUES", converter.Convert(expression.Arguments[1]));
             values.Indent = 1;
             return values;
         }
