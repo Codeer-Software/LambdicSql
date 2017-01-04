@@ -5,17 +5,17 @@ using System.Linq.Expressions;
 namespace LambdicSql.ConverterServices.SqlSyntaxes
 {
     /// <summary>
-    /// SQL syntax attribute.
+    /// SQL syntax attribute for constructor.
     /// </summary>
     [AttributeUsage(AttributeTargets.Constructor)]
     public abstract class SqlSyntaxConverterNewAttribute : Attribute
     {
         /// <summary>
-        /// 
+        /// Convert expression to building parts.
         /// </summary>
-        /// <param name="converter"></param>
-        /// <param name="expression"></param>
-        /// <returns></returns>
+        /// <param name="expression">Expression.</param>
+        /// <param name="converter">Expression converter.</param>
+        /// <returns>BuildingParts.</returns>
         public abstract BuildingParts Convert(NewExpression expression, ExpressionConverter converter);
     }
 }

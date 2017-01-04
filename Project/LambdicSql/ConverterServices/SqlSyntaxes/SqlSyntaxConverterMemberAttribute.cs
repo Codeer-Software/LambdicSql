@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 namespace LambdicSql.ConverterServices.SqlSyntaxes
 {
     /// <summary>
-    /// SQL syntax attribute.
+    /// SQL syntax attribute for property or field.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
     public abstract class SqlSyntaxConverterMemberAttribute : Attribute

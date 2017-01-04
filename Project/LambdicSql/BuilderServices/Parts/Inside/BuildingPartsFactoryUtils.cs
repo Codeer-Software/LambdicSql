@@ -2,6 +2,7 @@
 
 namespace LambdicSql.BuilderServices.Parts.Inside
 {
+    //TODO Syntaxのリファクタリングが終わった段階で見直し
     static class BuildingPartsFactoryUtils
     {
         internal static HParts Arguments(params BuildingParts[] args)

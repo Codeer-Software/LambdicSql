@@ -7,26 +7,26 @@ using static LambdicSql.BuilderServices.Parts.Inside.BuildingPartsFactoryUtils;
 namespace LambdicSql.ConverterServices.SqlSyntaxes
 {
     /// <summary>
-    /// 
+    /// SQL syntax attribute for SQL Function.
     /// </summary>
     public class SqlSyntaxFuncAttribute : SqlSyntaxConverterMethodAttribute
     {
         /// <summary>
-        /// 
+        /// Name.If it is empty, use the name of the method.
         /// </summary>
         public string Name { get; set; }
 
         /// <summary>
-        /// 
+        /// Separator between arguments.By default it uses ", ".
         /// </summary>
         public string Separator { get; set; } = ", ";
 
         /// <summary>
-        /// 
+        /// Convert expression to building parts.
         /// </summary>
-        /// <param name="converter"></param>
-        /// <param name="expression"></param>
-        /// <returns></returns>
+        /// <param name="expression">Expression.</param>
+        /// <param name="converter">Expression converter.</param>
+        /// <returns>BuildingParts.</returns>
         public override BuildingParts Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var index = expression.SkipMethodChain(0);

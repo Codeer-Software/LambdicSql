@@ -71,6 +71,7 @@ namespace LambdicSql.ConverterServices.Inside
             }
         }
 
+        //TODO これは公開してもいいかも
         internal static int SkipMethodChain(this MethodCallExpression exp, int index)
         {
             if (!exp.Method.IsExtension()) return index;
