@@ -32,14 +32,14 @@ namespace TestCheck35
             public decimal Money { get; set; }
         }
 
-        public static readonly SqlExpression<SelectData> Select = Sql<DB>.Of(db =>
+        public static readonly Sql<SelectData> Select = Db<DB>.Sql(db =>
             Select(new SelectData
             {
                 PaymentDate = db.tbl_remuneration.payment_date,
                 Money = db.tbl_remuneration.money,
             }));
 
-        public static readonly ISqlExpression From = Sql<DB>.Of(db =>
+        public static readonly ISql From = Db<DB>.Sql(db =>
             From(db.tbl_remuneration));
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]

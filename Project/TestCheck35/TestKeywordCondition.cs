@@ -35,7 +35,7 @@ namespace TestCheck35
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Like1()
         {
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData
                {
                    Id = db.tbl_staff.id
@@ -58,7 +58,7 @@ WHERE tbl_staff.name LIKE @p_0",
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Like2()
         {
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData
                {
                    Id = db.tbl_staff.id
@@ -79,9 +79,9 @@ WHERE @p_0 LIKE tbl_staff.name",
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Like3()
         {
-            var exp1 = Sql<DB>.Of(db => db.tbl_staff.name);
-            var exp2 = Sql<DB>.Of(db => "%a%");
-            var query = Sql<DB>.Of(db =>
+            var exp1 = Db<DB>.Sql(db => db.tbl_staff.name);
+            var exp2 = Db<DB>.Sql(db => "%a%");
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData
                {
                    Id = db.tbl_staff.id
@@ -102,7 +102,7 @@ WHERE tbl_staff.name LIKE @p_0",
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Between1()
         {
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData
                {
                    Id = db.tbl_staff.id
@@ -123,7 +123,7 @@ WHERE tbl_staff.id BETWEEN @p_0 AND @p_1",
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Between2()
         {
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData
                {
                    Id = db.tbl_staff.id
@@ -144,10 +144,10 @@ WHERE @p_0 BETWEEN tbl_staff.id AND tbl_staff.id",
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Between3()
         {
-            var exp1 = Sql<DB>.Of(db => db.tbl_staff.id);
-            var exp2 = Sql<DB>.Of(db => 0);
-            var exp3 = Sql<DB>.Of(db => 100);
-            var query = Sql<DB>.Of(db =>
+            var exp1 = Db<DB>.Sql(db => db.tbl_staff.id);
+            var exp2 = Db<DB>.Sql(db => 0);
+            var exp3 = Db<DB>.Sql(db => 100);
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData
                {
                    Id = db.tbl_staff.id
@@ -168,7 +168,7 @@ WHERE tbl_staff.id BETWEEN @p_0 AND @p_1",
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_In1()
         {
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData
                {
                    Id = db.tbl_staff.id
@@ -189,7 +189,7 @@ WHERE tbl_staff.id IN(@p_0, @p_1, @p_2, @p_3, @p_4)",
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_In1_1()
         {
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData
                {
                    Id = db.tbl_staff.id
@@ -209,10 +209,10 @@ WHERE @p_0 IN(@p_1, tbl_staff.id, @p_2, @p_3, @p_4)", 1, 1, 3, 4, 5);
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_In1_2()
         {
-            var exp1 = Sql<DB>.Of(db => db.tbl_staff.id);
-            var exp2 = Sql<DB>.Of(db => 1);
-            var exp3 = Sql<DB>.Of(db => 2);
-            var query = Sql<DB>.Of(db =>
+            var exp1 = Db<DB>.Sql(db => db.tbl_staff.id);
+            var exp2 = Db<DB>.Sql(db => 1);
+            var exp3 = Db<DB>.Sql(db => 2);
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData
                {
                    Id = db.tbl_staff.id
@@ -234,7 +234,7 @@ WHERE tbl_staff.id IN(@p_0, @p_1)",
         public void Test_In1_3()
         {
             var vals = new int[] { 1, 2 };
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData
                {
                    Id = db.tbl_staff.id
@@ -256,13 +256,13 @@ WHERE tbl_staff.id IN(@p_0, @p_1)",
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_In2()
         {
-            var sub = Sql<DB>.Of(db =>
+            var sub = Db<DB>.Sql(db =>
                 Select(new { id = db.tbl_remuneration.staff_id }).
                 From(db.tbl_remuneration).
                 Join(db.tbl_staff, db.tbl_staff.id == db.tbl_staff.id).
                 Where(1000 < db.tbl_remuneration.money));
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData
                {
                    Id = db.tbl_staff.id
@@ -289,14 +289,14 @@ WHERE
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_In2_1()
         {
-            var sub = Sql<DB>.Of(db =>
+            var sub = Db<DB>.Sql(db =>
                 Select(new { id = db.tbl_remuneration.staff_id }).
                 From(db.tbl_remuneration).
                 Join(db.tbl_staff, db.tbl_staff.id == db.tbl_staff.id).
                 Where(1000 < db.tbl_remuneration.money));
 
-            var exp = Sql<DB>.Of(db => db.tbl_staff.id);
-            var query = Sql<DB>.Of(db =>
+            var exp = Db<DB>.Sql(db => db.tbl_staff.id);
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData
                {
                    Id = db.tbl_staff.id
@@ -323,7 +323,7 @@ WHERE
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_In3()
         {
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData
                {
                    Id = db.tbl_staff.id
@@ -355,8 +355,8 @@ WHERE
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_In3_1()
         {
-            var exp = Sql<DB>.Of(db => db.tbl_staff.id);
-            var query = Sql<DB>.Of(db =>
+            var exp = Db<DB>.Sql(db => db.tbl_staff.id);
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData
                {
                    Id = db.tbl_staff.id
@@ -388,13 +388,13 @@ WHERE
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Exists1()
         {
-            var sub = Sql<DB>.Of(db =>
+            var sub = Db<DB>.Sql(db =>
                 Select(new { id = db.tbl_remuneration.staff_id }).
                 From(db.tbl_remuneration).
                 Join(db.tbl_staff, db.tbl_staff.id == db.tbl_staff.id).
                 Where(1000 < db.tbl_remuneration.money));
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData
                {
                    Id = db.tbl_staff.id
@@ -424,7 +424,7 @@ WHERE
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Exists2()
         {
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData
                {
                    Id = db.tbl_staff.id
@@ -458,7 +458,7 @@ WHERE
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_IsNull1()
         {
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData
                {
                    Id = db.tbl_staff.id
@@ -482,7 +482,7 @@ WHERE NOT ((tbl_staff.name) IS NULL)");
             if (name == "OracleConnection") return;
 
             string val = "";
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData
                {
                    Id = db.tbl_staff.id
@@ -502,7 +502,7 @@ WHERE NOT ((@val) IS NULL)", new Params() { { "@val", ""} });
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_IsNotNull1()
         {
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData
                {
                    Id = db.tbl_staff.id
@@ -526,7 +526,7 @@ WHERE (tbl_staff.name) IS NOT NULL");
             if (name == "OracleConnection") return;
 
             string val = "";
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData
                {
                    Id = db.tbl_staff.id
@@ -552,7 +552,7 @@ WHERE (@val) IS NOT NULL", new Params() { { "@val", "" } });
             if (name == "NpgsqlConnection") return;
             if (name == "SQLiteConnection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
             Select(new SelectData
             {
                 Id = db.tbl_staff.id

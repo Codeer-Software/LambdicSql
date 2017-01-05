@@ -64,7 +64,7 @@ namespace TestCheck35
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Aggregate1()
         {
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData1
                {
                    Val1 = Sum(db.tbl_remuneration.money),
@@ -106,7 +106,7 @@ GROUP BY tbl_staff.id, tbl_staff.name");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Aggregate2()
         {
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData1
                {
                    Val1 = Sum(1),
@@ -146,10 +146,10 @@ GROUP BY tbl_staff.id, tbl_staff.name", 1, 2, 3, 4, 5, 6, 7, 8, 9);
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Aggregate3()
         {
-            var exp1 = Sql<DB>.Of(db => db.tbl_remuneration.money);
-            var exp2 = Sql<DB>.Of(db => All());
-            var exp3 = Sql<DB>.Of(db => Distinct());
-            var query = Sql<DB>.Of(db =>
+            var exp1 = Db<DB>.Sql(db => db.tbl_remuneration.money);
+            var exp2 = Db<DB>.Sql(db => All());
+            var exp3 = Db<DB>.Sql(db => Distinct());
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData1
                {
                    Val1 = Sum(exp1),
@@ -192,8 +192,8 @@ GROUP BY tbl_staff.id, tbl_staff.name");
             if (_connection.GetType().Name != "MySqlConnection" &&
                 _connection.GetType().Name != "OracleConnection") return;
 
-            var exp = Sql<DB>.Of(db => db.tbl_remuneration.money);
-            var query = Sql<DB>.Of(db =>
+            var exp = Db<DB>.Sql(db => db.tbl_remuneration.money);
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData1
                {
                    Val1 = Count(All(), Asterisk())
@@ -215,7 +215,7 @@ GROUP BY tbl_staff.id, tbl_staff.name");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Abs_Round1()
         {
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData2
                {
                    Val1 = Abs(db.tbl_remuneration.money),
@@ -236,7 +236,7 @@ FROM tbl_remuneration",
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Abs_Round2()
         {
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData2
                {
                    Val1 = Abs(1),
@@ -256,9 +256,9 @@ FROM tbl_remuneration", 1, 2);
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Abs_Round3()
         {
-            var exp1 = Sql<DB>.Of(db => db.tbl_remuneration.money);
-            var exp2 = Sql<DB>.Of(db => 2);
-            var query = Sql<DB>.Of(db =>
+            var exp1 = Db<DB>.Sql(db => db.tbl_remuneration.money);
+            var exp2 = Db<DB>.Sql(db => 2);
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData2
                {
                    Val1 = Abs(exp1),
@@ -284,7 +284,7 @@ FROM tbl_remuneration",
             if (name == "SQLiteConnection") return;
             if (name == "MySqlConnection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData3
                {
                    Val = Mod(db.tbl_remuneration.money, 2)
@@ -308,7 +308,7 @@ FROM tbl_remuneration",
             if (name == "SQLiteConnection") return;
             if (name == "MySqlConnection") return;
             
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData3
                {
                    Val = Mod(1, db.tbl_remuneration.staff_id)
@@ -332,9 +332,9 @@ FROM tbl_remuneration", 1);
             if (name == "SQLiteConnection") return;
             if (name == "MySqlConnection") return;
 
-            var exp1 = Sql<DB>.Of(db => db.tbl_remuneration.money);
-            var exp2 = Sql<DB>.Of(db => 2);
-            var query = Sql<DB>.Of(db =>
+            var exp1 = Db<DB>.Sql(db => db.tbl_remuneration.money);
+            var exp2 = Db<DB>.Sql(db => 2);
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData3
                {
                    Val = Mod(exp1, exp2)
@@ -358,7 +358,7 @@ FROM tbl_remuneration",
             if (name == "OracleConnection") return;
             if (name == "DB2Connection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new
                {
                    Val = Concat(db.tbl_staff.name, "a", "b")
@@ -381,7 +381,7 @@ FROM tbl_staff", "a", "b");
             if (name == "OracleConnection") return;
             if (name == "DB2Connection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new
                {
                    Val = Concat("a", db.tbl_staff.name, "b")
@@ -406,10 +406,10 @@ FROM tbl_staff", "a", "b");
             if (name == "OracleConnection") return;
             if (name == "DB2Connection") return;
 
-            var exp1 = Sql<DB>.Of(db => db.tbl_staff.name);
-            var exp2 = Sql<DB>.Of(db => "a");
-            var exp3 = Sql<DB>.Of(db => "b");
-            var query = Sql<DB>.Of(db =>
+            var exp1 = Db<DB>.Sql(db => db.tbl_staff.name);
+            var exp2 = Db<DB>.Sql(db => "a");
+            var exp3 = Db<DB>.Sql(db => "b");
+            var query = Db<DB>.Sql(db =>
                Select(new
                {
                    Val = Concat(exp1, exp2, exp3)
@@ -431,7 +431,7 @@ FROM tbl_staff", "a", "b");
             if (name != "NpgsqlConnection" &&
                 name != "DB2Connection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new
                {
                    Val = Length(db.tbl_staff.name)
@@ -453,7 +453,7 @@ FROM tbl_staff");
             if (name != "NpgsqlConnection" &&
                 name != "DB2Connection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new
                {
                    Val = Length("a")
@@ -475,8 +475,8 @@ FROM tbl_staff", "a");
             if (name != "NpgsqlConnection" &&
                 name != "DB2Connection") return;
 
-            var exp = Sql<DB>.Of(db => db.tbl_staff.name);
-            var query = Sql<DB>.Of(db =>
+            var exp = Db<DB>.Sql(db => db.tbl_staff.name);
+            var query = Db<DB>.Sql(db =>
                Select(new
                {
                    Val = Length(exp)
@@ -497,7 +497,7 @@ FROM tbl_staff");
             var name = _connection.GetType().Name;
             if (name != "SqlConnection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new
                {
                    Val = Len(db.tbl_staff.name)
@@ -518,7 +518,7 @@ FROM tbl_staff");
             var name = _connection.GetType().Name;
             if (name != "SqlConnection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new
                {
                    Val = Len("a")
@@ -539,8 +539,8 @@ FROM tbl_staff", "a");
             var name = _connection.GetType().Name;
             if (name != "SqlConnection") return;
 
-            var exp = Sql<DB>.Of(db => db.tbl_staff.name);
-            var query = Sql<DB>.Of(db =>
+            var exp = Db<DB>.Sql(db => db.tbl_staff.name);
+            var query = Db<DB>.Sql(db =>
                Select(new
                {
                    Val = Len(exp)
@@ -558,7 +558,7 @@ FROM tbl_staff");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Lower1()
         {
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new
                {
                    Val = Lower(db.tbl_staff.name)
@@ -576,7 +576,7 @@ FROM tbl_staff");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Lower2()
         {
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new
                {
                    Val = Lower("a")
@@ -594,8 +594,8 @@ FROM tbl_staff", "a");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Lower3()
         {
-            var exp = Sql<DB>.Of(db => db.tbl_staff.name);
-            var query = Sql<DB>.Of(db =>
+            var exp = Db<DB>.Sql(db => db.tbl_staff.name);
+            var query = Db<DB>.Sql(db =>
                Select(new
                {
                    Val = Lower(db.tbl_staff.name)
@@ -613,7 +613,7 @@ FROM tbl_staff");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Upper1()
         {
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new
                {
                    Val = Upper(db.tbl_staff.name)
@@ -631,7 +631,7 @@ FROM tbl_staff");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Upper2()
         {
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new
                {
                    Val = Upper("a")
@@ -649,8 +649,8 @@ FROM tbl_staff", "a");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Upper3()
         {
-            var exp = Sql<DB>.Of(db => db.tbl_staff.name);
-            var query = Sql<DB>.Of(db =>
+            var exp = Db<DB>.Sql(db => db.tbl_staff.name);
+            var query = Db<DB>.Sql(db =>
                Select(new
                {
                    Val = Upper(exp)
@@ -668,7 +668,7 @@ FROM tbl_staff");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Replace()
         {
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new
                {
                    Val = Replace(db.tbl_staff.name, "a", "b")
@@ -688,7 +688,7 @@ FROM tbl_staff",
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Replace2()
         {
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new
                {
                    Val = Replace("a", db.tbl_staff.name, "b")
@@ -707,10 +707,10 @@ FROM tbl_staff",
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Replace3()
         {
-            var exp1 = Sql<DB>.Of(db => db.tbl_staff.name);
-            var exp2 = Sql<DB>.Of(db => "a");
-            var exp3 = Sql<DB>.Of(db => "b");
-            var query = Sql<DB>.Of(db =>
+            var exp1 = Db<DB>.Sql(db => db.tbl_staff.name);
+            var exp2 = Db<DB>.Sql(db => "a");
+            var exp3 = Db<DB>.Sql(db => "b");
+            var query = Db<DB>.Sql(db =>
                Select(new
                {
                    Val = Replace(exp1, exp2, exp3)
@@ -733,7 +733,7 @@ FROM tbl_staff",
             if (name == "SQLiteConnection") return;
             if (name == "OracleConnection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new
                {
                    Val = Substring(db.tbl_staff.name, 0, 1)
@@ -755,7 +755,7 @@ FROM tbl_staff",
             if (name == "SQLiteConnection") return;
             if (name == "OracleConnection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new
                {
                    Val = Substring("a", db.tbl_staff.id, db.tbl_staff.id)
@@ -777,10 +777,10 @@ FROM tbl_staff", "a");
             if (name == "SQLiteConnection") return;
             if (name == "OracleConnection") return;
 
-            var exp1 = Sql<DB>.Of(db => db.tbl_staff.name);
-            var exp2 = Sql<DB>.Of(db => 0);
-            var exp3 = Sql<DB>.Of(db => 1);
-            var query = Sql<DB>.Of(db =>
+            var exp1 = Db<DB>.Sql(db => db.tbl_staff.name);
+            var exp2 = Db<DB>.Sql(db => 0);
+            var exp3 = Db<DB>.Sql(db => 1);
+            var query = Db<DB>.Sql(db =>
                Select(new
                {
                    Val = Substring(exp1, exp2, exp3)
@@ -803,7 +803,7 @@ FROM tbl_staff",
             if (name != "NpgsqlConnection" &&
                 name != "MySqlConnection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(new
                 {
                     Val = CurrentDate()
@@ -823,7 +823,7 @@ FROM tbl_staff",
             if (name != "OracleConnection") return;
 
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(new
                 {
                     Val = CurrentDate()
@@ -843,7 +843,7 @@ FROM DUAL");
             var name = _connection.GetType().Name;
             if (name != "MySqlConnection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(new
                 {
                     Val = CurrentTime()
@@ -864,7 +864,7 @@ FROM DUAL");
                  name != "NpgsqlConnection" &&
                  name != "MySqlConnection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
             Select(new
             {
                 Val = CurrentTimeStamp()
@@ -883,7 +883,7 @@ FROM DUAL");
             var name = _connection.GetType().Name;
             if (name != "MySqlConnection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(new
                 {
                     Val = CurrentTimeStamp()
@@ -904,7 +904,7 @@ FROM DUAL");
             var name = _connection.GetType().Name;
             if (name != "DB2Connection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(new
                 {
                     Val = CurrentDate()
@@ -925,7 +925,7 @@ FROM SYSIBM.SYSDUMMY1");
             var name = _connection.GetType().Name;
             if (name != "DB2Connection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(new
                 {
                     Val = CurrentTime()
@@ -946,7 +946,7 @@ FROM SYSIBM.SYSDUMMY1");
             var name = _connection.GetType().Name;
             if (name != "DB2Connection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(new
                 {
                     Val = CurrentTimeStamp()
@@ -967,7 +967,7 @@ FROM SYSIBM.SYSDUMMY1");
             var name = _connection.GetType().Name;
             if (name != "NpgsqlConnection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(new
                 {
                     Val1 = Extract(DateTimeElement.Year, CurrentTimeStamp()),
@@ -1003,7 +1003,7 @@ FROM SYSIBM.SYSDUMMY1");
         {
             var name = _connection.GetType().Name;
             if (name != "MySqlConnection") return;
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
             Select(new
             {
                 Val1 = (long)Extract(DateTimeElement.Year, CurrentTimeStamp()),
@@ -1035,7 +1035,7 @@ FROM SYSIBM.SYSDUMMY1");
         {
             var name = _connection.GetType().Name;
             if (name != "SqlConnection") return;
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(new
                 {
                     Val1 = DatePart(DateTimeElement.Year, CurrentTimeStamp()),
@@ -1082,7 +1082,7 @@ FROM SYSIBM.SYSDUMMY1");
                 name != "SqlConnection" &&
                 name != "NpgsqlConnection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(new
                 {
                     id = Cast<int>(db.tbl_remuneration.money, "int")
@@ -1105,9 +1105,9 @@ FROM tbl_remuneration");
                 name != "SqlConnection" &&
                 name != "NpgsqlConnection") return;
 
-            var exp1 = Sql<DB>.Of(db => db.tbl_remuneration.money);
-            var exp2 = Sql<DB>.Of(db => "int");
-            var query = Sql<DB>.Of(db =>
+            var exp1 = Db<DB>.Sql(db => db.tbl_remuneration.money);
+            var exp2 = Db<DB>.Sql(db => "int");
+            var query = Db<DB>.Sql(db =>
                 Select(new
                 {
                     id = Cast<int>(exp1, exp2)
@@ -1125,7 +1125,7 @@ FROM tbl_remuneration");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Coalesce1()
         {
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new
                {
                    id = Coalesce(db.tbl_staff.name, "a")
@@ -1144,7 +1144,7 @@ FROM tbl_staff",
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Coalesce2()
         {
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new
                {
                    id = Coalesce("a", db.tbl_staff.name)
@@ -1163,9 +1163,9 @@ FROM tbl_staff",
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Coalesce3()
         {
-            var exp1 = Sql<DB>.Of(db => db.tbl_staff.name);
-            var exp2 = Sql<DB>.Of(db => "a");
-            var query = Sql<DB>.Of(db =>
+            var exp1 = Db<DB>.Sql(db => db.tbl_staff.name);
+            var exp2 = Db<DB>.Sql(db => "a");
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData5
                {
                    Val = Coalesce(exp1, exp2)
@@ -1188,7 +1188,7 @@ FROM tbl_staff",
             if (name != "DB2Connection" &&
                 name != "OracleConnection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new 
                {
                    id = NVL(db.tbl_staff.name, "a")
@@ -1211,7 +1211,7 @@ FROM tbl_staff",
             if (name != "DB2Connection" &&
                 name != "OracleConnection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new
                {
                    id = NVL("a", db.tbl_staff.name)
@@ -1234,9 +1234,9 @@ FROM tbl_staff",
             if (name != "DB2Connection" &&
                 name != "OracleConnection") return;
 
-            var exp1 = Sql<DB>.Of(db => db.tbl_staff.name);
-            var exp2 = Sql<DB>.Of(db => "a");
-            var query = Sql<DB>.Of(db =>
+            var exp1 = Db<DB>.Sql(db => db.tbl_staff.name);
+            var exp2 = Db<DB>.Sql(db => "a");
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData5
                {
                    Val = NVL(exp1, exp2)

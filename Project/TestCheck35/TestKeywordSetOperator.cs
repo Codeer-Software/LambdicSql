@@ -28,7 +28,7 @@ namespace TestCheck35
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Union()
         {
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff).
                 Union().
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff));
@@ -46,7 +46,7 @@ FROM tbl_staff");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Union_All()
         {
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff).
                 Union(All()).
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff));
@@ -66,7 +66,7 @@ FROM tbl_staff");
         {
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff).
                 Intersect().
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff));
@@ -87,7 +87,7 @@ FROM tbl_staff");
             if (_connection.GetType().Name == "MySqlConnection") return;
             if (_connection.GetType().Name == "OracleConnection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff).
                 Except().
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff).Where(db.tbl_staff.id == 1));
@@ -112,7 +112,7 @@ WHERE (tbl_staff.id) = (@p_0)",
             if (_connection.GetType().Name == "MySqlConnection") return;
             if (_connection.GetType().Name == "OracleConnection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff).
                 Except(All()).
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff).Where(db.tbl_staff.id == 1));
@@ -136,7 +136,7 @@ WHERE (tbl_staff.id) = (@p_0)",
             if (_connection.GetType().Name == "MySqlConnection") return;
             if (_connection.GetType().Name == "NpgsqlConnection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff).
                 Minus().
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff).Where(db.tbl_staff.id == 1));
@@ -156,10 +156,10 @@ WHERE (tbl_staff.id) = (@p_0)",
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Union()
         {
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff));
 
-            var target = Sql<DB>.Of(db =>
+            var target = Db<DB>.Sql(db =>
                 Union().Select(Asterisk(db.tbl_staff)).From(db.tbl_staff));
             query = query.Concat(target);
 
@@ -176,10 +176,10 @@ FROM tbl_staff");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Union_All()
         {
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff));
 
-            var target = Sql<DB>.Of(db =>
+            var target = Db<DB>.Sql(db =>
                 Union(All()).Select(Asterisk(db.tbl_staff)).From(db.tbl_staff));
             query = query.Concat(target);
 
@@ -198,10 +198,10 @@ FROM tbl_staff");
         {
             if (_connection.GetType().Name == "MySqlConnection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff));
 
-            var target = Sql<DB>.Of(db =>
+            var target = Db<DB>.Sql(db =>
                 Intersect().Select(Asterisk(db.tbl_staff)).From(db.tbl_staff));
             query = query.Concat(target);
 
@@ -221,10 +221,10 @@ FROM tbl_staff");
             if (_connection.GetType().Name == "MySqlConnection") return;
             if (_connection.GetType().Name == "OracleConnection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff));
 
-            var target = Sql<DB>.Of(db =>
+            var target = Db<DB>.Sql(db =>
                 Except().
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff).Where(db.tbl_staff.id == 1));
             query = query.Concat(target);
@@ -249,10 +249,10 @@ WHERE (tbl_staff.id) = (@p_0)",
             if (_connection.GetType().Name == "MySqlConnection") return;
             if (_connection.GetType().Name == "OracleConnection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff));
 
-            var target = Sql<DB>.Of(db =>
+            var target = Db<DB>.Sql(db =>
                 Except(All()).
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff).Where(db.tbl_staff.id == 1));
             query = query.Concat(target);
@@ -276,10 +276,10 @@ WHERE (tbl_staff.id) = (@p_0)",
             if (_connection.GetType().Name == "MySqlConnection") return;
             if (_connection.GetType().Name == "NpgsqlConnection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff));
 
-            var target = Sql<DB>.Of(db =>
+            var target = Db<DB>.Sql(db =>
                 Minus().
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff).Where(db.tbl_staff.id == 1));
             query = query.Concat(target);

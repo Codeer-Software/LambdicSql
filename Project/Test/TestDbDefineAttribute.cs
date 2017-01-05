@@ -95,7 +95,7 @@ namespace Test
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Normal()
         {
-            var query = Sql<DBX>.Of(db =>
+            var query = Db<DBX>.Sql(db =>
                 Select(new SelectData
                 {
                     name = db.tbl_staffX.nameX,
@@ -122,7 +122,7 @@ FROM tbl_remuneration
             var name = _connection.GetType().Name;
             if (name != "SqlConnection") return;
 
-            var query = Sql<DBY>.Of(db =>
+            var query = Db<DBY>.Sql(db =>
                 Select(new SelectData
                 {
                     name = db.tbl_staffY.nameY,

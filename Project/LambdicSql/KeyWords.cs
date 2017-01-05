@@ -42,7 +42,7 @@ namespace LambdicSql
         /// <param name="subQuerys"></param>
         /// <returns></returns>
         [WithConverter]
-        public static ClauseChain<Non> With(params ISqlExpression[] subQuerys) => InvalitContext.Throw<ClauseChain<Non>>(nameof(With));
+        public static ClauseChain<Non> With(params ISql[] subQuerys) => InvalitContext.Throw<ClauseChain<Non>>(nameof(With));
 
         /// <summary>
         /// 
@@ -52,7 +52,7 @@ namespace LambdicSql
         /// <param name="select"></param>
         /// <returns></returns>
         [WithConverter]
-        public static ClauseChain<TSelected> With<TSelected>(SqlRecursiveArgumentsExpression<TSelected> args, ISqlExpression select) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(With));
+        public static ClauseChain<TSelected> With<TSelected>(SqlRecursiveArguments<TSelected> args, ISql select) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(With));
 
         /// <summary>
         /// 

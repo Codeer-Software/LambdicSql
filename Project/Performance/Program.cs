@@ -49,7 +49,7 @@ namespace Performance
 
             Console.ReadKey();
             Console.WriteLine("Start");
-            SqlInfo info = null;
+            Command info = null;
             var times = new List<double>();
             var watch = new Stopwatch();
 
@@ -59,7 +59,7 @@ namespace Performance
                 watch.Start();
 
 
-                var query = Sql<Data>.Of(db =>
+                var query = Db<Data>.Sql(db =>
 
                     Select(new SelectedData()
                     {

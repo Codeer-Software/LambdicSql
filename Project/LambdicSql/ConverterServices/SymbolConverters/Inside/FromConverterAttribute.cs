@@ -36,7 +36,7 @@ namespace LambdicSql.ConverterServices.SymbolConverters.Inside
             var member = exp as MemberExpression;
             while (member != null)
             {
-                if (typeof(ISqlExpression).IsAssignableFrom(member.Type)) return member.Member.Name;
+                if (typeof(ISql).IsAssignableFrom(member.Type)) return member.Member.Name;
                 member = member.Expression as MemberExpression;
             }
 
@@ -46,7 +46,7 @@ namespace LambdicSql.ConverterServices.SymbolConverters.Inside
                 member = method.Arguments[0] as MemberExpression;
                 if (member != null)
                 {
-                    if (typeof(ISqlExpression).IsAssignableFrom(member.Type)) return member.Member.Name;
+                    if (typeof(ISql).IsAssignableFrom(member.Type)) return member.Member.Name;
                 }
             }
             return null;

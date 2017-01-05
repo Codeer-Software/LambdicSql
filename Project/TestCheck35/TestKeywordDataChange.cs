@@ -32,7 +32,7 @@ namespace TestCheck35
         {
             Test_InsertInto_Values1();
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Update(db.tbl_data).Set(new Assign(db.tbl_data.val1, 100), new Assign(db.tbl_data.val2, "200")).
                 Where(db.tbl_data.id == 1));
 
@@ -53,10 +53,10 @@ WHERE (tbl_data.id) = (@p_2)",
         {
             Test_InsertInto_Values1();
 
-            var exp1 = Sql<DB>.Of(db => db.tbl_data);
-            var exp2 = Sql<DB>.Of(db => new Assign(db.tbl_data.val1, 100));
-            var exp3 = Sql<DB>.Of(db => new Assign(db.tbl_data.val2, "200"));
-            var query = Sql<DB>.Of(db =>
+            var exp1 = Db<DB>.Sql(db => db.tbl_data);
+            var exp2 = Db<DB>.Sql(db => new Assign(db.tbl_data.val1, 100));
+            var exp3 = Db<DB>.Sql(db => new Assign(db.tbl_data.val2, "200"));
+            var query = Db<DB>.Sql(db =>
                 Update(exp1).Set(exp2.Body, exp3.Body).
                 Where(db.tbl_data.id == 1));
 
@@ -73,7 +73,7 @@ WHERE (tbl_data.id) = (@p_2)",
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Delete()
         {
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Delete().
                 From(db.tbl_data).
                 Where(db.tbl_data.id == 3));
@@ -89,7 +89,7 @@ WHERE (tbl_data.id) = (@p_0)",
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Delete_All()
         {
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Delete().
                 From(db.tbl_data));
 
@@ -104,7 +104,7 @@ FROM tbl_data");
         {
             Test_Delete_All();
             
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                    InsertInto(db.tbl_data, db.tbl_data.id, db.tbl_data.val2).Values(1, "val2"));
 
             Assert.AreEqual(1, _connection.Execute(query));
@@ -119,12 +119,12 @@ FROM tbl_data");
         {
             Test_Delete_All();
 
-            var exp1 = Sql<DB>.Of(db => db.tbl_data);
-            var exp2 = Sql<DB>.Of(db => db.tbl_data.id);
-            var exp3 = Sql<DB>.Of(db => db.tbl_data.val2);
-            var exp4 = Sql<DB>.Of(db =>1);
-            var exp5 = Sql<DB>.Of(db => "val2");
-            var query = Sql<DB>.Of(db =>
+            var exp1 = Db<DB>.Sql(db => db.tbl_data);
+            var exp2 = Db<DB>.Sql(db => db.tbl_data.id);
+            var exp3 = Db<DB>.Sql(db => db.tbl_data.val2);
+            var exp4 = Db<DB>.Sql(db =>1);
+            var exp5 = Db<DB>.Sql(db => "val2");
+            var query = Db<DB>.Sql(db =>
                    InsertInto(exp1, exp2, exp3).Values(exp4, exp5));
 
             Assert.AreEqual(1, _connection.Execute(query));
@@ -138,7 +138,7 @@ FROM tbl_data");
         public void Test_InsertInto_Values_Select()
         {
             Test_InsertInto_Values1();
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                    InsertInto(db.tbl_data, db.tbl_data.id, db.tbl_data.val1, db.tbl_data.val2).
                    Select(new
                    {

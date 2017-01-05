@@ -180,7 +180,7 @@ namespace TestCheck35
             var min = 3000;
 
             //make sql.
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(new SelectData1()
                 {
                     Name = db.tbl_staff.name,
@@ -204,7 +204,7 @@ namespace TestCheck35
         public void TestSelectFrom()
         {
             //make sql.
-            var query = Sql<DB>.Of(db => Select(Asterisk()).From(db.tbl_staff));
+            var query = Db<DB>.Sql(db => Select(Asterisk()).From(db.tbl_staff));
 
             //to string and params.
             var info = query.Build(_connection.GetType());
@@ -220,7 +220,7 @@ namespace TestCheck35
             var min = 3000;
 
             //make sql.
-            var query1 = Sql<DB>.Of(db =>
+            var query1 = Db<DB>.Sql(db =>
                 Select(new SelectData1()
                 {
                     Name = db.tbl_staff.name,
@@ -229,7 +229,7 @@ namespace TestCheck35
                 }).
                 From(db.tbl_remuneration));
 
-            var query2 = Sql<DB>.Of(db =>
+            var query2 = Db<DB>.Sql(db =>
                     Join(db.tbl_staff, db.tbl_staff.id == db.tbl_remuneration.staff_id).
                 Where(min < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
 
@@ -248,7 +248,7 @@ namespace TestCheck35
         public void TestGroupBy()
         {
             //make sql.
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData2
                {
                    Name = db.tbl_staff.name,
@@ -275,7 +275,7 @@ namespace TestCheck35
         public void TestGroupByPredicateDistinct()
         {
             //make sql.
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(new SelectData3()
                 {
                     Name = db.tbl_staff.name,
@@ -299,7 +299,7 @@ namespace TestCheck35
         public void TestGroupByPredicateAll()
         {
             //make sql.
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(new SelectData3()
                 {
                     Name = db.tbl_staff.name,
@@ -323,7 +323,7 @@ namespace TestCheck35
         public void TestHaving()
         {
             //make sql.
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(new SelectData3
                 {
                     Name = db.tbl_staff.name,
@@ -348,7 +348,7 @@ namespace TestCheck35
         public void TestLike()
         {
             //make sql.
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(Asterisk()).From(db.tbl_staff).
                 Where(Like(db.tbl_staff.name, "%son%")));
 
@@ -364,7 +364,7 @@ namespace TestCheck35
         public void TestIn()
         {
             //make sql.
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(Asterisk()).From(db.tbl_staff).
                 Where(In(db.tbl_staff.id, 1, 3)));
 
@@ -380,7 +380,7 @@ namespace TestCheck35
         public void TestBetween()
         {
             //make sql.
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(Asterisk()).From(db.tbl_staff).
                 Where(Between(db.tbl_staff.id, 1, 3)));
 
@@ -396,11 +396,11 @@ namespace TestCheck35
         public void TestExists()
         {
             //make sql.
-            var sub = Sql<DB>.Of(db =>
+            var sub = Db<DB>.Sql(db =>
                 Select(new { total = db.tbl_remuneration.staff_id }).
                 From(db.tbl_remuneration));
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(new SelectData6 { Name = db.tbl_staff.name }).
                 From(db.tbl_staff).
                 Where(Exists(sub)));//sub query.
@@ -420,7 +420,7 @@ namespace TestCheck35
         public void TestSelectPredicateDistinct()
         {
             //make sql.
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(Distinct(), new SelectData4()
                 {
                     Id = db.tbl_remuneration.staff_id
@@ -442,7 +442,7 @@ namespace TestCheck35
         public void TestSelectPredicateAll()
         {
             //make sql.
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(All(), new SelectData4()
                 {
                     Id = db.tbl_remuneration.staff_id
@@ -464,7 +464,7 @@ namespace TestCheck35
         public void TestDelete()
         {
             //make sql.
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Delete().
                 From(db.tbl_data));
 
@@ -483,7 +483,7 @@ namespace TestCheck35
         public void TestDeleteWhere()
         {
             //make sql.
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Delete().
                 From(db.tbl_data).
                 Where(db.tbl_data.id == 3));
@@ -505,7 +505,7 @@ namespace TestCheck35
             TestDelete();
 
             //make sql.
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                    InsertInto(db.tbl_data, db.tbl_data.id, db.tbl_data.val2).Values(1, "val2"));
 
             //to string and params.
@@ -522,7 +522,7 @@ namespace TestCheck35
         public void TestUpdate()
         {
             //make sql.
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Update(db.tbl_data).Set(new Assign(db.tbl_data.val1, 100), new Assign(db.tbl_data.val2, "200")).
                 Where(db.tbl_data.id == 1));
 
@@ -541,7 +541,7 @@ namespace TestCheck35
         public void TestUpdateUsingTableValue()
         {
             //make sql.
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Update(db.tbl_data).Set(new Assign(db.tbl_data.val1, db.tbl_data.val1 * 2)).
                 Where(db.tbl_data.id == 1));
 
@@ -560,7 +560,7 @@ namespace TestCheck35
             decimal? val = null;
 
             //make sql.
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(new SelectData1()
                 {
                     Name = db.tbl_staff.name,
@@ -585,7 +585,7 @@ namespace TestCheck35
             decimal? val = null;
 
             //make sql.
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(new SelectData1()
                 {
                     Name = db.tbl_staff.name,
@@ -608,7 +608,7 @@ namespace TestCheck35
         public void TestNullable()
         {
             //make sql.
-            var query = Sql<DBNullable>.Of(db =>
+            var query = Db<DBNullable>.Sql(db =>
                 Select(new SelectData7()
                 {
                     Name = db.tbl_staff.name,
@@ -631,7 +631,7 @@ namespace TestCheck35
         public void TestStringCalc()
         {
             //make sql.
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
             Select(new SelectData1()
             {
                 Name = db.tbl_staff.name + "x"
@@ -658,11 +658,11 @@ namespace TestCheck35
         public void TestWhereEx(bool minCondition, bool maxCondition)
         {
             //make sql.
-            var exp = Sql<DB>.Of(db =>
+            var exp = Db<DB>.Sql(db =>
                 new Condition(minCondition, 3000 < db.tbl_remuneration.money) &&
                 new Condition(maxCondition, db.tbl_remuneration.money < 4000));
 
-            var query = Sql<DB>.Of(db => Select(Asterisk()).From(db.tbl_remuneration).Where(exp));
+            var query = Db<DB>.Sql(db => Select(Asterisk()).From(db.tbl_remuneration).Where(exp));
 
             //to string and params.
             var info = query.Build(_connection.GetType());
@@ -676,7 +676,7 @@ namespace TestCheck35
         public void TestCase1()
         {
             //make sql.
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(new SelectData5()
                 {
                     Type = Case().
@@ -699,7 +699,7 @@ namespace TestCheck35
         public void TestCase2()
         {
             //make sql.
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(new SelectData5()
                 {
                     Type = Case(db.tbl_staff.id).
@@ -727,7 +727,7 @@ namespace TestCheck35
             if (_connection.GetType().FullName == "MySql.Data.MySqlClient.MySqlConnection") return;
 
             //make sql.
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(new SelectData8()
                 {
                     Avg = Avg(db.tbl_remuneration.money).Over(
@@ -754,7 +754,7 @@ namespace TestCheck35
         public void TestQueryConcat()
         {
             //make sql.
-            var select = Sql<DB>.Of(db =>
+            var select = Db<DB>.Sql(db =>
                 Select(new SelectData1()
                 {
                     Name = db.tbl_staff.name,
@@ -762,14 +762,14 @@ namespace TestCheck35
                     Money = db.tbl_remuneration.money,
                 }));
 
-            var from = Sql<DB>.Of(db =>
+            var from = Db<DB>.Sql(db =>
                  From(db.tbl_remuneration).
                 Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id));
 
-            var where = Sql<DB>.Of(db =>
+            var where = Db<DB>.Sql(db =>
                 Where(3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
 
-            var orderby = Sql<DB>.Of(db =>
+            var orderby = Db<DB>.Sql(db =>
                  OrderBy(Asc(db.tbl_staff.name)));
 
             var query = select.Concat(from).Concat(where).Concat(orderby);
@@ -786,11 +786,11 @@ namespace TestCheck35
         public void TestSqlExpression()
         {
             //make sql.
-            var expMoneyAdd = Sql<DB>.Of(db => db.tbl_remuneration.money + 100);
-            var expWhereMin = Sql<DB>.Of(db => 3000 < db.tbl_remuneration.money);
-            var expWhereMax = Sql<DB>.Of(db => db.tbl_remuneration.money < 4000);
+            var expMoneyAdd = Db<DB>.Sql(db => db.tbl_remuneration.money + 100);
+            var expWhereMin = Db<DB>.Sql(db => 3000 < db.tbl_remuneration.money);
+            var expWhereMax = Db<DB>.Sql(db => db.tbl_remuneration.money < 4000);
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData1()
                {
                    Name = db.tbl_staff.name,
@@ -815,11 +815,11 @@ namespace TestCheck35
         public void TestSubQueryAtWhere()
         {
             //make sql.
-            var sub = Sql<DB>.Of(db =>
+            var sub = Db<DB>.Sql(db =>
                 Select(new { total = db.tbl_remuneration.staff_id }).
                 From(db.tbl_remuneration));
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(new SelectData6 { Name = db.tbl_staff.name }).
                 From(db.tbl_staff).
                 Where(In(db.tbl_staff.id, sub.Body)));//sub query.
@@ -836,11 +836,11 @@ namespace TestCheck35
         public void TestSubQuerySelect()
         {
             //make sql.
-            var sub = Sql<DB>.Of(db =>
+            var sub = Db<DB>.Sql(db =>
                 Select(Sum(db.tbl_remuneration.money)).
                 From(db.tbl_remuneration));
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(new SelectData6
                 {
                     Name = db.tbl_staff.name,
@@ -860,7 +860,7 @@ namespace TestCheck35
         public void TestSubQueryAtFrom()
         {
             //make sql.
-            var subQuery = Sql<DB>.Of(db =>
+            var subQuery = Db<DB>.Sql(db =>
                 Select(new
                 {
                     name_sub = db.tbl_staff.name,
@@ -871,7 +871,7 @@ namespace TestCheck35
                     Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
                 Where(3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
             {
-                var query = Sql<DB>.Of(db =>
+                var query = Db<DB>.Sql(db =>
                     Select(new SelectData6
                     {
                         Name = subQuery.Body.name_sub
@@ -886,7 +886,7 @@ namespace TestCheck35
                 var datas = _connection.Query(query).ToList();
             }
             {
-                var query = Sql<DB>.Of(db =>
+                var query = Db<DB>.Sql(db =>
                     Select(new SelectData6
                     {
                         Name = subQuery.Body.name_sub
@@ -907,7 +907,7 @@ namespace TestCheck35
         public void TestFormatText()
         {
             //make sql.
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(new
                 {
                     name = db.tbl_staff.name,
@@ -949,7 +949,7 @@ FROM tbl_remuneration
     JOIN tbl_staff ON tbl_staff.id = tbl_remuneration.staff_id
 /*1*/WHERE tbl_remuneration.money = 100/**/";
 
-            var query = Sql<DB>.Of(db => sql.TwoWaySql(
+            var query = Db<DB>.Sql(db => sql.TwoWaySql(
                 bonus,
                 Where(
                     new Condition(minCondition, 3000 < db.tbl_remuneration.money) &&
@@ -963,11 +963,11 @@ FROM tbl_remuneration
 
 
             //pattern2 building.
-            var where = Sql<DB>.Of(db => Where(
+            var where = Db<DB>.Sql(db => Where(
                     new Condition(minCondition, 3000 < db.tbl_remuneration.money) &&
                     new Condition(maxCondition, db.tbl_remuneration.money < 4000)));
 
-            var query2 = Sql<DB>.Of(db => sql.TwoWaySql(bonus, where));
+            var query2 = Db<DB>.Sql(db => sql.TwoWaySql(bonus, where));
             info = query2.Build(_connection.GetType());
             Debug.Print(info.Text);
 
@@ -979,7 +979,7 @@ FROM tbl_remuneration
         public void CheckOperatior()
         {
             //make sql.
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(new SelectData1()
                 {
                     Name = db.tbl_staff.name + "x",
@@ -1002,7 +1002,7 @@ FROM tbl_remuneration
         public void FromMany()
         {
             //make sql.
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(new SelectData1()
                 {
                     Name = db.tbl_staff.name,
@@ -1026,7 +1026,7 @@ FROM tbl_remuneration
                 name == "System.Data.SqlClient.SqlConnection" ||
                 name == "Npgsql.NpgsqlConnection")
             {
-                var query = Sql<DB>.Of(db =>
+                var query = Db<DB>.Sql(db =>
                     Select(new
                     {
                         id = Cast<int>(db.tbl_staff.id, "int")
@@ -1037,7 +1037,7 @@ FROM tbl_remuneration
             }
 
             {
-                var query = Sql<DB>.Of(db =>
+                var query = Db<DB>.Sql(db =>
                    Select(new
                    {
                        id = Coalesce(db.tbl_staff.name, "a", "b")
@@ -1049,7 +1049,7 @@ FROM tbl_remuneration
 
             if (name != "System.Data.SQLite.SQLiteConnection")
             {
-                var query = Sql<DB>.Of(db =>
+                var query = Db<DB>.Sql(db =>
                     Select(new
                     {
                         Name = Concat(db.tbl_staff.name, "a")
@@ -1061,7 +1061,7 @@ FROM tbl_remuneration
             if (name == "Npgsql.NpgsqlConnection" ||
                 name == "IBM.Data.DB2.DB2Connection")
             {
-                var query = Sql<DB>.Of(db =>
+                var query = Db<DB>.Sql(db =>
                     Select(new
                     {
                         Length = Length(db.tbl_staff.name)
@@ -1071,7 +1071,7 @@ FROM tbl_remuneration
             }
             if (name == "System.Data.SqlClient.SqlConnection")
             {
-                var query = Sql<DB>.Of(db =>
+                var query = Db<DB>.Sql(db =>
                     Select(new
                     {
                         Length = Len(db.tbl_staff.name)
@@ -1080,7 +1080,7 @@ FROM tbl_remuneration
                 ExecuteRead(query);
             }
             {
-                var query = Sql<DB>.Of(db =>
+                var query = Db<DB>.Sql(db =>
                     Select(new
                     {
                         Lower = Lower(db.tbl_staff.name),
@@ -1090,7 +1090,7 @@ FROM tbl_remuneration
                 ExecuteRead(query);
             }
             {
-                var query = Sql<DB>.Of(db =>
+                var query = Db<DB>.Sql(db =>
                     Select(new
                     {
                         Dst = Replace(db.tbl_staff.name, "a", "b")
@@ -1101,7 +1101,7 @@ FROM tbl_remuneration
             if (name != "System.Data.SQLite.SQLiteConnection" &&
                 name != "Oracle.ManagedDataAccess.Client.OracleConnection")
             {
-                var query = Sql<DB>.Of(db =>
+                var query = Db<DB>.Sql(db =>
                     Select(new
                     {
                         Dst = Substring(db.tbl_staff.name, 1, 2)
@@ -1114,7 +1114,7 @@ FROM tbl_remuneration
             if (name == "Npgsql.NpgsqlConnection" ||
                 name == "MySql.Data.MySqlClient.MySqlConnection")
             {
-                var query = Sql<DB>.Of(db =>
+                var query = Db<DB>.Sql(db =>
                     Select(new
                     {
                         Dst = CurrentDate()
@@ -1123,7 +1123,7 @@ FROM tbl_remuneration
             }
             if (name == "Oracle.ManagedDataAccess.Client.OracleConnection")
             {
-                var query = Sql<DB>.Of(db =>
+                var query = Db<DB>.Sql(db =>
                     Select(new
                     {
                         Dst = CurrentDate()
@@ -1132,7 +1132,7 @@ FROM tbl_remuneration
             }
             if (name == "IBM.Data.DB2.DB2Connection")
             {
-                var query = Sql<DB>.Of(db =>
+                var query = Db<DB>.Sql(db =>
                     Select(new
                     {
                         Dst = CurrentDate()
@@ -1143,7 +1143,7 @@ FROM tbl_remuneration
             //CurrentTime
             if (name == "MySql.Data.MySqlClient.MySqlConnection")
             {
-                var query = Sql<DB>.Of(db =>
+                var query = Db<DB>.Sql(db =>
                     Select(new
                     {
                         Dst = CurrentTime()
@@ -1153,7 +1153,7 @@ FROM tbl_remuneration
 
             if (name == "IBM.Data.DB2.DB2Connection")
             {
-                var query = Sql<DB>.Of(db =>
+                var query = Db<DB>.Sql(db =>
                     Select(new
                     {
                         Dst = CurrentTime()
@@ -1166,7 +1166,7 @@ FROM tbl_remuneration
                 name == "Npgsql.NpgsqlConnection" ||
                 name == "MySql.Data.MySqlClient.MySqlConnection")
             {
-                var query = Sql<DB>.Of(db =>
+                var query = Db<DB>.Sql(db =>
                     Select(new
                     {
                         Dst = CurrentTimeStamp()
@@ -1175,7 +1175,7 @@ FROM tbl_remuneration
             }
             if (name == "Oracle.ManagedDataAccess.Client.OracleConnection")
             {
-                var query = Sql<DB>.Of(db =>
+                var query = Db<DB>.Sql(db =>
                     Select(new
                     {
                         Dst = CurrentTimeStamp()
@@ -1184,7 +1184,7 @@ FROM tbl_remuneration
             }
             if (name == "Oracle.ManagedDataAccess.Client.OracleConnection")
             {
-                var query = Sql<DB>.Of(db =>
+                var query = Db<DB>.Sql(db =>
                     Select(new
                     {
                         Dst = CurrentTimeStamp()
@@ -1193,7 +1193,7 @@ FROM tbl_remuneration
             }
             if (name == "IBM.Data.DB2.DB2Connection")
             {
-                var query = Sql<DB>.Of(db =>
+                var query = Db<DB>.Sql(db =>
                     Select(new
                     {
                         Dst = CurrentTimeStamp()
@@ -1202,7 +1202,7 @@ FROM tbl_remuneration
             }
             if (name == "IBM.Data.DB2.DB2Connection")
             {
-                var query = Sql<DB>.Of(db =>
+                var query = Db<DB>.Sql(db =>
                     Select(new
                     {
                         Dst = CurrentTimeStamp()
@@ -1213,7 +1213,7 @@ FROM tbl_remuneration
             //Extract, DatePart
             if (name == "Npgsql.NpgsqlConnection")
             {
-                var query = Sql<DB>.Of(db =>
+                var query = Db<DB>.Sql(db =>
                     Select(new
                     {
                         Dst1 = Extract(DateTimeElement.Year, CurrentTimeStamp()),
@@ -1231,7 +1231,7 @@ FROM tbl_remuneration
             }
             if (name == "MySql.Data.MySqlClient.MySqlConnection")
             {
-                var query = Sql<DB>.Of(db =>
+                var query = Db<DB>.Sql(db =>
                     Select(new
                     {
                         Dst1 = (long)Extract(DateTimeElement.Year, CurrentTimeStamp()),
@@ -1247,7 +1247,7 @@ FROM tbl_remuneration
             }
             if (name == "System.Data.SqlClient.SqlConnection")
             {
-                var query = Sql<DB>.Of(db =>
+                var query = Db<DB>.Sql(db =>
                     Select(new
                     {
                         Year = DatePart(DateTimeElement.Year, CurrentTimeStamp()),
@@ -1274,9 +1274,9 @@ FROM tbl_remuneration
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestUnion()
         {
-            var query = Sql<DB>.Of(db => Select(Asterisk()).From(db.tbl_staff).Union().Select(Asterisk()).From(db.tbl_staff));
+            var query = Db<DB>.Sql(db => Select(Asterisk()).From(db.tbl_staff).Union().Select(Asterisk()).From(db.tbl_staff));
             ExecuteRead<Staff>(query);
-            query = Sql<DB>.Of(db => Select(Asterisk()).From(db.tbl_staff).Union(All()).Select(Asterisk()).From(db.tbl_staff));
+            query = Db<DB>.Sql(db => Select(Asterisk()).From(db.tbl_staff).Union(All()).Select(Asterisk()).From(db.tbl_staff));
             ExecuteRead<Staff>(query);
         }
 
@@ -1285,12 +1285,12 @@ FROM tbl_remuneration
         {
             var name = _connection.GetType().FullName;
             if (name == "MySql.Data.MySqlClient.MySqlConnection") return;
-            var query = Sql<DB>.Of(db => Select(Asterisk()).From(db.tbl_staff).Intersect().Select(Asterisk()).From(db.tbl_staff));
+            var query = Db<DB>.Sql(db => Select(Asterisk()).From(db.tbl_staff).Intersect().Select(Asterisk()).From(db.tbl_staff));
             ExecuteRead<Staff>(query);
             if (name == "System.Data.SqlClient.SqlConnection") return;
             if (name == "System.Data.SQLite.SQLiteConnection") return;
             if (name == "Oracle.ManagedDataAccess.Client.OracleConnection") return;
-            query = Sql<DB>.Of(db => Select(Asterisk()).From(db.tbl_staff).Intersect(All()).Select(Asterisk()).From(db.tbl_staff));
+            query = Db<DB>.Sql(db => Select(Asterisk()).From(db.tbl_staff).Intersect(All()).Select(Asterisk()).From(db.tbl_staff));
             ExecuteRead<Staff>(query);
         }
 
@@ -1300,11 +1300,11 @@ FROM tbl_remuneration
             var name = _connection.GetType().FullName;
             if (name == "MySql.Data.MySqlClient.MySqlConnection") return;
             if (name == "Oracle.ManagedDataAccess.Client.OracleConnection") return;
-            var query = Sql<DB>.Of(db => Select(Asterisk()).From(db.tbl_staff).Except().Select(Asterisk()).From(db.tbl_staff));
+            var query = Db<DB>.Sql(db => Select(Asterisk()).From(db.tbl_staff).Except().Select(Asterisk()).From(db.tbl_staff));
             ExecuteRead<Staff>(query);
             if (name == "System.Data.SqlClient.SqlConnection") return;
             if (name == "System.Data.SQLite.SQLiteConnection") return;
-            query = Sql<DB>.Of(db => Select(Asterisk()).From(db.tbl_staff).Except(All()).Select(Asterisk()).From(db.tbl_staff));
+            query = Db<DB>.Sql(db => Select(Asterisk()).From(db.tbl_staff).Except(All()).Select(Asterisk()).From(db.tbl_staff));
             ExecuteRead<Staff>(query);
         }
 
@@ -1313,7 +1313,7 @@ FROM tbl_remuneration
         {
             var name = _connection.GetType().FullName;
             if (name != "Oracle.ManagedDataAccess.Client.OracleConnection") return;
-            var query = Sql<DB>.Of(db => Select(Asterisk()).From(db.tbl_staff).Minus().Select(Asterisk()).From(db.tbl_staff));
+            var query = Db<DB>.Sql(db => Select(Asterisk()).From(db.tbl_staff).Minus().Select(Asterisk()).From(db.tbl_staff));
             ExecuteRead<Staff>(query);
         }
 
@@ -1321,7 +1321,7 @@ FROM tbl_remuneration
         public void TestGroupByEx()
         {
             //make sql.
-            var selectFrom = Sql<DB>.Of(db =>
+            var selectFrom = Db<DB>.Sql(db =>
                Select(new SelectData2
                {
                    Total = Sum(db.tbl_remuneration.money)
@@ -1332,18 +1332,18 @@ FROM tbl_remuneration
             if (name == "System.Data.SQLite.SQLiteConnection") return;
             if (name == "MySql.Data.MySqlClient.MySqlConnection")
             {
-                var queryWith = selectFrom.Concat(Sql<DB>.Of(db => GroupByWithRollup(db.tbl_remuneration.id, db.tbl_remuneration.staff_id)));
+                var queryWith = selectFrom.Concat(Db<DB>.Sql(db => GroupByWithRollup(db.tbl_remuneration.id, db.tbl_remuneration.staff_id)));
                 ExecuteRead(queryWith);
                 return;
             }
 
-            var query = selectFrom.Concat(Sql<DB>.Of(db => GroupByRollup(db.tbl_remuneration.id, db.tbl_remuneration.staff_id)));
+            var query = selectFrom.Concat(Db<DB>.Sql(db => GroupByRollup(db.tbl_remuneration.id, db.tbl_remuneration.staff_id)));
             ExecuteRead(query);
 
-            query = selectFrom.Concat(Sql<DB>.Of(db => GroupByCube(db.tbl_remuneration.id, db.tbl_remuneration.staff_id)));
+            query = selectFrom.Concat(Db<DB>.Sql(db => GroupByCube(db.tbl_remuneration.id, db.tbl_remuneration.staff_id)));
             ExecuteRead(query);
 
-            query = selectFrom.Concat(Sql<DB>.Of(db => GroupByGroupingSets(db.tbl_remuneration.id, db.tbl_remuneration.staff_id)));
+            query = selectFrom.Concat(Db<DB>.Sql(db => GroupByGroupingSets(db.tbl_remuneration.id, db.tbl_remuneration.staff_id)));
             ExecuteRead(query);
         }
 
@@ -1354,7 +1354,7 @@ FROM tbl_remuneration
             if (name != "System.Data.SqlClient.SqlConnection" &&
                 name != "IBM.Data.DB2.DB2Connection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                  Select(Asterisk()).
                  From(db.tbl_remuneration).
                  OrderBy(Asc(db.tbl_remuneration.id)).
@@ -1373,7 +1373,7 @@ FROM tbl_remuneration
             if (name == "Oracle.ManagedDataAccess.Client.OracleConnection") return;
             if (name == "Npgsql.NpgsqlConnection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                  Select(Asterisk()).
                  From(db.tbl_remuneration).
                  OrderBy(Asc(db.tbl_remuneration.id)).
@@ -1390,7 +1390,7 @@ FROM tbl_remuneration
             if (name == "System.Data.SqlClient.SqlConnection") return;
             if (name == "Oracle.ManagedDataAccess.Client.OracleConnection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                  Select(Asterisk()).
                  From(db.tbl_remuneration).
                  OrderBy(Asc(db.tbl_remuneration.id)).
@@ -1407,7 +1407,7 @@ FROM tbl_remuneration
             var name = _connection.GetType().FullName;
             if (name != "Oracle.ManagedDataAccess.Client.OracleConnection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                  Select(Asterisk()).
                  From(db.tbl_remuneration).
                  Where(Between(RowNum(), 1, 5)).
@@ -1423,7 +1423,7 @@ FROM tbl_remuneration
             var name = _connection.GetType().FullName;
             if (name != "System.Data.SqlClient.SqlConnection") return;
             {
-                var query = Sql<DB>.Of(db =>
+                var query = Db<DB>.Sql(db =>
                       Select(
                           Top(10),
                           new
@@ -1435,7 +1435,7 @@ FROM tbl_remuneration
                 _connection.Query(query);
             }
             {
-                var query = Sql<DB>.Of(db =>
+                var query = Db<DB>.Sql(db =>
                       Select(
                           Top(10),
                           Asterisk()).
@@ -1444,7 +1444,7 @@ FROM tbl_remuneration
                 _connection.Query(query);
             }
             {
-                var query = Sql<DB>.Of(db =>
+                var query = Db<DB>.Sql(db =>
                       Select(
                           Distinct(),
                           Top(10),
@@ -1457,7 +1457,7 @@ FROM tbl_remuneration
                 _connection.Query(query);
             }
             {
-                var query = Sql<DB>.Of(db =>
+                var query = Db<DB>.Sql(db =>
                       Select(
                           Distinct(),
                           Top(10),
@@ -1468,14 +1468,14 @@ FROM tbl_remuneration
             }
         }
 
-        public IEnumerable<T> ExecuteRead<T>(LambdicSql.SqlExpression<T> exp)
+        public IEnumerable<T> ExecuteRead<T>(LambdicSql.Sql<T> exp)
         {
             var info = exp.Build(_connection.GetType());
             Debug.Print(info.Text);
             return _connection.Query(exp).ToList();
         }
 
-        public IEnumerable<T> ExecuteRead<T>(ISqlExpression exp)
+        public IEnumerable<T> ExecuteRead<T>(ISql exp)
         {
             var info = exp.Build(_connection.GetType());
             Debug.Print(info.Text);

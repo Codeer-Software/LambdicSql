@@ -34,7 +34,7 @@ namespace TestCheck35
         public void Test_Param()
         {
             var text = new DbParam<string>() { Value = "xxx" };
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(new SelectData
                 {
                     Name = db.tbl_staff.name + text,
@@ -53,7 +53,7 @@ FROM tbl_staff",
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Param_Direct()
         {
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(new SelectData
                 {
                     Name = db.tbl_staff.name
@@ -85,7 +85,7 @@ FROM tbl_staff",
                 Size = 30,
             };
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(new SelectData
                 {
                     Name = db.tbl_staff.name + param,

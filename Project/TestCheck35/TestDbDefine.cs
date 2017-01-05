@@ -36,7 +36,7 @@ namespace TestCheck35
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Normal()
         {
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(new SelectData
                 {
                     name = db.tbl_staff.name,
@@ -65,7 +65,7 @@ FROM tbl_remuneration
             var name = _connection.GetType().Name;
             if (name != "SqlConnection") return;
 
-            var query = Sql<DBEX>.Of(db =>
+            var query = Db<DBEX>.Sql(db =>
                 Select(new SelectData
                 {
                     name = db.dbo.tbl_staff.name,

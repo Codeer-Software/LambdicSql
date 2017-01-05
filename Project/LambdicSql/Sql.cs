@@ -1,72 +1,57 @@
-﻿using LambdicSql.ConverterServices;
-using LambdicSql.ConverterServices.Inside;
-using LambdicSql.BuilderServices.Syntaxes.Inside;
-using System;
-using System.Linq.Expressions;
+﻿using LambdicSql.ConverterServices.Inside;
 using LambdicSql.BuilderServices.Syntaxes;
 
 namespace LambdicSql
 {
     /// <summary>
-    /// LambdicSql's query creator.
+    /// Expression.
     /// </summary>
-    /// <typeparam name="TDB">DB's type.</typeparam>
-    public class Sql<TDB> where TDB : class
+    public interface ISql
     {
         /// <summary>
-        /// Create an expression that will be part of the query.
+        /// Data converted from Expression to a form close to a string representation.
         /// </summary>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="expression">An expression expressing a part of query by C #.</param>
-        /// <returns>An expression that will be part of the query.</returns>
-        public static SqlExpression<TResult> Of<TResult>(Expression<Func<TDB, TResult>> expression)
-        {
-            var db = DBDefineAnalyzer.GetDbInfo<TDB>();
-            return new SqlExpression<TResult>(MakeSynatx(db, expression.Body));
-        }
+        /// <returns>text.</returns>
+        Syntax Syntax { get; }
+    }
+    
+    /// <summary>
+    /// Expressions that represent part of the query.
+    /// </summary>
+    /// <typeparam name="T">The type represented by SqlExpression.</typeparam>
+    public class Sql<T> : ISql
+    {
+        /// <summary>
+        /// Data converted from Expression to a form close to a string representation.
+        /// </summary>
+        /// <returns>text.</returns>
+        public Syntax Syntax { get; }
 
         /// <summary>
-        /// Create a query.
+        /// Entity represented by SqlExpression.
+        /// It can only be used within methods of the LambdicSql.Sql class.
         /// </summary>
-        /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
-        /// <param name="expression">An expression expressing a query by C #.</param>
-        /// <returns>A query.</returns>
-        public static SqlExpression<TSelected> Of<TSelected>(Expression<Func<TDB, ClauseChain<TSelected>>> expression)
-        {
-            var db = DBDefineAnalyzer.GetDbInfo<TDB>();
-            return new SqlExpression<TSelected>(MakeSynatx(db, expression.Body));
-        }
+        public T Body => InvalitContext.Throw<T>(nameof(Body));
 
         /// <summary>
-        /// Create a query.
-        /// Add name.
+        /// Implicitly convert to the type represented by SqlExpression.
+        /// It can only be used within methods of the LambdicSql.Sql class.
         /// </summary>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="expression">An expression expressing a query by C #.</param>
-        /// <returns>A query.</returns>
-        public static SqlExpression<TResult> Of<TResult>(Expression<Func<TDB, SqlExpression<TResult>>> expression)
-        {
-            var db = DBDefineAnalyzer.GetDbInfo<TDB>();
-            var core = expression.Body as MemberExpression;
-            return new SqlExpression<TResult>(new AliasSyntax(core.Member.Name));
-        }
+        /// <param name="src"></param>
+        public static implicit operator T(Sql<T> src) => InvalitContext.Throw<T>("implicit operator");
 
-        /// <summary>
-        /// Create a query.
-        /// </summary>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="expression">An expression expressing a query by C #.</param>
-        /// <returns>A query.</returns>
-        public static SqlRecursiveArgumentsExpression<TResult> Of<TResult>(Expression<Func<TDB, Keywords.RecursiveArguments<TResult>>> expression)
+        internal Sql(Syntax syntax)
         {
-            var db = DBDefineAnalyzer.GetDbInfo<TDB>();
-            return new SqlRecursiveArgumentsExpression<TResult>(MakeSynatx(db, expression.Body));
+            Syntax = syntax;
         }
+    }
 
-        static Syntax MakeSynatx(DbInfo dbInfo, Expression core)
-        {
-            var converter = new ExpressionConverter(dbInfo);
-            return core == null ? string.Empty : converter.Convert(core);
-        }
+    /// <summary>
+    /// Expressions that represent arguments of recursive SQL.
+    /// </summary>
+    /// <typeparam name="TSelected">The type represented by SqlExpression.</typeparam>
+    public class SqlRecursiveArguments<TSelected> : Sql<TSelected>
+    {
+        internal SqlRecursiveArguments(Syntax syntax) : base(syntax) { }
     }
 }

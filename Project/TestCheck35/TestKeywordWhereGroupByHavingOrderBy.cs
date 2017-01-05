@@ -39,7 +39,7 @@ namespace TestCheck35
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Where1()
         {
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData1
                {
                    Count = Count(db.tbl_remuneration.money)
@@ -61,8 +61,8 @@ WHERE (tbl_remuneration.id) = (@p_0)",
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Where2()
         {
-            var exp = Sql<DB>.Of(db => db.tbl_remuneration.id == 1);
-            var query = Sql<DB>.Of(db =>
+            var exp = Db<DB>.Sql(db => db.tbl_remuneration.id == 1);
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData1
                {
                    Count = Count(db.tbl_remuneration.money)
@@ -84,7 +84,7 @@ WHERE (tbl_remuneration.id) = (@p_0)",
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_GroupBy1()
         {
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData1
                {
                    Count = Count(db.tbl_remuneration.money)
@@ -106,9 +106,9 @@ GROUP BY tbl_remuneration.id, tbl_remuneration.staff_id");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_GroupBy2()
         {
-            var exp1 = Sql<DB>.Of(db => db.tbl_remuneration.id);
-            var exp2 = Sql<DB>.Of(db => db.tbl_remuneration.staff_id);
-            var query = Sql<DB>.Of(db =>
+            var exp1 = Db<DB>.Sql(db => db.tbl_remuneration.id);
+            var exp2 = Db<DB>.Sql(db => db.tbl_remuneration.staff_id);
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData1
                {
                    Count = Count(db.tbl_remuneration.money)
@@ -133,7 +133,7 @@ GROUP BY tbl_remuneration.id, tbl_remuneration.staff_id");
             if (name == "SQLiteConnection") return;
             if (name == "MySqlConnection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData1
                {
                    Count = Count(db.tbl_remuneration.money)
@@ -157,9 +157,9 @@ GROUP BY ROLLUP(tbl_remuneration.id, tbl_remuneration.staff_id)");
             if (name == "SQLiteConnection") return;
             if (name == "MySqlConnection") return;
 
-            var exp1 = Sql<DB>.Of(db => db.tbl_remuneration.id);
-            var exp2 = Sql<DB>.Of(db => db.tbl_remuneration.staff_id);
-            var query = Sql<DB>.Of(db =>
+            var exp1 = Db<DB>.Sql(db => db.tbl_remuneration.id);
+            var exp2 = Db<DB>.Sql(db => db.tbl_remuneration.staff_id);
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData1
                {
                    Count = Count(db.tbl_remuneration.money)
@@ -182,7 +182,7 @@ GROUP BY ROLLUP(tbl_remuneration.id, tbl_remuneration.staff_id)");
             var name = _connection.GetType().Name;
             if (name != "MySqlConnection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData1
                {
                    Count = Count(db.tbl_remuneration.money)
@@ -207,9 +207,9 @@ GROUP BY tbl_remuneration.id, tbl_remuneration.staff_id WITH ROLLUP");
             var name = _connection.GetType().Name;
             if (name != "MySqlConnection") return;
 
-            var exp1 = Sql<DB>.Of(db => db.tbl_remuneration.id);
-            var exp2 = Sql<DB>.Of(db => db.tbl_remuneration.staff_id);
-            var query = Sql<DB>.Of(db =>
+            var exp1 = Db<DB>.Sql(db => db.tbl_remuneration.id);
+            var exp2 = Db<DB>.Sql(db => db.tbl_remuneration.staff_id);
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData1
                {
                    Count = Count(db.tbl_remuneration.money)
@@ -233,7 +233,7 @@ GROUP BY tbl_remuneration.id, tbl_remuneration.staff_id WITH ROLLUP");
             if (name == "SQLiteConnection") return;
             if (name == "MySqlConnection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData1
                {
                    Count = Count(db.tbl_remuneration.money)
@@ -259,9 +259,9 @@ GROUP BY CUBE(tbl_remuneration.id, tbl_remuneration.staff_id)");
             if (name == "SQLiteConnection") return;
             if (name == "MySqlConnection") return;
 
-            var exp1 = Sql<DB>.Of(db => db.tbl_remuneration.id);
-            var exp2 = Sql<DB>.Of(db => db.tbl_remuneration.staff_id);
-            var query = Sql<DB>.Of(db =>
+            var exp1 = Db<DB>.Sql(db => db.tbl_remuneration.id);
+            var exp2 = Db<DB>.Sql(db => db.tbl_remuneration.staff_id);
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData1
                {
                    Count = Count(db.tbl_remuneration.money)
@@ -285,7 +285,7 @@ GROUP BY CUBE(tbl_remuneration.id, tbl_remuneration.staff_id)");
             if (name == "SQLiteConnection") return;
             if (name == "MySqlConnection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData1
                {
                    Count = Count(db.tbl_remuneration.money)
@@ -309,9 +309,9 @@ GROUP BY GROUPING SETS(tbl_remuneration.id, tbl_remuneration.staff_id)");
             if (name == "SQLiteConnection") return;
             if (name == "MySqlConnection") return;
 
-            var exp1 = Sql<DB>.Of(db => db.tbl_remuneration.id);
-            var exp2 = Sql<DB>.Of(db => db.tbl_remuneration.staff_id);
-            var query = Sql<DB>.Of(db =>
+            var exp1 = Db<DB>.Sql(db => db.tbl_remuneration.id);
+            var exp2 = Db<DB>.Sql(db => db.tbl_remuneration.staff_id);
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData1
                {
                    Count = Count(db.tbl_remuneration.money)
@@ -334,7 +334,7 @@ GROUP BY GROUPING SETS(tbl_remuneration.id, tbl_remuneration.staff_id)");
             var name = _connection.GetType().Name;
             if (name == "SQLiteConnection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(new SelectedData2
                 {
                     Id = db.tbl_remuneration.staff_id
@@ -360,8 +360,8 @@ HAVING (@p_0) < (SUM(tbl_remuneration.money))",
             var name = _connection.GetType().Name;
             if (name == "SQLiteConnection") return;
 
-            var exp = Sql<DB>.Of(db => 100 < Sum(db.tbl_remuneration.money));
-            var query = Sql<DB>.Of(db =>
+            var exp = Db<DB>.Sql(db => 100 < Sum(db.tbl_remuneration.money));
+            var query = Db<DB>.Sql(db =>
                 Select(new SelectedData2
                 {
                     Id = db.tbl_remuneration.staff_id
@@ -387,7 +387,7 @@ HAVING (@p_0) < (SUM(tbl_remuneration.money))",
             var name = _connection.GetType().Name;
             if (name == "SQLiteConnection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(new SelectedData2
                 {
                     Id = db.tbl_remuneration.staff_id
@@ -412,11 +412,11 @@ ORDER BY
             var name = _connection.GetType().Name;
             if (name == "SQLiteConnection") return;
 
-            var exp1 = Sql<DB>.Of(db => db.tbl_remuneration.money);
-            var exp2 = Sql<DB>.Of(db => db.tbl_remuneration.staff_id);
-            var exp3 = Sql<DB>.Of(db => Asc(exp1));
-            var exp4 = Sql<DB>.Of(db => Desc(exp2));
-            var query = Sql<DB>.Of(db =>
+            var exp1 = Db<DB>.Sql(db => db.tbl_remuneration.money);
+            var exp2 = Db<DB>.Sql(db => db.tbl_remuneration.staff_id);
+            var exp3 = Db<DB>.Sql(db => Asc(exp1));
+            var exp4 = Db<DB>.Sql(db => Desc(exp2));
+            var query = Db<DB>.Sql(db =>
                 Select(new SelectedData2
                 {
                     Id = db.tbl_remuneration.staff_id
@@ -438,14 +438,14 @@ ORDER BY
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Where1()
         {
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData1
                {
                    Count = Count(db.tbl_remuneration.money)
                }).
                From(db.tbl_remuneration));
 
-            var target = Sql<DB>.Of(db => Where(db.tbl_remuneration.id == 1));
+            var target = Db<DB>.Sql(db => Where(db.tbl_remuneration.id == 1));
             query = query.Concat(target);
 
             var datas = _connection.Query(query).ToList();
@@ -462,15 +462,15 @@ WHERE (tbl_remuneration.id) = (@p_0)",
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_Where2()
         {
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData1
                {
                    Count = Count(db.tbl_remuneration.money)
                }).
                From(db.tbl_remuneration));
 
-            var exp = Sql<DB>.Of(db => db.tbl_remuneration.id == 1);
-            var target = Sql<DB>.Of(db => Where(exp));
+            var exp = Db<DB>.Sql(db => db.tbl_remuneration.id == 1);
+            var target = Db<DB>.Sql(db => Where(exp));
             query = query.Concat(target);
 
             var datas = _connection.Query(query).ToList();
@@ -487,14 +487,14 @@ WHERE (tbl_remuneration.id) = (@p_0)",
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_GroupBy1()
         {
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData1
                {
                    Count = Count(db.tbl_remuneration.money)
                }).
                From(db.tbl_remuneration));
 
-            var target = Sql<DB>.Of(db => GroupBy(db.tbl_remuneration.id, db.tbl_remuneration.staff_id));
+            var target = Db<DB>.Sql(db => GroupBy(db.tbl_remuneration.id, db.tbl_remuneration.staff_id));
             query = query.Concat(target);
 
             var datas = _connection.Query(query).ToList();
@@ -510,16 +510,16 @@ GROUP BY tbl_remuneration.id, tbl_remuneration.staff_id");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Continue_GroupBy2()
         {
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData1
                {
                    Count = Count(db.tbl_remuneration.money)
                }).
                From(db.tbl_remuneration));
 
-            var exp1 = Sql<DB>.Of(db => db.tbl_remuneration.id);
-            var exp2 = Sql<DB>.Of(db => db.tbl_remuneration.staff_id);
-            var target = Sql<DB>.Of(db => GroupBy(exp1, exp2));
+            var exp1 = Db<DB>.Sql(db => db.tbl_remuneration.id);
+            var exp2 = Db<DB>.Sql(db => db.tbl_remuneration.staff_id);
+            var target = Db<DB>.Sql(db => GroupBy(exp1, exp2));
             query = query.Concat(target);
 
             var datas = _connection.Query(query).ToList();
@@ -539,14 +539,14 @@ GROUP BY tbl_remuneration.id, tbl_remuneration.staff_id");
             if (name == "SQLiteConnection") return;
             if (name == "MySqlConnection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData1
                {
                    Count = Count(db.tbl_remuneration.money)
                }).
                From(db.tbl_remuneration));
 
-            var target = Sql<DB>.Of(db => GroupByRollup(db.tbl_remuneration.id, db.tbl_remuneration.staff_id));
+            var target = Db<DB>.Sql(db => GroupByRollup(db.tbl_remuneration.id, db.tbl_remuneration.staff_id));
             query = query.Concat(target);
 
             var datas = _connection.Query(query).ToList();
@@ -565,16 +565,16 @@ GROUP BY ROLLUP(tbl_remuneration.id, tbl_remuneration.staff_id)");
             if (name == "SQLiteConnection") return;
             if (name == "MySqlConnection") return;
 
-            var exp1 = Sql<DB>.Of(db => db.tbl_remuneration.id);
-            var exp2 = Sql<DB>.Of(db => db.tbl_remuneration.staff_id);
-            var query = Sql<DB>.Of(db =>
+            var exp1 = Db<DB>.Sql(db => db.tbl_remuneration.id);
+            var exp2 = Db<DB>.Sql(db => db.tbl_remuneration.staff_id);
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData1
                {
                    Count = Count(db.tbl_remuneration.money)
                }).
                From(db.tbl_remuneration));
 
-            var target = Sql<DB>.Of(db => GroupByRollup(exp1, exp2));
+            var target = Db<DB>.Sql(db => GroupByRollup(exp1, exp2));
             query = query.Concat(target);
 
             var datas = _connection.Query(query).ToList();
@@ -592,14 +592,14 @@ GROUP BY ROLLUP(tbl_remuneration.id, tbl_remuneration.staff_id)");
             var name = _connection.GetType().Name;
             if (name != "MySqlConnection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData1
                {
                    Count = Count(db.tbl_remuneration.money)
                }).
                From(db.tbl_remuneration));
 
-            var target = Sql<DB>.Of(db => GroupByWithRollup(db.tbl_remuneration.id, db.tbl_remuneration.staff_id));
+            var target = Db<DB>.Sql(db => GroupByWithRollup(db.tbl_remuneration.id, db.tbl_remuneration.staff_id));
             query = query.Concat(target);
 
             var datas = _connection.Query(query).ToList();
@@ -617,16 +617,16 @@ GROUP BY tbl_remuneration.id, tbl_remuneration.staff_id WITH ROLLUP");
             var name = _connection.GetType().Name;
             if (name != "MySqlConnection") return;
 
-            var exp1 = Sql<DB>.Of(db => db.tbl_remuneration.id);
-            var exp2 = Sql<DB>.Of(db => db.tbl_remuneration.staff_id);
-            var query = Sql<DB>.Of(db =>
+            var exp1 = Db<DB>.Sql(db => db.tbl_remuneration.id);
+            var exp2 = Db<DB>.Sql(db => db.tbl_remuneration.staff_id);
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData1
                {
                    Count = Count(db.tbl_remuneration.money)
                }).
                From(db.tbl_remuneration));
 
-            var target = Sql<DB>.Of(db => GroupByWithRollup(exp1, exp2));
+            var target = Db<DB>.Sql(db => GroupByWithRollup(exp1, exp2));
             query = query.Concat(target);
 
             var datas = _connection.Query(query).ToList();
@@ -645,14 +645,14 @@ GROUP BY tbl_remuneration.id, tbl_remuneration.staff_id WITH ROLLUP");
             if (name == "SQLiteConnection") return;
             if (name == "MySqlConnection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData1
                {
                    Count = Count(db.tbl_remuneration.money)
                }).
                From(db.tbl_remuneration));
 
-            var target = Sql<DB>.Of(db => GroupByCube(db.tbl_remuneration.id, db.tbl_remuneration.staff_id));
+            var target = Db<DB>.Sql(db => GroupByCube(db.tbl_remuneration.id, db.tbl_remuneration.staff_id));
             query = query.Concat(target);
 
             var datas = _connection.Query(query).ToList();
@@ -671,16 +671,16 @@ GROUP BY CUBE(tbl_remuneration.id, tbl_remuneration.staff_id)");
             if (name == "SQLiteConnection") return;
             if (name == "MySqlConnection") return;
 
-            var exp1 = Sql<DB>.Of(db => db.tbl_remuneration.id);
-            var exp2 = Sql<DB>.Of(db => db.tbl_remuneration.staff_id);
-            var query = Sql<DB>.Of(db =>
+            var exp1 = Db<DB>.Sql(db => db.tbl_remuneration.id);
+            var exp2 = Db<DB>.Sql(db => db.tbl_remuneration.staff_id);
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData1
                {
                    Count = Count(db.tbl_remuneration.money)
                }).
                From(db.tbl_remuneration));
 
-            var target = Sql<DB>.Of(db => GroupByCube(exp1, exp2));
+            var target = Db<DB>.Sql(db => GroupByCube(exp1, exp2));
             query = query.Concat(target);
 
             var datas = _connection.Query(query).ToList();
@@ -699,14 +699,14 @@ GROUP BY CUBE(tbl_remuneration.id, tbl_remuneration.staff_id)");
             if (name == "SQLiteConnection") return;
             if (name == "MySqlConnection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData1
                {
                    Count = Count(db.tbl_remuneration.money)
                }).
                From(db.tbl_remuneration));
 
-            var target = Sql<DB>.Of(db => GroupByGroupingSets(db.tbl_remuneration.id, db.tbl_remuneration.staff_id));
+            var target = Db<DB>.Sql(db => GroupByGroupingSets(db.tbl_remuneration.id, db.tbl_remuneration.staff_id));
             query = query.Concat(target);
 
             var datas = _connection.Query(query).ToList();
@@ -725,16 +725,16 @@ GROUP BY GROUPING SETS(tbl_remuneration.id, tbl_remuneration.staff_id)");
             if (name == "SQLiteConnection") return;
             if (name == "MySqlConnection") return;
 
-            var exp1 = Sql<DB>.Of(db => db.tbl_remuneration.id);
-            var exp2 = Sql<DB>.Of(db => db.tbl_remuneration.staff_id);
-            var query = Sql<DB>.Of(db =>
+            var exp1 = Db<DB>.Sql(db => db.tbl_remuneration.id);
+            var exp2 = Db<DB>.Sql(db => db.tbl_remuneration.staff_id);
+            var query = Db<DB>.Sql(db =>
                Select(new SelectData1
                {
                    Count = Count(db.tbl_remuneration.money)
                }).
                From(db.tbl_remuneration));
 
-            var target = Sql<DB>.Of(db => GroupByGroupingSets(exp1, exp2));
+            var target = Db<DB>.Sql(db => GroupByGroupingSets(exp1, exp2));
             query = query.Concat(target);
 
             var datas = _connection.Query(query).ToList();
@@ -752,7 +752,7 @@ GROUP BY GROUPING SETS(tbl_remuneration.id, tbl_remuneration.staff_id)");
             var name = _connection.GetType().Name;
             if (name == "SQLiteConnection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(new SelectedData2
                 {
                     Id = db.tbl_remuneration.staff_id
@@ -760,7 +760,7 @@ GROUP BY GROUPING SETS(tbl_remuneration.id, tbl_remuneration.staff_id)");
                 From(db.tbl_remuneration).
                 GroupBy(db.tbl_remuneration.staff_id));
 
-            var target = Sql<DB>.Of(db => Having(100 < Sum(db.tbl_remuneration.money)));
+            var target = Db<DB>.Sql(db => Having(100 < Sum(db.tbl_remuneration.money)));
             query = query.Concat(target);
 
             var datas = _connection.Query(query).ToList();
@@ -780,8 +780,8 @@ HAVING (@p_0) < (SUM(tbl_remuneration.money))",
             var name = _connection.GetType().Name;
             if (name == "SQLiteConnection") return;
 
-            var exp = Sql<DB>.Of(db => 100 < Sum(db.tbl_remuneration.money));
-            var query = Sql<DB>.Of(db =>
+            var exp = Db<DB>.Sql(db => 100 < Sum(db.tbl_remuneration.money));
+            var query = Db<DB>.Sql(db =>
                 Select(new SelectedData2
                 {
                     Id = db.tbl_remuneration.staff_id
@@ -789,7 +789,7 @@ HAVING (@p_0) < (SUM(tbl_remuneration.money))",
                 From(db.tbl_remuneration).
                 GroupBy(db.tbl_remuneration.staff_id));
 
-            var target = Sql<DB>.Of(db => Having(exp));
+            var target = Db<DB>.Sql(db => Having(exp));
             query = query.Concat(target);
 
             var datas = _connection.Query(query).ToList();
@@ -809,14 +809,14 @@ HAVING (@p_0) < (SUM(tbl_remuneration.money))",
             var name = _connection.GetType().Name;
             if (name == "SQLiteConnection") return;
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(new SelectedData2
                 {
                     Id = db.tbl_remuneration.staff_id
                 }).
                 From(db.tbl_remuneration));
 
-            var target = Sql<DB>.Of(db => OrderBy(Asc(db.tbl_remuneration.money), Desc(db.tbl_remuneration.staff_id)));
+            var target = Db<DB>.Sql(db => OrderBy(Asc(db.tbl_remuneration.money), Desc(db.tbl_remuneration.staff_id)));
             query = query.Concat(target);
 
 
@@ -839,18 +839,18 @@ ORDER BY
             var name = _connection.GetType().Name;
             if (name == "SQLiteConnection") return;
 
-            var exp1 = Sql<DB>.Of(db => db.tbl_remuneration.money);
-            var exp2 = Sql<DB>.Of(db => db.tbl_remuneration.staff_id);
-            var exp3 = Sql<DB>.Of(db => Asc(exp1));
-            var exp4 = Sql<DB>.Of(db => Desc(exp2));
-            var query = Sql<DB>.Of(db =>
+            var exp1 = Db<DB>.Sql(db => db.tbl_remuneration.money);
+            var exp2 = Db<DB>.Sql(db => db.tbl_remuneration.staff_id);
+            var exp3 = Db<DB>.Sql(db => Asc(exp1));
+            var exp4 = Db<DB>.Sql(db => Desc(exp2));
+            var query = Db<DB>.Sql(db =>
                 Select(new SelectedData2
                 {
                     Id = db.tbl_remuneration.staff_id
                 }).
                 From(db.tbl_remuneration));
 
-            var target = Sql<DB>.Of(db => OrderBy(exp3.Body, exp4.Body));
+            var target = Db<DB>.Sql(db => OrderBy(exp3.Body, exp4.Body));
             query = query.Concat(target);
 
             var datas = _connection.Query(query).ToList();

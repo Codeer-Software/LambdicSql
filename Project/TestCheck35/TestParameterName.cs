@@ -28,12 +28,12 @@ namespace TestCheck35
         class Expressions
         {
             public int val1 = 1;
-            public SqlExpression<bool> Condition1 => Sql<DB>.Of(DB => val1 == 1);
-            public SqlExpression<bool> Condition2 => Sql<DB>.Of(DB => val1 == 2);
-            public SqlExpression<bool> GetCondition3()
+            public Sql<bool> Condition1 => Db<DB>.Sql(DB => val1 == 1);
+            public Sql<bool> Condition2 => Db<DB>.Sql(DB => val1 == 2);
+            public Sql<bool> GetCondition3()
             {
                 int val1 = 0;
-                return Sql<DB>.Of(DB => val1 == 3);
+                return Db<DB>.Sql(DB => val1 == 3);
             }
         }
 
@@ -42,7 +42,7 @@ namespace TestCheck35
         {
             var exps = new Expressions();
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(Asterisk(db.tbl_staff)).
                 From(db.tbl_staff).
                 Where(exps.Condition1 || exps.Condition2));
@@ -66,7 +66,7 @@ new Params()
         {
             var exps = new Expressions();
 
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(Asterisk(db.tbl_staff)).
                 From(db.tbl_staff).
                 Where(exps.Condition1 || exps.GetCondition3()));
@@ -92,7 +92,7 @@ new Params()
             var exps = new Expressions();
 
             int val1 = 0;
-            var query = Sql<DB>.Of(db =>
+            var query = Db<DB>.Sql(db =>
                 Select(Asterisk(db.tbl_staff)).
                 From(db.tbl_staff).
                 Where(exps.Condition1 || val1 == 3));
