@@ -1,4 +1,4 @@
-﻿using LambdicSql.ConverterServices.SqlSyntaxes.Inside;
+﻿using LambdicSql.ConverterServices.SymbolConverters.Inside;
 using LambdicSql.ConverterServices.Inside;
 using LambdicSql.BuilderServices.Parts;
 using LambdicSql.BuilderServices.Parts.Inside;
@@ -100,9 +100,9 @@ namespace LambdicSql.ConverterServices
 
         ConvertedResult Convert(ConstantExpression constant)
         {
-            //sql syntax.
-            var syntax = constant.Type.GetSqlSyntaxObject();
-            if (syntax != null) return new ConvertedResult(constant.Type, syntax.Convert(constant.Value));
+            //sql symbol.
+            var symbol = constant.Type.GetObjectConverter();
+            if (symbol != null) return new ConvertedResult(constant.Type, symbol.Convert(constant.Value));
 
             //normal object.
             return new ConvertedResult(constant.Type, Convert(constant.Value));
@@ -110,9 +110,9 @@ namespace LambdicSql.ConverterServices
 
         ConvertedResult Convert(NewExpression newExp)
         {
-            //syntax.
-            var syntax = newExp.GetSqlSyntaxNew();
-            if (syntax != null) return new ConvertedResult(null, syntax.Convert(newExp, this));
+            //symbol.
+            var symbol = newExp.GetNewConverter();
+            if (symbol != null) return new ConvertedResult(null, symbol.Convert(newExp, this));
 
             //object.
             var value = ExpressionToObject.GetNewObject(newExp);
@@ -182,22 +182,22 @@ namespace LambdicSql.ConverterServices
             var body = ResolveSqlExpressionBody(member);
             if (body != null) return body;
 
-            //sql syntax.
-            var syntaxMember = member.GetSqlSyntaxMember();
-            if (syntaxMember != null)
+            //sql symbol.
+            var symbolMember = member.GetMemberConverter();
+            if (symbolMember != null)
             {
                 //convert.
-                return new ConvertedResult(member.Type, syntaxMember.Convert(member, this));
+                return new ConvertedResult(member.Type, symbolMember.Convert(member, this));
             }
-            
-            //sql syntax extension method
+
+            //sql symbol extension method
             var method = member.Expression as MethodCallExpression;
             if (method != null)
             {
-                var syntaxMethod = method.GetSqlSyntaxMethod();
-                if (syntaxMethod != null)
+                var symbolMethod = method.GetMethodConverter();
+                if (symbolMethod != null)
                 {
-                    var ret = syntaxMethod.Convert(method, this);
+                    var ret = symbolMethod.Convert(method, this);
                     //T()
                     var tbl = ret as DbTableParts;
                     if (tbl != null)
@@ -222,12 +222,12 @@ namespace LambdicSql.ConverterServices
 
         ConvertedResult Convert(MethodCallExpression method)
         {
-            //convert syntax.
-            var parts = GetMethodChains(method).Select(c=> c.GetSqlSyntaxMethod().Convert(c, this)).ToArray();
+            //convert symbol.
+            var parts = GetMethodChains(method).Select(c=> c.GetMethodConverter().Convert(c, this)).ToArray();
             if (parts.Length == 0) return ResolveExpressionObject(method);
 
             //TODO ちょっと嫌すぎる。括弧を付けない方法を何か確立せねば
-            if (parts.Length == 1 && typeof(SqlSyntaxAllAttribute.DisableBracketsText).IsAssignableFrom(parts[0].GetType()))
+            if (parts.Length == 1 && typeof(AllConverterAttribute.DisableBracketsText).IsAssignableFrom(parts[0].GetType()))
             {
                 return new ConvertedResult(method.Method.ReturnType, parts[0]);
             }
@@ -398,10 +398,10 @@ namespace LambdicSql.ConverterServices
                 return new ConvertedResult(exp.Type, Arguments(list.ToArray()));
             }
 
-            //object syntax.
+            //object symbol.
             //for example enum.
-            var syntax = exp.Type.GetSqlSyntaxObject();
-            if (syntax != null) return new ConvertedResult(exp.Type, syntax.Convert(obj));
+            var symbol = exp.Type.GetObjectConverter();
+            if (symbol != null) return new ConvertedResult(exp.Type, symbol.Convert(obj));
 
             //DbParam.
             if (typeof(DbParam).IsAssignableFrom(exp.Type))
@@ -451,7 +451,7 @@ namespace LambdicSql.ConverterServices
         {
             var chains = new List<MethodCallExpression>();
             var curent = end;
-            while (curent != null && curent.GetSqlSyntaxMethod() != null)
+            while (curent != null && curent.GetMethodConverter() != null)
             {
                 chains.Insert(0, curent);
                 curent = (curent.Method.IsExtension() && 0 < curent.Arguments.Count) ? 

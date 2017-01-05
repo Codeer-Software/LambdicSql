@@ -6,7 +6,7 @@ using System.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
-using LambdicSql.ConverterServices.SqlSyntaxes;
+using LambdicSql.ConverterServices.SymbolConverters;
 using LambdicSql.ConverterServices;
 using LambdicSql.BuilderServices.Parts;
 
@@ -14,11 +14,11 @@ namespace TestCheck35
 {
     public static class TestSynatax
     {
-        [SqlSyntaxTest]
+        [SymbolForTest]
         public static ClauseChain<object> Empty() => null;
     }
 
-    class SqlSyntaxTestAttribute : SqlSyntaxConverterMethodAttribute
+    class SymbolForTestAttribute : SymbolConverterMethodAttribute
     {
         public override BuildingParts Convert(MethodCallExpression expression, ExpressionConverter converter) => string.Empty;
     }

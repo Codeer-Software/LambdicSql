@@ -460,7 +460,7 @@ new Params()
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_SqlSyntaxMember()
+        public void Test_SymbolMember()
         {
             var data = new
             {

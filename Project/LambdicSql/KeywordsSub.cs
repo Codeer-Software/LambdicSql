@@ -1,7 +1,7 @@
 ﻿using LambdicSql.ConverterServices;
 using LambdicSql.ConverterServices.Inside;
-using LambdicSql.ConverterServices.SqlSyntaxes;
-using LambdicSql.ConverterServices.SqlSyntaxes.Inside;
+using LambdicSql.ConverterServices.SymbolConverters;
+using LambdicSql.ConverterServices.SymbolConverters.Inside;
 
 namespace LambdicSql
 {
@@ -71,7 +71,7 @@ namespace LambdicSql
     /// <summary>
     /// Element of DateTime.
     /// </summary>
-    [SqlSyntaxKeywordObject]
+    [KeywordObjectConverter]
     public enum DateTimeElement
     {
         /// <summary>
@@ -156,7 +156,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="rhs">Rvalue</param>
         /// <param name="lhs">Lvalue</param>
-        [SqlSyntaxAssign]
+        [AssignConverter]
         public Assign(object rhs, object lhs) { InvalitContext.Throw("new " + nameof(Assign)); }
     }
 
@@ -172,7 +172,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="enable">Whether condition is valid.</param>
         /// <param name="condition">Condition expression.</param>
-        [SqlSyntaxCondition]
+        [ConditionConverter]
         public Condition(object enable, object condition) { InvalitContext.Throw("new " + nameof(Condition)); }
 
         /// <summary>
@@ -192,7 +192,7 @@ namespace LambdicSql
         /// <summary>
         /// SYSDUMMY1 keyword.
         /// </summary>
-        [SqlSyntaxKeywordMember(Name = "SYSIBM.SYSDUMMY1")]
+        [KeywordMemberConverter(Name = "SYSIBM.SYSDUMMY1")]
         public static object SysDummy1 => InvalitContext.Throw<long>(nameof(SysDummy1));
     }
 
@@ -208,7 +208,7 @@ namespace LambdicSql
         /// <param name="text">Text.You can use the same format as System.String's Format method.</param>
         /// <param name="args">Format arguments.</param>
         /// <returns>LamblicSql's expression.</returns>
-        [SqlSyntaxToSql]
+        [ToSqlConverter]
         public static object ToSql(this string text, params object[] args) => InvalitContext.Throw<object>(nameof(ToSql));
 
         /// <summary>
@@ -221,7 +221,7 @@ namespace LambdicSql
         /// <param name="text">Text.</param>
         /// <param name="args">Format arguments.</param>
         /// <returns>LamblicSql's expression.</returns>
-        [SqlSyntaxTwoWaySql]
+        [TwoWaySqlConverter]
         public static object TwoWaySql(this string text, params object[] args) => InvalitContext.Throw<object>(nameof(ToSql));
 
         /// <summary>
@@ -231,7 +231,7 @@ namespace LambdicSql
         /// <typeparam name="T">column type.</typeparam>
         /// <param name="column">column.</param>
         /// <returns>Column name only.</returns>
-        [SqlSyntaxColumnOnly]
+        [ColumnOnlyConverter]
         public static T ColumnOnly<T>(this T column) => InvalitContext.Throw<T>(nameof(ColumnOnly));
 
         //TODO 強制でパラメータを値に変更する拡張
