@@ -6,7 +6,6 @@ using static LambdicSql.BuilderServices.Syntaxes.Inside.SyntaxFactoryUtils;
 
 namespace LambdicSql.ConverterServices.SymbolConverters.Inside
 {
-    //TODO あとでもう一回見直し
     class WithConverterAttribute : SymbolConverterMethodAttribute
     {
         public override Syntax Convert(MethodCallExpression expression, ExpressionConverter converter)
@@ -32,10 +31,10 @@ namespace LambdicSql.ConverterServices.SymbolConverters.Inside
         static Syntax ConvertRecurciveWith(MethodCallExpression expression, ExpressionConverter converter)
         {
             var table = converter.Convert(expression.Arguments[0]);
-            var body = FromConverterAttribute.GetSubQuery(expression.Arguments[0]);
+            var sub = FromConverterAttribute.GetSubQuery(expression.Arguments[0]);
             var with = new VSyntax() { Indent = 1 };
-            with.Add(Clause(LineSpace(new RecursiveTargetSyntax(Line(body, table)), "AS"), converter.Convert(expression.Arguments[1])));
-            return new WithEntriedSyntax(new VSyntax("WITH", with), new[] { body });
+            with.Add(Clause(LineSpace(new RecursiveTargetSyntax(Line(sub, table)), "AS"), converter.Convert(expression.Arguments[1])));
+            return new WithEntriedSyntax(new VSyntax("WITH", with), new[] { sub });
         }
     }
 }

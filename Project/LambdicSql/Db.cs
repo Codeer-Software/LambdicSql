@@ -8,7 +8,7 @@ using LambdicSql.BuilderServices.Syntaxes;
 namespace LambdicSql
 {
     /// <summary>
-    /// LambdicSql's query creator.
+    /// Sql creator.
     /// </summary>
     /// <typeparam name="T">DB's type.</typeparam>
     public class Db<T> where T : class

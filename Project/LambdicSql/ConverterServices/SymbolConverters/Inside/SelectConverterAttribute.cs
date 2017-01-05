@@ -8,12 +8,11 @@ using static LambdicSql.BuilderServices.Syntaxes.Inside.SyntaxFactoryUtils;
 
 namespace LambdicSql.ConverterServices.SymbolConverters.Inside
 {
-    //TODO もう一回見直し
     class SelectConverterAttribute : SymbolConverterMethodAttribute
     {
         public override Syntax Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
-            //ALL, DISTINCT
+            //ALL, DISTINCT, TOP
             var modify = new List<Expression>();
             for (int i = expression.SkipMethodChain(0); i < expression.Arguments.Count - 1; i++)
             {
@@ -24,29 +23,24 @@ namespace LambdicSql.ConverterServices.SymbolConverters.Inside
 
             //select elemnts.
             var selectTargets = expression.Arguments[expression.Arguments.Count - 1];
-            Syntax selectTargetText = null;
-            ObjectCreateInfo createInfo = null;
 
             //*
             if (typeof(IAsterisk).IsAssignableFrom(selectTargets.Type))
             {
-                var asteriskType = selectTargets.Type.IsGenericType ? selectTargets.Type.GetGenericTypeDefinition() : null;
-                if (asteriskType == typeof(IAsterisk<>)) createInfo = ObjectCreateAnalyzer.MakeSelectInfo(asteriskType);
                 select.Add("*");
+                return new SelectClauseSyntax(select);
             }
 
             //new { item = db.tbl.column }
             else
             {
-                createInfo = ObjectCreateAnalyzer.MakeSelectInfo(selectTargets);
-                selectTargetText =
-                    new VSyntax(createInfo.Members.Select(e => ToStringSelectedElement(converter, e)).ToArray()) { Indent = 1, Separator = "," };
+                var createInfo = ObjectCreateAnalyzer.MakeSelectInfo(selectTargets);
+                var elements = new VSyntax(createInfo.Members.Select(e => ConvertSelectedElement(converter, e))) { Indent = 1, Separator = "," };
+                return new SelectClauseSyntax(new VSyntax(select, elements));
             }
-
-            return new SelectClauseSyntax(createInfo, selectTargetText == null ? (Syntax)select : new VSyntax(select, selectTargetText));
         }
 
-        static Syntax ToStringSelectedElement(ExpressionConverter converter, ObjectCreateMemberInfo element)
+        static Syntax ConvertSelectedElement(ExpressionConverter converter, ObjectCreateMemberInfo element)
         {
             //single select.
             //for example, COUNT(*).

@@ -1,5 +1,7 @@
 ﻿namespace LambdicSql.BuilderServices.Syntaxes
 {
+    //TODO Syntaxではない気がする
+    
     /// <summary>
     /// Text.
     /// </summary>

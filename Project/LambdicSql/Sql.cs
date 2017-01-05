@@ -3,6 +3,8 @@ using LambdicSql.BuilderServices.Syntaxes;
 
 namespace LambdicSql
 {
+    //TODO clauseと統合できるのでは？
+
     /// <summary>
     /// Expression.
     /// </summary>
