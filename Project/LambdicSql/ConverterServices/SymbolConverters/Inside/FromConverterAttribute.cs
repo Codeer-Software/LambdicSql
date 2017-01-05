@@ -1,22 +1,22 @@
 ﻿using LambdicSql.ConverterServices.Inside;
 using LambdicSql.BuilderServices;
-using LambdicSql.BuilderServices.Parts;
+using LambdicSql.BuilderServices.Syntaxes;
 using System.Linq;
 using System.Linq.Expressions;
-using static LambdicSql.BuilderServices.Parts.Inside.BuildingPartsFactoryUtils;
+using static LambdicSql.BuilderServices.Syntaxes.Inside.SyntaxFactoryUtils;
 
 namespace LambdicSql.ConverterServices.SymbolConverters.Inside
 {
     class FromConverterAttribute : SymbolConverterMethodAttribute
     {
-        public override BuildingParts Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override Syntax Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var startIndex = expression.SkipMethodChain(0);
             var table = ToTableName(converter, expression.Arguments[startIndex]);
-            return new HParts(new BuildingParts[] { "FROM", table }) { IsFunctional = true, Separator = " " };
+            return new HSyntax(new Syntax[] { "FROM", table }) { IsFunctional = true, Separator = " " };
         }
 
-        internal static BuildingParts ToTableName(ExpressionConverter decoder, Expression exp)
+        internal static Syntax ToTableName(ExpressionConverter decoder, Expression exp)
         {
             //where query, write tables side by side
             var arry = exp as NewArrayExpression;
@@ -52,20 +52,20 @@ namespace LambdicSql.ConverterServices.SymbolConverters.Inside
             return null;
         }
 
-        class SubQueryAndNameText : BuildingParts
+        class SubQueryAndNameText : Syntax
         {
             string _front = string.Empty;
             string _back = string.Empty;
             string _body;
-            BuildingParts _define;
+            Syntax _define;
 
-            internal SubQueryAndNameText(string body, BuildingParts table)
+            internal SubQueryAndNameText(string body, Syntax table)
             {
                 _body = body;
-                _define = new HParts(table, _body) { Separator = " ", EnableChangeLine = false };
+                _define = new HSyntax(table, _body) { Separator = " ", EnableChangeLine = false };
             }
 
-            SubQueryAndNameText(string body, BuildingParts define, string front, string back)
+            SubQueryAndNameText(string body, Syntax define, string front, string back)
             {
                 _body = body;
                 _define = define;
@@ -86,16 +86,16 @@ namespace LambdicSql.ConverterServices.SymbolConverters.Inside
                 return _define.ToString(isTopLevel, indent, context);
             }
 
-            public override BuildingParts ConcatAround(string front, string back)
+            public override Syntax ConcatAround(string front, string back)
                 => new SubQueryAndNameText(_body, _define.ConcatAround(front, back), front + _front, _back + back);
 
-            public override BuildingParts ConcatToFront(string front)
+            public override Syntax ConcatToFront(string front)
                 => new SubQueryAndNameText(_body, _define.ConcatToFront(front), front + _front, _back);
 
-            public override BuildingParts ConcatToBack(string back)
+            public override Syntax ConcatToBack(string back)
                 => new SubQueryAndNameText(_body, _define.ConcatToBack(back), _front, _back + back);
 
-            public override BuildingParts Customize(IPartsCustomizer customizer)
+            public override Syntax Customize(ISyntaxCustomizer customizer)
                 => customizer.Custom(this);
         }
     }

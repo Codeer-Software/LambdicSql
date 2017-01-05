@@ -1,11 +1,11 @@
-﻿using LambdicSql.BuilderServices.Parts.Inside;
+﻿using LambdicSql.BuilderServices.Syntaxes.Inside;
 
-namespace LambdicSql.BuilderServices.Parts
+namespace LambdicSql.BuilderServices.Syntaxes
 {
     /// <summary>
     /// Single text.
     /// </summary>
-    public class TextParts : BuildingParts
+    public class SingleTextSyntax : Syntax
     {
         string _text;
         int _indent;
@@ -14,7 +14,7 @@ namespace LambdicSql.BuilderServices.Parts
         /// Constructor.
         /// </summary>
         /// <param name="text">Text.</param>
-        public TextParts(string text)
+        public SingleTextSyntax(string text)
         {
             _text = text;
         }
@@ -24,7 +24,7 @@ namespace LambdicSql.BuilderServices.Parts
         /// </summary>
         /// <param name="text">Text.</param>
         /// <param name="indent">Indent.</param>
-        public TextParts(string text, int indent)
+        public SingleTextSyntax(string text, int indent)
         {
             _text = text;
             _indent = indent;
@@ -47,7 +47,7 @@ namespace LambdicSql.BuilderServices.Parts
         /// <param name="indent">Indent.</param>
         /// <param name="context">Context.</param>
         /// <returns>Text.</returns>
-        public override string ToString(bool isTopLevel, int indent, BuildingContext context) => BuildingPartsUtils.GetIndent(_indent + indent) + _text;
+        public override string ToString(bool isTopLevel, int indent, BuildingContext context) => SyntaxUtils.GetIndent(_indent + indent) + _text;
 
         /// <summary>
         /// Concat to front and back.
@@ -55,27 +55,27 @@ namespace LambdicSql.BuilderServices.Parts
         /// <param name="front">Front.</param>
         /// <param name="back">Back.</param>
         /// <returns>Text.</returns>
-        public override BuildingParts ConcatAround(string front, string back) => new TextParts(front + _text + back, _indent);
+        public override Syntax ConcatAround(string front, string back) => new SingleTextSyntax(front + _text + back, _indent);
 
         /// <summary>
         /// Concat to front.
         /// </summary>
         /// <param name="front">Front.</param>
         /// <returns>Text.</returns>
-        public override BuildingParts ConcatToFront(string front) => new TextParts(front + _text, _indent);
+        public override Syntax ConcatToFront(string front) => new SingleTextSyntax(front + _text, _indent);
 
         /// <summary>
         /// Concat to back.
         /// </summary>
         /// <param name="back"></param>
         /// <returns></returns>
-        public override BuildingParts ConcatToBack(string back) => new TextParts(_text + back, _indent);
+        public override Syntax ConcatToBack(string back) => new SingleTextSyntax(_text + back, _indent);
 
         /// <summary>
         /// Customize.
         /// </summary>
         /// <param name="customizer">Customizer.</param>
         /// <returns>Customized SqlText.</returns>
-        public override BuildingParts Customize(IPartsCustomizer customizer) => customizer.Custom(this);
+        public override Syntax Customize(ISyntaxCustomizer customizer) => customizer.Custom(this);
     }
 }

@@ -1,9 +1,9 @@
-﻿namespace LambdicSql.BuilderServices.Parts
+﻿namespace LambdicSql.BuilderServices.Syntaxes
 {
     /// <summary>
     /// Text.
     /// </summary>
-    public abstract class BuildingParts
+    public abstract class Syntax
     {
         /// <summary>
         /// Is empty.
@@ -30,33 +30,33 @@
         /// <param name="front">Front.</param>
         /// <param name="back">Back.</param>
         /// <returns>Text.</returns>
-        public abstract BuildingParts ConcatAround(string front, string back);
+        public abstract Syntax ConcatAround(string front, string back);
 
         /// <summary>
         /// Concat to front.
         /// </summary>
         /// <param name="front">Front.</param>
         /// <returns>Text.</returns>
-        public abstract BuildingParts ConcatToFront(string front);
+        public abstract Syntax ConcatToFront(string front);
 
         /// <summary>
         /// Concat to back.
         /// </summary>
         /// <param name="back"></param>
         /// <returns></returns>
-        public abstract BuildingParts ConcatToBack(string back);
+        public abstract Syntax ConcatToBack(string back);
 
         /// <summary>
         /// Customize.
         /// </summary>
         /// <param name="customizer">Customizer.</param>
         /// <returns>Customized SqlText.</returns>
-        public abstract BuildingParts Customize(IPartsCustomizer customizer);
+        public abstract Syntax Customize(ISyntaxCustomizer customizer);
 
         /// <summary>
         /// Convert string to IText.
         /// </summary>
         /// <param name="text">string.</param>
-        public static implicit operator BuildingParts(string text) => new TextParts(text);
+        public static implicit operator Syntax(string text) => new SingleTextSyntax(text);
     }
 }

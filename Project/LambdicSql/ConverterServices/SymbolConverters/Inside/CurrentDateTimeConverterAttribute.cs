@@ -1,5 +1,5 @@
 ﻿using LambdicSql.BuilderServices;
-using LambdicSql.BuilderServices.Parts;
+using LambdicSql.BuilderServices.Syntaxes;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -7,7 +7,7 @@ namespace LambdicSql.ConverterServices.SymbolConverters.Inside
 {
     class CurrentDateTimeConverterAttribute : SymbolConverterMethodAttribute
     {
-        class CurrentDateTimeExpressionElement : BuildingParts
+        class CurrentDateTimeExpressionElement : Syntax
         {
             string _front = string.Empty;
             string _back = string.Empty;
@@ -32,22 +32,22 @@ namespace LambdicSql.ConverterServices.SymbolConverters.Inside
             public override string ToString(bool isTopLevel, int indent, BuildingContext context)
                 => string.Join(string.Empty, Enumerable.Range(0, indent).Select(e => "\t").ToArray()) + _front + "CURRENT" + context.Option.CurrentDateTimeSeparator + _core + _back;
 
-            public override BuildingParts ConcatAround(string front, string back)
+            public override Syntax ConcatAround(string front, string back)
                 => new CurrentDateTimeExpressionElement(_core, front + _front, _back + back);
 
-            public override BuildingParts ConcatToFront(string front)
+            public override Syntax ConcatToFront(string front)
                 => new CurrentDateTimeExpressionElement(_core, front + _front, _back);
 
-            public override BuildingParts ConcatToBack(string back)
+            public override Syntax ConcatToBack(string back)
                 => new CurrentDateTimeExpressionElement(_core, _front, _back + back);
 
-            public override BuildingParts Customize(IPartsCustomizer customizer)
+            public override Syntax Customize(ISyntaxCustomizer customizer)
                 => customizer.Custom(this);
         }
 
         public string Name { get; set; }
 
-        public override BuildingParts Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override Syntax Convert(MethodCallExpression expression, ExpressionConverter converter)
             => new CurrentDateTimeExpressionElement(Name);
     }
 

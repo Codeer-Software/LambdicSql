@@ -1,15 +1,15 @@
-﻿namespace LambdicSql.BuilderServices.Parts
+﻿namespace LambdicSql.BuilderServices.Syntaxes
 {
     /// <summary>
     /// Customizer.
     /// </summary>
-    public interface IPartsCustomizer
+    public interface ISyntaxCustomizer
     {
         /// <summary>
         /// Coustom.
         /// </summary>
         /// <param name="src">Source.</param>
         /// <returns>Result.</returns>
-        BuildingParts Custom(BuildingParts src);
+        Syntax Custom(Syntax src);
     }
 }

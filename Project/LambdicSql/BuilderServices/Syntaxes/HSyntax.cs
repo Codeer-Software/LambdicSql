@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace LambdicSql.BuilderServices.Parts
+namespace LambdicSql.BuilderServices.Syntaxes
 {
     /// <summary>
     /// Horizontal text.
     /// </summary>
-    public class HParts : BuildingParts
+    public class HSyntax : Syntax
     {
-        List<BuildingParts> _texts = new List<BuildingParts>();
+        List<Syntax> _texts = new List<Syntax>();
 
         /// <summary>
         /// Separator.
@@ -45,7 +45,7 @@ namespace LambdicSql.BuilderServices.Parts
         /// Constructor.
         /// </summary>
         /// <param name="texts">Horizontal texts.</param>
-        public HParts(params BuildingParts[] texts)
+        public HSyntax(params Syntax[] texts)
         {
             _texts.AddRange(texts.Where(e => !e.IsEmpty));
         }
@@ -54,7 +54,7 @@ namespace LambdicSql.BuilderServices.Parts
         /// Constructor.
         /// </summary>
         /// <param name="texts">Horizontal texts.</param>
-        public HParts(IEnumerable<BuildingParts> texts)
+        public HSyntax(IEnumerable<Syntax> texts)
         {
             _texts.AddRange(texts.Where(e => !e.IsEmpty));
         }
@@ -89,7 +89,7 @@ namespace LambdicSql.BuilderServices.Parts
         /// Add text.
         /// </summary>
         /// <param name="text">Text.</param>
-        public void Add(BuildingParts text)
+        public void Add(Syntax text)
         {
             if (text.IsEmpty) return;
             _texts.Add(text);
@@ -99,14 +99,14 @@ namespace LambdicSql.BuilderServices.Parts
         /// Add text.
         /// </summary>
         /// <param name="texts">Texts.</param>
-        public void AddRange(IEnumerable<BuildingParts> texts)
+        public void AddRange(IEnumerable<Syntax> texts)
             => _texts.AddRange(texts.Where(e => !e.IsEmpty));
 
         /// <summary>
         /// Add text.
         /// </summary>
         /// <param name="texts">Texts.</param>
-        public void AddRange(params BuildingParts[] texts)
+        public void AddRange(params Syntax[] texts)
             => _texts.AddRange(texts.Where(e => !e.IsEmpty));
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace LambdicSql.BuilderServices.Parts
         /// <param name="front">Front.</param>
         /// <param name="back">Back.</param>
         /// <returns>Text.</returns>
-        public override BuildingParts ConcatAround(string front, string back)
+        public override Syntax ConcatAround(string front, string back)
         {
             if (_texts.Count == 0) return CopyProperty(front + back);
 
@@ -130,7 +130,7 @@ namespace LambdicSql.BuilderServices.Parts
         /// </summary>
         /// <param name="front">Front.</param>
         /// <returns>Text.</returns>
-        public override BuildingParts ConcatToFront(string front)
+        public override Syntax ConcatToFront(string front)
         {
             if (_texts.Count == 0) return CopyProperty(front);
 
@@ -144,7 +144,7 @@ namespace LambdicSql.BuilderServices.Parts
         /// </summary>
         /// <param name="back"></param>
         /// <returns></returns>
-        public override BuildingParts ConcatToBack(string back)
+        public override Syntax ConcatToBack(string back)
         {
             if (_texts.Count == 0) return CopyProperty(back);
 
@@ -158,13 +158,13 @@ namespace LambdicSql.BuilderServices.Parts
         /// </summary>
         /// <param name="customizer">Customizer.</param>
         /// <returns>Customized SqlText.</returns>
-        public override BuildingParts Customize(IPartsCustomizer customizer)
+        public override Syntax Customize(ISyntaxCustomizer customizer)
         {
             var dst = _texts.Select(e => customizer.Custom(e));
             return CopyProperty(dst.ToArray());
         }
 
-        HParts CopyProperty(params BuildingParts[] texts)
-             => new HParts(texts) { Indent = Indent, IsFunctional = IsFunctional, EnableChangeLine = EnableChangeLine, Separator = Separator };
+        HSyntax CopyProperty(params Syntax[] texts)
+             => new HSyntax(texts) { Indent = Indent, IsFunctional = IsFunctional, EnableChangeLine = EnableChangeLine, Separator = Separator };
     }
 }

@@ -1,5 +1,5 @@
-﻿using LambdicSql.BuilderServices.Parts;
-using LambdicSql.BuilderServices.Parts.Inside;
+﻿using LambdicSql.BuilderServices.Syntaxes;
+using LambdicSql.BuilderServices.Syntaxes.Inside;
 using System.Linq.Expressions;
 
 namespace LambdicSql.ConverterServices.SymbolConverters.Inside
@@ -7,10 +7,10 @@ namespace LambdicSql.ConverterServices.SymbolConverters.Inside
 
     class AssignConverterAttribute : SymbolConverterNewAttribute
     {
-        public override BuildingParts Convert(NewExpression expression, ExpressionConverter converter)
+        public override Syntax Convert(NewExpression expression, ExpressionConverter converter)
         {
-            BuildingParts arg1 = converter.Convert(expression.Arguments[0]).Customize(new CustomizeColumnOnly());
-            return new HParts(arg1, "=", converter.Convert(expression.Arguments[1])) { Separator = " " };
+            Syntax arg1 = converter.Convert(expression.Arguments[0]).Customize(new CustomizeColumnOnly());
+            return new HSyntax(arg1, "=", converter.Convert(expression.Arguments[1])) { Separator = " " };
         }
     }
 }

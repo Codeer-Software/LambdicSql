@@ -1,13 +1,13 @@
-﻿using LambdicSql.BuilderServices.Parts;
-using LambdicSql.BuilderServices.Parts.Inside;
+﻿using LambdicSql.BuilderServices.Syntaxes;
+using LambdicSql.BuilderServices.Syntaxes.Inside;
 using System.Linq.Expressions;
-using static LambdicSql.BuilderServices.Parts.Inside.BuildingPartsFactoryUtils;
+using static LambdicSql.BuilderServices.Syntaxes.Inside.SyntaxFactoryUtils;
 
 namespace LambdicSql.ConverterServices.SymbolConverters.Inside
 {
     class InsertIntoConverterAttribute : SymbolConverterMethodAttribute
     {
-        public override BuildingParts Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override Syntax Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var table = converter.Convert(expression.Arguments[0]);
 

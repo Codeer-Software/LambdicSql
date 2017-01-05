@@ -1,6 +1,6 @@
 ﻿using LambdicSql.BuilderServices;
 using System;
-using LambdicSql.BuilderServices.Parts;
+using LambdicSql.BuilderServices.Syntaxes;
 
 namespace LambdicSql
 {
@@ -42,7 +42,7 @@ namespace LambdicSql
         public static SqlInfo Build(this ISqlExpression expression, DialectOption option)
         {
             var context = new BuildingContext(option);
-            return new SqlInfo(expression.BuildingParts.ToString(true, 0, context), context.ParameterInfo.GetDbParams());
+            return new SqlInfo(expression.Syntax.ToString(true, 0, context), context.ParameterInfo.GetDbParams());
         }
 
         class Non { }
@@ -58,7 +58,7 @@ namespace LambdicSql
         /// <param name="expression2">Exppresion 2.</param>
         /// <returns>Concatenated result.</returns>
         public static SqlExpression<TResult> Concat<TResult>(this SqlExpression<TResult> expression1, ISqlExpression expression2)
-          => new SqlExpression<TResult>(new VParts(expression1.BuildingParts, expression2.BuildingParts));
+          => new SqlExpression<TResult>(new VSyntax(expression1.Syntax, expression2.Syntax));
 
         /// <summary>
         /// Concatenate expression1 and expression2 using UNION clause.

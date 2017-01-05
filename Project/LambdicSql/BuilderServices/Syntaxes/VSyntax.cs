@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace LambdicSql.BuilderServices.Parts
+namespace LambdicSql.BuilderServices.Syntaxes
 {
     /// <summary>
     /// Vertical text.
     /// </summary>
-    public class VParts : BuildingParts
+    public class VSyntax : Syntax
     {
-        List<BuildingParts> _texts = new List<BuildingParts>();
+        List<Syntax> _texts = new List<Syntax>();
 
         /// <summary>
         /// Separator
@@ -35,7 +35,7 @@ namespace LambdicSql.BuilderServices.Parts
         /// Constructor.
         /// </summary>
         /// <param name="texts">Vertical texts.</param>
-        public VParts(params BuildingParts[] texts)
+        public VSyntax(params Syntax[] texts)
         {
             _texts.AddRange(texts.Where(e => !e.IsEmpty));
         }
@@ -58,14 +58,14 @@ namespace LambdicSql.BuilderServices.Parts
         public void Add(string text, int indent)
         {
             if (string.IsNullOrEmpty(text.Trim())) return;
-            _texts.Add(new TextParts(text, indent));
+            _texts.Add(new SingleTextSyntax(text, indent));
         }
 
         /// <summary>
         /// Add text.
         /// </summary>
         /// <param name="text">Text.</param>
-        public void Add(BuildingParts text)
+        public void Add(Syntax text)
         {
             if (text.IsEmpty) return;
             _texts.Add(text);
@@ -76,16 +76,16 @@ namespace LambdicSql.BuilderServices.Parts
         /// </summary>
         /// <param name="indent">Indent.</param>
         /// <param name="texts">Texts.</param>
-        public void AddRange(int indent, IEnumerable<BuildingParts> texts)
-            => _texts.AddRange(texts.Where(e => !e.IsEmpty).Select(e => new HParts(e) { Indent = 1 }).Cast<BuildingParts>());
+        public void AddRange(int indent, IEnumerable<Syntax> texts)
+            => _texts.AddRange(texts.Where(e => !e.IsEmpty).Select(e => new HSyntax(e) { Indent = 1 }).Cast<Syntax>());
 
         /// <summary>
         /// Add texts.
         /// </summary>
         /// <param name="indent">Indent.</param>
         /// <param name="texts">Texts.</param>
-        public void AddRange(int indent, params BuildingParts[] texts)
-            => _texts.AddRange(texts.Where(e => !e.IsEmpty).Select(e => new HParts(e) { Indent = 1 }).Cast<BuildingParts>());
+        public void AddRange(int indent, params Syntax[] texts)
+            => _texts.AddRange(texts.Where(e => !e.IsEmpty).Select(e => new HSyntax(e) { Indent = 1 }).Cast<Syntax>());
 
         /// <summary>
         /// Concat to front and back.
@@ -93,7 +93,7 @@ namespace LambdicSql.BuilderServices.Parts
         /// <param name="front">Front.</param>
         /// <param name="back">Back.</param>
         /// <returns>Text.</returns>
-        public override BuildingParts ConcatAround(string front, string back)
+        public override Syntax ConcatAround(string front, string back)
         {
             if (_texts.Count == 0) return CopyProperty(front + back);
 
@@ -108,7 +108,7 @@ namespace LambdicSql.BuilderServices.Parts
         /// </summary>
         /// <param name="front">Front.</param>
         /// <returns>Text.</returns>
-        public override BuildingParts ConcatToFront(string front)
+        public override Syntax ConcatToFront(string front)
         {
             if (_texts.Count == 0) return CopyProperty(front);
 
@@ -122,7 +122,7 @@ namespace LambdicSql.BuilderServices.Parts
         /// </summary>
         /// <param name="back"></param>
         /// <returns>Text.</returns>
-        public override BuildingParts ConcatToBack(string back)
+        public override Syntax ConcatToBack(string back)
         {
             if (_texts.Count == 0) return CopyProperty(back);
 
@@ -136,13 +136,13 @@ namespace LambdicSql.BuilderServices.Parts
         /// </summary>
         /// <param name="customizer">Customizer.</param>
         /// <returns>Customized SqlText.</returns>
-        public override BuildingParts Customize(IPartsCustomizer customizer)
+        public override Syntax Customize(ISyntaxCustomizer customizer)
         {
             var dst = _texts.Select(e => customizer.Custom(e));
             return CopyProperty(dst.ToArray());
         }
 
-        VParts CopyProperty(params BuildingParts[] texts)
-             => new VParts(texts) { Indent = Indent, Separator = Separator };
+        VSyntax CopyProperty(params Syntax[] texts)
+             => new VSyntax(texts) { Indent = Indent, Separator = Separator };
     }
 }

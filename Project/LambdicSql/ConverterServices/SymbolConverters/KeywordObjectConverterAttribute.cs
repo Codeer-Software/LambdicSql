@@ -1,4 +1,4 @@
-﻿using LambdicSql.BuilderServices.Parts;
+﻿using LambdicSql.BuilderServices.Syntaxes;
 
 namespace LambdicSql.ConverterServices.SymbolConverters
 {
@@ -13,11 +13,11 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         public string Name { get; set; }
 
         /// <summary>
-        /// Convert object to building parts.
+        /// Convert object to syntax.
         /// </summary>
         /// <param name="obj">Object.</param>
-        /// <returns>BuildingParts.</returns>
-        public override BuildingParts Convert(object obj)
+        /// <returns>Syntax.</returns>
+        public override Syntax Convert(object obj)
             => obj == null ? string.Empty :
                string.IsNullOrEmpty(Name) ? obj.ToString().ToUpper() : Name;
     }

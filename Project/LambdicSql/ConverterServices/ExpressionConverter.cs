@@ -1,14 +1,14 @@
 ﻿using LambdicSql.ConverterServices.SymbolConverters.Inside;
 using LambdicSql.ConverterServices.Inside;
-using LambdicSql.BuilderServices.Parts;
-using LambdicSql.BuilderServices.Parts.Inside;
+using LambdicSql.BuilderServices.Syntaxes;
+using LambdicSql.BuilderServices.Syntaxes.Inside;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
-using static LambdicSql.BuilderServices.Parts.Inside.BuildingPartsFactoryUtils;
+using static LambdicSql.BuilderServices.Syntaxes.Inside.SyntaxFactoryUtils;
 
 namespace LambdicSql.ConverterServices
 {
@@ -20,8 +20,8 @@ namespace LambdicSql.ConverterServices
         class ConvertedResult
         {
             internal Type Type { get; }
-            internal BuildingParts Text { get; }
-            internal ConvertedResult(Type type, BuildingParts text)
+            internal Syntax Text { get; }
+            internal ConvertedResult(Type type, Syntax text)
             {
                 Type = type;
                 Text = text;
@@ -52,15 +52,15 @@ namespace LambdicSql.ConverterServices
         /// </summary>
         /// <param name="obj">object.</param>
         /// <returns>text.</returns>
-        public BuildingParts Convert(object obj)
+        public Syntax Convert(object obj)
         {
             var exp = obj as Expression;
             if (exp != null) return Convert(exp).Text;
 
             var param = obj as DbParam;
-            if (param != null) return new ParameterParts(null, null, param);
+            if (param != null) return new ParameterSyntax(null, null, param);
 
-            return new ParameterParts(obj);
+            return new ParameterSyntax(obj);
         }
 
         ConvertedResult Convert(Expression exp)
@@ -134,17 +134,17 @@ namespace LambdicSql.ConverterServices
                     return new ConvertedResult(typeof(bool), Convert(unary.Operand).Text.ConcatAround("NOT (", ")"));
                 case ExpressionType.Convert:
                     var ret = Convert(unary.Operand);
-                    var param = ret.Text as ParameterParts;
+                    var param = ret.Text as ParameterSyntax;
                     if (param != null && param.Value != null && !SupportedTypeSpec.IsSupported(param.Value.GetType()))
                     {
                         var casted = ExpressionToObject.ConvertObject(unary.Type, param.Value);
-                        return new ConvertedResult(ret.Type, new ParameterParts(param.Name, param.MetaId, new DbParam() { Value = casted }));
+                        return new ConvertedResult(ret.Type, new ParameterSyntax(param.Name, param.MetaId, new DbParam() { Value = casted }));
                     }
                     return ret;
                 case ExpressionType.ArrayLength:
                     object obj;
                     ExpressionToObject.GetExpressionObject(unary.Operand, out obj);
-                    return new ConvertedResult(typeof(int), new ParameterParts(((Array)obj).Length));
+                    return new ConvertedResult(typeof(int), new ParameterSyntax(((Array)obj).Length));
                 default:
                     return Convert(unary.Operand);
             }
@@ -158,7 +158,7 @@ namespace LambdicSql.ConverterServices
                 ExpressionToObject.GetExpressionObject(binary.Left, out ary);
                 object index;
                 ExpressionToObject.GetExpressionObject(binary.Right, out index);
-                return new ConvertedResult(typeof(int), new ParameterParts(((Array)ary).GetValue((int)index)));
+                return new ConvertedResult(typeof(int), new ParameterSyntax(((Array)ary).GetValue((int)index)));
             }
 
             var left = Convert(binary.Left);
@@ -173,7 +173,7 @@ namespace LambdicSql.ConverterServices
             if (nullCheck != null) return nullCheck;
 
             var nodeType = Convert(left, binary.NodeType, right);
-            return new ConvertedResult(nodeType.Type, new HParts(left.Text.ConcatAround("(", ")"), nodeType.Text.ConcatAround(" ", " "), right.Text.ConcatAround("(", ")")));
+            return new ConvertedResult(nodeType.Type, new HSyntax(left.Text.ConcatAround("(", ")"), nodeType.Text.ConcatAround(" ", " "), right.Text.ConcatAround("(", ")")));
         }
         
         ConvertedResult Convert(MemberExpression member)
@@ -199,7 +199,7 @@ namespace LambdicSql.ConverterServices
                 {
                     var ret = symbolMethod.Convert(method, this);
                     //T()
-                    var tbl = ret as DbTableParts;
+                    var tbl = ret as DbTableSyntax;
                     if (tbl != null)
                     {
                         var memberName = tbl.Info.LambdaFullName + "." + member.Member.Name;
@@ -223,20 +223,20 @@ namespace LambdicSql.ConverterServices
         ConvertedResult Convert(MethodCallExpression method)
         {
             //convert symbol.
-            var parts = GetMethodChains(method).Select(c=> c.GetMethodConverter().Convert(c, this)).ToArray();
-            if (parts.Length == 0) return ResolveExpressionObject(method);
+            var syntax = GetMethodChains(method).Select(c=> c.GetMethodConverter().Convert(c, this)).ToArray();
+            if (syntax.Length == 0) return ResolveExpressionObject(method);
 
             //TODO ちょっと嫌すぎる。括弧を付けない方法を何か確立せねば
-            if (parts.Length == 1 && typeof(AllConverterAttribute.DisableBracketsText).IsAssignableFrom(parts[0].GetType()))
+            if (syntax.Length == 1 && typeof(AllConverterAttribute.DisableBracketsText).IsAssignableFrom(syntax[0].GetType()))
             {
-                return new ConvertedResult(method.Method.ReturnType, parts[0]);
+                return new ConvertedResult(method.Method.ReturnType, syntax[0]);
             }
 
-            var core = new VParts(parts);
+            var core = new VSyntax(syntax);
 
-            return (typeof(SelectClauseParts).IsAssignableFrom(parts[0].GetType())) ?
-                 new ConvertedResult(method.Method.ReturnType, new SelectQueryParts(core)) :
-                 new ConvertedResult(method.Method.ReturnType, new QueryParts(core));
+            return (typeof(SelectClauseSyntax).IsAssignableFrom(syntax[0].GetType())) ?
+                 new ConvertedResult(method.Method.ReturnType, new SelectQuerySyntax(core)) :
+                 new ConvertedResult(method.Method.ReturnType, new QuerySyntax(core));
         }
 
         ConvertedResult ResolveSqlExpressionBody(MemberExpression member)
@@ -291,7 +291,7 @@ namespace LambdicSql.ConverterServices
                     {
                         if (left.Type == typeof(string) || right.Type == typeof(string))
                         {
-                            return new ConvertedResult(left.Type, new StringAddOperatorParts());
+                            return new ConvertedResult(left.Type, new StringAddOperatorSyntax());
                         }
                         return new ConvertedResult(left.Type, "+");
                     }
@@ -331,12 +331,12 @@ namespace LambdicSql.ConverterServices
             TableInfo table;
             if (DbInfo.GetLambdaNameAndTable().TryGetValue(name, out table))
             {
-                return new ConvertedResult(null, new DbTableParts(table));
+                return new ConvertedResult(null, new DbTableSyntax(table));
             }
             ColumnInfo col;
             if (DbInfo.GetLambdaNameAndColumn().TryGetValue(name, out col))
             {
-                return new ConvertedResult(col.Type, new DbColumnParts(col));
+                return new ConvertedResult(col.Type, new DbColumnSyntax(col));
             }
             return new ConvertedResult(null, name);
         }
@@ -351,8 +351,8 @@ namespace LambdicSql.ConverterServices
                 default: return null;
             }
 
-            var leftParam = left.Text as ParameterParts;
-            var rightParam = right.Text as ParameterParts;
+            var leftParam = left.Text as ParameterSyntax;
+            var rightParam = right.Text as ParameterSyntax;
 
             var leftObj = leftParam != null ? leftParam.Value : null;
             var rightObj = rightParam != null ? rightParam.Value : null;
@@ -390,7 +390,7 @@ namespace LambdicSql.ConverterServices
             //array.
             if (obj != null && obj.GetType().IsArray)
             {
-                var list = new List<BuildingParts>();
+                var list = new List<Syntax>();
                 foreach (var e in (IEnumerable)obj)
                 {
                     list.Add(Convert(e));
@@ -416,7 +416,7 @@ namespace LambdicSql.ConverterServices
                 }
                 var param = ((DbParam)obj);
                 //use field name.
-                return new ConvertedResult(exp.Type.GetGenericArguments()[0], new ParameterParts(name, metaId, param));
+                return new ConvertedResult(exp.Type.GetGenericArguments()[0], new ParameterSyntax(name, metaId, param));
             }
 
             //ISqlExpression.
@@ -427,7 +427,7 @@ namespace LambdicSql.ConverterServices
                 Type type = null;
                 var types = sqlExp.GetType().GetGenericArguments();
                 if (0 < types.Length) type = types[0];
-                return new ConvertedResult(type, sqlExp.BuildingParts);
+                return new ConvertedResult(type, sqlExp.Syntax);
             }
 
             //others.
@@ -443,7 +443,7 @@ namespace LambdicSql.ConverterServices
                 }
 
                 //use field name.
-                return new ConvertedResult(exp.Type, new ParameterParts(name, metaId, new DbParam() { Value = obj }));
+                return new ConvertedResult(exp.Type, new ParameterSyntax(name, metaId, new DbParam() { Value = obj }));
             }
         }
         

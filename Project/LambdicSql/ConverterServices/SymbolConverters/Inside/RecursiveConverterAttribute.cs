@@ -1,28 +1,28 @@
 ﻿using LambdicSql.ConverterServices.Inside;
 using LambdicSql.BuilderServices;
-using LambdicSql.BuilderServices.Parts;
-using LambdicSql.BuilderServices.Parts.Inside;
+using LambdicSql.BuilderServices.Syntaxes;
+using LambdicSql.BuilderServices.Syntaxes.Inside;
 using System.Linq;
 using System.Linq.Expressions;
-using static LambdicSql.BuilderServices.Parts.Inside.BuildingPartsFactoryUtils;
+using static LambdicSql.BuilderServices.Syntaxes.Inside.SyntaxFactoryUtils;
 
 namespace LambdicSql.ConverterServices.SymbolConverters.Inside
 {
     class RecursiveConverterAttribute : SymbolConverterMethodAttribute
     {
-        public override BuildingParts Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override Syntax Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var selectTargets = expression.Arguments[expression.Arguments.Count - 1];
             var createInfo = ObjectCreateAnalyzer.MakeSelectInfo(selectTargets);
-            return new RecursiveClauseText(createInfo, Blanket(createInfo.Members.Select(e => (BuildingParts)e.Name).ToArray()));
+            return new RecursiveClauseText(createInfo, Blanket(createInfo.Members.Select(e => (Syntax)e.Name).ToArray()));
         }
 
-        class RecursiveClauseText : BuildingParts
+        class RecursiveClauseText : Syntax
         {
-            BuildingParts _core;
+            Syntax _core;
             ObjectCreateInfo _createInfo;
 
-            internal RecursiveClauseText(ObjectCreateInfo createInfo, BuildingParts core)
+            internal RecursiveClauseText(ObjectCreateInfo createInfo, Syntax core)
             {
                 _core = core;
                 _createInfo = createInfo;
@@ -37,13 +37,13 @@ namespace LambdicSql.ConverterServices.SymbolConverters.Inside
                 return _core.ToString(isTopLevel, indent, context);
             }
 
-            public override BuildingParts ConcatAround(string front, string back) => new SelectClauseParts(_createInfo, _core.ConcatAround(front, back));
+            public override Syntax ConcatAround(string front, string back) => new SelectClauseSyntax(_createInfo, _core.ConcatAround(front, back));
 
-            public override BuildingParts ConcatToFront(string front) => new SelectClauseParts(_createInfo, _core.ConcatToFront(front));
+            public override Syntax ConcatToFront(string front) => new SelectClauseSyntax(_createInfo, _core.ConcatToFront(front));
 
-            public override BuildingParts ConcatToBack(string back) => new SelectClauseParts(_createInfo, _core.ConcatToBack(back));
+            public override Syntax ConcatToBack(string back) => new SelectClauseSyntax(_createInfo, _core.ConcatToBack(back));
 
-            public override BuildingParts Customize(IPartsCustomizer customizer) => customizer.Custom(this);
+            public override Syntax Customize(ISyntaxCustomizer customizer) => customizer.Custom(this);
         }
     }
 }

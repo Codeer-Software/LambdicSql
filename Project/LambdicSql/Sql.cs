@@ -1,9 +1,9 @@
 ﻿using LambdicSql.ConverterServices;
 using LambdicSql.ConverterServices.Inside;
-using LambdicSql.BuilderServices.Parts.Inside;
+using LambdicSql.BuilderServices.Syntaxes.Inside;
 using System;
 using System.Linq.Expressions;
-using LambdicSql.BuilderServices.Parts;
+using LambdicSql.BuilderServices.Syntaxes;
 
 namespace LambdicSql
 {
@@ -22,7 +22,7 @@ namespace LambdicSql
         public static SqlExpression<TResult> Of<TResult>(Expression<Func<TDB, TResult>> expression)
         {
             var db = DBDefineAnalyzer.GetDbInfo<TDB>();
-            return new SqlExpression<TResult>(MakeParts(db, expression.Body));
+            return new SqlExpression<TResult>(MakeSynatx(db, expression.Body));
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace LambdicSql
         public static SqlExpression<TSelected> Of<TSelected>(Expression<Func<TDB, ClauseChain<TSelected>>> expression)
         {
             var db = DBDefineAnalyzer.GetDbInfo<TDB>();
-            return new SqlExpression<TSelected>(MakeParts(db, expression.Body));
+            return new SqlExpression<TSelected>(MakeSynatx(db, expression.Body));
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace LambdicSql
         {
             var db = DBDefineAnalyzer.GetDbInfo<TDB>();
             var core = expression.Body as MemberExpression;
-            return new SqlExpression<TResult>(new AliasParts(core.Member.Name));
+            return new SqlExpression<TResult>(new AliasSyntax(core.Member.Name));
         }
 
         /// <summary>
@@ -60,10 +60,10 @@ namespace LambdicSql
         public static SqlRecursiveArgumentsExpression<TResult> Of<TResult>(Expression<Func<TDB, Keywords.RecursiveArguments<TResult>>> expression)
         {
             var db = DBDefineAnalyzer.GetDbInfo<TDB>();
-            return new SqlRecursiveArgumentsExpression<TResult>(MakeParts(db, expression.Body));
+            return new SqlRecursiveArgumentsExpression<TResult>(MakeSynatx(db, expression.Body));
         }
 
-        static BuildingParts MakeParts(DbInfo dbInfo, Expression core)
+        static Syntax MakeSynatx(DbInfo dbInfo, Expression core)
         {
             var converter = new ExpressionConverter(dbInfo);
             return core == null ? string.Empty : converter.Convert(core);

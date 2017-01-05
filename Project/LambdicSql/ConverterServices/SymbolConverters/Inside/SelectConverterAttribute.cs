@@ -1,16 +1,16 @@
 ﻿using LambdicSql.ConverterServices.Inside;
-using LambdicSql.BuilderServices.Parts;
-using LambdicSql.BuilderServices.Parts.Inside;
+using LambdicSql.BuilderServices.Syntaxes;
+using LambdicSql.BuilderServices.Syntaxes.Inside;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using static LambdicSql.BuilderServices.Parts.Inside.BuildingPartsFactoryUtils;
+using static LambdicSql.BuilderServices.Syntaxes.Inside.SyntaxFactoryUtils;
 
 namespace LambdicSql.ConverterServices.SymbolConverters.Inside
 {
     class SelectConverterAttribute : SymbolConverterMethodAttribute
     {
-        public override BuildingParts Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override Syntax Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             //ALL, DISTINCT
             var modify = new List<Expression>();
@@ -19,11 +19,11 @@ namespace LambdicSql.ConverterServices.SymbolConverters.Inside
                 modify.Add(expression.Arguments[i]);
             }
 
-            var select = LineSpace(new BuildingParts[] { "SELECT" }.Concat(modify.Select(e => converter.Convert(e))).ToArray());
+            var select = LineSpace(new Syntax[] { "SELECT" }.Concat(modify.Select(e => converter.Convert(e))).ToArray());
 
             //select elemnts.
             var selectTargets = expression.Arguments[expression.Arguments.Count - 1];
-            BuildingParts selectTargetText = null;
+            Syntax selectTargetText = null;
             ObjectCreateInfo createInfo = null;
 
             //*
@@ -38,13 +38,13 @@ namespace LambdicSql.ConverterServices.SymbolConverters.Inside
             {
                 createInfo = ObjectCreateAnalyzer.MakeSelectInfo(selectTargets);
                 selectTargetText =
-                    new VParts(createInfo.Members.Select(e => ToStringSelectedElement(converter, e)).ToArray()) { Indent = 1, Separator = "," };
+                    new VSyntax(createInfo.Members.Select(e => ToStringSelectedElement(converter, e)).ToArray()) { Indent = 1, Separator = "," };
             }
 
-            return new SelectClauseParts(createInfo, selectTargetText == null ? (BuildingParts)select : new VParts(select, selectTargetText));
+            return new SelectClauseSyntax(createInfo, selectTargetText == null ? (Syntax)select : new VSyntax(select, selectTargetText));
         }
 
-        static BuildingParts ToStringSelectedElement(ExpressionConverter converter, ObjectCreateMemberInfo element)
+        static Syntax ToStringSelectedElement(ExpressionConverter converter, ObjectCreateMemberInfo element)
         {
             //single select.
             //for example, COUNT(*).
