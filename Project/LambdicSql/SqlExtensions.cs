@@ -68,7 +68,7 @@ namespace LambdicSql
         /// <param name="expression2">Exppresion 2.</param>
         /// <returns>Concatenated result.</returns>
         public static Sql<TResult> Union<TResult>(this Sql<TResult> expression1, ISql expression2)
-            => expression1.Concat(Db<Non>.Sql(db => Keywords.Union())).Concat(expression2);
+            => expression1.Concat(Db<Non>.Sql(db => Symbols.Union())).Concat(expression2);
 
         /// <summary>
         /// Concatenate expression1 and expression2 using UNION clause.
@@ -79,7 +79,7 @@ namespace LambdicSql
         /// <param name="expression2">Exppresion 2.</param>
         /// <returns>Concatenated result.</returns>
         public static Sql<TResult> Union<TResult>(this Sql<TResult> expression1, IAggregatePredicateAll all, ISql expression2)
-            => expression1.Concat(Db<Non>.Sql(db => Keywords.Union(Keywords.All()))).Concat(expression2);
+            => expression1.Concat(Db<Non>.Sql(db => Symbols.Union(Symbols.All()))).Concat(expression2);
 
         /// <summary>
         /// Concatenate expression1 and expression2 using INTERSECT clause.
@@ -89,7 +89,7 @@ namespace LambdicSql
         /// <param name="expression2">Exppresion 2.</param>
         /// <returns>Concatenated result.</returns>
         public static Sql<TResult> Intersect<TResult>(this Sql<TResult> expression1, ISql expression2)
-            => expression1.Concat(Db<Non>.Sql(db => Keywords.Intersect())).Concat(expression2);
+            => expression1.Concat(Db<Non>.Sql(db => Symbols.Intersect())).Concat(expression2);
 
         /// <summary>
         /// Concatenate expression1 and expression2 using INTERSECT clause.
@@ -100,7 +100,7 @@ namespace LambdicSql
         /// <param name="expression2">Exppresion 2.</param>
         /// <returns>Concatenated result.</returns>
         public static Sql<TResult> Intersect<TResult>(this Sql<TResult> expression1, IAggregatePredicateAll all, ISql expression2)
-            => expression1.Concat(Db<Non>.Sql(db => Keywords.Intersect(Keywords.All()))).Concat(expression2);
+            => expression1.Concat(Db<Non>.Sql(db => Symbols.Intersect(Symbols.All()))).Concat(expression2);
 
         /// <summary>
         /// Concatenate expression1 and expression2 using EXCEPT clause.
@@ -110,7 +110,7 @@ namespace LambdicSql
         /// <param name="expression2">Exppresion 2.</param>
         /// <returns>Concatenated result.</returns>
         public static Sql<TResult> Except<TResult>(this Sql<TResult> expression1, ISql expression2)
-            => expression1.Concat(Db<Non>.Sql(db => Keywords.Except())).Concat(expression2);
+            => expression1.Concat(Db<Non>.Sql(db => Symbols.Except())).Concat(expression2);
 
         /// <summary>
         /// Concatenate expression1 and expression2 using EXCEPT clause.
@@ -121,7 +121,7 @@ namespace LambdicSql
         /// <param name="expression2">Exppresion 2.</param>
         /// <returns>Concatenated result.</returns>
         public static Sql<TResult> Except<TResult>(this Sql<TResult> expression1, IAggregatePredicateAll all, ISql expression2)
-            => expression1.Concat(Db<Non>.Sql(db => Keywords.Except(Keywords.All()))).Concat(expression2);
+            => expression1.Concat(Db<Non>.Sql(db => Symbols.Except(Symbols.All()))).Concat(expression2);
 
         /// <summary>
         /// Concatenate expression1 and expression2 using MINUS clause.
@@ -131,6 +131,6 @@ namespace LambdicSql
         /// <param name="expression2">Exppresion 2.</param>
         /// <returns>Concatenated result.</returns>
         public static Sql<TResult> Minus<TResult>(this Sql<TResult> expression1, ISql expression2)
-            => expression1.Concat(Db<Non>.Sql(db => Keywords.Minus())).Concat(expression2);
+            => expression1.Concat(Db<Non>.Sql(db => Symbols.Minus())).Concat(expression2);
     }
 }

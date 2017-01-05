@@ -13,6 +13,7 @@ namespace LambdicSql.ConverterServices.SymbolConverters.Inside
         {
             var args = expression.Arguments.Select(e => converter.Convert(e)).ToArray();
 
+            //TODO でもDBの種別によってパラメータにするか否かは決めた方が良い
             //Sql server can't use parameter.
             if (expression.Arguments.Count == 1)
             {

@@ -41,6 +41,15 @@ namespace LambdicSql.BuilderServices.Syntaxes
         }
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="texts">Vertical texts.</param>
+        public VSyntax(IEnumerable<Syntax> texts)
+        {
+            _texts.AddRange(texts.Where(e => !e.IsEmpty));
+        }
+
+        /// <summary>
         /// To string.
         /// </summary>
         /// <param name="isTopLevel">Is top level.</param>

@@ -5,7 +5,7 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
-using static LambdicSql.Keywords;
+using static LambdicSql.Symbols;
 
 namespace Performance
 {

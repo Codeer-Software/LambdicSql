@@ -11,13 +11,9 @@ namespace LambdicSql.ConverterServices.SymbolConverters.Inside
             var partitionBy = new VSyntax();
             partitionBy.Add("PARTITION BY");
 
-            var elements = new VSyntax() { Indent = 1, Separator = "," };
             var array = expression.Arguments[0] as NewArrayExpression;
-            foreach (var e in array.Expressions.Select(e => converter.Convert(e)))
-            {
-                elements.Add(e);
-            }
-            partitionBy.Add(elements);
+            var args = new VSyntax(array.Expressions.Select(e => converter.Convert(e))) { Indent = 1, Separator = "," };
+            partitionBy.Add(args);
 
             return partitionBy;
         }

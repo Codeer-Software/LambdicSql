@@ -4,7 +4,6 @@ using System.Linq.Expressions;
 
 namespace LambdicSql.ConverterServices.SymbolConverters.Inside
 {
-
     class AssignConverterAttribute : SymbolConverterNewAttribute
     {
         public override Syntax Convert(NewExpression expression, ExpressionConverter converter)

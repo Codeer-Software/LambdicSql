@@ -57,7 +57,7 @@ namespace LambdicSql
         /// <typeparam name="TResult"></typeparam>
         /// <param name="expression">An expression expressing a query by C #.</param>
         /// <returns>A query.</returns>
-        public static SqlRecursiveArguments<TResult> Sql<TResult>(Expression<Func<T, Keywords.RecursiveArguments<TResult>>> expression)
+        public static SqlRecursiveArguments<TResult> Sql<TResult>(Expression<Func<T, Symbols.RecursiveArguments<TResult>>> expression)
         {
             var db = DBDefineAnalyzer.GetDbInfo<T>();
             return new SqlRecursiveArguments<TResult>(MakeSynatx(db, expression.Body));

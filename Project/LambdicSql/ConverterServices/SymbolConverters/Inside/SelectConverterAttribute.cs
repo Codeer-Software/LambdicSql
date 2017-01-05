@@ -8,6 +8,7 @@ using static LambdicSql.BuilderServices.Syntaxes.Inside.SyntaxFactoryUtils;
 
 namespace LambdicSql.ConverterServices.SymbolConverters.Inside
 {
+    //TODO もう一回見直し
     class SelectConverterAttribute : SymbolConverterMethodAttribute
     {
         public override Syntax Convert(MethodCallExpression expression, ExpressionConverter converter)
@@ -33,6 +34,7 @@ namespace LambdicSql.ConverterServices.SymbolConverters.Inside
                 if (asteriskType == typeof(IAsterisk<>)) createInfo = ObjectCreateAnalyzer.MakeSelectInfo(asteriskType);
                 select.Add("*");
             }
+
             //new { item = db.tbl.column }
             else
             {
@@ -53,6 +55,5 @@ namespace LambdicSql.ConverterServices.SymbolConverters.Inside
             //normal select.
             return LineSpace(converter.Convert(element.Expression), "AS", element.Name);
         }
-
     }
 }

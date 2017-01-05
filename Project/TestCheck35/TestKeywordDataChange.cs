@@ -7,7 +7,7 @@ using static Test.Helper.DBProviderInfo;
 //important
 using LambdicSql;
 using LambdicSql.feat.Dapper;
-using static LambdicSql.Keywords;
+using static LambdicSql.Symbols;
 
 namespace TestCheck35
 {

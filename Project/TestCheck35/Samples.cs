@@ -11,7 +11,7 @@ using System.Collections.Generic;
 //important
 using LambdicSql;
 using LambdicSql.feat.Dapper;
-using static LambdicSql.Keywords;
+using static LambdicSql.Symbols;
 
 //TODO Make this a more practical sample.
 //Add better data for sample

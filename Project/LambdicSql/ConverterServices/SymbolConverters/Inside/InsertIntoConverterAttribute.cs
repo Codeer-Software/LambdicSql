@@ -12,8 +12,8 @@ namespace LambdicSql.ConverterServices.SymbolConverters.Inside
             var table = converter.Convert(expression.Arguments[0]);
 
             //column should not have a table name.
-            var arg = converter.Convert(expression.Arguments[1]).Customize(new CustomizeColumnOnly());
-            return Func(LineSpace("INSERT INTO", table), arg);
+            var args = converter.Convert(expression.Arguments[1]).Customize(new CustomizeColumnOnly());
+            return Func(LineSpace("INSERT INTO", table), args);
         }
     }
 }

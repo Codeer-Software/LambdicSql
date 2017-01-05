@@ -227,7 +227,7 @@ namespace LambdicSql.ConverterServices
             if (syntax.Length == 0) return ResolveExpressionObject(method);
 
             //TODO ちょっと嫌すぎる。括弧を付けない方法を何か確立せねば
-            if (syntax.Length == 1 && typeof(AllConverterAttribute.DisableBracketsText).IsAssignableFrom(syntax[0].GetType()))
+            if (syntax.Length == 1 && typeof(DisableBracketsSyntax).IsAssignableFrom(syntax[0].GetType()))
             {
                 return new ConvertedResult(method.Method.ReturnType, syntax[0]);
             }

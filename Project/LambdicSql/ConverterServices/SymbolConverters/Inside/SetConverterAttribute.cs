@@ -9,10 +9,10 @@ namespace LambdicSql.ConverterServices.SymbolConverters.Inside
         public override Syntax Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var array = expression.Arguments[1] as NewArrayExpression;
-            var sets = new VSyntax();
-            sets.Add("SET");
-            sets.Add(new VSyntax(array.Expressions.Select(e => converter.Convert(e)).ToArray()) { Indent = 1, Separator = "," });
-            return sets;
+            var set = new VSyntax();
+            set.Add("SET");
+            set.Add(new VSyntax(array.Expressions.Select(e => converter.Convert(e)).ToArray()) { Indent = 1, Separator = "," });
+            return set;
         }
     }
 }

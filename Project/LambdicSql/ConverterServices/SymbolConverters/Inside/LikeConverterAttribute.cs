@@ -5,7 +5,6 @@ using static LambdicSql.BuilderServices.Syntaxes.Inside.SyntaxFactoryUtils;
 
 namespace LambdicSql.ConverterServices.SymbolConverters.Inside
 {
-
     class LikeConverterAttribute : SymbolConverterMethodAttribute
     {
         public override Syntax Convert(MethodCallExpression expression, ExpressionConverter converter)
