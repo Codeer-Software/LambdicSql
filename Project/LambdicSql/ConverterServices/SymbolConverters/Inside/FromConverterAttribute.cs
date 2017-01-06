@@ -1,22 +1,22 @@
 ﻿using LambdicSql.ConverterServices.Inside;
-using LambdicSql.BuilderServices.Syntaxes;
-using LambdicSql.BuilderServices.Syntaxes.Inside;
+using LambdicSql.BuilderServices.Code;
+using LambdicSql.BuilderServices.Code.Inside;
 using System.Linq;
 using System.Linq.Expressions;
-using static LambdicSql.BuilderServices.Syntaxes.Inside.SyntaxFactoryUtils;
+using static LambdicSql.BuilderServices.Code.Inside.PartsFactoryUtils;
 
 namespace LambdicSql.ConverterServices.SymbolConverters.Inside
 {
     class FromConverterAttribute : SymbolConverterMethodAttribute
     {
-        public override Syntax Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override Parts Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var startIndex = expression.SkipMethodChain(0);
             var table = ConvertTable(converter, expression.Arguments[startIndex]);
             return Clause("FROM", table);
         }
 
-        internal static Syntax ConvertTable(ExpressionConverter decoder, Expression exp)
+        internal static Parts ConvertTable(ExpressionConverter decoder, Expression exp)
         {
             //where query, write tables side by side.
             var arry = exp as NewArrayExpression;
@@ -26,7 +26,7 @@ namespace LambdicSql.ConverterServices.SymbolConverters.Inside
 
             //sub query.
             var body = GetSubQuery(exp);
-            if (body != null) return new SubQueryAndNameSyntax(body, table);
+            if (body != null) return new SubQueryAndNameParts(body, table);
 
             return table;
         }

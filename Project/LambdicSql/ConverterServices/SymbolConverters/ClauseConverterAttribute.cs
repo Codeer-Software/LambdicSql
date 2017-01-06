@@ -1,5 +1,5 @@
 ﻿using LambdicSql.ConverterServices.Inside;
-using LambdicSql.BuilderServices.Syntaxes;
+using LambdicSql.BuilderServices.Code;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -32,12 +32,12 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         public string AfterPredicate { get; set; }
 
         /// <summary>
-        /// Convert expression to syntax.
+        /// Convert expression to code parts.
         /// </summary>
         /// <param name="expression">Expression.</param>
         /// <param name="converter">Expression converter.</param>
-        /// <returns>Syntax.</returns>
-        public override Syntax Convert(MethodCallExpression expression, ExpressionConverter converter)
+        /// <returns>Parts.</returns>
+        public override Parts Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var name = string.IsNullOrEmpty(Name) ? expression.Method.Name.ToUpper() : Name;
 
@@ -45,7 +45,7 @@ namespace LambdicSql.ConverterServices.SymbolConverters
             var args = expression.Arguments.Skip(index).Select(e => converter.Convert(e)).ToList();
             if (!string.IsNullOrEmpty(AfterPredicate)) args.Add(AfterPredicate);
             
-            return new HSyntax(name, new HSyntax(args) { Separator = Separator }) { IsFunctional = true, Separator = " ", Indent = Indent };
+            return new HParts(name, new HParts(args) { Separator = Separator }) { IsFunctional = true, Separator = " ", Indent = Indent };
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using LambdicSql.BuilderServices.Syntaxes;
+﻿using LambdicSql.BuilderServices.Code;
 using LambdicSql.ConverterServices;
 using LambdicSql.ConverterServices.Inside;
 using LambdicSql.ConverterServices.SymbolConverters;
@@ -122,7 +122,7 @@ namespace LambdicSql.feat.EntityFramework
 
     class TConverterAttribute : SymbolConverterMethodAttribute
     {
-        public override Syntax Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override Parts Convert(MethodCallExpression expression, ExpressionConverter converter)
             => converter.Convert(expression.Arguments[0]);
     }
 }

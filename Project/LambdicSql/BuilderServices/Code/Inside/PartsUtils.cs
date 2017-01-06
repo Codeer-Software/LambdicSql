@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 
-namespace LambdicSql.BuilderServices.Syntaxes.Inside
+namespace LambdicSql.BuilderServices.Code.Inside
 {
-    static class SyntaxUtils
+    static class PartsUtils
     {
         internal static string GetIndent(int indent)
         {

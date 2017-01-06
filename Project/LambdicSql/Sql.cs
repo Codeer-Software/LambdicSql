@@ -1,5 +1,5 @@
 ﻿using LambdicSql.ConverterServices.Inside;
-using LambdicSql.BuilderServices.Syntaxes;
+using LambdicSql.BuilderServices.Code;
 
 namespace LambdicSql
 {
@@ -14,7 +14,7 @@ namespace LambdicSql
         /// Data converted from Expression to a form close to a string representation.
         /// </summary>
         /// <returns>text.</returns>
-        Syntax Syntax { get; }
+        Parts Parts { get; }
     }
     
     /// <summary>
@@ -27,7 +27,7 @@ namespace LambdicSql
         /// Data converted from Expression to a form close to a string representation.
         /// </summary>
         /// <returns>text.</returns>
-        public Syntax Syntax { get; }
+        public Parts Parts { get; }
 
         /// <summary>
         /// Entity represented by SqlExpression.
@@ -42,9 +42,9 @@ namespace LambdicSql
         /// <param name="src"></param>
         public static implicit operator T(Sql<T> src) => InvalitContext.Throw<T>("implicit operator");
 
-        internal Sql(Syntax syntax)
+        internal Sql(Parts parts)
         {
-            Syntax = syntax;
+            Parts = parts;
         }
     }
 
@@ -54,6 +54,6 @@ namespace LambdicSql
     /// <typeparam name="TSelected">The type represented by SqlExpression.</typeparam>
     public class SqlRecursiveArguments<TSelected> : Sql<TSelected>
     {
-        internal SqlRecursiveArguments(Syntax syntax) : base(syntax) { }
+        internal SqlRecursiveArguments(Parts parts) : base(parts) { }
     }
 }

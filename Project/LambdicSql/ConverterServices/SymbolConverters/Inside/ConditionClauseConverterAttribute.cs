@@ -1,13 +1,13 @@
 ﻿using LambdicSql.ConverterServices.Inside;
-using LambdicSql.BuilderServices.Syntaxes;
+using LambdicSql.BuilderServices.Code;
 using System.Linq.Expressions;
-using static LambdicSql.BuilderServices.Syntaxes.Inside.SyntaxFactoryUtils;
+using static LambdicSql.BuilderServices.Code.Inside.PartsFactoryUtils;
 
 namespace LambdicSql.ConverterServices.SymbolConverters.Inside
 {
     class ConditionClauseConverterAttribute : SymbolConverterMethodAttribute
     {
-        public override Syntax Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override Parts Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var condition = converter.Convert(expression.Arguments[expression.SkipMethodChain(0)]);
             if (condition.IsEmpty) return string.Empty;

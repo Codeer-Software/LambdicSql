@@ -1,4 +1,4 @@
-﻿using LambdicSql.BuilderServices.Syntaxes;
+﻿using LambdicSql.BuilderServices.Code;
 using System;
 using System.Linq.Expressions;
 
@@ -11,11 +11,11 @@ namespace LambdicSql.ConverterServices.SymbolConverters
     public abstract class SymbolConverterNewAttribute : Attribute
     {
         /// <summary>
-        /// Convert expression to syntax.
+        /// Convert expression to code parts.
         /// </summary>
         /// <param name="expression">Expression.</param>
         /// <param name="converter">Expression converter.</param>
-        /// <returns>Syntax.</returns>
-        public abstract Syntax Convert(NewExpression expression, ExpressionConverter converter);
+        /// <returns>Parts.</returns>
+        public abstract Parts Convert(NewExpression expression, ExpressionConverter converter);
     }
 }

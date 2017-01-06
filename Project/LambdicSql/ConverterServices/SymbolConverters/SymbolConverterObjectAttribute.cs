@@ -1,4 +1,4 @@
-﻿using LambdicSql.BuilderServices.Syntaxes;
+﻿using LambdicSql.BuilderServices.Code;
 using System;
 
 namespace LambdicSql.ConverterServices.SymbolConverters
@@ -9,10 +9,10 @@ namespace LambdicSql.ConverterServices.SymbolConverters
     public abstract class SymbolConverterObjectAttribute : Attribute
     {
         /// <summary>
-        /// Convert object to syntax.
+        /// Convert object to code parts.
         /// </summary>
         /// <param name="obj">Object.</param>
-        /// <returns>Syntax.</returns>
-        public abstract Syntax Convert(object obj);
+        /// <returns>Parts.</returns>
+        public abstract Parts Convert(object obj);
     }
 }

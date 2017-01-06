@@ -1,9 +1,9 @@
 ﻿using LambdicSql.ConverterServices;
 using LambdicSql.ConverterServices.Inside;
-using LambdicSql.BuilderServices.Syntaxes.Inside;
+using LambdicSql.BuilderServices.Code.Inside;
 using System;
 using System.Linq.Expressions;
-using LambdicSql.BuilderServices.Syntaxes;
+using LambdicSql.BuilderServices.Code;
 
 namespace LambdicSql
 {
@@ -48,7 +48,7 @@ namespace LambdicSql
         {
             var db = DBDefineAnalyzer.GetDbInfo<T>();
             var core = expression.Body as MemberExpression;
-            return new Sql<TResult>(new AliasSyntax(core.Member.Name));
+            return new Sql<TResult>(new AliasParts(core.Member.Name));
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace LambdicSql
             return new SqlRecursiveArguments<TResult>(MakeSynatx(db, expression.Body));
         }
 
-        static Syntax MakeSynatx(DbInfo dbInfo, Expression core)
+        static Parts MakeSynatx(DbInfo dbInfo, Expression core)
         {
             var converter = new ExpressionConverter(dbInfo);
             return core == null ? string.Empty : converter.Convert(core);

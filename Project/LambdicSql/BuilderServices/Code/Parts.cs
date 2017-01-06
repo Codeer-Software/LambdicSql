@@ -1,11 +1,9 @@
-﻿namespace LambdicSql.BuilderServices.Syntaxes
+﻿namespace LambdicSql.BuilderServices.Code
 {
-    //TODO Syntaxではない気がする
-    
     /// <summary>
-    /// Text.
+    /// Sql code parts.
     /// </summary>
-    public abstract class Syntax
+    public abstract class Parts
     {
         /// <summary>
         /// Is empty.
@@ -32,33 +30,33 @@
         /// <param name="front">Front.</param>
         /// <param name="back">Back.</param>
         /// <returns>Text.</returns>
-        public abstract Syntax ConcatAround(string front, string back);
+        public abstract Parts ConcatAround(string front, string back);
 
         /// <summary>
         /// Concat to front.
         /// </summary>
         /// <param name="front">Front.</param>
         /// <returns>Text.</returns>
-        public abstract Syntax ConcatToFront(string front);
+        public abstract Parts ConcatToFront(string front);
 
         /// <summary>
         /// Concat to back.
         /// </summary>
         /// <param name="back"></param>
         /// <returns></returns>
-        public abstract Syntax ConcatToBack(string back);
+        public abstract Parts ConcatToBack(string back);
 
         /// <summary>
         /// Customize.
         /// </summary>
         /// <param name="customizer">Customizer.</param>
         /// <returns>Customized SqlText.</returns>
-        public abstract Syntax Customize(ISyntaxCustomizer customizer);
+        public abstract Parts Customize(IPartsCustomizer customizer);
 
         /// <summary>
         /// Convert string to IText.
         /// </summary>
         /// <param name="text">string.</param>
-        public static implicit operator Syntax(string text) => new SingleTextSyntax(text);
+        public static implicit operator Parts(string text) => new SingleTextParts(text);
     }
 }

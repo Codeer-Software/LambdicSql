@@ -1,8 +1,8 @@
 ﻿using LambdicSql.ConverterServices.Inside;
-using LambdicSql.BuilderServices.Syntaxes;
+using LambdicSql.BuilderServices.Code;
 using System.Linq;
 using System.Linq.Expressions;
-using static LambdicSql.BuilderServices.Syntaxes.Inside.SyntaxFactoryUtils;
+using static LambdicSql.BuilderServices.Code.Inside.PartsFactoryUtils;
 
 namespace LambdicSql.ConverterServices.SymbolConverters
 {
@@ -22,19 +22,19 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         public string Separator { get; set; } = ", ";
 
         /// <summary>
-        /// Convert expression to syntax.
+        /// Convert expression to code parts.
         /// </summary>
         /// <param name="expression">Expression.</param>
         /// <param name="converter">Expression converter.</param>
-        /// <returns>Syntax.</returns>
-        public override Syntax Convert(MethodCallExpression expression, ExpressionConverter converter)
+        /// <returns>Parts.</returns>
+        public override Parts Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var index = expression.SkipMethodChain(0);
             var args = expression.Arguments.Skip(index).Select(e => converter.Convert(e)).ToArray();
             var name = string.IsNullOrEmpty(Name) ? expression.Method.Name.ToUpper() : Name;
 
-            var hArgs = new HSyntax(args) { Separator = Separator }.ConcatToBack(")");
-            return new HSyntax(Line(name, "("), hArgs) { IsFunctional = true };
+            var hArgs = new HParts(args) { Separator = Separator }.ConcatToBack(")");
+            return new HParts(Line(name, "("), hArgs) { IsFunctional = true };
         }
     }
 }

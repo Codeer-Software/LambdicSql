@@ -2,19 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace LambdicSql.BuilderServices.Syntaxes
+namespace LambdicSql.BuilderServices.Code
 {
     /// <summary>
-    /// Horizontal text.
+    /// Vertical text.
     /// </summary>
-    public class HSyntax : Syntax
+    public class VParts : Parts
     {
-        List<Syntax> _texts = new List<Syntax>();
+        List<Parts> _texts = new List<Parts>();
 
         /// <summary>
-        /// Separator.
+        /// Separator
         /// </summary>
-        public string Separator { get; set; } = string.Empty;
+        public string Separator { get; set; }
 
         /// <summary>
         /// Indent
@@ -22,19 +22,9 @@ namespace LambdicSql.BuilderServices.Syntaxes
         public int Indent { get; set; }
 
         /// <summary>
-        /// Is functional.
-        /// </summary>
-        public bool IsFunctional { get; set; }
-
-        /// <summary>
-        /// Enable change line.
-        /// </summary>
-        public bool EnableChangeLine { get; set; } = true;
-
-        /// <summary>
         /// Is single line.
         /// </summary>
-        public override bool IsSingleLine(BuildingContext context) => !_texts.Any(e => !e.IsSingleLine(context));
+        public override bool IsSingleLine(BuildingContext context) => _texts.Count <= 1 && !_texts.Any(e => !e.IsSingleLine(context));
 
         /// <summary>
         /// Is empty.
@@ -44,8 +34,8 @@ namespace LambdicSql.BuilderServices.Syntaxes
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="texts">Horizontal texts.</param>
-        public HSyntax(params Syntax[] texts)
+        /// <param name="texts">Vertical texts.</param>
+        public VParts(params Parts[] texts)
         {
             _texts.AddRange(texts.Where(e => !e.IsEmpty));
         }
@@ -53,8 +43,8 @@ namespace LambdicSql.BuilderServices.Syntaxes
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="texts">Horizontal texts.</param>
-        public HSyntax(IEnumerable<Syntax> texts)
+        /// <param name="texts">Vertical texts.</param>
+        public VParts(IEnumerable<Parts> texts)
         {
             _texts.AddRange(texts.Where(e => !e.IsEmpty));
         }
@@ -67,47 +57,44 @@ namespace LambdicSql.BuilderServices.Syntaxes
         /// <param name="context">Context.</param>
         /// <returns>Text.</returns>
         public override string ToString(bool isTopLevel, int indent, BuildingContext context)
-        {
-            indent += Indent;
-            if (_texts.Count == 0) return string.Empty;
-            if (_texts.Count == 1) return _texts[0].ToString(isTopLevel, indent, context);
+            => string.Join(Separator + Environment.NewLine, _texts.Select(e => e.ToString(isTopLevel, Indent + indent, context)).ToArray());
 
-            if (IsSingleLine(context) || !EnableChangeLine)
-            {
-                return _texts[0].ToString(isTopLevel, indent, context) + Separator
-                    + string.Join(Separator, _texts.Skip(1).Select(e => e.ToString(isTopLevel, 0, context)).ToArray());
-            }
-
-            //if IsFunctional is true, add Indent other than the first line.
-            var addIndentCount = IsFunctional ? 1 : 0;
-            var sep = Separator.TrimEnd();
-            return _texts[0].ToString(isTopLevel, indent, context) + sep + Environment.NewLine +
-                string.Join(sep + Environment.NewLine, _texts.Skip(1).Select(e => e.ToString(isTopLevel, indent + addIndentCount, context)).ToArray());
-        }
-        
         /// <summary>
         /// Add text.
         /// </summary>
         /// <param name="text">Text.</param>
-        public void Add(Syntax text)
+        /// <param name="indent">Indent.</param>
+        public void Add(string text, int indent)
+        {
+            if (string.IsNullOrEmpty(text.Trim())) return;
+            _texts.Add(new SingleTextParts(text, indent));
+        }
+
+        /// <summary>
+        /// Add text.
+        /// </summary>
+        /// <param name="text">Text.</param>
+        public void Add(Parts text)
         {
             if (text.IsEmpty) return;
             _texts.Add(text);
         }
 
         /// <summary>
-        /// Add text.
+        /// Add texts.
         /// </summary>
+        /// <param name="indent">Indent.</param>
         /// <param name="texts">Texts.</param>
-        public void AddRange(IEnumerable<Syntax> texts)
-            => _texts.AddRange(texts.Where(e => !e.IsEmpty));
+        public void AddRange(int indent, IEnumerable<Parts> texts)
+            => _texts.AddRange(texts.Where(e => !e.IsEmpty).Select(e => new HParts(e) { Indent = 1 }).Cast<Parts>());
 
         /// <summary>
-        /// Add text.
+        /// Add texts.
         /// </summary>
+        /// <param name="indent">Indent.</param>
         /// <param name="texts">Texts.</param>
-        public void AddRange(params Syntax[] texts)
-            => _texts.AddRange(texts.Where(e => !e.IsEmpty));
+        public void AddRange(int indent, params Parts[] texts)
+            => _texts.AddRange(texts.Where(e => !e.IsEmpty).Select(e => new HParts(e) { Indent = 1 }).Cast<Parts>());
 
         /// <summary>
         /// Concat to front and back.
@@ -115,22 +102,22 @@ namespace LambdicSql.BuilderServices.Syntaxes
         /// <param name="front">Front.</param>
         /// <param name="back">Back.</param>
         /// <returns>Text.</returns>
-        public override Syntax ConcatAround(string front, string back)
+        public override Parts ConcatAround(string front, string back)
         {
             if (_texts.Count == 0) return CopyProperty(front + back);
 
-            var newTexts = _texts.ToArray();
-            newTexts[0] = newTexts[0].ConcatToFront(front);
-            newTexts[newTexts.Length - 1] = newTexts[newTexts.Length - 1].ConcatToBack(back);
-            return CopyProperty(newTexts);
+            var dst = _texts.ToArray();
+            dst[0] = dst[0].ConcatToFront(front);
+            dst[dst.Length - 1] = dst[dst.Length - 1].ConcatToBack(back);
+            return CopyProperty(dst);
         }
-        
+
         /// <summary>
         /// Concat to front.
         /// </summary>
         /// <param name="front">Front.</param>
         /// <returns>Text.</returns>
-        public override Syntax ConcatToFront(string front)
+        public override Parts ConcatToFront(string front)
         {
             if (_texts.Count == 0) return CopyProperty(front);
 
@@ -143,8 +130,8 @@ namespace LambdicSql.BuilderServices.Syntaxes
         /// Concat to back.
         /// </summary>
         /// <param name="back"></param>
-        /// <returns></returns>
-        public override Syntax ConcatToBack(string back)
+        /// <returns>Text.</returns>
+        public override Parts ConcatToBack(string back)
         {
             if (_texts.Count == 0) return CopyProperty(back);
 
@@ -158,13 +145,13 @@ namespace LambdicSql.BuilderServices.Syntaxes
         /// </summary>
         /// <param name="customizer">Customizer.</param>
         /// <returns>Customized SqlText.</returns>
-        public override Syntax Customize(ISyntaxCustomizer customizer)
+        public override Parts Customize(IPartsCustomizer customizer)
         {
             var dst = _texts.Select(e => customizer.Custom(e));
             return CopyProperty(dst.ToArray());
         }
 
-        HSyntax CopyProperty(params Syntax[] texts)
-             => new HSyntax(texts) { Indent = Indent, IsFunctional = IsFunctional, EnableChangeLine = EnableChangeLine, Separator = Separator };
+        VParts CopyProperty(params Parts[] texts)
+             => new VParts(texts) { Indent = Indent, Separator = Separator };
     }
 }
