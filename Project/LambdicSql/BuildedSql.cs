@@ -7,7 +7,7 @@ namespace LambdicSql
     /// <summary>
     /// SQL information.
     /// </summary>
-    public class Command
+    public class BuildedSql
     {
         Dictionary<string, DbParam> _dbParams;
 
@@ -26,7 +26,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="sqlText">Sql text.</param>
         /// <param name="dbParams">Parameters.</param>
-        public Command(string sqlText, Dictionary<string, DbParam> dbParams)
+        public BuildedSql(string sqlText, Dictionary<string, DbParam> dbParams)
         {
             Text = sqlText;
             _dbParams = dbParams;
@@ -36,7 +36,7 @@ namespace LambdicSql
         /// Copy constructor.
         /// </summary>
         /// <param name="src">Source.</param>
-        public Command(Command src)
+        public BuildedSql(BuildedSql src)
         {
             Text = src.Text;
             _dbParams = src._dbParams;
@@ -47,20 +47,20 @@ namespace LambdicSql
     /// SQL information.
     /// </summary>
     /// <typeparam name="TSelected">Type of selected at SELECT clause.</typeparam>
-    public class Command<TSelected> : Command
+    public class BuildedSql<TSelected> : BuildedSql
     {
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="sqlText">Sql text.</param>
         /// <param name="dbParams">Parameters.</param>
-        public Command(string sqlText, Dictionary<string, DbParam> dbParams)
+        public BuildedSql(string sqlText, Dictionary<string, DbParam> dbParams)
             : base(sqlText, dbParams) { }
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="src">Source.</param>
-        public Command(Command src) : base(src) { }
+        public BuildedSql(BuildedSql src) : base(src) { }
     }
 }

@@ -50,6 +50,7 @@
     <Compile Include="BuilderServices\Code\Inside\SubQueryAndNameParts.cs" />
     <Compile Include="BuilderServices\Code\Inside\PartsFactoryUtils.cs" />
     <Compile Include="BuilderServices\Code\Inside\WithEntriedParts.cs" />
+    <Compile Include="ConverterServices\IMethodChain.cs" />
     <Compile Include="ConverterServices\SymbolConverters\Inside\AllConverterAttribute.cs" />
     <Compile Include="ConverterServices\SymbolConverters\Inside\AssignConverterAttribute.cs" />
     <Compile Include="ConverterServices\SymbolConverters\Inside\BetweenConverterAttribute.cs" />
@@ -120,7 +121,7 @@
     <Compile Include="BuilderServices\Code\VParts.cs" />
     <Compile Include="Sql.cs" />
     <Compile Include="BuilderServices\DialectOption.cs" />
-    <Compile Include="Command.cs" />
+    <Compile Include="BuildedSql.cs" />
     <Compile Include="SqlExtensions.cs" />
     <Compile Include="ConverterServices\Inside\ObjectCreateInfo.cs" />
     <Compile Include="ConverterServices\Inside\ObjectCreateMemberInfo.cs" />

@@ -258,7 +258,7 @@ namespace LambdicSql.ConverterServices
             var method = member.Expression as MethodCallExpression;
             if (method != null)
             {
-                if (!typeof(IClauseChain).IsAssignableFrom(method.Type) ||
+                if (!typeof(IMethodChain).IsAssignableFrom(method.Type) ||
                      member.Member.Name != "Body") return null;
                 return Convert(method);
             }

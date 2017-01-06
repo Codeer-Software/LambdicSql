@@ -70,7 +70,7 @@ namespace TestCheck35
             }
         }
 
-        static int QueryForTest(IDbConnection cnn, Command info)
+        static int QueryForTest(IDbConnection cnn, BuildedSql info)
         {
             bool openNow = false;
             if (cnn.State == ConnectionState.Closed)
@@ -108,7 +108,7 @@ namespace TestCheck35
             }
         }
 
-        static int ExecuteForTest(IDbConnection cnn, Command info)
+        static int ExecuteForTest(IDbConnection cnn, BuildedSql info)
         {
             bool openNow = false;
             if (cnn.State == ConnectionState.Closed)

@@ -20,8 +20,8 @@ namespace LambdicSql
         /// <param name="expression">Object with information of expression representing SQL.</param>
         /// <param name="connectionType">IDbConnection's type.</param>
         /// <returns>Sql information.</returns>
-        public static Command<TSelected> Build<TSelected>(this Sql<TSelected> expression, Type connectionType)
-          => new Command<TSelected>(Build((ISql)expression, connectionType));
+        public static BuildedSql<TSelected> Build<TSelected>(this Sql<TSelected> expression, Type connectionType)
+          => new BuildedSql<TSelected>(Build((ISql)expression, connectionType));
 
         //この↓はいりません。
         /// <summary>
@@ -30,7 +30,7 @@ namespace LambdicSql
         /// <param name="expression">Object with information of expression representing SQL.</param>
         /// <param name="connectionType">IDbConnection's type.</param>
         /// <returns>Sql information.</returns>
-        public static Command Build(this ISql expression, Type connectionType)
+        public static BuildedSql Build(this ISql expression, Type connectionType)
             => Build(expression, DialectResolver.CreateCustomizer(connectionType.FullName));
 
         /// <summary>
@@ -39,10 +39,10 @@ namespace LambdicSql
         /// <param name="expression">Object with information of expression representing SQL.</param>
         /// <param name="option">Options for converting from C # to SQL string.</param>
         /// <returns>Sql information.</returns>
-        public static Command Build(this ISql expression, DialectOption option)
+        public static BuildedSql Build(this ISql expression, DialectOption option)
         {
             var context = new BuildingContext(option);
-            return new Command(expression.Parts.ToString(true, 0, context), context.ParameterInfo.GetDbParams());
+            return new BuildedSql(expression.Parts.ToString(true, 0, context), context.ParameterInfo.GetDbParams());
         }
 
         class Non { }

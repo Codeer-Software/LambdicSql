@@ -332,30 +332,30 @@ namespace LambdicSql
         /// <summary>
         /// Return value of CASE clause.
         /// </summary>
-        public interface ICaseAfter : IClauseChain { }
+        public interface ICaseAfter : IMethodChain { }
 
         /// <summary>
         /// Return value of WHEN clause.
         /// </summary>
-        public interface IWhenAfter : IClauseChain { }
+        public interface IWhenAfter : IMethodChain { }
 
         /// <summary>
         /// Return value of WHEN clause.
         /// </summary>
         /// <typeparam name="T">Type represented by CASE expression.</typeparam>
-        public interface IWhenAfter<T> : IClauseChain { }
+        public interface IWhenAfter<T> : IMethodChain { }
 
         /// <summary>
         /// Return value of THEN clause.
         /// </summary>
         /// <typeparam name="T">Type represented by CASE expression.</typeparam>
-        public interface IThenAfter<T> : IClauseChain { }
+        public interface IThenAfter<T> : IMethodChain { }
 
         /// <summary>
         /// Return value of ELSE clause.
         /// </summary>
         /// <typeparam name="T">Type represented by CASE expression.</typeparam>
-        public interface IElseAfter<T> : IClauseChain { }
+        public interface IElseAfter<T> : IMethodChain { }
 
         /// <summary>
         /// CASE clause.
