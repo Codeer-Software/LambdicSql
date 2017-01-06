@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using LambdicSql;
 using LambdicSql.feat.Dapper;
 using static LambdicSql.Symbols;
+using LambdicSql.ConverterServices;
 
 //TODO Make this a more practical sample.
 //Add better data for sample
@@ -211,7 +212,7 @@ namespace TestCheck35
             Debug.Print(info.Text);
 
             //dapper
-            var datas = _connection.Query(query).ToList();
+            var datas = _connection.Query<object>(query).ToList();
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -357,7 +358,7 @@ namespace TestCheck35
             Debug.Print(info.Text);
 
             //dapper
-            var datas = _connection.Query(query).ToList();
+            var datas = _connection.Query<object>(query).ToList();
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -373,7 +374,7 @@ namespace TestCheck35
             Debug.Print(info.Text);
 
             //dapper
-            var datas = _connection.Query(query).ToList();
+            var datas = _connection.Query<object>(query).ToList();
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -389,7 +390,7 @@ namespace TestCheck35
             Debug.Print(info.Text);
 
             //dapper
-            var datas = _connection.Query(query).ToList();
+            var datas = _connection.Query<object>(query).ToList();
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -669,7 +670,7 @@ namespace TestCheck35
             Debug.Print(info.Text);
 
             //dapper
-            var datas = _connection.Query(query).ToList();
+            var datas = _connection.Query<object>(query).ToList();
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -1362,7 +1363,7 @@ FROM tbl_remuneration
                  FetchNextRowsOnly(3)
                  );
           //  Debug.Print(query.ToSqlInfo().SqlText);
-            _connection.Query(query);
+            _connection.Query<object>(query);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -1380,7 +1381,7 @@ FROM tbl_remuneration
                  Limit(1, 3)
                  );
       //      Debug.Print(query.ToSqlInfo().SqlText);
-            _connection.Query(query);
+            _connection.Query<object>(query);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -1398,7 +1399,7 @@ FROM tbl_remuneration
                  Offset(3)
                  );
        //     Debug.Print(query.ToSqlInfo().SqlText);
-            _connection.Query(query);
+            _connection.Query<object>(query);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -1414,7 +1415,7 @@ FROM tbl_remuneration
                  OrderBy(Asc(db.tbl_remuneration.id))
                  );
        //     Debug.Print(query.ToSqlInfo().SqlText);
-            _connection.Query(query);
+            _connection.Query<object>(query);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -1441,7 +1442,7 @@ FROM tbl_remuneration
                           Asterisk()).
                       From(db.tbl_remuneration));
          //       Debug.Print(query.ToSqlInfo().SqlText);
-                _connection.Query(query);
+                _connection.Query<object>(query);
             }
             {
                 var query = Db<DB>.Sql(db =>
@@ -1464,7 +1465,7 @@ FROM tbl_remuneration
                           Asterisk()).
                       From(db.tbl_remuneration));
         //        Debug.Print(query.ToSqlInfo().SqlText);
-                _connection.Query(query);
+                _connection.Query<object>(query);
             }
         }
 
@@ -1475,7 +1476,7 @@ FROM tbl_remuneration
             return _connection.Query(exp).ToList();
         }
 
-        public IEnumerable<T> ExecuteRead<T>(ISql exp)
+        public IEnumerable<T> ExecuteRead<T>(Sql exp)
         {
             var info = exp.Build(_connection.GetType());
             Debug.Print(info.Text);

@@ -30,7 +30,7 @@ namespace LambdicSql.feat.Dapper
         ///     (case insensitive).
         /// </returns>
         public static IEnumerable<T> Query<T>(this IDbConnection cnn, Sql<T> query, IDbTransaction transaction = null, bool buffered = true, int? commandTimeout = default(int?), CommandType? commandType = default(CommandType?))
-            => Query<T>(cnn, (ISql)query, transaction, buffered, commandTimeout, commandType);
+            => Query<T>(cnn, (Sql)query, transaction, buffered, commandTimeout, commandType);
  
         /// <summary>
         /// Executes a query, returning the data typed as per T.
@@ -49,7 +49,7 @@ namespace LambdicSql.feat.Dapper
         ///     is created per row, and a direct column-name===member-name mapping is assumed
         ///     (case insensitive).
         /// </returns>
-        public static IEnumerable<T> Query<T>(this IDbConnection cnn, ISql query, IDbTransaction transaction = null, bool buffered = true, int? commandTimeout = default(int?), CommandType? commandType = default(CommandType?))
+        public static IEnumerable<T> Query<T>(this IDbConnection cnn, Sql query, IDbTransaction transaction = null, bool buffered = true, int? commandTimeout = default(int?), CommandType? commandType = default(CommandType?))
         {
             var info = query.Build(cnn.GetType());
 
@@ -76,7 +76,7 @@ namespace LambdicSql.feat.Dapper
         /// <param name="commandTimeout">Command timeout.</param>
         /// <param name="commandType">Command type.</param>
         /// <returns>Number of rows affected.</returns>
-        public static int Execute(this IDbConnection cnn, ISql exp, IDbTransaction transaction = null, int? commandTimeout = default(int?), CommandType? commandType = default(CommandType?))
+        public static int Execute(this IDbConnection cnn, Sql exp, IDbTransaction transaction = null, int? commandTimeout = default(int?), CommandType? commandType = default(CommandType?))
         {
             var info = exp.Build(cnn.GetType());
 

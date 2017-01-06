@@ -39,7 +39,7 @@ namespace TestCheck35
                 Money = db.tbl_remuneration.money,
             }));
 
-        public static readonly ISql From = Db<DB>.Sql(db =>
+        public static readonly Sql From = Db<DB>.Sql(db =>
             From(db.tbl_remuneration));
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]

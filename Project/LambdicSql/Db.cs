@@ -39,6 +39,17 @@ namespace LambdicSql
 
         /// <summary>
         /// Create a query.
+        /// </summary>
+        /// <param name="expression">An expression expressing a query by C #.</param>
+        /// <returns>A query.</returns>
+        public static Sql Sql(Expression<Func<T, ClauseChain<Non>>> expression)
+        {
+            var db = DBDefineAnalyzer.GetDbInfo<T>();
+            return new Sql(MakeSynatx(db, expression.Body));
+        }
+
+        /// <summary>
+        /// Create a query.
         /// Add name.
         /// </summary>
         /// <typeparam name="TResult"></typeparam>

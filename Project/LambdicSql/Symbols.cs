@@ -6,6 +6,7 @@ using System;
 
 namespace LambdicSql
 {
+
     //TODO 改行を入れながらドキュメントを書く
     //<para>paraを</para>
 
@@ -18,13 +19,6 @@ namespace LambdicSql
     /// </summary>
     public static class Symbols
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        public class Non
-        {
-            Non() { }
-        }
 
         /// <summary>
         /// 
@@ -42,7 +36,7 @@ namespace LambdicSql
         /// <param name="subQuerys"></param>
         /// <returns></returns>
         [WithConverter]
-        public static ClauseChain<Non> With(params ISql[] subQuerys) => InvalitContext.Throw<ClauseChain<Non>>(nameof(With));
+        public static ClauseChain<Non> With(params Sql[] subQuerys) => InvalitContext.Throw<ClauseChain<Non>>(nameof(With));
 
         /// <summary>
         /// 
@@ -52,7 +46,7 @@ namespace LambdicSql
         /// <param name="select"></param>
         /// <returns></returns>
         [WithConverter]
-        public static ClauseChain<TSelected> With<TSelected>(SqlRecursiveArguments<TSelected> args, ISql select) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(With));
+        public static ClauseChain<TSelected> With<TSelected>(SqlRecursiveArguments<TSelected> args, Sql select) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(With));
 
         /// <summary>
         /// 

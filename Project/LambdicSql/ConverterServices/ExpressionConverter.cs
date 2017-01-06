@@ -267,7 +267,7 @@ namespace LambdicSql.ConverterServices
             members.Reverse();
             
             //check SqlExpression's Body
-            if (!typeof(ISql).IsAssignableFrom(members[0].Type) ||
+            if (!typeof(Sql).IsAssignableFrom(members[0].Type) ||
                 members[1].Member.Name != "Body") return null;
 
             //for example, sub.Body
@@ -421,7 +421,7 @@ namespace LambdicSql.ConverterServices
 
             //ISqlExpression.
             //example [ from(exp) ]
-            var sqlExp = obj as ISql;
+            var sqlExp = obj as Sql;
             if (sqlExp != null)
             {
                 Type type = null;
