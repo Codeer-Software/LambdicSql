@@ -11,9 +11,11 @@
                 case "System.Data.SQLite.SQLiteConnection":
                     return new DialectOption() { ConnectionTypeFullName = connectionTypeFullName, StringAddOperator = "||" };
                 case "IBM.Data.DB2.DB2Connection":
-                    return new DialectOption() { ConnectionTypeFullName = connectionTypeFullName, StringAddOperator = "||", CurrentDateTimeSeparator = " " };
+                    return new DialectOption() { IsRowsParameterDirectValue = true, ConnectionTypeFullName = connectionTypeFullName, StringAddOperator = "||", CurrentDateTimeSeparator = " " };
                 case "Oracle.ManagedDataAccess.Client.OracleConnection":
                     return new DialectOption() { ConnectionTypeFullName = connectionTypeFullName, StringAddOperator = "||", ParameterPrefix = ":" };
+                case "System.Data.SqlClient.SqlConnection":
+                    return new DialectOption() { IsRowsParameterDirectValue = true };
                 default:
                     return new DialectOption() { ConnectionTypeFullName = connectionTypeFullName };
             }

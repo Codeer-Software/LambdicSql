@@ -1,11 +1,11 @@
 ﻿namespace LambdicSql.BuilderServices.Code.Inside
 {
-    class CustomizeParameterToObject : IPartsCustomizer
+    class CustomizeParameterForRowsToObject : IPartsCustomizer
     {
         public Parts Custom(Parts src)
         {
             var param = src as ParameterParts;
-            return param == null ? src : param.ToDisplayValue();
+            return param == null ? src : new RowsParameterParts(param);
         }
     }
 }

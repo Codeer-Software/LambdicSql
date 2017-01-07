@@ -549,7 +549,6 @@ WHERE (@val) IS NOT NULL", new Params() { { "@val", "" } });
         public void XXX()
         {
             var name = _connection.GetType().Name;
-            if (name == "NpgsqlConnection") return;
             if (name == "SQLiteConnection") return;
 
             var query = Db<DB>.Sql(db =>
@@ -563,9 +562,5 @@ WHERE (@val) IS NOT NULL", new Params() { { "@val", "" } });
             query.Gen(_connection);
             var datas = _connection.Query(query).ToList();
         }
-
-
-
-
     }
 }

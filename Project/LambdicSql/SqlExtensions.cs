@@ -4,9 +4,6 @@ using LambdicSql.BuilderServices.Code;
 
 namespace LambdicSql
 {
-    //TODO 拡張にするべきなのか？
-    //役割分担を考えればそんなにおかしくないけれども
-
     /// <summary>
     /// Enhancement of ISqlExpressionBase.
     /// </summary>
@@ -56,10 +53,7 @@ namespace LambdicSql
         }
 
         class Dummy { }
-
-        //TODO ラムダの中で使われたら？
-        //もう、面倒だからラムダの中では使えない属性をつけるか。
-
+        
         /// <summary>
         /// Concatenate expression1 and expression2.
         /// </summary>

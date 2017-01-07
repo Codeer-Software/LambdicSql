@@ -23,9 +23,7 @@ namespace LambdicSql.BuilderServices
         {
             _prefix = prefix;
         }
-
-        //TODO Performance tuning. 
-
+        
         /// <summary>
         /// Get parameters.
         /// It's dictionary of name and parameter.
@@ -37,41 +35,40 @@ namespace LambdicSql.BuilderServices
         internal string Push(object obj, string nameSrc = null, MetaId metadataToken = null, DbParam param = null)
         {
             if (string.IsNullOrEmpty(nameSrc)) nameSrc = "p_" + _count++;
+            else nameSrc = nameSrc.Replace(".", "_");
 
-            nameSrc = nameSrc.Replace(".", "_");
             var name = _prefix + nameSrc;
+
             DecodingParameterInfo val;
             if (_parameters.TryGetValue(name, out val))
             {
-                //not be same direct value. 
-                if (metadataToken != null && metadataToken == val.MetadataToken)
-                {
-                    return name;
-                }
-                while (true)
-                {
-                    var nameCheck = _prefix + nameSrc;
-                    if (_parameters.TryGetValue(nameCheck, out val))
-                    {
-                        //not be same direct value. 
-                        if (metadataToken != null && metadataToken == val.MetadataToken)
-                        {
-                            return nameCheck;
-                        }
-                    }
-                    else
-                    {
-                        name = nameCheck;
-                        break;
-                    }
-                    nameSrc += "_";
-                }
+                //find same metatoken object.
+                if (metadataToken != null && metadataToken == val.MetadataToken) return name;
+
+                //make unique name.
+                name = MakeUniqueName(nameSrc);
             }
 
+            //register.
             if (param == null) param = new DbParam();
             param.Value = obj;
             _parameters.Add(name, new DecodingParameterInfo() { MetadataToken = metadataToken, Detail = param });
+
             return name;
+        }
+
+        string MakeUniqueName(string nameSrc)
+        {
+            while (true)
+            {
+                var nameCheck = _prefix + nameSrc;
+                DecodingParameterInfo val;
+                if (!_parameters.TryGetValue(nameCheck, out val))
+                {
+                    return nameCheck;
+                }
+                nameSrc += "_";
+            }
         }
     }
 }

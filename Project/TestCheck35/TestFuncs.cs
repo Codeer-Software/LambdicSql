@@ -1085,7 +1085,7 @@ FROM SYSIBM.SYSDUMMY1");
             var query = Db<DB>.Sql(db =>
                 Select(new
                 {
-                    id = Cast<int>(db.tbl_remuneration.money, "int")
+                    id = Cast<int>(db.tbl_remuneration.money, DataTypes.Int())
                 }).
                 From(db.tbl_remuneration));
 
@@ -1093,7 +1093,7 @@ FROM SYSIBM.SYSDUMMY1");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	CAST(tbl_remuneration.money AS int) AS id
+	CAST(tbl_remuneration.money AS INT) AS id
 FROM tbl_remuneration");
         }
 
@@ -1106,11 +1106,11 @@ FROM tbl_remuneration");
                 name != "NpgsqlConnection") return;
 
             var exp1 = Db<DB>.Sql(db => db.tbl_remuneration.money);
-            var exp2 = Db<DB>.Sql(db => "int");
+            var exp2 = Db<DB>.Sql(db => DataTypes.Int());
             var query = Db<DB>.Sql(db =>
                 Select(new
                 {
-                    id = Cast<int>(exp1, exp2)
+                    id = Cast<int>(exp1, exp2.Body)
                 }).
                 From(db.tbl_remuneration));
 
@@ -1118,7 +1118,7 @@ FROM tbl_remuneration");
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
 @"SELECT
-	CAST(tbl_remuneration.money AS int) AS id
+	CAST(tbl_remuneration.money AS INT) AS id
 FROM tbl_remuneration");
         }
 

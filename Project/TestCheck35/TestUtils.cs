@@ -581,5 +581,21 @@ FROM rec", 1, 1, 1, 5);
         }
 
         //TODO テスト WHERE句の比較にサブクエリを入れる 直とsubと両方
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void TestDirectValue()
+        {
+            var name = _connection.GetType().Name;
+            if (name == "OracleConnection") return;
+            if (name == "MySqlConnection") return;
+            if (name == "DB2Connection") return;
+
+            var query = Db<DB>.Sql(db => Select(1.DirectValue()));
+            var datas = _connection.Query<SelectedData>(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+ @"SELECT
+	1");
+        }
     }
 }

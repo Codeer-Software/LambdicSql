@@ -28,6 +28,11 @@
         public bool ExistRecursiveClause { get; set; }
 
         /// <summary>
+        /// Does a Recursive clause exist?
+        /// </summary>
+        public bool IsRowsParameterDirectValue { get; set; }
+
+        /// <summary>
         /// Separator between Current and Date.
         /// It affects CurrentDate, CurrentTime, CurrentTimeStamp.
         /// </summary>

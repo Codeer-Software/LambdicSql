@@ -36,6 +36,9 @@ namespace TestCheck35
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            //@@@
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var query = Db<DB>.Sql(db =>
                 Select(new SelectData()
@@ -68,6 +71,8 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var query = Db<DB>.Sql(db =>
                 Select(new SelectData()
@@ -98,6 +103,8 @@ FROM tbl_remuneration", 3);
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var exp = Db<DB>.Sql(db => db.tbl_remuneration.money);
             var query = Db<DB>.Sql(db =>
@@ -129,6 +136,9 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            //@@@
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var query = Db<DB>.Sql(db =>
                 Select(new SelectData()
@@ -159,6 +169,8 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var query = Db<DB>.Sql(db =>
                 Select(new SelectData()
@@ -189,6 +201,8 @@ FROM tbl_remuneration", 3);
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var exp = Db<DB>.Sql(db => db.tbl_remuneration.money);
             var query = Db<DB>.Sql(db =>
@@ -220,6 +234,8 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var exp = Db<DB>.Sql(db => db.tbl_remuneration.money);
             var query = Db<DB>.Sql(db =>
@@ -251,6 +267,9 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            //@@@
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var query = Db<DB>.Sql(db =>
                 Select(new SelectData()
@@ -284,6 +303,8 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var query = Db<DB>.Sql(db =>
                 Select(new SelectData()
@@ -314,6 +335,8 @@ FROM tbl_remuneration", 3);
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var exp = Db<DB>.Sql(db => db.tbl_remuneration.money);
             var query = Db<DB>.Sql(db =>
@@ -345,6 +368,9 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            //@@@
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var query = Db<DB>.Sql(db =>
                 Select(new SelectData()
@@ -375,6 +401,9 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            //@@@
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var query = Db<DB>.Sql(db =>
                 Select(new SelectData()
@@ -425,8 +454,8 @@ FROM tbl_remuneration");
 			tbl_remuneration.payment_date
 		ORDER BY
 			tbl_remuneration.money ASC
-		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
-FROM tbl_remuneration");
+		ROWS BETWEEN @p_0 PRECEDING AND @p_1 FOLLOWING) AS Val
+FROM tbl_remuneration", (long)1, (long)5);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -434,6 +463,9 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            //@@@
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var query = Db<DB>.Sql(db =>
                 Select(new SelectData()
@@ -464,6 +496,8 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var query = Db<DB>.Sql(db =>
                 Select(new SelectData()
@@ -494,6 +528,8 @@ FROM tbl_remuneration", 3);
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var exp = Db<DB>.Sql(db => db.tbl_remuneration.money);
             var query = Db<DB>.Sql(db =>
@@ -525,6 +561,9 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            //@@@
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var query = Db<DB>.Sql(db =>
                 Select(new SelectData()
@@ -555,6 +594,8 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var query = Db<DB>.Sql(db =>
                 Select(new SelectData()
@@ -585,6 +626,8 @@ FROM tbl_remuneration", 3);
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var exp = Db<DB>.Sql(db => db.tbl_remuneration.money);
             var query = Db<DB>.Sql(db =>
@@ -616,6 +659,9 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            //@@@
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var query = Db<DB>.Sql(db =>
                 Select(new SelectData()
@@ -647,6 +693,8 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var query = Db<DB>.Sql(db =>
                 Select(new SelectData()
@@ -677,6 +725,8 @@ FROM tbl_remuneration", 3);
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var exp = Db<DB>.Sql(db => db.tbl_remuneration.money);
             var query = Db<DB>.Sql(db =>
@@ -708,6 +758,9 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            //@@@
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var query = Db<DB>.Sql(db =>
                 Select(new SelectData()
@@ -738,6 +791,8 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var query = Db<DB>.Sql(db =>
                 Select(new SelectData()
@@ -768,6 +823,8 @@ FROM tbl_remuneration", 3);
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var exp = Db<DB>.Sql(db => db.tbl_remuneration.money);
             var query = Db<DB>.Sql(db =>
@@ -799,6 +856,9 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            //@@@
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var query = Db<DB>.Sql(db =>
                 Select(new SelectData()
@@ -826,6 +886,9 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            //@@@
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var query = Db<DB>.Sql(db =>
                 Select(new SelectData()
@@ -854,6 +917,9 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
             if (_connection.GetType().Name == "OracleConnection") return;
+            //@@@
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var query = Db<DB>.Sql(db =>
                 Select(new SelectData
@@ -881,6 +947,9 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            //@@@
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var query = Db<DB>.Sql(db =>
                 Select(new SelectData()
@@ -909,6 +978,9 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
             if (_connection.GetType().Name == "NpgsqlConnection") return;
+            //@@@
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var query = Db<DB>.Sql(db =>
                 Select(new SelectData()
@@ -937,6 +1009,9 @@ FROM tbl_remuneration", 2);
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
             if (_connection.GetType().Name == "NpgsqlConnection") return;
+            //@@@
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var exp = Db<DB>.Sql(db => 2);
             var query = Db<DB>.Sql(db =>
@@ -965,6 +1040,9 @@ FROM tbl_remuneration", 2);
         {
             if (_connection.GetType().Name != "OracleConnection" &&
                 _connection.GetType().Name != "DB2Connection") return;
+            //@@@
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var query = Db<DB>.Sql(db =>
                 Select(new SelectData()
@@ -1011,8 +1089,8 @@ FROM tbl_remuneration", 2);
 	OVER(
 		ORDER BY
 			tbl_remuneration.money ASC
-		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
-FROM tbl_remuneration", 2);
+		ROWS BETWEEN :p_1 PRECEDING AND :p_2 FOLLOWING) AS Val
+FROM tbl_remuneration", 2, (long)1, (long)5);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -1020,6 +1098,9 @@ FROM tbl_remuneration", 2);
         {
             if (_connection.GetType().Name != "OracleConnection" &&
                 _connection.GetType().Name != "DB2Connection") return;
+            //@@@
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var exp1 = Db<DB>.Sql(db => db.tbl_remuneration.money);
             var exp2 = Db<DB>.Sql(db => (long)2);
@@ -1050,6 +1131,9 @@ FROM tbl_remuneration", (long)2);
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            //@@@
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var query = Db<DB>.Sql(db =>
                 Select(new SelectData()
@@ -1077,6 +1161,8 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var query = Db<DB>.Sql(db =>
                 Select(new SelectData()
@@ -1104,6 +1190,8 @@ FROM tbl_remuneration", 3);
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var exp = Db<DB>.Sql(db => db.tbl_remuneration.money);
             var query = Db<DB>.Sql(db =>
@@ -1133,6 +1221,9 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
             if (_connection.GetType().Name == "DB2Connection") return;
+            //@@@
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var query = Db<DB>.Sql(db =>
                 Select(new SelectData()
@@ -1163,6 +1254,8 @@ FROM tbl_remuneration", 2);
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
             if (_connection.GetType().Name == "DB2Connection") return;
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var query = Db<DB>.Sql(db =>
                 Select(new SelectData()
@@ -1191,6 +1284,8 @@ FROM tbl_remuneration", 3);
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
             if (_connection.GetType().Name == "DB2Connection") return;
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var exp1 = Db<DB>.Sql(db => db.tbl_remuneration.money);
             var exp2 = Db<DB>.Sql(db => 2);
@@ -1222,6 +1317,9 @@ FROM tbl_remuneration", 2);
             if (_connection.GetType().Name == "MySqlConnection") return;
             if (_connection.GetType().Name == "DB2Connection") return;
             if (_connection.GetType().Name == "NpgsqlConnection") return;
+            //@@@
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var query = Db<DB>.Sql(db =>
                 Select(new SelectData()
@@ -1251,6 +1349,8 @@ FROM tbl_remuneration", 2, (decimal)100);
             if (_connection.GetType().Name == "MySqlConnection") return;
             if (_connection.GetType().Name == "DB2Connection") return;
             if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var query = Db<DB>.Sql(db =>
                 Select(new SelectData()
@@ -1280,6 +1380,8 @@ FROM tbl_remuneration", 2000);
             if (_connection.GetType().Name == "MySqlConnection") return;
             if (_connection.GetType().Name == "DB2Connection") return;
             if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var exp1 = Db<DB>.Sql(db => db.tbl_remuneration.money);
             var exp2 = Db<DB>.Sql(db => 2);
@@ -1305,12 +1407,44 @@ FROM tbl_remuneration", 2000);
 FROM tbl_remuneration", 2, 100);
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_RowNumber()
+        {
+            if (_connection.GetType().FullName == "System.Data.SQLite.SQLiteConnection") return;
+            if (_connection.GetType().FullName == "MySql.Data.MySqlClient.MySqlConnection") return;
+            //@@@
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
+            var query = Db<DB>.Sql(db =>
+                Select(new SelectData()
+                {
+                    Val = Row_Number().
+                            Over(null,
+                                OrderBy(Asc(db.tbl_remuneration.money)),
+                                null)
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	ROW_NUMBER()
+	OVER(
+		ORDER BY
+			tbl_remuneration.money ASC) AS Val
+FROM tbl_remuneration");
+        }
+
         //TODO PARTITION BY のテストが少し弱いかな？
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_PartitionBy()
         {
             if (_connection.GetType().FullName == "System.Data.SQLite.SQLiteConnection") return;
             if (_connection.GetType().FullName == "MySql.Data.MySqlClient.MySqlConnection") return;
+            //@@@
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var query = Db<DB>.Sql(db =>
                 Select(new SelectData()
@@ -1345,6 +1479,9 @@ FROM tbl_remuneration
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            //@@@
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var query = Db<DB>.Sql(db =>
                 Select(new SelectData()
@@ -1381,7 +1518,7 @@ FROM tbl_remuneration");
                     Val = Count(db.tbl_remuneration.money).
                             Over(PartitionBy(db.tbl_remuneration.payment_date),
                                 OrderBy(Asc(db.tbl_remuneration.money)),
-                                Rows((int)db.tbl_remuneration.money))
+                                Rows((long)db.tbl_remuneration.money))
                 }).
                 From(db.tbl_remuneration));
 
@@ -1406,6 +1543,9 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
             if (_connection.GetType().Name == "DB2Connection") return;
+            //@@@
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var exp = Db<DB>.Sql(db => 1);
             var query = Db<DB>.Sql(db =>
@@ -1439,6 +1579,9 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
             if (_connection.GetType().Name == "DB2Connection") return;
+            //@@@
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var query = Db<DB>.Sql(db =>
                 Select(new SelectData()
@@ -1500,6 +1643,8 @@ FROM tbl_remuneration");
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
             if (_connection.GetType().Name == "DB2Connection") return;
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var exp1 = Db<DB>.Sql(db => 1);
             var exp2 = Db<DB>.Sql(db => 3);
@@ -1532,6 +1677,9 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            //@@@
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var query = Db<DB>.Sql(db =>
                 Select(new SelectData()
@@ -1563,6 +1711,8 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var exp1 = Db<DB>.Sql(db => Asc(db.tbl_remuneration.money));
             var exp2 = Db<DB>.Sql(db => Desc(db.tbl_remuneration.payment_date));
@@ -1596,6 +1746,9 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            //@@@
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var query = Db<DB>.Sql(db =>
                 Select(new SelectData()
@@ -1621,6 +1774,8 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var partitionBy = Db<DB>.Sql(db => PartitionBy(db.tbl_remuneration.payment_date));
             var query = Db<DB>.Sql(db =>
@@ -1647,6 +1802,9 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            //@@@
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var query = Db<DB>.Sql(db =>
                 Select(new SelectData()
@@ -1675,6 +1833,8 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var partitionBy = Db<DB>.Sql(db => PartitionBy(db.tbl_remuneration.payment_date));
             var orderBy = Db<DB>.Sql(db => OrderBy(Asc(db.tbl_remuneration.money)));
@@ -1722,8 +1882,8 @@ FROM tbl_remuneration");
 	OVER(
 		PARTITION BY
 			tbl_remuneration.payment_date
-		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
-FROM tbl_remuneration");
+		ROWS BETWEEN @p_0 PRECEDING AND @p_1 FOLLOWING) AS Val
+FROM tbl_remuneration", (long)1, (long)5);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -1750,8 +1910,8 @@ FROM tbl_remuneration");
 	OVER(
 		PARTITION BY
 			tbl_remuneration.payment_date
-		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
-FROM tbl_remuneration");
+		ROWS BETWEEN @p_0 PRECEDING AND @p_1 FOLLOWING) AS Val
+FROM tbl_remuneration", (long)1, (long)5);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -1759,6 +1919,9 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            //@@@
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var query = Db<DB>.Sql(db =>
                 Select(new SelectData()
@@ -1789,6 +1952,8 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var partitionBy = Db<DB>.Sql(db => PartitionBy(db.tbl_remuneration.payment_date));
             var orderBy = Db<DB>.Sql(db => OrderBy(Asc(db.tbl_remuneration.money)));
@@ -1820,6 +1985,9 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            //@@@
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var partitionBy = Db<DB>.Sql(db => PartitionBy(db.tbl_remuneration.payment_date));
             var orderBy = Db<DB>.Sql(db => OrderBy(Asc(db.tbl_remuneration.money)));
@@ -1849,6 +2017,8 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var orderBy = Db<DB>.Sql(db => OrderBy(Asc(db.tbl_remuneration.money)));
             var query = Db<DB>.Sql(db =>
@@ -1875,6 +2045,9 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            //@@@
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var query = Db<DB>.Sql(db =>
                 Select(new SelectData()
@@ -1902,6 +2075,8 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
+            if (_connection.GetType().Name == "NpgsqlConnection") return;
+            if (_connection.GetType().Name == "OracleConnection") return;
 
             var orderBy = Db<DB>.Sql(db => OrderBy(Asc(db.tbl_remuneration.money)));
             var rows = Db<DB>.Sql(db => Rows(1, 5));
@@ -1944,8 +2119,8 @@ FROM tbl_remuneration");
 @"SELECT
 	COUNT(tbl_remuneration.money)
 	OVER(
-		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
-FROM tbl_remuneration");
+		ROWS BETWEEN @p_0 PRECEDING AND @p_1 FOLLOWING) AS Val
+FROM tbl_remuneration", (long)1, (long)5);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -1968,8 +2143,8 @@ FROM tbl_remuneration");
 @"SELECT
 	COUNT(tbl_remuneration.money)
 	OVER(
-		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
-FROM tbl_remuneration");
+		ROWS BETWEEN @p_0 PRECEDING AND @p_1 FOLLOWING) AS Val
+FROM tbl_remuneration", (long)1, (long)5);
         }
     }
 }

@@ -2,7 +2,6 @@
 
 namespace LambdicSql.BuilderServices.Code.Inside
 {
-    //TODO Symbolのリファクタリングが終わった段階で見直し
     static class PartsFactoryUtils
     {
         internal static HParts Arguments(params Parts[] args)

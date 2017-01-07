@@ -228,12 +228,19 @@ namespace LambdicSql
         /// Get column name only.
         /// It's Removing table name and schema name.
         /// </summary>
-        /// <typeparam name="T">column type.</typeparam>
-        /// <param name="column">column.</param>
+        /// <typeparam name="T">Column type.</typeparam>
+        /// <param name="column">Column.</param>
         /// <returns>Column name only.</returns>
         [ColumnOnlyConverter]
         public static T ColumnOnly<T>(this T column) => InvalitContext.Throw<T>(nameof(ColumnOnly));
 
-        //TODO 強制でパラメータを値に変更する拡張
+        /// <summary>
+        /// Embed a direct value in SQL without using parameters.
+        /// </summary>
+        /// <typeparam name="T">Value type.</typeparam>
+        /// <param name="value">Value.</param>
+        /// <returns>Direct Value.</returns>
+        [DirectValueConverter]
+        public static T DirectValue<T>(this T value) => InvalitContext.Throw<T>(nameof(DirectValue));
     }
 }
