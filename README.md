@@ -46,11 +46,11 @@ public class DB
 
 public void TestStandard()
 {
-	var min = 3000;
-	
+    var min = 3000;
+
     //make sql.
-    var query = Sql<DB>.Create(db =>
-        Select(new SelectData()
+    var query = Db<DB>.Sql(db =>
+        Select(new SelectData1()
         {
             Name = db.tbl_staff.name,
             PaymentDate = db.tbl_remuneration.payment_date,
@@ -61,10 +61,10 @@ public void TestStandard()
         Where(min < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
 
     //to string and params.
-    var info = query.ToSqlInfo(_connection.GetType());
-    Debug.Print(info.SqlText);
+    var info = query.Build(_connection.GetType());
+    Debug.Print(info.Text);
 
-    //if you installed dapper, use this extension.
+    //dapper
     var datas = _connection.Query(query).ToList();
 }
 ```
@@ -216,7 +216,7 @@ You can write DRY code.
 public void TestQueryConcat()
 {
     //make sql.
-    var select = Sql<DB>.Create(db => 
+    var select = Db<DB>.Sql(db =>
         Select(new SelectData1()
         {
             Name = db.tbl_staff.name,
@@ -224,19 +224,26 @@ public void TestQueryConcat()
             Money = db.tbl_remuneration.money,
         }));
 
-    var from = Sql<DB>.Create(db => 
+    var from = Db<DB>.Sql(db =>
          From(db.tbl_remuneration).
         Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id));
 
-	var min = 3000;
-    var where = Sql<DB>.Create(db => 
-        Where(min < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
+    var where = Db<DB>.Sql(db =>
+        Where(3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
 
-    var orderby = Sql<DB>.Create(db => 
-         OrderBy(new Asc(db.tbl_staff.name)));
+    var orderby = Db<DB>.Sql(db =>
+         OrderBy(Asc(db.tbl_staff.name)));
 
     var query = select.Concat(from).Concat(where).Concat(orderby);
+
+    //to string and params.
+    var info = query.Build(_connection.GetType());
+    Debug.Print(info.Text);
+
+    //dapper
+    var datas = _connection.Query(query).ToList();
 }
+
 ```
 ```sql
 SELECT
@@ -254,21 +261,28 @@ Build expressions.
 public void TestSqlExpression()
 {
     //make sql.
-    var expMoneyAdd = Sql<DB>.Create(db => db.tbl_remuneration.money + 100);
-    var expWhereMin = Sql<DB>.Create(db => 3000 < db.tbl_remuneration.money);
-    var expWhereMax = Sql<DB>.Create(db => db.tbl_remuneration.money < 4000);
+    var expMoneyAdd = Db<DB>.Sql(db => db.tbl_remuneration.money + 100);
+    var expWhereMin = Db<DB>.Sql(db => 3000 < db.tbl_remuneration.money);
+    var expWhereMax = Db<DB>.Sql(db => db.tbl_remuneration.money < 4000);
 
-    var query = Sql<DB>.Create(db =>
-        Select(new SelectData1()
-        {
-            Name = db.tbl_staff.name,
-            PaymentDate = db.tbl_remuneration.payment_date,
-            Money = expMoneyAdd,
-        }).
-        From(db.tbl_remuneration).
-            Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
-        Where(expWhereMin && expWhereMax).
-        OrderBy(new Asc(db.tbl_staff.name)));
+    var query = Db<DB>.Sql(db =>
+       Select(new SelectData1()
+       {
+           Name = db.tbl_staff.name,
+           PaymentDate = db.tbl_remuneration.payment_date,
+           Money = expMoneyAdd,
+       }).
+       From(db.tbl_remuneration).
+           Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
+       Where(expWhereMin && expWhereMax).
+       OrderBy(Asc(db.tbl_staff.name)));
+
+    //to string and params.
+    var info = query.Build(_connection.GetType());
+    Debug.Print(info.Text);
+
+    //dapper
+    var datas = _connection.Query(query).ToList();
 }
 ```
 ```sql
@@ -287,8 +301,8 @@ Sub query.
 public void TestSubQueryAtFrom()
 {
     //make sql.
-    var subQuery = Sql<DB>.Create(db => 
-        Select(new SelectedData
+    var subQuery = Db<DB>.Sql(db => 
+        Select(new 
         {
             name_sub = db.tbl_staff.name,
             PaymentDate = db.tbl_remuneration.payment_date,
@@ -298,8 +312,8 @@ public void TestSubQueryAtFrom()
             Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
         Where(3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
     
-    var query = Sql<DB>.Create(db => 
-        Select(new SelectData6
+    var query = Db<DB>.Sql(db => 
+        Select(new SelectData
         {
             Name = subQuery.Body.name_sub
         }).
@@ -326,7 +340,7 @@ And insert expression to text.
 public void TestFormatText()
 {
     //make sql.
-    var query = Sql<DB>.Create(db =>
+    var query = Db<DB>.Sql(db =>
         Select(new SelectedData
         {
             name = db.tbl_staff.name,
@@ -338,7 +352,7 @@ public void TestFormatText()
         Where(3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
 
     //to string and params.
-    var info = query.ToSqlInfo(_connection.GetType());
+    var info = query.Build(_connection.GetType());
     Debug.Print(info.SqlText);
 
     //if you installed dapper, use this extension.
@@ -378,13 +392,13 @@ FROM tbl_remuneration
 JOIN tbl_staff ON tbl_staff.id = tbl_remuneration.staff_id
 /*1*/WHERE tbl_remuneration.money = 100/**/";
     
-    var query = Sql<DB>.Create(db => sql.TwoWaySql(
+    var query = Db<DB>.Sql(db => sql.TwoWaySql(
         bonus,
         Where(
             Condition(minCondition, 3000 < db.tbl_remuneration.money) &&
             Condition(maxCondition, db.tbl_remuneration.money < 4000))
         ));
-    var info = query.ToSqlInfo(_connection.GetType());
+    var info = query.Build(_connection.GetType());
     Debug.Print(info.SqlText);
 
     //if you installed dapper, use this extension.
