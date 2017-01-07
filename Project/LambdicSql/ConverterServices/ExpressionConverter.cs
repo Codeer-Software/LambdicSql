@@ -226,7 +226,7 @@ namespace LambdicSql.ConverterServices
             var parts = GetMethodChains(method).Select(c=> c.GetMethodConverter().Convert(c, this)).ToArray();
             if (parts.Length == 0) return ResolveExpressionObject(method);
 
-            //TODO ちょっと嫌すぎる。括弧を付けない方法を何か確立せねば
+            //for ALL function. can't add blankets.
             if (parts.Length == 1 && typeof(DisableBracketsParts).IsAssignableFrom(parts[0].GetType()))
             {
                 return new ConvertedResult(method.Method.ReturnType, parts[0]);

@@ -197,8 +197,7 @@ namespace LambdicSql
         /// <returns>A part from the date data.</returns>
         [FuncConverter]
         public static int DatePart(DateTimeElement element, DateTime src) => InvalitContext.Throw<int>(nameof(Extract));
-
-        //TODO stringをやめる
+        
         /// <summary>
         /// CAST function.
         /// </summary>
