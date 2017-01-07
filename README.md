@@ -49,7 +49,7 @@ public void TestStandard()
     var min = 3000;
 
     //make sql.
-    var query = Db<DB>.Sql(db =>
+    var sql = Db<DB>.Sql(db =>
         Select(new SelectData1()
         {
             Name = db.tbl_staff.name,
@@ -61,11 +61,11 @@ public void TestStandard()
         Where(min < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
 
     //to string and params.
-    var info = query.Build(_connection.GetType());
+    var info = sql.Build(_connection.GetType());
     Debug.Print(info.Text);
 
     //dapper
-    var datas = _connection.Query(query).ToList();
+    var datas = _connection.Query(sql).ToList();
 }
 ```
 ```sql
@@ -234,14 +234,14 @@ public void TestQueryConcat()
     var orderby = Db<DB>.Sql(db =>
          OrderBy(Asc(db.tbl_staff.name)));
 
-    var query = select.Concat(from).Concat(where).Concat(orderby);
+    var sql = select.Concat(from).Concat(where).Concat(orderby);
 
     //to string and params.
-    var info = query.Build(_connection.GetType());
+    var info = sql.Build(_connection.GetType());
     Debug.Print(info.Text);
 
     //dapper
-    var datas = _connection.Query(query).ToList();
+    var datas = _connection.Query(sql).ToList();
 }
 
 ```
@@ -265,7 +265,7 @@ public void TestSqlExpression()
     var expWhereMin = Db<DB>.Sql(db => 3000 < db.tbl_remuneration.money);
     var expWhereMax = Db<DB>.Sql(db => db.tbl_remuneration.money < 4000);
 
-    var query = Db<DB>.Sql(db =>
+    var sql = Db<DB>.Sql(db =>
        Select(new SelectData1()
        {
            Name = db.tbl_staff.name,
@@ -278,11 +278,11 @@ public void TestSqlExpression()
        OrderBy(Asc(db.tbl_staff.name)));
 
     //to string and params.
-    var info = query.Build(_connection.GetType());
+    var info = sql.Build(_connection.GetType());
     Debug.Print(info.Text);
 
     //dapper
-    var datas = _connection.Query(query).ToList();
+    var datas = _connection.Query(sql).ToList();
 }
 ```
 ```sql
@@ -312,7 +312,7 @@ public void TestSubQueryAtFrom()
             Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
         Where(3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
     
-    var query = Db<DB>.Sql(db => 
+    var sql = Db<DB>.Sql(db => 
         Select(new SelectData
         {
             Name = subQuery.Body.name_sub
@@ -340,7 +340,7 @@ And insert expression to text.
 public void TestFormatText()
 {
     //make sql.
-    var query = Db<DB>.Sql(db =>
+    var sql = Db<DB>.Sql(db =>
         Select(new SelectedData
         {
             name = db.tbl_staff.name,
@@ -352,11 +352,11 @@ public void TestFormatText()
         Where(3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
 
     //to string and params.
-    var info = query.Build(_connection.GetType());
+    var info = sql.Build(_connection.GetType());
     Debug.Print(info.SqlText);
 
     //if you installed dapper, use this extension.
-    var datas = _connection.Query(query).ToList();
+    var datas = _connection.Query(sql).ToList();
 }
 ```
 ```sql
@@ -383,7 +383,7 @@ public void TestFormat2WaySql(bool minCondition, bool maxCondition, decimal bonu
 {
     //make sql.
     //replace /*no*/---/**/.
-    var sql = @"
+    var text = @"
 SELECT
 tbl_staff.name AS name,
 tbl_remuneration.payment_date AS payment_date,
@@ -392,17 +392,17 @@ FROM tbl_remuneration
 JOIN tbl_staff ON tbl_staff.id = tbl_remuneration.staff_id
 /*1*/WHERE tbl_remuneration.money = 100/**/";
     
-    var query = Db<DB>.Sql(db => sql.TwoWaySql(
+    var sql = Db<DB>.Sql(db => text.TwoWaySql(
         bonus,
         Where(
             Condition(minCondition, 3000 < db.tbl_remuneration.money) &&
             Condition(maxCondition, db.tbl_remuneration.money < 4000))
         ));
-    var info = query.Build(_connection.GetType());
+    var info = sql.Build(_connection.GetType());
     Debug.Print(info.SqlText);
 
     //if you installed dapper, use this extension.
-    var datas = _connection.Query<SelectedData>(query).ToList();
+    var datas = _connection.Query<SelectedData>(sql).ToList();
 }
 ```
 min max enable.
