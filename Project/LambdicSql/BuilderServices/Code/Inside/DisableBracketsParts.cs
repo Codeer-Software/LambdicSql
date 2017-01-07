@@ -1,6 +1,5 @@
 ﻿namespace LambdicSql.BuilderServices.Code.Inside
 { 
-    //TODO そもそも括弧つけの手法が見直せたら良い
     class DisableBracketsParts : Parts
     {
         Parts _core;
