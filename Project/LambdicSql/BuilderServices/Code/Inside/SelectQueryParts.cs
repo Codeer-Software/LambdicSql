@@ -25,6 +25,6 @@
 
         public override Parts ConcatToBack(string back) => new SelectQueryParts(_core.ConcatToBack(back));
 
-        public override Parts Customize(IPartsCustomizer customizer) => customizer.Custom(this);
+        public override Parts Customize(IPartsCustomizer customizer) => new SelectQueryParts(_core.Customize(customizer));
     }
 }

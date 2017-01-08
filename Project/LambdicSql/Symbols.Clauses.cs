@@ -1103,8 +1103,23 @@ namespace LambdicSql
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [FuncConverter(Name = "FOREIGN KEY", Indent = 1)]
         public static IConstraint ForeignKey(this IConstraint before, params object[] columns) => InvalitContext.Throw<IConstraint>(nameof(ForeignKey));
+        
+        /// <summary>
+        /// NOT NULL
+        /// </summary>
+        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        [KeywordMethodConverter(Name = "NOT NULL")]
+        public static IConstraint NotNull() => InvalitContext.Throw<IConstraint>(nameof(NotNull));
 
-        //Not NULLとか Defaultとか
+        //TODO あれ？そういえば、これってパラメータで渡せるのか？ 
+
+        /// <summary>
+        /// DEFAULT
+        /// </summary>
+        /// <param name="value">value</param>
+        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        [ClauseConverter]
+        public static IConstraint Default(object value) => InvalitContext.Throw<IConstraint>(nameof(NotNull));
 
         /// <summary>
         /// REFERENCES clause.

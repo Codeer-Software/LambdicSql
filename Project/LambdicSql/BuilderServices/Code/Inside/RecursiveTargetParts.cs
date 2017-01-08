@@ -24,6 +24,6 @@
 
         public override Parts ConcatToBack(string back) => new RecursiveTargetParts(_core.ConcatToBack(back));
 
-        public override Parts Customize(IPartsCustomizer customizer) => customizer.Custom(this);
+        public override Parts Customize(IPartsCustomizer customizer) => new RecursiveTargetParts(_core.Customize(customizer));
     }
 }

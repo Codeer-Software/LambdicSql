@@ -189,7 +189,8 @@ FROM tbl_data", 10);
             {
                 var sql = Db<DBForCreateTest>.Sql(db => 
                     CreateTable(db.table1,
-                        new Column(db.table1.id, DataTypes.Int())
+                        new Column(db.table1.id, DataTypes.Int(), Default(10), NotNull()),
+                        new Column(db.table1.val2, DataTypes.VarChar(10), NotNull())
                     ));
                 sql.Gen(_connection);
                 _connection.Execute(sql);
@@ -202,7 +203,7 @@ FROM tbl_data", 10);
                 _connection.Execute(sql);
             }
 
-            //lite, oracle, db2はダメ
+            //lite, oracle, db2はダメ まとめて消す
             {
       //          var sql2 = Db<DBForCreateTest>.Sql(db => DropTable(db.table1, db.table2));
          //       _connection.Execute(sql2);

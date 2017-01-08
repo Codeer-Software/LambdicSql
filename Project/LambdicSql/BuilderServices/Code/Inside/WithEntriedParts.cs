@@ -27,6 +27,6 @@
 
         public override Parts ConcatToBack(string back) => new WithEntriedParts(_core.ConcatToBack(back), _names);
 
-        public override Parts Customize(IPartsCustomizer customizer) => customizer.Custom(this);
+        public override Parts Customize(IPartsCustomizer customizer) => new WithEntriedParts(_core.Customize(customizer), _names);
     }
 }
