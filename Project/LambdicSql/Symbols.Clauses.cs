@@ -1104,6 +1104,8 @@ namespace LambdicSql
         [FuncConverter(Name = "FOREIGN KEY", Indent = 1)]
         public static IConstraint ForeignKey(this IConstraint before, params object[] columns) => InvalitContext.Throw<IConstraint>(nameof(ForeignKey));
 
+        //Not NULLとか Defaultとか
+
         /// <summary>
         /// REFERENCES clause.
         /// </summary>

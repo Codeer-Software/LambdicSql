@@ -27,6 +27,11 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         public string Separator { get; set; } = ", ";
 
         /// <summary>
+        /// It is the predicate attached at the end. By default it is empty.
+        /// </summary>
+        public string AfterPredicate { get; set; }
+
+        /// <summary>
         /// Convert expression to code parts.
         /// </summary>
         /// <param name="expression">Expression.</param>
@@ -39,7 +44,8 @@ namespace LambdicSql.ConverterServices.SymbolConverters
             var name = string.IsNullOrEmpty(Name) ? expression.Method.Name.ToUpper() : Name;
 
             var hArgs = new HParts(args) { Separator = Separator }.ConcatToBack(")");
-            return new HParts(Line(name, "("), hArgs) { IsFunctional = true, Indent = Indent };
+            var parts = new HParts(Line(name, "("), hArgs) { IsFunctional = true, Indent = Indent };
+            return string.IsNullOrEmpty(AfterPredicate) ? parts : LineSpace(parts, AfterPredicate);
         }
     }
 }
