@@ -1,4 +1,5 @@
 ﻿using LambdicSql.ConverterServices.Inside;
+using System;
 
 namespace LambdicSql.BuilderServices.Code.Inside
 {
@@ -53,6 +54,14 @@ namespace LambdicSql.BuilderServices.Code.Inside
 
         internal Parts ToDisplayValue() => new ParameterParts(Name, MetaId, _param, _front, _back, true);
 
-        string GetDisplayText(BuildingContext context) => _displayValue ? Value.ToString() : context.ParameterInfo.Push(_param.Value, Name, MetaId, _param);
+        string GetDisplayText(BuildingContext context)
+        {
+            if (_displayValue)
+            {
+                if (typeof(string).IsAssignableFrom(Value.GetType())) throw new NotSupportedException();
+                return Value.ToString();
+            }
+            return context.ParameterInfo.Push(_param.Value, Name, MetaId, _param);
+        }
     }
 }

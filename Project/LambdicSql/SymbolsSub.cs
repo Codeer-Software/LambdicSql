@@ -243,4 +243,29 @@ namespace LambdicSql
         [DirectValueConverter]
         public static T DirectValue<T>(this T value) => InvalitContext.Throw<T>(nameof(DirectValue));
     }
+
+    /// <summary>
+    /// Table definition item.
+    /// </summary>
+    public interface ITableDefinition { }
+
+    /// <summary>
+    /// Constraint object.
+    /// </summary>
+    public interface IConstraint : ITableDefinition { }
+
+    /// <summary>
+    /// Column definition.
+    /// </summary>
+    public class Column : ITableDefinition
+    {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="column">Column.</param>
+        /// <param name="type">Type.</param>
+        /// <param name="constraints">Constraints.</param>
+        [ColumnDefineConverter]
+        public Column(object column, IDataType type, params IConstraint[] constraints) { InvalitContext.Throw("new " + nameof(Column)); }
+    }
 }

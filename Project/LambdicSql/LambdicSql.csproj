@@ -54,6 +54,7 @@
     <Compile Include="BuilderServices\Code\Inside\WithEntriedParts.cs" />
     <Compile Include="ConverterServices\IMethodChain.cs" />
     <Compile Include="ConverterServices\Non.cs" />
+    <Compile Include="ConverterServices\SymbolConverters\Inside\ColumnDefineConverterAttribute.cs" />
     <Compile Include="ConverterServices\SymbolConverters\Inside\AllConverterAttribute.cs" />
     <Compile Include="ConverterServices\SymbolConverters\Inside\AssignConverterAttribute.cs" />
     <Compile Include="ConverterServices\SymbolConverters\Inside\BetweenConverterAttribute.cs" />
@@ -61,6 +62,9 @@
     <Compile Include="ConverterServices\SymbolConverters\Inside\ColumnOnlyConverterAttribute.cs" />
     <Compile Include="ConverterServices\SymbolConverters\Inside\ConditionConverterAttribute.cs" />
     <Compile Include="ConverterServices\SymbolConverters\Inside\ConditionClauseConverterAttribute.cs" />
+    <Compile Include="ConverterServices\SymbolConverters\Inside\SpecialNameClauseConverterAttribute.cs" />
+    <Compile Include="ConverterServices\SymbolConverters\Inside\ReferencesConverterAttribute.cs" />
+    <Compile Include="ConverterServices\SymbolConverters\Inside\CreateTableConverterAttribute.cs" />
     <Compile Include="ConverterServices\SymbolConverters\Inside\CurrentDateTimeConverterAttribute.cs" />
     <Compile Include="ConverterServices\SymbolConverters\Inside\DirectValueConverterAttribute.cs" />
     <Compile Include="ConverterServices\SymbolConverters\Inside\ExtractConverterAttribute.cs" />
@@ -92,6 +96,7 @@
     <Compile Include="ConverterServices\SymbolConverters\Inside\TopConverterAttribute.cs" />
     <Compile Include="ConverterServices\SymbolConverters\Inside\ToSqlConverterAttribute.cs" />
     <Compile Include="IDataType.cs" />
+    <Compile Include="ConvertingNameAttribute.cs" />
     <Compile Include="Symbols.Clauses.cs" />
     <Compile Include="Symbols.Funcs.cs" />
     <Compile Include="Symbols.Etc.cs" />

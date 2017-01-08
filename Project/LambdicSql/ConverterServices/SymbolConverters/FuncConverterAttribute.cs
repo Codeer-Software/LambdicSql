@@ -12,6 +12,11 @@ namespace LambdicSql.ConverterServices.SymbolConverters
     public class FuncConverterAttribute : SymbolConverterMethodAttribute
     {
         /// <summary>
+        /// Indent.
+        /// </summary>
+        public int Indent { get; set; }
+
+        /// <summary>
         /// Name.If it is empty, use the name of the method.
         /// </summary>
         public string Name { get; set; }
@@ -34,7 +39,7 @@ namespace LambdicSql.ConverterServices.SymbolConverters
             var name = string.IsNullOrEmpty(Name) ? expression.Method.Name.ToUpper() : Name;
 
             var hArgs = new HParts(args) { Separator = Separator }.ConcatToBack(")");
-            return new HParts(Line(name, "("), hArgs) { IsFunctional = true };
+            return new HParts(Line(name, "("), hArgs) { IsFunctional = true, Indent = Indent };
         }
     }
 }

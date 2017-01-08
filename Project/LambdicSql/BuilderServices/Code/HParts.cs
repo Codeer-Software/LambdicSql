@@ -160,7 +160,7 @@ namespace LambdicSql.BuilderServices.Code
         /// <returns>Customized SqlText.</returns>
         public override Parts Customize(IPartsCustomizer customizer)
         {
-            var dst = _texts.Select(e => customizer.Custom(e));
+            var dst = _texts.Select(e => e.Customize(customizer));
             return CopyProperty(dst.ToArray());
         }
 

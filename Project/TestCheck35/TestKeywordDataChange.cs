@@ -157,5 +157,59 @@ SELECT
 	tbl_data.val2 AS val2
 FROM tbl_data", 10);
         }
+
+
+
+        public class Table
+        {
+            public int id { get; set; }
+            public int val1 { get; set; }
+            public string val2 { get; set; }
+        }
+
+        public class DBForCreateTest
+        {
+            public Table table1 { get; set; }
+            public Table table2 { get; set; }
+        }
+
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Drop()
+        {
+            try
+            {
+                var sql1 = Db<DBForCreateTest>.Sql(db => DropTable(db.table1));
+                _connection.Execute(sql1);
+                var sql2 = Db<DBForCreateTest>.Sql(db => DropTable(db.table2));
+                _connection.Execute(sql2);
+            }
+            catch { }
+
+            {
+                var sql = Db<DBForCreateTest>.Sql(db => 
+                    CreateTable(db.table1,
+                        new Column(db.table1.id, DataTypes.Int())
+                    ));
+                sql.Gen(_connection);
+                _connection.Execute(sql);
+            }
+            {
+                var sql = Db<DBForCreateTest>.Sql(db => CreateTable(db.table2,
+                    new Column(db.table2.id, DataTypes.Int())
+                    ));
+                sql.Gen(_connection);
+                _connection.Execute(sql);
+            }
+
+            //lite, oracle, db2はダメ
+            {
+      //          var sql2 = Db<DBForCreateTest>.Sql(db => DropTable(db.table1, db.table2));
+         //       _connection.Execute(sql2);
+            }
+        }
+
+
+
     }
 }

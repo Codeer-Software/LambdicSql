@@ -13,42 +13,6 @@ namespace LambdicSql
     public static partial class Symbols
     {
         /// <summary>
-        /// Class representing argument of recursive part.
-        /// </summary>
-        /// <typeparam name="T">Type representing argument.</typeparam>
-        public class RecursiveArguments<T>
-        {
-            RecursiveArguments() { }
-        }
-        
-        /// <summary>
-        /// WITH clause.
-        /// </summary>
-        /// <param name="subQuerys">sub querys.</param>
-        /// <returns></returns>
-        [WithConverter]
-        public static ClauseChain<Non> With(params Sql[] subQuerys) => InvalitContext.Throw<ClauseChain<Non>>(nameof(With));
-
-        /// <summary>
-        /// WITH clause.
-        /// </summary>
-        /// <typeparam name="T">Type representing argument of recursive part.</typeparam>
-        /// <param name="args">Argument of recursive part.</param>
-        /// <param name="subQuery">sub query.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [WithConverter]
-        public static ClauseChain<T> With<T>(SqlRecursiveArguments<T> args, Sql subQuery) => InvalitContext.Throw<ClauseChain<T>>(nameof(With));
-
-        /// <summary>
-        /// RECURSIVE clause.
-        /// </summary>
-        /// <typeparam name="T">Type representing argument of recursive part.</typeparam>
-        /// <param name="args">Argument of recursive part.</param>
-        /// <returns>Class representing argument of recursive part.</returns>
-        [RecursiveConverter]
-        public static RecursiveArguments<T> Recursive<T>(T args) => InvalitContext.Throw<RecursiveArguments<T>>(nameof(Select));
-
-        /// <summary>
         /// SELECT clause.
         /// </summary>
         /// <typeparam name="TSelected">Type of selected.</typeparam>
@@ -1006,5 +970,205 @@ namespace LambdicSql
         /// <returns>Returns TRUE if there is at least one record returned by expression, FALSE otherwise.</returns>
         [ClauseConverter]
         public static bool Exists(object expression) => InvalitContext.Throw<bool>(nameof(Exists));
+
+        /// <summary>
+        /// Class representing argument of recursive part.
+        /// </summary>
+        /// <typeparam name="T">Type representing argument.</typeparam>
+        public class RecursiveArguments<T>
+        {
+            RecursiveArguments() { }
+        }
+
+        /// <summary>
+        /// WITH clause.
+        /// </summary>
+        /// <param name="subQuerys">sub querys.</param>
+        /// <returns></returns>
+        [WithConverter]
+        public static ClauseChain<Non> With(params Sql[] subQuerys) => InvalitContext.Throw<ClauseChain<Non>>(nameof(With));
+
+        /// <summary>
+        /// WITH clause.
+        /// </summary>
+        /// <typeparam name="T">Type representing argument of recursive part.</typeparam>
+        /// <param name="args">Argument of recursive part.</param>
+        /// <param name="subQuery">sub query.</param>
+        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        [WithConverter]
+        public static ClauseChain<T> With<T>(SqlRecursiveArguments<T> args, Sql subQuery) => InvalitContext.Throw<ClauseChain<T>>(nameof(With));
+
+        /// <summary>
+        /// RECURSIVE clause.
+        /// </summary>
+        /// <typeparam name="T">Type representing argument of recursive part.</typeparam>
+        /// <param name="args">Argument of recursive part.</param>
+        /// <returns>Class representing argument of recursive part.</returns>
+        [RecursiveConverter]
+        public static RecursiveArguments<T> Recursive<T>(T args) => InvalitContext.Throw<RecursiveArguments<T>>(nameof(Select));
+
+        //TODO test.
+        /// <summary>
+        /// CREATE TABLE clause.
+        /// </summary>
+        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        [CreateTableConverter]
+        public static ClauseChain<Non> CreateTable(object table, params ITableDefinition[] designer) => InvalitContext.Throw<ClauseChain<Non>>(nameof(CreateTable));
+
+        /// <summary>
+        /// CONSTRAINT clause.
+        /// </summary>
+        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        [ClauseConverter]
+        public static IConstraint Constraint() => InvalitContext.Throw<IConstraint>(nameof(Constraint));
+
+        /// <summary>
+        /// CONSTRAINT clause.
+        /// </summary>
+        /// <param name="nameOfVariable">Constraint name.</param>
+        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        [SpecialNameClauseConverter(Name = "CONSTRAINT")]
+        public static IConstraint Constraint(object nameOfVariable) => InvalitContext.Throw<IConstraint>(nameof(Constraint));
+
+        /// <summary>
+        /// PRIMARY KEY clause.
+        /// </summary>
+        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        [KeywordMethodConverter(Name = "PRIMARY KEY")]
+        public static IConstraint PrimaryKey() => InvalitContext.Throw<IConstraint>(nameof(PrimaryKey));
+
+        /// <summary>
+        /// PRIMARY KEY clause.
+        /// </summary>
+        /// <param name="columns">Columns.</param>
+        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        [FuncConverter(Name = "PRIMARY KEY")]
+        public static IConstraint PrimaryKey(params object[] columns) => InvalitContext.Throw<IConstraint>(nameof(PrimaryKey));
+
+        /// <summary>
+        /// PRIMARY KEY clause.
+        /// </summary>
+        /// <param name="before">It is the previous clause.</param>
+        /// <param name="columns">Columns.</param>
+        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        [FuncConverter(Name = "PRIMARY KEY", Indent = 1)]
+        public static IConstraint PrimaryKey(this IConstraint before, params object[] columns) => InvalitContext.Throw<IConstraint>(nameof(PrimaryKey));
+
+        /// <summary>
+        /// CHECK clause.
+        /// </summary>
+        /// <param name="before">It is the previous clause.</param>
+        /// <param name="condition">Condition.</param>
+        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        [FuncConverter(Indent = 1)]
+        public static IConstraint Check(this IConstraint before, bool condition) => InvalitContext.Throw<IConstraint>(nameof(Check));
+
+        /// <summary>
+        /// UNIQUE clause.
+        /// </summary>
+        /// <param name="columns">Columns.</param>
+        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        [FuncConverter]
+        public static IConstraint Unique(params object[] columns) => InvalitContext.Throw<IConstraint>(nameof(Unique));
+
+        /// <summary>
+        /// UNIQUE clause.
+        /// </summary>
+        /// <param name="before">It is the previous clause.</param>
+        /// <param name="columns">Columns.</param>
+        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        [FuncConverter(Indent = 1)]
+        public static IConstraint Unique(this IConstraint before, params object[] columns) => InvalitContext.Throw<IConstraint>(nameof(Unique));
+
+        /// <summary>
+        /// FOREIGN KEY clause.
+        /// </summary>
+        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        [KeywordMethodConverter(Name = "FOREIGN KEY")]
+        public static IConstraint ForeignKey() => InvalitContext.Throw<IConstraint>(nameof(ForeignKey));
+
+        /// <summary>
+        /// FOREIGN KEY clause.
+        /// </summary>
+        /// <param name="columns">Columns.</param>
+        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        [FuncConverter(Name = "FOREIGN KEY")]
+        public static IConstraint ForeignKey(params object[] columns) => InvalitContext.Throw<IConstraint>(nameof(ForeignKey));
+
+        /// <summary>
+        /// FOREIGN KEY clause.
+        /// </summary>
+        /// <param name="before">It is the previous clause.</param>
+        /// <param name="columns">Columns.</param>
+        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        [FuncConverter(Name = "FOREIGN KEY", Indent = 1)]
+        public static IConstraint ForeignKey(this IConstraint before, params object[] columns) => InvalitContext.Throw<IConstraint>(nameof(ForeignKey));
+
+        /// <summary>
+        /// REFERENCES clause.
+        /// </summary>
+        /// <param name="before">It is the previous clause.</param>
+        /// <param name="table">Table.</param>
+        /// <param name="columns">Columns.</param>
+        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        [ReferencesConverter]
+        public static IConstraint References(this IConstraint before, object table, params object[] columns) => InvalitContext.Throw<IConstraint>(nameof(References));
+
+        /// <summary>
+        /// RESTRICT clause.
+        /// </summary>
+        /// <param name="before">It is the previous clause.</param>
+        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        [ClauseConverter]
+        public static ClauseChain<Non> Restrict(this ClauseChain<Non> before) => InvalitContext.Throw<ClauseChain<Non>>(nameof(Restrict));
+
+        /// <summary>
+        /// CASCADE clause.
+        /// </summary>
+        /// <param name="before">It is the previous clause.</param>
+        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        [ClauseConverter]
+        public static ClauseChain<Non> Cascade(this ClauseChain<Non> before) => InvalitContext.Throw<ClauseChain<Non>>(nameof(Cascade));
+
+        /// <summary>
+        /// CASCADE clause.
+        /// </summary>
+        /// <param name="before">It is the previous clause.</param>
+        /// <param name="constraint">Constraint.</param>
+        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        [ClauseConverter]
+        public static ClauseChain<Non> Cascade(this ClauseChain<Non> before, IConstraint constraint) => InvalitContext.Throw<ClauseChain<Non>>(nameof(Cascade));
+
+        /// <summary>
+        /// DROP TABLE clause.
+        /// </summary>
+        /// <param name="tables">Tables.</param>
+        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        [ClauseConverter(Name = "DROP TABLE", Separator = " ")]
+        public static ClauseChain<Non> DropTable(params object[] tables) => InvalitContext.Throw<ClauseChain<Non>>(nameof(DropTable));
+
+        /// <summary>
+        /// DROP TABLE IF EXISTS clause.
+        /// </summary>
+        /// <param name="tables">Tables.</param>
+        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        [ClauseConverter(Name = "DROP TABLE IF EXISTS", Separator = " ")]
+        public static ClauseChain<Non> DropTableIfExists(params object[] tables) => InvalitContext.Throw<ClauseChain<Non>>(nameof(DropTable));
+
+        /// <summary>
+        /// DROP DATABASE clause.
+        /// </summary>
+        /// <param name="nameOfVariable">DataBase name.</param>
+        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        [SpecialNameClauseConverter(Name = "CREATE DATABASE")]
+        public static ClauseChain<Non> CreateDataBase(object nameOfVariable) => InvalitContext.Throw<ClauseChain<Non>>(nameof(CreateDataBase));
+
+        /// <summary>
+        /// DROP DATABASE clause.
+        /// </summary>
+        /// <param name="nameOfVariable">DataBase name.</param>
+        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        [SpecialNameClauseConverter(Name = "DROP DATABASE")]
+        public static ClauseChain<Non> DropDataBase(object nameOfVariable) => InvalitContext.Throw<ClauseChain<Non>>(nameof(CreateDataBase));
     }
 }
