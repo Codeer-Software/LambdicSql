@@ -252,7 +252,7 @@ namespace LambdicSql
     /// <summary>
     /// Constraint object.
     /// </summary>
-    public interface IConstraint : ITableDefinition { }
+    public interface IConstraint : ITableDefinition, IMethodChain { }
 
     /// <summary>
     /// Column definition.

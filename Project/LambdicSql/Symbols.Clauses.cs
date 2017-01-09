@@ -1007,6 +1007,8 @@ namespace LambdicSql
         [RecursiveConverter]
         public static RecursiveArguments<T> Recursive<T>(T args) => InvalitContext.Throw<RecursiveArguments<T>>(nameof(Select));
 
+        //TODO なかったら作ると、あったら消すを全DBでできるようにしておくか
+
         //TODO test.
         /// <summary>
         /// CREATE TABLE clause.
@@ -1014,21 +1016,22 @@ namespace LambdicSql
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [CreateTableConverter]
         public static ClauseChain<Non> CreateTable(object table, params ITableDefinition[] designer) => InvalitContext.Throw<ClauseChain<Non>>(nameof(CreateTable));
-
+        
         /// <summary>
         /// CONSTRAINT clause.
         /// </summary>
+        /// <param name="before">It is the previous clause.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [ClauseConverter]
-        public static IConstraint Constraint() => InvalitContext.Throw<IConstraint>(nameof(Constraint));
+        public static IConstraint Constraint(this ClauseChain<Non> before) => InvalitContext.Throw<IConstraint>(nameof(Constraint));
 
         /// <summary>
         /// CONSTRAINT clause.
         /// </summary>
-        /// <param name="nameOfVariable">Constraint name.</param>
+        /// <param name="name">Constraint name.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [SpecialNameClauseConverter(Name = "CONSTRAINT")]
-        public static IConstraint Constraint(object nameOfVariable) => InvalitContext.Throw<IConstraint>(nameof(Constraint));
+        public static IConstraint Constraint(string name) => InvalitContext.Throw<IConstraint>(nameof(Constraint));
 
         /// <summary>
         /// PRIMARY KEY clause.
@@ -1083,13 +1086,6 @@ namespace LambdicSql
         /// <summary>
         /// FOREIGN KEY clause.
         /// </summary>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [KeywordMethodConverter(Name = "FOREIGN KEY")]
-        public static IConstraint ForeignKey() => InvalitContext.Throw<IConstraint>(nameof(ForeignKey));
-
-        /// <summary>
-        /// FOREIGN KEY clause.
-        /// </summary>
         /// <param name="columns">Columns.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [FuncConverter(Name = "FOREIGN KEY")]
@@ -1110,8 +1106,6 @@ namespace LambdicSql
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [KeywordMethodConverter(Name = "NOT NULL")]
         public static IConstraint NotNull() => InvalitContext.Throw<IConstraint>(nameof(NotNull));
-
-        //TODO あれ？そういえば、これってパラメータで渡せるのか？ 
 
         /// <summary>
         /// DEFAULT
@@ -1175,17 +1169,17 @@ namespace LambdicSql
         /// <summary>
         /// DROP DATABASE clause.
         /// </summary>
-        /// <param name="nameOfVariable">DataBase name.</param>
+        /// <param name="name">DataBase name.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [SpecialNameClauseConverter(Name = "CREATE DATABASE")]
-        public static ClauseChain<Non> CreateDataBase(object nameOfVariable) => InvalitContext.Throw<ClauseChain<Non>>(nameof(CreateDataBase));
+        public static ClauseChain<Non> CreateDataBase(string name) => InvalitContext.Throw<ClauseChain<Non>>(nameof(CreateDataBase));
 
         /// <summary>
         /// DROP DATABASE clause.
         /// </summary>
-        /// <param name="nameOfVariable">DataBase name.</param>
+        /// <param name="name">DataBase name.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [SpecialNameClauseConverter(Name = "DROP DATABASE")]
-        public static ClauseChain<Non> DropDataBase(object nameOfVariable) => InvalitContext.Throw<ClauseChain<Non>>(nameof(CreateDataBase));
+        public static ClauseChain<Non> DropDataBase(string name) => InvalitContext.Throw<ClauseChain<Non>>(nameof(CreateDataBase));
     }
 }

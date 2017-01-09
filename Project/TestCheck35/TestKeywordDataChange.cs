@@ -160,47 +160,72 @@ FROM tbl_data", 10);
 
 
 
-        public class Table
+        public class Table1
         {
             public int id { get; set; }
             public int val1 { get; set; }
             public string val2 { get; set; }
         }
+        public class Table2
+        {
+            public int id { get; set; }
+            public int table1Id { get; set; }
+            public int val1 { get; set; }
+        }
 
         public class DBForCreateTest
         {
-            public Table table1 { get; set; }
-            public Table table2 { get; set; }
+            public Table1 table1 { get; set; }
+            public Table2 table2 { get; set; }
         }
 
+
+        //やっぱり、IS NULL と IS NOT NULL は必要かな
+        //  IF OBJECT_ID('dbo.Scores', 'U') IS NOT NULL DROP TABLE dbo.Scores;
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Drop()
         {
             try
             {
-                var sql1 = Db<DBForCreateTest>.Sql(db => DropTable(db.table1));
-                _connection.Execute(sql1);
                 var sql2 = Db<DBForCreateTest>.Sql(db => DropTable(db.table2));
                 _connection.Execute(sql2);
+            }
+            catch { }
+            try
+            {
+                var sql1 = Db<DBForCreateTest>.Sql(db => DropTable(db.table1));
+                _connection.Execute(sql1);
             }
             catch { }
 
             {
                 var sql = Db<DBForCreateTest>.Sql(db => 
                     CreateTable(db.table1,
-                        new Column(db.table1.id, DataTypes.Int(), Default(10), NotNull()),
-                        new Column(db.table1.val2, DataTypes.VarChar(10), NotNull())
+                        new Column(db.table1.id, DataTypes.Int(), Default(10), NotNull(), PrimaryKey()),
+                        new Column(db.table1.val2, DataTypes.VarChar(10), NotNull()),
+                        Constraint("xxx").Check(db.table1.id < 100),
+                        Unique(db.table1.val2)
                     ));
                 sql.Gen(_connection);
                 _connection.Execute(sql);
             }
             {
                 var sql = Db<DBForCreateTest>.Sql(db => CreateTable(db.table2,
-                    new Column(db.table2.id, DataTypes.Int())
+                    new Column(db.table2.id, DataTypes.Int(), NotNull()),
+                    new Column(db.table2.table1Id, DataTypes.Int()),
+                    ForeignKey(db.table2.table1Id).References(db.table1, db.table1.id),
+                    PrimaryKey(db.table2.id)
                     ));
                 sql.Gen(_connection);
                 _connection.Execute(sql);
+            }
+
+            {
+                var sql2 = Db<DBForCreateTest>.Sql(db => DropTable(db.table2));
+                _connection.Execute(sql2);
+                var sql1 = Db<DBForCreateTest>.Sql(db => DropTable(db.table1));
+                _connection.Execute(sql1);
             }
 
             //lite, oracle, db2はダメ まとめて消す
@@ -208,6 +233,8 @@ FROM tbl_data", 10);
       //          var sql2 = Db<DBForCreateTest>.Sql(db => DropTable(db.table1, db.table2));
          //       _connection.Execute(sql2);
             }
+
+            //.Cascade().Constraint() はオラクルしか使えない
         }
 
 
