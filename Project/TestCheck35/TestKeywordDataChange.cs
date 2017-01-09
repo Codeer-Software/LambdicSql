@@ -103,7 +103,7 @@ FROM tbl_data");
         public void Test_InsertInto_Values1()
         {
             Test_Delete_All();
-            
+
             var query = Db<DB>.Sql(db =>
                    InsertInto(db.tbl_data, db.tbl_data.id, db.tbl_data.val2).Values(1, "val2"));
 
@@ -113,7 +113,7 @@ FROM tbl_data");
 	VALUES(@p_0, @p_1)",
 1, "val2");
         }
-        
+
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_InsertInto_Values2()
         {
@@ -122,7 +122,7 @@ FROM tbl_data");
             var exp1 = Db<DB>.Sql(db => db.tbl_data);
             var exp2 = Db<DB>.Sql(db => db.tbl_data.id);
             var exp3 = Db<DB>.Sql(db => db.tbl_data.val2);
-            var exp4 = Db<DB>.Sql(db =>1);
+            var exp4 = Db<DB>.Sql(db => 1);
             var exp5 = Db<DB>.Sql(db => "val2");
             var query = Db<DB>.Sql(db =>
                    InsertInto(exp1, exp2, exp3).Values(exp4, exp5));
@@ -196,7 +196,7 @@ FROM tbl_data", 10);
             catch { }
 
             {
-                var sql = Db<DBForCreateTest>.Sql(db => 
+                var sql = Db<DBForCreateTest>.Sql(db =>
                     CreateTable(db.table1,
                         new Column(db.table1.id, Int(), Default(10), NotNull(), PrimaryKey()),
                         new Column(db.table1.val2, VarChar(10), Default("abc"), NotNull()),
@@ -226,14 +226,41 @@ FROM tbl_data", 10);
 
             //lite, oracle, db2はダメ まとめて消す
             {
-      //          var sql2 = Db<DBForCreateTest>.Sql(db => DropTable(db.table1, db.table2));
-         //       _connection.Execute(sql2);
+                //          var sql2 = Db<DBForCreateTest>.Sql(db => DropTable(db.table1, db.table2));
+                //       _connection.Execute(sql2);
             }
 
             //.Cascade().Constraint() はオラクルしか使えない
         }
 
+        public class Selected
+        {
+            public int id { get; set; }
+        }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void XXXX()
+        {
+            var sql = Db<DB>.Sql(db =>
+               Select(new Selected
+               {
+                   id = db.tbl_staff.id,
+               }).
+               From(db.tbl_staff).
+               Where(IsNull(db.tbl_staff.name)));
+            sql.Gen(_connection);
+            var datas = _connection.Query(sql).ToList();
 
+            sql = Db<DB>.Sql(db =>
+               Select(new Selected
+               {
+                   id = db.tbl_staff.id,
+               }).
+               From(db.tbl_staff).
+               Where(IsNull(db.tbl_staff.name)));
+            sql.Gen(_connection);
+            datas = _connection.Query(sql).ToList();
+
+        }
     }
 }

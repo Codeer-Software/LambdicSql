@@ -13,6 +13,22 @@ namespace LambdicSql
     public static partial class Symbols
     {
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="target"></param>
+        /// <returns></returns>
+        [ClauseConverter(Name = " ", AfterPredicate = "IS NULL")]
+        public static bool IsNull(object target) => InvalitContext.Throw<bool>(nameof(IsNull));
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="target"></param>
+        /// <returns></returns>
+        [ClauseConverter(Name = " ", AfterPredicate = "IS NOT NULL")]
+        public static bool IsNotNull(object target) => InvalitContext.Throw<bool>(nameof(IsNull));
+
+        /// <summary>
         /// SUM function.
         /// </summary>
         /// <typeparam name="T">Type represented by expression.</typeparam>

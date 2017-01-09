@@ -39,6 +39,7 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         public override Parts Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var name = string.IsNullOrEmpty(Name) ? expression.Method.Name.ToUpper() : Name;
+            name = name.Trim();
 
             var index = expression.SkipMethodChain(0);
             var args = expression.Arguments.Skip(index).Select(e => converter.Convert(e)).ToList();

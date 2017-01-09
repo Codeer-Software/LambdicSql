@@ -14,7 +14,9 @@ namespace LambdicSql.ConverterServices.SymbolConverters.Inside
             var startIndex = expression.SkipMethodChain(0);
             var create = LineSpace("REFERENCES", converter.Convert(expression.Arguments[startIndex]));
             var args = expression.Arguments.Skip(startIndex + 1).Select(e => converter.Convert(e).Customize(new CustomizeColumnOnly())).ToArray();
-            return Func(create, args);
+            var func = Func(create, args);
+            func.Indent = 1;
+            return func;
         }
     }
 }
