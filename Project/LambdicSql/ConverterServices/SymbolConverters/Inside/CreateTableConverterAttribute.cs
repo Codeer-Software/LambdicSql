@@ -12,7 +12,8 @@ namespace LambdicSql.ConverterServices.SymbolConverters.Inside
         public override Parts Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var create = LineSpace("CREATE TABLE", converter.Convert(expression.Arguments[0]));
-            var args = ((NewArrayExpression)expression.Arguments[1]).Expressions.Select(e => converter.Convert(e).Customize(new CustomizeColumnOnly()).Customize(new CustomizeParameterToObject())).ToArray();
+            var args = ((NewArrayExpression)expression.Arguments[1]).Expressions.
+                Select(e => converter.Convert(e).Customize(new CustomizeColumnOnly()).Customize(new CustomizeParameterToObject(true))).ToArray();
 
             var clause = new VParts(create.ConcatToBack("("));
             var argsParts = new VParts() { Separator = ","};

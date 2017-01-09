@@ -15,7 +15,7 @@
 
         public override string ToString(bool isTopLevel, int indent, BuildingContext context)
         {
-            var core = context.Option.IsRowsParameterDirectValue ? _core.ToDisplayValue() : _core;
+            var core = context.Option.IsRowsParameterDirectValue ? _core.ToDisplayValue(false) : _core;
             return core.ToString(isTopLevel, indent, context);
         }
 

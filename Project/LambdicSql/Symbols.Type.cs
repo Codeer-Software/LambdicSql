@@ -4,9 +4,11 @@ using LambdicSql.ConverterServices.SymbolConverters;
 namespace LambdicSql
 {
     /// <summary>
-    /// Data Types.
+    /// SQL Symbols.
+    /// It can only be used within methods of the LambdicSql.Sql class.
+    /// Use[using static LambdicSql.Keywords;], you can use to write natural SQL.
     /// </summary>
-    public static class DataTypes
+    public static partial class Symbols
     {
         /// <summary>
         /// BFILE

@@ -1085,7 +1085,7 @@ FROM SYSIBM.SYSDUMMY1");
             var query = Db<DB>.Sql(db =>
                 Select(new
                 {
-                    id = Cast<int>(db.tbl_remuneration.money, DataTypes.Int())
+                    id = Cast<int>(db.tbl_remuneration.money, Int())
                 }).
                 From(db.tbl_remuneration));
 
@@ -1106,7 +1106,7 @@ FROM tbl_remuneration");
                 name != "NpgsqlConnection") return;
 
             var exp1 = Db<DB>.Sql(db => db.tbl_remuneration.money);
-            var exp2 = Db<DB>.Sql(db => DataTypes.Int());
+            var exp2 = Db<DB>.Sql(db => Int());
             var query = Db<DB>.Sql(db =>
                 Select(new
                 {

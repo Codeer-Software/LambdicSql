@@ -110,7 +110,7 @@
     <Compile Include="ConverterServices\Inside\InvalitContext.cs" />
     <Compile Include="ConverterServices\Inside\MetaId.cs" />
     <Compile Include="ConverterServices\Inside\TowWaySqlSpec.cs" />
-    <Compile Include="DataTypes.cs" />
+    <Compile Include="Symbols.Type.cs" />
     <Compile Include="ConverterServices\Inside\ExpressionToObject.CreateGetter.cs" />
     <Compile Include="ConverterServices\Inside\ExpressionToObject.Getter.cs" />
     <Compile Include="BuilderServices\Code\Inside\AliasParts.cs" />

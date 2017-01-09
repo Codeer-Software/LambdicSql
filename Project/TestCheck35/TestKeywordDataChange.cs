@@ -179,10 +179,6 @@ FROM tbl_data", 10);
             public Table2 table2 { get; set; }
         }
 
-
-        //やっぱり、IS NULL と IS NOT NULL は必要かな
-        //  IF OBJECT_ID('dbo.Scores', 'U') IS NOT NULL DROP TABLE dbo.Scores;
-
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Drop()
         {
@@ -202,8 +198,8 @@ FROM tbl_data", 10);
             {
                 var sql = Db<DBForCreateTest>.Sql(db => 
                     CreateTable(db.table1,
-                        new Column(db.table1.id, DataTypes.Int(), Default(10), NotNull(), PrimaryKey()),
-                        new Column(db.table1.val2, DataTypes.VarChar(10), NotNull()),
+                        new Column(db.table1.id, Int(), Default(10), NotNull(), PrimaryKey()),
+                        new Column(db.table1.val2, VarChar(10), Default("abc"), NotNull()),
                         Constraint("xxx").Check(db.table1.id < 100),
                         Unique(db.table1.val2)
                     ));
@@ -212,8 +208,8 @@ FROM tbl_data", 10);
             }
             {
                 var sql = Db<DBForCreateTest>.Sql(db => CreateTable(db.table2,
-                    new Column(db.table2.id, DataTypes.Int(), NotNull()),
-                    new Column(db.table2.table1Id, DataTypes.Int()),
+                    new Column(db.table2.id, Int(), NotNull()),
+                    new Column(db.table2.table1Id, Int()),
                     ForeignKey(db.table2.table1Id).References(db.table1, db.table1.id),
                     PrimaryKey(db.table2.id)
                     ));

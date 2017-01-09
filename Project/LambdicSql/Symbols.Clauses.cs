@@ -1181,5 +1181,10 @@ namespace LambdicSql
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [SpecialNameClauseConverter(Name = "DROP DATABASE")]
         public static ClauseChain<Non> DropDataBase(string name) => InvalitContext.Throw<ClauseChain<Non>>(nameof(CreateDataBase));
+
+
+        //TODO やっぱり、IS NULL と IS NOT NULL は必要かな
+        //TODO で、DropTableとCreateTableは前に続くものも作る
+        //  IF OBJECT_ID('dbo.Scores', 'U') IS NOT NULL DROP TABLE dbo.Scores;
     }
 }

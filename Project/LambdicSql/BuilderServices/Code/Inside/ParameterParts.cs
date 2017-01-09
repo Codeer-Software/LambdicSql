@@ -13,6 +13,7 @@ namespace LambdicSql.BuilderServices.Code.Inside
         string _front = string.Empty;
         string _back = string.Empty;
         bool _displayValue;
+        bool _isAllowString;
 
         internal ParameterParts(object value)
         {
@@ -28,7 +29,7 @@ namespace LambdicSql.BuilderServices.Code.Inside
             _param = param;
         }
 
-        ParameterParts(string name, MetaId metaId, DbParam param, string front, string back, bool displayValue)
+        ParameterParts(string name, MetaId metaId, DbParam param, string front, string back, bool displayValue, bool isAllowString)
         {
             Name = name;
             MetaId = metaId;
@@ -36,6 +37,7 @@ namespace LambdicSql.BuilderServices.Code.Inside
             _front = front;
             _back = back;
             _displayValue = displayValue;
+            _isAllowString = isAllowString;
         }
 
         public override bool IsEmpty => false;
@@ -44,21 +46,49 @@ namespace LambdicSql.BuilderServices.Code.Inside
 
         public override string ToString(bool isTopLevel, int indent, BuildingContext context) => PartsUtils.GetIndent(indent) + _front + GetDisplayText(context) + _back;
 
-        public override Parts ConcatAround(string front, string back) => new ParameterParts(Name, MetaId, _param, front + _front, _back + back, _displayValue);
+        public override Parts ConcatAround(string front, string back) => new ParameterParts(Name, MetaId, _param, front + _front, _back + back, _displayValue, _isAllowString);
 
-        public override Parts ConcatToFront(string front) => new ParameterParts(Name, MetaId, _param, front + _front, _back, _displayValue);
+        public override Parts ConcatToFront(string front) => new ParameterParts(Name, MetaId, _param, front + _front, _back, _displayValue, _isAllowString);
 
-        public override Parts ConcatToBack(string back) => new ParameterParts(Name, MetaId, _param, _front, _back + back, _displayValue);
+        public override Parts ConcatToBack(string back) => new ParameterParts(Name, MetaId, _param, _front, _back + back, _displayValue, _isAllowString);
 
         public override Parts Customize(IPartsCustomizer customizer) => customizer.Custom(this);
 
-        internal Parts ToDisplayValue() => new ParameterParts(Name, MetaId, _param, _front, _back, true);
+        internal Parts ToDisplayValue(bool isAllowString) => new ParameterParts(Name, MetaId, _param, _front, _back, true, isAllowString);
 
         string GetDisplayText(BuildingContext context)
         {
             if (_displayValue)
             {
-                if (typeof(string).IsAssignableFrom(Value.GetType())) throw new NotSupportedException();
+                if (Value == null)
+                {
+                    return "NULL";
+                }
+
+                var type = Value.GetType();
+                if (type == typeof(DateTime) ||
+                    type == typeof(DateTimeOffset) ||
+                    type == typeof(TimeSpan))
+                {
+                    return "'" + Value + "'";
+                }
+                if (type == typeof(string))
+                {
+                    if (!_isAllowString) throw new NotSupportedException();
+                    return "'" + Value + "'";
+                }
+                if (type == typeof(DateTime?))
+                {
+                    return "'" + ((DateTime?)Value).Value + "'";
+                }
+                if (type == typeof(DateTimeOffset?))
+                {
+                    return "'" + ((DateTimeOffset?)Value).Value + "'";
+                }
+                if (type == typeof(TimeSpan?))
+                {
+                    return "'" + ((TimeSpan?)Value).Value + "'";
+                }
                 return Value.ToString();
             }
             return context.ParameterInfo.Push(_param.Value, Name, MetaId, _param);
