@@ -248,6 +248,47 @@ FROM tbl_data", 10);
             //.Cascade().Constraint() はオラクルしか使えない
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_IFExists()
+        {
+            var name = _connection.GetType().Name;
+            if (name == "SqlConnection") return;
+            if (name == "DB2Connection") return;
+            if (name == "OracleConnection") return;
+
+            try
+            {
+                var sql2 = Db<DBForCreateTest>.Sql(db => DropTable(db.table2));
+                _connection.Execute(sql2);
+            }
+            catch { }
+            try
+            {
+                var sql1 = Db<DBForCreateTest>.Sql(db => DropTable(db.table1));
+                _connection.Execute(sql1);
+            }
+            catch { }
+
+
+            {
+                var sql = Db<DBForCreateTest>.Sql(db =>
+                    CreateTableIfNotExists(db.table1,
+                        new Column(db.table1.id, Int(), Default(10), NotNull(), PrimaryKey()),
+                        new Column(db.table1.val1, Int()),
+                        new Column(db.table1.val2, Char(10), Default("abc"), NotNull()),
+                        Constraint("xxx").Check(db.table1.id < 100),
+                        Unique(db.table1.val2)
+                    ));
+                sql.Gen(_connection);
+                _connection.Execute(sql);
+            }
+
+            {
+                var sql = Db<DBForCreateTest>.Sql(db => DropTableIfExists(db.table1));
+                _connection.Execute(sql);
+            }
+        }
+
         public class Selected
         {
             public int id { get; set; }

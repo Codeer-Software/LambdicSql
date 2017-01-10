@@ -1014,8 +1014,15 @@ namespace LambdicSql
         /// CREATE TABLE clause.
         /// </summary>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [CreateTableConverter]
+        [CreateTableConverter(Name = "CREATE TABLE")]
         public static ClauseChain<Non> CreateTable(object table, params ITableDefinition[] designer) => InvalitContext.Throw<ClauseChain<Non>>(nameof(CreateTable));
+        
+        /// <summary>
+        /// CREATE TABLE clause.
+        /// </summary>
+        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        [CreateTableConverter(Name = "CREATE TABLE IF NOT EXISTS")]
+        public static ClauseChain<Non> CreateTableIfNotExists(object table, params ITableDefinition[] designer) => InvalitContext.Throw<ClauseChain<Non>>(nameof(CreateTable));
         
         /// <summary>
         /// CONSTRAINT clause.

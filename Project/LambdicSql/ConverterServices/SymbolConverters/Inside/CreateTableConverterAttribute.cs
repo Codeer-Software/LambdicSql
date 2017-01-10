@@ -9,9 +9,10 @@ namespace LambdicSql.ConverterServices.SymbolConverters.Inside
     //TODO CustomizeParameterToObjectの特殊版をつくるかな・・・　、　そんでパラメータでもOKなDBが一個あったよね　そんでCREATE DBとかの微妙仕様はやめる
     class CreateTableConverterAttribute : SymbolConverterMethodAttribute
     {
+        public string Name { get; set; }
         public override Parts Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
-            var create = LineSpace("CREATE TABLE", converter.Convert(expression.Arguments[0]));
+            var create = LineSpace(Name, converter.Convert(expression.Arguments[0]));
             var args = ((NewArrayExpression)expression.Arguments[1]).Expressions.
                 Select(e => converter.Convert(e).Customize(new CustomizeColumnOnly()).Customize(new CustomizeParameterToObject(true))).ToArray();
 
