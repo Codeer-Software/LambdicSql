@@ -164,7 +164,7 @@ FROM tbl_data", 10);
         {
             public int id { get; set; }
             public int val1 { get; set; }
-            public string val2 { get; set; }
+            public char[] val2 { get; set; }
         }
         public class Table2
         {
@@ -199,12 +199,27 @@ FROM tbl_data", 10);
                 var sql = Db<DBForCreateTest>.Sql(db =>
                     CreateTable(db.table1,
                         new Column(db.table1.id, Int(), Default(10), NotNull(), PrimaryKey()),
-                        new Column(db.table1.val2, VarChar(10), Default("abc"), NotNull()),
+                        new Column(db.table1.val1, Int()),
+                        new Column(db.table1.val2, Char(10), Default("abc"), NotNull()),
                         Constraint("xxx").Check(db.table1.id < 100),
                         Unique(db.table1.val2)
                     ));
                 sql.Gen(_connection);
                 _connection.Execute(sql);
+
+                //TODO LambdicSql的にはちゃんとやってるんだけど、その後の実行がやられている
+                var val = new[] { 'a', 'x' };
+                sql = Db<DBForCreateTest>.Sql(db =>
+                    InsertInto(db.table1, db.table1.id, db.table1.val1, db.table1.val2).
+                    Values(0, 1, val));
+                sql.Gen(_connection);
+                sql = Db<DBForCreateTest>.Sql(db =>
+                    InsertInto(db.table1, db.table1.id, db.table1.val1, db.table1.val2).
+                    Values(0, 1, new[] { 'a', 'x' }));
+                sql.Gen(_connection);
+                //    _connection.Execute(sql);
+
+
             }
             {
                 var sql = Db<DBForCreateTest>.Sql(db => CreateTable(db.table2,
@@ -260,7 +275,6 @@ FROM tbl_data", 10);
                Where(IsNull(db.tbl_staff.name)));
             sql.Gen(_connection);
             datas = _connection.Query(sql).ToList();
-
         }
     }
 }

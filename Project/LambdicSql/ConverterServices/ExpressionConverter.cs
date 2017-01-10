@@ -119,8 +119,14 @@ namespace LambdicSql.ConverterServices
             return new ConvertedResult(newExp.Type, Convert(value));
         }
 
+        //TODO この展開はやめる
         ConvertedResult Convert(NewArrayExpression array)
         {
+            if (SupportedTypeSpec.IsSupported(array.Type))
+            {
+                var obj = SupportedTypeSpec.ConvertArray(array.Type, array.Expressions.Select(e => ToObject(e)));
+                return new ConvertedResult(array.Type, new ParameterParts(obj));
+            }
             if (array.Expressions.Count == 0) return new ConvertedResult(null, string.Empty);
             var infos = array.Expressions.Select(e => Convert(e)).ToArray();
             return new ConvertedResult(infos[0].Type, Arguments(infos.Select(e => e.Text).ToArray()));
@@ -387,9 +393,23 @@ namespace LambdicSql.ConverterServices
                 throw new NotSupportedException();
             }
 
+            //TODO ここも変わる？ここに配列が来るときは展開は・・・しないんじゃないかな？
             //array.
             if (obj != null && obj.GetType().IsArray)
             {
+                if (SupportedTypeSpec.IsSupported(obj.GetType()))
+                {
+                    string name = string.Empty;
+                    MetaId metaId = null;
+                    var member = exp as MemberExpression;
+                    if (member != null)
+                    {
+                        name = member.Member.Name;
+                        metaId = new MetaId(member.Member);
+                    }
+                    return new ConvertedResult(exp.Type, new ParameterParts(name, metaId, new DbParam() { Value = obj }));
+                }
+
                 var list = new List<Parts>();
                 foreach (var e in (IEnumerable)obj)
                 {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace LambdicSql.ConverterServices.Inside
 {
@@ -33,6 +34,8 @@ namespace LambdicSql.ConverterServices.Inside
             _supported.Add(typeof(DateTimeOffset?));
             _supported.Add(typeof(TimeSpan));
             _supported.Add(typeof(TimeSpan?));
+            _supported.Add(typeof(byte[]));
+            _supported.Add(typeof(char[]));
         }
 
         public static bool IsSupported(Type type)
@@ -41,6 +44,13 @@ namespace LambdicSql.ConverterServices.Inside
             {
                 return _supported.Contains(type);
             }
+        }
+
+        internal static object ConvertArray(Type arrayType, IEnumerable<object> src)
+        {
+            if (arrayType == typeof(byte[])) return src.Cast<byte>().ToArray();
+            else if (arrayType == typeof(char[])) return src.Cast<char>().ToArray();
+            throw new NotSupportedException();
         }
     }
 }
