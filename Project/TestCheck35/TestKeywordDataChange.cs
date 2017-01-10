@@ -275,6 +275,10 @@ FROM tbl_data", 10);
                Where(IsNull(db.tbl_staff.name)));
             sql.Gen(_connection);
             datas = _connection.Query(sql).ToList();
+            
+            var s1 = Db<DB>.Sql(db => 1);
+            var s2 = Db<DB>.Sql(db => "abc");
+            var s3 = s1 + (Sql)s2;
         }
     }
 }

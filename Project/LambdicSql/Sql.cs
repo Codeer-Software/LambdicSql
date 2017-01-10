@@ -1,5 +1,7 @@
 ﻿using LambdicSql.ConverterServices.Inside;
 using LambdicSql.BuilderServices.Code;
+using System;
+using LambdicSql.BuilderServices;
 
 namespace LambdicSql
 {
@@ -18,8 +20,44 @@ namespace LambdicSql
         {
             Parts = parts;
         }
+
+        /// <summary>
+        /// Concatenate expression1 and expression2.
+        /// </summary>
+        /// <param name="expression1">Expression 1.</param>
+        /// <param name="expression2">Exppresion 2.</param>
+        /// <returns>Concatenated result.</returns>
+        public static Sql operator + (Sql expression1, Sql expression2)
+          => new Sql(new VParts(expression1.Parts, expression2.Parts));
+
+        /// <summary>
+        /// Sql information.
+        /// </summary>
+        /// <param name="connectionType">IDbConnection's type.</param>
+        /// <returns>Sql information.</returns>
+        public BuildedSql Build(Type connectionType)
+            => Build(DialectResolver.CreateCustomizer(connectionType.FullName));
+
+        /// <summary>
+        /// Sql information.
+        /// </summary>
+        /// <param name="option">Options for converting from C # to SQL string.</param>
+        /// <returns>Sql information.</returns>
+        public BuildedSql Build(DialectOption option)
+        {
+            var context = new BuildingContext(option);
+            return new BuildedSql(Parts.ToString(true, 0, context), context.ParameterInfo.GetDbParams());
+        }
+
+        //TODO test.
+        /// <summary>
+        /// Cast.
+        /// </summary>
+        /// <typeparam name="TDst">Destination type.</typeparam>
+        /// <returns>Casted result.</returns>
+        public Sql<TDst> Cast<TDst>() => new Sql<TDst>(Parts);
     }
-    
+
     /// <summary>
     /// Expressions that represent part of the query.
     /// </summary>
@@ -38,6 +76,33 @@ namespace LambdicSql
         /// </summary>
         /// <param name="src"></param>
         public static implicit operator T(Sql<T> src) => InvalitContext.Throw<T>("implicit operator");
+
+        /// <summary>
+        /// Concatenate expression1 and expression2.
+        /// </summary>
+        /// <param name="expression1">Expression 1.</param>
+        /// <param name="expression2">Exppresion 2.</param>
+        /// <returns>Concatenated result.</returns>
+        public static Sql<T> operator + (Sql<T> expression1, Sql expression2)
+          => new Sql<T>(new VParts(expression1.Parts, expression2.Parts));
+
+        /// <summary>
+        /// Sql information.
+        /// This have static information of the type selected in the SELECT clause.
+        /// </summary>
+        /// <param name="connectionType">IDbConnection's type.</param>
+        /// <returns>Sql information.</returns>
+        public new BuildedSql<T> Build(Type connectionType)
+          => new BuildedSql<T>(base.Build(connectionType));
+
+        /// <summary>
+        /// Sql information.
+        /// This have static information of the type selected in the SELECT clause.
+        /// </summary>
+        /// <param name="option">Options for converting from C # to SQL string.</param>
+        /// <returns>Sql information.</returns>
+        public new BuildedSql<T> Build(DialectOption option)
+          => new BuildedSql<T>(base.Build(option));
 
         internal Sql(Parts parts) : base(parts) { }
     }

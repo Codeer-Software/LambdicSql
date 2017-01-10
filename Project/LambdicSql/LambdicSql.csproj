@@ -135,7 +135,7 @@
     <Compile Include="Sql.cs" />
     <Compile Include="BuilderServices\DialectOption.cs" />
     <Compile Include="BuildedSql.cs" />
-    <Compile Include="SqlExtensions.cs" />
+    <Compile Include="SqlSetOperationsExtensions.cs" />
     <Compile Include="ConverterServices\Inside\ObjectCreateInfo.cs" />
     <Compile Include="ConverterServices\Inside\ObjectCreateMemberInfo.cs" />
     <Compile Include="ConverterServices\Inside\ExpressionToObject.cs" />

@@ -392,7 +392,7 @@ FROM tbl_remuneration
                 From(db.tbl_remuneration));
 
             var target = Db<DB>.Sql(db => Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id));
-            query = query.Concat(target);
+            query = query + target;
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -467,7 +467,7 @@ FROM tbl_remuneration
             var expStaff = Db<DB>.Sql(db => db.tbl_staff);
             var exp2 = Db<DB>.Sql(db => db.tbl_remuneration.staff_id == expStaff.Body.id);
             var target = Db<DB>.Sql(db => Join(expStaff, exp2));
-            query = query.Concat(target);
+            query = query + target;
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -491,7 +491,7 @@ FROM tbl_remuneration
                 From(db.tbl_remuneration));
 
             var target = Db<DB>.Sql(db => LeftJoin(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id));
-            query = query.Concat(target);
+            query = query + target;
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -517,7 +517,7 @@ FROM tbl_remuneration
             var expStaff = Db<DB>.Sql(db => db.tbl_staff);
             var exp2 = Db<DB>.Sql(db => db.tbl_remuneration.staff_id == expStaff.Body.id);
             var target = Db<DB>.Sql(db => LeftJoin(expStaff, exp2));
-            query = query.Concat(target);
+            query = query + target;
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -543,7 +543,7 @@ FROM tbl_remuneration
                 From(db.tbl_remuneration));
 
             var target = Db<DB>.Sql(db => RightJoin(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id));
-            query = query.Concat(target);
+            query = query + target;
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -571,7 +571,7 @@ FROM tbl_remuneration
             var expStaff = Db<DB>.Sql(db => db.tbl_staff);
             var exp2 = Db<DB>.Sql(db => db.tbl_remuneration.staff_id == expStaff.Body.id);
             var target = Db<DB>.Sql(db => RightJoin(expStaff, exp2));
-            query = query.Concat(target);
+            query = query + target;
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -598,7 +598,7 @@ FROM tbl_remuneration
                 From(db.tbl_remuneration));
 
             var target = Db<DB>.Sql(db => FullJoin(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id));
-            query = query.Concat(target);
+            query = query + target;
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -627,7 +627,7 @@ FROM tbl_remuneration
             var expStaff = Db<DB>.Sql(db => db.tbl_staff);
             var exp2 = Db<DB>.Sql(db => db.tbl_remuneration.staff_id == expStaff.Body.id);
             var target = Db<DB>.Sql(db => FullJoin(expStaff, exp2));
-            query = query.Concat(target);
+            query = query + target;
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -653,7 +653,7 @@ FROM tbl_remuneration
                 From(db.tbl_remuneration));
 
             var target = Db<DB>.Sql(db => CrossJoin(db.tbl_staff));
-            query = query.Concat(target);
+            query = query + target;
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -680,7 +680,7 @@ FROM tbl_remuneration
                 From(db.tbl_remuneration));
 
             var target = Db<DB>.Sql(db => CrossJoin(exp));
-            query = query.Concat(target);
+            query = query + target;
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);

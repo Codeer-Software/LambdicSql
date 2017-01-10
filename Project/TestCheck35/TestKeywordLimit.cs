@@ -208,7 +208,7 @@ FETCH NEXT @p_1 ROWS ONLY",
                  From(db.tbl_remuneration).
                  OrderBy(Asc(db.tbl_remuneration.id)));
             var limit = Db<DB>.Sql(db => Limit(1, 3));
-            query = query.Concat(limit);
+            query = query + limit;
 
             query.Gen(_connection);
 
@@ -239,7 +239,7 @@ LIMIT @p_0, @p_1",
             var exp1 = Db<DB>.Sql(db => (long)1);
             var exp2 = Db<DB>.Sql(db => (long)3);
             var limit = Db<DB>.Sql(db => Limit(exp1, exp2));
-            query = query.Concat(limit);
+            query = query + limit;
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -265,7 +265,7 @@ LIMIT @p_0, @p_1",
                  OrderBy(Asc(db.tbl_remuneration.id)));
             var limit = Db<DB>.Sql(db => Limit(1));
             var offset = Db<DB>.Sql(db => Offset(3));
-            query = query.Concat(limit).Concat(offset);
+            query = query + limit + offset;
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -294,7 +294,7 @@ OFFSET @p_1",
                  OrderBy(Asc(db.tbl_remuneration.id)));
             var limit = Db<DB>.Sql(db => Limit(exp1));
             var offset = Db<DB>.Sql(db => Offset(exp2));
-            query = query.Concat(limit).Concat(offset);
+            query = query + limit + offset;
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -321,7 +321,7 @@ OFFSET @p_1",
                  OrderBy(Asc(db.tbl_remuneration.id)));
             var offsetRows = Db<DB>.Sql(db => OffsetRows(1));
             var fetchNextRowOnly = Db<DB>.Sql(db => FetchNextRowsOnly(3));
-            query = query.Concat(offsetRows).Concat(fetchNextRowOnly);
+            query = query + offsetRows + fetchNextRowOnly;
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -350,7 +350,7 @@ FETCH NEXT @p_1 ROWS ONLY",
                  OrderBy(Asc(db.tbl_remuneration.id)));
             var offsetRows = Db<DB>.Sql(db => OffsetRows(exp1));
             var fetchNextRowOnly = Db<DB>.Sql(db => FetchNextRowsOnly(exp2));
-            query = query.Concat(offsetRows).Concat(fetchNextRowOnly);
+            query = query + offsetRows + fetchNextRowOnly;
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);

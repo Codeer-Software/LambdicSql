@@ -250,7 +250,7 @@ SELECT * FROM tbl_staff WHERE (tbl_staff.id) = (1)");
         {
             var select = Db<DB>.Sql(db => Select(new { name = db.tbl_staff.name}));
             var from = Db<DB>.Sql(db => From(db.tbl_staff));
-            var query = select.Concat(from);
+            var query = select + from;
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -265,7 +265,7 @@ FROM tbl_staff");
         {
             var select = Db<DB>.Sql(db => "SELECT tbl_staff.name AS name".ToSql());
             var from = Db<DB>.Sql(db => "FROM tbl_staff".ToSql());
-            var query = select.Concat(from);
+            var query = select + from;
 
             var datas = _connection.Query<Staff>(query).ToList();
             Assert.IsTrue(0 < datas.Count);

@@ -161,7 +161,7 @@ WHERE (tbl_staff.id) = (@p_0)",
 
             var target = Db<DB>.Sql(db =>
                 Union().Select(Asterisk(db.tbl_staff)).From(db.tbl_staff));
-            query = query.Concat(target);
+            query = query + target;
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -181,7 +181,7 @@ FROM tbl_staff");
 
             var target = Db<DB>.Sql(db =>
                 Union(All()).Select(Asterisk(db.tbl_staff)).From(db.tbl_staff));
-            query = query.Concat(target);
+            query = query + target;
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -203,7 +203,7 @@ FROM tbl_staff");
 
             var target = Db<DB>.Sql(db =>
                 Intersect().Select(Asterisk(db.tbl_staff)).From(db.tbl_staff));
-            query = query.Concat(target);
+            query = query + target;
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -227,7 +227,7 @@ FROM tbl_staff");
             var target = Db<DB>.Sql(db =>
                 Except().
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff).Where(db.tbl_staff.id == 1));
-            query = query.Concat(target);
+            query = query + target;
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -255,7 +255,7 @@ WHERE (tbl_staff.id) = (@p_0)",
             var target = Db<DB>.Sql(db =>
                 Except(All()).
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff).Where(db.tbl_staff.id == 1));
-            query = query.Concat(target);
+            query = query + target;
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -282,7 +282,7 @@ WHERE (tbl_staff.id) = (@p_0)",
             var target = Db<DB>.Sql(db =>
                 Minus().
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff).Where(db.tbl_staff.id == 1));
-            query = query.Concat(target);
+            query = query + target;
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);

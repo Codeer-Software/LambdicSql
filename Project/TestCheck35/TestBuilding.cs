@@ -45,7 +45,7 @@ namespace TestCheck35
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test()
         {
-            var query = Select.Concat(From);
+            var query = Select + From;
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);

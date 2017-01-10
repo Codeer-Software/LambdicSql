@@ -234,7 +234,7 @@ namespace TestCheck35
                     Join(db.tbl_staff, db.tbl_staff.id == db.tbl_remuneration.staff_id).
                 Where(min < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
 
-            var query = query1.Concat(query2);
+            var query = query1 + query2;
 
             //to string and params.
             var info = query.Build(_connection.GetType());
@@ -773,7 +773,7 @@ namespace TestCheck35
             var orderby = Db<DB>.Sql(db =>
                  OrderBy(Asc(db.tbl_staff.name)));
 
-            var query = select.Concat(from).Concat(where).Concat(orderby);
+            var query = select + from + where + orderby;
 
             //to string and params.
             var info = query.Build(_connection.GetType());
@@ -1333,18 +1333,18 @@ FROM tbl_remuneration
             if (name == "System.Data.SQLite.SQLiteConnection") return;
             if (name == "MySql.Data.MySqlClient.MySqlConnection")
             {
-                var queryWith = selectFrom.Concat(Db<DB>.Sql(db => GroupByWithRollup(db.tbl_remuneration.id, db.tbl_remuneration.staff_id)));
+                var queryWith = selectFrom + Db<DB>.Sql(db => GroupByWithRollup(db.tbl_remuneration.id, db.tbl_remuneration.staff_id));
                 ExecuteRead(queryWith);
                 return;
             }
 
-            var query = selectFrom.Concat(Db<DB>.Sql(db => GroupByRollup(db.tbl_remuneration.id, db.tbl_remuneration.staff_id)));
+            var query = selectFrom + Db<DB>.Sql(db => GroupByRollup(db.tbl_remuneration.id, db.tbl_remuneration.staff_id));
             ExecuteRead(query);
 
-            query = selectFrom.Concat(Db<DB>.Sql(db => GroupByCube(db.tbl_remuneration.id, db.tbl_remuneration.staff_id)));
+            query = selectFrom + Db<DB>.Sql(db => GroupByCube(db.tbl_remuneration.id, db.tbl_remuneration.staff_id));
             ExecuteRead(query);
 
-            query = selectFrom.Concat(Db<DB>.Sql(db => GroupByGroupingSets(db.tbl_remuneration.id, db.tbl_remuneration.staff_id)));
+            query = selectFrom + Db<DB>.Sql(db => GroupByGroupingSets(db.tbl_remuneration.id, db.tbl_remuneration.staff_id));
             ExecuteRead(query);
         }
 

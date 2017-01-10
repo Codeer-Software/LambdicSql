@@ -446,7 +446,7 @@ ORDER BY
                From(db.tbl_remuneration));
 
             var target = Db<DB>.Sql(db => Where(db.tbl_remuneration.id == 1));
-            query = query.Concat(target);
+            query = query + target;
 
             var datas = _connection.Query(query).ToList();
 
@@ -471,7 +471,7 @@ WHERE (tbl_remuneration.id) = (@p_0)",
 
             var exp = Db<DB>.Sql(db => db.tbl_remuneration.id == 1);
             var target = Db<DB>.Sql(db => Where(exp));
-            query = query.Concat(target);
+            query = query + target;
 
             var datas = _connection.Query(query).ToList();
 
@@ -495,7 +495,7 @@ WHERE (tbl_remuneration.id) = (@p_0)",
                From(db.tbl_remuneration));
 
             var target = Db<DB>.Sql(db => GroupBy(db.tbl_remuneration.id, db.tbl_remuneration.staff_id));
-            query = query.Concat(target);
+            query = query + target;
 
             var datas = _connection.Query(query).ToList();
 
@@ -520,7 +520,7 @@ GROUP BY tbl_remuneration.id, tbl_remuneration.staff_id");
             var exp1 = Db<DB>.Sql(db => db.tbl_remuneration.id);
             var exp2 = Db<DB>.Sql(db => db.tbl_remuneration.staff_id);
             var target = Db<DB>.Sql(db => GroupBy(exp1, exp2));
-            query = query.Concat(target);
+            query = query + target;
 
             var datas = _connection.Query(query).ToList();
 
@@ -547,7 +547,7 @@ GROUP BY tbl_remuneration.id, tbl_remuneration.staff_id");
                From(db.tbl_remuneration));
 
             var target = Db<DB>.Sql(db => GroupByRollup(db.tbl_remuneration.id, db.tbl_remuneration.staff_id));
-            query = query.Concat(target);
+            query = query + target;
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -575,7 +575,7 @@ GROUP BY ROLLUP(tbl_remuneration.id, tbl_remuneration.staff_id)");
                From(db.tbl_remuneration));
 
             var target = Db<DB>.Sql(db => GroupByRollup(exp1, exp2));
-            query = query.Concat(target);
+            query = query + target;
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -600,7 +600,7 @@ GROUP BY ROLLUP(tbl_remuneration.id, tbl_remuneration.staff_id)");
                From(db.tbl_remuneration));
 
             var target = Db<DB>.Sql(db => GroupByWithRollup(db.tbl_remuneration.id, db.tbl_remuneration.staff_id));
-            query = query.Concat(target);
+            query = query + target;
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -627,7 +627,7 @@ GROUP BY tbl_remuneration.id, tbl_remuneration.staff_id WITH ROLLUP");
                From(db.tbl_remuneration));
 
             var target = Db<DB>.Sql(db => GroupByWithRollup(exp1, exp2));
-            query = query.Concat(target);
+            query = query + target;
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -653,7 +653,7 @@ GROUP BY tbl_remuneration.id, tbl_remuneration.staff_id WITH ROLLUP");
                From(db.tbl_remuneration));
 
             var target = Db<DB>.Sql(db => GroupByCube(db.tbl_remuneration.id, db.tbl_remuneration.staff_id));
-            query = query.Concat(target);
+            query = query + target;
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -681,7 +681,7 @@ GROUP BY CUBE(tbl_remuneration.id, tbl_remuneration.staff_id)");
                From(db.tbl_remuneration));
 
             var target = Db<DB>.Sql(db => GroupByCube(exp1, exp2));
-            query = query.Concat(target);
+            query = query + target;
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -707,7 +707,7 @@ GROUP BY CUBE(tbl_remuneration.id, tbl_remuneration.staff_id)");
                From(db.tbl_remuneration));
 
             var target = Db<DB>.Sql(db => GroupByGroupingSets(db.tbl_remuneration.id, db.tbl_remuneration.staff_id));
-            query = query.Concat(target);
+            query = query + target;
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -735,7 +735,7 @@ GROUP BY GROUPING SETS(tbl_remuneration.id, tbl_remuneration.staff_id)");
                From(db.tbl_remuneration));
 
             var target = Db<DB>.Sql(db => GroupByGroupingSets(exp1, exp2));
-            query = query.Concat(target);
+            query = query + target;
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -761,7 +761,7 @@ GROUP BY GROUPING SETS(tbl_remuneration.id, tbl_remuneration.staff_id)");
                 GroupBy(db.tbl_remuneration.staff_id));
 
             var target = Db<DB>.Sql(db => Having(100 < Sum(db.tbl_remuneration.money)));
-            query = query.Concat(target);
+            query = query + target;
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -790,7 +790,7 @@ HAVING (@p_0) < (SUM(tbl_remuneration.money))",
                 GroupBy(db.tbl_remuneration.staff_id));
 
             var target = Db<DB>.Sql(db => Having(exp));
-            query = query.Concat(target);
+            query = query + target;
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -817,7 +817,7 @@ HAVING (@p_0) < (SUM(tbl_remuneration.money))",
                 From(db.tbl_remuneration));
 
             var target = Db<DB>.Sql(db => OrderBy(Asc(db.tbl_remuneration.money), Desc(db.tbl_remuneration.staff_id)));
-            query = query.Concat(target);
+            query = query + target;
 
 
             query.Gen(_connection);
@@ -851,7 +851,7 @@ ORDER BY
                 From(db.tbl_remuneration));
 
             var target = Db<DB>.Sql(db => OrderBy(exp3.Body, exp4.Body));
-            query = query.Concat(target);
+            query = query + target;
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
