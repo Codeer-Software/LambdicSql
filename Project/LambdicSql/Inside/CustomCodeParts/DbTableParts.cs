@@ -1,4 +1,5 @@
 ﻿using LambdicSql.BuilderServices;
+using LambdicSql.BuilderServices.Inside;
 using LambdicSql.BuilderServices.Parts;
 using LambdicSql.ConverterServices.Inside;
 

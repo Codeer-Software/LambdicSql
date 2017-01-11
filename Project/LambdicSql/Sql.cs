@@ -2,6 +2,7 @@
 using LambdicSql.BuilderServices.Parts;
 using System;
 using LambdicSql.BuilderServices;
+using LambdicSql.BuilderServices.Inside;
 
 namespace LambdicSql
 {

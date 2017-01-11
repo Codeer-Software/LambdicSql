@@ -1,7 +1,7 @@
 ﻿using LambdicSql.BuilderServices.Parts;
 using System.Linq;
 
-namespace LambdicSql.Inside.CustomCodeParts
+namespace LambdicSql.BuilderServices.Inside
 {
     static class PartsFactoryUtils
     {

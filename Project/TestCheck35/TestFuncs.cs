@@ -8,6 +8,11 @@ using LambdicSql;
 using LambdicSql.feat.Dapper;
 using static LambdicSql.Symbols;
 
+//TODO テストもリファクタリング
+//全メソッド
+//全属性 全パーツ
+//いらないのは消す
+
 namespace TestCheck35
 {
     [TestClass]

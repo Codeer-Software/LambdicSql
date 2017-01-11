@@ -1,4 +1,4 @@
-﻿namespace LambdicSql.BuilderServices
+﻿namespace LambdicSql.BuilderServices.Inside
 {
     static class DialectResolver
     {

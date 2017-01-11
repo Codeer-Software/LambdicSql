@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace LambdicSql.Inside.CustomCodeParts
+namespace LambdicSql.BuilderServices.Inside
 {
     static class PartsUtils
     {

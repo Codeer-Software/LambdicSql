@@ -5,7 +5,7 @@ using LambdicSql.ConverterServices.Inside;
 using LambdicSql.Inside.CustomCodeParts;
 using System.Linq;
 using System.Linq.Expressions;
-using static LambdicSql.Inside.CustomCodeParts.PartsFactoryUtils;
+using static LambdicSql.BuilderServices.Inside.PartsFactoryUtils;
 
 namespace LambdicSql.Inside.CustomSymbolConverters
 {
