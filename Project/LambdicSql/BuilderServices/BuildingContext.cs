@@ -17,6 +17,7 @@ namespace LambdicSql.BuilderServices
         /// </summary>
         public ParameterInfo ParameterInfo { get; }
 
+        //TODO このあたり、一般にも使えそうなデザインにする
         /// <summary>
         /// Name of subquery entied in With clause.
         /// </summary>

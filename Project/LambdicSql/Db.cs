@@ -59,7 +59,7 @@ namespace LambdicSql
         {
             var db = DBDefineAnalyzer.GetDbInfo<T>();
             var core = expression.Body as MemberExpression;
-            return new Sql<TResult>(new AliasParts(core.Member.Name));
+            return new Sql<TResult>(core.Member.Name);
         }
 
         /// <summary>

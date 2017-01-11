@@ -10,6 +10,9 @@
         /// </summary>
         public string ConnectionTypeFullName { get; set; }
 
+
+        //TODO このあたり、一般にも使えそうなデザインにする
+
         /// <summary>
         /// String addtional operator.
         /// Default is +.

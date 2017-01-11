@@ -103,7 +103,6 @@
     <Compile Include="Symbols.Type.cs" />
     <Compile Include="ConverterServices\Inside\ExpressionToObject.CreateGetter.cs" />
     <Compile Include="ConverterServices\Inside\ExpressionToObject.Getter.cs" />
-    <Compile Include="Inside\CustomCodeParts\AliasParts.cs" />
     <Compile Include="Inside\CustomCodeParts\CustomizeParameterToObject.cs" />
     <Compile Include="Inside\CustomCodeParts\DbColumnParts.cs" />
     <Compile Include="Inside\CustomCodeParts\DbTableParts.cs" />
