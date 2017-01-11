@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using LambdicSql.ConverterServices.SymbolConverters;
 using LambdicSql.ConverterServices;
-using LambdicSql.BuilderServices.Code;
+using LambdicSql.BuilderServices.CodeParts;
 
 namespace TestCheck35
 {

@@ -1,9 +1,9 @@
 ﻿using LambdicSql.ConverterServices;
 using LambdicSql.ConverterServices.Inside;
-using LambdicSql.BuilderServices.Code.Inside;
+using LambdicSql.Inside.CustomCodeParts;
 using System;
 using System.Linq.Expressions;
-using LambdicSql.BuilderServices.Code;
+using LambdicSql.BuilderServices.CodeParts;
 
 namespace LambdicSql
 {

@@ -1,10 +1,34 @@
 ﻿using LambdicSql.ConverterServices;
 using LambdicSql.ConverterServices.Inside;
 using LambdicSql.ConverterServices.SymbolConverters;
-using LambdicSql.ConverterServices.SymbolConverters.Inside;
+using LambdicSql.Inside.CustomSymbolConverters;
 
 namespace LambdicSql
-{
+{    
+    /// <summary>
+    /// 
+    /// </summary>
+    public abstract class Non { }
+
+    /// <summary>
+    /// Clause chain.
+    /// </summary>
+    /// <typeparam name="TSelected"></typeparam>
+    public abstract class ClauseChain<TSelected> : IMethodChain
+    {
+        /// <summary>
+        /// Implicitly convert to the type represented by SqlExpression.
+        /// It can only be used within methods of the LambdicSql.Sql class.
+        /// </summary>
+        /// <param name="src"></param>
+        public static implicit operator TSelected(ClauseChain<TSelected> src) => InvalitContext.Throw<TSelected>("implicit operator");
+    }
+
+    /// <summary>
+    /// Data type.
+    /// </summary>
+    public interface IDataType { }
+
     /// <summary>
     /// TOP keyword.
     /// </summary>

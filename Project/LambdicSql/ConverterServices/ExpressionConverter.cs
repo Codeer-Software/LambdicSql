@@ -1,14 +1,14 @@
-﻿using LambdicSql.ConverterServices.SymbolConverters.Inside;
+﻿using LambdicSql.Inside.CustomSymbolConverters;
 using LambdicSql.ConverterServices.Inside;
-using LambdicSql.BuilderServices.Code;
-using LambdicSql.BuilderServices.Code.Inside;
+using LambdicSql.BuilderServices.CodeParts;
+using LambdicSql.Inside.CustomCodeParts;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
-using static LambdicSql.BuilderServices.Code.Inside.PartsFactoryUtils;
+using static LambdicSql.Inside.CustomCodeParts.PartsFactoryUtils;
 
 namespace LambdicSql.ConverterServices
 {

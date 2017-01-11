@@ -1,4 +1,4 @@
-﻿using LambdicSql.BuilderServices.Code;
+﻿using LambdicSql.BuilderServices.CodeParts;
 using System;
 
 namespace LambdicSql.ConverterServices.SymbolConverters
