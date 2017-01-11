@@ -1,4 +1,4 @@
-﻿namespace LambdicSql.BuilderServices.Code
+﻿namespace LambdicSql.BuilderServices.Parts
 {
     /// <summary>
     /// Customizer.
@@ -10,6 +10,6 @@
         /// </summary>
         /// <param name="src">Source.</param>
         /// <returns>Result.</returns>
-        Parts Custom(Parts src);
+        CodeParts Custom(CodeParts src);
     }
 }

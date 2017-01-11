@@ -1,4 +1,4 @@
-﻿using LambdicSql.BuilderServices.Code;
+﻿using LambdicSql.BuilderServices.Parts;
 using LambdicSql.ConverterServices;
 using LambdicSql.ConverterServices.SymbolConverters;
 using LambdicSql.ConverterServices.Inside;
@@ -12,7 +12,7 @@ namespace LambdicSql.Inside.CustomSymbolConverters
 {
     class SelectConverterAttribute : SymbolConverterMethodAttribute
     {
-        public override Parts Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override CodeParts Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             //ALL, DISTINCT, TOP
             var modify = new List<Expression>();
@@ -21,7 +21,7 @@ namespace LambdicSql.Inside.CustomSymbolConverters
                 modify.Add(expression.Arguments[i]);
             }
 
-            var select = LineSpace(new Parts[] { "SELECT" }.Concat(modify.Select(e => converter.Convert(e))).ToArray());
+            var select = LineSpace(new CodeParts[] { "SELECT" }.Concat(modify.Select(e => converter.Convert(e))).ToArray());
 
             //select elemnts.
             var selectTargets = expression.Arguments[expression.Arguments.Count - 1];
@@ -42,7 +42,7 @@ namespace LambdicSql.Inside.CustomSymbolConverters
             }
         }
 
-        static Parts ConvertSelectedElement(ExpressionConverter converter, ObjectCreateMemberInfo element)
+        static CodeParts ConvertSelectedElement(ExpressionConverter converter, ObjectCreateMemberInfo element)
         {
             //single select.
             //for example, COUNT(*).

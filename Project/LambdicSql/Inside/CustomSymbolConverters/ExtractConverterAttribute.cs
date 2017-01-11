@@ -1,4 +1,4 @@
-﻿using LambdicSql.BuilderServices.Code;
+﻿using LambdicSql.BuilderServices.Parts;
 using LambdicSql.ConverterServices;
 using LambdicSql.ConverterServices.SymbolConverters;
 using System.Linq;
@@ -9,7 +9,7 @@ namespace LambdicSql.Inside.CustomSymbolConverters
 {
     class ExtractConverterAttribute : SymbolConverterMethodAttribute
     {
-        public override Parts Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override CodeParts Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var args = expression.Arguments.Select(e => converter.Convert(e)).ToArray();
             return FuncSpace(expression.Method.Name.ToUpper(), args[0], "FROM", args[1]);

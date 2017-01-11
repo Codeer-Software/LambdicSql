@@ -1,4 +1,4 @@
-﻿using LambdicSql.BuilderServices.Code;
+﻿using LambdicSql.BuilderServices.Parts;
 
 namespace LambdicSql.Inside.CustomCodeParts
 {
@@ -13,7 +13,7 @@ namespace LambdicSql.Inside.CustomCodeParts
             _isAllowString = isAllowString;
         }
 
-        public Parts Custom(Parts src)
+        public CodeParts Custom(CodeParts src)
         {
             var param = src as ParameterParts;
             return param == null ? src : param.ToDisplayValue(_isAllowString);

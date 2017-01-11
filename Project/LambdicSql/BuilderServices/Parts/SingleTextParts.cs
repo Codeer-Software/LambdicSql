@@ -1,11 +1,11 @@
 ﻿using LambdicSql.Inside.CustomCodeParts;
 
-namespace LambdicSql.BuilderServices.Code
+namespace LambdicSql.BuilderServices.Parts
 {
     /// <summary>
     /// Single text.
     /// </summary>
-    public class SingleTextParts : Parts
+    public class SingleTextParts : CodeParts
     {
         string _text;
         int _indent;
@@ -55,27 +55,27 @@ namespace LambdicSql.BuilderServices.Code
         /// <param name="front">Front.</param>
         /// <param name="back">Back.</param>
         /// <returns>Text.</returns>
-        public override Parts ConcatAround(string front, string back) => new SingleTextParts(front + _text + back, _indent);
+        public override CodeParts ConcatAround(string front, string back) => new SingleTextParts(front + _text + back, _indent);
 
         /// <summary>
         /// Concat to front.
         /// </summary>
         /// <param name="front">Front.</param>
         /// <returns>Text.</returns>
-        public override Parts ConcatToFront(string front) => new SingleTextParts(front + _text, _indent);
+        public override CodeParts ConcatToFront(string front) => new SingleTextParts(front + _text, _indent);
 
         /// <summary>
         /// Concat to back.
         /// </summary>
         /// <param name="back"></param>
         /// <returns></returns>
-        public override Parts ConcatToBack(string back) => new SingleTextParts(_text + back, _indent);
+        public override CodeParts ConcatToBack(string back) => new SingleTextParts(_text + back, _indent);
 
         /// <summary>
         /// Customize.
         /// </summary>
         /// <param name="customizer">Customizer.</param>
         /// <returns>Customized SqlText.</returns>
-        public override Parts Customize(IPartsCustomizer customizer) => customizer.Custom(this);
+        public override CodeParts Customize(IPartsCustomizer customizer) => customizer.Custom(this);
     }
 }

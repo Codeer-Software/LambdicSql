@@ -1,4 +1,4 @@
-﻿using LambdicSql.BuilderServices.Code;
+﻿using LambdicSql.BuilderServices.Parts;
 using LambdicSql.ConverterServices;
 using LambdicSql.ConverterServices.SymbolConverters;
 using LambdicSql.Inside.CustomCodeParts;
@@ -8,9 +8,9 @@ namespace LambdicSql.Inside.CustomSymbolConverters
 {
     class AssignConverterAttribute : SymbolConverterNewAttribute
     {
-        public override Parts Convert(NewExpression expression, ExpressionConverter converter)
+        public override CodeParts Convert(NewExpression expression, ExpressionConverter converter)
         {
-            Parts arg1 = converter.Convert(expression.Arguments[0]).Customize(new CustomizeColumnOnly());
+            CodeParts arg1 = converter.Convert(expression.Arguments[0]).Customize(new CustomizeColumnOnly());
             return new HParts(arg1, "=", converter.Convert(expression.Arguments[1])) { Separator = " " };
         }
     }

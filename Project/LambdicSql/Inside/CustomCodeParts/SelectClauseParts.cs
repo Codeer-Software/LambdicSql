@@ -1,13 +1,13 @@
 ﻿using LambdicSql.BuilderServices;
-using LambdicSql.BuilderServices.Code;
+using LambdicSql.BuilderServices.Parts;
 
 namespace LambdicSql.Inside.CustomCodeParts
 {
-    class SelectClauseParts : Parts
+    class SelectClauseParts : CodeParts
     {
-        Parts _core;
+        CodeParts _core;
 
-        internal SelectClauseParts(Parts core)
+        internal SelectClauseParts(CodeParts core)
         {
             _core = core;
         }
@@ -18,12 +18,12 @@ namespace LambdicSql.Inside.CustomCodeParts
 
         public override string ToString(bool isTopLevel, int indent, BuildingContext context) => _core.ToString(isTopLevel, indent, context);
 
-        public override Parts ConcatAround(string front, string back) => new SelectClauseParts(_core.ConcatAround(front, back));
+        public override CodeParts ConcatAround(string front, string back) => new SelectClauseParts(_core.ConcatAround(front, back));
 
-        public override Parts ConcatToFront(string front) => new SelectClauseParts(_core.ConcatToFront(front));
+        public override CodeParts ConcatToFront(string front) => new SelectClauseParts(_core.ConcatToFront(front));
 
-        public override Parts ConcatToBack(string back) => new SelectClauseParts(_core.ConcatToBack(back));
+        public override CodeParts ConcatToBack(string back) => new SelectClauseParts(_core.ConcatToBack(back));
 
-        public override Parts Customize(IPartsCustomizer customizer) => new SelectClauseParts(_core.Customize(customizer));
+        public override CodeParts Customize(IPartsCustomizer customizer) => new SelectClauseParts(_core.Customize(customizer));
     }
 }

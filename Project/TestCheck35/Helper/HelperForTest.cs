@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using LambdicSql.ConverterServices.SymbolConverters;
 using LambdicSql.ConverterServices;
-using LambdicSql.BuilderServices.Code;
+using LambdicSql.BuilderServices.Parts;
 
 namespace TestCheck35
 {
@@ -20,7 +20,7 @@ namespace TestCheck35
 
     class SymbolForTestAttribute : SymbolConverterMethodAttribute
     {
-        public override Parts Convert(MethodCallExpression expression, ExpressionConverter converter) => string.Empty;
+        public override CodeParts Convert(MethodCallExpression expression, ExpressionConverter converter) => string.Empty;
     }
 
     public static class TestExtensions

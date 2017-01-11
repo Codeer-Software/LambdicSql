@@ -1,4 +1,4 @@
-﻿using LambdicSql.BuilderServices.Code;
+﻿using LambdicSql.BuilderServices.Parts;
 using System;
 using System.Linq.Expressions;
 
@@ -16,6 +16,6 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         /// <param name="expression">Expression.</param>
         /// <param name="converter">Expression converter.</param>
         /// <returns>Parts.</returns>
-        public abstract Parts Convert(MemberExpression expression, ExpressionConverter converter);
+        public abstract CodeParts Convert(MemberExpression expression, ExpressionConverter converter);
     }
 }

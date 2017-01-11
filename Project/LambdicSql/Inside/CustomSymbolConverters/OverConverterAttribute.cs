@@ -1,4 +1,4 @@
-﻿using LambdicSql.BuilderServices.Code;
+﻿using LambdicSql.BuilderServices.Parts;
 using LambdicSql.ConverterServices;
 using LambdicSql.ConverterServices.SymbolConverters;
 using System.Linq;
@@ -8,7 +8,7 @@ namespace LambdicSql.Inside.CustomSymbolConverters
 {
     class OverConverterAttribute : SymbolConverterMethodAttribute
     {
-        public override Parts Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override CodeParts Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var over = new VParts();
             over.Add(expression.Method.Name.ToUpper() + "(");

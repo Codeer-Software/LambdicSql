@@ -1,10 +1,10 @@
-﻿using LambdicSql.BuilderServices.Code;
+﻿using LambdicSql.BuilderServices.Parts;
 
 namespace LambdicSql.Inside.CustomCodeParts
 {
     class CustomizeColumnOnly : IPartsCustomizer
     {
-        public Parts Custom(Parts src)
+        public CodeParts Custom(CodeParts src)
         {
             var col = src as DbColumnParts;
             return col == null ? src : col.ToColumnOnly();

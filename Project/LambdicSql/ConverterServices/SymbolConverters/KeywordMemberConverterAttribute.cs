@@ -1,4 +1,4 @@
-﻿using LambdicSql.BuilderServices.Code;
+﻿using LambdicSql.BuilderServices.Parts;
 using System.Linq.Expressions;
 
 namespace LambdicSql.ConverterServices.SymbolConverters
@@ -19,7 +19,7 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         /// <param name="expression">Expression.</param>
         /// <param name="converter">Expression converter.</param>
         /// <returns>Parts.</returns>
-        public override Parts Convert(MemberExpression expression, ExpressionConverter converter)
+        public override CodeParts Convert(MemberExpression expression, ExpressionConverter converter)
             => string.IsNullOrEmpty(Name) ? expression.Member.Name.ToUpper() : Name;
     }
 }

@@ -1,4 +1,4 @@
-﻿using LambdicSql.BuilderServices.Code;
+﻿using LambdicSql.BuilderServices.Parts;
 using LambdicSql.ConverterServices;
 using LambdicSql.ConverterServices.SymbolConverters;
 using LambdicSql.Inside.CustomCodeParts;
@@ -10,6 +10,6 @@ namespace LambdicSql.Inside.CustomSymbolConverters
     {
         public string Name { get; set; }
 
-        public override Parts Convert(MethodCallExpression expression, ExpressionConverter converter) => new CurrentDateTimeParts(Name);
+        public override CodeParts Convert(MethodCallExpression expression, ExpressionConverter converter) => new CurrentDateTimeParts(Name);
     }
 }

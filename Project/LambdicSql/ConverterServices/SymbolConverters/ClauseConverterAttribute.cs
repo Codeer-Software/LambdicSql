@@ -1,5 +1,5 @@
 ﻿using LambdicSql.ConverterServices.Inside;
-using LambdicSql.BuilderServices.Code;
+using LambdicSql.BuilderServices.Parts;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Collections.Generic;
@@ -38,7 +38,7 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         /// <param name="expression">Expression.</param>
         /// <param name="converter">Expression converter.</param>
         /// <returns>Parts.</returns>
-        public override Parts Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override CodeParts Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var name = string.IsNullOrEmpty(Name) ? expression.Method.Name.ToUpper() : Name;
             name = name.Trim();
@@ -79,7 +79,7 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         /// <param name="expression">Expression.</param>
         /// <param name="converter">Expression converter.</param>
         /// <returns>Parts.</returns>
-        public override Parts Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override CodeParts Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var array = _formatSymbolName.GetSymbolName(expression, converter);
             if (FirstLineElemetCount == -1)
@@ -98,8 +98,8 @@ namespace LambdicSql.ConverterServices.SymbolConverters
     {
         internal string Text { get; set; }
         
-        Parts _clauseName;
-        Parts[] _clauseNameSrc;
+        CodeParts _clauseName;
+        CodeParts[] _clauseNameSrc;
         Dictionary<int, int> _argumentIndexAndPartsIndex;
         Dictionary<int, string> _argumentIndexAndSeparators;
 
@@ -111,12 +111,12 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         //括弧、それからセパレータ
 
 
-        internal Parts[] GetSymbolName(MethodCallExpression expression, ExpressionConverter converter)
+        internal CodeParts[] GetSymbolName(MethodCallExpression expression, ExpressionConverter converter)
         {
             //hit cache.
             if (_clauseName != null)
             {
-                return new Parts[] { _clauseName };
+                return new CodeParts[] { _clauseName };
             }
             if (_clauseNameSrc != null)
             {
@@ -141,7 +141,7 @@ namespace LambdicSql.ConverterServices.SymbolConverters
             if (string.IsNullOrEmpty(Text))
             {
                 _clauseName = expression.Method.Name.ToUpper();
-                return new Parts[] { _clauseName };
+                return new CodeParts[] { _clauseName };
             }
 
             //use argument.
@@ -150,10 +150,10 @@ namespace LambdicSql.ConverterServices.SymbolConverters
             if (index == -1)
             {
                 _clauseName = name;
-                return new Parts[] { _clauseName };
+                return new CodeParts[] { _clauseName };
             }
 
-            var clauseNameSrc = new List<Parts>();
+            var clauseNameSrc = new List<CodeParts>();
             var argumentIndexAndPartsIndex = new Dictionary<int, int>();
             var argumentIndexAndSeparators = new Dictionary<int, string>();
             while (true)

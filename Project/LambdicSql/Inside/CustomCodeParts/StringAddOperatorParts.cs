@@ -1,9 +1,9 @@
 ﻿using LambdicSql.BuilderServices;
-using LambdicSql.BuilderServices.Code;
+using LambdicSql.BuilderServices.Parts;
 
 namespace LambdicSql.Inside.CustomCodeParts
 {
-    class StringAddOperatorParts : Parts
+    class StringAddOperatorParts : CodeParts
     {
         string _front = string.Empty;
         string _back = string.Empty;
@@ -22,12 +22,12 @@ namespace LambdicSql.Inside.CustomCodeParts
 
         public override string ToString(bool isTopLevel, int indent, BuildingContext context) => PartsUtils.GetIndent(indent) + _front + context.Option.StringAddOperator + _back;
 
-        public override Parts ConcatAround(string front, string back) => new StringAddOperatorParts(front + _front, _back + back);
+        public override CodeParts ConcatAround(string front, string back) => new StringAddOperatorParts(front + _front, _back + back);
 
-        public override Parts ConcatToFront(string front) => new StringAddOperatorParts(front + _front, _back);
+        public override CodeParts ConcatToFront(string front) => new StringAddOperatorParts(front + _front, _back);
 
-        public override Parts ConcatToBack(string back) => new StringAddOperatorParts(_front, _back + back);
+        public override CodeParts ConcatToBack(string back) => new StringAddOperatorParts(_front, _back + back);
 
-        public override Parts Customize(IPartsCustomizer customizer) => customizer.Custom(this);
+        public override CodeParts Customize(IPartsCustomizer customizer) => customizer.Custom(this);
     }
 }

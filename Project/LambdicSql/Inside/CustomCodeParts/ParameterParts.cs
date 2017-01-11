@@ -1,11 +1,11 @@
 ﻿using LambdicSql.BuilderServices;
-using LambdicSql.BuilderServices.Code;
+using LambdicSql.BuilderServices.Parts;
 using LambdicSql.ConverterServices.Inside;
 using System;
 
 namespace LambdicSql.Inside.CustomCodeParts
 {
-    class ParameterParts : Parts
+    class ParameterParts : CodeParts
     {
         internal string Name { get; private set; }
         internal MetaId MetaId { get; private set; }
@@ -48,15 +48,15 @@ namespace LambdicSql.Inside.CustomCodeParts
 
         public override string ToString(bool isTopLevel, int indent, BuildingContext context) => PartsUtils.GetIndent(indent) + _front + GetDisplayText(context) + _back;
 
-        public override Parts ConcatAround(string front, string back) => new ParameterParts(Name, MetaId, _param, front + _front, _back + back, _displayValue, _isAllowString);
+        public override CodeParts ConcatAround(string front, string back) => new ParameterParts(Name, MetaId, _param, front + _front, _back + back, _displayValue, _isAllowString);
 
-        public override Parts ConcatToFront(string front) => new ParameterParts(Name, MetaId, _param, front + _front, _back, _displayValue, _isAllowString);
+        public override CodeParts ConcatToFront(string front) => new ParameterParts(Name, MetaId, _param, front + _front, _back, _displayValue, _isAllowString);
 
-        public override Parts ConcatToBack(string back) => new ParameterParts(Name, MetaId, _param, _front, _back + back, _displayValue, _isAllowString);
+        public override CodeParts ConcatToBack(string back) => new ParameterParts(Name, MetaId, _param, _front, _back + back, _displayValue, _isAllowString);
 
-        public override Parts Customize(IPartsCustomizer customizer) => customizer.Custom(this);
+        public override CodeParts Customize(IPartsCustomizer customizer) => customizer.Custom(this);
 
-        internal Parts ToDisplayValue(bool isAllowString) => new ParameterParts(Name, MetaId, _param, _front, _back, true, isAllowString);
+        internal CodeParts ToDisplayValue(bool isAllowString) => new ParameterParts(Name, MetaId, _param, _front, _back, true, isAllowString);
 
         string GetDisplayText(BuildingContext context)
         {
