@@ -44,6 +44,7 @@
     <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConverterServices\SymbolConverters\FormatConverterAttribute.cs" />
     <Compile Include="Inside\CustomCodeParts\CurrentDateTimeParts.cs" />
     <Compile Include="Inside\CustomCodeParts\CustomizeParameterForRowsToObject.cs" />
     <Compile Include="Inside\CustomCodeParts\DisableBracketsParts.cs" />
