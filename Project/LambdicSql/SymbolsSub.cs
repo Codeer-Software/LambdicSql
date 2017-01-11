@@ -247,25 +247,6 @@ namespace LambdicSql
         /// <returns>LamblicSql's expression.</returns>
         [TwoWaySqlConverter]
         public static object TwoWaySql(this string text, params object[] args) => InvalitContext.Throw<object>(nameof(ToSql));
-
-        /// <summary>
-        /// Get column name only.
-        /// It's Removing table name and schema name.
-        /// </summary>
-        /// <typeparam name="T">Column type.</typeparam>
-        /// <param name="column">Column.</param>
-        /// <returns>Column name only.</returns>
-        [ColumnOnlyConverter]
-        public static T ColumnOnly<T>(this T column) => InvalitContext.Throw<T>(nameof(ColumnOnly));
-
-        /// <summary>
-        /// Embed a direct value in SQL without using parameters.
-        /// </summary>
-        /// <typeparam name="T">Value type.</typeparam>
-        /// <param name="value">Value.</param>
-        /// <returns>Direct Value.</returns>
-        [DirectValueConverter]
-        public static T DirectValue<T>(this T value) => InvalitContext.Throw<T>(nameof(DirectValue));
     }
 
     /// <summary>

@@ -13,22 +13,6 @@ namespace LambdicSql
     public static partial class Symbols
     {
         /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="target"></param>
-        /// <returns></returns>
-        [ClauseConverter(Name = " ", AfterPredicate = "IS NULL")]
-        public static bool IsNull(object target) => InvalitContext.Throw<bool>(nameof(IsNull));
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="target"></param>
-        /// <returns></returns>
-        [ClauseConverter(Name = " ", AfterPredicate = "IS NOT NULL")]
-        public static bool IsNotNull(object target) => InvalitContext.Throw<bool>(nameof(IsNull));
-
-        /// <summary>
         /// SUM function.
         /// </summary>
         /// <typeparam name="T">Type represented by expression.</typeparam>
@@ -202,7 +186,7 @@ namespace LambdicSql
         /// <param name="element">Part type.</param>
         /// <param name="src">The date data.</param>
         /// <returns>A part from the date data.</returns>
-        [ExtractConverter]
+        [FormatConverter(Format = "EXTRACT([0] FROM [1])", FirstLineElemetCount = 1)]
         public static double Extract(DateTimeElement element, DateTime src) => InvalitContext.Throw<double>(nameof(Extract));
 
         /// <summary>
@@ -213,7 +197,7 @@ namespace LambdicSql
         /// <returns>A part from the date data.</returns>
         [FuncConverter]
         public static int DatePart(DateTimeElement element, DateTime src) => InvalitContext.Throw<int>(nameof(Extract));
-        
+
         /// <summary>
         /// CAST function.
         /// </summary>
@@ -221,7 +205,7 @@ namespace LambdicSql
         /// <param name="target"></param>
         /// <param name="destinationType">Type of destination.</param>
         /// <returns>Converted data.</returns>
-        [CastConverter]
+        [FormatConverter(Format = "CAST([0] AS [1])", FirstLineElemetCount = 1)]
         public static TDst Cast<TDst>(object target, IDataType destinationType) => InvalitContext.Throw<TDst>(nameof(Cast));
 
         /// <summary>

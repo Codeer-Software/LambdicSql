@@ -1008,6 +1008,23 @@ namespace LambdicSql
         [RecursiveConverter]
         public static RecursiveArguments<T> Recursive<T>(T args) => InvalitContext.Throw<RecursiveArguments<T>>(nameof(Select));
 
+        /// <summary>
+        /// IS NULL clause.
+        /// </summary>
+        /// <param name="target"></param>
+        /// <returns>IS NULL</returns>
+        [ClauseConverter(Name = " ", AfterPredicate = "IS NULL")]
+        public static bool IsNull(object target) => InvalitContext.Throw<bool>(nameof(IsNull));
+
+        /// <summary>
+        /// IS NOT NULL clause.
+        /// </summary>
+        /// <param name="target">target.</param>
+        /// <returns>IS NOT NULL</returns>
+        [ClauseConverter(Name = " ", AfterPredicate = "IS NOT NULL")]
+        public static bool IsNotNull(object target) => InvalitContext.Throw<bool>(nameof(IsNull));
+
+
         //TODO なかったら作ると、あったら消すを全DBでできるようにしておくか
 
         //TODO test.
@@ -1130,7 +1147,7 @@ namespace LambdicSql
         /// <param name="table">Table.</param>
         /// <param name="columns">Columns.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [ReferencesConverter]
+        [FormatConverter(Format = "REFERENCES [1]([2])", FirstLineElemetCount =1, Indent = 1)]
         public static IConstraint References(this IConstraint before, object table, params object[] columns) => InvalitContext.Throw<IConstraint>(nameof(References));
 
         /// <summary>

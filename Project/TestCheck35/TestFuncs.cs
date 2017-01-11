@@ -982,6 +982,8 @@ FROM SYSIBM.SYSDUMMY1");
                     Val10 = Extract(DateTimeElement.Week, CurrentTimeStamp())
                 }));
 
+            query.Gen(_connection);
+
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,

@@ -325,39 +325,6 @@ WHERE (@p_1) < (tbl_remuneration.money)",
 100, (decimal)3000);
         }
 
-        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_ColumnOnly()
-        {
-            var sql =
-@"SELECT
-	tbl_staff.name AS name,
-    tbl_remuneration.payment_date AS payment_date,
-	/*0*/tbl_remuneration.money/**/ AS /*1*/money/**/
-FROM tbl_remuneration 
-    JOIN tbl_staff ON tbl_staff.id = tbl_remuneration.staff_id
-/*2*/WHERE tbl_remuneration.money = 100/**/";
-
-            var query = Db<DB>.Sql(db => sql.TwoWaySql(
-                db.tbl_remuneration.money,
-                db.tbl_remuneration.money.ColumnOnly(),
-                Where(3000 < db.tbl_remuneration.money)
-                ));
-
-            query.Gen(_connection);
-
-            var datas = _connection.Query(query).ToList();
-            Assert.IsTrue(0 < datas.Count);
-            AssertEx.AreEqual(query, _connection,
-@"SELECT
-	tbl_staff.name AS name,
-    tbl_remuneration.payment_date AS payment_date,
-	tbl_remuneration.money AS money
-FROM tbl_remuneration 
-    JOIN tbl_staff ON tbl_staff.id = tbl_remuneration.staff_id
-WHERE (@p_0) < (tbl_remuneration.money)",
-(decimal)3000);
-        }
-
         class SelectedData
         {
             public int id { get; set; }
@@ -578,24 +545,6 @@ FROM rec", 1, 1, 1, 5);
 SELECT
 	rec.val
 FROM rec", 1, 1, 1, 5);
-        }
-
-        //TODO テスト WHERE句の比較にサブクエリを入れる 直とsubと両方
-
-        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void TestDirectValue()
-        {
-            var name = _connection.GetType().Name;
-            if (name == "OracleConnection") return;
-            if (name == "MySqlConnection") return;
-            if (name == "DB2Connection") return;
-
-            var query = Db<DB>.Sql(db => Select(1.DirectValue()));
-            var datas = _connection.Query<SelectedData>(query).ToList();
-            Assert.IsTrue(0 < datas.Count);
-            AssertEx.AreEqual(query, _connection,
- @"SELECT
-	1");
         }
     }
 }

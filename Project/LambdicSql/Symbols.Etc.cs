@@ -41,14 +41,14 @@ namespace LambdicSql
         /// Constructor.
         /// </summary>
         /// <param name="target">target column.</param>
-        [SortedByConverter]
+        [FormatConverter(Format = "[0] ASC")]
         public static ISortedBy Asc(object target) => InvalitContext.Throw<ISortedBy>(nameof(Asc));
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="target">target column.</param>
-        [SortedByConverter]
+        [FormatConverter(Format = "[0] DESC")]
         public static ISortedBy Desc(object target) => InvalitContext.Throw<ISortedBy>(nameof(Desc));
 
         /// <summary>

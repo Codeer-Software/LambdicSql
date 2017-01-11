@@ -1,5 +1,4 @@
-﻿using LambdicSql.ConverterServices.Inside;
-using LambdicSql.BuilderServices.Parts;
+﻿using LambdicSql.BuilderServices.Parts;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Collections.Generic;
@@ -7,6 +6,12 @@ using System;
 
 namespace LambdicSql.ConverterServices.SymbolConverters
 {
+    //TODO params展開の印
+    //TODO 縦対応 → まあ、引数だけの話かな。そこを区切ればいいんじゃないかなー
+    //TODO 直値対応 引数にそのような情報を付ける
+    //TODO カラムだけとかね。
+    //そしたらいらなくなるかな？
+
     /// <summary>
     /// SQL symbol converter attribute for clause.
     /// </summary>
@@ -38,7 +43,12 @@ namespace LambdicSql.ConverterServices.SymbolConverters
                 Init();
             }
         }
-        
+
+        /// <summary>
+        /// Indent.
+        /// </summary>
+        public int Indent { get; set; }
+
         /// <summary>
         /// Convert expression to code parts.
         /// </summary>

@@ -57,16 +57,11 @@
     <Compile Include="Inside\CustomSymbolConverters\ColumnDefineConverterAttribute.cs" />
     <Compile Include="Inside\CustomSymbolConverters\AllConverterAttribute.cs" />
     <Compile Include="Inside\CustomSymbolConverters\AssignConverterAttribute.cs" />
-    <Compile Include="Inside\CustomSymbolConverters\CastConverterAttribute.cs" />
-    <Compile Include="Inside\CustomSymbolConverters\ColumnOnlyConverterAttribute.cs" />
     <Compile Include="Inside\CustomSymbolConverters\ConditionConverterAttribute.cs" />
     <Compile Include="Inside\CustomSymbolConverters\ConditionClauseConverterAttribute.cs" />
     <Compile Include="Inside\CustomSymbolConverters\SpecialNameClauseConverterAttribute.cs" />
-    <Compile Include="Inside\CustomSymbolConverters\ReferencesConverterAttribute.cs" />
     <Compile Include="Inside\CustomSymbolConverters\CreateTableConverterAttribute.cs" />
     <Compile Include="Inside\CustomSymbolConverters\CurrentDateTimeConverterAttribute.cs" />
-    <Compile Include="Inside\CustomSymbolConverters\DirectValueConverterAttribute.cs" />
-    <Compile Include="Inside\CustomSymbolConverters\ExtractConverterAttribute.cs" />
     <Compile Include="Inside\CustomSymbolConverters\FromConverterAttribute.cs" />
     <Compile Include="Inside\CustomSymbolConverters\InsertIntoConverterAttribute.cs" />
     <Compile Include="Inside\CustomSymbolConverters\JoinConverterAttribute.cs" />
