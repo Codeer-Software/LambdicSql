@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace LambdicSql.BuilderServices.CodeParts
+namespace LambdicSql.BuilderServices.Code
 {
     /// <summary>
     /// Horizontal text.
@@ -21,6 +21,7 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// </summary>
         public int Indent { get; set; }
 
+        //TODO これがfalseなケースってなに？
         /// <summary>
         /// Is functional.
         /// </summary>

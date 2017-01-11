@@ -176,8 +176,11 @@ WHERE tbl_staff.id BETWEEN @p_0 AND @p_1",
                From(db.tbl_staff).
                Where(In(db.tbl_staff.id, 1, 2, 3, 4, 5)));
 
+            query.Gen(_connection);
+
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
+
             AssertEx.AreEqual(query, _connection,
 @"SELECT
 	tbl_staff.id AS Id
@@ -269,6 +272,8 @@ WHERE tbl_staff.id IN(@p_0, @p_1)",
                }).
                From(db.tbl_staff).
                Where(In(db.tbl_staff.id, sub)));
+
+            query.Gen(_connection);
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);

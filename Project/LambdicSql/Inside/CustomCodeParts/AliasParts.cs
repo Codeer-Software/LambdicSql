@@ -1,4 +1,4 @@
-﻿using LambdicSql.BuilderServices.CodeParts;
+﻿using LambdicSql.BuilderServices.Code;
 
 namespace LambdicSql.Inside.CustomCodeParts
 {

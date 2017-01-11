@@ -1,5 +1,5 @@
 ﻿using LambdicSql.ConverterServices.Inside;
-using LambdicSql.BuilderServices.CodeParts;
+using LambdicSql.BuilderServices.Code;
 using System.Linq;
 using System.Linq.Expressions;
 using static LambdicSql.Inside.CustomCodeParts.PartsFactoryUtils;

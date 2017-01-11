@@ -3,7 +3,7 @@ using LambdicSql.ConverterServices.Inside;
 using LambdicSql.Inside.CustomCodeParts;
 using System;
 using System.Linq.Expressions;
-using LambdicSql.BuilderServices.CodeParts;
+using LambdicSql.BuilderServices.Code;
 
 namespace LambdicSql
 {

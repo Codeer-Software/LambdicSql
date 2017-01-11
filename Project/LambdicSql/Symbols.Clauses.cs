@@ -918,7 +918,7 @@ namespace LambdicSql
         /// <param name="target">Target text.</param>
         /// <param name="pattern">Text that represents pattern matching.</param>
         /// <returns>If target matches the specified pattern, LIKE returns TRUE.</returns>
-        [LikeConverter]
+        [FormatConverter(Name = "[0] LIKE [1]", FirstLineElemetCount = 2)]
         public static bool Like(object target, object pattern) => InvalitContext.Throw<bool>(nameof(Like));
 
         /// <summary>
@@ -928,16 +928,17 @@ namespace LambdicSql
         /// <param name="min">Minimum value.</param>
         /// <param name="max">Maxmum value.</param>
         /// <returns>Returns TRUE if target is included in the range of min and max.</returns>
-        [BetweenConverter]
+        [FormatConverter(Name = "[0] BETWEEN [1] AND [2]", FirstLineElemetCount = 2)]
         public static bool Between(object target, object min, object max) => InvalitContext.Throw<bool>(nameof(Between));
 
+        //TODO paramsがついているかどうかって属性でわかるんやっけ？ それはFormatConverterとかの中で見るべし
         /// <summary>
         /// IN keyword.
         /// </summary>
         /// <param name="target">Target of IN check.</param>
         /// <param name="canditates">Canditates.</param>
         /// <returns>Returns TRUE if target is included in the canditates represented by expression.</returns>
-        [InConverter]
+        [FormatConverter(Name = "[0] IN([1])", FirstLineElemetCount = 2)]
         public static bool In(object target, params object[] canditates) => InvalitContext.Throw<bool>(nameof(In));
 
         /// <summary>

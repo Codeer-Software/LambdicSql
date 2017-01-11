@@ -1,4 +1,4 @@
-﻿namespace LambdicSql.BuilderServices.CodeParts
+﻿namespace LambdicSql.BuilderServices.Code
 {
     /// <summary>
     /// Customizer.

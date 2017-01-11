@@ -1,6 +1,6 @@
 ﻿using LambdicSql.Inside.CustomCodeParts;
 
-namespace LambdicSql.BuilderServices.CodeParts
+namespace LambdicSql.BuilderServices.Code
 {
     /// <summary>
     /// Single text.
@@ -38,7 +38,7 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// <summary>
         /// Is empty.
         /// </summary>
-        public override bool IsEmpty => string.IsNullOrEmpty(_text.Trim());
+        public override bool IsEmpty => string.IsNullOrEmpty(_text);
 
         /// <summary>
         /// To string.
