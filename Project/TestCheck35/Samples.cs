@@ -11,7 +11,7 @@ using System.Collections.Generic;
 //important
 using LambdicSql;
 using LambdicSql.feat.Dapper;
-using static LambdicSql.Symbols;
+using static LambdicSql.Symbol;
 using LambdicSql.ConverterServices;
 
 //TODO Make this a more practical sample.
@@ -1030,7 +1030,7 @@ FROM tbl_remuneration
                 var query = Db<DB>.Sql(db =>
                     Select(new
                     {
-                        id = Cast<int>(db.tbl_staff.id, Int())
+                        id = Cast<int>(db.tbl_staff.id, DataType.Int())
                     }).
                     From(db.tbl_staff));
 

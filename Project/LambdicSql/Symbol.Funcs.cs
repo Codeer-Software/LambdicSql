@@ -10,7 +10,7 @@ namespace LambdicSql
     /// It can only be used within methods of the LambdicSql.Sql class.
     /// Use[using static LambdicSql.Keywords;], you can use to write natural SQL.
     /// </summary>
-    public static partial class Symbols
+    public static partial class Symbol
     {
         /// <summary>
         /// SUM function.

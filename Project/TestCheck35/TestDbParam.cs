@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using static Test.Helper.DBProviderInfo;
 using LambdicSql;
 using LambdicSql.feat.Dapper;
-using static LambdicSql.Symbols;
+using static LambdicSql.Symbol;
 
 namespace TestCheck35
 {

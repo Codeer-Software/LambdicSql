@@ -17,7 +17,7 @@
         /// <param name="expression2">Exppresion 2.</param>
         /// <returns>Concatenated result.</returns>
         public static Sql<TResult> Union<TResult>(this Sql<TResult> expression1, Sql expression2)
-            => expression1 + Db<Dummy>.Sql(db => Symbols.Union()) + expression2;
+            => expression1 + Db<Dummy>.Sql(db => Symbol.Union()) + expression2;
 
         /// <summary>
         /// Concatenate expression1 and expression2 using UNION clause.
@@ -26,7 +26,7 @@
         /// <param name="expression2">Exppresion 2.</param>
         /// <returns>Concatenated result.</returns>
         public static Sql Union(this Sql expression1, Sql expression2)
-            => expression1 + Db<Dummy>.Sql(db => Symbols.Union()) + expression2;
+            => expression1 + Db<Dummy>.Sql(db => Symbol.Union()) + expression2;
 
         /// <summary>
         /// Concatenate expression1 and expression2 using UNION clause.
@@ -37,7 +37,7 @@
         /// <param name="expression2">Exppresion 2.</param>
         /// <returns>Concatenated result.</returns>
         public static Sql<TResult> Union<TResult>(this Sql<TResult> expression1, IAggregatePredicateAll all, Sql expression2)
-            => expression1 + Db<Dummy>.Sql(db => Symbols.Union(Symbols.All())) + expression2;
+            => expression1 + Db<Dummy>.Sql(db => Symbol.Union(Symbol.All())) + expression2;
 
         /// <summary>
         /// Concatenate expression1 and expression2 using UNION clause.
@@ -47,7 +47,7 @@
         /// <param name="expression2">Exppresion 2.</param>
         /// <returns>Concatenated result.</returns>
         public static Sql Union(this Sql expression1, IAggregatePredicateAll all, Sql expression2)
-            => expression1 + Db<Dummy>.Sql(db => Symbols.Union(Symbols.All())) + expression2;
+            => expression1 + Db<Dummy>.Sql(db => Symbol.Union(Symbol.All())) + expression2;
 
         /// <summary>
         /// Concatenate expression1 and expression2 using INTERSECT clause.
@@ -57,7 +57,7 @@
         /// <param name="expression2">Exppresion 2.</param>
         /// <returns>Concatenated result.</returns>
         public static Sql<TResult> Intersect<TResult>(this Sql<TResult> expression1, Sql expression2)
-            => expression1 + Db<Dummy>.Sql(db => Symbols.Intersect()) + expression2;
+            => expression1 + Db<Dummy>.Sql(db => Symbol.Intersect()) + expression2;
 
         /// <summary>
         /// Concatenate expression1 and expression2 using INTERSECT clause.
@@ -66,7 +66,7 @@
         /// <param name="expression2">Exppresion 2.</param>
         /// <returns>Concatenated result.</returns>
         public static Sql Intersect(this Sql expression1, Sql expression2)
-            => expression1 + Db<Dummy>.Sql(db => Symbols.Intersect()) + expression2;
+            => expression1 + Db<Dummy>.Sql(db => Symbol.Intersect()) + expression2;
 
         /// <summary>
         /// Concatenate expression1 and expression2 using INTERSECT clause.
@@ -77,7 +77,7 @@
         /// <param name="expression2">Exppresion 2.</param>
         /// <returns>Concatenated result.</returns>
         public static Sql<TResult> Intersect<TResult>(this Sql<TResult> expression1, IAggregatePredicateAll all, Sql expression2)
-            => expression1 + Db<Dummy>.Sql(db => Symbols.Intersect(Symbols.All())) + expression2;
+            => expression1 + Db<Dummy>.Sql(db => Symbol.Intersect(Symbol.All())) + expression2;
 
         /// <summary>
         /// Concatenate expression1 and expression2 using INTERSECT clause.
@@ -87,7 +87,7 @@
         /// <param name="expression2">Exppresion 2.</param>
         /// <returns>Concatenated result.</returns>
         public static Sql Intersect(this Sql expression1, IAggregatePredicateAll all, Sql expression2)
-            => expression1 + Db<Dummy>.Sql(db => Symbols.Intersect(Symbols.All())) + expression2;
+            => expression1 + Db<Dummy>.Sql(db => Symbol.Intersect(Symbol.All())) + expression2;
 
         /// <summary>
         /// Concatenate expression1 and expression2 using EXCEPT clause.
@@ -97,7 +97,7 @@
         /// <param name="expression2">Exppresion 2.</param>
         /// <returns>Concatenated result.</returns>
         public static Sql<TResult> Except<TResult>(this Sql<TResult> expression1, Sql expression2)
-            => expression1 + Db<Dummy>.Sql(db => Symbols.Except()) + expression2;
+            => expression1 + Db<Dummy>.Sql(db => Symbol.Except()) + expression2;
 
         /// <summary>
         /// Concatenate expression1 and expression2 using EXCEPT clause.
@@ -106,7 +106,7 @@
         /// <param name="expression2">Exppresion 2.</param>
         /// <returns>Concatenated result.</returns>
         public static Sql Except(this Sql expression1, Sql expression2)
-            => expression1 + Db<Dummy>.Sql(db => Symbols.Except()) + expression2;
+            => expression1 + Db<Dummy>.Sql(db => Symbol.Except()) + expression2;
 
         /// <summary>
         /// Concatenate expression1 and expression2 using EXCEPT clause.
@@ -117,7 +117,7 @@
         /// <param name="expression2">Exppresion 2.</param>
         /// <returns>Concatenated result.</returns>
         public static Sql<TResult> Except<TResult>(this Sql<TResult> expression1, IAggregatePredicateAll all, Sql expression2)
-            => expression1 + Db<Dummy>.Sql(db => Symbols.Except(Symbols.All())) + expression2;
+            => expression1 + Db<Dummy>.Sql(db => Symbol.Except(Symbol.All())) + expression2;
 
         /// <summary>
         /// Concatenate expression1 and expression2 using EXCEPT clause.
@@ -127,7 +127,7 @@
         /// <param name="expression2">Exppresion 2.</param>
         /// <returns>Concatenated result.</returns>
         public static Sql Except(this Sql expression1, IAggregatePredicateAll all, Sql expression2)
-            => expression1 + Db<Dummy>.Sql(db => Symbols.Except(Symbols.All())) + expression2;
+            => expression1 + Db<Dummy>.Sql(db => Symbol.Except(Symbol.All())) + expression2;
 
         /// <summary>
         /// Concatenate expression1 and expression2 using MINUS clause.
@@ -137,7 +137,7 @@
         /// <param name="expression2">Exppresion 2.</param>
         /// <returns>Concatenated result.</returns>
         public static Sql<TResult> Minus<TResult>(this Sql<TResult> expression1, Sql expression2)
-            => expression1 + Db<Dummy>.Sql(db => Symbols.Minus()) + expression2;
+            => expression1 + Db<Dummy>.Sql(db => Symbol.Minus()) + expression2;
 
         /// <summary>
         /// Concatenate expression1 and expression2 using MINUS clause.
@@ -146,6 +146,6 @@
         /// <param name="expression2">Exppresion 2.</param>
         /// <returns>Concatenated result.</returns>
         public static Sql Minus(this Sql expression1, Sql expression2)
-            => expression1 + Db<Dummy>.Sql(db => Symbols.Minus()) + expression2;
+            => expression1 + Db<Dummy>.Sql(db => Symbol.Minus()) + expression2;
     }
 }

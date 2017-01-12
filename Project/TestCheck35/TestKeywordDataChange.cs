@@ -7,7 +7,7 @@ using static Test.Helper.DBProviderInfo;
 //important
 using LambdicSql;
 using LambdicSql.feat.Dapper;
-using static LambdicSql.Symbols;
+using static LambdicSql.Symbol;
 
 namespace TestCheck35
 {
@@ -198,9 +198,9 @@ FROM tbl_data", 10);
             {
                 var sql = Db<DBForCreateTest>.Sql(db =>
                     CreateTable(db.table1,
-                        new Column(db.table1.id, Int(), Default(10), NotNull(), PrimaryKey()),
-                        new Column(db.table1.val1, Int()),
-                        new Column(db.table1.val2, Char(10), Default("abc"), NotNull()),
+                        new Column(db.table1.id, DataType.Int(), Default(10), NotNull(), PrimaryKey()),
+                        new Column(db.table1.val1, DataType.Int()),
+                        new Column(db.table1.val2, DataType.Char(10), Default("abc"), NotNull()),
                         Constraint("xxx").Check(db.table1.id < 100),
                         Unique(db.table1.val2)
                     ));
@@ -223,8 +223,8 @@ FROM tbl_data", 10);
             }
             {
                 var sql = Db<DBForCreateTest>.Sql(db => CreateTable(db.table2,
-                    new Column(db.table2.id, Int(), NotNull()),
-                    new Column(db.table2.table1Id, Int()),
+                    new Column(db.table2.id, DataType.Int(), NotNull()),
+                    new Column(db.table2.table1Id, DataType.Int()),
                     ForeignKey(db.table2.table1Id).References(db.table1, db.table1.id),
                     PrimaryKey(db.table2.id)
                     ));
@@ -273,9 +273,9 @@ FROM tbl_data", 10);
             {
                 var sql = Db<DBForCreateTest>.Sql(db =>
                     CreateTableIfNotExists(db.table1,
-                        new Column(db.table1.id, Int(), Default(10), NotNull(), PrimaryKey()),
-                        new Column(db.table1.val1, Int()),
-                        new Column(db.table1.val2, Char(10), Default("abc"), NotNull()),
+                        new Column(db.table1.id, DataType.Int(), Default(10), NotNull(), PrimaryKey()),
+                        new Column(db.table1.val1, DataType.Int()),
+                        new Column(db.table1.val2, DataType.Char(10), Default("abc"), NotNull()),
                         Constraint("xxx").Check(db.table1.id < 100),
                         Unique(db.table1.val2)
                     ));

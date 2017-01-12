@@ -87,10 +87,10 @@
     <Compile Include="ConverterServices\SymbolConverters\SymbolConverterObjectAttribute.cs" />
     <Compile Include="Inside\CustomSymbolConverters\TopConverterAttribute.cs" />
     <Compile Include="Inside\CustomSymbolConverters\ToSqlConverterAttribute.cs" />
-    <Compile Include="Symbols.Clauses.cs" />
-    <Compile Include="Symbols.Funcs.cs" />
-    <Compile Include="Symbols.Etc.cs" />
-    <Compile Include="SymbolsSub.cs" />
+    <Compile Include="Symbol.Clauses.cs" />
+    <Compile Include="Symbol.Funcs.cs" />
+    <Compile Include="Symbol.Etc.cs" />
+    <Compile Include="SymbolSub.cs" />
     <Compile Include="feat\Dapper\DapperApaptExtensions.cs" />
     <Compile Include="feat\Dapper\DapperWrapper.cs" />
     <Compile Include="feat\EntityFramework\EFAdaptExtensions.cs" />
@@ -100,7 +100,7 @@
     <Compile Include="ConverterServices\Inside\InvalitContext.cs" />
     <Compile Include="ConverterServices\Inside\MetaId.cs" />
     <Compile Include="ConverterServices\Inside\TowWaySqlSpec.cs" />
-    <Compile Include="Symbols.Type.cs" />
+    <Compile Include="DataType.cs" />
     <Compile Include="ConverterServices\Inside\ExpressionToObject.CreateGetter.cs" />
     <Compile Include="ConverterServices\Inside\ExpressionToObject.Getter.cs" />
     <Compile Include="Inside\CustomCodeParts\CustomizeParameterToObject.cs" />

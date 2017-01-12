@@ -6,7 +6,7 @@ using Test.Helper;
 using static Test.Helper.DBProviderInfo;
 using LambdicSql;
 using LambdicSql.feat.Dapper;
-using static LambdicSql.Symbols;
+using static LambdicSql.Symbol;
 
 //TODO テストもリファクタリング
 //全メソッド
@@ -1092,7 +1092,7 @@ FROM SYSIBM.SYSDUMMY1");
             var query = Db<DB>.Sql(db =>
                 Select(new
                 {
-                    id = Cast<int>(db.tbl_remuneration.money, Int())
+                    id = Cast<int>(db.tbl_remuneration.money, DataType.Int())
                 }).
                 From(db.tbl_remuneration));
 
@@ -1113,7 +1113,7 @@ FROM tbl_remuneration");
                 name != "NpgsqlConnection") return;
 
             var exp1 = Db<DB>.Sql(db => db.tbl_remuneration.money);
-            var exp2 = Db<DB>.Sql(db => Int());
+            var exp2 = Db<DB>.Sql(db => DataType.Int());
             var query = Db<DB>.Sql(db =>
                 Select(new
                 {
