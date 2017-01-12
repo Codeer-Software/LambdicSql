@@ -625,7 +625,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="elements">Specify column and sort order. Asc(column) or Desc(column).</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [OrderByConverter]
+        [OrderByConverter]//[FormatConverter(Format = "ORDER BY |[0]", FormatDirection = FormatDirection.Vertical)]
         public static OrderBy OrderBy(params ISortedBy[] elements) => InvalitContext.Throw<OrderBy>(nameof(OrderBy));
 
         /// <summary>
@@ -938,7 +938,7 @@ namespace LambdicSql
         /// <param name="target">Target of IN check.</param>
         /// <param name="canditates">Canditates.</param>
         /// <returns>Returns TRUE if target is included in the canditates represented by expression.</returns>
-        [FormatConverter(Format = "[0] IN(|[1])")]
+        [FormatConverter(Format = "[0] IN(|[<, >1])")]
         public static bool In(object target, params object[] canditates) => InvalitContext.Throw<bool>(nameof(In));
 
         /// <summary>
@@ -1147,7 +1147,7 @@ namespace LambdicSql
         /// <param name="table">Table.</param>
         /// <param name="columns">Columns.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [FormatConverter(Format = "REFERENCES [1](|[2])", Indent = 1)]
+        [FormatConverter(Format = "REFERENCES [1](|[<, >2])", Indent = 1)]
         public static IConstraint References(this IConstraint before, object table, params object[] columns) => InvalitContext.Throw<IConstraint>(nameof(References));
 
         /// <summary>

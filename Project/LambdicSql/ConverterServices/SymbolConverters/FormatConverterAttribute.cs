@@ -3,6 +3,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Collections.Generic;
 using System;
+using System.Collections;
+using LambdicSql.Inside.CustomCodeParts;
 
 namespace LambdicSql.ConverterServices.SymbolConverters
 {
@@ -36,8 +38,7 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         string _format;
         int _firstLineElemetCount = -1;
         List<Code> _partsSrc;
-        Dictionary<int, int> _argumentIndexAndPartsIndex;
-        Dictionary<int, string> _argumentIndexAndSeparators;
+        Dictionary<int, ArgumentInfo> _parameterMappingInfo;
 
         /// <summary>
         /// 
@@ -74,42 +75,93 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var array = ConvertByFormat(expression, converter);
-            if (_firstLineElemetCount == -1)
+            if (FormatDirection == FormatDirection.Vertical)
             {
-                return new HCode(array) { EnableChangeLine = false };
+                var first = new HCode(array.Take(_firstLineElemetCount)) { EnableChangeLine = false };
+                var v = new VCode(first);
+                v.AddRange(1, array.Skip(_firstLineElemetCount));
+                return v;
             }
-            var first = new HCode(array.Take(_firstLineElemetCount)) { EnableChangeLine = false };
-            var h = new HCode(first) { IsFunctional = true };
-            h.AddRange(array.Skip(_firstLineElemetCount));
-            return h;
+            else
+            {
+                var first = new HCode(array.Take(_firstLineElemetCount)) { EnableChangeLine = false };
+                var h = new HCode(first) { IsFunctional = true };
+                h.AddRange(array.Skip(_firstLineElemetCount));
+                return h;
+            }
         }
         
         internal Code[] ConvertByFormat(MethodCallExpression expression, ExpressionConverter converter)
         {
-            var array = _partsSrc.ToArray();
-            foreach (var e in _argumentIndexAndPartsIndex)
+            var array = _partsSrc.Select(e=>new Code[] { e }).ToArray();
+            foreach (var e in _parameterMappingInfo)
             {
-                var argCore = converter.Convert(expression.Arguments[e.Key]);
-                string sep;
-                if (_argumentIndexAndSeparators.TryGetValue(e.Key, out sep))
+                var argExp = expression.Arguments[e.Key];
+
+                Code[] code = null;
+                if (e.Value.IsArrayExpand)
                 {
-                    array[e.Value] = new HCode(argCore, sep) { EnableChangeLine = false };
+                    //NewArrayExpressionの場合
+                    var newArrayExp = argExp as NewArrayExpression;
+                    if (newArrayExp != null)
+                    {
+                        code = newArrayExp.Expressions.Select(x => converter.Convert(x)).ToArray();
+                    }
+                    else
+                    {
+                        var obj = converter.ToObject(newArrayExp);
+                        var list = new List<Code>();
+                        foreach (var x in (IEnumerable)obj)
+                        {
+                            list.Add(converter.Convert(x));
+                        }
+                        code = list.ToArray();
+                    }
+                    if (!string.IsNullOrEmpty(e.Value.ArrayExpandSeparator))
+                    {
+                        for (int i = 0; i < code.Length - 1; i++)
+                        {
+                            code[i] = new HCode(code[i], e.Value.ArrayExpandSeparator) { EnableChangeLine = false };
+                        }
+                    }
+                    if (0 < code.Length)
+                    {
+                        code[code.Length - 1] = new HCode(code[code.Length - 1], e.Value.Separator) { EnableChangeLine = false };
+                    }
                 }
                 else
                 {
-                    array[e.Value] = argCore;
+                    var argCore = converter.Convert(argExp);
+                    if (!string.IsNullOrEmpty(e.Value.Separator))
+                    {
+                        code = new Code[] { new HCode(argCore, e.Value.Separator) { EnableChangeLine = false } };
+                    }
+                    else
+                    {
+                        code = new Code[] { argCore };
+                    }
                 }
+                if (e.Value.IsDirectValue)
+                {
+                    var customizer = new CustomizeParameterToObject();
+                    code = code.Select(x => x.Customize(customizer)).ToArray();
+                }
+                if (e.Value.IsColumnOnly)
+                {
+                    var customizer = new CustomizeColumnOnly();
+                    code = code.Select(x => x.Customize(customizer)).ToArray();
+                }
+                array[e.Value.PartsIndex] = code;
             }
-            return array;
+            return array.SelectMany(e => e).ToArray();
         }
 
         void Init()
         {
             var format = Format;
-            _firstLineElemetCount = -1;
+            _firstLineElemetCount = 0;
             _partsSrc = new List<Code>();
-            _argumentIndexAndPartsIndex = new Dictionary<int, int>();
-            _argumentIndexAndSeparators = new Dictionary<int, string>();
+            _parameterMappingInfo = new Dictionary<int, ArgumentInfo>();
 
             while (true)
             {
@@ -133,14 +185,55 @@ namespace LambdicSql.ConverterServices.SymbolConverters
             AnalizeFormat(format);
         }
 
+
+        class ArgumentInfo
+        {
+            internal int PartsIndex { get; set; }
+            internal string Separator { get; set; }
+            internal bool IsArrayExpand { get; set; }
+            internal string ArrayExpandSeparator { get; set; }
+            internal bool IsDirectValue { get; set; }
+            internal bool IsColumnOnly { get; set; }
+        }
+
         void AnalizeArg(string arg)
         {
-            int index = 0;
-            if (!int.TryParse(arg, out index))
+            var info = new ArgumentInfo();
+
+            //expand array.
+            var index = arg.IndexOf('<');
+            if (index != -1)
+            {
+                var end = arg.IndexOf('>');
+                if (end == -1) throw new NotSupportedException("Invalid format.");
+                var left = arg.Substring(0, index);
+                var mid = arg.Substring(index + 1, end - index - 1);
+                var right = arg.Substring(end + 1);
+                arg = left + right;
+                info.IsArrayExpand = true;
+                info.ArrayExpandSeparator = mid;
+            }
+
+            //direct value.
+            if (arg.IndexOf('$') != -1)
+            {
+                arg = arg.Replace("$", string.Empty);
+                info.IsDirectValue = true;
+            }
+
+            //column only.
+            if (arg.IndexOf('#') != -1)
+            {
+                arg = arg.Replace("#", string.Empty);
+                info.IsColumnOnly = true;
+            }
+
+            if (!int.TryParse(arg.Trim(), out index))
             {
                 throw new NotSupportedException("Invalid format.");
             }
-            _argumentIndexAndPartsIndex[index] = _partsSrc.Count;
+            info.PartsIndex = _partsSrc.Count;
+            _parameterMappingInfo[index] = info;
             _partsSrc.Add(null);
         }
 
@@ -148,7 +241,7 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         {
             if (!string.IsNullOrEmpty(format))
             {
-                if (_argumentIndexAndPartsIndex.Count != 0)
+                if (_parameterMappingInfo.Count != 0)
                 {
                     int i = 0;
                     for (; i < format.Length; i++)
@@ -166,9 +259,9 @@ namespace LambdicSql.ConverterServices.SymbolConverters
                     }
                     var sep = format.Substring(0, i);
                     format = format.Substring(i);
-                    _argumentIndexAndSeparators[_argumentIndexAndPartsIndex.Last().Key] = sep;
+                    _parameterMappingInfo[_parameterMappingInfo.Last().Key].Separator = sep;
                 }
-                if (_firstLineElemetCount == -1 && format.IndexOf('|') != -1)
+                if (_firstLineElemetCount == 0 && format.IndexOf('|') != -1)
                 {
                     _firstLineElemetCount = _partsSrc.Count + 1;
                     format = format.Replace("|", string.Empty);
