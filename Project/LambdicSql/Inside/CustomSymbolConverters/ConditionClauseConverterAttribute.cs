@@ -1,4 +1,4 @@
-﻿using LambdicSql.BuilderServices.Parts;
+﻿using LambdicSql.BuilderServices.CodeParts;
 using LambdicSql.ConverterServices;
 using LambdicSql.ConverterServices.SymbolConverters;
 using LambdicSql.ConverterServices.Inside;
@@ -9,7 +9,7 @@ namespace LambdicSql.Inside.CustomSymbolConverters
 {
     class ConditionClauseConverterAttribute : SymbolConverterMethodAttribute
     {
-        public override CodeParts Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override Parts Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var condition = converter.Convert(expression.Arguments[expression.SkipMethodChain(0)]);
             if (condition.IsEmpty) return string.Empty;

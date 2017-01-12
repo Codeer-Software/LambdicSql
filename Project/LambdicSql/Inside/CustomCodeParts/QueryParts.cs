@@ -1,13 +1,13 @@
 ﻿using LambdicSql.BuilderServices;
-using LambdicSql.BuilderServices.Parts;
+using LambdicSql.BuilderServices.CodeParts;
 
 namespace LambdicSql.Inside.CustomCodeParts
 {
-    internal class QueryParts : CodeParts
+    internal class QueryParts : Parts
     {
-        CodeParts _core;
+        Parts _core;
 
-        internal QueryParts(CodeParts core)
+        internal QueryParts(Parts core)
         {
             _core = core;
         }
@@ -18,12 +18,12 @@ namespace LambdicSql.Inside.CustomCodeParts
 
         public override string ToString(bool isTopLevel, int indent, BuildingContext context) => _core.ToString(false, indent, context);
 
-        public override CodeParts ConcatAround(string front, string back) => new QueryParts(_core.ConcatAround(front, back));
+        public override Parts ConcatAround(string front, string back) => new QueryParts(_core.ConcatAround(front, back));
 
-        public override CodeParts ConcatToFront(string front) => new QueryParts(_core.ConcatToFront(front));
+        public override Parts ConcatToFront(string front) => new QueryParts(_core.ConcatToFront(front));
 
-        public override CodeParts ConcatToBack(string back) => new QueryParts(_core.ConcatToBack(back));
+        public override Parts ConcatToBack(string back) => new QueryParts(_core.ConcatToBack(back));
 
-        public override CodeParts Customize(IPartsCustomizer customizer) => new QueryParts(_core.Customize(customizer));
+        public override Parts Customize(IPartsCustomizer customizer) => new QueryParts(_core.Customize(customizer));
     }
 }

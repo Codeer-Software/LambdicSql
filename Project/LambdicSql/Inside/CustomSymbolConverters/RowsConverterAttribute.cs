@@ -1,4 +1,4 @@
-﻿using LambdicSql.BuilderServices.Parts;
+﻿using LambdicSql.BuilderServices.CodeParts;
 using LambdicSql.ConverterServices;
 using LambdicSql.ConverterServices.SymbolConverters;
 using LambdicSql.Inside.CustomCodeParts;
@@ -10,7 +10,7 @@ namespace LambdicSql.Inside.CustomSymbolConverters
 {
     class RowsConverterAttribute : SymbolConverterMethodAttribute
     {
-        public override CodeParts Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override Parts Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var args = expression.Arguments.Select(e => converter.Convert(e)).ToArray();
             

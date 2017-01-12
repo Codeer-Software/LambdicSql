@@ -1,9 +1,9 @@
-﻿namespace LambdicSql.BuilderServices.Parts
+﻿namespace LambdicSql.BuilderServices.CodeParts
 {
     /// <summary>
     /// Sql code parts.
     /// </summary>
-    public abstract class CodeParts
+    public abstract class Parts
     {
         /// <summary>
         /// Is empty.
@@ -30,33 +30,33 @@
         /// <param name="front">Front.</param>
         /// <param name="back">Back.</param>
         /// <returns>Text.</returns>
-        public abstract CodeParts ConcatAround(string front, string back);
+        public abstract Parts ConcatAround(string front, string back);
 
         /// <summary>
         /// Concat to front.
         /// </summary>
         /// <param name="front">Front.</param>
         /// <returns>Text.</returns>
-        public abstract CodeParts ConcatToFront(string front);
+        public abstract Parts ConcatToFront(string front);
 
         /// <summary>
         /// Concat to back.
         /// </summary>
         /// <param name="back"></param>
         /// <returns></returns>
-        public abstract CodeParts ConcatToBack(string back);
+        public abstract Parts ConcatToBack(string back);
 
         /// <summary>
         /// Customize.
         /// </summary>
         /// <param name="customizer">Customizer.</param>
         /// <returns>Customized SqlText.</returns>
-        public abstract CodeParts Customize(IPartsCustomizer customizer);
+        public abstract Parts Customize(IPartsCustomizer customizer);
 
         /// <summary>
         /// Convert string to IText.
         /// </summary>
         /// <param name="text">string.</param>
-        public static implicit operator CodeParts(string text) => new SingleTextParts(text);
+        public static implicit operator Parts(string text) => new SingleTextParts(text);
     }
 }

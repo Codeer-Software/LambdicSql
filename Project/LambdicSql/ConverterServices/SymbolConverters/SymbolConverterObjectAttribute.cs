@@ -1,4 +1,4 @@
-﻿using LambdicSql.BuilderServices.Parts;
+﻿using LambdicSql.BuilderServices.CodeParts;
 using System;
 
 namespace LambdicSql.ConverterServices.SymbolConverters
@@ -13,6 +13,6 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         /// </summary>
         /// <param name="obj">Object.</param>
         /// <returns>Parts.</returns>
-        public abstract CodeParts Convert(object obj);
+        public abstract Parts Convert(object obj);
     }
 }

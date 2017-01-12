@@ -3,7 +3,7 @@ using LambdicSql.ConverterServices.Inside;
 using LambdicSql.Inside.CustomCodeParts;
 using System;
 using System.Linq.Expressions;
-using LambdicSql.BuilderServices.Parts;
+using LambdicSql.BuilderServices.CodeParts;
 
 namespace LambdicSql
 {
@@ -74,7 +74,7 @@ namespace LambdicSql
             return new SqlRecursiveArguments<TResult>(MakeSynatx(db, expression.Body));
         }
 
-        static CodeParts MakeSynatx(DbInfo dbInfo, Expression core)
+        static Parts MakeSynatx(DbInfo dbInfo, Expression core)
         {
             var converter = new ExpressionConverter(dbInfo);
             return core == null ? string.Empty : converter.Convert(core);

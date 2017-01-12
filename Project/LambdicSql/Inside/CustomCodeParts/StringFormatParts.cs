@@ -1,24 +1,24 @@
 ﻿using LambdicSql.BuilderServices;
 using LambdicSql.BuilderServices.Inside;
-using LambdicSql.BuilderServices.Parts;
+using LambdicSql.BuilderServices.CodeParts;
 using System.Linq;
 
 namespace LambdicSql.Inside.CustomCodeParts
 {
-    class StringFormatParts : CodeParts
+    class StringFormatParts : Parts
     {
         string _formatText;
-        CodeParts[] _args;
+        Parts[] _args;
         string _front = string.Empty;
         string _back = string.Empty;
 
-        internal StringFormatParts(string formatText, CodeParts[] args)
+        internal StringFormatParts(string formatText, Parts[] args)
         {
             _formatText = formatText;
             _args = args;
         }
 
-        StringFormatParts(string formatText, CodeParts[] args, string front, string back)
+        StringFormatParts(string formatText, Parts[] args, string front, string back)
         {
             _formatText = formatText;
             _args = args;
@@ -36,12 +36,12 @@ namespace LambdicSql.Inside.CustomCodeParts
              string.Format(_formatText, _args.Select(e => e.ToString(true, 0, context)).ToArray()) +
             _back;
 
-        public override CodeParts ConcatAround(string front, string back) => new StringFormatParts(_formatText, _args, front + _front, _back + back);
+        public override Parts ConcatAround(string front, string back) => new StringFormatParts(_formatText, _args, front + _front, _back + back);
 
-        public override CodeParts ConcatToFront(string front) => new StringFormatParts(_formatText, _args, front + _front, _back);
+        public override Parts ConcatToFront(string front) => new StringFormatParts(_formatText, _args, front + _front, _back);
 
-        public override CodeParts ConcatToBack(string back) => new StringFormatParts(_formatText, _args, _front, _back + back);
+        public override Parts ConcatToBack(string back) => new StringFormatParts(_formatText, _args, _front, _back + back);
 
-        public override CodeParts Customize(IPartsCustomizer customizer) => customizer.Custom(this);
+        public override Parts Customize(IPartsCustomizer customizer) => customizer.Custom(this);
     }
 }

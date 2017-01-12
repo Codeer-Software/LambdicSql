@@ -1,13 +1,13 @@
 ﻿using LambdicSql.BuilderServices;
-using LambdicSql.BuilderServices.Parts;
+using LambdicSql.BuilderServices.CodeParts;
 
 namespace LambdicSql.Inside.CustomCodeParts
 { 
-    class DisableBracketsParts : CodeParts
+    class DisableBracketsParts : Parts
     {
-        CodeParts _core;
+        Parts _core;
 
-        internal DisableBracketsParts(CodeParts core)
+        internal DisableBracketsParts(Parts core)
         {
             _core = core;
         }
@@ -18,12 +18,12 @@ namespace LambdicSql.Inside.CustomCodeParts
 
         public override string ToString(bool isTopLevel, int indent, BuildingContext context) => _core.ToString(false, indent, context);
 
-        public override CodeParts ConcatAround(string front, string back) => this;
+        public override Parts ConcatAround(string front, string back) => this;
 
-        public override CodeParts ConcatToFront(string front) => new DisableBracketsParts(_core.ConcatToFront(front));
+        public override Parts ConcatToFront(string front) => new DisableBracketsParts(_core.ConcatToFront(front));
 
-        public override CodeParts ConcatToBack(string back) => new DisableBracketsParts(_core.ConcatToBack(back));
+        public override Parts ConcatToBack(string back) => new DisableBracketsParts(_core.ConcatToBack(back));
 
-        public override CodeParts Customize(IPartsCustomizer customizer) => new DisableBracketsParts(_core.Customize(customizer));
+        public override Parts Customize(IPartsCustomizer customizer) => new DisableBracketsParts(_core.Customize(customizer));
     }
 }

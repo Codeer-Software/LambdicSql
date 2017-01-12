@@ -1,4 +1,4 @@
-﻿using LambdicSql.BuilderServices.Parts;
+﻿using LambdicSql.BuilderServices.CodeParts;
 using LambdicSql.ConverterServices;
 using LambdicSql.ConverterServices.SymbolConverters;
 using System.Linq.Expressions;
@@ -22,7 +22,7 @@ namespace LambdicSql.Inside.CustomSymbolConverters
         /// <param name="expression">Expression.</param>
         /// <param name="converter">Expression converter.</param>
         /// <returns>Parts.</returns>
-        public override CodeParts Convert(NewExpression expression, ExpressionConverter converter)
+        public override Parts Convert(NewExpression expression, ExpressionConverter converter)
         {
             var h = new HParts() { Separator = Separator };
             h.Add(converter.Convert(expression.Arguments[0]));

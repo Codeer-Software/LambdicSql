@@ -1,4 +1,4 @@
-﻿using LambdicSql.BuilderServices.Parts;
+﻿using LambdicSql.BuilderServices.CodeParts;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Collections.Generic;
@@ -18,7 +18,7 @@ namespace LambdicSql.ConverterServices.SymbolConverters
     public class FormatConverterAttribute : SymbolConverterMethodAttribute
     {
         string _format;
-        List<CodeParts> _partsSrc = new List<CodeParts>();
+        List<Parts> _partsSrc = new List<Parts>();
         Dictionary<int, int> _argumentIndexAndPartsIndex = new Dictionary<int, int>();
         Dictionary<int, string> _argumentIndexAndSeparators = new Dictionary<int, string>();
 
@@ -55,7 +55,7 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         /// <param name="expression">Expression.</param>
         /// <param name="converter">Expression converter.</param>
         /// <returns>Parts.</returns>
-        public override CodeParts Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override Parts Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var array = ConvertByFormat(expression, converter);
             if (FirstLineElemetCount == -1)
@@ -68,7 +68,7 @@ namespace LambdicSql.ConverterServices.SymbolConverters
             return h;
         }
         
-        internal CodeParts[] ConvertByFormat(MethodCallExpression expression, ExpressionConverter converter)
+        internal Parts[] ConvertByFormat(MethodCallExpression expression, ExpressionConverter converter)
         {
             var array = _partsSrc.ToArray();
             foreach (var e in _argumentIndexAndPartsIndex)

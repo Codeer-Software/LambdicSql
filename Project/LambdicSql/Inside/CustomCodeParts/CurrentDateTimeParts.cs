@@ -1,10 +1,10 @@
 ﻿using LambdicSql.BuilderServices;
 using LambdicSql.BuilderServices.Inside;
-using LambdicSql.BuilderServices.Parts;
+using LambdicSql.BuilderServices.CodeParts;
 
 namespace LambdicSql.Inside.CustomCodeParts
 {
-    class CurrentDateTimeParts : CodeParts
+    class CurrentDateTimeParts : Parts
     {
         string _front = string.Empty;
         string _back = string.Empty;
@@ -29,12 +29,12 @@ namespace LambdicSql.Inside.CustomCodeParts
         public override string ToString(bool isTopLevel, int indent, BuildingContext context)
             => PartsUtils.GetIndent(indent) + _front + "CURRENT" + context.Option.CurrentDateTimeSeparator + _core + _back;
 
-        public override CodeParts ConcatAround(string front, string back) => new CurrentDateTimeParts(_core, front + _front, _back + back);
+        public override Parts ConcatAround(string front, string back) => new CurrentDateTimeParts(_core, front + _front, _back + back);
 
-        public override CodeParts ConcatToFront(string front) => new CurrentDateTimeParts(_core, front + _front, _back);
+        public override Parts ConcatToFront(string front) => new CurrentDateTimeParts(_core, front + _front, _back);
 
-        public override CodeParts ConcatToBack(string back) => new CurrentDateTimeParts(_core, _front, _back + back);
+        public override Parts ConcatToBack(string back) => new CurrentDateTimeParts(_core, _front, _back + back);
 
-        public override CodeParts Customize(IPartsCustomizer customizer) => customizer.Custom(this);
+        public override Parts Customize(IPartsCustomizer customizer) => customizer.Custom(this);
     }
 }

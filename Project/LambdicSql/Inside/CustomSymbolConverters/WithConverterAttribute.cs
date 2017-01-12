@@ -1,4 +1,4 @@
-﻿using LambdicSql.BuilderServices.Parts;
+﻿using LambdicSql.BuilderServices.CodeParts;
 using LambdicSql.ConverterServices;
 using LambdicSql.ConverterServices.SymbolConverters;
 using LambdicSql.Inside.CustomCodeParts;
@@ -10,13 +10,13 @@ namespace LambdicSql.Inside.CustomSymbolConverters
 {
     class WithConverterAttribute : SymbolConverterMethodAttribute
     {
-        public override CodeParts Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override Parts Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var arry = expression.Arguments[0] as NewArrayExpression;
             return arry == null ? ConvertRecurciveWith(expression, converter) : ConvertNormalWith(converter, arry);
         }
 
-        static CodeParts ConvertNormalWith(ExpressionConverter converter, NewArrayExpression arry)
+        static Parts ConvertNormalWith(ExpressionConverter converter, NewArrayExpression arry)
         {
             var with = new VParts() { Indent = 1, Separator = "," };
             var names = new List<string>();
@@ -30,7 +30,7 @@ namespace LambdicSql.Inside.CustomSymbolConverters
             return new WithEntriedParts(new VParts("WITH", with), names.ToArray());
         }
 
-        static CodeParts ConvertRecurciveWith(MethodCallExpression expression, ExpressionConverter converter)
+        static Parts ConvertRecurciveWith(MethodCallExpression expression, ExpressionConverter converter)
         {
             var table = converter.Convert(expression.Arguments[0]);
             var sub = FromConverterAttribute.GetSubQuery(expression.Arguments[0]);

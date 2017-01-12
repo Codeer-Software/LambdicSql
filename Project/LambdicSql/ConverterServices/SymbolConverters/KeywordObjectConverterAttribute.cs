@@ -1,4 +1,4 @@
-﻿using LambdicSql.BuilderServices.Parts;
+﻿using LambdicSql.BuilderServices.CodeParts;
 
 namespace LambdicSql.ConverterServices.SymbolConverters
 {
@@ -17,7 +17,7 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         /// </summary>
         /// <param name="obj">Object.</param>
         /// <returns>Parts.</returns>
-        public override CodeParts Convert(object obj)
+        public override Parts Convert(object obj)
             => obj == null ? string.Empty :
                string.IsNullOrEmpty(Name) ? obj.ToString().ToUpper() : Name;
     }

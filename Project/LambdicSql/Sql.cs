@@ -1,5 +1,5 @@
 ﻿using LambdicSql.ConverterServices.Inside;
-using LambdicSql.BuilderServices.Parts;
+using LambdicSql.BuilderServices.CodeParts;
 using System;
 using LambdicSql.BuilderServices;
 using LambdicSql.BuilderServices.Inside;
@@ -15,9 +15,9 @@ namespace LambdicSql
         /// Data converted from Expression to a form close to a string representation.
         /// </summary>
         /// <returns>text.</returns>
-        public CodeParts Parts { get; }
+        public Parts Parts { get; }
 
-        internal Sql(CodeParts parts)
+        internal Sql(Parts parts)
         {
             Parts = parts;
         }
@@ -105,7 +105,7 @@ namespace LambdicSql
         public new BuildedSql<T> Build(DialectOption option)
           => new BuildedSql<T>(base.Build(option));
 
-        internal Sql(CodeParts parts) : base(parts) { }
+        internal Sql(Parts parts) : base(parts) { }
     }
 
     /// <summary>
@@ -114,6 +114,6 @@ namespace LambdicSql
     /// <typeparam name="TSelected">The type represented by SqlExpression.</typeparam>
     public class SqlRecursiveArguments<TSelected> : Sql<TSelected>
     {
-        internal SqlRecursiveArguments(CodeParts parts) : base(parts) { }
+        internal SqlRecursiveArguments(Parts parts) : base(parts) { }
     }
 }

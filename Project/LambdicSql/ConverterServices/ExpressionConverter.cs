@@ -1,6 +1,6 @@
 ﻿using LambdicSql.Inside.CustomSymbolConverters;
 using LambdicSql.ConverterServices.Inside;
-using LambdicSql.BuilderServices.Parts;
+using LambdicSql.BuilderServices.CodeParts;
 using LambdicSql.Inside.CustomCodeParts;
 using System;
 using System.Collections;
@@ -19,8 +19,8 @@ namespace LambdicSql.ConverterServices
         class ConvertedResult
         {
             internal Type Type { get; }
-            internal CodeParts Text { get; }
-            internal ConvertedResult(Type type, CodeParts text)
+            internal Parts Text { get; }
+            internal ConvertedResult(Type type, Parts text)
             {
                 Type = type;
                 Text = text;
@@ -51,7 +51,7 @@ namespace LambdicSql.ConverterServices
         /// </summary>
         /// <param name="obj">object.</param>
         /// <returns>text.</returns>
-        public CodeParts Convert(object obj)
+        public Parts Convert(object obj)
         {
             var exp = obj as Expression;
             if (exp != null) return Convert(exp).Text;
@@ -409,7 +409,7 @@ namespace LambdicSql.ConverterServices
                     return new ConvertedResult(exp.Type, new ParameterParts(name, metaId, new DbParam() { Value = obj }));
                 }
 
-                var list = new List<CodeParts>();
+                var list = new List<Parts>();
                 foreach (var e in (IEnumerable)obj)
                 {
                     list.Add(Convert(e));
