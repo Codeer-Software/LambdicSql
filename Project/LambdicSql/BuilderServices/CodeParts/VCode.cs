@@ -57,7 +57,7 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// <param name="context">Context.</param>
         /// <returns>Text.</returns>
         public override string ToString(bool isTopLevel, int indent, BuildingContext context)
-            => string.Join(Separator + Environment.NewLine, _texts.Select(e => e.ToString(isTopLevel, Indent + indent, context)).ToArray());
+            => string.Join(Separator + Environment.NewLine, _texts.Select(e => e.ToString(isTopLevel, Indent + indent, context).TrimEnd()).ToArray());
 
         /// <summary>
         /// Add text.

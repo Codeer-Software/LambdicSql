@@ -224,7 +224,7 @@ namespace LambdicSql
     /// Utility.
     /// It can only be used within methods of the LambdicSql.Sql class.
     /// </summary>
-    public static class UtilityKeywordExtensions
+    public static class UtilitySymbolExtensions
     {
         /// <summary>
         /// Put the text in the expression of LamblicSql.

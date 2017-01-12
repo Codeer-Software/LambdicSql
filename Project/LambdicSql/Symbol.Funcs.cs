@@ -186,7 +186,7 @@ namespace LambdicSql
         /// <param name="element">Part type.</param>
         /// <param name="src">The date data.</param>
         /// <returns>A part from the date data.</returns>
-        [FormatConverter(Format = "EXTRACT([0] FROM [1])", FirstLineElemetCount = 1)]
+        [FormatConverter(Format = "EXTRACT(|[0] FROM [1])")]
         public static double Extract(DateTimeElement element, DateTime src) => InvalitContext.Throw<double>(nameof(Extract));
 
         /// <summary>
@@ -205,7 +205,7 @@ namespace LambdicSql
         /// <param name="target"></param>
         /// <param name="destinationType">Type of destination.</param>
         /// <returns>Converted data.</returns>
-        [FormatConverter(Format = "CAST([0] AS [1])", FirstLineElemetCount = 1)]
+        [FormatConverter(Format = "CAST(|[0] AS [1])")]
         public static TDst Cast<TDst>(object target, IDataType destinationType) => InvalitContext.Throw<TDst>(nameof(Cast));
 
         /// <summary>

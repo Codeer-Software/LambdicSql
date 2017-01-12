@@ -335,7 +335,7 @@ FROM tbl_staff",
 			((SELECT
 				COUNT(*)
 			FROM tbl_staff))
-			 = 
+			 =
 			(@p_0)
 		THEN @p_1
 		ELSE @p_2
@@ -365,7 +365,7 @@ FROM tbl_staff",
 	CASE
 		WHEN
 			(@p_0)
-			 = 
+			 =
 			((SELECT
 				COUNT(*)
 			FROM tbl_staff))

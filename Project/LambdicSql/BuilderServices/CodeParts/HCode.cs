@@ -83,7 +83,7 @@ namespace LambdicSql.BuilderServices.CodeParts
             var addIndentCount = IsFunctional ? 1 : 0;
             var sep = Separator.TrimEnd();
             return _texts[0].ToString(isTopLevel, indent, context) + sep + Environment.NewLine +
-                string.Join(sep + Environment.NewLine, _texts.Skip(1).Select(e => e.ToString(isTopLevel, indent + addIndentCount, context)).ToArray());
+                string.Join(sep + Environment.NewLine, _texts.Skip(1).Select(e => e.ToString(isTopLevel, indent + addIndentCount, context).TrimEnd()).ToArray());
         }
         
         /// <summary>

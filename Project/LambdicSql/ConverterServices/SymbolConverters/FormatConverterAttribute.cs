@@ -13,20 +13,36 @@ namespace LambdicSql.ConverterServices.SymbolConverters
     //そしたらいらなくなるかな？
 
     /// <summary>
+    /// 
+    /// </summary>
+    public enum FormatDirection
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        Horizontal,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        Vertical
+    }
+
+    /// <summary>
     /// SQL symbol converter attribute for clause.
     /// </summary>
     public class FormatConverterAttribute : SymbolConverterMethodAttribute
     {
         string _format;
-        List<Code> _partsSrc = new List<Code>();
-        Dictionary<int, int> _argumentIndexAndPartsIndex = new Dictionary<int, int>();
-        Dictionary<int, string> _argumentIndexAndSeparators = new Dictionary<int, string>();
+        int _firstLineElemetCount = -1;
+        List<Code> _partsSrc;
+        Dictionary<int, int> _argumentIndexAndPartsIndex;
+        Dictionary<int, string> _argumentIndexAndSeparators;
 
-        //TODO 要素の数え方を書く 例えば次の例であれば
         /// <summary>
-        /// The number of elements that are always displayed on the first line even if a new line is entered.
+        /// 
         /// </summary>
-        public int FirstLineElemetCount = -1;
+        public FormatDirection FormatDirection { get; set; } = FormatDirection.Horizontal;
 
         /// <summary>
         /// Format.
@@ -58,13 +74,13 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var array = ConvertByFormat(expression, converter);
-            if (FirstLineElemetCount == -1)
+            if (_firstLineElemetCount == -1)
             {
                 return new HCode(array) { EnableChangeLine = false };
             }
-            var first = new HCode(array.Take(FirstLineElemetCount)) { EnableChangeLine = false };
+            var first = new HCode(array.Take(_firstLineElemetCount)) { EnableChangeLine = false };
             var h = new HCode(first) { IsFunctional = true };
-            h.AddRange(array.Skip(FirstLineElemetCount));
+            h.AddRange(array.Skip(_firstLineElemetCount));
             return h;
         }
         
@@ -89,8 +105,12 @@ namespace LambdicSql.ConverterServices.SymbolConverters
 
         void Init()
         {
-            var format = Format.Trim();
-            
+            var format = Format;
+            _firstLineElemetCount = -1;
+            _partsSrc = new List<Code>();
+            _argumentIndexAndPartsIndex = new Dictionary<int, int>();
+            _argumentIndexAndSeparators = new Dictionary<int, string>();
+
             while (true)
             {
                 var argFirst = format.IndexOf("[");
@@ -147,6 +167,11 @@ namespace LambdicSql.ConverterServices.SymbolConverters
                     var sep = format.Substring(0, i);
                     format = format.Substring(i);
                     _argumentIndexAndSeparators[_argumentIndexAndPartsIndex.Last().Key] = sep;
+                }
+                if (_firstLineElemetCount == -1 && format.IndexOf('|') != -1)
+                {
+                    _firstLineElemetCount = _partsSrc.Count + 1;
+                    format = format.Replace("|", string.Empty);
                 }
                 _partsSrc.Add(format);
             }
