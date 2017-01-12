@@ -247,6 +247,24 @@ namespace LambdicSql
         /// <returns>LamblicSql's expression.</returns>
         [TwoWaySqlConverter]
         public static object TwoWaySql(this string text, params object[] args) => InvalitContext.Throw<object>(nameof(ToSql));
+
+        /// <summary>
+        /// Embed values directly into SQL without parameterization.
+        /// </summary>
+        /// <typeparam name="T">Type.</typeparam>
+        /// <param name="value">Value.</param>
+        /// <returns>Direct value.</returns>
+        [FormatConverter(Format = "[$0]")]
+        public static T DirectValue<T>(this T value) => InvalitContext.Throw<T>(nameof(DirectValue));
+
+        /// <summary>
+        /// Schema and table names are omitted and only columns are used.
+        /// </summary>
+        /// <typeparam name="T">Type.</typeparam>
+        /// <param name="column">Column.</param>
+        /// <returns>Column only.</returns>
+        [FormatConverter(Format ="[#0]")]
+        public static T ColumnOnly<T>(this T column) => InvalitContext.Throw<T>(nameof(ColumnOnly));
     }
 
     /// <summary>

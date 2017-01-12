@@ -625,7 +625,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="elements">Specify column and sort order. Asc(column) or Desc(column).</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [OrderByConverter]//[FormatConverter(Format = "ORDER BY |[0]", FormatDirection = FormatDirection.Vertical)]
+        [FormatConverter(Format = "ORDER BY |[<, >0]", FormatDirection = FormatDirection.Vertical)]
         public static OrderBy OrderBy(params ISortedBy[] elements) => InvalitContext.Throw<OrderBy>(nameof(OrderBy));
 
         /// <summary>
@@ -635,7 +635,7 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="elements">Specify column and sort order. Asc(column) or Desc(column).</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [OrderByConverter]
+        [FormatConverter(Format = "ORDER BY |[<, >1]", FormatDirection = FormatDirection.Vertical)]
         public static ClauseChain<TSelected> OrderBy<TSelected>(this ClauseChain<TSelected> before, params ISortedBy[] elements) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(OrderBy));
 
         /// <summary>

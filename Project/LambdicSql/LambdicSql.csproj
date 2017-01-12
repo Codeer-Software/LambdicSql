@@ -65,7 +65,6 @@
     <Compile Include="Inside\CustomSymbolConverters\FromConverterAttribute.cs" />
     <Compile Include="Inside\CustomSymbolConverters\InsertIntoConverterAttribute.cs" />
     <Compile Include="Inside\CustomSymbolConverters\JoinConverterAttribute.cs" />
-    <Compile Include="Inside\CustomSymbolConverters\OrderByConverterAttribute.cs" />
     <Compile Include="Inside\CustomSymbolConverters\OverConverterAttribute.cs" />
     <Compile Include="Inside\CustomSymbolConverters\PartitionByConverterAttribute.cs" />
     <Compile Include="Inside\CustomSymbolConverters\RecursiveConverterAttribute.cs" />

@@ -546,5 +546,37 @@ SELECT
 	rec.val
 FROM rec", 1, 1, 1, 5);
         }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_ColumnOnlyAndDirectValue()
+        {
+            var sql =
+@"SELECT
+	tbl_staff.name AS name,
+    tbl_remuneration.payment_date AS payment_date,
+	/*0*/tbl_remuneration.money/**/ AS /*1*/money/**/
+FROM tbl_remuneration 
+    JOIN tbl_staff ON tbl_staff.id = tbl_remuneration.staff_id
+/*2*/WHERE tbl_remuneration.money = 100/**/";
+
+            var query = Db<DB>.Sql(db => sql.TwoWaySql(
+                db.tbl_remuneration.money,
+                db.tbl_remuneration.money.ColumnOnly(),
+                Where(3000.DirectValue() < db.tbl_remuneration.money)
+                ));
+
+            query.Gen(_connection);
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	tbl_staff.name AS name,
+    tbl_remuneration.payment_date AS payment_date,
+	tbl_remuneration.money AS money
+FROM tbl_remuneration 
+    JOIN tbl_staff ON tbl_staff.id = tbl_remuneration.staff_id
+WHERE (3000) < (tbl_remuneration.money)");
+        }
     }
 }
