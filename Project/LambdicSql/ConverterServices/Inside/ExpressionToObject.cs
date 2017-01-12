@@ -356,9 +356,17 @@ namespace LambdicSql.ConverterServices.Inside
                         target = StaticPropertyOrField(type, names[0]);
                         names.RemoveAt(0);
                     }
-                    names.ForEach(e => target = Expression.PropertyOrField(target, e));
-                    getter = Activator.CreateInstance(typeof(GetterCore<>).MakeGenericType(type), true) as IGetter;
-                    getter.Init(Expression.Convert(target, typeof(object)), new[] { param });
+                    if (names.Count == 0)
+                    {
+                        getter = Activator.CreateInstance(typeof(GetterCore), true) as IGetter;
+                        getter.Init(Expression.Convert(target, typeof(object)), new ParameterExpression[0]);
+                    }
+                    else
+                    {
+                        names.ForEach(e => target = Expression.PropertyOrField(target, e));
+                        getter = Activator.CreateInstance(typeof(GetterCore<>).MakeGenericType(type), true) as IGetter;
+                        getter.Init(Expression.Convert(target, typeof(object)), new[] { param });
+                    }
                     _memberGet.Add(getterName, getter);
                 }
             }

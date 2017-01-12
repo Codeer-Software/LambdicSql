@@ -8,6 +8,7 @@ using LambdicSql.feat.Dapper;
 using static LambdicSql.Symbol;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 
 namespace TestCheck35
 {
@@ -469,6 +470,13 @@ new Params()
 
             var query = Db<Data>.Sql(db => data.val);
             AssertEx.AreEqual(query, _connection, @"DAY");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Static_Property()
+        {
+            var query = Db<Data>.Sql(db => DateTime.Now);
+            var ret = query.Build(typeof(SqlConnection));
         }
 
         //TODO ExpressionToObjectがテストされるだけのテストを書くこと
