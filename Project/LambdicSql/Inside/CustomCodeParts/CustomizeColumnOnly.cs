@@ -2,11 +2,11 @@
 
 namespace LambdicSql.Inside.CustomCodeParts
 {
-    class CustomizeColumnOnly : IPartsCustomizer
+    class CustomizeColumnOnly : ICodeCustomizer
     {
-        public Parts Custom(Parts src)
+        public Code Custom(Code src)
         {
-            var col = src as DbColumnParts;
+            var col = src as DbColumnCode;
             return col == null ? src : col.ToColumnOnly();
         }
     }

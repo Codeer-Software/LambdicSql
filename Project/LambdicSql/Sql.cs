@@ -15,11 +15,11 @@ namespace LambdicSql
         /// Data converted from Expression to a form close to a string representation.
         /// </summary>
         /// <returns>text.</returns>
-        public Parts Parts { get; }
+        public Code Code { get; }
 
-        internal Sql(Parts parts)
+        internal Sql(Code code)
         {
-            Parts = parts;
+            Code = code;
         }
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace LambdicSql
         /// <param name="expression2">Exppresion 2.</param>
         /// <returns>Concatenated result.</returns>
         public static Sql operator + (Sql expression1, Sql expression2)
-          => new Sql(new VParts(expression1.Parts, expression2.Parts));
+          => new Sql(new VCode(expression1.Code, expression2.Code));
 
         /// <summary>
         /// Sql information.
@@ -47,7 +47,7 @@ namespace LambdicSql
         public BuildedSql Build(DialectOption option)
         {
             var context = new BuildingContext(option);
-            return new BuildedSql(Parts.ToString(true, 0, context), context.ParameterInfo.GetDbParams());
+            return new BuildedSql(Code.ToString(true, 0, context), context.ParameterInfo.GetDbParams());
         }
 
         //TODO test.
@@ -56,7 +56,7 @@ namespace LambdicSql
         /// </summary>
         /// <typeparam name="TDst">Destination type.</typeparam>
         /// <returns>Casted result.</returns>
-        public Sql<TDst> Cast<TDst>() => new Sql<TDst>(Parts);
+        public Sql<TDst> Cast<TDst>() => new Sql<TDst>(Code);
     }
 
     /// <summary>
@@ -85,7 +85,7 @@ namespace LambdicSql
         /// <param name="expression2">Exppresion 2.</param>
         /// <returns>Concatenated result.</returns>
         public static Sql<T> operator + (Sql<T> expression1, Sql expression2)
-          => new Sql<T>(new VParts(expression1.Parts, expression2.Parts));
+          => new Sql<T>(new VCode(expression1.Code, expression2.Code));
 
         /// <summary>
         /// Sql information.
@@ -105,7 +105,7 @@ namespace LambdicSql
         public new BuildedSql<T> Build(DialectOption option)
           => new BuildedSql<T>(base.Build(option));
 
-        internal Sql(Parts parts) : base(parts) { }
+        internal Sql(Code code) : base(code) { }
     }
 
     /// <summary>
@@ -114,6 +114,6 @@ namespace LambdicSql
     /// <typeparam name="TSelected">The type represented by SqlExpression.</typeparam>
     public class SqlRecursiveArguments<TSelected> : Sql<TSelected>
     {
-        internal SqlRecursiveArguments(Parts parts) : base(parts) { }
+        internal SqlRecursiveArguments(Code code) : base(code) { }
     }
 }

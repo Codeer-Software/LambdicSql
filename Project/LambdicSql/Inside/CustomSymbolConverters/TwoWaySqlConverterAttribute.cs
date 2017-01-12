@@ -10,12 +10,12 @@ namespace LambdicSql.Inside.CustomSymbolConverters
 {
     class TwoWaySqlConverterAttribute : SymbolConverterMethodAttribute
     {
-        public override Parts Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var obj = converter.ToObject(expression.Arguments[0]);
             var text = TowWaySqlSpec.ToStringFormat((string)obj);
             var array = expression.Arguments[1] as NewArrayExpression;
-            return new StringFormatParts(text, array.Expressions.Select(e => converter.Convert(e)).ToArray());
+            return new StringFormatCode(text, array.Expressions.Select(e => converter.Convert(e)).ToArray());
         }
     }
 }

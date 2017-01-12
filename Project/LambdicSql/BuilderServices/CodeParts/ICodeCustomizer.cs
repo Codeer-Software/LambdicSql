@@ -3,13 +3,13 @@
     /// <summary>
     /// Customizer.
     /// </summary>
-    public interface IPartsCustomizer
+    public interface ICodeCustomizer
     {
         /// <summary>
         /// Coustom.
         /// </summary>
         /// <param name="src">Source.</param>
         /// <returns>Result.</returns>
-        Parts Custom(Parts src);
+        Code Custom(Code src);
     }
 }

@@ -12,14 +12,14 @@ namespace LambdicSql.Inside.CustomSymbolConverters
     class CreateTableConverterAttribute : SymbolConverterMethodAttribute
     {
         public string Name { get; set; }
-        public override Parts Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var create = LineSpace(Name, converter.Convert(expression.Arguments[0]));
             var args = ((NewArrayExpression)expression.Arguments[1]).Expressions.
                 Select(e => converter.Convert(e).Customize(new CustomizeColumnOnly()).Customize(new CustomizeParameterToObject(true))).ToArray();
 
-            var clause = new VParts(create.ConcatToBack("("));
-            var argsParts = new VParts() { Separator = ","};
+            var clause = new VCode(create.ConcatToBack("("));
+            var argsParts = new VCode() { Separator = ","};
             argsParts.AddRange(1, args);
             clause.Add(argsParts.ConcatToBack(")"));
 

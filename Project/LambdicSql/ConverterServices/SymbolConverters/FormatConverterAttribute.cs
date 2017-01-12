@@ -18,7 +18,7 @@ namespace LambdicSql.ConverterServices.SymbolConverters
     public class FormatConverterAttribute : SymbolConverterMethodAttribute
     {
         string _format;
-        List<Parts> _partsSrc = new List<Parts>();
+        List<Code> _partsSrc = new List<Code>();
         Dictionary<int, int> _argumentIndexAndPartsIndex = new Dictionary<int, int>();
         Dictionary<int, string> _argumentIndexAndSeparators = new Dictionary<int, string>();
 
@@ -50,25 +50,25 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         public int Indent { get; set; }
 
         /// <summary>
-        /// Convert expression to code parts.
+        /// Convert expression to code.
         /// </summary>
         /// <param name="expression">Expression.</param>
         /// <param name="converter">Expression converter.</param>
         /// <returns>Parts.</returns>
-        public override Parts Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var array = ConvertByFormat(expression, converter);
             if (FirstLineElemetCount == -1)
             {
-                return new HParts(array) { EnableChangeLine = false };
+                return new HCode(array) { EnableChangeLine = false };
             }
-            var first = new HParts(array.Take(FirstLineElemetCount)) { EnableChangeLine = false };
-            var h = new HParts(first) { IsFunctional = true };
+            var first = new HCode(array.Take(FirstLineElemetCount)) { EnableChangeLine = false };
+            var h = new HCode(first) { IsFunctional = true };
             h.AddRange(array.Skip(FirstLineElemetCount));
             return h;
         }
         
-        internal Parts[] ConvertByFormat(MethodCallExpression expression, ExpressionConverter converter)
+        internal Code[] ConvertByFormat(MethodCallExpression expression, ExpressionConverter converter)
         {
             var array = _partsSrc.ToArray();
             foreach (var e in _argumentIndexAndPartsIndex)
@@ -77,7 +77,7 @@ namespace LambdicSql.ConverterServices.SymbolConverters
                 string sep;
                 if (_argumentIndexAndSeparators.TryGetValue(e.Key, out sep))
                 {
-                    array[e.Value] = new HParts(argCore, sep) { EnableChangeLine = false };
+                    array[e.Value] = new HCode(argCore, sep) { EnableChangeLine = false };
                 }
                 else
                 {

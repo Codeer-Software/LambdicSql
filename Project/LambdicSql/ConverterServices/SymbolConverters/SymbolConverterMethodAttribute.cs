@@ -11,11 +11,11 @@ namespace LambdicSql.ConverterServices.SymbolConverters
     public abstract class SymbolConverterMethodAttribute : Attribute
     {
         /// <summary>
-        /// Convert expression to code parts.
+        /// Convert expression to code.
         /// </summary>
         /// <param name="expression">Expression.</param>
         /// <param name="converter">Expression converter.</param>
         /// <returns>Parts.</returns>
-        public abstract Parts Convert(MethodCallExpression expression, ExpressionConverter converter);
+        public abstract Code Convert(MethodCallExpression expression, ExpressionConverter converter);
     }
 }

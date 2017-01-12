@@ -14,12 +14,12 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         public string Name { get; set; }
 
         /// <summary>
-        /// Convert expression to code parts.
+        /// Convert expression to code.
         /// </summary>
         /// <param name="expression">Expression.</param>
         /// <param name="converter">Expression converter.</param>
         /// <returns>Parts.</returns>
-        public override Parts Convert(MemberExpression expression, ExpressionConverter converter)
+        public override Code Convert(MemberExpression expression, ExpressionConverter converter)
             => string.IsNullOrEmpty(Name) ? expression.Member.Name.ToUpper() : Name;
     }
 }

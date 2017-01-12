@@ -5,17 +5,17 @@ using LambdicSql.ConverterServices.Inside;
 
 namespace LambdicSql.Inside.CustomCodeParts
 {
-    class DbTableParts : Parts
+    class DbTableCode : Code
     {
         string _front = string.Empty;
         string _back = string.Empty;
 
-        internal DbTableParts(TableInfo info)
+        internal DbTableCode(TableInfo info)
         {
             Info = info;
         }
 
-        DbTableParts(TableInfo info, string front, string back)
+        DbTableCode(TableInfo info, string front, string back)
         {
             Info = info;
             _front = front;
@@ -30,12 +30,12 @@ namespace LambdicSql.Inside.CustomCodeParts
 
         public override string ToString(bool isTopLevel, int indent, BuildingContext context) => PartsUtils.GetIndent(indent) + _front + Info.SqlFullName + _back;
 
-        public override Parts ConcatAround(string front, string back) => new DbTableParts(Info, front + _front, _back + back);
+        public override Code ConcatAround(string front, string back) => new DbTableCode(Info, front + _front, _back + back);
 
-        public override Parts ConcatToFront(string front) => new DbTableParts(Info, front + _front, _back);
+        public override Code ConcatToFront(string front) => new DbTableCode(Info, front + _front, _back);
 
-        public override Parts ConcatToBack(string back) => new DbTableParts(Info, _front, _back + back);
+        public override Code ConcatToBack(string back) => new DbTableCode(Info, _front, _back + back);
 
-        public override Parts Customize(IPartsCustomizer customizer) => customizer.Custom(this);
+        public override Code Customize(ICodeCustomizer customizer) => customizer.Custom(this);
     }
 }

@@ -8,13 +8,13 @@ namespace LambdicSql.Inside.CustomSymbolConverters
 {
     class PartitionByConverterAttribute : SymbolConverterMethodAttribute
     {
-        public override Parts Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
-            var partitionBy = new VParts();
+            var partitionBy = new VCode();
             partitionBy.Add("PARTITION BY");
 
             var array = expression.Arguments[0] as NewArrayExpression;
-            var args = new VParts(array.Expressions.Select(e => converter.Convert(e))) { Indent = 1, Separator = "," };
+            var args = new VCode(array.Expressions.Select(e => converter.Convert(e))) { Indent = 1, Separator = "," };
             partitionBy.Add(args);
 
             return partitionBy;

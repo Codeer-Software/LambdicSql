@@ -5,20 +5,20 @@ using System.Linq;
 
 namespace LambdicSql.Inside.CustomCodeParts
 {
-    class StringFormatParts : Parts
+    class StringFormatCode : Code
     {
         string _formatText;
-        Parts[] _args;
+        Code[] _args;
         string _front = string.Empty;
         string _back = string.Empty;
 
-        internal StringFormatParts(string formatText, Parts[] args)
+        internal StringFormatCode(string formatText, Code[] args)
         {
             _formatText = formatText;
             _args = args;
         }
 
-        StringFormatParts(string formatText, Parts[] args, string front, string back)
+        StringFormatCode(string formatText, Code[] args, string front, string back)
         {
             _formatText = formatText;
             _args = args;
@@ -36,12 +36,12 @@ namespace LambdicSql.Inside.CustomCodeParts
              string.Format(_formatText, _args.Select(e => e.ToString(true, 0, context)).ToArray()) +
             _back;
 
-        public override Parts ConcatAround(string front, string back) => new StringFormatParts(_formatText, _args, front + _front, _back + back);
+        public override Code ConcatAround(string front, string back) => new StringFormatCode(_formatText, _args, front + _front, _back + back);
 
-        public override Parts ConcatToFront(string front) => new StringFormatParts(_formatText, _args, front + _front, _back);
+        public override Code ConcatToFront(string front) => new StringFormatCode(_formatText, _args, front + _front, _back);
 
-        public override Parts ConcatToBack(string back) => new StringFormatParts(_formatText, _args, _front, _back + back);
+        public override Code ConcatToBack(string back) => new StringFormatCode(_formatText, _args, _front, _back + back);
 
-        public override Parts Customize(IPartsCustomizer customizer) => customizer.Custom(this);
+        public override Code Customize(ICodeCustomizer customizer) => customizer.Custom(this);
     }
 }

@@ -8,9 +8,9 @@ namespace LambdicSql.Inside.CustomSymbolConverters
 {
     class OverConverterAttribute : SymbolConverterMethodAttribute
     {
-        public override Parts Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
-            var over = new VParts();
+            var over = new VCode();
             over.Add(expression.Method.Name.ToUpper() + "(");
             over.AddRange(1, expression.Arguments.Skip(1).
                 Where(e => !(e is ConstantExpression)). //Skip null.

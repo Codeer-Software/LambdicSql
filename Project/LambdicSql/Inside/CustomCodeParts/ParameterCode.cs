@@ -6,7 +6,7 @@ using System;
 
 namespace LambdicSql.Inside.CustomCodeParts
 {
-    class ParameterParts : Parts
+    class ParameterCode : Code
     {
         internal string Name { get; private set; }
         internal MetaId MetaId { get; private set; }
@@ -18,21 +18,21 @@ namespace LambdicSql.Inside.CustomCodeParts
         bool _displayValue;
         bool _isAllowString;
 
-        internal ParameterParts(object value)
+        internal ParameterCode(object value)
         {
             Name = null;
             MetaId = null;
             _param = new DbParam() {Value = value };
         }
 
-        internal ParameterParts(string name = null, MetaId metaId = null, DbParam param = null)
+        internal ParameterCode(string name = null, MetaId metaId = null, DbParam param = null)
         {
             Name = name;
             MetaId = metaId;
             _param = param;
         }
 
-        ParameterParts(string name, MetaId metaId, DbParam param, string front, string back, bool displayValue, bool isAllowString)
+        ParameterCode(string name, MetaId metaId, DbParam param, string front, string back, bool displayValue, bool isAllowString)
         {
             Name = name;
             MetaId = metaId;
@@ -49,15 +49,15 @@ namespace LambdicSql.Inside.CustomCodeParts
 
         public override string ToString(bool isTopLevel, int indent, BuildingContext context) => PartsUtils.GetIndent(indent) + _front + GetDisplayText(context) + _back;
 
-        public override Parts ConcatAround(string front, string back) => new ParameterParts(Name, MetaId, _param, front + _front, _back + back, _displayValue, _isAllowString);
+        public override Code ConcatAround(string front, string back) => new ParameterCode(Name, MetaId, _param, front + _front, _back + back, _displayValue, _isAllowString);
 
-        public override Parts ConcatToFront(string front) => new ParameterParts(Name, MetaId, _param, front + _front, _back, _displayValue, _isAllowString);
+        public override Code ConcatToFront(string front) => new ParameterCode(Name, MetaId, _param, front + _front, _back, _displayValue, _isAllowString);
 
-        public override Parts ConcatToBack(string back) => new ParameterParts(Name, MetaId, _param, _front, _back + back, _displayValue, _isAllowString);
+        public override Code ConcatToBack(string back) => new ParameterCode(Name, MetaId, _param, _front, _back + back, _displayValue, _isAllowString);
 
-        public override Parts Customize(IPartsCustomizer customizer) => customizer.Custom(this);
+        public override Code Customize(ICodeCustomizer customizer) => customizer.Custom(this);
 
-        internal Parts ToDisplayValue(bool isAllowString) => new ParameterParts(Name, MetaId, _param, _front, _back, true, isAllowString);
+        internal Code ToDisplayValue(bool isAllowString) => new ParameterCode(Name, MetaId, _param, _front, _back, true, isAllowString);
 
         string GetDisplayText(BuildingContext context)
         {

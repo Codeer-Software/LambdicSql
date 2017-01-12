@@ -31,12 +31,12 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         public string AfterPredicate { get; set; }
 
         /// <summary>
-        /// Convert expression to code parts.
+        /// Convert expression to code.
         /// </summary>
         /// <param name="expression">Expression.</param>
         /// <param name="converter">Expression converter.</param>
         /// <returns>Parts.</returns>
-        public override Parts Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var name = string.IsNullOrEmpty(Name) ? expression.Method.Name.ToUpper() : Name;
             name = name.Trim();
@@ -45,7 +45,7 @@ namespace LambdicSql.ConverterServices.SymbolConverters
             var args = expression.Arguments.Skip(index).Select(e => converter.Convert(e)).ToList();
             if (!string.IsNullOrEmpty(AfterPredicate)) args.Add(AfterPredicate);
             
-            return new HParts(name, new HParts(args) { Separator = Separator }) { IsFunctional = true, Separator = " ", Indent = Indent };
+            return new HCode(name, new HCode(args) { Separator = Separator }) { IsFunctional = true, Separator = " ", Indent = Indent };
         }
     }
 }

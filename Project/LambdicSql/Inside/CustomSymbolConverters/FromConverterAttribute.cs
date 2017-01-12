@@ -11,14 +11,14 @@ namespace LambdicSql.Inside.CustomSymbolConverters
 {
     class FromConverterAttribute : SymbolConverterMethodAttribute
     {
-        public override Parts Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var startIndex = expression.SkipMethodChain(0);
             var table = ConvertTable(converter, expression.Arguments[startIndex]);
             return Clause("FROM", table);
         }
 
-        internal static Parts ConvertTable(ExpressionConverter decoder, Expression exp)
+        internal static Code ConvertTable(ExpressionConverter decoder, Expression exp)
         {
             //where query, write tables side by side.
             var arry = exp as NewArrayExpression;
@@ -28,7 +28,7 @@ namespace LambdicSql.Inside.CustomSymbolConverters
 
             //sub query.
             var body = GetSubQuery(exp);
-            if (body != null) return new SubQueryAndNameParts(body, table);
+            if (body != null) return new SubQueryAndNameCode(body, table);
 
             return table;
         }

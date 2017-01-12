@@ -10,11 +10,11 @@ namespace LambdicSql.Inside.CustomSymbolConverters
 {
     class RecursiveConverterAttribute : SymbolConverterMethodAttribute
     {
-        public override Parts Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var selectTargets = expression.Arguments[expression.Arguments.Count - 1];
             var createInfo = ObjectCreateAnalyzer.MakeSelectInfo(selectTargets);
-            return Blanket(createInfo.Members.Select(e => (Parts)e.Name).ToArray());
+            return Blanket(createInfo.Members.Select(e => (Code)e.Name).ToArray());
         }
     }
 }

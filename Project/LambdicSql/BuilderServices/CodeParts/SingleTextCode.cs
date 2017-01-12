@@ -5,7 +5,7 @@ namespace LambdicSql.BuilderServices.CodeParts
     /// <summary>
     /// Single text.
     /// </summary>
-    public class SingleTextParts : Parts
+    public class SingleTextCode : Code
     {
         string _text;
         int _indent;
@@ -14,7 +14,7 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// Constructor.
         /// </summary>
         /// <param name="text">Text.</param>
-        public SingleTextParts(string text)
+        public SingleTextCode(string text)
         {
             _text = text;
         }
@@ -24,7 +24,7 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// </summary>
         /// <param name="text">Text.</param>
         /// <param name="indent">Indent.</param>
-        public SingleTextParts(string text, int indent)
+        public SingleTextCode(string text, int indent)
         {
             _text = text;
             _indent = indent;
@@ -55,27 +55,27 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// <param name="front">Front.</param>
         /// <param name="back">Back.</param>
         /// <returns>Text.</returns>
-        public override Parts ConcatAround(string front, string back) => new SingleTextParts(front + _text + back, _indent);
+        public override Code ConcatAround(string front, string back) => new SingleTextCode(front + _text + back, _indent);
 
         /// <summary>
         /// Concat to front.
         /// </summary>
         /// <param name="front">Front.</param>
         /// <returns>Text.</returns>
-        public override Parts ConcatToFront(string front) => new SingleTextParts(front + _text, _indent);
+        public override Code ConcatToFront(string front) => new SingleTextCode(front + _text, _indent);
 
         /// <summary>
         /// Concat to back.
         /// </summary>
         /// <param name="back"></param>
         /// <returns></returns>
-        public override Parts ConcatToBack(string back) => new SingleTextParts(_text + back, _indent);
+        public override Code ConcatToBack(string back) => new SingleTextCode(_text + back, _indent);
 
         /// <summary>
         /// Customize.
         /// </summary>
         /// <param name="customizer">Customizer.</param>
         /// <returns>Customized SqlText.</returns>
-        public override Parts Customize(IPartsCustomizer customizer) => customizer.Custom(this);
+        public override Code Customize(ICodeCustomizer customizer) => customizer.Custom(this);
     }
 }

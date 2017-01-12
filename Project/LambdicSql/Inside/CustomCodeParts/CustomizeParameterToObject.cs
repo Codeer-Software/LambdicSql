@@ -2,7 +2,7 @@
 
 namespace LambdicSql.Inside.CustomCodeParts
 {
-    class CustomizeParameterToObject : IPartsCustomizer
+    class CustomizeParameterToObject : ICodeCustomizer
     {
         bool _isAllowString;
 
@@ -13,9 +13,9 @@ namespace LambdicSql.Inside.CustomCodeParts
             _isAllowString = isAllowString;
         }
 
-        public Parts Custom(Parts src)
+        public Code Custom(Code src)
         {
-            var param = src as ParameterParts;
+            var param = src as ParameterCode;
             return param == null ? src : param.ToDisplayValue(_isAllowString);
         }
     }

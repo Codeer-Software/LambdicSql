@@ -11,7 +11,7 @@ namespace LambdicSql.Inside.CustomSymbolConverters
     {
         public string Name { get; set; }
         
-        public override Parts Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var index = expression.SkipMethodChain(0);
             var name = (string)converter.ToObject(expression.Arguments[index]);

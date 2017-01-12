@@ -10,10 +10,10 @@ namespace LambdicSql.Inside.CustomSymbolConverters
 {
     class AllConverterAttribute : SymbolConverterMethodAttribute
     {
-        public override Parts Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var args = expression.Arguments.Select(e => converter.Convert(e)).ToArray();
-            return new DisableBracketsParts(Func("ALL", args[0]));
+            return new DisableBracketsCode(Func("ALL", args[0]));
         }
     }
 }

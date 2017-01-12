@@ -10,6 +10,6 @@ namespace LambdicSql.Inside.CustomSymbolConverters
     {
         public string Name { get; set; }
 
-        public override Parts Convert(MethodCallExpression expression, ExpressionConverter converter) => new CurrentDateTimeParts(Name);
+        public override Code Convert(MethodCallExpression expression, ExpressionConverter converter) => new CurrentDateTimeCode(Name);
     }
 }

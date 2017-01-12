@@ -74,7 +74,7 @@ namespace LambdicSql
             return new SqlRecursiveArguments<TResult>(MakeSynatx(db, expression.Body));
         }
 
-        static Parts MakeSynatx(DbInfo dbInfo, Expression core)
+        static Code MakeSynatx(DbInfo dbInfo, Expression core)
         {
             var converter = new ExpressionConverter(dbInfo);
             return core == null ? string.Empty : converter.Convert(core);

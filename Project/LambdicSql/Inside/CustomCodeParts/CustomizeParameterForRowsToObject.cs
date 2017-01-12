@@ -2,12 +2,12 @@
 
 namespace LambdicSql.Inside.CustomCodeParts
 {
-    class CustomizeParameterForRowsToObject : IPartsCustomizer
+    class CustomizeParameterForRowsToObject : ICodeCustomizer
     {
-        public Parts Custom(Parts src)
+        public Code Custom(Code src)
         {
-            var param = src as ParameterParts;
-            return param == null ? src : new RowsParameterParts(param);
+            var param = src as ParameterCode;
+            return param == null ? src : new RowsParameterCode(param);
         }
     }
 }

@@ -8,7 +8,7 @@ namespace LambdicSql.Inside.CustomSymbolConverters
 {
     class SortedByConverterAttribute : SymbolConverterMethodAttribute
     {
-        public override Parts Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
             => LineSpace(converter.Convert(expression.Arguments[0]), expression.Method.Name.ToUpper());
     }
 }

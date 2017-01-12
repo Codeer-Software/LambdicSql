@@ -4,20 +4,20 @@ using LambdicSql.BuilderServices.CodeParts;
 
 namespace LambdicSql.Inside.CustomCodeParts
 {
-    class SubQueryAndNameParts : Parts
+    class SubQueryAndNameCode : Code
     {
         string _front = string.Empty;
         string _back = string.Empty;
         string _body;
-        Parts _define;
+        Code _define;
 
-        internal SubQueryAndNameParts(string body, Parts table)
+        internal SubQueryAndNameCode(string body, Code table)
         {
             _body = body;
-            _define = new HParts(table, _body) { Separator = " ", EnableChangeLine = false };
+            _define = new HCode(table, _body) { Separator = " ", EnableChangeLine = false };
         }
 
-        SubQueryAndNameParts(string body, Parts define, string front, string back)
+        SubQueryAndNameCode(string body, Code define, string front, string back)
         {
             _body = body;
             _define = define;
@@ -34,12 +34,12 @@ namespace LambdicSql.Inside.CustomCodeParts
                     (PartsUtils.GetIndent(indent) + _front + _body + _back) :
                     _define.ToString(isTopLevel, indent, context);
 
-        public override Parts ConcatAround(string front, string back) => new SubQueryAndNameParts(_body, _define.ConcatAround(front, back), front + _front, _back + back);
+        public override Code ConcatAround(string front, string back) => new SubQueryAndNameCode(_body, _define.ConcatAround(front, back), front + _front, _back + back);
 
-        public override Parts ConcatToFront(string front) => new SubQueryAndNameParts(_body, _define.ConcatToFront(front), front + _front, _back);
+        public override Code ConcatToFront(string front) => new SubQueryAndNameCode(_body, _define.ConcatToFront(front), front + _front, _back);
 
-        public override Parts ConcatToBack(string back) => new SubQueryAndNameParts(_body, _define.ConcatToBack(back), _front, _back + back);
+        public override Code ConcatToBack(string back) => new SubQueryAndNameCode(_body, _define.ConcatToBack(back), _front, _back + back);
 
-        public override Parts Customize(IPartsCustomizer customizer) => customizer.Custom(this);
+        public override Code Customize(ICodeCustomizer customizer) => customizer.Custom(this);
     }
 }

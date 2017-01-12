@@ -3,12 +3,12 @@ using LambdicSql.BuilderServices.CodeParts;
 
 namespace LambdicSql.Inside.CustomCodeParts
 {
-    class WithEntriedParts : Parts
+    class WithEntriedCode : Code
     {
-        Parts _core;
+        Code _core;
         string[] _names;
 
-        internal WithEntriedParts(Parts core, string[] names)
+        internal WithEntriedCode(Code core, string[] names)
         {
             _core = core;
             _names = names;
@@ -24,12 +24,12 @@ namespace LambdicSql.Inside.CustomCodeParts
             return _core.ToString(isTopLevel, indent, context);
         }
 
-        public override Parts ConcatAround(string front, string back) => new WithEntriedParts(_core.ConcatAround(front, back), _names);
+        public override Code ConcatAround(string front, string back) => new WithEntriedCode(_core.ConcatAround(front, back), _names);
 
-        public override Parts ConcatToFront(string front) => new WithEntriedParts(_core.ConcatToFront(front), _names);
+        public override Code ConcatToFront(string front) => new WithEntriedCode(_core.ConcatToFront(front), _names);
 
-        public override Parts ConcatToBack(string back) => new WithEntriedParts(_core.ConcatToBack(back), _names);
+        public override Code ConcatToBack(string back) => new WithEntriedCode(_core.ConcatToBack(back), _names);
 
-        public override Parts Customize(IPartsCustomizer customizer) => new WithEntriedParts(_core.Customize(customizer), _names);
+        public override Code Customize(ICodeCustomizer customizer) => new WithEntriedCode(_core.Customize(customizer), _names);
     }
 }

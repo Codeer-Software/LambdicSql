@@ -13,11 +13,11 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         public string Name { get; set; }
 
         /// <summary>
-        /// Convert object to code parts.
+        /// Convert object to code.
         /// </summary>
         /// <param name="obj">Object.</param>
         /// <returns>Parts.</returns>
-        public override Parts Convert(object obj)
+        public override Code Convert(object obj)
             => obj == null ? string.Empty :
                string.IsNullOrEmpty(Name) ? obj.ToString().ToUpper() : Name;
     }

@@ -12,7 +12,7 @@ namespace LambdicSql.Inside.CustomSymbolConverters
 {
     class SelectConverterAttribute : SymbolConverterMethodAttribute
     {
-        public override Parts Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             //ALL, DISTINCT, TOP
             var modify = new List<Expression>();
@@ -21,7 +21,7 @@ namespace LambdicSql.Inside.CustomSymbolConverters
                 modify.Add(expression.Arguments[i]);
             }
 
-            var select = LineSpace(new Parts[] { "SELECT" }.Concat(modify.Select(e => converter.Convert(e))).ToArray());
+            var select = LineSpace(new Code[] { "SELECT" }.Concat(modify.Select(e => converter.Convert(e))).ToArray());
 
             //select elemnts.
             var selectTargets = expression.Arguments[expression.Arguments.Count - 1];
@@ -30,19 +30,19 @@ namespace LambdicSql.Inside.CustomSymbolConverters
             if (typeof(IAsterisk).IsAssignableFrom(selectTargets.Type))
             {
                 select.Add("*");
-                return new SelectClauseParts(select);
+                return new SelectClauseCode(select);
             }
 
             //new { item = db.tbl.column }
             else
             {
                 var createInfo = ObjectCreateAnalyzer.MakeSelectInfo(selectTargets);
-                var elements = new VParts(createInfo.Members.Select(e => ConvertSelectedElement(converter, e))) { Indent = 1, Separator = "," };
-                return new SelectClauseParts(new VParts(select, elements));
+                var elements = new VCode(createInfo.Members.Select(e => ConvertSelectedElement(converter, e))) { Indent = 1, Separator = "," };
+                return new SelectClauseCode(new VCode(select, elements));
             }
         }
 
-        static Parts ConvertSelectedElement(ExpressionConverter converter, ObjectCreateMemberInfo element)
+        static Code ConvertSelectedElement(ExpressionConverter converter, ObjectCreateMemberInfo element)
         {
             //single select.
             //for example, COUNT(*).

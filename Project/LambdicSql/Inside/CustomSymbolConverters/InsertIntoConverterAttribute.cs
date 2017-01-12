@@ -9,7 +9,7 @@ namespace LambdicSql.Inside.CustomSymbolConverters
 {
     class InsertIntoConverterAttribute : SymbolConverterMethodAttribute
     {
-        public override Parts Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var table = converter.Convert(expression.Arguments[0]);
 

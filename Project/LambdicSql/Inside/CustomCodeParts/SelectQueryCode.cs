@@ -3,11 +3,11 @@ using LambdicSql.BuilderServices.CodeParts;
 
 namespace LambdicSql.Inside.CustomCodeParts
 {
-    internal class SelectQueryParts : Parts
+    internal class SelectQueryCode : Code
     {
-        Parts _core;
+        Code _core;
 
-        internal SelectQueryParts(Parts core)
+        internal SelectQueryCode(Code core)
         {
             _core = core;
         }
@@ -22,12 +22,12 @@ namespace LambdicSql.Inside.CustomCodeParts
             return target.ToString(false, indent, context);
         }
 
-        public override Parts ConcatAround(string front, string back) => new SelectQueryParts(_core.ConcatAround(front, back));
+        public override Code ConcatAround(string front, string back) => new SelectQueryCode(_core.ConcatAround(front, back));
 
-        public override Parts ConcatToFront(string front) => new SelectQueryParts(_core.ConcatToFront(front));
+        public override Code ConcatToFront(string front) => new SelectQueryCode(_core.ConcatToFront(front));
 
-        public override Parts ConcatToBack(string back) => new SelectQueryParts(_core.ConcatToBack(back));
+        public override Code ConcatToBack(string back) => new SelectQueryCode(_core.ConcatToBack(back));
 
-        public override Parts Customize(IPartsCustomizer customizer) => new SelectQueryParts(_core.Customize(customizer));
+        public override Code Customize(ICodeCustomizer customizer) => new SelectQueryCode(_core.Customize(customizer));
     }
 }

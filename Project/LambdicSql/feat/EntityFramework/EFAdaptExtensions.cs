@@ -122,7 +122,7 @@ namespace LambdicSql.feat.EntityFramework
 
     class TConverterAttribute : SymbolConverterMethodAttribute
     {
-        public override Parts Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
             => converter.Convert(expression.Arguments[0]);
     }
 }

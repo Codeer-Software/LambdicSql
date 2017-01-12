@@ -9,10 +9,10 @@ namespace LambdicSql.ConverterServices.SymbolConverters
     public abstract class SymbolConverterObjectAttribute : Attribute
     {
         /// <summary>
-        /// Convert object to code parts.
+        /// Convert object to code.
         /// </summary>
         /// <param name="obj">Object.</param>
         /// <returns>Parts.</returns>
-        public abstract Parts Convert(object obj);
+        public abstract Code Convert(object obj);
     }
 }

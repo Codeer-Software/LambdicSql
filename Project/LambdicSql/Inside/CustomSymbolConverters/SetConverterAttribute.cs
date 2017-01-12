@@ -8,12 +8,12 @@ namespace LambdicSql.Inside.CustomSymbolConverters
 {
     class SetConverterAttribute : SymbolConverterMethodAttribute
     {
-        public override Parts Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var array = expression.Arguments[1] as NewArrayExpression;
-            var set = new VParts();
+            var set = new VCode();
             set.Add("SET");
-            set.Add(new VParts(array.Expressions.Select(e => converter.Convert(e)).ToArray()) { Indent = 1, Separator = "," });
+            set.Add(new VCode(array.Expressions.Select(e => converter.Convert(e)).ToArray()) { Indent = 1, Separator = "," });
             return set;
         }
     }

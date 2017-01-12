@@ -8,7 +8,7 @@ namespace LambdicSql.Inside.CustomSymbolConverters
 {
     class ValuesConverterAttribute : SymbolConverterMethodAttribute
     {
-        public override Parts Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var values = Func("VALUES", converter.Convert(expression.Arguments[1]));
             values.Indent = 1;

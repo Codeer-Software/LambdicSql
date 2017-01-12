@@ -10,13 +10,13 @@ namespace LambdicSql.Inside.CustomSymbolConverters
     {
         public string Name { get; set; }
 
-        public override Parts Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var startIndex = expression.SkipMethodChain(0);
             var table = FromConverterAttribute.ConvertTable(converter, expression.Arguments[startIndex]);
             var condition = ((startIndex + 1) < expression.Arguments.Count) ? converter.Convert(expression.Arguments[startIndex + 1]) : null;
 
-            var join = new HParts() { IsFunctional = true, Separator = " ", Indent = 1 };
+            var join = new HCode() { IsFunctional = true, Separator = " ", Indent = 1 };
             join.Add(Name);
             join.Add(table);
             if (condition != null)

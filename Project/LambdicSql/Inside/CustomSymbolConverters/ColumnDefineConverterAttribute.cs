@@ -17,14 +17,14 @@ namespace LambdicSql.Inside.CustomSymbolConverters
         public string Separator { get; set; } = " ";
 
         /// <summary>
-        /// Convert expression to code parts.
+        /// Convert expression to code.
         /// </summary>
         /// <param name="expression">Expression.</param>
         /// <param name="converter">Expression converter.</param>
         /// <returns>Parts.</returns>
-        public override Parts Convert(NewExpression expression, ExpressionConverter converter)
+        public override Code Convert(NewExpression expression, ExpressionConverter converter)
         {
-            var h = new HParts() { Separator = Separator };
+            var h = new HCode() { Separator = Separator };
             h.Add(converter.Convert(expression.Arguments[0]));
             h.Add(converter.Convert(expression.Arguments[1]));
             var array = expression.Arguments[2] as NewArrayExpression;

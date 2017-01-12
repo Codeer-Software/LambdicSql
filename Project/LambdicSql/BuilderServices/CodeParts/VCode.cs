@@ -7,9 +7,9 @@ namespace LambdicSql.BuilderServices.CodeParts
     /// <summary>
     /// Vertical text.
     /// </summary>
-    public class VParts : Parts
+    public class VCode : Code
     {
-        List<Parts> _texts = new List<Parts>();
+        List<Code> _texts = new List<Code>();
 
         /// <summary>
         /// Separator
@@ -35,7 +35,7 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// Constructor.
         /// </summary>
         /// <param name="texts">Vertical texts.</param>
-        public VParts(params Parts[] texts)
+        public VCode(params Code[] texts)
         {
             _texts.AddRange(texts.Where(e => !e.IsEmpty));
         }
@@ -44,7 +44,7 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// Constructor.
         /// </summary>
         /// <param name="texts">Vertical texts.</param>
-        public VParts(IEnumerable<Parts> texts)
+        public VCode(IEnumerable<Code> texts)
         {
             _texts.AddRange(texts.Where(e => !e.IsEmpty));
         }
@@ -67,14 +67,14 @@ namespace LambdicSql.BuilderServices.CodeParts
         public void Add(string text, int indent)
         {
             if (string.IsNullOrEmpty(text.Trim())) return;
-            _texts.Add(new SingleTextParts(text, indent));
+            _texts.Add(new SingleTextCode(text, indent));
         }
 
         /// <summary>
         /// Add text.
         /// </summary>
         /// <param name="text">Text.</param>
-        public void Add(Parts text)
+        public void Add(Code text)
         {
             if (text.IsEmpty) return;
             _texts.Add(text);
@@ -85,16 +85,16 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// </summary>
         /// <param name="indent">Indent.</param>
         /// <param name="texts">Texts.</param>
-        public void AddRange(int indent, IEnumerable<Parts> texts)
-            => _texts.AddRange(texts.Where(e => !e.IsEmpty).Select(e => new HParts(e) { Indent = 1 }).Cast<Parts>());
+        public void AddRange(int indent, IEnumerable<Code> texts)
+            => _texts.AddRange(texts.Where(e => !e.IsEmpty).Select(e => new HCode(e) { Indent = 1 }).Cast<Code>());
 
         /// <summary>
         /// Add texts.
         /// </summary>
         /// <param name="indent">Indent.</param>
         /// <param name="texts">Texts.</param>
-        public void AddRange(int indent, params Parts[] texts)
-            => _texts.AddRange(texts.Where(e => !e.IsEmpty).Select(e => new HParts(e) { Indent = 1 }).Cast<Parts>());
+        public void AddRange(int indent, params Code[] texts)
+            => _texts.AddRange(texts.Where(e => !e.IsEmpty).Select(e => new HCode(e) { Indent = 1 }).Cast<Code>());
 
         /// <summary>
         /// Concat to front and back.
@@ -102,7 +102,7 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// <param name="front">Front.</param>
         /// <param name="back">Back.</param>
         /// <returns>Text.</returns>
-        public override Parts ConcatAround(string front, string back)
+        public override Code ConcatAround(string front, string back)
         {
             if (_texts.Count == 0) return CopyProperty(front + back);
 
@@ -117,7 +117,7 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// </summary>
         /// <param name="front">Front.</param>
         /// <returns>Text.</returns>
-        public override Parts ConcatToFront(string front)
+        public override Code ConcatToFront(string front)
         {
             if (_texts.Count == 0) return CopyProperty(front);
 
@@ -131,7 +131,7 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// </summary>
         /// <param name="back"></param>
         /// <returns>Text.</returns>
-        public override Parts ConcatToBack(string back)
+        public override Code ConcatToBack(string back)
         {
             if (_texts.Count == 0) return CopyProperty(back);
 
@@ -145,13 +145,13 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// </summary>
         /// <param name="customizer">Customizer.</param>
         /// <returns>Customized SqlText.</returns>
-        public override Parts Customize(IPartsCustomizer customizer)
+        public override Code Customize(ICodeCustomizer customizer)
         {
             var dst = _texts.Select(e => e.Customize(customizer));
             return CopyProperty(dst.ToArray());
         }
 
-        VParts CopyProperty(params Parts[] texts)
-             => new VParts(texts) { Indent = Indent, Separator = Separator };
+        VCode CopyProperty(params Code[] texts)
+             => new VCode(texts) { Indent = Indent, Separator = Separator };
     }
 }

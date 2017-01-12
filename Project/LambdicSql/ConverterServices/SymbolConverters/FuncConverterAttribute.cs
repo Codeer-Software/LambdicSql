@@ -32,20 +32,20 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         public string AfterPredicate { get; set; }
 
         /// <summary>
-        /// Convert expression to code parts.
+        /// Convert expression to code.
         /// </summary>
         /// <param name="expression">Expression.</param>
         /// <param name="converter">Expression converter.</param>
         /// <returns>Parts.</returns>
-        public override Parts Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var index = expression.SkipMethodChain(0);
             var args = expression.Arguments.Skip(index).Select(e => converter.Convert(e)).ToArray();
             var name = string.IsNullOrEmpty(Name) ? expression.Method.Name.ToUpper() : Name;
 
-            var hArgs = new HParts(args) { Separator = Separator }.ConcatToBack(")");
-            var parts = new HParts(Line(name, "("), hArgs) { IsFunctional = true, Indent = Indent };
-            return string.IsNullOrEmpty(AfterPredicate) ? parts : LineSpace(parts, AfterPredicate);
+            var hArgs = new HCode(args) { Separator = Separator }.ConcatToBack(")");
+            var code = new HCode(Line(name, "("), hArgs) { IsFunctional = true, Indent = Indent };
+            return string.IsNullOrEmpty(AfterPredicate) ? code : LineSpace(code, AfterPredicate);
         }
     }
 }

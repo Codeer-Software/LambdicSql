@@ -7,9 +7,9 @@ namespace LambdicSql.BuilderServices.CodeParts
     /// <summary>
     /// Horizontal text.
     /// </summary>
-    public class HParts : Parts
+    public class HCode : Code
     {
-        List<Parts> _texts = new List<Parts>();
+        List<Code> _texts = new List<Code>();
 
         /// <summary>
         /// Separator.
@@ -46,7 +46,7 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// Constructor.
         /// </summary>
         /// <param name="texts">Horizontal texts.</param>
-        public HParts(params Parts[] texts)
+        public HCode(params Code[] texts)
         {
             _texts.AddRange(texts.Where(e => !e.IsEmpty));
         }
@@ -55,7 +55,7 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// Constructor.
         /// </summary>
         /// <param name="texts">Horizontal texts.</param>
-        public HParts(IEnumerable<Parts> texts)
+        public HCode(IEnumerable<Code> texts)
         {
             _texts.AddRange(texts.Where(e => !e.IsEmpty));
         }
@@ -90,7 +90,7 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// Add text.
         /// </summary>
         /// <param name="text">Text.</param>
-        public void Add(Parts text)
+        public void Add(Code text)
         {
             if (text.IsEmpty) return;
             _texts.Add(text);
@@ -100,14 +100,14 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// Add text.
         /// </summary>
         /// <param name="texts">Texts.</param>
-        public void AddRange(IEnumerable<Parts> texts)
+        public void AddRange(IEnumerable<Code> texts)
             => _texts.AddRange(texts.Where(e => !e.IsEmpty));
 
         /// <summary>
         /// Add text.
         /// </summary>
         /// <param name="texts">Texts.</param>
-        public void AddRange(params Parts[] texts)
+        public void AddRange(params Code[] texts)
             => _texts.AddRange(texts.Where(e => !e.IsEmpty));
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// <param name="front">Front.</param>
         /// <param name="back">Back.</param>
         /// <returns>Text.</returns>
-        public override Parts ConcatAround(string front, string back)
+        public override Code ConcatAround(string front, string back)
         {
             if (_texts.Count == 0) return CopyProperty(front + back);
 
@@ -131,7 +131,7 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// </summary>
         /// <param name="front">Front.</param>
         /// <returns>Text.</returns>
-        public override Parts ConcatToFront(string front)
+        public override Code ConcatToFront(string front)
         {
             if (_texts.Count == 0) return CopyProperty(front);
 
@@ -145,7 +145,7 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// </summary>
         /// <param name="back"></param>
         /// <returns></returns>
-        public override Parts ConcatToBack(string back)
+        public override Code ConcatToBack(string back)
         {
             if (_texts.Count == 0) return CopyProperty(back);
 
@@ -159,13 +159,13 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// </summary>
         /// <param name="customizer">Customizer.</param>
         /// <returns>Customized SqlText.</returns>
-        public override Parts Customize(IPartsCustomizer customizer)
+        public override Code Customize(ICodeCustomizer customizer)
         {
             var dst = _texts.Select(e => e.Customize(customizer));
             return CopyProperty(dst.ToArray());
         }
 
-        HParts CopyProperty(params Parts[] texts)
-             => new HParts(texts) { Indent = Indent, IsFunctional = IsFunctional, EnableChangeLine = EnableChangeLine, Separator = Separator };
+        HCode CopyProperty(params Code[] texts)
+             => new HCode(texts) { Indent = Indent, IsFunctional = IsFunctional, EnableChangeLine = EnableChangeLine, Separator = Separator };
     }
 }
