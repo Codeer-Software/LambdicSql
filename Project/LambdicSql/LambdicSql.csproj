@@ -67,8 +67,6 @@
     <Compile Include="Inside\SymbolConverters\WithConverterAttribute.cs" />
     <Compile Include="ConverterServices\SymbolConverters\ClauseStyleConverterAttribute.cs" />
     <Compile Include="ConverterServices\SymbolConverters\FuncStyleConverterAttribute.cs" />
-    <Compile Include="ConverterServices\SymbolConverters\MemberNameConverterAttribute.cs" />
-    <Compile Include="ConverterServices\SymbolConverters\MethodNameConverterAttribute.cs" />
     <Compile Include="ConverterServices\SymbolConverters\ObjectToStringConverterAttribute.cs" />
     <Compile Include="ConverterServices\SymbolConverters\MemberConverterAttribute.cs" />
     <Compile Include="ConverterServices\SymbolConverters\MethodConverterAttribute.cs" />

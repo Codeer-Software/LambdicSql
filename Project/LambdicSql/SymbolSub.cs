@@ -221,7 +221,7 @@ namespace LambdicSql
         /// <summary>
         /// SYSDUMMY1 keyword.
         /// </summary>
-        [MemberNameConverter(Name = "SYSIBM.SYSDUMMY1")]
+        [MemberConverter(Name = "SYSIBM.SYSDUMMY1")]
         public static object SysDummy1 => InvalitContext.Throw<long>(nameof(SysDummy1));
     }
 

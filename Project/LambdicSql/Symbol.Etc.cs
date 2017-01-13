@@ -19,7 +19,7 @@ namespace LambdicSql
         /// <typeparam name="TSelected">Type of selected.</typeparam>
         /// <param name="selected">The type you want to obtain with the SELECT clause. Usually you specify a table element.</param>
         /// <returns>*</returns>
-        [MethodNameConverter(Name = "*")]
+        [ClauseStyleConverter(Name = "*")]
         public static IAsterisk<TSelected> Asterisk<TSelected>(TSelected selected) => InvalitContext.Throw<IAsterisk<TSelected>>(nameof(Asterisk));
 
         /// <summary>
@@ -27,14 +27,14 @@ namespace LambdicSql
         /// </summary>
         /// <typeparam name="TSelected">Type of selected.</typeparam>
         /// <returns>*</returns>
-        [MethodNameConverter(Name = "*")]
+        [ClauseStyleConverter(Name = "*")]
         public static IAsterisk<TSelected> Asterisk<TSelected>() => InvalitContext.Throw<IAsterisk<TSelected>>(nameof(Asterisk));
 
         /// <summary>
         /// It's *.
         /// </summary>
         /// <returns>*</returns>
-        [MethodNameConverter(Name = "*")]
+        [ClauseStyleConverter(Name = "*")]
         public static IAsterisk Asterisk() => InvalitContext.Throw<IAsterisk>(nameof(Asterisk));
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace LambdicSql
         /// <summary>
         /// ROWNUM BETWEEN keyword.
         /// </summary>
-        [MethodNameConverter]
+        [ClauseStyleConverter]
         public static object RowNum() => InvalitContext.Throw<Non>(nameof(RowNum));
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace LambdicSql
         /// <summary>
         /// DUAL keyword.
         /// </summary>
-        [MemberNameConverter]
+        [MemberConverter]
         public static object Dual => InvalitContext.Throw<Non>(nameof(Dual));
     }
 }

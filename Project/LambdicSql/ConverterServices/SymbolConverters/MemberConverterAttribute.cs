@@ -8,14 +8,23 @@ namespace LambdicSql.ConverterServices.SymbolConverters
     /// SQL symbol converter attribute for property or field.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
-    public abstract class MemberConverterAttribute : Attribute
+    public class MemberConverterAttribute : Attribute
     {
+        /// <summary>
+        /// Name.If it is empty, use the name of the member.
+        /// </summary>
+        public string Name { get; set; }
+
         /// <summary>
         /// Convert expression to code.
         /// </summary>
         /// <param name="expression">Expression.</param>
         /// <param name="converter">Expression converter.</param>
         /// <returns>Parts.</returns>
-        public abstract Code Convert(MemberExpression expression, ExpressionConverter converter);
+        public Code Convert(MemberExpression expression, ExpressionConverter converter)
+        {
+            if (string.IsNullOrEmpty(Name)) Name = expression.Member.Name.ToUpper();
+            return Name;
+        }
     }
 }

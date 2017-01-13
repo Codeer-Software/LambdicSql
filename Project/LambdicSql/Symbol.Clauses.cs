@@ -946,14 +946,14 @@ namespace LambdicSql
         /// ALL Keyword
         /// </summary>
         /// <returns></returns>
-        [MethodNameConverter]
+        [ClauseStyleConverter]
         public static IAggregatePredicateAll All() => null;
 
         /// <summary>
         /// Distinct Keyword
         /// </summary>
         /// <returns></returns>
-        [MethodNameConverter]
+        [ClauseStyleConverter]
         public static IAggregatePredicate Distinct() => InvalitContext.Throw<IAggregatePredicate>(nameof(All));
 
         /// <summary>
@@ -1063,7 +1063,7 @@ namespace LambdicSql
         /// PRIMARY KEY clause.
         /// </summary>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [MethodNameConverter(Name = "PRIMARY KEY")]
+        [ClauseStyleConverter(Name = "PRIMARY KEY")]
         public static IConstraint PrimaryKey() => InvalitContext.Throw<IConstraint>(nameof(PrimaryKey));
 
         /// <summary>
@@ -1130,7 +1130,7 @@ namespace LambdicSql
         /// NOT NULL
         /// </summary>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [MethodNameConverter(Name = "NOT NULL")]
+        [ClauseStyleConverter(Name = "NOT NULL")]
         public static IConstraint NotNull() => InvalitContext.Throw<IConstraint>(nameof(NotNull));
 
         /// <summary>
