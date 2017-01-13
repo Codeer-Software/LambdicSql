@@ -5,10 +5,10 @@ using System.Linq.Expressions;
 namespace LambdicSql.ConverterServices.SymbolConverters
 {
     /// <summary>
-    /// SQL symbol converter attribute for method.
+    /// SQL symbol converter attribute for constructor.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Method)]
-    public abstract class SymbolConverterMethodAttribute : Attribute
+    [AttributeUsage(AttributeTargets.Constructor)]
+    public abstract class NewConverterAttribute : Attribute
     {
         /// <summary>
         /// Convert expression to code.
@@ -16,6 +16,6 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         /// <param name="expression">Expression.</param>
         /// <param name="converter">Expression converter.</param>
         /// <returns>Parts.</returns>
-        public abstract Code Convert(MethodCallExpression expression, ExpressionConverter converter);
+        public abstract Code Convert(NewExpression expression, ExpressionConverter converter);
     }
 }

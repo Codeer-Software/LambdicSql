@@ -3,10 +3,11 @@ using System.Linq.Expressions;
 
 namespace LambdicSql.ConverterServices.SymbolConverters
 {
+    //TODO Keywordっていけてない
     /// <summary>
     /// SQL symbol converter attribute for keyword.
     /// </summary>
-    public class KeywordMemberConverterAttribute : SymbolConverterMemberAttribute
+    public class MemberNameConverterAttribute : MemberConverterAttribute
     {
         /// <summary>
         /// Name.If it is empty, use the name of the member.

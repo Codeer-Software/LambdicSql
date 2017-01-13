@@ -100,7 +100,7 @@ namespace LambdicSql
     /// <summary>
     /// Element of DateTime.
     /// </summary>
-    [KeywordObjectConverter]
+    [ObjectToStringConverter]
     public enum DateTimeElement
     {
         /// <summary>
@@ -221,7 +221,7 @@ namespace LambdicSql
         /// <summary>
         /// SYSDUMMY1 keyword.
         /// </summary>
-        [KeywordMemberConverter(Name = "SYSIBM.SYSDUMMY1")]
+        [MemberNameConverter(Name = "SYSIBM.SYSDUMMY1")]
         public static object SysDummy1 => InvalitContext.Throw<long>(nameof(SysDummy1));
     }
 

@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace LambdicSql.Inside.CustomSymbolConverters
 {
-    class ConditionConverterAttribute : SymbolConverterNewAttribute
+    class ConditionConverterAttribute : NewConverterAttribute
     {
         public override Code Convert(NewExpression expression, ExpressionConverter converter)
         {

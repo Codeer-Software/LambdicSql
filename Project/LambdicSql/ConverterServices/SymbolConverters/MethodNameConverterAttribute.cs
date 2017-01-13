@@ -6,7 +6,7 @@ namespace LambdicSql.ConverterServices.SymbolConverters
     /// <summary>
     /// SQL symbol converter attribute for keyword.
     /// </summary>
-    public class KeywordMethodConverterAttribute : SymbolConverterMethodAttribute
+    public class MethodNameConverterAttribute : MethodConverterAttribute
     {
         /// <summary>
         /// Name.If it is empty, use the name of the method.

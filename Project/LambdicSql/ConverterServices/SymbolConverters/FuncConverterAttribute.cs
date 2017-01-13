@@ -9,7 +9,7 @@ namespace LambdicSql.ConverterServices.SymbolConverters
     /// <summary>
     /// SQL symbol converter attribute for SQL Function.
     /// </summary>
-    public class FuncConverterAttribute : SymbolConverterMethodAttribute
+    public class FuncConverterAttribute : MethodConverterAttribute
     {
         /// <summary>
         /// Indent.

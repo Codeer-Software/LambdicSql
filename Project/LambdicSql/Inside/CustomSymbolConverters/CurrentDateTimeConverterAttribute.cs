@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace LambdicSql.Inside.CustomSymbolConverters
 {
-    class CurrentDateTimeConverterAttribute : SymbolConverterMethodAttribute
+    class CurrentDateTimeConverterAttribute : MethodConverterAttribute
     {
         public string Name { get; set; }
 

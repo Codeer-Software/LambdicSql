@@ -8,7 +8,7 @@ using System.Linq.Expressions;
 
 namespace LambdicSql.Inside.CustomSymbolConverters
 {
-    class TwoWaySqlConverterAttribute : SymbolConverterMethodAttribute
+    class TwoWaySqlConverterAttribute : MethodConverterAttribute
     {
         public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
         {

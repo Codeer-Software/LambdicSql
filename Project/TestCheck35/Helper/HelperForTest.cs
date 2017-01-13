@@ -18,7 +18,7 @@ namespace TestCheck35
         public static ClauseChain<object> Empty() => null;
     }
 
-    class SymbolForTestAttribute : SymbolConverterMethodAttribute
+    class SymbolForTestAttribute : MethodConverterAttribute
     {
         public override Code Convert(MethodCallExpression expression, ExpressionConverter converter) => string.Empty;
     }

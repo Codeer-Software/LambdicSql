@@ -1,13 +1,13 @@
 ﻿using LambdicSql.BuilderServices.CodeParts;
-using System.Linq.Expressions;
 using LambdicSql.ConverterServices.Inside;
+using System.Linq.Expressions;
 
 namespace LambdicSql.ConverterServices.SymbolConverters
 {
     /// <summary>
     /// SQL symbol converter attribute for clause.
     /// </summary>
-    public class FormatConverterAttribute : MethodConverterAttribute
+    public class FormatConverterNewAttribute : NewConverterAttribute
     {
         FormatConverterCore _core = new FormatConverterCore();
 
@@ -32,7 +32,7 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         /// <param name="expression">Expression.</param>
         /// <param name="converter">Expression converter.</param>
         /// <returns>Parts.</returns>
-        public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override Code Convert(NewExpression expression, ExpressionConverter converter)
             => _core.Convert(expression.Arguments, converter);
     }
 }

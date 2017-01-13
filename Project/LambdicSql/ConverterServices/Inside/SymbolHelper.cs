@@ -11,10 +11,10 @@ namespace LambdicSql.ConverterServices.Inside
     static class SymbolHelper
     {
         static Dictionary<MetaId, bool> _isExtension = new Dictionary<MetaId, bool>();
-        static Dictionary<MetaId, SymbolConverterMethodAttribute> _converterMethodAttribute = new Dictionary<MetaId, SymbolConverterMethodAttribute>();
-        static Dictionary<MetaId, SymbolConverterMemberAttribute> _converterMemberAttribute = new Dictionary<MetaId, SymbolConverterMemberAttribute>();
-        static Dictionary<MetaId, SymbolConverterNewAttribute> _converterNewAttribute = new Dictionary<MetaId, SymbolConverterNewAttribute>();
-        static Dictionary<Type, SymbolConverterObjectAttribute> _converterObjectAttribute = new Dictionary<Type, SymbolConverterObjectAttribute>();
+        static Dictionary<MetaId, MethodConverterAttribute> _converterMethodAttribute = new Dictionary<MetaId, MethodConverterAttribute>();
+        static Dictionary<MetaId, MemberConverterAttribute> _converterMemberAttribute = new Dictionary<MetaId, MemberConverterAttribute>();
+        static Dictionary<MetaId, NewConverterAttribute> _converterNewAttribute = new Dictionary<MetaId, NewConverterAttribute>();
+        static Dictionary<Type, ObjectConverterAttribute> _converterObjectAttribute = new Dictionary<Type, ObjectConverterAttribute>();
         
         internal static bool IsExtension(this MethodInfo methodInfo)
         {
@@ -31,28 +31,28 @@ namespace LambdicSql.ConverterServices.Inside
             }
         }
 
-        internal static SymbolConverterObjectAttribute GetObjectConverter(this Type type)
+        internal static ObjectConverterAttribute GetObjectConverter(this Type type)
         {
             lock (_converterObjectAttribute)
             {
-                SymbolConverterObjectAttribute attr;
+                ObjectConverterAttribute attr;
                 if (_converterObjectAttribute.TryGetValue(type, out attr)) return attr;
 
-                var attrs = type.GetCustomAttributes(typeof(SymbolConverterObjectAttribute), true);
-                if (attrs.Length == 1) attr = attrs[0] as SymbolConverterObjectAttribute;
+                var attrs = type.GetCustomAttributes(typeof(ObjectConverterAttribute), true);
+                if (attrs.Length == 1) attr = attrs[0] as ObjectConverterAttribute;
                 else attr = null;
                 _converterObjectAttribute.Add(type, attr);
                 return attr;
             }
         }
 
-        internal static SymbolConverterMethodAttribute GetMethodConverter(this MethodCallExpression exp)
+        internal static MethodConverterAttribute GetMethodConverter(this MethodCallExpression exp)
             => GetMemberConverter(exp.Method, _converterMethodAttribute);
         
-        internal static SymbolConverterMemberAttribute GetMemberConverter(this MemberExpression exp)
+        internal static MemberConverterAttribute GetMemberConverter(this MemberExpression exp)
             => GetMemberConverter(exp.Member, _converterMemberAttribute);
 
-        internal static SymbolConverterNewAttribute GetNewConverter(this NewExpression exp)
+        internal static NewConverterAttribute GetNewConverter(this NewExpression exp)
             => GetMemberConverter(exp.Constructor, _converterNewAttribute);
 
         static T GetMemberConverter<T>(MemberInfo member, Dictionary<MetaId, T> cache) where T : class

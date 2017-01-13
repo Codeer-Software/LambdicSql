@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace LambdicSql.Inside.CustomSymbolConverters
 {
-    class JoinConverterAttribute : SymbolConverterMethodAttribute
+    class JoinConverterAttribute : MethodConverterAttribute
     {
         public string Name { get; set; }
 

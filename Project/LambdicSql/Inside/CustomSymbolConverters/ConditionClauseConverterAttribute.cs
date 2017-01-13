@@ -7,7 +7,7 @@ using static LambdicSql.BuilderServices.Inside.PartsFactoryUtils;
 
 namespace LambdicSql.Inside.CustomSymbolConverters
 {
-    class ConditionClauseConverterAttribute : SymbolConverterMethodAttribute
+    class ConditionClauseConverterAttribute : MethodConverterAttribute
     {
         public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
         {

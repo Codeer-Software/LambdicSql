@@ -6,7 +6,7 @@ namespace LambdicSql.ConverterServices.SymbolConverters
     /// <summary>
     /// SQL symbol converter attribute for object.
     /// </summary>
-    public abstract class SymbolConverterObjectAttribute : Attribute
+    public abstract class ObjectConverterAttribute : Attribute
     {
         /// <summary>
         /// Convert object to code.

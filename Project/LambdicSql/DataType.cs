@@ -12,28 +12,28 @@ namespace LambdicSql
         /// BFILE
         /// </summary>
         /// <returns>BFILE</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType BFile() => InvalitContext.Throw<IDataType>(nameof(BFile));
 
         /// <summary>
         /// BIGINT
         /// </summary>
         /// <returns>BIGINT</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType BigInt() => InvalitContext.Throw<IDataType>(nameof(BigInt));
 
         /// <summary>
         /// BIGSERIAL
         /// </summary>
         /// <returns>BIGSERIAL</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType BigSerial() => InvalitContext.Throw<IDataType>(nameof(BigSerial));
 
         /// <summary>
         /// BINARY
         /// </summary>
         /// <returns>BINARY</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Binary() => InvalitContext.Throw<IDataType>(nameof(Binary));
 
         /// <summary>
@@ -48,21 +48,21 @@ namespace LambdicSql
         /// BINARY_DOUBLE
         /// </summary>
         /// <returns>BINARY_DOUBLE</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Binary_Double() => InvalitContext.Throw<IDataType>(nameof(Binary_Double));
 
         /// <summary>
         /// BINARY_FLOAT
         /// </summary>
         /// <returns>BINARY_FLOAT</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Binary_Float() => InvalitContext.Throw<IDataType>(nameof(Binary_Float));
 
         /// <summary>
         /// BIT
         /// </summary>
         /// <returns>BIT</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Bit() => InvalitContext.Throw<IDataType>(nameof(Bit));
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace LambdicSql
         /// BIT VARYING
         /// </summary>
         /// <returns>BIT VARYING</returns>
-        [KeywordMethodConverter(Name = "BIT VARYING")]
+        [MethodNameConverter(Name = "BIT VARYING")]
         public static IDataType BitVarying() => InvalitContext.Throw<IDataType>(nameof(BitVarying));
 
         /// <summary>
@@ -92,28 +92,28 @@ namespace LambdicSql
         /// BLOB
         /// </summary>
         /// <returns>BLOB</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Blob() => InvalitContext.Throw<IDataType>(nameof(Blob));
 
         /// <summary>
         /// BOOLEAN
         /// </summary>
         /// <returns>BOOLEAN</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Boolean() => InvalitContext.Throw<IDataType>(nameof(Boolean));
 
         /// <summary>
         /// BOX
         /// </summary>
         /// <returns>BOX</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Box() => InvalitContext.Throw<IDataType>(nameof(Box));
 
         /// <summary>
         /// BYTEA
         /// </summary>
         /// <returns>BYTEA</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Bytea() => InvalitContext.Throw<IDataType>(nameof(Bytea));
 
         //TODO CHAR(maxlen CHAR) BYTE enumかな・・・
@@ -121,7 +121,7 @@ namespace LambdicSql
         /// CHAR
         /// </summary>
         /// <returns>CHAR</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Char() => InvalitContext.Throw<IDataType>(nameof(Char));
 
         /// <summary>
@@ -136,7 +136,7 @@ namespace LambdicSql
         /// CHARACTER
         /// </summary>
         /// <returns>CHARACTER</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Character() => InvalitContext.Throw<IDataType>(nameof(Character));
 
         /// <summary>
@@ -151,7 +151,7 @@ namespace LambdicSql
         /// CHARACTER VARYING
         /// </summary>
         /// <returns>CHARACTER VARYING</returns>
-        [KeywordMethodConverter(Name = "CHARACTER VARYING")]
+        [MethodNameConverter(Name = "CHARACTER VARYING")]
         public static IDataType CharacterVarying() => InvalitContext.Throw<IDataType>(nameof(CharacterVarying));
 
         /// <summary>
@@ -166,49 +166,49 @@ namespace LambdicSql
         /// CIDR
         /// </summary>
         /// <returns>CIDR</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Cidr() => InvalitContext.Throw<IDataType>(nameof(Cidr));
 
         /// <summary>
         /// CIRCLE
         /// </summary>
         /// <returns>CIRCLE</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Circle() => InvalitContext.Throw<IDataType>(nameof(Circle));
 
         /// <summary>
         /// CLOB
         /// </summary>
         /// <returns>CLOB</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Clob() => InvalitContext.Throw<IDataType>(nameof(Clob));
 
         /// <summary>
         /// CURRENCY
         /// </summary>
         /// <returns>CURRENCY</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Currency() => InvalitContext.Throw<IDataType>(nameof(Currency));
 
         /// <summary>
         /// DATE
         /// </summary>
         /// <returns>DATE</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Date() => InvalitContext.Throw<IDataType>(nameof(Date));
 
         /// <summary>
         /// DATETIME
         /// </summary>
         /// <returns>DATETIME</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType DateTime() => InvalitContext.Throw<IDataType>(nameof(DateTime));
 
         /// <summary>
         /// DATETIME2
         /// </summary>
         /// <returns>DATETIME2</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType DateTime2() => InvalitContext.Throw<IDataType>(nameof(DateTime2));
 
         /// <summary>
@@ -223,7 +223,7 @@ namespace LambdicSql
         /// DATETIMEOFFSET
         /// </summary>
         /// <returns>DATETIMEOFFSET</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType DateTimeOffset() => InvalitContext.Throw<IDataType>(nameof(DateTimeOffset));
 
         /// <summary>
@@ -238,14 +238,14 @@ namespace LambdicSql
         /// DBCLOB
         /// </summary>
         /// <returns>DBCLOB</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType DbClob() => InvalitContext.Throw<IDataType>(nameof(DbClob));
 
         /// <summary>
         /// DECIMAL
         /// </summary>
         /// <returns>DECIMAL</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Decimal() => InvalitContext.Throw<IDataType>(nameof(Decimal));
 
         /// <summary>
@@ -253,7 +253,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="precision">precision</param>
         /// <returns>DECIMAL</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Decimal(int precision) => InvalitContext.Throw<IDataType>(nameof(Decimal));
 
 
@@ -263,35 +263,35 @@ namespace LambdicSql
         /// <param name="precision">precision</param>
         /// <param name="scale">scale</param>
         /// <returns>DECIMAL</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Decimal(int precision, int scale) => InvalitContext.Throw<IDataType>(nameof(Decimal));
 
         /// <summary>
         /// DOUBLE
         /// </summary>
         /// <returns>DOUBLE</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Double() => InvalitContext.Throw<IDataType>(nameof(Double));
 
         /// <summary>
         /// DOUBLE PRECISION
         /// </summary>
         /// <returns>DOUBLE PRECISION</returns>
-        [KeywordMethodConverter(Name = "DOUBLE PRECISION")]
+        [MethodNameConverter(Name = "DOUBLE PRECISION")]
         public static IDataType DoublePrecision() => InvalitContext.Throw<IDataType>(nameof(DoublePrecision));
 
         /// <summary>
         /// ENUM
         /// </summary>
         /// <returns>ENUM</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Enum() => InvalitContext.Throw<IDataType>(nameof(Enum));
 
         /// <summary>
         /// FLOAT
         /// </summary>
         /// <returns>FLOAT</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Float() => InvalitContext.Throw<IDataType>(nameof(Float));
 
         /// <summary>
@@ -306,49 +306,49 @@ namespace LambdicSql
         /// GRAPHIC
         /// </summary>
         /// <returns>GRAPHIC</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Graphic() => InvalitContext.Throw<IDataType>(nameof(Graphic));
 
         /// <summary>
         /// IMAGE
         /// </summary>
         /// <returns>IMAGE</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Image() => InvalitContext.Throw<IDataType>(nameof(Image));
 
         /// <summary>
         /// INET
         /// </summary>
         /// <returns>INET</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Inet() => InvalitContext.Throw<IDataType>(nameof(Inet));
 
         /// <summary>
         /// INT
         /// </summary>
         /// <returns>INT</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Int() => InvalitContext.Throw<IDataType>(nameof(Int));
 
         /// <summary>
         /// INT2
         /// </summary>
         /// <returns>INT2</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Int2() => InvalitContext.Throw<IDataType>(nameof(Int2));
 
         /// <summary>
         /// INT8
         /// </summary>
         /// <returns>INT8</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Int8() => InvalitContext.Throw<IDataType>(nameof(Int8));
 
         /// <summary>
         /// INTEGER
         /// </summary>
         /// <returns>INTEGER</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Integer() => InvalitContext.Throw<IDataType>(nameof(Integer));
 
         //TODO interval [ fields ] [ (p) ] fieldはenumにするか
@@ -357,126 +357,126 @@ namespace LambdicSql
         /// INTERVAL
         /// </summary>
         /// <returns>INTERVAL</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Interval() => InvalitContext.Throw<IDataType>(nameof(Interval));
 
         /// <summary>
         /// JSON
         /// </summary>
         /// <returns>JSON</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Json() => InvalitContext.Throw<IDataType>(nameof(Json));
 
         /// <summary>
         /// JSONB
         /// </summary>
         /// <returns>JSONB</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType JsonB() => InvalitContext.Throw<IDataType>(nameof(JsonB));
 
         /// <summary>
         /// LINE
         /// </summary>
         /// <returns>LINE</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Line() => InvalitContext.Throw<IDataType>(nameof(Line));
 
         /// <summary>
         /// LONG
         /// </summary>
         /// <returns>LONG</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Long() => InvalitContext.Throw<IDataType>(nameof(Long));
 
         /// <summary>
         /// LONG RAW
         /// </summary>
         /// <returns>LONG RAW</returns>
-        [KeywordMethodConverter(Name = "LONG RAW")]
+        [MethodNameConverter(Name = "LONG RAW")]
         public static IDataType LongRaw() => InvalitContext.Throw<IDataType>(nameof(LongRaw));
 
         /// <summary>
         /// LONGBLOB
         /// </summary>
         /// <returns>LONGBLOB</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType LongBlob() => InvalitContext.Throw<IDataType>(nameof(LongBlob));
 
         /// <summary>
         /// LONGTEXT
         /// </summary>
         /// <returns>LONGTEXT</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType LongText() => InvalitContext.Throw<IDataType>(nameof(LongText));
 
         /// <summary>
         /// LONGVARCHAR
         /// </summary>
         /// <returns>LONGVARCHAR</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType LongVarchar() => InvalitContext.Throw<IDataType>(nameof(LongVarchar));
 
         /// <summary>
         /// LONGVARGRAPHIC
         /// </summary>
         /// <returns>LONGVARGRAPHIC</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType LongVarGraphic() => InvalitContext.Throw<IDataType>(nameof(LongVarGraphic));
 
         /// <summary>
         /// LSEG
         /// </summary>
         /// <returns>LSEG</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Lseg() => InvalitContext.Throw<IDataType>(nameof(Lseg));
 
         /// <summary>
         /// MACADDR
         /// </summary>
         /// <returns>MACADDR</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType MacAddr() => InvalitContext.Throw<IDataType>(nameof(MacAddr));
 
         /// <summary>
         /// MEDIUMBLOB
         /// </summary>
         /// <returns>MEDIUMBLOB</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType MediumBlob() => InvalitContext.Throw<IDataType>(nameof(MediumBlob));
 
         /// <summary>
         /// MEDIUMINT
         /// </summary>
         /// <returns>MEDIUMINT</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType MediumInt() => InvalitContext.Throw<IDataType>(nameof(MediumInt));
 
         /// <summary>
         /// MEDIUMTEXT
         /// </summary>
         /// <returns>MEDIUMTEXT</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType MediumText() => InvalitContext.Throw<IDataType>(nameof(MediumText));
 
         /// <summary>
         /// MONEY
         /// </summary>
         /// <returns>MONEY</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Money() => InvalitContext.Throw<IDataType>(nameof(Money));
 
         /// <summary>
         /// NATIVE CHARACTER
         /// </summary>
         /// <returns>NATIVE CHARACTER</returns>
-        [KeywordMethodConverter(Name = "NATIVE CHARACTER")]
+        [MethodNameConverter(Name = "NATIVE CHARACTER")]
         public static IDataType NativeCharacter() => InvalitContext.Throw<IDataType>(nameof(NativeCharacter));
 
         /// <summary>
         /// NCHAR
         /// </summary>
         /// <returns>NCHAR</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType NChar() => InvalitContext.Throw<IDataType>(nameof(NChar));
 
         /// <summary>
@@ -491,21 +491,21 @@ namespace LambdicSql
         /// NCLOB
         /// </summary>
         /// <returns>NCLOB</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType NClob() => InvalitContext.Throw<IDataType>(nameof(NClob));
 
         /// <summary>
         /// NTEXT
         /// </summary>
         /// <returns>NTEXT</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType NText() => InvalitContext.Throw<IDataType>(nameof(NText));
 
         /// <summary>
         /// NUMBER
         /// </summary>
         /// <returns>NUMBER</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Number() => InvalitContext.Throw<IDataType>(nameof(Number));
 
         /// <summary>
@@ -529,7 +529,7 @@ namespace LambdicSql
         /// NUMERIC
         /// </summary>
         /// <returns>NUMERIC</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Numeric() => InvalitContext.Throw<IDataType>(nameof(Numeric));
 
         /// <summary>
@@ -553,14 +553,14 @@ namespace LambdicSql
         /// NVARCHAR
         /// </summary>
         /// <returns>NVARCHAR</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType NVarChar() => InvalitContext.Throw<IDataType>(nameof(NVarChar));
 
         /// <summary>
         /// NVARCHAR2
         /// </summary>
         /// <returns>NVARCHAR2</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType NVarChar2() => InvalitContext.Throw<IDataType>(nameof(NVarChar2));
 
         /// <summary>
@@ -575,98 +575,98 @@ namespace LambdicSql
         /// PATH
         /// </summary>
         /// <returns>PATH</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Path() => InvalitContext.Throw<IDataType>(nameof(Path));
 
         /// <summary>
         /// PG_LSN
         /// </summary>
         /// <returns>PG_LSN</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Pg_Lsn() => InvalitContext.Throw<IDataType>(nameof(Pg_Lsn));
 
         /// <summary>
         /// POINT
         /// </summary>
         /// <returns>POINT</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Point() => InvalitContext.Throw<IDataType>(nameof(Point));
 
         /// <summary>
         /// POLYGON
         /// </summary>
         /// <returns>POLYGON</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Polygon() => InvalitContext.Throw<IDataType>(nameof(Polygon));
 
         /// <summary>
         /// RAW
         /// </summary>
         /// <returns>RAW</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Raw() => InvalitContext.Throw<IDataType>(nameof(Raw));
 
         /// <summary>
         /// REAL
         /// </summary>
         /// <returns>REAL</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Real() => InvalitContext.Throw<IDataType>(nameof(Real));
 
         /// <summary>
         /// SERIAL
         /// </summary>
         /// <returns>SERIAL</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Serial() => InvalitContext.Throw<IDataType>(nameof(Serial));
 
         /// <summary>
         /// SET
         /// </summary>
         /// <returns>SET</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Set() => InvalitContext.Throw<IDataType>(nameof(Set));
 
         /// <summary>
         /// SMALLDATETIME
         /// </summary>
         /// <returns>SMALLDATETIME</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType SmallDateTime() => InvalitContext.Throw<IDataType>(nameof(SmallDateTime));
 
         /// <summary>
         /// SMALLINT
         /// </summary>
         /// <returns>SMALLINT</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType SmallInt() => InvalitContext.Throw<IDataType>(nameof(SmallInt));
 
         /// <summary>
         /// SMALLMONEY
         /// </summary>
         /// <returns>SMALLMONEY</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType SmallMoney() => InvalitContext.Throw<IDataType>(nameof(SmallMoney));
 
         /// <summary>
         /// SMALLSERIAL
         /// </summary>
         /// <returns>SMALLSERIAL</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType SmallSerial() => InvalitContext.Throw<IDataType>(nameof(SmallSerial));
 
         /// <summary>
         /// TEXT
         /// </summary>
         /// <returns>TEXT</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Text() => InvalitContext.Throw<IDataType>(nameof(Text));
 
         /// <summary>
         /// TIME
         /// </summary>
         /// <returns>TIME</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Time() => InvalitContext.Throw<IDataType>(nameof(Time));
 
         /// <summary>
@@ -682,7 +682,7 @@ namespace LambdicSql
         /// TIME WITH TIME ZONE
         /// </summary>
         /// <returns>TIME</returns>
-        [KeywordMethodConverter(Name = "TIME WITH TIME ZONE")]
+        [MethodNameConverter(Name = "TIME WITH TIME ZONE")]
         public static IDataType TimeWithTimeZone() => InvalitContext.Throw<IDataType>(nameof(Time));
 
         /// <summary>
@@ -697,7 +697,7 @@ namespace LambdicSql
         /// TIMESTAMP
         /// </summary>
         /// <returns>TIMESTAMP</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType TimeStamp() => InvalitContext.Throw<IDataType>(nameof(TimeStamp));
 
         /// <summary>
@@ -712,7 +712,7 @@ namespace LambdicSql
         /// TIME STAMP WITH TIME ZONE
         /// </summary>
         /// <returns>TIMESTAMP</returns>
-        [KeywordMethodConverter(Name = "TIME STAMP WITH TIME ZONE")]
+        [MethodNameConverter(Name = "TIME STAMP WITH TIME ZONE")]
         public static IDataType TimeStampWithTimeZone() => InvalitContext.Throw<IDataType>(nameof(TimeStamp));
 
         /// <summary>
@@ -727,63 +727,63 @@ namespace LambdicSql
         /// TINYBLOB
         /// </summary>
         /// <returns>TINYBLOB</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType TinyBlob() => InvalitContext.Throw<IDataType>(nameof(TinyBlob));
 
         /// <summary>
         /// TINYINT
         /// </summary>
         /// <returns>TINYINT</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType TinyInt() => InvalitContext.Throw<IDataType>(nameof(TinyInt));
 
         /// <summary>
         /// TINYTEXT
         /// </summary>
         /// <returns>TINYTEXT</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType TinyText() => InvalitContext.Throw<IDataType>(nameof(TinyText));
 
         /// <summary>
         /// TSQUERY
         /// </summary>
         /// <returns>TSQUERY</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType TsQuery() => InvalitContext.Throw<IDataType>(nameof(TsQuery));
 
         /// <summary>
         /// TSVECTOR
         /// </summary>
         /// <returns>TSVECTOR</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType TsVector() => InvalitContext.Throw<IDataType>(nameof(TsVector));
 
         /// <summary>
         /// TXID_SNAPSHOT
         /// </summary>
         /// <returns>TXID_SNAPSHOT</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Txid_Snapshot() => InvalitContext.Throw<IDataType>(nameof(Txid_Snapshot));
 
         /// <summary>
         /// UNSIGNED BIG INT
         /// </summary>
         /// <returns>UNSIGNED BIG INT</returns>
-        [KeywordMethodConverter(Name = "UNSIGNED BIG INT")]
+        [MethodNameConverter(Name = "UNSIGNED BIG INT")]
         public static IDataType UnsignedBigInt() => InvalitContext.Throw<IDataType>(nameof(UnsignedBigInt));
 
         /// <summary>
         /// UUID
         /// </summary>
         /// <returns>UUID</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Uuid() => InvalitContext.Throw<IDataType>(nameof(Uuid));
 
         /// <summary>
         /// VARBINARY
         /// </summary>
         /// <returns>VARBINARY</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType VarBinary() => InvalitContext.Throw<IDataType>(nameof(VarBinary));
 
         /// <summary>
@@ -799,7 +799,7 @@ namespace LambdicSql
         /// VARCHAR
         /// </summary>
         /// <returns>VARCHAR</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType VarChar() => InvalitContext.Throw<IDataType>(nameof(VarChar));
 
         /// <summary>
@@ -815,7 +815,7 @@ namespace LambdicSql
         /// VARCHAR2
         /// </summary>
         /// <returns>VARCHAR2</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType VarChar2() => InvalitContext.Throw<IDataType>(nameof(VarChar2));
 
         /// <summary>
@@ -830,35 +830,35 @@ namespace LambdicSql
         /// VARGRAPHIC
         /// </summary>
         /// <returns>VARGRAPHIC</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType VarGraphic() => InvalitContext.Throw<IDataType>(nameof(VarGraphic));
 
         /// <summary>
         /// VARYING CHARACTER
         /// </summary>
         /// <returns>VARYING CHARACTER</returns>
-        [KeywordMethodConverter(Name = "VARYING CHARACTER")]
+        [MethodNameConverter(Name = "VARYING CHARACTER")]
         public static IDataType VaryingCharacter() => InvalitContext.Throw<IDataType>(nameof(VaryingCharacter));
 
         /// <summary>
         /// XML
         /// </summary>
         /// <returns>XML</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Xml() => InvalitContext.Throw<IDataType>(nameof(Xml));
 
         /// <summary>
         /// XMLTYPE
         /// </summary>
         /// <returns>XMLTYPE</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType XmlType() => InvalitContext.Throw<IDataType>(nameof(XmlType));
 
         /// <summary>
         /// YEAR
         /// </summary>
         /// <returns>YEAR</returns>
-        [KeywordMethodConverter]
+        [MethodNameConverter]
         public static IDataType Year() => InvalitContext.Throw<IDataType>(nameof(Year));
     }
 }

@@ -8,7 +8,7 @@ namespace LambdicSql.ConverterServices.SymbolConverters
     /// <summary>
     /// SQL symbol converter attribute for clause.
     /// </summary>
-    public class ClauseConverterAttribute : SymbolConverterMethodAttribute
+    public class ClauseConverterAttribute : MethodConverterAttribute
     {
         /// <summary>
         /// Indent.
