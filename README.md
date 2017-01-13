@@ -1,4 +1,4 @@
-﻿LambdicSql_β 0.16.0
+﻿LambdicSql_β 0.19.0
 ======================
 
 ## Features ...
@@ -234,7 +234,7 @@ public void TestQueryConcat()
     var orderby = Db<DB>.Sql(db =>
          OrderBy(Asc(db.tbl_staff.name)));
 
-    var sql = select.Concat(from).Concat(where).Concat(orderby);
+    var sql = select + from + where + orderby;
 
     //to string and params.
     var info = sql.Build(_connection.GetType());

@@ -479,6 +479,18 @@ new Params()
             var ret = query.Build(typeof(SqlConnection));
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_AddSQP()
+        {
+            var select = Db<DB>.Sql(db => Select(Asterisk()));
+            var from = Db<DB>.Sql(db => From(db.tbl_staff));
+            var query = Db<DB>.Sql(db => select + from);
+            query.Gen(_connection);
+
+        }
+
+        //TODO ★足したものが正しくサブクエリの時に括弧がつくか！
+
         //TODO ExpressionToObjectがテストされるだけのテストを書くこと
         //new 引数あり + 初期化
 

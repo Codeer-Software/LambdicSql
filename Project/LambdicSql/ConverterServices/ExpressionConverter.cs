@@ -17,14 +17,15 @@ namespace LambdicSql.ConverterServices
     /// </summary>
     public class ExpressionConverter
     {
+        //TODO あれ？なんかこの型いらない気がしてきた
         class ConvertedResult
         {
-            internal Type Type { get; }
-            internal Code Text { get; }
+            internal Type Type { get; }//これは+演算で必要なだけで、こんなに引っ張り回すほどのものでもない
+            internal Code Code { get; }
             internal ConvertedResult(Type type, Code text)
             {
                 Type = type;
-                Text = text;
+                Code = text;
             }
         }
 
@@ -55,7 +56,7 @@ namespace LambdicSql.ConverterServices
         public Code Convert(object obj)
         {
             var exp = obj as Expression;
-            if (exp != null) return Convert(exp).Text;
+            if (exp != null) return Convert(exp).Code;
 
             var param = obj as DbParam;
             if (param != null) return new ParameterCode(null, null, param);
@@ -129,7 +130,7 @@ namespace LambdicSql.ConverterServices
             }
             if (array.Expressions.Count == 0) return new ConvertedResult(null, string.Empty);
             var infos = array.Expressions.Select(e => Convert(e)).ToArray();
-            return new ConvertedResult(infos[0].Type, Arguments(infos.Select(e => e.Text).ToArray()));
+            return new ConvertedResult(infos[0].Type, Arguments(infos.Select(e => e.Code).ToArray()));
         }
         
         ConvertedResult Convert(UnaryExpression unary)
@@ -137,10 +138,10 @@ namespace LambdicSql.ConverterServices
             switch (unary.NodeType)
             {
                 case ExpressionType.Not:
-                    return new ConvertedResult(typeof(bool), Convert(unary.Operand).Text.ConcatAround("NOT (", ")"));
+                    return new ConvertedResult(typeof(bool), Convert(unary.Operand).Code.ConcatAround("NOT (", ")"));
                 case ExpressionType.Convert:
                     var ret = Convert(unary.Operand);
-                    var param = ret.Text as ParameterCode;
+                    var param = ret.Code as ParameterCode;
                     if (param != null && param.Value != null && !SupportedTypeSpec.IsSupported(param.Value.GetType()))
                     {
                         var casted = ExpressionToObject.ConvertObject(unary.Type, param.Value);
@@ -170,16 +171,22 @@ namespace LambdicSql.ConverterServices
             var left = Convert(binary.Left);
             var right = Convert(binary.Right);
 
-            if (left.Text.IsEmpty && right.Text.IsEmpty) return new ConvertedResult(null, string.Empty);
-            if (left.Text.IsEmpty) return right;
-            if (right.Text.IsEmpty) return left;
+            //sql + sql
+            if (typeof(Sql).IsAssignableFrom(binary.Type) && binary.NodeType == ExpressionType.Add)
+            {
+                return new ConvertedResult(null, new VCode(left.Code, right.Code));
+            }
+
+            if (left.Code.IsEmpty && right.Code.IsEmpty) return new ConvertedResult(null, string.Empty);
+            if (left.Code.IsEmpty) return right;
+            if (right.Code.IsEmpty) return left;
 
             //for null
             var nullCheck = ResolveNullCheck(left, binary.NodeType, right);
             if (nullCheck != null) return nullCheck;
 
             var nodeType = Convert(left, binary.NodeType, right);
-            return new ConvertedResult(nodeType.Type, new HCode(left.Text.ConcatAround("(", ")"), nodeType.Text.ConcatAround(" ", " "), right.Text.ConcatAround("(", ")")));
+            return new ConvertedResult(nodeType.Type, new HCode(left.Code.ConcatAround("(", ")"), nodeType.Code.ConcatAround(" ", " "), right.Code.ConcatAround("(", ")")));
         }
         
         ConvertedResult Convert(MemberExpression member)
@@ -357,8 +364,8 @@ namespace LambdicSql.ConverterServices
                 default: return null;
             }
 
-            var leftParam = left.Text as ParameterCode;
-            var rightParam = right.Text as ParameterCode;
+            var leftParam = left.Code as ParameterCode;
+            var rightParam = right.Code as ParameterCode;
 
             var leftObj = leftParam != null ? leftParam.Value : null;
             var rightObj = rightParam != null ? rightParam.Value : null;
@@ -366,8 +373,8 @@ namespace LambdicSql.ConverterServices
 
             var isParams = new[] { leftParam != null, rightParam != null };
             var objs = new[] { leftObj, rightObj };
-            var names = new[] { left.Text, right.Text };
-            var targetTexts = new[] { right.Text, left.Text };
+            var names = new[] { left.Code, right.Code };
+            var targetTexts = new[] { right.Code, left.Code };
             for (int i = 0; i < isParams.Length; i++)
             {
                 var obj = objs[i];
