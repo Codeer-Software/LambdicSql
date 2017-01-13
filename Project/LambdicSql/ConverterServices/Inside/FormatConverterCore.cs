@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 using System.Collections.Generic;
 using System;
 using System.Collections;
-using LambdicSql.Inside.CustomCodeParts;
+using LambdicSql.Inside.CodeParts;
 using System.Collections.ObjectModel;
 using LambdicSql.ConverterServices.SymbolConverters;
 using LambdicSql.BuilderServices;

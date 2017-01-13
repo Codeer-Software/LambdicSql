@@ -3,7 +3,7 @@ using LambdicSql.BuilderServices.Inside;
 using LambdicSql.BuilderServices.CodeParts;
 using System.Linq;
 
-namespace LambdicSql.Inside.CustomCodeParts
+namespace LambdicSql.Inside.CodeParts
 {
     class StringFormatCode : Code
     {

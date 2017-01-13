@@ -6,7 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using static LambdicSql.BuilderServices.Inside.PartsFactoryUtils;
 
-namespace LambdicSql.Inside.CustomSymbolConverters
+namespace LambdicSql.Inside.SymbolConverters
 {
     class RecursiveConverterAttribute : MethodConverterAttribute
     {

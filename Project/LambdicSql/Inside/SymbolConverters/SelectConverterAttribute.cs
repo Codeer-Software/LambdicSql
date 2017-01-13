@@ -8,7 +8,7 @@ using System.Linq.Expressions;
 using LambdicSql.ConverterServices.Inside.CodeParts;
 using static LambdicSql.BuilderServices.Inside.PartsFactoryUtils;
 
-namespace LambdicSql.Inside.CustomSymbolConverters
+namespace LambdicSql.Inside.SymbolConverters
 {
     class SelectConverterAttribute : MethodConverterAttribute
     {

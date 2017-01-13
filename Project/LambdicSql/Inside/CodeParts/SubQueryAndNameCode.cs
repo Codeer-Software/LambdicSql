@@ -2,7 +2,7 @@
 using LambdicSql.BuilderServices.Inside;
 using LambdicSql.BuilderServices.CodeParts;
 
-namespace LambdicSql.ConverterServices.Inside.CodeParts
+namespace LambdicSql.Inside.CodeParts
 {
     class SubQueryAndNameCode : Code
     {

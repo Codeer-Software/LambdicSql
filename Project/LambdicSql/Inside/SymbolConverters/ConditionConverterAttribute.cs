@@ -3,7 +3,7 @@ using LambdicSql.ConverterServices;
 using LambdicSql.ConverterServices.SymbolConverters;
 using System.Linq.Expressions;
 
-namespace LambdicSql.Inside.CustomSymbolConverters
+namespace LambdicSql.Inside.SymbolConverters
 {
     class ConditionConverterAttribute : NewConverterAttribute
     {

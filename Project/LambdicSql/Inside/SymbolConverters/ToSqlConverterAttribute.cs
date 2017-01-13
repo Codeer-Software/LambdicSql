@@ -1,11 +1,11 @@
 ﻿using LambdicSql.BuilderServices.CodeParts;
 using LambdicSql.ConverterServices;
 using LambdicSql.ConverterServices.SymbolConverters;
-using LambdicSql.Inside.CustomCodeParts;
+using LambdicSql.Inside.CodeParts;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace LambdicSql.Inside.CustomSymbolConverters
+namespace LambdicSql.Inside.SymbolConverters
 {
     class ToSqlConverterAttribute : MethodConverterAttribute
     {

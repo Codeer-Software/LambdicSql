@@ -2,12 +2,12 @@
 using LambdicSql.ConverterServices;
 using LambdicSql.ConverterServices.SymbolConverters;
 using LambdicSql.ConverterServices.Inside;
+using LambdicSql.Inside.CodeParts;
 using System.Linq;
 using System.Linq.Expressions;
 using static LambdicSql.BuilderServices.Inside.PartsFactoryUtils;
-using LambdicSql.ConverterServices.Inside.CodeParts;
 
-namespace LambdicSql.Inside.CustomSymbolConverters
+namespace LambdicSql.Inside.SymbolConverters
 {
     class FromConverterAttribute : MethodConverterAttribute
     {

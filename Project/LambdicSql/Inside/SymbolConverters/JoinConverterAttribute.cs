@@ -4,7 +4,7 @@ using LambdicSql.ConverterServices.SymbolConverters;
 using LambdicSql.ConverterServices.Inside;
 using System.Linq.Expressions;
 
-namespace LambdicSql.Inside.CustomSymbolConverters
+namespace LambdicSql.Inside.SymbolConverters
 {
     class JoinConverterAttribute : MethodConverterAttribute
     {
