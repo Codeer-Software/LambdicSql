@@ -10,9 +10,6 @@
         /// </summary>
         public string ConnectionTypeFullName { get; set; }
 
-
-        //TODO このあたり、一般にも使えそうなデザインにする
-
         /// <summary>
         /// String addtional operator.
         /// Default is +.
@@ -29,11 +26,6 @@
         /// Does a Recursive clause exist?
         /// </summary>
         public bool ExistRecursiveClause { get; set; }
-
-        /// <summary>
-        /// Does a Recursive clause exist?
-        /// </summary>
-        public bool IsRowsParameterDirectValue { get; set; }
 
         /// <summary>
         /// Separator between Current and Date.

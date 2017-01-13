@@ -69,21 +69,21 @@ namespace LambdicSql
         /// </summary>
         /// <returns>Date of executing SQL.</returns>
         [CurrentDateTimeConverter(Name = "DATE")]
-        public static DateTime CurrentDate() => InvalitContext.Throw<DateTime>(nameof(CurrentDate));
+        public static DateTime Current_Date() => InvalitContext.Throw<DateTime>(nameof(Current_Date));
 
         /// <summary>
         /// CURRENT_TIME function.
         /// </summary>
         /// <returns>Date of executing SQL.</returns>
         [CurrentDateTimeConverter(Name = "TIME")]
-        public static TimeSpan CurrentTime() => InvalitContext.Throw<TimeSpan>(nameof(DateTimeOffset));
+        public static TimeSpan Current_Time() => InvalitContext.Throw<TimeSpan>(nameof(DateTimeOffset));
 
         /// <summary>
         /// CURRENT_TIMESTAMP function.
         /// </summary>
         /// <returns>Date and time of executing SQL.</returns>
         [CurrentDateTimeConverter(Name = "TIMESTAMP")]
-        public static DateTime CurrentTimeStamp() => InvalitContext.Throw<DateTime>(nameof(CurrentTimeStamp));
+        public static DateTime Current_TimeStamp() => InvalitContext.Throw<DateTime>(nameof(Current_TimeStamp));
 
         /// <summary>
         /// DUAL keyword.
