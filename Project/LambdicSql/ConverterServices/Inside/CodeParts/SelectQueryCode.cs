@@ -1,7 +1,7 @@
 ﻿using LambdicSql.BuilderServices;
 using LambdicSql.BuilderServices.CodeParts;
 
-namespace LambdicSql.Inside.CustomCodeParts
+namespace LambdicSql.ConverterServices.Inside.CodeParts
 {
     internal class SelectQueryCode : Code
     {

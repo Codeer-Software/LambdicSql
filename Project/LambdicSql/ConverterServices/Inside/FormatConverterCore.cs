@@ -7,6 +7,7 @@ using System.Collections;
 using LambdicSql.Inside.CustomCodeParts;
 using System.Collections.ObjectModel;
 using LambdicSql.ConverterServices.SymbolConverters;
+using LambdicSql.BuilderServices;
 
 namespace LambdicSql.ConverterServices.Inside
 {

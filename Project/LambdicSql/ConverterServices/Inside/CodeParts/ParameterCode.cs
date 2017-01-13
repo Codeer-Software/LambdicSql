@@ -1,10 +1,9 @@
 ﻿using LambdicSql.BuilderServices;
 using LambdicSql.BuilderServices.Inside;
 using LambdicSql.BuilderServices.CodeParts;
-using LambdicSql.ConverterServices.Inside;
 using System;
 
-namespace LambdicSql.Inside.CustomCodeParts
+namespace LambdicSql.ConverterServices.Inside.CodeParts
 {
     class ParameterCode : Code
     {

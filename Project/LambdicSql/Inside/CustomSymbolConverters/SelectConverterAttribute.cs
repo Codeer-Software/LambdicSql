@@ -2,10 +2,10 @@
 using LambdicSql.ConverterServices;
 using LambdicSql.ConverterServices.SymbolConverters;
 using LambdicSql.ConverterServices.Inside;
-using LambdicSql.Inside.CustomCodeParts;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using LambdicSql.ConverterServices.Inside.CodeParts;
 using static LambdicSql.BuilderServices.Inside.PartsFactoryUtils;
 
 namespace LambdicSql.Inside.CustomSymbolConverters

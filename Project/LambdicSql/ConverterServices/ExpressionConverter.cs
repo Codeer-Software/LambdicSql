@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using static LambdicSql.BuilderServices.Inside.PartsFactoryUtils;
+using LambdicSql.ConverterServices.Inside.CodeParts;
 
 namespace LambdicSql.ConverterServices
 {

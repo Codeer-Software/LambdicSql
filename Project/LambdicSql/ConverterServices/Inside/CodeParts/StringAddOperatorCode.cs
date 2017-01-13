@@ -2,7 +2,7 @@
 using LambdicSql.BuilderServices.Inside;
 using LambdicSql.BuilderServices.CodeParts;
 
-namespace LambdicSql.Inside.CustomCodeParts
+namespace LambdicSql.ConverterServices.Inside.CodeParts
 {
     class StringAddOperatorCode : Code
     {
