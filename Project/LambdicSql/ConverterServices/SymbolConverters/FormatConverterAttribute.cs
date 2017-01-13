@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System;
 using System.Collections;
 using LambdicSql.Inside.CustomCodeParts;
+using System.Collections.ObjectModel;
 
 namespace LambdicSql.ConverterServices.SymbolConverters
 {
@@ -35,20 +36,75 @@ namespace LambdicSql.ConverterServices.SymbolConverters
     /// </summary>
     public class FormatConverterAttribute : SymbolConverterMethodAttribute
     {
+        FormatConverterCore _core = new FormatConverterCore();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public FormatDirection FormatDirection { get { return _core.FormatDirection; } set { _core.FormatDirection = value; } }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Format { get { return _core.Format; } set { _core.Format = value; } }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public int Indent { get { return _core.Indent; } set { _core.Indent = value; } }
+
+        /// <summary>
+        /// Convert expression to code.
+        /// </summary>
+        /// <param name="expression">Expression.</param>
+        /// <param name="converter">Expression converter.</param>
+        /// <returns>Parts.</returns>
+        public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
+            => _core.Convert(expression.Arguments, converter);
+    }
+
+    /// <summary>
+    /// SQL symbol converter attribute for clause.
+    /// </summary>
+    public class FormatConverterNewAttribute : SymbolConverterNewAttribute
+    {
+        FormatConverterCore _core = new FormatConverterCore();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public FormatDirection FormatDirection { get { return _core.FormatDirection; } set { _core.FormatDirection = value; } }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Format { get { return _core.Format; } set { _core.Format = value; } }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public int Indent { get { return _core.Indent; } set { _core.Indent = value; } }
+
+        /// <summary>
+        /// Convert expression to code.
+        /// </summary>
+        /// <param name="expression">Expression.</param>
+        /// <param name="converter">Expression converter.</param>
+        /// <returns>Parts.</returns>
+        public override Code Convert(NewExpression expression, ExpressionConverter converter)
+            => _core.Convert(expression.Arguments, converter);
+    }
+
+    class FormatConverterCore
+    {
         string _format;
         int _firstLineElemetCount = -1;
         List<Code> _partsSrc;
         Dictionary<int, ArgumentInfo> _parameterMappingInfo;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public FormatDirection FormatDirection { get; set; } = FormatDirection.Horizontal;
+        internal FormatDirection FormatDirection { get; set; } = FormatDirection.Horizontal;
 
-        /// <summary>
-        /// Format.
-        /// </summary>
-        public string Format
+        internal string Format
         {
             get
             {
@@ -61,20 +117,12 @@ namespace LambdicSql.ConverterServices.SymbolConverters
             }
         }
 
-        /// <summary>
-        /// Indent.
-        /// </summary>
-        public int Indent { get; set; }
+        internal int Indent { get; set; }
 
-        /// <summary>
-        /// Convert expression to code.
-        /// </summary>
-        /// <param name="expression">Expression.</param>
-        /// <param name="converter">Expression converter.</param>
-        /// <returns>Parts.</returns>
-        public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public Code Convert(ReadOnlyCollection<Expression> arguments, ExpressionConverter converter)
         {
-            var array = ConvertByFormat(expression, converter);
+            //ReadOnlyCollection<Expression>
+            var array = ConvertByFormat(arguments, converter);
             if (FormatDirection == FormatDirection.Vertical)
             {
                 var first = new HCode(array.Take(_firstLineElemetCount)) { EnableChangeLine = false };
@@ -91,12 +139,12 @@ namespace LambdicSql.ConverterServices.SymbolConverters
             }
         }
         
-        internal Code[] ConvertByFormat(MethodCallExpression expression, ExpressionConverter converter)
+        Code[] ConvertByFormat(ReadOnlyCollection<Expression> arguments, ExpressionConverter converter)
         {
             var array = _partsSrc.Select(e=>new Code[] { e }).ToArray();
             foreach (var e in _parameterMappingInfo)
             {
-                var argExp = expression.Arguments[e.Key];
+                var argExp = arguments[e.Key];
 
                 Code[] code = null;
                 if (e.Value.IsArrayExpand)
@@ -131,7 +179,15 @@ namespace LambdicSql.ConverterServices.SymbolConverters
                 }
                 else
                 {
-                    var argCore = converter.Convert(argExp);
+                    Code argCore = null;
+                    if (e.Value.IsDefineName)
+                    {
+                        argCore = (string)converter.ToObject(argExp);
+                    }
+                    else
+                    {
+                        argCore = converter.Convert(argExp);
+                    }
                     if (!string.IsNullOrEmpty(e.Value.Separator))
                     {
                         code = new Code[] { new HCode(argCore, e.Value.Separator) { EnableChangeLine = false } };
@@ -194,6 +250,7 @@ namespace LambdicSql.ConverterServices.SymbolConverters
             internal string ArrayExpandSeparator { get; set; }
             internal bool IsDirectValue { get; set; }
             internal bool IsColumnOnly { get; set; }
+            internal bool IsDefineName { get; set; }
         }
 
         void AnalizeArg(string arg)
@@ -219,6 +276,13 @@ namespace LambdicSql.ConverterServices.SymbolConverters
             {
                 arg = arg.Replace("$", string.Empty);
                 info.IsDirectValue = true;
+            }
+
+            //define name.
+            if (arg.IndexOf('!') != -1)
+            {
+                arg = arg.Replace("!", string.Empty);
+                info.IsDefineName = true;
             }
 
             //column only.

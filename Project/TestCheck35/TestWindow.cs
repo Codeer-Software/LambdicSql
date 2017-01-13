@@ -454,8 +454,8 @@ FROM tbl_remuneration");
 			tbl_remuneration.payment_date
 		ORDER BY
 			tbl_remuneration.money ASC
-		ROWS BETWEEN @p_0 PRECEDING AND @p_1 FOLLOWING) AS Val
-FROM tbl_remuneration", (long)1, (long)5);
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+FROM tbl_remuneration");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -864,9 +864,7 @@ FROM tbl_remuneration");
                 Select(new SelectData()
                 {
                     Val = Rank().
-                            Over(null,
-                                OrderBy(Asc(db.tbl_remuneration.money)),
-                                null)
+                            Over(OrderBy(Asc(db.tbl_remuneration.money)))
                 }).
                 From(db.tbl_remuneration));
 
@@ -894,9 +892,7 @@ FROM tbl_remuneration");
                 Select(new SelectData()
                 {
                     Val = Dense_Rank().
-                            Over(null,
-                                OrderBy(Asc(db.tbl_remuneration.money)),
-                                null)
+                            Over(OrderBy(Asc(db.tbl_remuneration.money)))
                 }).
                 From(db.tbl_remuneration));
 
@@ -925,9 +921,7 @@ FROM tbl_remuneration");
                 Select(new SelectData
                 {
                     Val = (decimal)Percent_Rank().
-                            Over(null,
-                                OrderBy(Asc(db.tbl_remuneration.money)),
-                                null)
+                            Over(OrderBy(Asc(db.tbl_remuneration.money)))
                 }).
                 From(db.tbl_remuneration));
 
@@ -955,11 +949,11 @@ FROM tbl_remuneration");
                 Select(new SelectData()
                 {
                     Val = (decimal)Cume_Dist().
-                            Over(null,
-                                OrderBy(Asc(db.tbl_remuneration.money)),
-                                null)
+                            Over(OrderBy(Asc(db.tbl_remuneration.money)))
                 }).
                 From(db.tbl_remuneration));
+
+            query.Gen(_connection);
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -986,9 +980,7 @@ FROM tbl_remuneration");
                 Select(new SelectData()
                 {
                     Val = Ntile(2).
-                            Over(null,
-                                OrderBy(Asc(db.tbl_remuneration.money)),
-                                null)
+                            Over(OrderBy(Asc(db.tbl_remuneration.money)))
                 }).
                 From(db.tbl_remuneration));
 
@@ -1018,9 +1010,7 @@ FROM tbl_remuneration", 2);
                 Select(new SelectData()
                 {
                     Val = Ntile(exp).
-                            Over(null,
-                                OrderBy(Asc(db.tbl_remuneration.money)),
-                                null)
+                            Over(OrderBy(Asc(db.tbl_remuneration.money)))
                 }).
                 From(db.tbl_remuneration));
 
@@ -1048,8 +1038,7 @@ FROM tbl_remuneration", 2);
                 Select(new SelectData()
                 {
                     Val = Nth_Value(db.tbl_remuneration.money, 2).
-                            Over(null,
-                                OrderBy(Asc(db.tbl_remuneration.money)),
+                            Over(OrderBy(Asc(db.tbl_remuneration.money)),
                                 Rows(1, 5))
                 }).
                 From(db.tbl_remuneration));
@@ -1075,11 +1064,12 @@ FROM tbl_remuneration", 2);
                 Select(new SelectData()
                 {
                     Val = Nth_Value(2, (long)db.tbl_remuneration.money).
-                            Over(null,
-                                OrderBy(Asc(db.tbl_remuneration.money)),
+                            Over(OrderBy(Asc(db.tbl_remuneration.money)),
                                 Rows(1, 5))
                 }).
                 From(db.tbl_remuneration));
+
+            query.Gen(_connection);
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -1089,8 +1079,8 @@ FROM tbl_remuneration", 2);
 	OVER(
 		ORDER BY
 			tbl_remuneration.money ASC
-		ROWS BETWEEN :p_1 PRECEDING AND :p_2 FOLLOWING) AS Val
-FROM tbl_remuneration", 2, (long)1, (long)5);
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+FROM tbl_remuneration", 2);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -1108,8 +1098,7 @@ FROM tbl_remuneration", 2, (long)1, (long)5);
                 Select(new SelectData()
                 {
                     Val = Nth_Value(exp1, exp2).
-                            Over(null,
-                                OrderBy(Asc(db.tbl_remuneration.money)),
+                            Over(OrderBy(Asc(db.tbl_remuneration.money)),
                                 Rows(1, 5))
                 }).
                 From(db.tbl_remuneration));
@@ -1139,9 +1128,7 @@ FROM tbl_remuneration", (long)2);
                 Select(new SelectData()
                 {
                     Val = Lag(db.tbl_remuneration.money).
-                            Over(null,
-                                OrderBy(Asc(db.tbl_remuneration.money)),
-                                null)
+                            Over(OrderBy(Asc(db.tbl_remuneration.money)))
                 }).
                 From(db.tbl_remuneration));
 
@@ -1168,9 +1155,7 @@ FROM tbl_remuneration");
                 Select(new SelectData()
                 {
                     Val = Lag(3).
-                            Over(null,
-                                OrderBy(Asc(db.tbl_remuneration.money)),
-                                null)
+                            Over(OrderBy(Asc(db.tbl_remuneration.money)))
                 }).
                 From(db.tbl_remuneration));
 
@@ -1198,9 +1183,7 @@ FROM tbl_remuneration", 3);
                 Select(new SelectData()
                 {
                     Val = Lag(exp).
-                            Over(null,
-                                OrderBy(Asc(db.tbl_remuneration.money)),
-                                null)
+                            Over(OrderBy(Asc(db.tbl_remuneration.money)))
                 }).
                 From(db.tbl_remuneration));
 
@@ -1229,9 +1212,7 @@ FROM tbl_remuneration");
                 Select(new SelectData()
                 {
                     Val = Lag(db.tbl_remuneration.money, 2).
-                            Over(null,
-                                OrderBy(Asc(db.tbl_remuneration.money)),
-                                null)
+                            Over(OrderBy(Asc(db.tbl_remuneration.money)))
                 }).
                 From(db.tbl_remuneration));
 
@@ -1261,9 +1242,7 @@ FROM tbl_remuneration", 2);
                 Select(new SelectData()
                 {
                     Val = Lag(3, db.tbl_remuneration.id).
-                            Over(null,
-                                OrderBy(Asc(db.tbl_remuneration.money)),
-                                null)
+                            Over(OrderBy(Asc(db.tbl_remuneration.money)))
                 }).
                 From(db.tbl_remuneration));
 
@@ -1293,9 +1272,7 @@ FROM tbl_remuneration", 3);
                 Select(new SelectData()
                 {
                     Val = Lag(exp1, exp2).
-                            Over(null,
-                                OrderBy(Asc(db.tbl_remuneration.money)),
-                                null)
+                            Over(OrderBy(Asc(db.tbl_remuneration.money)))
                 }).
                 From(db.tbl_remuneration));
 
@@ -1325,9 +1302,7 @@ FROM tbl_remuneration", 2);
                 Select(new SelectData()
                 {
                     Val = Lag(db.tbl_remuneration.money, 2, 100).
-                            Over(null,
-                                OrderBy(Asc(db.tbl_remuneration.money)),
-                                null)
+                            Over(OrderBy(Asc(db.tbl_remuneration.money)))
                 }).
                 From(db.tbl_remuneration));
 
@@ -1356,9 +1331,7 @@ FROM tbl_remuneration", 2, (decimal)100);
                 Select(new SelectData()
                 {
                     Val = Lag(2000, db.tbl_remuneration.id, db.tbl_remuneration.id).
-                            Over(null,
-                                OrderBy(Asc(db.tbl_remuneration.money)),
-                                null)
+                            Over(OrderBy(Asc(db.tbl_remuneration.money)))
                 }).
                 From(db.tbl_remuneration));
 
@@ -1390,9 +1363,7 @@ FROM tbl_remuneration", 2000);
                 Select(new SelectData()
                 {
                     Val = Lag(exp1.Body, exp2, exp3).
-                            Over(null,
-                                OrderBy(Asc(db.tbl_remuneration.money)),
-                                null)
+                            Over(OrderBy(Asc(db.tbl_remuneration.money)))
                 }).
                 From(db.tbl_remuneration));
 
@@ -1419,9 +1390,7 @@ FROM tbl_remuneration", 2, 100);
                 Select(new SelectData()
                 {
                     Val = Row_Number().
-                            Over(null,
-                                OrderBy(Asc(db.tbl_remuneration.money)),
-                                null)
+                            Over(OrderBy(Asc(db.tbl_remuneration.money)))
                 }).
                 From(db.tbl_remuneration));
 
@@ -1874,6 +1843,8 @@ FROM tbl_remuneration");
                 }).
                 From(db.tbl_remuneration));
 
+            query.Gen(_connection);
+
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
@@ -1882,8 +1853,8 @@ FROM tbl_remuneration");
 	OVER(
 		PARTITION BY
 			tbl_remuneration.payment_date
-		ROWS BETWEEN @p_0 PRECEDING AND @p_1 FOLLOWING) AS Val
-FROM tbl_remuneration", (long)1, (long)5);
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+FROM tbl_remuneration");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -1910,8 +1881,8 @@ FROM tbl_remuneration", (long)1, (long)5);
 	OVER(
 		PARTITION BY
 			tbl_remuneration.payment_date
-		ROWS BETWEEN @p_0 PRECEDING AND @p_1 FOLLOWING) AS Val
-FROM tbl_remuneration", (long)1, (long)5);
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+FROM tbl_remuneration");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -2119,8 +2090,8 @@ FROM tbl_remuneration");
 @"SELECT
 	COUNT(tbl_remuneration.money)
 	OVER(
-		ROWS BETWEEN @p_0 PRECEDING AND @p_1 FOLLOWING) AS Val
-FROM tbl_remuneration", (long)1, (long)5);
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+FROM tbl_remuneration");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -2143,8 +2114,8 @@ FROM tbl_remuneration", (long)1, (long)5);
 @"SELECT
 	COUNT(tbl_remuneration.money)
 	OVER(
-		ROWS BETWEEN @p_0 PRECEDING AND @p_1 FOLLOWING) AS Val
-FROM tbl_remuneration", (long)1, (long)5);
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+FROM tbl_remuneration");
         }
     }
 }

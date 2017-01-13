@@ -16,7 +16,6 @@ namespace LambdicSql.Inside.CustomCodeParts
         string _front = string.Empty;
         string _back = string.Empty;
         bool _displayValue;
-        bool _isAllowString;
 
         internal ParameterCode(object value)
         {
@@ -32,7 +31,7 @@ namespace LambdicSql.Inside.CustomCodeParts
             _param = param;
         }
 
-        ParameterCode(string name, MetaId metaId, DbParam param, string front, string back, bool displayValue, bool isAllowString)
+        ParameterCode(string name, MetaId metaId, DbParam param, string front, string back, bool displayValue)
         {
             Name = name;
             MetaId = metaId;
@@ -40,7 +39,6 @@ namespace LambdicSql.Inside.CustomCodeParts
             _front = front;
             _back = back;
             _displayValue = displayValue;
-            _isAllowString = isAllowString;
         }
 
         public override bool IsEmpty => false;
@@ -49,15 +47,15 @@ namespace LambdicSql.Inside.CustomCodeParts
 
         public override string ToString(bool isTopLevel, int indent, BuildingContext context) => PartsUtils.GetIndent(indent) + _front + GetDisplayText(context) + _back;
 
-        public override Code ConcatAround(string front, string back) => new ParameterCode(Name, MetaId, _param, front + _front, _back + back, _displayValue, _isAllowString);
+        public override Code ConcatAround(string front, string back) => new ParameterCode(Name, MetaId, _param, front + _front, _back + back, _displayValue);
 
-        public override Code ConcatToFront(string front) => new ParameterCode(Name, MetaId, _param, front + _front, _back, _displayValue, _isAllowString);
+        public override Code ConcatToFront(string front) => new ParameterCode(Name, MetaId, _param, front + _front, _back, _displayValue);
 
-        public override Code ConcatToBack(string back) => new ParameterCode(Name, MetaId, _param, _front, _back + back, _displayValue, _isAllowString);
+        public override Code ConcatToBack(string back) => new ParameterCode(Name, MetaId, _param, _front, _back + back, _displayValue);
 
         public override Code Customize(ICodeCustomizer customizer) => customizer.Custom(this);
 
-        internal Code ToDisplayValue(bool isAllowString) => new ParameterCode(Name, MetaId, _param, _front, _back, true, isAllowString);
+        internal Code ToDisplayValue() => new ParameterCode(Name, MetaId, _param, _front, _back, true);
 
         string GetDisplayText(BuildingContext context)
         {
@@ -77,7 +75,6 @@ namespace LambdicSql.Inside.CustomCodeParts
                 }
                 if (type == typeof(string))
                 {
-                    if (!_isAllowString) throw new NotSupportedException();
                     return "'" + Value + "'";
                 }
                 if (type == typeof(DateTime?))

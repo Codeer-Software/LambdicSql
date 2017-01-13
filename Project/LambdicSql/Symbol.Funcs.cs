@@ -331,7 +331,7 @@ namespace LambdicSql
         /// Constructor.
         /// </summary>
         /// <param name="preceding">Preceding row count.</param>
-        [RowsConverter]
+        [FormatConverter(Format = "ROWS [$0] PRECEDING")]
         public static IRows Rows(long preceding) => InvalitContext.Throw<IRows>(nameof(Rows));
 
         /// <summary>
@@ -339,16 +339,16 @@ namespace LambdicSql
         /// </summary>
         /// <param name="preceding">Preceding row count.</param>
         /// <param name="following">Following row count.</param>
-        [RowsConverter]
+        [FormatConverter(Format = "ROWS BETWEEN [$0] PRECEDING AND [$1] FOLLOWING")]
         public static IRows Rows(long preceding, long following) => InvalitContext.Throw<IRows>(nameof(Rows));
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="columns">Specify column or expression.</param>
-        [PartitionByConverter]
+        [FormatConverter(Format = "PARTITION BY|[<,>0]", FormatDirection = FormatDirection.Vertical)]
         public static IPartitionBy PartitionBy(params object[] columns) => InvalitContext.Throw<IPartitionBy>(nameof(PartitionBy));
-
+        
         /// <summary>
         /// OVER function.
         /// </summary>
@@ -358,7 +358,7 @@ namespace LambdicSql
         /// <param name="orderBy">ORDER BY keyword.</param>
         /// <param name="rows">ROWS keyword.</param>
         /// <returns>It is the result of Window function.</returns>
-        [OverConverter]
+        [FormatConverter(Format = "OVER(|[1][2][3])", FormatDirection = FormatDirection.Vertical)]
         public static T Over<T>(this T before, IPartitionBy partitionBy, IOrderBy orderBy, IRows rows) => InvalitContext.Throw<T>(nameof(Over));
 
         /// <summary>
@@ -369,7 +369,7 @@ namespace LambdicSql
         /// <param name="partitionBy">PARTITION BY keyword.</param>
         /// <param name="orderBy">ORDER BY keyword.</param>
         /// <returns>It is the result of Window function.</returns>
-        [OverConverter]
+        [FormatConverter(Format = "OVER(|[1][2])", FormatDirection = FormatDirection.Vertical)]
         public static T Over<T>(this T before, IPartitionBy partitionBy, IOrderBy orderBy) => InvalitContext.Throw<T>(nameof(Over));
 
         /// <summary>
@@ -380,7 +380,7 @@ namespace LambdicSql
         /// <param name="partitionBy">PARTITION BY keyword.</param>
         /// <param name="rows">ROWS keyword.</param>
         /// <returns>It is the result of Window function.</returns>
-        [OverConverter]
+        [FormatConverter(Format = "OVER(|[1][2])", FormatDirection = FormatDirection.Vertical)]
         public static T Over<T>(this T before, IPartitionBy partitionBy, IRows rows) => InvalitContext.Throw<T>(nameof(Over));
 
         /// <summary>
@@ -391,7 +391,7 @@ namespace LambdicSql
         /// <param name="orderBy">ORDER BY keyword.</param>
         /// <param name="rows">Getting row order.</param>
         /// <returns>It is the result of Window function.</returns>
-        [OverConverter]
+        [FormatConverter(Format = "OVER(|[1][2])", FormatDirection = FormatDirection.Vertical)]
         public static T Over<T>(this T before, IOrderBy orderBy, IRows rows) => InvalitContext.Throw<T>(nameof(Over));
 
         /// <summary>
@@ -401,7 +401,7 @@ namespace LambdicSql
         /// <param name="before">It is an before expression in the Windwo function.</param>
         /// <param name="partitionBy">PARTITION BY keyword.</param>
         /// <returns>It is the result of Window function.</returns>
-        [OverConverter]
+        [FormatConverter(Format = "OVER(|[1])", FormatDirection = FormatDirection.Vertical)]
         public static T Over<T>(this T before, IPartitionBy partitionBy) => InvalitContext.Throw<T>(nameof(Over));
 
         /// <summary>
@@ -411,7 +411,7 @@ namespace LambdicSql
         /// <param name="before">It is an before expression in the Windwo function.</param>
         /// <param name="orderBy">ORDER BY keyword.</param>
         /// <returns>It is the result of Window function.</returns>
-        [OverConverter]
+        [FormatConverter(Format = "OVER(|[1])", FormatDirection = FormatDirection.Vertical)]
         public static T Over<T>(this T before, IOrderBy orderBy) => InvalitContext.Throw<T>(nameof(Over));
 
         /// <summary>
@@ -421,7 +421,7 @@ namespace LambdicSql
         /// <param name="before">It is an before expression in the Windwo function.</param>
         /// <param name="rows">Getting row order.</param>
         /// <returns>It is the result of Window function.</returns>
-        [OverConverter]
+        [FormatConverter(Format = "OVER(|[1])", FormatDirection = FormatDirection.Vertical)]
         public static T Over<T>(this T before, IRows rows) => InvalitContext.Throw<T>(nameof(Over));
     }
 }

@@ -863,9 +863,9 @@ namespace LambdicSql
         /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
         /// <param name="assigns">Assignment in the SET clause.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [SetConverter]
+        [FormatConverter(Format = "SET |[<,>0]", FormatDirection = FormatDirection.Vertical)]
         public static ClauseChain<TSelected> Set<TSelected>(params Assign[] assigns) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Set));
-
+        
         /// <summary>
         /// SET clause.
         /// </summary>
@@ -873,7 +873,7 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="assigns">Assignment in the SET clause.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [SetConverter]
+        [FormatConverter(Format = "SET |[<,>1]", FormatDirection = FormatDirection.Vertical)]
         public static ClauseChain<TSelected> Set<TSelected>(this ClauseChain<TSelected> before, params Assign[] assigns) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Set));
 
         /// <summary>
@@ -889,7 +889,7 @@ namespace LambdicSql
         /// <param name="table">Table for INSERT.</param>
         /// <param name="columns">It is a column that performs INSERT.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [InsertIntoConverter]
+        [FormatConverter(Format = "INSERT INTO [0](|[#<, >1])")]
         public static ClauseChain<Non> InsertInto(object table, params object[] columns) => InvalitContext.Throw<ClauseChain<Non>>(nameof(InsertInto));
 
         //TODO test
@@ -899,7 +899,7 @@ namespace LambdicSql
         /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
         /// <param name="values">It is the value to be Inserted.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [ValuesConverter]
+        [FuncConverter(Indent = 1)]
         public static ClauseChain<TSelected> Values<TSelected>(params object[] values) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Values));
 
         /// <summary>
@@ -909,7 +909,7 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="values">It is the value to be Inserted.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [ValuesConverter]
+        [FuncConverter(Indent = 1)]
         public static ClauseChain<TSelected> Values<TSelected>(this ClauseChain<TSelected> before, params object[] values) => InvalitContext.Throw<ClauseChain<TSelected>>(nameof(Values));
 
         /// <summary>
@@ -1032,14 +1032,14 @@ namespace LambdicSql
         /// CREATE TABLE clause.
         /// </summary>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [CreateTableConverter(Name = "CREATE TABLE")]
+        [FormatConverter(Format = "CREATE TABLE [0](|[#$<,>1])", FormatDirection = FormatDirection.Vertical)]
         public static ClauseChain<Non> CreateTable(object table, params ITableDefinition[] designer) => InvalitContext.Throw<ClauseChain<Non>>(nameof(CreateTable));
-        
+
         /// <summary>
         /// CREATE TABLE clause.
         /// </summary>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [CreateTableConverter(Name = "CREATE TABLE IF NOT EXISTS")]
+        [FormatConverter(Format = "CREATE TABLE IF NOT EXISTS [0](|[#$<,>1])", FormatDirection = FormatDirection.Vertical)]
         public static ClauseChain<Non> CreateTableIfNotExists(object table, params ITableDefinition[] designer) => InvalitContext.Throw<ClauseChain<Non>>(nameof(CreateTable));
         
         /// <summary>
@@ -1055,7 +1055,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="name">Constraint name.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [SpecialNameClauseConverter(Name = "CONSTRAINT")]
+        [FormatConverter(Format = "CONSTRAINT [!0]")]
         public static IConstraint Constraint(string name) => InvalitContext.Throw<IConstraint>(nameof(Constraint));
 
         /// <summary>
@@ -1196,7 +1196,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="name">DataBase name.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [SpecialNameClauseConverter(Name = "CREATE DATABASE")]
+        [FormatConverter(Format = "CREATE DATABASE [!0]")]
         public static ClauseChain<Non> CreateDataBase(string name) => InvalitContext.Throw<ClauseChain<Non>>(nameof(CreateDataBase));
 
         /// <summary>
@@ -1204,7 +1204,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="name">DataBase name.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [SpecialNameClauseConverter(Name = "DROP DATABASE")]
+        [FormatConverter(Format = "DROP DATABASE [!0]")]
         public static ClauseChain<Non> DropDataBase(string name) => InvalitContext.Throw<ClauseChain<Non>>(nameof(CreateDataBase));
 
 

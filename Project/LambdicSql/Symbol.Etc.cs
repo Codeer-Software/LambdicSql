@@ -55,7 +55,7 @@ namespace LambdicSql
         /// Constructor.
         /// </summary>
         /// <param name="count">cout.</param>
-        [TopConverter]
+        [FormatConverter(Format = "TOP [$0]")]
         public static ITop Top(long count) => InvalitContext.Throw<ITop>(nameof(Top));
 
         /// <summary>

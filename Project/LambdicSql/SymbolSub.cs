@@ -54,10 +54,15 @@ namespace LambdicSql
     public interface ISortedBy { }
 
     /// <summary>
+    /// 
+    /// </summary>
+    public interface IOverArgument { }
+
+    /// <summary>
     /// ORDERBY keyword.
     /// Use it with the OVER function.
     /// </summary>
-    public interface IOrderBy { }
+    public interface IOrderBy : IOverArgument { }
 
     /// <summary>
     /// ORDERBY keyword.
@@ -72,13 +77,13 @@ namespace LambdicSql
     /// PARTITION BY keyword.
     /// Use it with the OVER function.
     /// </summary>
-    public interface IPartitionBy { }
+    public interface IPartitionBy : IOverArgument { }
 
     /// <summary>
     /// Rows keyword.
     /// Use it with the OVER function.
     /// </summary>
-    public interface IRows { }
+    public interface IRows : IOverArgument { }
 
     /// <summary>
     /// Aggregation predicate.
@@ -180,7 +185,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="rhs">Rvalue</param>
         /// <param name="lhs">Lvalue</param>
-        [AssignConverter]
+        [FormatConverterNew(Format = "[#0] = [1]")]
         public Assign(object rhs, object lhs) { InvalitContext.Throw("new " + nameof(Assign)); }
     }
 
@@ -288,7 +293,7 @@ namespace LambdicSql
         /// <param name="column">Column.</param>
         /// <param name="type">Type.</param>
         /// <param name="constraints">Constraints.</param>
-        [ColumnDefineConverter]
+        [FormatConverterNew(Format ="[0] [1] [< >2]")]
         public Column(object column, IDataType type, params IConstraint[] constraints) { InvalitContext.Throw("new " + nameof(Column)); }
     }
 }
