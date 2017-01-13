@@ -9,7 +9,7 @@ namespace LambdicSql.ConverterServices.SymbolConverters
     /// <summary>
     /// SQL symbol converter attribute for SQL Function.
     /// </summary>
-    public class FuncConverterAttribute : MethodConverterAttribute
+    public class FuncStyleConverterAttribute : MethodConverterAttribute
     {
         /// <summary>
         /// Indent.
@@ -22,16 +22,6 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         public string Name { get; set; }
 
         /// <summary>
-        /// Separator between arguments.By default it uses ", ".
-        /// </summary>
-        public string Separator { get; set; } = ", ";
-
-        /// <summary>
-        /// It is the predicate attached at the end. By default it is empty.
-        /// </summary>
-        public string AfterPredicate { get; set; }
-
-        /// <summary>
         /// Convert expression to code.
         /// </summary>
         /// <param name="expression">Expression.</param>
@@ -39,13 +29,12 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         /// <returns>Parts.</returns>
         public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
+            if (string.IsNullOrEmpty(Name)) Name = expression.Method.Name.ToUpper();
+
             var index = expression.SkipMethodChain(0);
             var args = expression.Arguments.Skip(index).Select(e => converter.Convert(e)).ToArray();
-            var name = string.IsNullOrEmpty(Name) ? expression.Method.Name.ToUpper() : Name;
-
-            var hArgs = new HCode(args) { Separator = Separator }.ConcatToBack(")");
-            var code = new HCode(Line(name, "("), hArgs) { IsFunctional = true, Indent = Indent };
-            return string.IsNullOrEmpty(AfterPredicate) ? code : LineSpace(code, AfterPredicate);
+            var hArgs = new HCode(args) { Separator = ", " }.ConcatToBack(")");
+            return new HCode(Line(Name, "("), hArgs) { IsFunctional = true, Indent = Indent };
         }
     }
 }

@@ -18,7 +18,7 @@ namespace LambdicSql
         /// <typeparam name="T">Type represented by expression.</typeparam>
         /// <param name="column">The column or expression that is function target.</param>
         /// <returns>Total.</returns>
-        [FuncConverter(Separator =" ")]
+        [FuncStyleConverter]
         public static T Sum<T>(T column) => InvalitContext.Throw<T>(nameof(Sum));
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace LambdicSql
         /// <param name="aggregatePredicate">Specify All or Distinct.</param>
         /// <param name="column">The column or expression that is function target.</param>
         /// <returns>Total.</returns>
-        [FuncConverter(Separator = " ")]
+        [MethodFormatConverter(Format = "SUM(|[0] [1])")]
         public static T Sum<T>(IAggregatePredicate aggregatePredicate, T column) => InvalitContext.Throw<T>(nameof(Sum));
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="column">The column or expression that is function target.</param>
         /// <returns>Count.</returns>
-        [FuncConverter(Separator = " ")]
+        [FuncStyleConverter]
         public static int Count(object column) => InvalitContext.Throw<int>(nameof(Count));
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="asterisk">*</param>
         /// <returns>Count.</returns>
-        [FuncConverter(Separator = " ")]
+        [FuncStyleConverter]
         public static int Count(IAsterisk asterisk) => InvalitContext.Throw<int>(nameof(Count));
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace LambdicSql
         /// <param name="aggregatePredicate">Specify All or Distinct.</param>
         /// <param name="column">The column or expression that is function target.</param>
         /// <returns>Count.</returns>
-        [FuncConverter(Separator = " ")]
+        [MethodFormatConverter(Format = "COUNT(|[0] [1])")]
         public static int Count(IAggregatePredicate aggregatePredicate, object column) => InvalitContext.Throw<int>(nameof(Count));
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace LambdicSql
         /// <param name="aggregatePredicate">Specify All or Distinct.</param>
         /// <param name="asterisk">*</param>
         /// <returns>Count.</returns>
-        [FuncConverter(Separator = " ")]
+        [MethodFormatConverter(Format = "COUNT(|[0] [1])")]
         public static int Count(IAggregatePredicate aggregatePredicate, IAsterisk asterisk) => InvalitContext.Throw<int>(nameof(Count));
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="column">The column or expression that is function target.</param>
         /// <returns>Average.</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static double Avg(object column) => InvalitContext.Throw<double>(nameof(Avg));
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace LambdicSql
         /// <typeparam name="T">Type represented by expression.</typeparam>
         /// <param name="column">The column or expression that is function target.</param>
         /// <returns>Minimum.</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static T Min<T>(T column) => InvalitContext.Throw<T>(nameof(Min));
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace LambdicSql
         /// <typeparam name="T">Type represented by expression.</typeparam>
         /// <param name="column">The column or expression that is function target.</param>
         /// <returns>Maximum.</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static T Max<T>(T column) => InvalitContext.Throw<T>(nameof(Max));
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace LambdicSql
         /// <typeparam name="T">Type represented by expression.</typeparam>
         /// <param name="column">The column or expression that is function target.</param>
         /// <returns>Absolute value.</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static T Abs<T>(T column) => InvalitContext.Throw<T>(nameof(Abs));
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace LambdicSql
         /// <param name="target">Numeric expression to divide.</param>
         /// <param name="div">A numeric expression that divides the dividend.</param>
         /// <returns>Surplus.</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static T Mod<T>(T target, object div) => InvalitContext.Throw<T>(nameof(Mod));
 
         /// <summary>
@@ -117,7 +117,7 @@ namespace LambdicSql
         /// <param name="target">Numeric expression to round.</param>
         /// <param name="digit">Is the precision to which it is to be rounded.</param>
         /// <returns>Rounded result.</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static T Round<T>(T target, object digit) => InvalitContext.Throw<T>(nameof(Round));
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="targets">A string value to concatenate to the other values.</param>
         /// <returns>concatenated result.</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static string Concat(params object[] targets) => InvalitContext.Throw<string>(nameof(Concat));
 
         /// <summary>
@@ -133,7 +133,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="target">target.</param>
         /// <returns>String length.</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static int Length(object target) => InvalitContext.Throw<int>(nameof(Length));
 
         /// <summary>
@@ -141,7 +141,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="target">target.</param>
         /// <returns>String length.</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static int Len(object target) => InvalitContext.Throw<int>(nameof(Len));
 
         /// <summary>
@@ -149,7 +149,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="target">target.</param>
         /// <returns>Changed string.</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static string Lower(object target) => InvalitContext.Throw<string>(nameof(Lower));
 
         /// <summary>
@@ -157,7 +157,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="target">target.</param>
         /// <returns>Changed string.</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static string Upper(object target) => InvalitContext.Throw<string>(nameof(Upper));
 
         /// <summary>
@@ -167,7 +167,7 @@ namespace LambdicSql
         /// <param name="src">source.</param>
         /// <param name="dst">destination.</param>
         /// <returns>Changed string.</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static string Replace(object target, object src, object dst) => InvalitContext.Throw<string>(nameof(Replace));
 
         /// <summary>
@@ -177,7 +177,7 @@ namespace LambdicSql
         /// <param name="startIndex">Specify the starting position of the character string to be acquired.</param>
         /// <param name="length">Specify the length of the string to be retrieved.</param>
         /// <returns>Part of a text.</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static string Substring(object target, object startIndex, object length) => InvalitContext.Throw<string>(nameof(Substring));
 
         /// <summary>
@@ -186,7 +186,7 @@ namespace LambdicSql
         /// <param name="element">Part type.</param>
         /// <param name="src">The date data.</param>
         /// <returns>A part from the date data.</returns>
-        [FormatConverter(Format = "EXTRACT(|[0] FROM [1])")]
+        [MethodFormatConverter(Format = "EXTRACT(|[0] FROM [1])")]
         public static double Extract(DateTimeElement element, DateTime src) => InvalitContext.Throw<double>(nameof(Extract));
 
         /// <summary>
@@ -195,7 +195,7 @@ namespace LambdicSql
         /// <param name="element">Part type.</param>
         /// <param name="src">The date data.</param>
         /// <returns>A part from the date data.</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static int DatePart(DateTimeElement element, DateTime src) => InvalitContext.Throw<int>(nameof(Extract));
 
         /// <summary>
@@ -205,7 +205,7 @@ namespace LambdicSql
         /// <param name="target"></param>
         /// <param name="destinationType">Type of destination.</param>
         /// <returns>Converted data.</returns>
-        [FormatConverter(Format = "CAST(|[0] AS [1])")]
+        [MethodFormatConverter(Format = "CAST(|[0] AS [1])")]
         public static TDst Cast<TDst>(object target, IDataType destinationType) => InvalitContext.Throw<TDst>(nameof(Cast));
 
         /// <summary>
@@ -214,7 +214,7 @@ namespace LambdicSql
         /// <typeparam name="T">Type of parameter</typeparam>
         /// <param name="parameter">Parameter.</param>
         /// <returns>The first non-null value in the parameter.</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static T Coalesce<T>(params T[] parameter) => InvalitContext.Throw<T>(nameof(Coalesce));
 
         /// <summary>
@@ -224,7 +224,7 @@ namespace LambdicSql
         /// <param name="expression1">expression.</param>
         /// <param name="expression2">expression.</param>
         /// <returns>expression1 or expression2.</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static T NVL<T>(T expression1, T expression2) => InvalitContext.Throw<T>(nameof(NVL));
 
         /// <summary>
@@ -233,7 +233,7 @@ namespace LambdicSql
         /// <typeparam name="T">Type represented by expression.</typeparam>
         /// <param name="column">The column or expression that is function target.</param>
         /// <returns>For each group, the value of the first row of the sorted record.</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static T First_Value<T>(T column) => InvalitContext.Throw<T>(nameof(First_Value));
 
         /// <summary>
@@ -242,35 +242,35 @@ namespace LambdicSql
         /// <typeparam name="T">Type represented by expression.</typeparam>
         /// <param name="column">The column or expression that is function target.</param>
         /// <returns>For each group, the value at the end of the sorted record.</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static T Last_Value<T>(T column) => InvalitContext.Throw<T>(nameof(Last_Value));
 
         /// <summary>
         /// RANK function.
         /// </summary>
         /// <returns>Ranked value.</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static int Rank() => InvalitContext.Throw<int>(nameof(Rank));
 
         /// <summary>
         /// DENSE_RANK function.
         /// </summary>
         /// <returns>Ranked value.</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static int Dense_Rank() => InvalitContext.Throw<int>(nameof(Dense_Rank));
 
         /// <summary>
         /// PERCENT_RANK function.
         /// </summary>
         /// <returns>Ranked value.</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static double Percent_Rank() => InvalitContext.Throw<double>(nameof(Percent_Rank));
 
         /// <summary>
         /// CUME_DIST function.
         /// </summary>
         /// <returns>Cumulative distribution of values in group.</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static double Cume_Dist() => InvalitContext.Throw<double>(nameof(Cume_Dist));
 
         /// <summary>
@@ -278,7 +278,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="groupCount">The number of ranking groups.</param>
         /// <returns>For each row, NTILE returns the number of the group to which the row belongs.</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static int Ntile(object groupCount) => InvalitContext.Throw<int>(nameof(Ntile));
 
         /// <summary>
@@ -287,7 +287,7 @@ namespace LambdicSql
         /// <param name="column">The column or expression that is function target.</param>
         /// <param name="offset">Specify the number of lines associated with the first line of the window that returns the expression.</param>
         /// <returns>Returns the value of the expression in the specified row of the window frame associated with the first line of the window.</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static int Nth_Value(object column, object offset) => InvalitContext.Throw<int>(nameof(Nth_Value));
 
         /// <summary>
@@ -296,7 +296,7 @@ namespace LambdicSql
         /// <typeparam name="T">Type represented by expression.</typeparam>
         /// <param name="column">The column or expression that is function target.</param>
         /// <returns>Returns the value of the row at the specified offset above (before) the current row of the partition.</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static T Lag<T>(T column) => InvalitContext.Throw<T>(nameof(Lag));
 
         /// <summary>
@@ -306,7 +306,7 @@ namespace LambdicSql
         /// <param name="column">The column or expression that is function target.</param>
         /// <param name="offset">An optional parameter that specifies the number of lines before the current line that returns a value.</param>
         /// <returns>Returns the value of the row at the specified offset above (before) the current row of the partition.</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static T Lag<T>(T column, object offset) => InvalitContext.Throw<T>(nameof(Lag));
 
         /// <summary>
@@ -317,21 +317,21 @@ namespace LambdicSql
         /// <param name="offset">An optional parameter that specifies the number of lines before the current line that returns a value.</param>
         /// <param name="default">The value returned if the value specified by offset is NULL.</param>
         /// <returns>Returns the value of the row at the specified offset above (before) the current row of the partition.</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static T Lag<T>(T column, object offset, T @default) => InvalitContext.Throw<T>(nameof(Lag));
 
         /// <summary>
         /// ROW_NUMBER function.
         /// </summary>
         /// <returns>Row number.</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static int Row_Number() => InvalitContext.Throw<int>(nameof(Row_Number));
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="preceding">Preceding row count.</param>
-        [FormatConverter(Format = "ROWS [$0] PRECEDING")]
+        [MethodFormatConverter(Format = "ROWS [$0] PRECEDING")]
         public static IRows Rows(long preceding) => InvalitContext.Throw<IRows>(nameof(Rows));
 
         /// <summary>
@@ -339,14 +339,14 @@ namespace LambdicSql
         /// </summary>
         /// <param name="preceding">Preceding row count.</param>
         /// <param name="following">Following row count.</param>
-        [FormatConverter(Format = "ROWS BETWEEN [$0] PRECEDING AND [$1] FOLLOWING")]
+        [MethodFormatConverter(Format = "ROWS BETWEEN [$0] PRECEDING AND [$1] FOLLOWING")]
         public static IRows Rows(long preceding, long following) => InvalitContext.Throw<IRows>(nameof(Rows));
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="columns">Specify column or expression.</param>
-        [FormatConverter(Format = "PARTITION BY|[<,>0]", FormatDirection = FormatDirection.Vertical)]
+        [MethodFormatConverter(Format = "PARTITION BY|[<,>0]", FormatDirection = FormatDirection.Vertical)]
         public static IPartitionBy PartitionBy(params object[] columns) => InvalitContext.Throw<IPartitionBy>(nameof(PartitionBy));
         
         /// <summary>
@@ -358,7 +358,7 @@ namespace LambdicSql
         /// <param name="orderBy">ORDER BY keyword.</param>
         /// <param name="rows">ROWS keyword.</param>
         /// <returns>It is the result of Window function.</returns>
-        [FormatConverter(Format = "OVER(|[1][2][3])", FormatDirection = FormatDirection.Vertical)]
+        [MethodFormatConverter(Format = "OVER(|[1][2][3])", FormatDirection = FormatDirection.Vertical)]
         public static T Over<T>(this T before, IPartitionBy partitionBy, IOrderBy orderBy, IRows rows) => InvalitContext.Throw<T>(nameof(Over));
 
         /// <summary>
@@ -369,7 +369,7 @@ namespace LambdicSql
         /// <param name="partitionBy">PARTITION BY keyword.</param>
         /// <param name="orderBy">ORDER BY keyword.</param>
         /// <returns>It is the result of Window function.</returns>
-        [FormatConverter(Format = "OVER(|[1][2])", FormatDirection = FormatDirection.Vertical)]
+        [MethodFormatConverter(Format = "OVER(|[1][2])", FormatDirection = FormatDirection.Vertical)]
         public static T Over<T>(this T before, IPartitionBy partitionBy, IOrderBy orderBy) => InvalitContext.Throw<T>(nameof(Over));
 
         /// <summary>
@@ -380,7 +380,7 @@ namespace LambdicSql
         /// <param name="partitionBy">PARTITION BY keyword.</param>
         /// <param name="rows">ROWS keyword.</param>
         /// <returns>It is the result of Window function.</returns>
-        [FormatConverter(Format = "OVER(|[1][2])", FormatDirection = FormatDirection.Vertical)]
+        [MethodFormatConverter(Format = "OVER(|[1][2])", FormatDirection = FormatDirection.Vertical)]
         public static T Over<T>(this T before, IPartitionBy partitionBy, IRows rows) => InvalitContext.Throw<T>(nameof(Over));
 
         /// <summary>
@@ -391,7 +391,7 @@ namespace LambdicSql
         /// <param name="orderBy">ORDER BY keyword.</param>
         /// <param name="rows">Getting row order.</param>
         /// <returns>It is the result of Window function.</returns>
-        [FormatConverter(Format = "OVER(|[1][2])", FormatDirection = FormatDirection.Vertical)]
+        [MethodFormatConverter(Format = "OVER(|[1][2])", FormatDirection = FormatDirection.Vertical)]
         public static T Over<T>(this T before, IOrderBy orderBy, IRows rows) => InvalitContext.Throw<T>(nameof(Over));
 
         /// <summary>
@@ -401,7 +401,7 @@ namespace LambdicSql
         /// <param name="before">It is an before expression in the Windwo function.</param>
         /// <param name="partitionBy">PARTITION BY keyword.</param>
         /// <returns>It is the result of Window function.</returns>
-        [FormatConverter(Format = "OVER(|[1])", FormatDirection = FormatDirection.Vertical)]
+        [MethodFormatConverter(Format = "OVER(|[1])", FormatDirection = FormatDirection.Vertical)]
         public static T Over<T>(this T before, IPartitionBy partitionBy) => InvalitContext.Throw<T>(nameof(Over));
 
         /// <summary>
@@ -411,7 +411,7 @@ namespace LambdicSql
         /// <param name="before">It is an before expression in the Windwo function.</param>
         /// <param name="orderBy">ORDER BY keyword.</param>
         /// <returns>It is the result of Window function.</returns>
-        [FormatConverter(Format = "OVER(|[1])", FormatDirection = FormatDirection.Vertical)]
+        [MethodFormatConverter(Format = "OVER(|[1])", FormatDirection = FormatDirection.Vertical)]
         public static T Over<T>(this T before, IOrderBy orderBy) => InvalitContext.Throw<T>(nameof(Over));
 
         /// <summary>
@@ -421,7 +421,7 @@ namespace LambdicSql
         /// <param name="before">It is an before expression in the Windwo function.</param>
         /// <param name="rows">Getting row order.</param>
         /// <returns>It is the result of Window function.</returns>
-        [FormatConverter(Format = "OVER(|[1])", FormatDirection = FormatDirection.Vertical)]
+        [MethodFormatConverter(Format = "OVER(|[1])", FormatDirection = FormatDirection.Vertical)]
         public static T Over<T>(this T before, IRows rows) => InvalitContext.Throw<T>(nameof(Over));
     }
 }

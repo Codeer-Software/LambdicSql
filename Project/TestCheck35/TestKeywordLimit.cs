@@ -323,6 +323,8 @@ OFFSET @p_1",
             var fetchNextRowOnly = Db<DB>.Sql(db => FetchNextRowsOnly(3));
             query = query + offsetRows + fetchNextRowOnly;
 
+            query.Gen(_connection);
+
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,

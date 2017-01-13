@@ -41,21 +41,21 @@ namespace LambdicSql
         /// Constructor.
         /// </summary>
         /// <param name="target">target column.</param>
-        [FormatConverter(Format = "[0] ASC")]
+        [MethodFormatConverter(Format = "[0] ASC")]
         public static ISortedBy Asc(object target) => InvalitContext.Throw<ISortedBy>(nameof(Asc));
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="target">target column.</param>
-        [FormatConverter(Format = "[0] DESC")]
+        [MethodFormatConverter(Format = "[0] DESC")]
         public static ISortedBy Desc(object target) => InvalitContext.Throw<ISortedBy>(nameof(Desc));
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="count">cout.</param>
-        [FormatConverter(Format = "TOP [$0]")]
+        [MethodFormatConverter(Format = "TOP [$0]")]
         public static ITop Top(long count) => InvalitContext.Throw<ITop>(nameof(Top));
 
         /// <summary>

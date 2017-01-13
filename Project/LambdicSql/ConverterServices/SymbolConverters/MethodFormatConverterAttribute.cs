@@ -7,7 +7,7 @@ namespace LambdicSql.ConverterServices.SymbolConverters
     /// <summary>
     /// SQL symbol converter attribute for clause.
     /// </summary>
-    public class FormatConverterAttribute : MethodConverterAttribute
+    public class MethodFormatConverterAttribute : MethodConverterAttribute
     {
         FormatConverterCore _core = new FormatConverterCore();
 

@@ -185,7 +185,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="rhs">Rvalue</param>
         /// <param name="lhs">Lvalue</param>
-        [FormatConverterNew(Format = "[#0] = [1]")]
+        [NewFormatConverter(Format = "[#0] = [1]")]
         public Assign(object rhs, object lhs) { InvalitContext.Throw("new " + nameof(Assign)); }
     }
 
@@ -259,7 +259,7 @@ namespace LambdicSql
         /// <typeparam name="T">Type.</typeparam>
         /// <param name="value">Value.</param>
         /// <returns>Direct value.</returns>
-        [FormatConverter(Format = "[$0]")]
+        [MethodFormatConverter(Format = "[$0]")]
         public static T DirectValue<T>(this T value) => InvalitContext.Throw<T>(nameof(DirectValue));
 
         /// <summary>
@@ -268,7 +268,7 @@ namespace LambdicSql
         /// <typeparam name="T">Type.</typeparam>
         /// <param name="column">Column.</param>
         /// <returns>Column only.</returns>
-        [FormatConverter(Format ="[#0]")]
+        [MethodFormatConverter(Format ="[#0]")]
         public static T ColumnOnly<T>(this T column) => InvalitContext.Throw<T>(nameof(ColumnOnly));
     }
 
@@ -293,7 +293,7 @@ namespace LambdicSql
         /// <param name="column">Column.</param>
         /// <param name="type">Type.</param>
         /// <param name="constraints">Constraints.</param>
-        [FormatConverterNew(Format ="[0] [1] [< >2]")]
+        [NewFormatConverter(Format ="[0] [1] [< >2]")]
         public Column(object column, IDataType type, params IConstraint[] constraints) { InvalitContext.Throw("new " + nameof(Column)); }
     }
 }

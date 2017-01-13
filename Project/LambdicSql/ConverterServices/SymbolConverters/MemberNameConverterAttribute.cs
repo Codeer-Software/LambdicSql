@@ -3,7 +3,9 @@ using System.Linq.Expressions;
 
 namespace LambdicSql.ConverterServices.SymbolConverters
 {
-    //TODO Keywordっていけてない
+    //TODO やっぱりやめておくか？
+    //ENUMもね。
+
     /// <summary>
     /// SQL symbol converter attribute for keyword.
     /// </summary>

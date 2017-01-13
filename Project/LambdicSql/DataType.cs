@@ -41,7 +41,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="n">n</param>
         /// <returns>BINARY</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static IDataType Binary(int n) => InvalitContext.Throw<IDataType>(nameof(Binary));
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="n">n</param>
         /// <returns>BIT</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static IDataType Bit(int n) => InvalitContext.Throw<IDataType>(nameof(Bit));
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="n">n</param>
         /// <returns>BIT VARYING</returns>
-        [FuncConverter(Name = "BIT VARYING")]
+        [FuncStyleConverter(Name = "BIT VARYING")]
         public static IDataType BitVarying(int n) => InvalitContext.Throw<IDataType>(nameof(BitVarying));
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="n">n</param>
         /// <returns>CHAR</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static IDataType Char(int n) => InvalitContext.Throw<IDataType>(nameof(Char));
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="n">n</param>
         /// <returns>CHARACTER</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static IDataType Character(int n) => InvalitContext.Throw<IDataType>(nameof(Character));
 
         /// <summary>
@@ -159,7 +159,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="n">n</param>
         /// <returns>CHARACTER VARYING</returns>
-        [FuncConverter(Name = "CHARACTER VARYING")]
+        [FuncStyleConverter(Name = "CHARACTER VARYING")]
         public static IDataType CharacterVarying(int n) => InvalitContext.Throw<IDataType>(nameof(CharacterVarying));
 
         /// <summary>
@@ -216,7 +216,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="n">n</param>
         /// <returns>DATETIME2</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static IDataType DateTime2(int n) => InvalitContext.Throw<IDataType>(nameof(DateTime2));
 
         /// <summary>
@@ -231,7 +231,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="n">n</param>
         /// <returns>DATETIMEOFFSET</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static IDataType DateTimeOffset(int n) => InvalitContext.Throw<IDataType>(nameof(DateTimeOffset));
 
         /// <summary>
@@ -299,7 +299,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="n">n</param>
         /// <returns>FLOAT</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static IDataType Float(int n) => InvalitContext.Throw<IDataType>(nameof(Float));
 
         /// <summary>
@@ -484,7 +484,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="n">n</param>
         /// <returns>NCHAR</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static IDataType NChar(int n) => InvalitContext.Throw<IDataType>(nameof(NChar));
 
         /// <summary>
@@ -513,7 +513,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="precision">precision</param>
         /// <returns>NUMBER</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static IDataType Number(int precision) => InvalitContext.Throw<IDataType>(nameof(Number));
 
         /// <summary>
@@ -522,7 +522,7 @@ namespace LambdicSql
         /// <param name="precision">precision</param>
         /// <param name="scale">scale</param>
         /// <returns>NUMBER</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static IDataType Number(int precision, int scale) => InvalitContext.Throw<IDataType>(nameof(Number));
         
         /// <summary>
@@ -537,7 +537,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="precision">precision</param>
         /// <returns>NUMERIC</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static IDataType Numeric(int precision) => InvalitContext.Throw<IDataType>(nameof(Numeric));
 
         /// <summary>
@@ -546,7 +546,7 @@ namespace LambdicSql
         /// <param name="precision">precision</param>
         /// <param name="scale">scale</param>
         /// <returns>NUMERIC</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static IDataType Numeric(int precision, int scale) => InvalitContext.Throw<IDataType>(nameof(Numeric));
 
         /// <summary>
@@ -568,7 +568,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="n">n</param>
         /// <returns>NVARCHAR2</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static IDataType NVarChar2(int n) => InvalitContext.Throw<IDataType>(nameof(NVarChar2));
 
         /// <summary>
@@ -674,7 +674,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="n">n</param>
         /// <returns>TIME</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static IDataType Time(int n) => InvalitContext.Throw<IDataType>(nameof(Time));
 
         //TODO オラクルはTIMEZONE
@@ -690,7 +690,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="n">n</param>
         /// <returns>TIME</returns>
-        [FuncConverter(Name = "TIME", AfterPredicate = "WITH TIME ZONE")]
+        [MethodFormatConverter(Format = "TIME([0]) WITH TIME ZONE|")]
         public static IDataType TimeWithTimeZone(int n) => InvalitContext.Throw<IDataType>(nameof(Time));
 
         /// <summary>
@@ -705,7 +705,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="n">n</param>
         /// <returns>TIMESTAMP</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static IDataType TimeStamp(int n) => InvalitContext.Throw<IDataType>(nameof(TimeStamp));
 
         /// <summary>
@@ -720,7 +720,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="n">n</param>
         /// <returns>TIMESTAMP</returns>
-        [FuncConverter(Name = "TIME STAMP", AfterPredicate = "WITH TIME ZONE")]
+        [MethodFormatConverter(Format = "TIME STAMP([0]) WITH TIME ZONE|")]
         public static IDataType TimeStampWithTimeZone(int n) => InvalitContext.Throw<IDataType>(nameof(TimeStamp));
 
         /// <summary>
@@ -791,7 +791,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="n">n</param>
         /// <returns>VARBINARY</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static IDataType VarBinary(int n) => InvalitContext.Throw<IDataType>(nameof(VarBinary));
 
         //TODO VARCHAR(maxlen CHAR) BYTE enumかな・・・
@@ -807,7 +807,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="n">n</param>
         /// <returns>VARCHAR</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static IDataType VarChar(int n) => InvalitContext.Throw<IDataType>(nameof(VarChar));
 
         //TODO VARCHAR2(maxlen CHAR) BYTE enumかな・・・
@@ -823,7 +823,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="n">n</param>
         /// <returns>VARCHAR2</returns>
-        [FuncConverter]
+        [FuncStyleConverter]
         public static IDataType VarChar2(int n) => InvalitContext.Throw<IDataType>(nameof(VarChar2));
 
         /// <summary>

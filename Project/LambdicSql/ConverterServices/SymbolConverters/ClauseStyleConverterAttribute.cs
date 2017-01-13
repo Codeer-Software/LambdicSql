@@ -8,7 +8,7 @@ namespace LambdicSql.ConverterServices.SymbolConverters
     /// <summary>
     /// SQL symbol converter attribute for clause.
     /// </summary>
-    public class ClauseConverterAttribute : MethodConverterAttribute
+    public class ClauseStyleConverterAttribute : MethodConverterAttribute
     {
         /// <summary>
         /// Indent.
@@ -21,16 +21,6 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         public string Name { get; set; }
 
         /// <summary>
-        /// Separator between arguments.By default it uses " ".
-        /// </summary>
-        public string Separator { get; set; } = " ";
-
-        /// <summary>
-        /// It is the predicate attached at the end. By default it is empty.
-        /// </summary>
-        public string AfterPredicate { get; set; }
-
-        /// <summary>
         /// Convert expression to code.
         /// </summary>
         /// <param name="expression">Expression.</param>
@@ -38,14 +28,12 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         /// <returns>Parts.</returns>
         public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
-            var name = string.IsNullOrEmpty(Name) ? expression.Method.Name.ToUpper() : Name;
-            name = name.Trim();
+            if (string.IsNullOrEmpty(Name)) Name = expression.Method.Name.ToUpper();
 
             var index = expression.SkipMethodChain(0);
             var args = expression.Arguments.Skip(index).Select(e => converter.Convert(e)).ToList();
-            if (!string.IsNullOrEmpty(AfterPredicate)) args.Add(AfterPredicate);
-            
-            return new HCode(name, new HCode(args) { Separator = Separator }) { IsFunctional = true, Separator = " ", Indent = Indent };
+            args.Insert(0, Name);
+            return new HCode(args) { IsFunctional = true, Separator = " ", Indent = Indent };
         }
     }
 }
