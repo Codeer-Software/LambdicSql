@@ -3,6 +3,7 @@ using LambdicSql.BuilderServices.CodeParts;
 using System;
 using LambdicSql.BuilderServices;
 using LambdicSql.BuilderServices.Inside;
+using LambdicSql.ConverterServices;
 
 namespace LambdicSql
 {
@@ -69,14 +70,14 @@ namespace LambdicSql
         /// Entity represented by SqlExpression.
         /// It can only be used within methods of the LambdicSql.Sql class.
         /// </summary>
-        public T Body => InvalitContext.Throw<T>(nameof(Body));
+        public T Body { get { throw new InvalitContextException(nameof(Body)); } }
 
         /// <summary>
         /// Implicitly convert to the type represented by SqlExpression.
         /// It can only be used within methods of the LambdicSql.Sql class.
         /// </summary>
         /// <param name="src"></param>
-        public static implicit operator T(Sql<T> src) => InvalitContext.Throw<T>("implicit operator");
+        public static implicit operator T(Sql<T> src) { throw new InvalitContextException("implicit operator"); }
 
         /// <summary>
         /// Concatenate expression1 and expression2.

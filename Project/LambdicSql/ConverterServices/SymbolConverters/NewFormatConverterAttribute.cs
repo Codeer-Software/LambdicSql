@@ -10,21 +10,11 @@ namespace LambdicSql.ConverterServices.SymbolConverters
     public class NewFormatConverterAttribute : NewConverterAttribute
     {
         FormatConverterCore _core = new FormatConverterCore();
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public FormatDirection FormatDirection { get { return _core.FormatDirection; } set { _core.FormatDirection = value; } }
-
+        
         /// <summary>
         /// 
         /// </summary>
         public string Format { get { return _core.Format; } set { _core.Format = value; } }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public int Indent { get { return _core.Indent; } set { _core.Indent = value; } }
 
         /// <summary>
         /// Convert expression to code.

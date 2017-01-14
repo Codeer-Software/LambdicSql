@@ -1,5 +1,4 @@
 ﻿using LambdicSql.ConverterServices;
-using LambdicSql.ConverterServices.Inside;
 using LambdicSql.ConverterServices.SymbolConverters;
 using LambdicSql.Inside.SymbolConverters;
 
@@ -21,7 +20,7 @@ namespace LambdicSql
         /// It can only be used within methods of the LambdicSql.Sql class.
         /// </summary>
         /// <param name="src"></param>
-        public static implicit operator TSelected(ClauseChain<TSelected> src) => InvalitContext.Throw<TSelected>("implicit operator");
+        public static implicit operator TSelected(ClauseChain<TSelected> src) { throw new InvalitContextException("implicit operator"); }
     }
 
     /// <summary>
@@ -186,7 +185,7 @@ namespace LambdicSql
         /// <param name="rhs">Rvalue</param>
         /// <param name="lhs">Lvalue</param>
         [NewFormatConverter(Format = "[#0] = [1]")]
-        public Assign(object rhs, object lhs) { InvalitContext.Throw("new " + nameof(Assign)); }
+        public Assign(object rhs, object lhs) { throw new InvalitContextException("new " + nameof(Assign)); }
     }
 
     /// <summary>
@@ -202,13 +201,13 @@ namespace LambdicSql
         /// <param name="enable">Whether condition is valid.</param>
         /// <param name="condition">Condition expression.</param>
         [ConditionConverter]
-        public Condition(object enable, object condition) { InvalitContext.Throw("new " + nameof(Condition)); }
+        public Condition(object enable, object condition) { throw new InvalitContextException("new " + nameof(Condition)); }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="src"></param>
-        public static implicit operator bool(Condition src) => InvalitContext.Throw<bool>("implicit operator bool(Condition src)");
+        public static implicit operator bool(Condition src) { throw new InvalitContextException("implicit operator bool(Condition src)"); }
     }
 
     /// <summary>
@@ -222,7 +221,7 @@ namespace LambdicSql
         /// SYSDUMMY1 keyword.
         /// </summary>
         [MemberConverter(Name = "SYSIBM.SYSDUMMY1")]
-        public static object SysDummy1 => InvalitContext.Throw<long>(nameof(SysDummy1));
+        public static object SysDummy1 { get { throw new InvalitContextException(nameof(SysDummy1)); } }
     }
 
     /// <summary>
@@ -238,7 +237,7 @@ namespace LambdicSql
         /// <param name="args">Format arguments.</param>
         /// <returns>LamblicSql's expression.</returns>
         [ToSqlConverter]
-        public static object ToSql(this string text, params object[] args) => InvalitContext.Throw<object>(nameof(ToSql));
+        public static object ToSql(this string text, params object[] args) { throw new InvalitContextException(nameof(ToSql)); }
 
         /// <summary>
         /// Put the text in the expression of LamblicSql.
@@ -251,7 +250,7 @@ namespace LambdicSql
         /// <param name="args">Format arguments.</param>
         /// <returns>LamblicSql's expression.</returns>
         [TwoWaySqlConverter]
-        public static object TwoWaySql(this string text, params object[] args) => InvalitContext.Throw<object>(nameof(ToSql));
+        public static object TwoWaySql(this string text, params object[] args) { throw new InvalitContextException(nameof(ToSql)); }
 
         /// <summary>
         /// Embed values directly into SQL without parameterization.
@@ -260,7 +259,7 @@ namespace LambdicSql
         /// <param name="value">Value.</param>
         /// <returns>Direct value.</returns>
         [MethodFormatConverter(Format = "[$0]")]
-        public static T DirectValue<T>(this T value) => InvalitContext.Throw<T>(nameof(DirectValue));
+        public static T DirectValue<T>(this T value) { throw new InvalitContextException(nameof(DirectValue)); }
 
         /// <summary>
         /// Schema and table names are omitted and only columns are used.
@@ -269,7 +268,7 @@ namespace LambdicSql
         /// <param name="column">Column.</param>
         /// <returns>Column only.</returns>
         [MethodFormatConverter(Format ="[#0]")]
-        public static T ColumnOnly<T>(this T column) => InvalitContext.Throw<T>(nameof(ColumnOnly));
+        public static T ColumnOnly<T>(this T column) { throw new InvalitContextException(nameof(ColumnOnly)); }
     }
 
     /// <summary>
@@ -294,6 +293,6 @@ namespace LambdicSql
         /// <param name="type">Type.</param>
         /// <param name="constraints">Constraints.</param>
         [NewFormatConverter(Format ="[0] [1] [< >2]")]
-        public Column(object column, IDataType type, params IConstraint[] constraints) { InvalitContext.Throw("new " + nameof(Column)); }
+        public Column(object column, IDataType type, params IConstraint[] constraints) { throw new InvalitContextException("new " + nameof(Column)); }
     }
 }

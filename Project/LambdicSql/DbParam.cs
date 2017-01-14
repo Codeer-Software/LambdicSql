@@ -1,4 +1,4 @@
-﻿using LambdicSql.ConverterServices.Inside;
+﻿using LambdicSql.ConverterServices;
 using System.Data;
 
 namespace LambdicSql
@@ -61,6 +61,6 @@ namespace LambdicSql
         /// Converter for converting to T
         /// </summary>
         /// <param name="src">Source.</param>
-        public static implicit operator T(DbParam<T> src) => InvalitContext.Throw<T>("new DbParameter<T>");
+        public static implicit operator T(DbParam<T> src) { throw new InvalitContextException("new DbParameter<T>"); }
     }
 }

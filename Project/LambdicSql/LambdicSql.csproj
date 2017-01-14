@@ -83,7 +83,7 @@
     <Compile Include="feat\EntityFramework\EFWrapper.cs" />
     <Compile Include="feat\PackageIsNotInstalledException.cs" />
     <Compile Include="BuilderServices\CustomizeColumnOnly.cs" />
-    <Compile Include="ConverterServices\Inside\InvalitContext.cs" />
+    <Compile Include="ConverterServices\InvalitContextException.cs" />
     <Compile Include="ConverterServices\Inside\MetaId.cs" />
     <Compile Include="ConverterServices\Inside\TowWaySqlSpec.cs" />
     <Compile Include="DataType.cs" />

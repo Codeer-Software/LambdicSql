@@ -26,7 +26,7 @@ namespace LambdicSql.feat.EntityFramework
         /// <param name="queryable">Queryable.</param>
         /// <returns>Entity.</returns>
         [TConverter]
-        public static TEntity T<TEntity>(this IQueryable<TEntity> queryable) => InvalitContext.Throw<TEntity>(nameof(T));
+        public static TEntity T<TEntity>(this IQueryable<TEntity> queryable) { throw new InvalitContextException(nameof(T)); }
 
         /// <summary>
         /// Execute query.
