@@ -125,7 +125,7 @@ namespace LambdicSql
         /// <param name="targets">A string value to concatenate to the other values.</param>
         /// <returns>concatenated result.</returns>
         [MethodFormatConverter(Format = "CONCAT(|[<, >0])")]
-        public static string Concat(params object[] targets) { throw new InvalitContextException(nameof(Concat)); }
+        public static string Concat(params string[] targets) { throw new InvalitContextException(nameof(Concat)); }
 
         /// <summary>
         /// LENGTH function.

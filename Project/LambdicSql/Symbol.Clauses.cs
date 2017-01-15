@@ -931,17 +931,7 @@ namespace LambdicSql
         /// <returns>Returns TRUE if target is included in the range of min and max.</returns>
         [MethodFormatConverter(Format = "[0] BETWEEN |[1] AND [2]")]
         public static bool Between(object target, object min, object max) { throw new InvalitContextException(nameof(Between)); }
-
-        /// <summary>
-        /// IN keyword.
-        /// </summary>
-        /// <param name="target">Target of IN check.</param>
-        /// <param name="canditates">Canditates.</param>
-        /// <returns>Returns TRUE if target is included in the canditates represented by expression.</returns>
-        [MethodFormatConverter(Format = "[0] IN(|[<, >1])")]
-        public static bool In(object target, params object[] canditates) { throw new InvalitContextException(nameof(In)); }
-
-        //TODO この手法を広めるか・・・ 他にparamsで問題になりそうなのを洗い出し、ValuesとSetかな・・・、力業っていう手もあるけどね・・・
+        
         /// <summary>
         /// IN keyword.
         /// </summary>

@@ -46,6 +46,9 @@ namespace LambdicSql.BuilderServices.CodeParts
         public override string ToString(bool isTopLevel, int indent, BuildingContext context)
         {
             var text = _core.ToString(isTopLevel, indent, context);
+
+            //TODO DisableBracketsCodeはインターフェイスにするか
+            //★よくない。これってBranketsではないからなー
             if (typeof(DisableBracketsCode).IsAssignableFrom(_core.GetType())) return text;
 
             int index = 0;
@@ -65,6 +68,7 @@ namespace LambdicSql.BuilderServices.CodeParts
             return text.Substring(0, index) + _front + text.Substring(index) + _back;
         }
         
+        //TODO 外側にチェックが行かないけど。
         /// <summary>
         /// 
         /// </summary>

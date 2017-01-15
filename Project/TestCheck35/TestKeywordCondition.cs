@@ -262,7 +262,7 @@ WHERE tbl_staff.id IN(@p_0, @p_1)",
         public void Test_In2()
         {
             var sub = Db<DB>.Sql(db =>
-                Select(new { id = db.tbl_remuneration.staff_id }).
+                Select(db.tbl_remuneration.staff_id).
                 From(db.tbl_remuneration).
                 Join(db.tbl_staff, db.tbl_staff.id == db.tbl_staff.id).
                 Where(1000 < db.tbl_remuneration.money));
@@ -286,7 +286,7 @@ FROM tbl_staff
 WHERE
 	tbl_staff.id IN(
 		(SELECT
-			tbl_remuneration.staff_id AS id
+			tbl_remuneration.staff_id
 		FROM tbl_remuneration
 			JOIN tbl_staff ON (tbl_staff.id) = (tbl_staff.id)
 		WHERE (@p_0) < (tbl_remuneration.money)))",
@@ -297,7 +297,7 @@ WHERE
         public void Test_In2_1()
         {
             var sub = Db<DB>.Sql(db =>
-                Select(new { id = db.tbl_remuneration.staff_id }).
+                Select(db.tbl_remuneration.staff_id).
                 From(db.tbl_remuneration).
                 Join(db.tbl_staff, db.tbl_staff.id == db.tbl_staff.id).
                 Where(1000 < db.tbl_remuneration.money));
@@ -320,7 +320,7 @@ FROM tbl_staff
 WHERE
 	tbl_staff.id IN(
 		(SELECT
-			tbl_remuneration.staff_id AS id
+			tbl_remuneration.staff_id
 		FROM tbl_remuneration
 			JOIN tbl_staff ON (tbl_staff.id) = (tbl_staff.id)
 		WHERE (@p_0) < (tbl_remuneration.money)))",
@@ -337,7 +337,7 @@ WHERE
                }).
                From(db.tbl_staff).
                Where(In(db.tbl_staff.id,
-                    Select(new { id = db.tbl_remuneration.staff_id }).
+                    Select(db.tbl_remuneration.staff_id).
                     From(db.tbl_remuneration).
                     Join(db.tbl_staff, db.tbl_staff.id == db.tbl_staff.id).
                     Where(1000 < db.tbl_remuneration.money)
@@ -352,7 +352,7 @@ FROM tbl_staff
 WHERE
 	tbl_staff.id IN(
 		(SELECT
-			tbl_remuneration.staff_id AS id
+			tbl_remuneration.staff_id
 		FROM tbl_remuneration
 			JOIN tbl_staff ON (tbl_staff.id) = (tbl_staff.id)
 		WHERE (@p_0) < (tbl_remuneration.money)))",
@@ -369,8 +369,8 @@ WHERE
                    Id = db.tbl_staff.id
                }).
                From(db.tbl_staff).
-               Where(In(exp,
-                    Select(new { id = db.tbl_remuneration.staff_id }).
+               Where(In(exp.Body,
+                    Select(db.tbl_remuneration.staff_id).
                     From(db.tbl_remuneration).
                     Join(db.tbl_staff, db.tbl_staff.id == db.tbl_staff.id).
                     Where(1000 < db.tbl_remuneration.money)
@@ -385,7 +385,7 @@ FROM tbl_staff
 WHERE
 	tbl_staff.id IN(
 		(SELECT
-			tbl_remuneration.staff_id AS id
+			tbl_remuneration.staff_id
 		FROM tbl_remuneration
 			JOIN tbl_staff ON (tbl_staff.id) = (tbl_staff.id)
 		WHERE (@p_0) < (tbl_remuneration.money)))",

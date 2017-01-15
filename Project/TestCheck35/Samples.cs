@@ -817,7 +817,7 @@ namespace TestCheck35
         {
             //make sql.
             var sub = Db<DB>.Sql(db =>
-                Select(new { total = db.tbl_remuneration.staff_id }).
+                Select(db.tbl_remuneration.staff_id).
                 From(db.tbl_remuneration));
 
             var query = Db<DB>.Sql(db =>

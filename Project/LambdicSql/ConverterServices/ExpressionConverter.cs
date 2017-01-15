@@ -220,6 +220,7 @@ namespace LambdicSql.ConverterServices
             var code = GetMethodChains(method).Select(c=> c.GetMethodConverter().Convert(c, this)).ToArray();
             if (code.Length == 0) return ResolveExpressionObject(method);
 
+            //TODO やっぱりこの仕組みは、このクラスの中に閉じるべきかな　上のBinaryのところで判断するか
             //for ALL function. can't add blankets.
             if (code.Length == 1 && typeof(DisableBracketsCode).IsAssignableFrom(code[0].GetType()))
             {
@@ -230,6 +231,7 @@ namespace LambdicSql.ConverterServices
 
             return (typeof(SelectClauseCode).IsAssignableFrom(code[0].GetType())) ?
                  (Code)new SelectQueryCode(core) :
+                 //TODO これいらんやろ。
                  new QueryCode(core);
         }
 
