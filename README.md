@@ -1,4 +1,4 @@
-﻿LambdicSql_β 0.19.0
+﻿LambdicSql_β 0.22.0
 ======================
 
 ## Features ...
@@ -21,7 +21,7 @@ Standard code.
 ```cs
 using LambdicSql;
 using LambdicSql.feat.Dapper;
-using static LambdicSql.Keywords;
+using static LambdicSql.Symbol;
 
 //tables.
 public class Staff
@@ -77,126 +77,8 @@ FROM tbl_remuneration
 	JOIN tbl_staff ON (tbl_staff.id) = (tbl_remuneration.staff_id)
 WHERE ((@min) < (tbl_remuneration.money)) AND ((tbl_remuneration.money) < (@p_1))
 ```
-
-## Supported Keywords.
-- SELECT
-- FROM
-	- JOIN
-	- LEFT JOIN
-	- RIGHT JOIN
-	- CROSS JOIN
-- WHERE
-- ORDER BY
-	- ASC
-	- DESC
-- GROUP BY
-	- ROLLUP
-	- WITH ROLLUP
-	- CUBE
-	- GROUPING SETS
-- HAVING
-- UPDATE
-	- SET
-- DELETE
-- INSERT INTO
-	- VALUES
-- DISTINCT
-- ALL
-- LIKE
-- BETWEEN
-- IN
-- EXISTS
-- CASE
-	- WHEN
-	- THEN
-	- ELSE
-	- END
-- UNION
-- INTERSECT
-- EXCEPT
-- MINUS
-- LIMIT
-- OFFSET
-- ROWNUM
-- OFFSET ROWS
-- FETCH NEXT ROWS ONLY
-- TOP
-- ROWNUM
-
-## Supported Functions
-- SUM
-- AVG
-- COUNT
-- MIN
-- MAX
-- CONCAT
-- LENGTH
-- LEN
-- LOWER
-- UPPER
-- REPLACE
-- SUBSTRING
-- CURRENT_DATE
-- CURRENT DATE
-- CURRENT_TIME
-- CURRENT TIME
-- CURRENT_TIMESTAMP
-- CURRENT TIMESTAMP
-- CAST
-- COALESCE
-- ISNULL
-- NVL
-
-## Supported Window Functions
-- AVG
-- SUN
-- COUNT
-- MAX
-- MIN
-- RANK
-- DENSE_RANK
-- PERCENT_RANK
-- CAM_DIST
-- NTIL
-- FIRST_VALUE
-- LAST_VALUE
-- LAG
-	- OVER
-	- PARTITION BY
-	- ORDER BY
-	- ROWS
-		- BETWEEN
-		- PRECEDING
-		- AND
-		- FOLLOWING
-		
 Look for how to use from the samples.<br>
 https://github.com/Codeer-Software/LambdicSql/blob/master/Project/TestCheck35/Samples.cs
-
-## Supported DataType
-- string
-- bool
-- bool?
-- byte
-- byte?
-- short
-- short?
-- int
-- int?
-- long
-- long?
-- float
-- float?
-- double
-- double?
-- decimal
-- decimal?
-- DateTime
-- DateTime?
-- DateTimeOffset
-- DateTimeOffset?
-- TimeSpan
-- TimeSpan?
 
 ## Supported database
 |DataBase type|Support|
