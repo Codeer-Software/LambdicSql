@@ -36,12 +36,6 @@ namespace LambdicSql.Inside.CodeParts
              string.Format(_formatText, _args.Select(e => e.ToString(true, 0, context)).ToArray()) +
             _back;
 
-        public override Code ConcatAround(string front, string back) => new StringFormatCode(_formatText, _args, front + _front, _back + back);
-
-        public override Code ConcatToFront(string front) => new StringFormatCode(_formatText, _args, front + _front, _back);
-
-        public override Code ConcatToBack(string back) => new StringFormatCode(_formatText, _args, _front, _back + back);
-
         public override Code Customize(ICodeCustomizer customizer) => customizer.Custom(this);
     }
 }

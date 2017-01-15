@@ -34,12 +34,6 @@ namespace LambdicSql.Inside.CodeParts
                     (PartsUtils.GetIndent(indent) + _front + _body + _back) :
                     _define.ToString(isTopLevel, indent, context);
 
-        public override Code ConcatAround(string front, string back) => new SubQueryAndNameCode(_body, _define.ConcatAround(front, back), front + _front, _back + back);
-
-        public override Code ConcatToFront(string front) => new SubQueryAndNameCode(_body, _define.ConcatToFront(front), front + _front, _back);
-
-        public override Code ConcatToBack(string back) => new SubQueryAndNameCode(_body, _define.ConcatToBack(back), _front, _back + back);
-
         public override Code Customize(ICodeCustomizer customizer) => customizer.Custom(this);
     }
 }

@@ -18,15 +18,9 @@ namespace LambdicSql.ConverterServices.Inside.CodeParts
 
         public override string ToString(bool isTopLevel, int indent, BuildingContext context)
         {
-            var target = isTopLevel ? _core : _core.ConcatAround("(", ")");
+            var target = isTopLevel ? _core : new AroundCode(_core, "(", ")");
             return target.ToString(false, indent, context);
         }
-
-        public override Code ConcatAround(string front, string back) => new SelectQueryCode(_core.ConcatAround(front, back));
-
-        public override Code ConcatToFront(string front) => new SelectQueryCode(_core.ConcatToFront(front));
-
-        public override Code ConcatToBack(string back) => new SelectQueryCode(_core.ConcatToBack(back));
 
         public override Code Customize(ICodeCustomizer customizer) => new SelectQueryCode(_core.Customize(customizer));
     }

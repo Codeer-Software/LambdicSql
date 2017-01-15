@@ -324,6 +324,7 @@ FROM tbl_staff",
                 }).
                 From(db.tbl_staff));
 
+            sub.Gen(_connection);
             query.Gen(_connection);
 
             var datas = _connection.Query(query).ToList();

@@ -50,28 +50,6 @@ namespace LambdicSql.BuilderServices.CodeParts
         public override string ToString(bool isTopLevel, int indent, BuildingContext context) => PartsUtils.GetIndent(_indent + indent) + _text;
 
         /// <summary>
-        /// Concat to front and back.
-        /// </summary>
-        /// <param name="front">Front.</param>
-        /// <param name="back">Back.</param>
-        /// <returns>Text.</returns>
-        public override Code ConcatAround(string front, string back) => new SingleTextCode(front + _text + back, _indent);
-
-        /// <summary>
-        /// Concat to front.
-        /// </summary>
-        /// <param name="front">Front.</param>
-        /// <returns>Text.</returns>
-        public override Code ConcatToFront(string front) => new SingleTextCode(front + _text, _indent);
-
-        /// <summary>
-        /// Concat to back.
-        /// </summary>
-        /// <param name="back"></param>
-        /// <returns></returns>
-        public override Code ConcatToBack(string back) => new SingleTextCode(_text + back, _indent);
-
-        /// <summary>
         /// Customize.
         /// </summary>
         /// <param name="customizer">Customizer.</param>

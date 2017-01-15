@@ -46,12 +46,6 @@ namespace LambdicSql.ConverterServices.Inside.CodeParts
 
         public override string ToString(bool isTopLevel, int indent, BuildingContext context) => PartsUtils.GetIndent(indent) + _front + GetDisplayText(context) + _back;
 
-        public override Code ConcatAround(string front, string back) => new ParameterCode(Name, MetaId, _param, front + _front, _back + back, _displayValue);
-
-        public override Code ConcatToFront(string front) => new ParameterCode(Name, MetaId, _param, front + _front, _back, _displayValue);
-
-        public override Code ConcatToBack(string back) => new ParameterCode(Name, MetaId, _param, _front, _back + back, _displayValue);
-
         public override Code Customize(ICodeCustomizer customizer) => customizer.Custom(this);
 
         internal Code ToDisplayValue() => new ParameterCode(Name, MetaId, _param, _front, _back, true);

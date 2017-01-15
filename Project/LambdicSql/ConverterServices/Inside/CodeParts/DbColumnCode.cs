@@ -40,12 +40,6 @@ namespace LambdicSql.ConverterServices.Inside.CodeParts
 
         public override string ToString(bool isTopLevel, int indent, BuildingContext context) => PartsUtils.GetIndent(indent) + _front + ColumnName + _back;
 
-        public override Code ConcatAround(string front, string back) => new DbColumnCode(_col, _columnOnly, front + _front, _back + back);
-
-        public override Code ConcatToFront(string front) => new DbColumnCode(_col, _columnOnly, front + _front, _back);
-
-        public override Code ConcatToBack(string back) => new DbColumnCode(_col, _columnOnly, _front, _back + back);
-
         public override Code Customize(ICodeCustomizer customizer) => customizer.Custom(this);
     }
 }

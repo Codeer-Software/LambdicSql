@@ -33,7 +33,7 @@ namespace LambdicSql.ConverterServices.SymbolConverters
 
             var index = expression.SkipMethodChain(0);
             var args = expression.Arguments.Skip(index).Select(e => converter.Convert(e)).ToArray();
-            var hArgs = new HCode(args) { Separator = ", " }.ConcatToBack(")");
+            var hArgs = new AroundCode(new HCode(args) { Separator = ", " }, "", ")");
             return new HCode(Line(Name, "("), hArgs) { IsFunctional = true, Indent = Indent };
         }
     }

@@ -25,28 +25,6 @@
         public abstract string ToString(bool isTopLevel, int indent, BuildingContext context);
 
         /// <summary>
-        /// Concat to front and back.
-        /// </summary>
-        /// <param name="front">Front.</param>
-        /// <param name="back">Back.</param>
-        /// <returns>Text.</returns>
-        public abstract Code ConcatAround(string front, string back);
-
-        /// <summary>
-        /// Concat to front.
-        /// </summary>
-        /// <param name="front">Front.</param>
-        /// <returns>Text.</returns>
-        public abstract Code ConcatToFront(string front);
-
-        /// <summary>
-        /// Concat to back.
-        /// </summary>
-        /// <param name="back"></param>
-        /// <returns></returns>
-        public abstract Code ConcatToBack(string back);
-
-        /// <summary>
         /// Customize.
         /// </summary>
         /// <param name="customizer">Customizer.</param>

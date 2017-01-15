@@ -97,50 +97,6 @@ namespace LambdicSql.BuilderServices.CodeParts
             => _texts.AddRange(texts.Where(e => !e.IsEmpty).Select(e => new HCode(e) { Indent = 1 }).Cast<Code>());
 
         /// <summary>
-        /// Concat to front and back.
-        /// </summary>
-        /// <param name="front">Front.</param>
-        /// <param name="back">Back.</param>
-        /// <returns>Text.</returns>
-        public override Code ConcatAround(string front, string back)
-        {
-            if (_texts.Count == 0) return CopyProperty(front + back);
-
-            var dst = _texts.ToArray();
-            dst[0] = dst[0].ConcatToFront(front);
-            dst[dst.Length - 1] = dst[dst.Length - 1].ConcatToBack(back);
-            return CopyProperty(dst);
-        }
-
-        /// <summary>
-        /// Concat to front.
-        /// </summary>
-        /// <param name="front">Front.</param>
-        /// <returns>Text.</returns>
-        public override Code ConcatToFront(string front)
-        {
-            if (_texts.Count == 0) return CopyProperty(front);
-
-            var dst = _texts.ToArray();
-            dst[0] = dst[0].ConcatToFront(front);
-            return CopyProperty(dst);
-        }
-
-        /// <summary>
-        /// Concat to back.
-        /// </summary>
-        /// <param name="back"></param>
-        /// <returns>Text.</returns>
-        public override Code ConcatToBack(string back)
-        {
-            if (_texts.Count == 0) return CopyProperty(back);
-
-            var dst = _texts.ToArray();
-            dst[dst.Length - 1] = dst[dst.Length - 1].ConcatToBack(back);
-            return CopyProperty(dst);
-        }
-
-        /// <summary>
         /// Customize.
         /// </summary>
         /// <param name="customizer">Customizer.</param>

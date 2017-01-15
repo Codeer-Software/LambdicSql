@@ -119,7 +119,7 @@ namespace LambdicSql.ConverterServices
             switch (unary.NodeType)
             {
                 case ExpressionType.Not:
-                    return Convert(unary.Operand).ConcatAround("NOT (", ")");
+                    return new AroundCode(Convert(unary.Operand), "NOT (", ")");
                 case ExpressionType.Convert:
                     var ret = Convert(unary.Operand);
                     var param = ret as ParameterCode;
@@ -167,7 +167,7 @@ namespace LambdicSql.ConverterServices
             if (nullCheck != null) return nullCheck;
 
             var nodeType = Convert(binary.Type, left, binary.NodeType, right);
-            return new HCode(left.ConcatAround("(", ")"), nodeType.ConcatAround(" ", " "), right.ConcatAround("(", ")"));
+            return new HCode(new AroundCode(left, "(", ")"), new AroundCode(nodeType, " ", " "), new AroundCode(right, "(", ")"));
         }
 
         Code Convert(MemberExpression member)
@@ -368,7 +368,7 @@ namespace LambdicSql.ConverterServices
                         if (bothParam) continue;
                         return null;
                     }
-                    return targetTexts[i].ConcatAround("(", ")" + ope);
+                    return new AroundCode(targetTexts[i], "(", ")" + ope);
                 }
             }
             return null;
