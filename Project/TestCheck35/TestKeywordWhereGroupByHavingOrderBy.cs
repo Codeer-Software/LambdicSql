@@ -655,6 +655,8 @@ GROUP BY tbl_remuneration.id, tbl_remuneration.staff_id WITH ROLLUP");
             var target = Db<DB>.Sql(db => GroupByCube(db.tbl_remuneration.id, db.tbl_remuneration.staff_id));
             query = query + target;
 
+            query.Gen(_connection);
+
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,

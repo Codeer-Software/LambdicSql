@@ -124,7 +124,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="targets">A string value to concatenate to the other values.</param>
         /// <returns>concatenated result.</returns>
-        [FuncStyleConverter]
+        [MethodFormatConverter(Format = "CONCAT(|[<, >0])")]
         public static string Concat(params object[] targets) { throw new InvalitContextException(nameof(Concat)); }
 
         /// <summary>
@@ -213,7 +213,7 @@ namespace LambdicSql
         /// <typeparam name="T">Type of parameter</typeparam>
         /// <param name="parameter">Parameter.</param>
         /// <returns>The first non-null value in the parameter.</returns>
-        [FuncStyleConverter]
+        [MethodFormatConverter(Format = "COALESCE(|[<, >0])")]
         public static T Coalesce<T>(params T[] parameter) { throw new InvalitContextException(nameof(Coalesce)); }
 
         /// <summary>

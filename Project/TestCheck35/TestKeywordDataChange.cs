@@ -107,6 +107,8 @@ FROM tbl_data");
             var query = Db<DB>.Sql(db =>
                    InsertInto(db.tbl_data, db.tbl_data.id, db.tbl_data.val2).Values(1, "val2"));
 
+            query.Gen(_connection);
+
             Assert.AreEqual(1, _connection.Execute(query));
             AssertEx.AreEqual(query, _connection,
 @"INSERT INTO tbl_data(id, val2)

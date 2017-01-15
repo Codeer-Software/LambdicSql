@@ -42,14 +42,14 @@ namespace LambdicSql.ConverterServices.Inside
             if (FormatDirection == FormatDirection.Vertical)
             {
                 var first = new HCode(array.Take(_firstLineElemetCount)) { EnableChangeLine = false };
-                var v = new VCode(first);
+                var v = new VCode(first) { Indent = Indent };
                 v.AddRange(1, array.Skip(_firstLineElemetCount));
                 return v;
             }
             else
             {
                 var first = new HCode(array.Take(_firstLineElemetCount)) { EnableChangeLine = false };
-                var h = new HCode(first) { IsFunctional = true };
+                var h = new HCode(first) { IsFunctional = true, Indent = Indent };
                 h.AddRange(array.Skip(_firstLineElemetCount));
                 return h;
             }
@@ -69,11 +69,35 @@ namespace LambdicSql.ConverterServices.Inside
                     var newArrayExp = argExp as NewArrayExpression;
                     if (newArrayExp != null)
                     {
+                        /*
+                        //TODO あー、これは十分ではない
+                        //以下が区別がつかない
+                        //そもそも区別がつかない・・・
+                        //Values(params object[] x)
+                        //byte[] bin
+                        //Value(bin)
+                        if (newArrayExp.Expressions.Count == 1 && newArrayExp.Expressions[0].Type.IsArray)
+                        {
+                            //TODO refactoring.
+                            var obj = converter.ToObject(newArrayExp.Expressions[0]);
+                            var list = new List<Code>();
+                            foreach (var x in (IEnumerable)obj)
+                            {
+                                list.Add(converter.Convert(x));
+                            }
+                            code = list.ToArray();
+                        }
+                        else
+                        {
+                            code = newArrayExp.Expressions.Select(x => converter.Convert(x)).ToArray();
+                        }
+                        */
+
                         code = newArrayExp.Expressions.Select(x => converter.Convert(x)).ToArray();
                     }
                     else
                     {
-                        var obj = converter.ToObject(newArrayExp);
+                        var obj = converter.ToObject(argExp);
                         var list = new List<Code>();
                         foreach (var x in (IEnumerable)obj)
                         {

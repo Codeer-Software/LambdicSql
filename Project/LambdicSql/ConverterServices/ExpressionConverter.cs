@@ -1,13 +1,9 @@
-﻿using LambdicSql.Inside.SymbolConverters;
-using LambdicSql.ConverterServices.Inside;
+﻿using LambdicSql.ConverterServices.Inside;
 using LambdicSql.BuilderServices.CodeParts;
-using LambdicSql.Inside.CodeParts;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using static LambdicSql.BuilderServices.Inside.PartsFactoryUtils;
 using LambdicSql.ConverterServices.Inside.CodeParts;
 
 namespace LambdicSql.ConverterServices
@@ -119,8 +115,7 @@ namespace LambdicSql.ConverterServices
             var value = ExpressionToObject.GetNewObject(newExp);
             return new ConvertedResult(newExp.Type, Convert(value));
         }
-
-        //TODO この展開はやめる
+        
         ConvertedResult Convert(NewArrayExpression array)
         {
             if (SupportedTypeSpec.IsSupported(array.Type))
@@ -128,9 +123,7 @@ namespace LambdicSql.ConverterServices
                 var obj = SupportedTypeSpec.ConvertArray(array.Type, array.Expressions.Select(e => ToObject(e)));
                 return new ConvertedResult(array.Type, new ParameterCode(obj));
             }
-            if (array.Expressions.Count == 0) return new ConvertedResult(null, string.Empty);
-            var infos = array.Expressions.Select(e => Convert(e)).ToArray();
-            return new ConvertedResult(infos[0].Type, Arguments(infos.Select(e => e.Code).ToArray()));
+            throw new NotSupportedException();
         }
         
         ConvertedResult Convert(UnaryExpression unary)
@@ -400,31 +393,6 @@ namespace LambdicSql.ConverterServices
                 throw new NotSupportedException();
             }
 
-            //TODO ここも変わる？ここに配列が来るときは展開は・・・しないんじゃないかな？
-            //array.
-            if (obj != null && obj.GetType().IsArray)
-            {
-                if (SupportedTypeSpec.IsSupported(obj.GetType()))
-                {
-                    string name = string.Empty;
-                    MetaId metaId = null;
-                    var member = exp as MemberExpression;
-                    if (member != null)
-                    {
-                        name = member.Member.Name;
-                        metaId = new MetaId(member.Member);
-                    }
-                    return new ConvertedResult(exp.Type, new ParameterCode(name, metaId, new DbParam() { Value = obj }));
-                }
-
-                var list = new List<Code>();
-                foreach (var e in (IEnumerable)obj)
-                {
-                    list.Add(Convert(e));
-                }
-                return new ConvertedResult(exp.Type, Arguments(list.ToArray()));
-            }
-
             //object symbol.
             //for example enum.
             var symbol = exp.Type.GetObjectConverter();
@@ -446,8 +414,8 @@ namespace LambdicSql.ConverterServices
                 return new ConvertedResult(exp.Type.GetGenericArguments()[0], new ParameterCode(name, metaId, param));
             }
 
-            //ISqlExpression.
-            //example [ from(exp) ]
+            //sql.
+            //example [ IN(exp) ]
             var sqlExp = obj as Sql;
             if (sqlExp != null)
             {

@@ -528,7 +528,9 @@ FROM rec", 1, 1, 1, 5);
                 Select(rec.Body.val).
                 From(rec)
                 );
-            
+
+            query.Gen(_connection);
+
             var datas = _connection.Query<SelectedData>(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,

@@ -32,7 +32,13 @@ namespace LambdicSql.Inside.SymbolConverters
                 select.Add("*");
                 return new SelectClauseCode(select);
             }
-
+            //new []{ a, b, c} recursive.
+            else if (selectTargets.Type.IsArray)
+            {
+                var newArrayExp = selectTargets as NewArrayExpression;
+                var elements = new VCode(newArrayExp.Expressions.Select(x => converter.Convert(x)).ToArray()) { Indent = 1, Separator = "," };
+                return new SelectClauseCode(new VCode(select, elements));
+            }
             //new { item = db.tbl.column }
             else
             {

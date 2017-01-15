@@ -245,6 +245,8 @@ WHERE tbl_staff.id IN(@p_0, @p_1)",
                From(db.tbl_staff).
                Where(In(db.tbl_staff.id, vals)));
 
+            query.Gen(_connection);
+
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,

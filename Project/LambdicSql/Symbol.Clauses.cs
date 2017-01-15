@@ -517,7 +517,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="columns">Specify the target column of GROUP BY.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [ClauseStyleConverter(Name ="GROUP BY")]
+        [MethodFormatConverter(Format = "GROUP BY |[<, >0]")]
         public static ClauseChain<Non> GroupBy(params object[] columns) { throw new InvalitContextException(nameof(GroupBy)); }
 
         /// <summary>
@@ -527,7 +527,7 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="columns">Specify the target column of GROUP BY.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [ClauseStyleConverter(Name = "GROUP BY")]
+        [MethodFormatConverter(Format = "GROUP BY |[<, >1]")]
         public static ClauseChain<TSelected> GroupBy<TSelected>(this ClauseChain<TSelected> before, params object[] columns) { throw new InvalitContextException(nameof(GroupBy)); }
 
         /// <summary>
@@ -535,7 +535,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="columns">Specify the target column of GROUP BY.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [FuncStyleConverter(Name = "GROUP BY ROLLUP")]
+        [MethodFormatConverter(Format = "GROUP BY ROLLUP(|[<, >0])")]
         public static ClauseChain<Non> GroupByRollup(params object[] columns) { throw new InvalitContextException(nameof(GroupByRollup)); }
 
         /// <summary>
@@ -545,7 +545,7 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="columns">Specify the target column of GROUP BY.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [FuncStyleConverter(Name = "GROUP BY ROLLUP")]
+        [MethodFormatConverter(Format = "GROUP BY ROLLUP(|[<, >1])")]
         public static ClauseChain<TSelected> GroupByRollup<TSelected>(this ClauseChain<TSelected> before, params object[] columns) { throw new InvalitContextException(nameof(GroupByRollup)); }
 
         /// <summary>
@@ -572,7 +572,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="columns">Specify the target column of GROUP BY.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [FuncStyleConverter(Name = "GROUP BY CUBE")]
+        [MethodFormatConverter(Format = "GROUP BY CUBE(|[<, >0])")]
         public static ClauseChain<Non> GroupByCube(params object[] columns) { throw new InvalitContextException(nameof(GroupByCube)); }
 
         /// <summary>
@@ -582,7 +582,7 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="columns">Specify the target column of GROUP BY.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [FuncStyleConverter(Name = "GROUP BY CUBE")]
+        [MethodFormatConverter(Format = "GROUP BY CUBE(|[<, >1])")]
         public static ClauseChain<TSelected> GroupByCube<TSelected>(this ClauseChain<TSelected> before, params object[] columns) { throw new InvalitContextException(nameof(GroupByCube)); }
 
         /// <summary>
@@ -590,7 +590,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="columns">Specify the target column of GROUP BY.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [FuncStyleConverter(Name = "GROUP BY GROUPING SETS")]
+        [MethodFormatConverter(Format = "GROUP BY GROUPING SETS(|[<, >0])")]
         public static ClauseChain<Non> GroupByGroupingSets(params object[] columns) { throw new InvalitContextException(nameof(GroupByGroupingSets)); }
 
         /// <summary>
@@ -600,7 +600,7 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="columns">Specify the target column of GROUP BY.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [FuncStyleConverter(Name = "GROUP BY GROUPING SETS")]
+        [MethodFormatConverter(Format = "GROUP BY GROUPING SETS(|[<, >1])")]
         public static ClauseChain<TSelected> GroupByGroupingSets<TSelected>(this ClauseChain<TSelected> before, params object[] columns) { throw new InvalitContextException(nameof(GroupByGroupingSets)); }
 
         /// <summary>
@@ -900,7 +900,7 @@ namespace LambdicSql
         /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
         /// <param name="values">It is the value to be Inserted.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [FuncStyleConverter(Indent = 1)]
+        [MethodFormatConverter(Format = "VALUES([<, >1])", Indent = 0)]
         public static ClauseChain<TSelected> Values<TSelected>(params object[] values) { throw new InvalitContextException(nameof(Values)); }
 
         /// <summary>
@@ -910,7 +910,7 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="values">It is the value to be Inserted.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [FuncStyleConverter(Indent = 1)]
+        [MethodFormatConverter(Format = "VALUES([<, >1])", Indent = 1)]
         public static ClauseChain<TSelected> Values<TSelected>(this ClauseChain<TSelected> before, params object[] values) { throw new InvalitContextException(nameof(Values)); }
 
         /// <summary>
@@ -932,7 +932,6 @@ namespace LambdicSql
         [MethodFormatConverter(Format = "[0] BETWEEN |[1] AND [2]")]
         public static bool Between(object target, object min, object max) { throw new InvalitContextException(nameof(Between)); }
 
-        //TODO paramsがついているかどうかって属性でわかるんやっけ？ それはFormatConverterとかの中で見るべし
         /// <summary>
         /// IN keyword.
         /// </summary>
@@ -941,6 +940,16 @@ namespace LambdicSql
         /// <returns>Returns TRUE if target is included in the canditates represented by expression.</returns>
         [MethodFormatConverter(Format = "[0] IN(|[<, >1])")]
         public static bool In(object target, params object[] canditates) { throw new InvalitContextException(nameof(In)); }
+
+        //TODO この手法を広めるか・・・ 他にparamsで問題になりそうなのを洗い出し、ValuesとSetかな・・・、力業っていう手もあるけどね・・・
+        /// <summary>
+        /// IN keyword.
+        /// </summary>
+        /// <param name="target">Target of IN check.</param>
+        /// <param name="canditates">Canditates.</param>
+        /// <returns>Returns TRUE if target is included in the canditates represented by expression.</returns>
+        [MethodFormatConverter(Format = "[0] IN(|[<, >1])")]
+        public static bool In<T>(T target, params T[] canditates) { throw new InvalitContextException(nameof(In)); }
 
         /// <summary>
         /// ALL Keyword
@@ -1071,7 +1080,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="columns">Columns.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [FuncStyleConverter(Name = "PRIMARY KEY")]
+        [MethodFormatConverter(Format = "PRIMARY KEY([<, >0])")]
         public static IConstraint PrimaryKey(params object[] columns) { throw new InvalitContextException(nameof(PrimaryKey)); }
 
         /// <summary>
@@ -1080,7 +1089,7 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="columns">Columns.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [FuncStyleConverter(Name = "PRIMARY KEY", Indent = 1)]
+        [MethodFormatConverter(Format = "PRIMARY KEY([<, >1])")]
         public static IConstraint PrimaryKey(this IConstraint before, params object[] columns) { throw new InvalitContextException(nameof(PrimaryKey)); }
 
         /// <summary>
@@ -1097,7 +1106,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="columns">Columns.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [FuncStyleConverter]
+        [MethodFormatConverter(Format = "UNIQUE([<, >0])")]
         public static IConstraint Unique(params object[] columns) { throw new InvalitContextException(nameof(Unique)); }
 
         /// <summary>
@@ -1106,7 +1115,7 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="columns">Columns.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [FuncStyleConverter(Indent = 1)]
+        [MethodFormatConverter(Format = "UNIQUE([<, >1])")]
         public static IConstraint Unique(this IConstraint before, params object[] columns) { throw new InvalitContextException(nameof(Unique)); }
 
         /// <summary>
@@ -1114,7 +1123,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="columns">Columns.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [FuncStyleConverter(Name = "FOREIGN KEY")]
+        [MethodFormatConverter(Format = "FOREIGN KEY([<, >0])")]
         public static IConstraint ForeignKey(params object[] columns) { throw new InvalitContextException(nameof(ForeignKey)); }
 
         /// <summary>
@@ -1123,7 +1132,7 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="columns">Columns.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [FuncStyleConverter(Name = "FOREIGN KEY", Indent = 1)]
+        [MethodFormatConverter(Format = "FOREIGN KEY([<, >1])")]
         public static IConstraint ForeignKey(this IConstraint before, params object[] columns) { throw new InvalitContextException(nameof(ForeignKey)); }
         
         /// <summary>
@@ -1181,7 +1190,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="tables">Tables.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [ClauseStyleConverter(Name = "DROP TABLE")]
+        [MethodFormatConverter(Format = "DROP TABLE [<, >0]")]
         public static ClauseChain<Non> DropTable(params object[] tables) { throw new InvalitContextException(nameof(DropTable)); }
 
         /// <summary>
@@ -1189,7 +1198,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="tables">Tables.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [ClauseStyleConverter(Name = "DROP TABLE IF EXISTS")]
+        [MethodFormatConverter(Format = "DROP TABLE IF EXISTS [<, >0]")]
         public static ClauseChain<Non> DropTableIfExists(params object[] tables) { throw new InvalitContextException(nameof(DropTable)); }
 
         /// <summary>
