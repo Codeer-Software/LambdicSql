@@ -171,7 +171,7 @@ namespace LambdicSql.ConverterServices
         }
 
         Code AddBinaryExpressionBlankets(Code src)
-            => typeof(DisableBracketsCode).IsAssignableFrom(src.GetType()) ? src : new AroundCode(src, "(", ")");
+            => typeof(IDisableBinaryExpressionBrackets).IsAssignableFrom(src.GetType()) ? src : new AroundCode(src, "(", ")");
 
         Code Convert(MemberExpression member)
         {
@@ -224,7 +224,7 @@ namespace LambdicSql.ConverterServices
             if (code.Length == 0) return ResolveExpressionObject(method);
             
             //for ALL function. can't add blankets.
-            if (code.Length == 1 && typeof(DisableBracketsCode).IsAssignableFrom(code[0].GetType()))
+            if (code.Length == 1 && typeof(IDisableBinaryExpressionBrackets).IsAssignableFrom(code[0].GetType()))
             {
                 return code[0];
             }
