@@ -7,10 +7,19 @@ using System.Linq;
 using System.Linq.Expressions;
 using static LambdicSql.BuilderServices.Inside.PartsFactoryUtils;
 
-namespace LambdicSql.Inside.SymbolConverters
+namespace LambdicSql.Specialized.SymbolConverters
 {
-    class AllConverterAttribute : MethodConverterAttribute
+    /// <summary>
+    /// 
+    /// </summary>
+    public class AllConverterAttribute : MethodConverterAttribute
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <param name="converter"></param>
+        /// <returns></returns>
         public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var args = expression.Arguments.Select(e => converter.Convert(e)).ToArray();

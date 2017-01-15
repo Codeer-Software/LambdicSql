@@ -6,10 +6,19 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using static LambdicSql.BuilderServices.Inside.PartsFactoryUtils;
 
-namespace LambdicSql.Inside.SymbolConverters
+namespace LambdicSql.Specialized.SymbolConverters
 {
-    class WithConverterAttribute : MethodConverterAttribute
+    /// <summary>
+    /// 
+    /// </summary>
+    public class WithConverterAttribute : MethodConverterAttribute
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <param name="converter"></param>
+        /// <returns></returns>
         public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var arry = expression.Arguments[0] as NewArrayExpression;

@@ -1,7 +1,7 @@
 using LambdicSql.ConverterServices;
 using LambdicSql.ConverterServices.Inside;
 using LambdicSql.ConverterServices.SymbolConverters;
-using LambdicSql.Inside.SymbolConverters;
+using LambdicSql.Specialized.SymbolConverters;
 
 namespace LambdicSql
 {
@@ -1207,8 +1207,13 @@ namespace LambdicSql
         [MethodFormatConverter(Format = "DROP DATABASE [!0]")]
         public static ClauseChain<Non> DropDataBase(string name) { throw new InvalitContextException(nameof(CreateDataBase)); }
 
-
-        //TODO やっぱり、IS NULL と IS NOT NULL は必要かな
+        //ifはインテリセンスで出てきてほしくないよな・・・
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="condition"></param>
+        /// <returns></returns>
+        public static ClauseChain<Non> If(bool condition) { throw new InvalitContextException(nameof(If)); }
         //TODO で、DropTableとCreateTableは前に続くものも作る
         //  IF OBJECT_ID('dbo.Scores', 'U') IS NOT NULL DROP TABLE dbo.Scores;
     }

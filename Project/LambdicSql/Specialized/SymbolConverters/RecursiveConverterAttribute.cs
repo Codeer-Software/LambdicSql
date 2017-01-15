@@ -6,10 +6,19 @@ using System.Linq;
 using System.Linq.Expressions;
 using static LambdicSql.BuilderServices.Inside.PartsFactoryUtils;
 
-namespace LambdicSql.Inside.SymbolConverters
+namespace LambdicSql.Specialized.SymbolConverters
 {
-    class RecursiveConverterAttribute : MethodConverterAttribute
+    /// <summary>
+    /// 
+    /// </summary>
+    public class RecursiveConverterAttribute : MethodConverterAttribute
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <param name="converter"></param>
+        /// <returns></returns>
         public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var selectTargets = expression.Arguments[expression.Arguments.Count - 1];

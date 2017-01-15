@@ -4,12 +4,24 @@ using LambdicSql.ConverterServices.SymbolConverters;
 using LambdicSql.ConverterServices.Inside;
 using System.Linq.Expressions;
 
-namespace LambdicSql.Inside.SymbolConverters
+namespace LambdicSql.Specialized.SymbolConverters
 {
-    class JoinConverterAttribute : MethodConverterAttribute
+    /// <summary>
+    /// 
+    /// </summary>
+    public class JoinConverterAttribute : MethodConverterAttribute
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public string Name { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <param name="converter"></param>
+        /// <returns></returns>
         public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var startIndex = expression.SkipMethodChain(0);

@@ -5,10 +5,19 @@ using LambdicSql.ConverterServices.Inside;
 using System.Linq.Expressions;
 using static LambdicSql.BuilderServices.Inside.PartsFactoryUtils;
 
-namespace LambdicSql.Inside.SymbolConverters
+namespace LambdicSql.Specialized.SymbolConverters
 {
-    class ConditionClauseConverterAttribute : MethodConverterAttribute
+    /// <summary>
+    /// 
+    /// </summary>
+    public class ConditionClauseConverterAttribute : MethodConverterAttribute
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <param name="converter"></param>
+        /// <returns></returns>
         public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var condition = converter.Convert(expression.Arguments[expression.SkipMethodChain(0)]);

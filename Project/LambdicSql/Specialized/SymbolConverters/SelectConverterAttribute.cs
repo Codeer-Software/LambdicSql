@@ -8,10 +8,19 @@ using System.Linq.Expressions;
 using LambdicSql.ConverterServices.Inside.CodeParts;
 using static LambdicSql.BuilderServices.Inside.PartsFactoryUtils;
 
-namespace LambdicSql.Inside.SymbolConverters
+namespace LambdicSql.Specialized.SymbolConverters
 {
-    class SelectConverterAttribute : MethodConverterAttribute
+    /// <summary>
+    /// 
+    /// </summary>
+    public class SelectConverterAttribute : MethodConverterAttribute
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <param name="converter"></param>
+        /// <returns></returns>
         public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             //ALL, DISTINCT, TOP

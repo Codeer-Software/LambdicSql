@@ -3,10 +3,19 @@ using LambdicSql.ConverterServices;
 using LambdicSql.ConverterServices.SymbolConverters;
 using System.Linq.Expressions;
 
-namespace LambdicSql.Inside.SymbolConverters
+namespace LambdicSql.Specialized.SymbolConverters
 {
-    class ConditionConverterAttribute : NewConverterAttribute
+    /// <summary>
+    /// 
+    /// </summary>
+    public class ConditionConverterAttribute : NewConverterAttribute
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <param name="converter"></param>
+        /// <returns></returns>
         public override Code Convert(NewExpression expression, ExpressionConverter converter)
         {
             var obj = converter.ToObject(expression.Arguments[0]);
