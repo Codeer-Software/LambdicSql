@@ -8,6 +8,7 @@ using static Test.Helper.DBProviderInfo;
 using LambdicSql;
 using LambdicSql.feat.Dapper;
 using static LambdicSql.Symbol;
+using System.Diagnostics;
 
 namespace TestCheck35
 {
@@ -45,6 +46,8 @@ namespace TestCheck35
                             End()
                 }).
                 From(db.tbl_staff));
+
+            DapperAdapter.Log = e => Debug.Print(e);
 
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);

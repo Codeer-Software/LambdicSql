@@ -8,6 +8,7 @@ using LambdicSql.feat.EntityFramework;
 using static LambdicSql.Symbol;
 using TestCheck35;
 using Test.Model;
+using System.Diagnostics;
 
 namespace Test
 {
@@ -50,7 +51,7 @@ namespace Test
                 From(db.tbl_remuneration).
                 Join(db.tbl_staff, db.tbl_staff.T().id == db.tbl_remuneration.T().staff_id));
 
-            query.Gen(_connection);
+            EFAdapter.Log = e => Debug.Print(e);
 
             var datas = query.SqlQuery(new ModelLambdicSqlTestDB()).ToList();
             Assert.IsTrue(0 < datas.Count);

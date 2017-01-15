@@ -16,8 +16,13 @@ namespace LambdicSql.feat.EntityFramework
     /// LambdicSql has no dependency on  Entity Framework from the project compositionally with  Entity Framework. 
     /// That is to avoid inconsistencies between versions. Please install your favorite version of  Entity Framework by yourself.
     /// </summary>
-    public static class EFAdaptExtensions
+    public static class EFAdapter
     {
+        /// <summary>
+        /// Debug Log.
+        /// </summary>
+        public static Action<string> Log { get; set; }
+
         /// <summary>
         /// Get entity.
         /// It can only be used within methods of the LambdicSql.Sql class.
@@ -49,7 +54,10 @@ namespace LambdicSql.feat.EntityFramework
         {
             var cnn = EFWrapper.GetConnection(dbContext);
             var info = query.Build(cnn.GetType());
-            
+
+            //debug.
+            Debug(info);
+
             object[] args;
             using (var com = cnn.CreateCommand())
             {
@@ -76,6 +84,9 @@ namespace LambdicSql.feat.EntityFramework
         {
             var cnn = EFWrapper.GetConnection(dbContext);
             var info = query.Build(cnn.GetType());
+
+            //debug.
+            Debug(info);
 
             object[] args;
             using (var com = cnn.CreateCommand())
@@ -117,6 +128,17 @@ namespace LambdicSql.feat.EntityFramework
             if (src.Size != null) dst.Size = src.Size.Value;
 
             return dst;
+        }
+
+        static void Debug(BuildedSql info)
+        {
+            if (Log == null) return;
+            Log(info.Text);
+            foreach (var e in info.Params)
+            {
+                Log(e.Key + " = " + (e.Value.Value == null ? string.Empty : e.Value.Value.ToString()));
+            }
+            Log(string.Empty);
         }
     }
 

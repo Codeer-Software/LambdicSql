@@ -10,8 +10,13 @@ namespace LambdicSql.feat.Dapper
     /// LambdicSql has no dependency on Dapper from the project compositionally with Dapper. 
     /// That is to avoid inconsistencies between versions. Please install your favorite version of Dapper by yourself.
     /// </summary>
-    public static class DapperApaptExtensions
+    public static class DapperAdapter
     {
+        /// <summary>
+        /// Debug Log.
+        /// </summary>
+        public static Action<string> Log { get; set; }
+
         /// <summary>
         /// Executes a query, returning the data typed as per T.
         /// For details, refer to the document of Dapper.
@@ -56,6 +61,9 @@ namespace LambdicSql.feat.Dapper
             //for testing.
             if (DapperApaptExtensionsForTest.Query != null) return new T[DapperApaptExtensionsForTest.Query(cnn, info)];
 
+            //debug.
+            Debug(info);
+
             try
             {
                 return DapperWrapper<T>.Query(cnn, info.Text, CreateDynamicParam(info.Params), transaction, buffered, commandTimeout, commandType);
@@ -82,6 +90,9 @@ namespace LambdicSql.feat.Dapper
 
             //for testing.
             if (DapperApaptExtensionsForTest.Execute != null) return DapperApaptExtensionsForTest.Execute(cnn, info);
+
+            //debug.
+            Debug(info);
 
             try
             {
@@ -110,6 +121,17 @@ namespace LambdicSql.feat.Dapper
                 DynamicParametersWrapper.Add(target, e.Key, e.Value.Value, e.Value.DbType, e.Value.Direction, e.Value.Size, e.Value.Precision, e.Value.Scale);
             }
             return target;
+        }
+
+        static void Debug(BuildedSql info)
+        {
+            if (Log == null) return;
+            Log(info.Text);
+            foreach (var e in info.Params)
+            {
+                Log(e.Key + " = " + (e.Value.Value == null ? string.Empty : e.Value.Value.ToString()));
+            }
+            Log(string.Empty);
         }
     }
 

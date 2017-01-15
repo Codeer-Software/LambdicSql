@@ -79,9 +79,9 @@
     <Compile Include="Symbol.Funcs.cs" />
     <Compile Include="Symbol.Etc.cs" />
     <Compile Include="SymbolSub.cs" />
-    <Compile Include="feat\Dapper\DapperApaptExtensions.cs" />
+    <Compile Include="feat\Dapper\DapperAdapter.cs" />
     <Compile Include="feat\Dapper\DapperWrapper.cs" />
-    <Compile Include="feat\EntityFramework\EFAdaptExtensions.cs" />
+    <Compile Include="feat\EntityFramework\EFAdapter.cs" />
     <Compile Include="feat\EntityFramework\EFWrapper.cs" />
     <Compile Include="feat\PackageIsNotInstalledException.cs" />
     <Compile Include="BuilderServices\CustomizeColumnOnly.cs" />
