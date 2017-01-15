@@ -167,8 +167,11 @@ namespace LambdicSql.ConverterServices
             if (nullCheck != null) return nullCheck;
 
             var nodeType = Convert(binary.Type, left, binary.NodeType, right);
-            return new HCode(new AroundCode(left, "(", ")"), new AroundCode(nodeType, " ", " "), new AroundCode(right, "(", ")"));
+            return new HCode(AddBinaryExpressionBlankets(left), new AroundCode(nodeType, " ", " "), AddBinaryExpressionBlankets(right));
         }
+
+        Code AddBinaryExpressionBlankets(Code src)
+            => typeof(DisableBracketsCode).IsAssignableFrom(src.GetType()) ? src : new AroundCode(src, "(", ")");
 
         Code Convert(MemberExpression member)
         {
@@ -219,8 +222,7 @@ namespace LambdicSql.ConverterServices
             //convert symbol.
             var code = GetMethodChains(method).Select(c=> c.GetMethodConverter().Convert(c, this)).ToArray();
             if (code.Length == 0) return ResolveExpressionObject(method);
-
-            //TODO やっぱりこの仕組みは、このクラスの中に閉じるべきかな　上のBinaryのところで判断するか
+            
             //for ALL function. can't add blankets.
             if (code.Length == 1 && typeof(DisableBracketsCode).IsAssignableFrom(code[0].GetType()))
             {
@@ -231,7 +233,6 @@ namespace LambdicSql.ConverterServices
 
             return (typeof(SelectClauseCode).IsAssignableFrom(code[0].GetType())) ?
                  (Code)new SelectQueryCode(core) :
-                 //TODO これいらんやろ。
                  new QueryCode(core);
         }
 
