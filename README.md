@@ -3,6 +3,8 @@
 
 ## Features ...
 #### LambdicSql's purpose is to generate sql text and parameters from lambda.
+![LambdicSqlImage](https://github.com/Codeer-Software/LambdicSql/Pictures/lambdicSqlImage.png)
+
 ## Getting Started
 LambdicSql from NuGet
 
@@ -277,8 +279,8 @@ JOIN tbl_staff ON tbl_staff.id = tbl_remuneration.staff_id
     var sql = Db<DB>.Sql(db => text.TwoWaySql(
         bonus,
         Where(
-            Condition(minCondition, 3000 < db.tbl_remuneration.money) &&
-            Condition(maxCondition, db.tbl_remuneration.money < 4000))
+            new Condition(minCondition, 3000 < db.tbl_remuneration.money) &&
+            new Condition(maxCondition, db.tbl_remuneration.money < 4000))
         ));
     var info = sql.Build(_connection.GetType());
     Debug.Print(info.SqlText);
