@@ -51,6 +51,8 @@ public void TestStandard()
 
     //make sql.
     var sql = Db<DB>.Sql(db =>
+    
+        //lambda.
         Select(new SelectData1()
         {
             Name = db.tbl_staff.name,
@@ -59,7 +61,9 @@ public void TestStandard()
         }).
         From(db.tbl_remuneration).
             Join(db.tbl_staff, db.tbl_staff.id == db.tbl_remuneration.staff_id).
-        Where(min < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
+        Where(min < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000)
+        
+        );
 
     //to string and params.
     var info = sql.Build(_connection.GetType());
