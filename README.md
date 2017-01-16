@@ -3,7 +3,7 @@
 
 ## Features ...
 #### LambdicSql's purpose is to generate sql text and parameters from lambda.
-<img src="https://github.com/Codeer-Software/LambdicSql/blob/master/lambdicSqlImage.png" width="591x303">
+<img src="https://github.com/Codeer-Software/LambdicSql/blob/master/lambdicSqlImage.png" width="591">
 ## Getting Started
 LambdicSql from NuGet
 
