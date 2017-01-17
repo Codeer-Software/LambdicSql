@@ -29,7 +29,7 @@ namespace LambdicSql.Specialized.SymbolConverters
             var table = FromConverterAttribute.ConvertTable(converter, expression.Arguments[startIndex]);
             var condition = ((startIndex + 1) < expression.Arguments.Count) ? converter.ConvertToCode(expression.Arguments[startIndex + 1]) : null;
 
-            var join = new HCode() { IsFunctional = true, Separator = " ", Indent = 1 };
+            var join = new HCode() { AddIndentNewLine = true, Separator = " ", Indent = 1 };
             join.Add(Name.ToCode());
             join.Add(table);
             if (condition != null)

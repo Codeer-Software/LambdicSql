@@ -15,7 +15,7 @@ namespace LambdicSql.BuilderServices.Inside
             => Func(func, ", ", args);
         
         internal static HCode Clause(ICode clause, params ICode[] args)
-            => new HCode(new ICode[] { clause }.Concat(args)) { IsFunctional = true, Separator = " " };
+            => new HCode(new ICode[] { clause }.Concat(args)) { AddIndentNewLine = true, Separator = " " };
         
         internal static HCode Line(params ICode[] args)
             => new HCode(args) { EnableChangeLine = false };
@@ -26,7 +26,7 @@ namespace LambdicSql.BuilderServices.Inside
         static HCode Func(ICode func, string separator, params ICode[] args)
         {
             var hArgs = new AroundCode(new HCode(args) { Separator = separator },"", ")");
-            return new HCode(Line(func, "(".ToCode()), hArgs) { IsFunctional = true };
+            return new HCode(Line(func, "(".ToCode()), hArgs) { AddIndentNewLine = true };
         }
 
         internal static SingleTextCode ToCode(this string src) => new SingleTextCode(src);

@@ -50,7 +50,7 @@ namespace LambdicSql.ConverterServices.Inside
             else
             {
                 var first = new HCode(array.Take(_firstLineElemetCount)) { EnableChangeLine = false };
-                var h = new HCode(first) { IsFunctional = true, Indent = Indent };
+                var h = new HCode(first) { AddIndentNewLine = true, Indent = Indent };
                 h.AddRange(array.Skip(_firstLineElemetCount));
                 return h;
             }
