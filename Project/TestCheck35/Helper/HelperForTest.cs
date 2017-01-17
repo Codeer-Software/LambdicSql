@@ -20,7 +20,7 @@ namespace TestCheck35
 
     class SymbolForTestAttribute : MethodConverterAttribute
     {
-        public override Code Convert(MethodCallExpression expression, ExpressionConverter converter) => string.Empty;
+        public override ICode Convert(MethodCallExpression expression, ExpressionConverter converter) => new SingleTextCode(string.Empty);
     }
 
     public static class TestExtensions

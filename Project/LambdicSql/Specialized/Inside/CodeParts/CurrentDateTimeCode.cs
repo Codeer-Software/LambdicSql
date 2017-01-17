@@ -4,7 +4,7 @@ using LambdicSql.BuilderServices.CodeParts;
 
 namespace LambdicSql.Inside.CodeParts
 {
-    class CurrentDateTimeCode : Code
+    class CurrentDateTimeCode : ICode
     {
         string _front = string.Empty;
         string _back = string.Empty;
@@ -22,13 +22,13 @@ namespace LambdicSql.Inside.CodeParts
             _back = back;
         }
 
-        public override bool IsSingleLine(BuildingContext context) => true;
+        public bool IsSingleLine(BuildingContext context) => true;
 
-        public override bool IsEmpty => false;
+        public bool IsEmpty => false;
 
-        public override string ToString(bool isTopLevel, int indent, BuildingContext context)
+        public string ToString(bool isTopLevel, int indent, BuildingContext context)
             => PartsUtils.GetIndent(indent) + _front + "CURRENT" + context.Option.CurrentDateTimeSeparator + _core + _back;
         
-        public override Code Customize(ICodeCustomizer customizer) => customizer.Custom(this);
+        public ICode Customize(ICodeCustomizer customizer) => customizer.Custom(this);
     }
 }

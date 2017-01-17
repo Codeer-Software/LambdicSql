@@ -13,7 +13,7 @@ namespace LambdicSql.BuilderServices
         /// </summary>
         /// <param name="src"></param>
         /// <returns></returns>
-        public Code Custom(Code src)
+        public ICode Custom(ICode src)
         {
             var col = src as DbColumnCode;
             return col == null ? src : col.ToColumnOnly();

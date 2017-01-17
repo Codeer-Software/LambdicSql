@@ -5,20 +5,20 @@ using System.Linq;
 
 namespace LambdicSql.Inside.CodeParts
 {
-    class StringFormatCode : Code
+    class StringFormatCode : ICode
     {
         string _formatText;
-        Code[] _args;
+        ICode[] _args;
         string _front = string.Empty;
         string _back = string.Empty;
 
-        internal StringFormatCode(string formatText, Code[] args)
+        internal StringFormatCode(string formatText, ICode[] args)
         {
             _formatText = formatText;
             _args = args;
         }
 
-        StringFormatCode(string formatText, Code[] args, string front, string back)
+        StringFormatCode(string formatText, ICode[] args, string front, string back)
         {
             _formatText = formatText;
             _args = args;
@@ -26,16 +26,16 @@ namespace LambdicSql.Inside.CodeParts
             _back = back;
         }
 
-        public override bool IsEmpty => false;
+        public bool IsEmpty => false;
 
-        public override bool IsSingleLine(BuildingContext context) => true;
+        public bool IsSingleLine(BuildingContext context) => true;
 
-        public override string ToString(bool isTopLevel, int indent, BuildingContext context)
+        public string ToString(bool isTopLevel, int indent, BuildingContext context)
             => PartsUtils.GetIndent(indent) + 
             _front +
              string.Format(_formatText, _args.Select(e => e.ToString(true, 0, context)).ToArray()) +
             _back;
 
-        public override Code Customize(ICodeCustomizer customizer) => customizer.Custom(this);
+        public ICode Customize(ICodeCustomizer customizer) => customizer.Custom(this);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using LambdicSql.BuilderServices.CodeParts;
+using LambdicSql.BuilderServices.Inside;
 
 namespace LambdicSql.ConverterServices.SymbolConverters
 {
@@ -12,7 +13,7 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         /// </summary>
         /// <param name="obj">Object.</param>
         /// <returns>Parts.</returns>
-        public override Code Convert(object obj)
-            => obj == null ? string.Empty : obj.ToString().ToUpper();
+        public override ICode Convert(object obj)
+            => (obj == null ? string.Empty : obj.ToString().ToUpper()).ToCode();
     }
 }

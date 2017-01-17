@@ -32,7 +32,7 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         /// <param name="expression">Expression.</param>
         /// <param name="converter">Expression converter.</param>
         /// <returns>Parts.</returns>
-        public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override ICode Convert(MethodCallExpression expression, ExpressionConverter converter)
             => _core.Convert(expression.Arguments, converter);
     }
 }

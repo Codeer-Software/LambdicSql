@@ -10,6 +10,6 @@
         /// </summary>
         /// <param name="src">Source.</param>
         /// <returns>Result.</returns>
-        Code Custom(Code src);
+        ICode Custom(ICode src);
     }
 }

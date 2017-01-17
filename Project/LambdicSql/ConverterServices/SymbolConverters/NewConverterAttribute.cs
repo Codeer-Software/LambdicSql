@@ -16,6 +16,6 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         /// <param name="expression">Expression.</param>
         /// <param name="converter">Expression converter.</param>
         /// <returns>Parts.</returns>
-        public abstract Code Convert(NewExpression expression, ExpressionConverter converter);
+        public abstract ICode Convert(NewExpression expression, ExpressionConverter converter);
     }
 }

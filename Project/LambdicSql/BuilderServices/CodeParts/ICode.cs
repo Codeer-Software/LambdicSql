@@ -3,17 +3,17 @@
     /// <summary>
     /// Sql code.
     /// </summary>
-    public abstract class Code
+    public interface ICode
     {
         /// <summary>
         /// Is empty.
         /// </summary>
-        public abstract bool IsEmpty { get; }
+        bool IsEmpty { get; }
 
         /// <summary>
         /// Is single line.
         /// </summary>
-        public abstract bool IsSingleLine(BuildingContext context);
+        bool IsSingleLine(BuildingContext context);
 
         /// <summary>
         /// To string.
@@ -22,19 +22,13 @@
         /// <param name="indent">Indent.</param>
         /// <param name="context">Context.</param>
         /// <returns>Text.</returns>
-        public abstract string ToString(bool isTopLevel, int indent, BuildingContext context);
+        string ToString(bool isTopLevel, int indent, BuildingContext context);
 
         /// <summary>
         /// Customize.
         /// </summary>
         /// <param name="customizer">Customizer.</param>
         /// <returns>Customized SqlText.</returns>
-        public abstract Code Customize(ICodeCustomizer customizer);
-
-        /// <summary>
-        /// Convert string to IText.
-        /// </summary>
-        /// <param name="text">string.</param>
-        public static implicit operator Code(string text) => new SingleTextCode(text);
+        ICode Customize(ICodeCustomizer customizer);
     }
 }

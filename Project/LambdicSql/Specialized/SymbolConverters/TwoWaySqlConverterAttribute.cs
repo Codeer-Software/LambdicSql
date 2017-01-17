@@ -19,7 +19,7 @@ namespace LambdicSql.Specialized.SymbolConverters
         /// <param name="expression"></param>
         /// <param name="converter"></param>
         /// <returns></returns>
-        public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override ICode Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var obj = converter.ConvertToObject(expression.Arguments[0]);
             var text = TowWaySqlSpec.ToStringFormat((string)obj);

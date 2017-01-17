@@ -5,7 +5,7 @@ using System;
 
 namespace LambdicSql.ConverterServices.Inside.CodeParts
 {
-    class ParameterCode : Code
+    class ParameterCode : ICode
     {
         internal string Name { get; private set; }
         internal MetaId MetaId { get; private set; }
@@ -40,15 +40,15 @@ namespace LambdicSql.ConverterServices.Inside.CodeParts
             _displayValue = displayValue;
         }
 
-        public override bool IsEmpty => false;
+        public bool IsEmpty => false;
 
-        public override bool IsSingleLine(BuildingContext context) => true;
+        public bool IsSingleLine(BuildingContext context) => true;
 
-        public override string ToString(bool isTopLevel, int indent, BuildingContext context) => PartsUtils.GetIndent(indent) + _front + GetDisplayText(context) + _back;
+        public string ToString(bool isTopLevel, int indent, BuildingContext context) => PartsUtils.GetIndent(indent) + _front + GetDisplayText(context) + _back;
 
-        public override Code Customize(ICodeCustomizer customizer) => customizer.Custom(this);
+        public ICode Customize(ICodeCustomizer customizer) => customizer.Custom(this);
 
-        internal Code ToDisplayValue() => new ParameterCode(Name, MetaId, _param, _front, _back, true);
+        internal ICode ToDisplayValue() => new ParameterCode(Name, MetaId, _param, _front, _back, true);
 
         string GetDisplayText(BuildingContext context)
         {

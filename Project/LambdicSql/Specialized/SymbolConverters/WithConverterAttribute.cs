@@ -19,13 +19,13 @@ namespace LambdicSql.Specialized.SymbolConverters
         /// <param name="expression"></param>
         /// <param name="converter"></param>
         /// <returns></returns>
-        public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override ICode Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var arry = expression.Arguments[0] as NewArrayExpression;
             return arry == null ? ConvertRecurciveWith(expression, converter) : ConvertNormalWith(converter, arry);
         }
 
-        static Code ConvertNormalWith(ExpressionConverter converter, NewArrayExpression arry)
+        static ICode ConvertNormalWith(ExpressionConverter converter, NewArrayExpression arry)
         {
             var with = new VCode() { Indent = 1, Separator = "," };
             var names = new List<string>();
@@ -34,18 +34,18 @@ namespace LambdicSql.Specialized.SymbolConverters
                 var table = converter.ConvertToCode(e);
                 var body = FromConverterAttribute.GetSubQuery(e);
                 names.Add(body);
-                with.Add(Clause(LineSpace(body, "AS"), table));
+                with.Add(Clause(LineSpace(body.ToCode(), "AS".ToCode()), table));
             }
-            return new WithEntriedCode(new VCode("WITH", with), names.ToArray());
+            return new WithEntriedCode(new VCode("WITH".ToCode(), with), names.ToArray());
         }
 
-        static Code ConvertRecurciveWith(MethodCallExpression expression, ExpressionConverter converter)
+        static ICode ConvertRecurciveWith(MethodCallExpression expression, ExpressionConverter converter)
         {
             var table = converter.ConvertToCode(expression.Arguments[0]);
             var sub = FromConverterAttribute.GetSubQuery(expression.Arguments[0]);
             var with = new VCode() { Indent = 1 };
-            with.Add(Clause(LineSpace(new RecursiveTargetCode(Line(sub, table)), "AS"), converter.ConvertToCode(expression.Arguments[1])));
-            return new WithEntriedCode(new VCode("WITH", with), new[] { sub });
+            with.Add(Clause(LineSpace(new RecursiveTargetCode(Line(sub.ToCode(), table)), "AS".ToCode()), converter.ConvertToCode(expression.Arguments[1])));
+            return new WithEntriedCode(new VCode("WITH".ToCode(), with), new[] { sub });
         }
     }
 }

@@ -3,25 +3,25 @@ using LambdicSql.BuilderServices.CodeParts;
 
 namespace LambdicSql.ConverterServices.Inside.CodeParts
 {
-    internal class SelectQueryCode : Code
+    internal class SelectQueryCode : ICode
     {
-        Code _core;
+        ICode _core;
 
-        internal SelectQueryCode(Code core)
+        internal SelectQueryCode(ICode core)
         {
             _core = core;
         }
 
-        public override bool IsEmpty => _core.IsEmpty;
+        public bool IsEmpty => _core.IsEmpty;
 
-        public override bool IsSingleLine(BuildingContext context) => _core.IsSingleLine(context);
+        public bool IsSingleLine(BuildingContext context) => _core.IsSingleLine(context);
 
-        public override string ToString(bool isTopLevel, int indent, BuildingContext context)
+        public string ToString(bool isTopLevel, int indent, BuildingContext context)
         {
             var target = isTopLevel ? _core : new AroundCode(_core, "(", ")");
             return target.ToString(false, indent, context);
         }
 
-        public override Code Customize(ICodeCustomizer customizer) => new SelectQueryCode(_core.Customize(customizer));
+        public ICode Customize(ICodeCustomizer customizer) => new SelectQueryCode(_core.Customize(customizer));
     }
 }

@@ -22,7 +22,7 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         /// <param name="expression">Expression.</param>
         /// <param name="converter">Expression converter.</param>
         /// <returns>Parts.</returns>
-        public override Code Convert(NewExpression expression, ExpressionConverter converter)
+        public override ICode Convert(NewExpression expression, ExpressionConverter converter)
             => _core.Convert(expression.Arguments, converter);
     }
 }

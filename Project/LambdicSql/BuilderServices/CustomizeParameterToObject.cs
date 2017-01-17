@@ -13,7 +13,7 @@ namespace LambdicSql.BuilderServices
         /// </summary>
         /// <param name="src"></param>
         /// <returns></returns>
-        public Code Custom(Code src)
+        public ICode Custom(ICode src)
         {
             var param = src as ParameterCode;
             return param == null ? src : param.ToDisplayValue();

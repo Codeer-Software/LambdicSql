@@ -21,7 +21,7 @@ namespace LambdicSql.Specialized.SymbolConverters
         /// <param name="expression"></param>
         /// <param name="converter"></param>
         /// <returns></returns>
-        public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override ICode Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             //ALL, DISTINCT, TOP
             var modify = new List<Expression>();
@@ -30,7 +30,7 @@ namespace LambdicSql.Specialized.SymbolConverters
                 modify.Add(expression.Arguments[i]);
             }
 
-            var select = LineSpace(new Code[] { "SELECT" }.Concat(modify.Select(e => converter.ConvertToCode(e))).ToArray());
+            var select = LineSpace(new [] { "SELECT".ToCode() }.Concat(modify.Select(e => converter.ConvertToCode(e))).ToArray());
 
             //select elemnts.
             var selectTargets = expression.Arguments[expression.Arguments.Count - 1];
@@ -38,7 +38,7 @@ namespace LambdicSql.Specialized.SymbolConverters
             //*
             if (typeof(IAsterisk).IsAssignableFrom(selectTargets.Type))
             {
-                select.Add("*");
+                select.Add("*".ToCode());
                 return new SelectClauseCode(select);
             }
             //new []{ a, b, c} recursive.
@@ -57,14 +57,14 @@ namespace LambdicSql.Specialized.SymbolConverters
             }
         }
 
-        static Code ConvertSelectedElement(ExpressionConverter converter, ObjectCreateMemberInfo element)
+        static ICode ConvertSelectedElement(ExpressionConverter converter, ObjectCreateMemberInfo element)
         {
             //single select.
             //for example, COUNT(*).
             if (string.IsNullOrEmpty(element.Name)) return converter.ConvertToCode(element.Expression);
 
             //normal select.
-            return LineSpace(converter.ConvertToCode(element.Expression), "AS", element.Name);
+            return LineSpace(converter.ConvertToCode(element.Expression), "AS".ToCode(), element.Name.ToCode());
         }
     }
 }

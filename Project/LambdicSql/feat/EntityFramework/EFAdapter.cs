@@ -144,7 +144,7 @@ namespace LambdicSql.feat.EntityFramework
 
     class TConverterAttribute : MethodConverterAttribute
     {
-        public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override ICode Convert(MethodCallExpression expression, ExpressionConverter converter)
             => converter.ConvertToCode(expression.Arguments[0]);
     }
 }

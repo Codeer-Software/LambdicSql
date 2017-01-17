@@ -15,9 +15,9 @@ namespace LambdicSql
         /// Data converted from Expression to a form close to a string representation.
         /// </summary>
         /// <returns>text.</returns>
-        public Code Code { get; }
+        public ICode Code { get; }
 
-        internal Sql(Code code)
+        internal Sql(ICode code)
         {
             Code = code;
         }
@@ -106,7 +106,7 @@ namespace LambdicSql
         public new BuildedSql<T> Build(DialectOption option)
           => new BuildedSql<T>(base.Build(option));
 
-        internal Sql(Code code) : base(code) { }
+        internal Sql(ICode code) : base(code) { }
     }
 
     /// <summary>
@@ -115,6 +115,6 @@ namespace LambdicSql
     /// <typeparam name="TSelected">The type represented by Sql.</typeparam>
     public class SqlRecursiveArguments<TSelected> : Sql<TSelected>
     {
-        internal SqlRecursiveArguments(Code code) : base(code) { }
+        internal SqlRecursiveArguments(ICode code) : base(code) { }
     }
 }

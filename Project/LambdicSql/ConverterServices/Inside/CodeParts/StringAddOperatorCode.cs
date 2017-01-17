@@ -4,7 +4,7 @@ using LambdicSql.BuilderServices.CodeParts;
 
 namespace LambdicSql.ConverterServices.Inside.CodeParts
 {
-    class StringAddOperatorCode : Code
+    class StringAddOperatorCode : ICode
     {
         string _front = string.Empty;
         string _back = string.Empty;
@@ -17,12 +17,12 @@ namespace LambdicSql.ConverterServices.Inside.CodeParts
             _back = back;
         }
 
-        public override bool IsEmpty => false;
+        public bool IsEmpty => false;
 
-        public override bool IsSingleLine(BuildingContext context) => true;
+        public bool IsSingleLine(BuildingContext context) => true;
 
-        public override string ToString(bool isTopLevel, int indent, BuildingContext context) => PartsUtils.GetIndent(indent) + _front + context.Option.StringAddOperator + _back;
+        public string ToString(bool isTopLevel, int indent, BuildingContext context) => PartsUtils.GetIndent(indent) + _front + context.Option.StringAddOperator + _back;
 
-        public override Code Customize(ICodeCustomizer customizer) => customizer.Custom(this);
+        public ICode Customize(ICodeCustomizer customizer) => customizer.Custom(this);
     }
 }

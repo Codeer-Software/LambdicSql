@@ -102,7 +102,7 @@
     <Compile Include="ConverterServices\Inside\CodeParts\SelectClauseCode.cs" />
     <Compile Include="ConverterServices\Inside\CodeParts\SelectQueryCode.cs" />
     <Compile Include="BuilderServices\BuildingContext.cs" />
-    <Compile Include="BuilderServices\CodeParts\Code.cs" />
+    <Compile Include="BuilderServices\CodeParts\ICode.cs" />
     <Compile Include="DbParam.cs" />
     <Compile Include="BuilderServices\Inside\PartsUtils.cs" />
     <Compile Include="ConverterServices\Inside\CodeParts\StringAddOperatorCode.cs" />

@@ -27,14 +27,14 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         /// <param name="expression">Expression.</param>
         /// <param name="converter">Expression converter.</param>
         /// <returns>Parts.</returns>
-        public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override ICode Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             if (string.IsNullOrEmpty(Name)) Name = expression.Method.Name.ToUpper();
 
             var index = expression.SkipMethodChain(0);
             var args = expression.Arguments.Skip(index).Select(e => converter.ConvertToCode(e)).ToArray();
             var hArgs = new AroundCode(new HCode(args) { Separator = ", " }, "", ")");
-            return new HCode(Line(Name, "("), hArgs) { IsFunctional = true, Indent = Indent };
+            return new HCode(Line(Name.ToCode(), "(".ToCode()), hArgs) { IsFunctional = true, Indent = Indent };
         }
     }
 }

@@ -3,6 +3,7 @@ using LambdicSql.ConverterServices.Inside;
 using LambdicSql.BuilderServices.CodeParts;
 using System;
 using System.Linq.Expressions;
+using LambdicSql.BuilderServices.Inside;
 
 namespace LambdicSql
 {
@@ -58,7 +59,7 @@ namespace LambdicSql
         {
             var db = DBDefineAnalyzer.GetDbInfo<T>();
             var core = expression.Body as MemberExpression;
-            return new Sql<TSelected>(core.Member.Name);
+            return new Sql<TSelected>(core.Member.Name.ToCode());
         }
 
         /// <summary>
@@ -73,10 +74,10 @@ namespace LambdicSql
             return new SqlRecursiveArguments<TResult>(MakeSynatx(db, expression.Body));
         }
 
-        static Code MakeSynatx(DbInfo dbInfo, Expression core)
+        static ICode MakeSynatx(DbInfo dbInfo, Expression core)
         {
             var converter = new ExpressionConverter(dbInfo);
-            return core == null ? string.Empty : converter.ConvertToCode(core);
+            return core == null ? string.Empty.ToCode() : converter.ConvertToCode(core);
         }
     }
 }

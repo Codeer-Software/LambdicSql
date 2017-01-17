@@ -4,7 +4,7 @@ using LambdicSql.BuilderServices.CodeParts;
 
 namespace LambdicSql.ConverterServices.Inside.CodeParts
 {
-    class DbColumnCode : Code
+    class DbColumnCode : ICode
     {
         ColumnInfo _col;
         string _front = string.Empty;
@@ -30,16 +30,16 @@ namespace LambdicSql.ConverterServices.Inside.CodeParts
             _columnOnly = columnOnly;
         }
 
-        internal Code ToColumnOnly() => new DbColumnCode(_col, true, _front, _back);
+        internal ICode ToColumnOnly() => new DbColumnCode(_col, true, _front, _back);
 
         string ColumnName => _columnOnly ? _col.SqlColumnName : _col.SqlFullName;
 
-        public override bool IsEmpty => false;
+        public bool IsEmpty => false;
 
-        public override bool IsSingleLine(BuildingContext context) => true;
+        public bool IsSingleLine(BuildingContext context) => true;
 
-        public override string ToString(bool isTopLevel, int indent, BuildingContext context) => PartsUtils.GetIndent(indent) + _front + ColumnName + _back;
+        public string ToString(bool isTopLevel, int indent, BuildingContext context) => PartsUtils.GetIndent(indent) + _front + ColumnName + _back;
 
-        public override Code Customize(ICodeCustomizer customizer) => customizer.Custom(this);
+        public ICode Customize(ICodeCustomizer customizer) => customizer.Custom(this);
     }
 }

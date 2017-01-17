@@ -7,9 +7,9 @@ namespace LambdicSql.BuilderServices.CodeParts
     /// <summary>
     /// Vertical text.
     /// </summary>
-    public class VCode : Code
+    public class VCode : ICode
     {
-        List<Code> _texts = new List<Code>();
+        List<ICode> _texts = new List<ICode>();
 
         /// <summary>
         /// Separator
@@ -24,18 +24,18 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// <summary>
         /// Is single line.
         /// </summary>
-        public override bool IsSingleLine(BuildingContext context) => _texts.Count <= 1 && !_texts.Any(e => !e.IsSingleLine(context));
+        public bool IsSingleLine(BuildingContext context) => _texts.Count <= 1 && !_texts.Any(e => !e.IsSingleLine(context));
 
         /// <summary>
         /// Is empty.
         /// </summary>
-        public override bool IsEmpty => !_texts.Any(e => !e.IsEmpty);
+        public bool IsEmpty => !_texts.Any(e => !e.IsEmpty);
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="texts">Vertical texts.</param>
-        public VCode(params Code[] texts)
+        public VCode(params ICode[] texts)
         {
             _texts.AddRange(texts.Where(e => !e.IsEmpty));
         }
@@ -44,7 +44,7 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// Constructor.
         /// </summary>
         /// <param name="texts">Vertical texts.</param>
-        public VCode(IEnumerable<Code> texts)
+        public VCode(IEnumerable<ICode> texts)
         {
             _texts.AddRange(texts.Where(e => !e.IsEmpty));
         }
@@ -56,7 +56,7 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// <param name="indent">Indent.</param>
         /// <param name="context">Context.</param>
         /// <returns>Text.</returns>
-        public override string ToString(bool isTopLevel, int indent, BuildingContext context)
+        public string ToString(bool isTopLevel, int indent, BuildingContext context)
             => string.Join(Separator + Environment.NewLine, _texts.Select(e => e.ToString(isTopLevel, Indent + indent, context).TrimEnd()).ToArray());
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// Add text.
         /// </summary>
         /// <param name="text">Text.</param>
-        public void Add(Code text)
+        public void Add(ICode text)
         {
             if (text.IsEmpty) return;
             _texts.Add(text);
@@ -85,29 +85,29 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// </summary>
         /// <param name="indent">Indent.</param>
         /// <param name="texts">Texts.</param>
-        public void AddRange(int indent, IEnumerable<Code> texts)
-            => _texts.AddRange(texts.Where(e => !e.IsEmpty).Select(e => new HCode(e) { Indent = 1 }).Cast<Code>());
+        public void AddRange(int indent, IEnumerable<ICode> texts)
+            => _texts.AddRange(texts.Where(e => !e.IsEmpty).Select(e => new HCode(e) { Indent = 1 }).Cast<ICode>());
 
         /// <summary>
         /// Add texts.
         /// </summary>
         /// <param name="indent">Indent.</param>
         /// <param name="texts">Texts.</param>
-        public void AddRange(int indent, params Code[] texts)
-            => _texts.AddRange(texts.Where(e => !e.IsEmpty).Select(e => new HCode(e) { Indent = 1 }).Cast<Code>());
+        public void AddRange(int indent, params ICode[] texts)
+            => _texts.AddRange(texts.Where(e => !e.IsEmpty).Select(e => new HCode(e) { Indent = 1 }).Cast<ICode>());
 
         /// <summary>
         /// Customize.
         /// </summary>
         /// <param name="customizer">Customizer.</param>
         /// <returns>Customized SqlText.</returns>
-        public override Code Customize(ICodeCustomizer customizer)
+        public ICode Customize(ICodeCustomizer customizer)
         {
             var dst = _texts.Select(e => e.Customize(customizer));
             return CopyProperty(dst.ToArray());
         }
 
-        VCode CopyProperty(params Code[] texts)
+        VCode CopyProperty(params ICode[] texts)
              => new VCode(texts) { Indent = Indent, Separator = Separator };
     }
 }

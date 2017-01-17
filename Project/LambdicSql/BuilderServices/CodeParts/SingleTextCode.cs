@@ -5,7 +5,7 @@ namespace LambdicSql.BuilderServices.CodeParts
     /// <summary>
     /// Single text.
     /// </summary>
-    public class SingleTextCode : Code
+    public class SingleTextCode : ICode
     {
         string _text;
         int _indent;
@@ -33,12 +33,12 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// <summary>
         /// Is single line.
         /// </summary>
-        public override bool IsSingleLine(BuildingContext context) => true;
+        public bool IsSingleLine(BuildingContext context) => true;
 
         /// <summary>
         /// Is empty.
         /// </summary>
-        public override bool IsEmpty => string.IsNullOrEmpty(_text);
+        public bool IsEmpty => string.IsNullOrEmpty(_text);
 
         /// <summary>
         /// To string.
@@ -47,13 +47,13 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// <param name="indent">Indent.</param>
         /// <param name="context">Context.</param>
         /// <returns>Text.</returns>
-        public override string ToString(bool isTopLevel, int indent, BuildingContext context) => PartsUtils.GetIndent(_indent + indent) + _text;
+        public string ToString(bool isTopLevel, int indent, BuildingContext context) => PartsUtils.GetIndent(_indent + indent) + _text;
 
         /// <summary>
         /// Customize.
         /// </summary>
         /// <param name="customizer">Customizer.</param>
         /// <returns>Customized SqlText.</returns>
-        public override Code Customize(ICodeCustomizer customizer) => customizer.Custom(this);
+        public ICode Customize(ICodeCustomizer customizer) => customizer.Custom(this);
     }
 }

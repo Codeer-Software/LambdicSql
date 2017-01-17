@@ -20,10 +20,10 @@ namespace LambdicSql.Specialized.SymbolConverters
         /// <param name="expression"></param>
         /// <param name="converter"></param>
         /// <returns></returns>
-        public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override ICode Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var args = expression.Arguments.Select(e => converter.ConvertToCode(e)).ToArray();
-            return new AllDisableBinaryExpressionBracketsCode(Func("ALL", args[0]));
+            return new AllDisableBinaryExpressionBracketsCode(Func("ALL".ToCode(), args[0]));
         }
     }
 }

@@ -19,11 +19,11 @@ namespace LambdicSql.Specialized.SymbolConverters
         /// <param name="expression"></param>
         /// <param name="converter"></param>
         /// <returns></returns>
-        public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override ICode Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var selectTargets = expression.Arguments[expression.Arguments.Count - 1];
             var createInfo = ObjectCreateAnalyzer.MakeSelectInfo(selectTargets);
-            return Blanket(createInfo.Members.Select(e => (Code)e.Name).ToArray());
+            return Blanket(createInfo.Members.Select(e => e.Name.ToCode()).ToArray());
         }
     }
 }

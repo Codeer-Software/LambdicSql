@@ -5,9 +5,9 @@ namespace LambdicSql.BuilderServices.CodeParts
     /// <summary>
     /// 
     /// </summary>
-    public class AroundCode : Code
+    public class AroundCode : ICode
     {
-        Code _core;
+        ICode _core;
         string _front = string.Empty;
         string _back = string.Empty;
 
@@ -17,7 +17,7 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// <param name="core"></param>
         /// <param name="front"></param>
         /// <param name="back"></param>
-        public AroundCode(Code core, string front, string back)
+        public AroundCode(ICode core, string front, string back)
         {
             _core = core;
             _front = front;
@@ -27,14 +27,14 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// <summary>
         /// 
         /// </summary>
-        public override bool IsEmpty => _core.IsEmpty && string.IsNullOrEmpty(_front) && string.IsNullOrEmpty(_back);
+        public bool IsEmpty => _core.IsEmpty && string.IsNullOrEmpty(_front) && string.IsNullOrEmpty(_back);
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public override bool IsSingleLine(BuildingContext context) => _core.IsSingleLine(context);
+        public bool IsSingleLine(BuildingContext context) => _core.IsSingleLine(context);
 
         /// <summary>
         /// 
@@ -43,7 +43,7 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// <param name="indent"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public override string ToString(bool isTopLevel, int indent, BuildingContext context)
+        public string ToString(bool isTopLevel, int indent, BuildingContext context)
         {
             var text = _core.ToString(isTopLevel, indent, context);
             
@@ -70,6 +70,6 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// </summary>
         /// <param name="customizer"></param>
         /// <returns></returns>
-        public override Code Customize(ICodeCustomizer customizer) => new AroundCode(_core.Customize(customizer), _front, _back);
+        public ICode Customize(ICodeCustomizer customizer) => new AroundCode(_core.Customize(customizer), _front, _back);
     }
 }

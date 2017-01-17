@@ -4,21 +4,21 @@ using LambdicSql.ConverterServices;
 
 namespace LambdicSql.Inside.CodeParts
 {
-    class AllDisableBinaryExpressionBracketsCode : Code, IDisableBinaryExpressionBrackets
+    class AllDisableBinaryExpressionBracketsCode : ICode, IDisableBinaryExpressionBrackets
     {
-        Code _core;
+        ICode _core;
 
-        internal AllDisableBinaryExpressionBracketsCode(Code core)
+        internal AllDisableBinaryExpressionBracketsCode(ICode core)
         {
             _core = core;
         }
 
-        public override bool IsSingleLine(BuildingContext context) => _core.IsSingleLine(context);
+        public bool IsSingleLine(BuildingContext context) => _core.IsSingleLine(context);
 
-        public override bool IsEmpty => _core.IsEmpty;
+        public bool IsEmpty => _core.IsEmpty;
 
-        public override string ToString(bool isTopLevel, int indent, BuildingContext context) => _core.ToString(false, indent, context);
+        public string ToString(bool isTopLevel, int indent, BuildingContext context) => _core.ToString(false, indent, context);
 
-        public override Code Customize(ICodeCustomizer customizer) => new AllDisableBinaryExpressionBracketsCode(_core.Customize(customizer));
+        public ICode Customize(ICodeCustomizer customizer) => new AllDisableBinaryExpressionBracketsCode(_core.Customize(customizer));
     }
 }

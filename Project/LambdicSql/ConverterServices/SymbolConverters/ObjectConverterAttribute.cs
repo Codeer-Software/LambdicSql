@@ -13,6 +13,6 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         /// </summary>
         /// <param name="obj">Object.</param>
         /// <returns>Parts.</returns>
-        public abstract Code Convert(object obj);
+        public abstract ICode Convert(object obj);
     }
 }

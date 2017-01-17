@@ -18,7 +18,7 @@ namespace LambdicSql.Specialized.SymbolConverters
         /// <param name="expression"></param>
         /// <param name="converter"></param>
         /// <returns></returns>
-        public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override ICode Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var text = (string)converter.ConvertToObject(expression.Arguments[0]);
             var array = expression.Arguments[1] as NewArrayExpression;

@@ -8,6 +8,7 @@ using LambdicSql.Inside.CodeParts;
 using System.Collections.ObjectModel;
 using LambdicSql.ConverterServices.SymbolConverters;
 using LambdicSql.BuilderServices;
+using LambdicSql.BuilderServices.Inside;
 
 namespace LambdicSql.ConverterServices.Inside
 {
@@ -15,7 +16,7 @@ namespace LambdicSql.ConverterServices.Inside
     {
         string _format;
         int _firstLineElemetCount = -1;
-        List<Code> _partsSrc;
+        List<ICode> _partsSrc;
         Dictionary<int, ArgumentInfo> _parameterMappingInfo;
 
         internal FormatDirection FormatDirection { get; set; } = FormatDirection.Horizontal;
@@ -35,7 +36,7 @@ namespace LambdicSql.ConverterServices.Inside
 
         internal int Indent { get; set; }
 
-        public Code Convert(ReadOnlyCollection<Expression> arguments, ExpressionConverter converter)
+        public ICode Convert(ReadOnlyCollection<Expression> arguments, ExpressionConverter converter)
         {
             //ReadOnlyCollection<Expression>
             var array = ConvertByFormat(arguments, converter);
@@ -55,14 +56,14 @@ namespace LambdicSql.ConverterServices.Inside
             }
         }
 
-        Code[] ConvertByFormat(ReadOnlyCollection<Expression> arguments, ExpressionConverter converter)
+        ICode[] ConvertByFormat(ReadOnlyCollection<Expression> arguments, ExpressionConverter converter)
         {
-            var array = _partsSrc.Select(e => new Code[] { e }).ToArray();
+            var array = _partsSrc.Select(e => new ICode[] { e }).ToArray();
             foreach (var e in _parameterMappingInfo)
             {
                 var argExp = arguments[e.Key];
 
-                Code[] code = null;
+                ICode[] code = null;
                 if (e.Value.IsArrayExpand)
                 {
                     //NewArrayExpressionの場合
@@ -98,7 +99,7 @@ namespace LambdicSql.ConverterServices.Inside
                     else
                     {
                         var obj = converter.ConvertToObject(argExp);
-                        var list = new List<Code>();
+                        var list = new List<ICode>();
                         foreach (var x in (IEnumerable)obj)
                         {
                             list.Add(converter.ConvertToCode(x));
@@ -109,20 +110,20 @@ namespace LambdicSql.ConverterServices.Inside
                     {
                         for (int i = 0; i < code.Length - 1; i++)
                         {
-                            code[i] = new HCode(code[i], e.Value.ArrayExpandSeparator) { EnableChangeLine = false };
+                            code[i] = new HCode(code[i], e.Value.ArrayExpandSeparator.ToCode()) { EnableChangeLine = false };
                         }
                     }
                     if (0 < code.Length)
                     {
-                        code[code.Length - 1] = new HCode(code[code.Length - 1], e.Value.Separator) { EnableChangeLine = false };
+                        code[code.Length - 1] = new HCode(code[code.Length - 1], e.Value.Separator.ToCode()) { EnableChangeLine = false };
                     }
                 }
                 else
                 {
-                    Code argCore = null;
+                    ICode argCore = null;
                     if (e.Value.IsDefineName)
                     {
-                        argCore = (string)converter.ConvertToObject(argExp);
+                        argCore = ((string)converter.ConvertToObject(argExp)).ToCode();
                     }
                     else
                     {
@@ -130,11 +131,11 @@ namespace LambdicSql.ConverterServices.Inside
                     }
                     if (!string.IsNullOrEmpty(e.Value.Separator))
                     {
-                        code = new Code[] { new HCode(argCore, e.Value.Separator) { EnableChangeLine = false } };
+                        code = new ICode[] { new HCode(argCore, e.Value.Separator.ToCode()) { EnableChangeLine = false } };
                     }
                     else
                     {
-                        code = new Code[] { argCore };
+                        code = new ICode[] { argCore };
                     }
                 }
                 if (e.Value.IsDirectValue)
@@ -156,7 +157,7 @@ namespace LambdicSql.ConverterServices.Inside
         {
             var format = Format;
             _firstLineElemetCount = 0;
-            _partsSrc = new List<Code>();
+            _partsSrc = new List<ICode>();
             _parameterMappingInfo = new Dictionary<int, ArgumentInfo>();
 
             while (true)
@@ -270,7 +271,7 @@ namespace LambdicSql.ConverterServices.Inside
                     _firstLineElemetCount = _partsSrc.Count + 1;
                     format = format.Replace("|", string.Empty);
                 }
-                _partsSrc.Add(format);
+                _partsSrc.Add(format.ToCode());
             }
 
             return format;

@@ -4,20 +4,20 @@ using LambdicSql.BuilderServices.CodeParts;
 
 namespace LambdicSql.Inside.CodeParts
 {
-    class SubQueryAndNameCode : Code
+    class SubQueryAndNameCode : ICode
     {
         string _front = string.Empty;
         string _back = string.Empty;
         string _body;
-        Code _define;
+        ICode _define;
 
-        internal SubQueryAndNameCode(string body, Code table)
+        internal SubQueryAndNameCode(string body, ICode table)
         {
             _body = body;
-            _define = new HCode(table, _body) { Separator = " ", EnableChangeLine = false };
+            _define = new HCode(table, _body.ToCode()) { Separator = " ", EnableChangeLine = false };
         }
 
-        SubQueryAndNameCode(string body, Code define, string front, string back)
+        SubQueryAndNameCode(string body, ICode define, string front, string back)
         {
             _body = body;
             _define = define;
@@ -25,15 +25,15 @@ namespace LambdicSql.Inside.CodeParts
             _back = back;
         }
 
-        public override bool IsEmpty => false;
+        public bool IsEmpty => false;
 
-        public override bool IsSingleLine(BuildingContext context) => context.WithEntied.ContainsKey(_body) ? true : _define.IsSingleLine(context);
+        public bool IsSingleLine(BuildingContext context) => context.WithEntied.ContainsKey(_body) ? true : _define.IsSingleLine(context);
 
-        public override string ToString(bool isTopLevel, int indent, BuildingContext context)
+        public string ToString(bool isTopLevel, int indent, BuildingContext context)
             => context.WithEntied.ContainsKey(_body) ?
                     (PartsUtils.GetIndent(indent) + _front + _body + _back) :
                     _define.ToString(isTopLevel, indent, context);
 
-        public override Code Customize(ICodeCustomizer customizer) => customizer.Custom(this);
+        public ICode Customize(ICodeCustomizer customizer) => customizer.Custom(this);
     }
 }

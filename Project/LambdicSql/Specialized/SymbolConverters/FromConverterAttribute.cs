@@ -20,14 +20,14 @@ namespace LambdicSql.Specialized.SymbolConverters
         /// <param name="expression"></param>
         /// <param name="converter"></param>
         /// <returns></returns>
-        public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override ICode Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var startIndex = expression.SkipMethodChain(0);
             var table = ConvertTable(converter, expression.Arguments[startIndex]);
-            return Clause("FROM", table);
+            return Clause("FROM".ToCode(), table);
         }
 
-        internal static Code ConvertTable(ExpressionConverter decoder, Expression exp)
+        internal static ICode ConvertTable(ExpressionConverter decoder, Expression exp)
         {
             //where query, write tables side by side.
             var arry = exp as NewArrayExpression;

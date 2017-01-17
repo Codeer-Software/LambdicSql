@@ -2,6 +2,7 @@
 using LambdicSql.BuilderServices.CodeParts;
 using System.Linq;
 using System.Linq.Expressions;
+using LambdicSql.BuilderServices.Inside;
 
 namespace LambdicSql.ConverterServices.SymbolConverters
 {
@@ -26,13 +27,13 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         /// <param name="expression">Expression.</param>
         /// <param name="converter">Expression converter.</param>
         /// <returns>Parts.</returns>
-        public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
+        public override ICode Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             if (string.IsNullOrEmpty(Name)) Name = expression.Method.Name.ToUpper();
 
             var index = expression.SkipMethodChain(0);
             var args = expression.Arguments.Skip(index).Select(e => converter.ConvertToCode(e)).ToList();
-            args.Insert(0, Name);
+            args.Insert(0, Name.ToCode());
             return new HCode(args) { IsFunctional = true, Separator = " ", Indent = Indent };
         }
     }

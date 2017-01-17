@@ -4,7 +4,7 @@ using LambdicSql.BuilderServices.CodeParts;
 
 namespace LambdicSql.ConverterServices.Inside.CodeParts
 {
-    class DbTableCode : Code
+    class DbTableCode : ICode
     {
         string _front = string.Empty;
         string _back = string.Empty;
@@ -23,12 +23,12 @@ namespace LambdicSql.ConverterServices.Inside.CodeParts
 
         internal TableInfo Info { get; private set; }
 
-        public override bool IsEmpty => false;
+        public bool IsEmpty => false;
 
-        public override bool IsSingleLine(BuildingContext context) => true;
+        public bool IsSingleLine(BuildingContext context) => true;
 
-        public override string ToString(bool isTopLevel, int indent, BuildingContext context) => PartsUtils.GetIndent(indent) + _front + Info.SqlFullName + _back;
+        public string ToString(bool isTopLevel, int indent, BuildingContext context) => PartsUtils.GetIndent(indent) + _front + Info.SqlFullName + _back;
 
-        public override Code Customize(ICodeCustomizer customizer) => customizer.Custom(this);
+        public ICode Customize(ICodeCustomizer customizer) => customizer.Custom(this);
     }
 }
