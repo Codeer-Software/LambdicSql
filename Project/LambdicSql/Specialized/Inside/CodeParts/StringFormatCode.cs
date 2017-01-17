@@ -32,7 +32,7 @@ namespace LambdicSql.Inside.CodeParts
 
         public string ToString(BuildingContext context)
         {
-            var next = context.ResetState();
+            var next = context.ChangeTopLevelQuery(true).ChangeIndent(0);
             return PartsUtils.GetIndent(context.Indent) +
                 _front +
                  string.Format(_formatText, _args.Select(e => e.ToString(next)).ToArray()) +

@@ -18,8 +18,8 @@ namespace LambdicSql.ConverterServices.Inside.CodeParts
 
         public string ToString(BuildingContext context)
         {
-            var target = context.IsTopLevel ? _core : new AroundCode(_core, "(", ")");
-            return target.ToString(context.ToSubLevel());
+            var target = context.IsTopLevelQuery ? _core : new AroundCode(_core, "(", ")");
+            return target.ToString(context.ChangeTopLevelQuery(false));
         }
 
         public ICode Customize(ICodeCustomizer customizer) => new SelectQueryCode(_core.Customize(customizer));

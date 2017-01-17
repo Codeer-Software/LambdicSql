@@ -11,7 +11,7 @@ namespace LambdicSql.BuilderServices
         /// <summary>
         /// 
         /// </summary>
-        public bool IsTopLevel { get; } = true;
+        public bool IsTopLevelQuery { get; } = true;
 
         /// <summary>
         /// 
@@ -45,30 +45,20 @@ namespace LambdicSql.BuilderServices
         /// <summary>
         /// 
         /// </summary>
-        /// <returns></returns>
-        public BuildingContext ResetState()
-             => new BuildingContext(true, 0, Option, ParameterInfo, WithEntied);
-
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="indent"></param>
         /// <returns></returns>
-        public BuildingContext ChangeIndent(int indent) => new BuildingContext(IsTopLevel, indent, Option, ParameterInfo, WithEntied);
+        public BuildingContext ChangeIndent(int indent) => new BuildingContext(IsTopLevelQuery, indent, Option, ParameterInfo, WithEntied);
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public BuildingContext ToSubLevel()
-            => new BuildingContext(false, Indent, Option, ParameterInfo, WithEntied);
-
-        //TODO ChangeStateにまとめてもいいかな・・・
-
+        public BuildingContext ChangeTopLevelQuery(bool isTopLevelQuery) => new BuildingContext(isTopLevelQuery, Indent, Option, ParameterInfo, WithEntied);
+        
 
         BuildingContext(bool isTopLevel, int indent, DialectOption option, ParameterInfo parameterInfo, Dictionary<string, bool> withEntied)
         {
-            IsTopLevel = isTopLevel;
+            IsTopLevelQuery = isTopLevel;
             Indent = indent;
             Option = option;
             ParameterInfo = parameterInfo;
