@@ -21,11 +21,10 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// </summary>
         public int Indent { get; set; }
 
-        //TODO これがfalseなケースってなに？
         /// <summary>
-        /// Is functional.
+        /// Add indent on line feed.
         /// </summary>
-        public bool IsFunctional { get; set; }
+        public bool AddIndentNewLine { get; set; }
 
         /// <summary>
         /// Enable change line.
@@ -80,7 +79,7 @@ namespace LambdicSql.BuilderServices.CodeParts
             }
 
             //if IsFunctional is true, add Indent other than the first line.
-            var addIndentCount = IsFunctional ? 1 : 0;
+            var addIndentCount = AddIndentNewLine ? 1 : 0;
             var sep = Separator.TrimEnd();
             return _texts[0].ToString(isTopLevel, indent, context) + sep + Environment.NewLine +
                 string.Join(sep + Environment.NewLine, _texts.Skip(1).Select(e => e.ToString(isTopLevel, indent + addIndentCount, context).TrimEnd()).ToArray());
@@ -122,6 +121,6 @@ namespace LambdicSql.BuilderServices.CodeParts
         }
 
         HCode CopyProperty(params ICode[] texts)
-             => new HCode(texts) { Indent = Indent, IsFunctional = IsFunctional, EnableChangeLine = EnableChangeLine, Separator = Separator };
+             => new HCode(texts) { Indent = Indent, AddIndentNewLine = AddIndentNewLine, EnableChangeLine = EnableChangeLine, Separator = Separator };
     }
 }
