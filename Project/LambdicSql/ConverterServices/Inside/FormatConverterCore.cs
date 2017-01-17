@@ -1,17 +1,17 @@
 ﻿using LambdicSql.BuilderServices.CodeParts;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Collections.Generic;
-using System;
-using System.Collections;
-using LambdicSql.Inside.CodeParts;
-using System.Collections.ObjectModel;
 using LambdicSql.ConverterServices.SymbolConverters;
 using LambdicSql.BuilderServices;
 using LambdicSql.BuilderServices.Inside;
+using System;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Collections;
+using System.Collections.ObjectModel;
+using System.Collections.Generic;
 
 namespace LambdicSql.ConverterServices.Inside
 {
+    //TODO referctoring.
     class FormatConverterCore
     {
         string _format;
@@ -70,30 +70,6 @@ namespace LambdicSql.ConverterServices.Inside
                     var newArrayExp = argExp as NewArrayExpression;
                     if (newArrayExp != null)
                     {
-                        /*
-                        //TODO あー、これは十分ではない
-                        //以下が区別がつかない
-                        //そもそも区別がつかない・・・
-                        //Values(params object[] x)
-                        //byte[] bin
-                        //Value(bin)
-                        if (newArrayExp.Expressions.Count == 1 && newArrayExp.Expressions[0].Type.IsArray)
-                        {
-                            //TODO refactoring.
-                            var obj = converter.ToObject(newArrayExp.Expressions[0]);
-                            var list = new List<Code>();
-                            foreach (var x in (IEnumerable)obj)
-                            {
-                                list.Add(converter.Convert(x));
-                            }
-                            code = list.ToArray();
-                        }
-                        else
-                        {
-                            code = newArrayExp.Expressions.Select(x => converter.Convert(x)).ToArray();
-                        }
-                        */
-
                         code = newArrayExp.Expressions.Select(x => converter.ConvertToCode(x)).ToArray();
                     }
                     else

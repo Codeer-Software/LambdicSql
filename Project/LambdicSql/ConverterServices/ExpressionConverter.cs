@@ -22,7 +22,7 @@ namespace LambdicSql.ConverterServices
         }
 
         /// <summary>
-        /// Get object in expression.
+        /// Convert expression to object.
         /// </summary>
         /// <param name="expression">expression.</param>
         /// <returns>object.</returns>
@@ -34,7 +34,7 @@ namespace LambdicSql.ConverterServices
         }
 
         /// <summary>
-        /// Convert object to sql text.
+        /// Convert expression to code.
         /// </summary>
         /// <param name="obj">object.</param>
         /// <returns>text.</returns>
@@ -107,12 +107,12 @@ namespace LambdicSql.ConverterServices
 
         ICode Convert(NewArrayExpression array)
         {
-            if (SupportedTypeSpec.IsSupported(array.Type))
+            if (!SupportedTypeSpec.IsSupported(array.Type))
             {
-                var obj = SupportedTypeSpec.ConvertArray(array.Type, array.Expressions.Select(e => ConvertToObject(e)));
-                return new ParameterCode(obj);
+                throw new NotSupportedException();
             }
-            throw new NotSupportedException();
+            var obj = SupportedTypeSpec.ConvertArray(array.Type, array.Expressions.Select(e => ConvertToObject(e)));
+            return new ParameterCode(obj);
         }
 
         ICode Convert(UnaryExpression unary)
@@ -121,6 +121,7 @@ namespace LambdicSql.ConverterServices
             {
                 case ExpressionType.Not:
                     return new AroundCode(Convert(unary.Operand), "NOT (", ")");
+
                 case ExpressionType.Convert:
                     var ret = Convert(unary.Operand);
                     var param = ret as ParameterCode;
@@ -130,10 +131,12 @@ namespace LambdicSql.ConverterServices
                         return new ParameterCode(param.Name, param.MetaId, new DbParam() { Value = casted });
                     }
                     return ret;
+
                 case ExpressionType.ArrayLength:
                     object obj;
                     ExpressionToObject.GetExpressionObject(unary.Operand, out obj);
                     return new ParameterCode(((Array)obj).Length);
+
                 default:
                     return Convert(unary.Operand);
             }
@@ -164,20 +167,17 @@ namespace LambdicSql.ConverterServices
             if (right.IsEmpty) return left;
 
             //for null
-            var nullCheck = ResolveNullCheck(left, binary.NodeType, right);
+            var nullCheck = TryResolveNullCheck(left, binary.NodeType, right);
             if (nullCheck != null) return nullCheck;
 
             var nodeType = Convert(binary.Type, left, binary.NodeType, right);
             return new HCode(AddBinaryExpressionBlankets(left), new AroundCode(nodeType, " ", " "), AddBinaryExpressionBlankets(right));
         }
 
-        ICode AddBinaryExpressionBlankets(ICode src)
-            => typeof(IDisableBinaryExpressionBrackets).IsAssignableFrom(src.GetType()) ? src : new AroundCode(src, "(", ")");
-
         ICode Convert(MemberExpression member)
         {
             //sub.Body
-            var body = ResolveSqlExpressionBody(member);
+            var body = TryResolveSqlExpressionBody(member);
             if (body != null) return body;
 
             //sql symbol.
@@ -209,7 +209,7 @@ namespace LambdicSql.ConverterServices
 
             //db element.
             string name;
-            if (IsDbDesignParam(member, out name))
+            if (TryGetDbDesignParam(member, out name))
             {
                 return ResolveLambdicElement(name);
             }
@@ -221,7 +221,7 @@ namespace LambdicSql.ConverterServices
         ICode Convert(MethodCallExpression method)
         {
             //convert symbol.
-            var code = GetMethodChains(method).Select(c=> c.GetMethodConverter().Convert(c, this)).ToArray();
+            var code = GetMethodChains(method).Select(e => e.GetMethodConverter().Convert(e, this)).ToArray();
             if (code.Length == 0) return ResolveExpressionObject(method);
             
             //for ALL function. can't add blankets.
@@ -236,45 +236,7 @@ namespace LambdicSql.ConverterServices
                  (ICode)new SelectQueryCode(core) :
                  new QueryCode(core);
         }
-
-        ICode ResolveSqlExpressionBody(MemberExpression member)
-        {
-            //get all members.
-            var members = new List<MemberExpression>();
-            var exp = member;
-            while (exp != null)
-            {
-                members.Add(exp);
-                exp = exp.Expression as MemberExpression;
-                if (exp != null)
-                {
-                    member = exp;
-                }
-            }
-
-            //check IClauseChain's Body.
-            var method = member.Expression as MethodCallExpression;
-            if (method != null)
-            {
-                if (!typeof(IMethodChain).IsAssignableFrom(method.Type) ||
-                     member.Member.Name != "Body") return null;
-                return Convert(method);
-            }
-
-            if (members.Count < 2) return null;
-            members.Reverse();
-            
-            //check SqlExpression's Body
-            if (!typeof(Sql).IsAssignableFrom(members[0].Type) ||
-                members[1].Member.Name != "Body") return null;
-
-            //for example, sub.Body
-            if (members.Count == 2) return ResolveExpressionObject(members[0]);
-            
-            //for example, sub.Body.column.
-            else return string.Join(".", members.Where((e, i) => i != 1).Select(e => e.Member.Name).ToArray()).ToCode();
-        }
-
+        
         ICode Convert(Type type, ICode left, ExpressionType nodeType, ICode right)
         {
             switch (nodeType)
@@ -305,7 +267,48 @@ namespace LambdicSql.ConverterServices
             throw new NotImplementedException();
         }
 
-        static bool IsDbDesignParam(MemberExpression member, out string lambdaName)
+        ICode AddBinaryExpressionBlankets(ICode src)
+            => typeof(IDisableBinaryExpressionBrackets).IsAssignableFrom(src.GetType()) ? src : new AroundCode(src, "(", ")");
+
+        ICode TryResolveSqlExpressionBody(MemberExpression member)
+        {
+            //get all members.
+            var members = new List<MemberExpression>();
+            var exp = member;
+            while (exp != null)
+            {
+                members.Add(exp);
+                exp = exp.Expression as MemberExpression;
+                if (exp != null)
+                {
+                    member = exp;
+                }
+            }
+
+            //check IClauseChain's Body.
+            var method = member.Expression as MethodCallExpression;
+            if (method != null)
+            {
+                if (!typeof(IMethodChain).IsAssignableFrom(method.Type) ||
+                     member.Member.Name != "Body") return null;
+                return Convert(method);
+            }
+
+            if (members.Count < 2) return null;
+            members.Reverse();
+
+            //check SqlExpression's Body
+            if (!typeof(Sql).IsAssignableFrom(members[0].Type) ||
+                members[1].Member.Name != "Body") return null;
+
+            //for example, sub.Body
+            if (members.Count == 2) return ResolveExpressionObject(members[0]);
+
+            //for example, sub.Body.column.
+            else return string.Join(".", members.Where((e, i) => i != 1).Select(e => e.Member.Name).ToArray()).ToCode();
+        }
+
+        static bool TryGetDbDesignParam(MemberExpression member, out string lambdaName)
         {
             lambdaName = string.Empty;
             var names = new List<string>();
@@ -339,7 +342,7 @@ namespace LambdicSql.ConverterServices
             return name.ToCode();
         }
 
-        ICode ResolveNullCheck(ICode left, ExpressionType nodeType, ICode right)
+        ICode TryResolveNullCheck(ICode left, ExpressionType nodeType, ICode right)
         {
             string ope;
             switch (nodeType)

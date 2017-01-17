@@ -60,13 +60,10 @@ namespace LambdicSql.ConverterServices.Inside.CodeParts
                 }
 
                 var type = Value.GetType();
-                if (type == typeof(DateTime) ||
+                if (type == typeof(string) || 
+                    type == typeof(DateTime) ||
                     type == typeof(DateTimeOffset) ||
                     type == typeof(TimeSpan))
-                {
-                    return "'" + Value + "'";
-                }
-                if (type == typeof(string))
                 {
                     return "'" + Value + "'";
                 }

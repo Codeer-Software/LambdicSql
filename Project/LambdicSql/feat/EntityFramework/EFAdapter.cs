@@ -1,6 +1,5 @@
 ﻿using LambdicSql.BuilderServices.CodeParts;
 using LambdicSql.ConverterServices;
-using LambdicSql.ConverterServices.Inside;
 using LambdicSql.ConverterServices.SymbolConverters;
 using System;
 using System.Collections.Generic;

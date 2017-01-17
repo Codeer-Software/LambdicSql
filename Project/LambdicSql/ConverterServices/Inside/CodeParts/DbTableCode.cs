@@ -21,7 +21,7 @@ namespace LambdicSql.ConverterServices.Inside.CodeParts
             _back = back;
         }
 
-        internal TableInfo Info { get; private set; }
+        internal TableInfo Info { get; }
 
         public bool IsEmpty => false;
 

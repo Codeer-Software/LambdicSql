@@ -29,6 +29,7 @@ namespace LambdicSql.BuilderServices.Inside
             return new HCode(Line(func, "(".ToCode()), hArgs) { AddIndentNewLine = true };
         }
 
-        internal static SingleTextCode ToCode(this string src) => new SingleTextCode(src);
+        internal static SingleTextCode ToCode(this string src)
+            => new SingleTextCode(src);
     }
 }

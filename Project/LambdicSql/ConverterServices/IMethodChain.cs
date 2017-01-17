@@ -1,7 +1,7 @@
 ﻿namespace LambdicSql.ConverterServices
 {
     /// <summary>
-    /// Method chain.
+    /// Interface indicating that methods are chained.
     /// </summary>
     public interface IMethodChain { }
 }

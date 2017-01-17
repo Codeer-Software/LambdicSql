@@ -18,6 +18,11 @@ namespace LambdicSql.ConverterServices.Inside.CodeParts
 
         public string ToString(BuildingContext context) => _core.ToString(context);
 
-        public ICode Accept(ICodeCustomizer customizer) => new SelectClauseCode(_core.Accept(customizer));
+        public ICode Accept(ICodeCustomizer customizer)
+        {
+            var dst = customizer.Visit(this);
+            if (!ReferenceEquals(this, dst)) return dst;
+            return new SelectClauseCode(_core.Accept(customizer));
+        }
     }
 }
