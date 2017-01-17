@@ -9,8 +9,6 @@ namespace LambdicSql.Inside.CodeParts
     {
         string _formatText;
         ICode[] _args;
-        string _front = string.Empty;
-        string _back = string.Empty;
 
         internal StringFormatCode(string formatText, ICode[] args)
         {
@@ -18,25 +16,15 @@ namespace LambdicSql.Inside.CodeParts
             _args = args;
         }
 
-        StringFormatCode(string formatText, ICode[] args, string front, string back)
-        {
-            _formatText = formatText;
-            _args = args;
-            _front = front;
-            _back = back;
-        }
+        public bool IsSingleLine(BuildingContext context) => true;
 
         public bool IsEmpty => false;
-
-        public bool IsSingleLine(BuildingContext context) => true;
 
         public string ToString(BuildingContext context)
         {
             var next = context.ChangeTopLevelQuery(true).ChangeIndent(0);
             return PartsUtils.GetIndent(context.Indent) +
-                _front +
-                 string.Format(_formatText, _args.Select(e => e.ToString(next)).ToArray()) +
-                _back;
+                 string.Format(_formatText, _args.Select(e => e.ToString(next)).ToArray());
         }
 
         public ICode Accept(ICodeCustomizer customizer) => customizer.Visit(this);

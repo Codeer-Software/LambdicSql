@@ -9,16 +9,16 @@ using System.Linq.Expressions;
 namespace LambdicSql.Specialized.SymbolConverters
 {
     /// <summary>
-    /// 
+    /// Converter for TwoWaySql conversion.
     /// </summary>
     public class TwoWaySqlConverterAttribute : MethodConverterAttribute
     {
         /// <summary>
-        /// 
+        /// Convert expression to code.
         /// </summary>
-        /// <param name="expression"></param>
-        /// <param name="converter"></param>
-        /// <returns></returns>
+        /// <param name="expression">Expression.</param>
+        /// <param name="converter">Expression converter.</param>
+        /// <returns>Parts.</returns>
         public override ICode Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var obj = converter.ConvertToObject(expression.Arguments[0]);

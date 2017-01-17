@@ -7,8 +7,6 @@ namespace LambdicSql.ConverterServices.Inside.CodeParts
     class DbColumnCode : ICode
     {
         ColumnInfo _col;
-        string _front = string.Empty;
-        string _back = string.Empty;
         bool _columnOnly;
 
         internal DbColumnCode(ColumnInfo col)
@@ -21,16 +19,8 @@ namespace LambdicSql.ConverterServices.Inside.CodeParts
             _col = col;
             _columnOnly = columnOnly;
         }
-
-        DbColumnCode(ColumnInfo col, bool columnOnly, string front, string back)
-        {
-            _col = col;
-            _front = front;
-            _back = back;
-            _columnOnly = columnOnly;
-        }
-
-        internal ICode ToColumnOnly() => new DbColumnCode(_col, true, _front, _back);
+        
+        internal ICode ToColumnOnly() => new DbColumnCode(_col, true);
 
         string ColumnName => _columnOnly ? _col.SqlColumnName : _col.SqlFullName;
 
@@ -38,7 +28,7 @@ namespace LambdicSql.ConverterServices.Inside.CodeParts
 
         public bool IsSingleLine(BuildingContext context) => true;
 
-        public string ToString(BuildingContext context) => PartsUtils.GetIndent(context.Indent) + _front + ColumnName + _back;
+        public string ToString(BuildingContext context) => PartsUtils.GetIndent(context.Indent) + ColumnName;
 
         public ICode Accept(ICodeCustomizer customizer) => customizer.Visit(this);
     }

@@ -13,12 +13,17 @@ namespace LambdicSql.Inside.CodeParts
             _core = core;
         }
 
-        public bool IsSingleLine(BuildingContext context) => _core.IsSingleLine(context);
-
         public bool IsEmpty => _core.IsEmpty;
+
+        public bool IsSingleLine(BuildingContext context) => _core.IsSingleLine(context);
 
         public string ToString(BuildingContext context) => _core.ToString(context);
 
-        public ICode Accept(ICodeCustomizer customizer) => new AllDisableBinaryExpressionBracketsCode(_core.Accept(customizer));
+        public ICode Accept(ICodeCustomizer customizer)
+        {
+            var dst = customizer.Visit(this);
+            if (!ReferenceEquals(this, dst)) return dst;
+            return new AllDisableBinaryExpressionBracketsCode(_core.Accept(customizer));
+        }
     }
 }

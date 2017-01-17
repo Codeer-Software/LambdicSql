@@ -6,8 +6,6 @@ namespace LambdicSql.Inside.CodeParts
 {
     class CurrentDateTimeCode : ICode
     {
-        string _front = string.Empty;
-        string _back = string.Empty;
         string _core;
 
         internal CurrentDateTimeCode(string core)
@@ -15,19 +13,12 @@ namespace LambdicSql.Inside.CodeParts
             _core = core;
         }
 
-        CurrentDateTimeCode(string core, string front, string back)
-        {
-            _core = core;
-            _front = front;
-            _back = back;
-        }
+        public bool IsEmpty => false;
 
         public bool IsSingleLine(BuildingContext context) => true;
 
-        public bool IsEmpty => false;
-
         public string ToString(BuildingContext context)
-            => PartsUtils.GetIndent(context.Indent) + _front + "CURRENT" + context.DialectOption.CurrentDateTimeSeparator + _core + _back;
+            => PartsUtils.GetIndent(context.Indent) + "CURRENT" + context.DialectOption.CurrentDateTimeSeparator + _core;
         
         public ICode Accept(ICodeCustomizer customizer) => customizer.Visit(this);
     }

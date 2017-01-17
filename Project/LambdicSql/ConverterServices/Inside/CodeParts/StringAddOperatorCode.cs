@@ -6,22 +6,13 @@ namespace LambdicSql.ConverterServices.Inside.CodeParts
 {
     class StringAddOperatorCode : ICode
     {
-        string _front = string.Empty;
-        string _back = string.Empty;
-
         internal StringAddOperatorCode() { }
-
-        StringAddOperatorCode(string front, string back)
-        {
-            _front = front;
-            _back = back;
-        }
 
         public bool IsEmpty => false;
 
         public bool IsSingleLine(BuildingContext context) => true;
 
-        public string ToString(BuildingContext context) => PartsUtils.GetIndent(context.Indent) + _front + context.DialectOption.StringAddOperator + _back;
+        public string ToString(BuildingContext context) => PartsUtils.GetIndent(context.Indent) + context.DialectOption.StringAddOperator;
 
         public ICode Accept(ICodeCustomizer customizer) => customizer.Visit(this);
     }

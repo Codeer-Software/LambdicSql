@@ -6,19 +6,9 @@ namespace LambdicSql.ConverterServices.Inside.CodeParts
 {
     class DbTableCode : ICode
     {
-        string _front = string.Empty;
-        string _back = string.Empty;
-
         internal DbTableCode(TableInfo info)
         {
             Info = info;
-        }
-
-        DbTableCode(TableInfo info, string front, string back)
-        {
-            Info = info;
-            _front = front;
-            _back = back;
         }
 
         internal TableInfo Info { get; }
@@ -27,7 +17,7 @@ namespace LambdicSql.ConverterServices.Inside.CodeParts
 
         public bool IsSingleLine(BuildingContext context) => true;
 
-        public string ToString(BuildingContext context) => PartsUtils.GetIndent(context.Indent) + _front + Info.SqlFullName + _back;
+        public string ToString(BuildingContext context) => PartsUtils.GetIndent(context.Indent) + Info.SqlFullName;
 
         public ICode Accept(ICodeCustomizer customizer) => customizer.Visit(this);
     }

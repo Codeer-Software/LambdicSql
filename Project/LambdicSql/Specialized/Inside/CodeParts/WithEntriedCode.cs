@@ -37,6 +37,11 @@ namespace LambdicSql.Inside.CodeParts
             return _core.ToString(context);
         }
 
-        public ICode Accept(ICodeCustomizer customizer) => new WithEntriedCode(_core.Accept(customizer), _names);
+        public ICode Accept(ICodeCustomizer customizer)
+        {
+            var dst = customizer.Visit(this);
+            if (!ReferenceEquals(this, dst)) return dst;
+            return new WithEntriedCode(_core.Accept(customizer), _names);
+        }
     }
 }

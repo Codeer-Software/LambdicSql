@@ -7,8 +7,6 @@ namespace LambdicSql.Inside.CodeParts
 {
     class SubQueryAndNameCode : ICode
     {
-        string _front = string.Empty;
-        string _back = string.Empty;
         string _body;
         ICode _define;
 
@@ -17,24 +15,14 @@ namespace LambdicSql.Inside.CodeParts
             _body = body;
             _define = new HCode(table, _body.ToCode()) { Separator = " ", EnableChangeLine = false };
         }
-
-        SubQueryAndNameCode(string body, ICode define, string front, string back)
-        {
-            _body = body;
-            _define = define;
-            _front = front;
-            _back = back;
-        }
-
+        
         public bool IsEmpty => false;
 
         public bool IsSingleLine(BuildingContext context)
         {
             object obj;
-            if (!context.UserData.TryGetValue(typeof(WithEntriedCode), out obj))
-            {
-                return _define.IsSingleLine(context);
-            }
+            if (!context.UserData.TryGetValue(typeof(WithEntriedCode), out obj)) return _define.IsSingleLine(context);
+
             var withEntied = (Dictionary<string, bool>)obj;
             return withEntied.ContainsKey(_body) ? true : _define.IsSingleLine(context);
         }
@@ -42,13 +30,11 @@ namespace LambdicSql.Inside.CodeParts
         public string ToString(BuildingContext context)
         {
             object obj;
-            if (!context.UserData.TryGetValue(typeof(WithEntriedCode), out obj))
-            {
-                return _define.ToString(context);
-            }
+            if (!context.UserData.TryGetValue(typeof(WithEntriedCode), out obj)) return _define.ToString(context);
+
             var withEntied = (Dictionary<string, bool>)obj;
             return withEntied.ContainsKey(_body) ?
-                    (PartsUtils.GetIndent(context.Indent) + _front + _body + _back) :
+                    (PartsUtils.GetIndent(context.Indent) + _body) :
                     _define.ToString(context);
         }
 

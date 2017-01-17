@@ -9,16 +9,16 @@ using static LambdicSql.BuilderServices.Inside.PartsFactoryUtils;
 namespace LambdicSql.Specialized.SymbolConverters
 {
     /// <summary>
-    /// 
+    /// Converter for RECURSIVE clause conversion.This clause is empty depending on the DB.
     /// </summary>
     public class RecursiveConverterAttribute : MethodConverterAttribute
     {
         /// <summary>
-        /// 
+        /// Convert expression to code.
         /// </summary>
-        /// <param name="expression"></param>
-        /// <param name="converter"></param>
-        /// <returns></returns>
+        /// <param name="expression">Expression.</param>
+        /// <param name="converter">Expression converter.</param>
+        /// <returns>Parts.</returns>
         public override ICode Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var selectTargets = expression.Arguments[expression.Arguments.Count - 1];

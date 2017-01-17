@@ -10,16 +10,16 @@ using static LambdicSql.BuilderServices.Inside.PartsFactoryUtils;
 namespace LambdicSql.Specialized.SymbolConverters
 {
     /// <summary>
-    /// 
+    /// Converter for FROM clause conversion.
     /// </summary>
     public class FromConverterAttribute : MethodConverterAttribute
     {
         /// <summary>
-        /// 
+        /// Convert expression to code.
         /// </summary>
-        /// <param name="expression"></param>
-        /// <param name="converter"></param>
-        /// <returns></returns>
+        /// <param name="expression">Expression.</param>
+        /// <param name="converter">Expression converter.</param>
+        /// <returns>Parts.</returns>
         public override ICode Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var startIndex = expression.SkipMethodChain(0);

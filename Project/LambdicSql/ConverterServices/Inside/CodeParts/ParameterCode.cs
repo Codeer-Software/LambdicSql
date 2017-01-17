@@ -12,8 +12,6 @@ namespace LambdicSql.ConverterServices.Inside.CodeParts
         internal object Value => _param.Value;
 
         DbParam _param;
-        string _front = string.Empty;
-        string _back = string.Empty;
         bool _displayValue;
 
         internal ParameterCode(object value)
@@ -30,13 +28,11 @@ namespace LambdicSql.ConverterServices.Inside.CodeParts
             _param = param;
         }
 
-        ParameterCode(string name, MetaId metaId, DbParam param, string front, string back, bool displayValue)
+        ParameterCode(string name, MetaId metaId, DbParam param, bool displayValue)
         {
             Name = name;
             MetaId = metaId;
             _param = param;
-            _front = front;
-            _back = back;
             _displayValue = displayValue;
         }
 
@@ -44,11 +40,11 @@ namespace LambdicSql.ConverterServices.Inside.CodeParts
 
         public bool IsSingleLine(BuildingContext context) => true;
 
-        public string ToString(BuildingContext context) => PartsUtils.GetIndent(context.Indent) + _front + GetDisplayText(context) + _back;
+        public string ToString(BuildingContext context) => PartsUtils.GetIndent(context.Indent) + GetDisplayText(context);
 
         public ICode Accept(ICodeCustomizer customizer) => customizer.Visit(this);
 
-        internal ICode ToDisplayValue() => new ParameterCode(Name, MetaId, _param, _front, _back, true);
+        internal ICode ToDisplayValue() => new ParameterCode(Name, MetaId, _param, true);
 
         string GetDisplayText(BuildingContext context)
         {

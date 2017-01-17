@@ -8,21 +8,21 @@ using LambdicSql.BuilderServices.Inside;
 namespace LambdicSql.Specialized.SymbolConverters
 {
     /// <summary>
-    /// 
+    /// Converter for XXX JOIN clause conversion.
     /// </summary>
     public class JoinConverterAttribute : MethodConverterAttribute
     {
         /// <summary>
-        /// 
+        /// Clause name.
         /// </summary>
         public string Name { get; set; }
 
         /// <summary>
-        /// 
+        /// Convert expression to code.
         /// </summary>
-        /// <param name="expression"></param>
-        /// <param name="converter"></param>
-        /// <returns></returns>
+        /// <param name="expression">Expression.</param>
+        /// <param name="converter">Expression converter.</param>
+        /// <returns>Parts.</returns>
         public override ICode Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var startIndex = expression.SkipMethodChain(0);
