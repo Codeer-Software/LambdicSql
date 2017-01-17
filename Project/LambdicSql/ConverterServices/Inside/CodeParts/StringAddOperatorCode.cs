@@ -21,7 +21,7 @@ namespace LambdicSql.ConverterServices.Inside.CodeParts
 
         public bool IsSingleLine(BuildingContext context) => true;
 
-        public string ToString(bool isTopLevel, int indent, BuildingContext context) => PartsUtils.GetIndent(indent) + _front + context.Option.StringAddOperator + _back;
+        public string ToString(BuildingContext context) => PartsUtils.GetIndent(context.Indent) + _front + context.Option.StringAddOperator + _back;
 
         public ICode Customize(ICodeCustomizer customizer) => customizer.Custom(this);
     }

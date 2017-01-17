@@ -16,10 +16,10 @@ namespace LambdicSql.ConverterServices.Inside.CodeParts
 
         public bool IsSingleLine(BuildingContext context) => _core.IsSingleLine(context);
 
-        public string ToString(bool isTopLevel, int indent, BuildingContext context)
+        public string ToString(BuildingContext context)
         {
-            var target = isTopLevel ? _core : new AroundCode(_core, "(", ")");
-            return target.ToString(false, indent, context);
+            var target = context.IsTopLevel ? _core : new AroundCode(_core, "(", ")");
+            return target.ToString(context.ToSubLevel());
         }
 
         public ICode Customize(ICodeCustomizer customizer) => new SelectQueryCode(_core.Customize(customizer));

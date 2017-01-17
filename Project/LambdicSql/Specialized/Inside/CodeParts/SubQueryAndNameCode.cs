@@ -29,10 +29,10 @@ namespace LambdicSql.Inside.CodeParts
 
         public bool IsSingleLine(BuildingContext context) => context.WithEntied.ContainsKey(_body) ? true : _define.IsSingleLine(context);
 
-        public string ToString(bool isTopLevel, int indent, BuildingContext context)
+        public string ToString(BuildingContext context)
             => context.WithEntied.ContainsKey(_body) ?
-                    (PartsUtils.GetIndent(indent) + _front + _body + _back) :
-                    _define.ToString(isTopLevel, indent, context);
+                    (PartsUtils.GetIndent(context.Indent) + _front + _body + _back) :
+                    _define.ToString(context);
 
         public ICode Customize(ICodeCustomizer customizer) => customizer.Custom(this);
     }

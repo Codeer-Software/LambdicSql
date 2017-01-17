@@ -30,11 +30,14 @@ namespace LambdicSql.Inside.CodeParts
 
         public bool IsSingleLine(BuildingContext context) => true;
 
-        public string ToString(bool isTopLevel, int indent, BuildingContext context)
-            => PartsUtils.GetIndent(indent) + 
-            _front +
-             string.Format(_formatText, _args.Select(e => e.ToString(true, 0, context)).ToArray()) +
-            _back;
+        public string ToString(BuildingContext context)
+        {
+            var next = context.ResetState();
+            return PartsUtils.GetIndent(context.Indent) +
+                _front +
+                 string.Format(_formatText, _args.Select(e => e.ToString(next)).ToArray()) +
+                _back;
+        }
 
         public ICode Customize(ICodeCustomizer customizer) => customizer.Custom(this);
     }

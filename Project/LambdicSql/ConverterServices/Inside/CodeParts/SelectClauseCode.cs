@@ -16,7 +16,7 @@ namespace LambdicSql.ConverterServices.Inside.CodeParts
 
         public bool IsSingleLine(BuildingContext context) => _core.IsSingleLine(context);
 
-        public string ToString(bool isTopLevel, int indent, BuildingContext context) => _core.ToString(isTopLevel, indent, context);
+        public string ToString(BuildingContext context) => _core.ToString(context);
 
         public ICode Customize(ICodeCustomizer customizer) => new SelectClauseCode(_core.Customize(customizer));
     }

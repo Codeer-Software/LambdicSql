@@ -18,11 +18,9 @@
         /// <summary>
         /// To string.
         /// </summary>
-        /// <param name="isTopLevel">Is top level.</param>
-        /// <param name="indent">Indent.</param>
         /// <param name="context">Context.</param>
         /// <returns>Text.</returns>
-        string ToString(bool isTopLevel, int indent, BuildingContext context);
+        string ToString(BuildingContext context);
 
         /// <summary>
         /// Customize.

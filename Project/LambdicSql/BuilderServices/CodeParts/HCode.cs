@@ -62,27 +62,27 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// <summary>
         /// To string.
         /// </summary>
-        /// <param name="isTopLevel">Is top level.</param>
-        /// <param name="indent">Indent.</param>
         /// <param name="context">Context.</param>
         /// <returns>Text.</returns>
-        public string ToString(bool isTopLevel, int indent, BuildingContext context)
+        public string ToString(BuildingContext context)
         {
-            indent += Indent;
+            var firstLineContext = context.ChangeIndent(context.Indent + Indent);
+
             if (_texts.Count == 0) return string.Empty;
-            if (_texts.Count == 1) return _texts[0].ToString(isTopLevel, indent, context);
+            if (_texts.Count == 1) return _texts[0].ToString(firstLineContext);
 
             if (IsSingleLine(context) || !EnableChangeLine)
             {
-                return _texts[0].ToString(isTopLevel, indent, context) + Separator
-                    + string.Join(Separator, _texts.Skip(1).Select(e => e.ToString(isTopLevel, 0, context)).ToArray());
+                var nonIndent = context.ChangeIndent(0);
+                return _texts[0].ToString(firstLineContext) + Separator
+                    + string.Join(Separator, _texts.Skip(1).Select(e => e.ToString(nonIndent)).ToArray());
             }
 
             //if IsFunctional is true, add Indent other than the first line.
-            var addIndentCount = AddIndentNewLine ? 1 : 0;
+            var nextLineContext = AddIndentNewLine ? firstLineContext.ChangeIndent(firstLineContext.Indent + 1): firstLineContext;
             var sep = Separator.TrimEnd();
-            return _texts[0].ToString(isTopLevel, indent, context) + sep + Environment.NewLine +
-                string.Join(sep + Environment.NewLine, _texts.Skip(1).Select(e => e.ToString(isTopLevel, indent + addIndentCount, context).TrimEnd()).ToArray());
+            return _texts[0].ToString(firstLineContext) + sep + Environment.NewLine +
+                string.Join(sep + Environment.NewLine, _texts.Skip(1).Select(e => e.ToString(nextLineContext).TrimEnd()).ToArray());
         }
         
         /// <summary>

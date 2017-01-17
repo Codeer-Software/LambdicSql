@@ -52,12 +52,13 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// <summary>
         /// To string.
         /// </summary>
-        /// <param name="isTopLevel">Is top level.</param>
-        /// <param name="indent">Indent.</param>
         /// <param name="context">Context.</param>
         /// <returns>Text.</returns>
-        public string ToString(bool isTopLevel, int indent, BuildingContext context)
-            => string.Join(Separator + Environment.NewLine, _texts.Select(e => e.ToString(isTopLevel, Indent + indent, context).TrimEnd()).ToArray());
+        public string ToString(BuildingContext context)
+        {
+            var next = context.ChangeIndent(context.Indent + Indent);
+            return string.Join(Separator + Environment.NewLine, _texts.Select(e => e.ToString(next).TrimEnd()).ToArray());
+        }
 
         /// <summary>
         /// Add text.

@@ -43,11 +43,9 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// <summary>
         /// To string.
         /// </summary>
-        /// <param name="isTopLevel">Is top level.</param>
-        /// <param name="indent">Indent.</param>
         /// <param name="context">Context.</param>
         /// <returns>Text.</returns>
-        public string ToString(bool isTopLevel, int indent, BuildingContext context) => PartsUtils.GetIndent(_indent + indent) + _text;
+        public string ToString(BuildingContext context) => PartsUtils.GetIndent(_indent + context.Indent) + _text;
 
         /// <summary>
         /// Customize.

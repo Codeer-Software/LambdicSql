@@ -39,13 +39,11 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="isTopLevel"></param>
-        /// <param name="indent"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public string ToString(bool isTopLevel, int indent, BuildingContext context)
+        public string ToString(BuildingContext context)
         {
-            var text = _core.ToString(isTopLevel, indent, context);
+            var text = _core.ToString(context);
             
             int index = 0;
             for (index = 0; index < text.Length; index++)

@@ -18,10 +18,10 @@ namespace LambdicSql.Inside.CodeParts
 
         public bool IsSingleLine(BuildingContext context) => _core.IsSingleLine(context);
 
-        public string ToString(bool isTopLevel, int indent, BuildingContext context)
+        public string ToString(BuildingContext context)
         {
             foreach (var e in _names) context.WithEntied[e] = true;
-            return _core.ToString(isTopLevel, indent, context);
+            return _core.ToString(context);
         }
 
         public ICode Customize(ICodeCustomizer customizer) => new WithEntriedCode(_core.Customize(customizer), _names);

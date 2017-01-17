@@ -17,7 +17,7 @@ namespace LambdicSql.Inside.CodeParts
 
         public bool IsEmpty => _core.IsEmpty;
 
-        public string ToString(bool isTopLevel, int indent, BuildingContext context) => _core.ToString(false, indent, context);
+        public string ToString(BuildingContext context) => _core.ToString(context);
 
         public ICode Customize(ICodeCustomizer customizer) => new AllDisableBinaryExpressionBracketsCode(_core.Customize(customizer));
     }

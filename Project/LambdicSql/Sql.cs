@@ -47,7 +47,7 @@ namespace LambdicSql
         public BuildedSql Build(DialectOption option)
         {
             var context = new BuildingContext(option);
-            var sqalText = Code.ToString(true, 0, context);
+            var sqalText = Code.ToString(context);
             return new BuildedSql(sqalText, context.ParameterInfo.GetDbParams());
         }
 

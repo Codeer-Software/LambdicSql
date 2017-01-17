@@ -16,10 +16,10 @@ namespace LambdicSql.Inside.CodeParts
 
         public bool IsEmpty => false;
 
-        public string ToString(bool isTopLevel, int indent, BuildingContext context)
+        public string ToString(BuildingContext context)
             => context.Option.ExistRecursiveClause ?
-                new AroundCode(_core, "RECURSIVE ", string.Empty).ToString(isTopLevel, indent, context):
-                _core.ToString(isTopLevel, indent, context);
+                new AroundCode(_core, "RECURSIVE ", string.Empty).ToString(context):
+                _core.ToString(context);
 
         public ICode Customize(ICodeCustomizer customizer) => new RecursiveTargetCode(_core.Customize(customizer));
     }

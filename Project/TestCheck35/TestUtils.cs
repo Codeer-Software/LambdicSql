@@ -449,6 +449,8 @@ FROM tbl_staff
                 From(rec)
                 );
 
+            query.Gen(_connection);
+
             var datas = _connection.Query<SelectedData>(query).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(query, _connection,
