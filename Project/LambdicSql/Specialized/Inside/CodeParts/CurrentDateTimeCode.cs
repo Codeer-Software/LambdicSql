@@ -27,7 +27,7 @@ namespace LambdicSql.Inside.CodeParts
         public bool IsEmpty => false;
 
         public string ToString(BuildingContext context)
-            => PartsUtils.GetIndent(context.Indent) + _front + "CURRENT" + context.Option.CurrentDateTimeSeparator + _core + _back;
+            => PartsUtils.GetIndent(context.Indent) + _front + "CURRENT" + context.DialectOption.CurrentDateTimeSeparator + _core + _back;
         
         public ICode Customize(ICodeCustomizer customizer) => customizer.Custom(this);
     }

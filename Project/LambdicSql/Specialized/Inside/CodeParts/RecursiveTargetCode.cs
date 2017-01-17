@@ -17,7 +17,7 @@ namespace LambdicSql.Inside.CodeParts
         public bool IsEmpty => false;
 
         public string ToString(BuildingContext context)
-            => context.Option.ExistRecursiveClause ?
+            => context.DialectOption.ExistRecursiveClause ?
                 new AroundCode(_core, "RECURSIVE ", string.Empty).ToString(context):
                 _core.ToString(context);
 

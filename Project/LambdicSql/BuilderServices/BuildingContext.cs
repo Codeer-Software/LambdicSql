@@ -9,60 +9,56 @@ namespace LambdicSql.BuilderServices
     public class BuildingContext
     {
         /// <summary>
-        /// 
+        /// Is it a top-level query?
         /// </summary>
         public bool IsTopLevelQuery { get; } = true;
 
         /// <summary>
-        /// 
+        /// Indent.
         /// </summary>
         public int Indent { get; }
 
         /// <summary>
-        /// Option
+        /// Options for resolving dialects per database.
         /// </summary>
-        public DialectOption Option { get; }
+        public DialectOption DialectOption { get; }
 
         /// <summary>
         /// Parameter info.
         /// </summary>
         public ParameterInfo ParameterInfo { get; }
 
-
-        //TODO このあたり、一般にも使えそうなデザインにする
         /// <summary>
-        /// Name of subquery entied in With clause.
+        /// Data that users set up and use when building SQL.
         /// </summary>
-        public Dictionary<string, bool> WithEntied { get; } = new Dictionary<string, bool>();
-
-
-        internal BuildingContext(DialectOption option)
-        {
-            Option = option;
-            ParameterInfo = new ParameterInfo(option.ParameterPrefix);
-        }
+        public Dictionary<Type, object> UserData { get; } = new Dictionary<Type, object>();
 
         /// <summary>
-        /// 
+        /// Generate clone with indent changed.
         /// </summary>
         /// <param name="indent"></param>
         /// <returns></returns>
-        public BuildingContext ChangeIndent(int indent) => new BuildingContext(IsTopLevelQuery, indent, Option, ParameterInfo, WithEntied);
+        public BuildingContext ChangeIndent(int indent) => new BuildingContext(IsTopLevelQuery, indent, DialectOption, ParameterInfo, UserData);
 
         /// <summary>
-        /// 
+        /// Generate clone with changed top level flag.
         /// </summary>
         /// <returns></returns>
-        public BuildingContext ChangeTopLevelQuery(bool isTopLevelQuery) => new BuildingContext(isTopLevelQuery, Indent, Option, ParameterInfo, WithEntied);
-        
+        public BuildingContext ChangeTopLevelQuery(bool isTopLevelQuery) => new BuildingContext(isTopLevelQuery, Indent, DialectOption, ParameterInfo, UserData);
 
-        BuildingContext(bool isTopLevel, int indent, DialectOption option, ParameterInfo parameterInfo, Dictionary<string, bool> withEntied)
+        internal BuildingContext(DialectOption dialectOption)
+        {
+            DialectOption = dialectOption;
+            ParameterInfo = new ParameterInfo(dialectOption.ParameterPrefix);
+        }
+
+        BuildingContext(bool isTopLevel, int indent, DialectOption dialectOption, ParameterInfo parameterInfo, Dictionary<Type, object> userData)
         {
             IsTopLevelQuery = isTopLevel;
             Indent = indent;
-            Option = option;
+            DialectOption = dialectOption;
             ParameterInfo = parameterInfo;
-            WithEntied = withEntied;
+            UserData = userData;
         }
     }
 }

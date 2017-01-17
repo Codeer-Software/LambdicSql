@@ -6,7 +6,7 @@
     public class DialectOption
     {
         /// <summary>
-        /// 
+        /// Connection's type fullName.
         /// </summary>
         public string ConnectionTypeFullName { get; set; }
 
@@ -22,6 +22,7 @@
         /// </summary>
         public string ParameterPrefix { get; set; } = "@";
 
+        //TODO どうしようかな・・・
         /// <summary>
         /// Does a Recursive clause exist?
         /// </summary>

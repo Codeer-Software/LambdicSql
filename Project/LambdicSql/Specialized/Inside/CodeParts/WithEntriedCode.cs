@@ -1,5 +1,6 @@
 ﻿using LambdicSql.BuilderServices;
 using LambdicSql.BuilderServices.CodeParts;
+using System.Collections.Generic;
 
 namespace LambdicSql.Inside.CodeParts
 {
@@ -20,7 +21,19 @@ namespace LambdicSql.Inside.CodeParts
 
         public string ToString(BuildingContext context)
         {
-            foreach (var e in _names) context.WithEntied[e] = true;
+            Dictionary<string, bool> withEntied = null;
+            object obj;
+            if (context.UserData.TryGetValue(typeof(WithEntriedCode), out obj))
+            {
+                withEntied = (Dictionary<string, bool>)obj;
+            }
+            else
+            { 
+                withEntied = new Dictionary<string, bool>();
+                context.UserData[typeof(WithEntriedCode)] = withEntied;
+            }
+
+            foreach (var e in _names) withEntied[e] = true;
             return _core.ToString(context);
         }
 
