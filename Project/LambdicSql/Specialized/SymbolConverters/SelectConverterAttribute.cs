@@ -30,7 +30,7 @@ namespace LambdicSql.Specialized.SymbolConverters
                 modify.Add(expression.Arguments[i]);
             }
 
-            var select = LineSpace(new Code[] { "SELECT" }.Concat(modify.Select(e => converter.Convert(e))).ToArray());
+            var select = LineSpace(new Code[] { "SELECT" }.Concat(modify.Select(e => converter.ConvertToCode(e))).ToArray());
 
             //select elemnts.
             var selectTargets = expression.Arguments[expression.Arguments.Count - 1];
@@ -45,7 +45,7 @@ namespace LambdicSql.Specialized.SymbolConverters
             else if (selectTargets.Type.IsArray)
             {
                 var newArrayExp = selectTargets as NewArrayExpression;
-                var elements = new VCode(newArrayExp.Expressions.Select(x => converter.Convert(x)).ToArray()) { Indent = 1, Separator = "," };
+                var elements = new VCode(newArrayExp.Expressions.Select(x => converter.ConvertToCode(x)).ToArray()) { Indent = 1, Separator = "," };
                 return new SelectClauseCode(new VCode(select, elements));
             }
             //new { item = db.tbl.column }
@@ -61,10 +61,10 @@ namespace LambdicSql.Specialized.SymbolConverters
         {
             //single select.
             //for example, COUNT(*).
-            if (string.IsNullOrEmpty(element.Name)) return converter.Convert(element.Expression);
+            if (string.IsNullOrEmpty(element.Name)) return converter.ConvertToCode(element.Expression);
 
             //normal select.
-            return LineSpace(converter.Convert(element.Expression), "AS", element.Name);
+            return LineSpace(converter.ConvertToCode(element.Expression), "AS", element.Name);
         }
     }
 }

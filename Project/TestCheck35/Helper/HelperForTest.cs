@@ -75,7 +75,7 @@ namespace TestCheck35
             }
             Assert.AreEqual(expected, info.Text);
             
-            var dbParams = info.Params;
+            var dbParams = info.GetParams();
             Assert.AreEqual(args.Count, dbParams.Count);
             for (int i = 0; i < dbParams.Count; i++)
             {

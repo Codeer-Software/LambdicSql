@@ -93,15 +93,15 @@ namespace LambdicSql.ConverterServices.Inside
                         }
                         */
 
-                        code = newArrayExp.Expressions.Select(x => converter.Convert(x)).ToArray();
+                        code = newArrayExp.Expressions.Select(x => converter.ConvertToCode(x)).ToArray();
                     }
                     else
                     {
-                        var obj = converter.ToObject(argExp);
+                        var obj = converter.ConvertToObject(argExp);
                         var list = new List<Code>();
                         foreach (var x in (IEnumerable)obj)
                         {
-                            list.Add(converter.Convert(x));
+                            list.Add(converter.ConvertToCode(x));
                         }
                         code = list.ToArray();
                     }
@@ -122,11 +122,11 @@ namespace LambdicSql.ConverterServices.Inside
                     Code argCore = null;
                     if (e.Value.IsDefineName)
                     {
-                        argCore = (string)converter.ToObject(argExp);
+                        argCore = (string)converter.ConvertToObject(argExp);
                     }
                     else
                     {
-                        argCore = converter.Convert(argExp);
+                        argCore = converter.ConvertToCode(argExp);
                     }
                     if (!string.IsNullOrEmpty(e.Value.Separator))
                     {

@@ -26,7 +26,7 @@ namespace LambdicSql.Specialized.SymbolConverters
         {
             var startIndex = expression.SkipMethodChain(0);
             var table = FromConverterAttribute.ConvertTable(converter, expression.Arguments[startIndex]);
-            var condition = ((startIndex + 1) < expression.Arguments.Count) ? converter.Convert(expression.Arguments[startIndex + 1]) : null;
+            var condition = ((startIndex + 1) < expression.Arguments.Count) ? converter.ConvertToCode(expression.Arguments[startIndex + 1]) : null;
 
             var join = new HCode() { IsFunctional = true, Separator = " ", Indent = 1 };
             join.Add(Name);

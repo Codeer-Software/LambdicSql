@@ -25,7 +25,7 @@ namespace LambdicSql.feat.EntityFramework
 
         /// <summary>
         /// Get entity.
-        /// It can only be used within methods of the LambdicSql.Sql class.
+        /// It can only be used within methods of the LambdicSql.Db class.
         /// </summary>
         /// <typeparam name="TEntity">Entity.</typeparam>
         /// <param name="queryable">Queryable.</param>
@@ -61,7 +61,7 @@ namespace LambdicSql.feat.EntityFramework
             object[] args;
             using (var com = cnn.CreateCommand())
             {
-                args = info.Params.Select(e => CreateParameter(com, e.Key, e.Value)).ToArray();
+                args = info.GetParams().Select(e => CreateParameter(com, e.Key, e.Value)).ToArray();
 
                 try
                 {
@@ -91,7 +91,7 @@ namespace LambdicSql.feat.EntityFramework
             object[] args;
             using (var com = cnn.CreateCommand())
             {
-                args = info.Params.Select(e => CreateParameter(com, e.Key, e.Value)).ToArray();
+                args = info.GetParams().Select(e => CreateParameter(com, e.Key, e.Value)).ToArray();
             }
 
             try
@@ -134,7 +134,7 @@ namespace LambdicSql.feat.EntityFramework
         {
             if (Log == null) return;
             Log(info.Text);
-            foreach (var e in info.Params)
+            foreach (var e in info.GetParams())
             {
                 Log(e.Key + " = " + (e.Value.Value == null ? string.Empty : e.Value.Value.ToString()));
             }
@@ -145,6 +145,6 @@ namespace LambdicSql.feat.EntityFramework
     class TConverterAttribute : MethodConverterAttribute
     {
         public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
-            => converter.Convert(expression.Arguments[0]);
+            => converter.ConvertToCode(expression.Arguments[0]);
     }
 }

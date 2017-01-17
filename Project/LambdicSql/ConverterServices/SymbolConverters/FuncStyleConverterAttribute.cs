@@ -32,7 +32,7 @@ namespace LambdicSql.ConverterServices.SymbolConverters
             if (string.IsNullOrEmpty(Name)) Name = expression.Method.Name.ToUpper();
 
             var index = expression.SkipMethodChain(0);
-            var args = expression.Arguments.Skip(index).Select(e => converter.Convert(e)).ToArray();
+            var args = expression.Arguments.Skip(index).Select(e => converter.ConvertToCode(e)).ToArray();
             var hArgs = new AroundCode(new HCode(args) { Separator = ", " }, "", ")");
             return new HCode(Line(Name, "("), hArgs) { IsFunctional = true, Indent = Indent };
         }

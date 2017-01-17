@@ -10,142 +10,142 @@
         class Dummy { }
 
         /// <summary>
-        /// Concatenate expression1 and expression2 using UNION clause.
+        /// Concatenate sql1 and sql2 using UNION clause.
         /// </summary>
         /// <typeparam name="TResult">The type represented by SqlExpression.</typeparam>
-        /// <param name="expression1">Expression 1.</param>
-        /// <param name="expression2">Exppresion 2.</param>
+        /// <param name="sql1">sql 1.</param>
+        /// <param name="sql2">sql 2.</param>
         /// <returns>Concatenated result.</returns>
-        public static Sql<TResult> Union<TResult>(this Sql<TResult> expression1, Sql expression2)
-            => expression1 + Db<Dummy>.Sql(db => Symbol.Union()) + expression2;
+        public static Sql<TResult> Union<TResult>(this Sql<TResult> sql1, Sql sql2)
+            => sql1 + Db<Dummy>.Sql(db => Symbol.Union()) + sql2;
 
         /// <summary>
-        /// Concatenate expression1 and expression2 using UNION clause.
+        /// Concatenate sql1 and sql2 using UNION clause.
         /// </summary>
-        /// <param name="expression1">Expression 1.</param>
-        /// <param name="expression2">Exppresion 2.</param>
+        /// <param name="sql1">sql 1.</param>
+        /// <param name="sql2">sql 2.</param>
         /// <returns>Concatenated result.</returns>
-        public static Sql Union(this Sql expression1, Sql expression2)
-            => expression1 + Db<Dummy>.Sql(db => Symbol.Union()) + expression2;
+        public static Sql Union(this Sql sql1, Sql sql2)
+            => sql1 + Db<Dummy>.Sql(db => Symbol.Union()) + sql2;
 
         /// <summary>
-        /// Concatenate expression1 and expression2 using UNION clause.
+        /// Concatenate sql1 and sql2 using UNION clause.
         /// </summary>
         /// <typeparam name="TResult">The type represented by SqlExpression.</typeparam>
-        /// <param name="expression1">Expression 1.</param>
+        /// <param name="sql1">sql 1.</param>
         /// <param name="all">ALL predicate.</param>
-        /// <param name="expression2">Exppresion 2.</param>
+        /// <param name="sql2">sql 2.</param>
         /// <returns>Concatenated result.</returns>
-        public static Sql<TResult> Union<TResult>(this Sql<TResult> expression1, IAggregatePredicateAll all, Sql expression2)
-            => expression1 + Db<Dummy>.Sql(db => Symbol.Union(Symbol.All())) + expression2;
+        public static Sql<TResult> Union<TResult>(this Sql<TResult> sql1, IAggregatePredicateAll all, Sql sql2)
+            => sql1 + Db<Dummy>.Sql(db => Symbol.Union(Symbol.All())) + sql2;
 
         /// <summary>
-        /// Concatenate expression1 and expression2 using UNION clause.
+        /// Concatenate sql1 and sql2 using UNION clause.
         /// </summary>
-        /// <param name="expression1">Expression 1.</param>
+        /// <param name="sql1">sql 1.</param>
         /// <param name="all">ALL predicate.</param>
-        /// <param name="expression2">Exppresion 2.</param>
+        /// <param name="sql2">sql 2.</param>
         /// <returns>Concatenated result.</returns>
-        public static Sql Union(this Sql expression1, IAggregatePredicateAll all, Sql expression2)
-            => expression1 + Db<Dummy>.Sql(db => Symbol.Union(Symbol.All())) + expression2;
+        public static Sql Union(this Sql sql1, IAggregatePredicateAll all, Sql sql2)
+            => sql1 + Db<Dummy>.Sql(db => Symbol.Union(Symbol.All())) + sql2;
 
         /// <summary>
-        /// Concatenate expression1 and expression2 using INTERSECT clause.
+        /// Concatenate sql1 and sql2 using INTERSECT clause.
         /// </summary>
         /// <typeparam name="TResult">The type represented by SqlExpression.</typeparam>
-        /// <param name="expression1">Expression 1.</param>
-        /// <param name="expression2">Exppresion 2.</param>
+        /// <param name="sql1">sql 1.</param>
+        /// <param name="sql2">sql 2.</param>
         /// <returns>Concatenated result.</returns>
-        public static Sql<TResult> Intersect<TResult>(this Sql<TResult> expression1, Sql expression2)
-            => expression1 + Db<Dummy>.Sql(db => Symbol.Intersect()) + expression2;
+        public static Sql<TResult> Intersect<TResult>(this Sql<TResult> sql1, Sql sql2)
+            => sql1 + Db<Dummy>.Sql(db => Symbol.Intersect()) + sql2;
 
         /// <summary>
-        /// Concatenate expression1 and expression2 using INTERSECT clause.
+        /// Concatenate sql1 and sql2 using INTERSECT clause.
         /// </summary>
-        /// <param name="expression1">Expression 1.</param>
-        /// <param name="expression2">Exppresion 2.</param>
+        /// <param name="sql1">sql 1.</param>
+        /// <param name="sql2">sql 2.</param>
         /// <returns>Concatenated result.</returns>
-        public static Sql Intersect(this Sql expression1, Sql expression2)
-            => expression1 + Db<Dummy>.Sql(db => Symbol.Intersect()) + expression2;
+        public static Sql Intersect(this Sql sql1, Sql sql2)
+            => sql1 + Db<Dummy>.Sql(db => Symbol.Intersect()) + sql2;
 
         /// <summary>
-        /// Concatenate expression1 and expression2 using INTERSECT clause.
-        /// </summary>
-        /// <typeparam name="TResult">The type represented by SqlExpression.</typeparam>
-        /// <param name="expression1">Expression 1.</param>
-        /// <param name="all">ALL predicate.</param>
-        /// <param name="expression2">Exppresion 2.</param>
-        /// <returns>Concatenated result.</returns>
-        public static Sql<TResult> Intersect<TResult>(this Sql<TResult> expression1, IAggregatePredicateAll all, Sql expression2)
-            => expression1 + Db<Dummy>.Sql(db => Symbol.Intersect(Symbol.All())) + expression2;
-
-        /// <summary>
-        /// Concatenate expression1 and expression2 using INTERSECT clause.
-        /// </summary>
-        /// <param name="expression1">Expression 1.</param>
-        /// <param name="all">ALL predicate.</param>
-        /// <param name="expression2">Exppresion 2.</param>
-        /// <returns>Concatenated result.</returns>
-        public static Sql Intersect(this Sql expression1, IAggregatePredicateAll all, Sql expression2)
-            => expression1 + Db<Dummy>.Sql(db => Symbol.Intersect(Symbol.All())) + expression2;
-
-        /// <summary>
-        /// Concatenate expression1 and expression2 using EXCEPT clause.
+        /// Concatenate sql1 and sql2 using INTERSECT clause.
         /// </summary>
         /// <typeparam name="TResult">The type represented by SqlExpression.</typeparam>
-        /// <param name="expression1">Expression 1.</param>
-        /// <param name="expression2">Exppresion 2.</param>
+        /// <param name="sql1">sql 1.</param>
+        /// <param name="all">ALL predicate.</param>
+        /// <param name="sql2">sql 2.</param>
         /// <returns>Concatenated result.</returns>
-        public static Sql<TResult> Except<TResult>(this Sql<TResult> expression1, Sql expression2)
-            => expression1 + Db<Dummy>.Sql(db => Symbol.Except()) + expression2;
+        public static Sql<TResult> Intersect<TResult>(this Sql<TResult> sql1, IAggregatePredicateAll all, Sql sql2)
+            => sql1 + Db<Dummy>.Sql(db => Symbol.Intersect(Symbol.All())) + sql2;
 
         /// <summary>
-        /// Concatenate expression1 and expression2 using EXCEPT clause.
+        /// Concatenate sql1 and sql2 using INTERSECT clause.
         /// </summary>
-        /// <param name="expression1">Expression 1.</param>
-        /// <param name="expression2">Exppresion 2.</param>
+        /// <param name="sql1">sql 1.</param>
+        /// <param name="all">ALL predicate.</param>
+        /// <param name="sql2">sql 2.</param>
         /// <returns>Concatenated result.</returns>
-        public static Sql Except(this Sql expression1, Sql expression2)
-            => expression1 + Db<Dummy>.Sql(db => Symbol.Except()) + expression2;
+        public static Sql Intersect(this Sql sql1, IAggregatePredicateAll all, Sql sql2)
+            => sql1 + Db<Dummy>.Sql(db => Symbol.Intersect(Symbol.All())) + sql2;
 
         /// <summary>
-        /// Concatenate expression1 and expression2 using EXCEPT clause.
+        /// Concatenate sql1 and sql2 using EXCEPT clause.
         /// </summary>
         /// <typeparam name="TResult">The type represented by SqlExpression.</typeparam>
-        /// <param name="expression1">Expression 1.</param>
-        /// <param name="all">ALL predicate.</param>
-        /// <param name="expression2">Exppresion 2.</param>
+        /// <param name="sql1">sql 1.</param>
+        /// <param name="sql2">sql 2.</param>
         /// <returns>Concatenated result.</returns>
-        public static Sql<TResult> Except<TResult>(this Sql<TResult> expression1, IAggregatePredicateAll all, Sql expression2)
-            => expression1 + Db<Dummy>.Sql(db => Symbol.Except(Symbol.All())) + expression2;
+        public static Sql<TResult> Except<TResult>(this Sql<TResult> sql1, Sql sql2)
+            => sql1 + Db<Dummy>.Sql(db => Symbol.Except()) + sql2;
 
         /// <summary>
-        /// Concatenate expression1 and expression2 using EXCEPT clause.
+        /// Concatenate sql1 and sql2 using EXCEPT clause.
         /// </summary>
-        /// <param name="expression1">Expression 1.</param>
-        /// <param name="all">ALL predicate.</param>
-        /// <param name="expression2">Exppresion 2.</param>
+        /// <param name="sql1">sql 1.</param>
+        /// <param name="sql2">sql 2.</param>
         /// <returns>Concatenated result.</returns>
-        public static Sql Except(this Sql expression1, IAggregatePredicateAll all, Sql expression2)
-            => expression1 + Db<Dummy>.Sql(db => Symbol.Except(Symbol.All())) + expression2;
+        public static Sql Except(this Sql sql1, Sql sql2)
+            => sql1 + Db<Dummy>.Sql(db => Symbol.Except()) + sql2;
 
         /// <summary>
-        /// Concatenate expression1 and expression2 using MINUS clause.
+        /// Concatenate sql1 and sql2 using EXCEPT clause.
         /// </summary>
         /// <typeparam name="TResult">The type represented by SqlExpression.</typeparam>
-        /// <param name="expression1">Expression 1.</param>
-        /// <param name="expression2">Exppresion 2.</param>
+        /// <param name="sql1">sql 1.</param>
+        /// <param name="all">ALL predicate.</param>
+        /// <param name="sql2">sql 2.</param>
         /// <returns>Concatenated result.</returns>
-        public static Sql<TResult> Minus<TResult>(this Sql<TResult> expression1, Sql expression2)
-            => expression1 + Db<Dummy>.Sql(db => Symbol.Minus()) + expression2;
+        public static Sql<TResult> Except<TResult>(this Sql<TResult> sql1, IAggregatePredicateAll all, Sql sql2)
+            => sql1 + Db<Dummy>.Sql(db => Symbol.Except(Symbol.All())) + sql2;
 
         /// <summary>
-        /// Concatenate expression1 and expression2 using MINUS clause.
+        /// Concatenate sql1 and sql2 using EXCEPT clause.
         /// </summary>
-        /// <param name="expression1">Expression 1.</param>
-        /// <param name="expression2">Exppresion 2.</param>
+        /// <param name="sql1">sql 1.</param>
+        /// <param name="all">ALL predicate.</param>
+        /// <param name="sql2">sql 2.</param>
         /// <returns>Concatenated result.</returns>
-        public static Sql Minus(this Sql expression1, Sql expression2)
-            => expression1 + Db<Dummy>.Sql(db => Symbol.Minus()) + expression2;
+        public static Sql Except(this Sql sql1, IAggregatePredicateAll all, Sql sql2)
+            => sql1 + Db<Dummy>.Sql(db => Symbol.Except(Symbol.All())) + sql2;
+
+        /// <summary>
+        /// Concatenate sql1 and sql2 using MINUS clause.
+        /// </summary>
+        /// <typeparam name="TResult">The type represented by SqlExpression.</typeparam>
+        /// <param name="sql1">sql 1.</param>
+        /// <param name="sql2">sql 2.</param>
+        /// <returns>Concatenated result.</returns>
+        public static Sql<TResult> Minus<TResult>(this Sql<TResult> sql1, Sql sql2)
+            => sql1 + Db<Dummy>.Sql(db => Symbol.Minus()) + sql2;
+
+        /// <summary>
+        /// Concatenate sql1 and sql2 using MINUS clause.
+        /// </summary>
+        /// <param name="sql1">sql 1.</param>
+        /// <param name="sql2">sql 2.</param>
+        /// <returns>Concatenated result.</returns>
+        public static Sql Minus(this Sql sql1, Sql sql2)
+            => sql1 + Db<Dummy>.Sql(db => Symbol.Minus()) + sql2;
     }
 }

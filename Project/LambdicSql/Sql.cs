@@ -1,14 +1,13 @@
-﻿using LambdicSql.ConverterServices.Inside;
-using LambdicSql.BuilderServices.CodeParts;
-using System;
+﻿using LambdicSql.BuilderServices.CodeParts;
 using LambdicSql.BuilderServices;
 using LambdicSql.BuilderServices.Inside;
 using LambdicSql.ConverterServices;
+using System;
 
 namespace LambdicSql
 {
     /// <summary>
-    /// Expression.
+    /// Sql.
     /// </summary>
     public class Sql
     {
@@ -24,31 +23,32 @@ namespace LambdicSql
         }
 
         /// <summary>
-        /// Concatenate expression1 and expression2.
+        /// Addition operator.
         /// </summary>
-        /// <param name="expression1">Expression 1.</param>
-        /// <param name="expression2">Exppresion 2.</param>
+        /// <param name="sql1">sql 1.</param>
+        /// <param name="sql2">sql 2.</param>
         /// <returns>Concatenated result.</returns>
-        public static Sql operator + (Sql expression1, Sql expression2)
-          => new Sql(new VCode(expression1.Code, expression2.Code));
+        public static Sql operator + (Sql sql1, Sql sql2)
+            => new Sql(new VCode(sql1.Code, sql2.Code));
 
         /// <summary>
-        /// Sql information.
+        /// Build.
         /// </summary>
         /// <param name="connectionType">IDbConnection's type.</param>
-        /// <returns>Sql information.</returns>
+        /// <returns>SQL text and parameters.</returns>
         public BuildedSql Build(Type connectionType)
             => Build(DialectResolver.CreateCustomizer(connectionType.FullName));
 
         /// <summary>
-        /// Sql information.
+        /// Build.
         /// </summary>
         /// <param name="option">Options for converting from C # to SQL string.</param>
-        /// <returns>Sql information.</returns>
+        /// <returns>SQL text and parameters.</returns>
         public BuildedSql Build(DialectOption option)
         {
             var context = new BuildingContext(option);
-            return new BuildedSql(Code.ToString(true, 0, context), context.ParameterInfo.GetDbParams());
+            var sqalText = Code.ToString(true, 0, context);
+            return new BuildedSql(sqalText, context.ParameterInfo.GetDbParams());
         }
 
         //TODO test.
@@ -61,39 +61,39 @@ namespace LambdicSql
     }
 
     /// <summary>
-    /// Expressions that represent part of the query.
+    /// Sql.
     /// </summary>
-    /// <typeparam name="T">The type represented by SqlExpression.</typeparam>
+    /// <typeparam name="T">The type represented by sql.</typeparam>
     public class Sql<T> : Sql
     {
         /// <summary>
-        /// Entity represented by SqlExpression.
-        /// It can only be used within methods of the LambdicSql.Sql class.
+        /// Entity represented by sql.
+        /// It can only be used within methods of the LambdicSql.Db class.
         /// </summary>
         public T Body { get { throw new InvalitContextException(nameof(Body)); } }
 
         /// <summary>
-        /// Implicitly convert to the type represented by SqlExpression.
-        /// It can only be used within methods of the LambdicSql.Sql class.
+        /// Implicitly convert to the type represented by sql.
+        /// It can only be used within methods of the LambdicSql.Db class.
         /// </summary>
         /// <param name="src"></param>
         public static implicit operator T(Sql<T> src) { throw new InvalitContextException("implicit operator"); }
 
         /// <summary>
-        /// Concatenate expression1 and expression2.
+        /// Concatenate sql1 and sql2.
         /// </summary>
-        /// <param name="expression1">Expression 1.</param>
-        /// <param name="expression2">Exppresion 2.</param>
+        /// <param name="sql1">sql 1.</param>
+        /// <param name="sql2">sql 2.</param>
         /// <returns>Concatenated result.</returns>
-        public static Sql<T> operator + (Sql<T> expression1, Sql expression2)
-          => new Sql<T>(new VCode(expression1.Code, expression2.Code));
+        public static Sql<T> operator + (Sql<T> sql1, Sql sql2)
+          => new Sql<T>(new VCode(sql1.Code, sql2.Code));
 
         /// <summary>
-        /// Sql information.
+        /// Build.
         /// This have static information of the type selected in the SELECT clause.
         /// </summary>
         /// <param name="connectionType">IDbConnection's type.</param>
-        /// <returns>Sql information.</returns>
+        /// <returns>SQL text and parameters.</returns>
         public new BuildedSql<T> Build(Type connectionType)
           => new BuildedSql<T>(base.Build(connectionType));
 
@@ -110,9 +110,9 @@ namespace LambdicSql
     }
 
     /// <summary>
-    /// Expressions that represent arguments of recursive SQL.
+    /// Represent arguments of recursive SQL.
     /// </summary>
-    /// <typeparam name="TSelected">The type represented by SqlExpression.</typeparam>
+    /// <typeparam name="TSelected">The type represented by Sql.</typeparam>
     public class SqlRecursiveArguments<TSelected> : Sql<TSelected>
     {
         internal SqlRecursiveArguments(Code code) : base(code) { }

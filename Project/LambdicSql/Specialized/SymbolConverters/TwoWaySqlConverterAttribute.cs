@@ -21,10 +21,10 @@ namespace LambdicSql.Specialized.SymbolConverters
         /// <returns></returns>
         public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
-            var obj = converter.ToObject(expression.Arguments[0]);
+            var obj = converter.ConvertToObject(expression.Arguments[0]);
             var text = TowWaySqlSpec.ToStringFormat((string)obj);
             var array = expression.Arguments[1] as NewArrayExpression;
-            return new StringFormatCode(text, array.Expressions.Select(e => converter.Convert(e)).ToArray());
+            return new StringFormatCode(text, array.Expressions.Select(e => converter.ConvertToCode(e)).ToArray());
         }
     }
 }

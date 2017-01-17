@@ -3,23 +3,23 @@ using LambdicSql.ConverterServices.SymbolConverters;
 using LambdicSql.Specialized.SymbolConverters;
 
 namespace LambdicSql
-{    
+{
     /// <summary>
-    /// 
+    /// Class not to express anything.
     /// </summary>
     public abstract class Non { }
 
     /// <summary>
     /// Clause chain.
     /// </summary>
-    /// <typeparam name="TSelected"></typeparam>
+    /// <typeparam name="TSelected">Type of selected.</typeparam>
     public abstract class ClauseChain<TSelected> : IMethodChain
     {
         /// <summary>
-        /// Implicitly convert to the type represented by SqlExpression.
-        /// It can only be used within methods of the LambdicSql.Sql class.
+        /// Implicitly convert to the type represented by Sql.
+        /// It can only be used within methods of the LambdicSql.Db class.
         /// </summary>
-        /// <param name="src"></param>
+        /// <param name="src">Clause chain.</param>
         public static implicit operator TSelected(ClauseChain<TSelected> src) { throw new InvalitContextException("implicit operator"); }
     }
 
@@ -53,15 +53,10 @@ namespace LambdicSql
     public interface ISortedBy { }
 
     /// <summary>
-    /// 
-    /// </summary>
-    public interface IOverArgument { }
-
-    /// <summary>
     /// ORDERBY keyword.
     /// Use it with the OVER function.
     /// </summary>
-    public interface IOrderBy : IOverArgument { }
+    public interface IOrderBy { }
 
     /// <summary>
     /// ORDERBY keyword.
@@ -76,23 +71,23 @@ namespace LambdicSql
     /// PARTITION BY keyword.
     /// Use it with the OVER function.
     /// </summary>
-    public interface IPartitionBy : IOverArgument { }
+    public interface IPartitionBy { }
 
     /// <summary>
-    /// Rows keyword.
+    /// ROWS keyword.
     /// Use it with the OVER function.
     /// </summary>
-    public interface IRows : IOverArgument { }
+    public interface IRows { }
 
     /// <summary>
     /// Aggregation predicate.
-    /// All or Distinct.
+    /// ALL or DISTINCT.
     /// </summary>
     public interface IAggregatePredicate { }
 
     /// <summary>
     /// Aggregation predicate.
-    /// All or Distinct.
+    /// ALL
     /// </summary>
     public interface IAggregatePredicateAll : IAggregatePredicate { }
 
@@ -226,7 +221,7 @@ namespace LambdicSql
 
     /// <summary>
     /// Utility.
-    /// It can only be used within methods of the LambdicSql.Sql class.
+    /// It can only be used within methods of the LambdicSql.Db class.
     /// </summary>
     public static class UtilitySymbolExtensions
     {

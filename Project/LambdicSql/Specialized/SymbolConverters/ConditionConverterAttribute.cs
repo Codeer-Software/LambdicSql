@@ -18,8 +18,8 @@ namespace LambdicSql.Specialized.SymbolConverters
         /// <returns></returns>
         public override Code Convert(NewExpression expression, ExpressionConverter converter)
         {
-            var obj = converter.ToObject(expression.Arguments[0]);
-            return (bool)obj ? converter.Convert(expression.Arguments[1]) : string.Empty;
+            var obj = converter.ConvertToObject(expression.Arguments[0]);
+            return (bool)obj ? converter.ConvertToCode(expression.Arguments[1]) : string.Empty;
         }
     }
 }

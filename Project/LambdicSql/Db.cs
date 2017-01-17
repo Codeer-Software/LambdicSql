@@ -1,24 +1,23 @@
 ﻿using LambdicSql.ConverterServices;
 using LambdicSql.ConverterServices.Inside;
-using LambdicSql.Inside.CodeParts;
+using LambdicSql.BuilderServices.CodeParts;
 using System;
 using System.Linq.Expressions;
-using LambdicSql.BuilderServices.CodeParts;
 
 namespace LambdicSql
 {
     /// <summary>
-    /// Sql creator.
+    /// Holds the database type.
     /// </summary>
     /// <typeparam name="T">DB's type.</typeparam>
     public class Db<T> where T : class
     {
         /// <summary>
-        /// Create an expression that will be part of the query.
+        /// Create sql.
         /// </summary>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="expression">An expression expressing a part of query by C #.</param>
-        /// <returns>An expression that will be part of the query.</returns>
+        /// <typeparam name="TResult">The type represented by expression.</typeparam>
+        /// <param name="expression">Expression expressing Sql by lambda.</param>
+        /// <returns>Sql.</returns>
         public static Sql<TResult> Sql<TResult>(Expression<Func<T, TResult>> expression)
         {
             var db = DBDefineAnalyzer.GetDbInfo<T>();
@@ -26,11 +25,11 @@ namespace LambdicSql
         }
 
         /// <summary>
-        /// Create a query.
+        /// Create a sql.
         /// </summary>
         /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
-        /// <param name="expression">An expression expressing a query by C #.</param>
-        /// <returns>A query.</returns>
+        /// <param name="expression">Expression expressing Sql by lambda.</param>
+        /// <returns>Sql.</returns>
         public static Sql<TSelected> Sql<TSelected>(Expression<Func<T, ClauseChain<TSelected>>> expression)
         {
             var db = DBDefineAnalyzer.GetDbInfo<T>();
@@ -38,10 +37,10 @@ namespace LambdicSql
         }
 
         /// <summary>
-        /// Create a query.
+        /// Create a sql.
         /// </summary>
-        /// <param name="expression">An expression expressing a query by C #.</param>
-        /// <returns>A query.</returns>
+        /// <param name="expression">Expression expressing Sql by lambda.</param>
+        /// <returns>Sql.</returns>
         public static Sql Sql(Expression<Func<T, ClauseChain<Non>>> expression)
         {
             var db = DBDefineAnalyzer.GetDbInfo<T>();
@@ -49,25 +48,25 @@ namespace LambdicSql
         }
 
         /// <summary>
-        /// Create a query.
+        /// Create a sql.
         /// Add name.
         /// </summary>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="expression">An expression expressing a query by C #.</param>
-        /// <returns>A query.</returns>
-        public static Sql<TResult> Sql<TResult>(Expression<Func<T, Sql<TResult>>> expression)
+        /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
+        /// <param name="expression">Expression expressing Sql by lambda.</param>
+        /// <returns>Sql.</returns>
+        public static Sql<TSelected> Sql<TSelected>(Expression<Func<T, Sql<TSelected>>> expression)
         {
             var db = DBDefineAnalyzer.GetDbInfo<T>();
             var core = expression.Body as MemberExpression;
-            return new Sql<TResult>(core.Member.Name);
+            return new Sql<TSelected>(core.Member.Name);
         }
 
         /// <summary>
-        /// Create a query.
+        /// Create a sql.
         /// </summary>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="expression">An expression expressing a query by C #.</param>
-        /// <returns>A query.</returns>
+        /// <typeparam name="TResult">The type represented by expression.</typeparam>
+        /// <param name="expression">Expression expressing Sql by lambda.</param>
+        /// <returns>Sql.</returns>
         public static SqlRecursiveArguments<TResult> Sql<TResult>(Expression<Func<T, Symbol.RecursiveArguments<TResult>>> expression)
         {
             var db = DBDefineAnalyzer.GetDbInfo<T>();
@@ -77,7 +76,7 @@ namespace LambdicSql
         static Code MakeSynatx(DbInfo dbInfo, Expression core)
         {
             var converter = new ExpressionConverter(dbInfo);
-            return core == null ? string.Empty : converter.Convert(core);
+            return core == null ? string.Empty : converter.ConvertToCode(core);
         }
     }
 }

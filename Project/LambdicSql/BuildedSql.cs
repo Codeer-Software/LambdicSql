@@ -1,11 +1,10 @@
-﻿using LambdicSql.ConverterServices;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace LambdicSql
 {
     /// <summary>
-    /// SQL information.
+    /// SQL text and parameters.
     /// </summary>
     public class BuildedSql
     {
@@ -17,16 +16,17 @@ namespace LambdicSql
         public string Text { get; }
 
         /// <summary>
-        /// Parameters.
+        /// Get parameters.
         /// </summary>
-        public Dictionary<string, DbParam> Params => _dbParams.ToDictionary(e => e.Key, e => e.Value);
+        /// <returns>Parameters.</returns>
+        public Dictionary<string, DbParam> GetParams() => _dbParams.ToDictionary(e => e.Key, e => e.Value);
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="sqlText">Sql text.</param>
         /// <param name="dbParams">Parameters.</param>
-        public BuildedSql(string sqlText, Dictionary<string, DbParam> dbParams)
+        internal BuildedSql(string sqlText, Dictionary<string, DbParam> dbParams)
         {
             Text = sqlText;
             _dbParams = dbParams;
@@ -36,7 +36,7 @@ namespace LambdicSql
         /// Copy constructor.
         /// </summary>
         /// <param name="src">Source.</param>
-        public BuildedSql(BuildedSql src)
+        internal BuildedSql(BuildedSql src)
         {
             Text = src.Text;
             _dbParams = src._dbParams;
@@ -44,7 +44,7 @@ namespace LambdicSql
     }
 
     /// <summary>
-    /// SQL information.
+    /// SQL text and parameters.
     /// </summary>
     /// <typeparam name="TSelected">Type of selected at SELECT clause.</typeparam>
     public class BuildedSql<TSelected> : BuildedSql
@@ -54,13 +54,13 @@ namespace LambdicSql
         /// </summary>
         /// <param name="sqlText">Sql text.</param>
         /// <param name="dbParams">Parameters.</param>
-        public BuildedSql(string sqlText, Dictionary<string, DbParam> dbParams)
+        internal BuildedSql(string sqlText, Dictionary<string, DbParam> dbParams)
             : base(sqlText, dbParams) { }
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="src">Source.</param>
-        public BuildedSql(BuildedSql src) : base(src) { }
+        internal BuildedSql(BuildedSql src) : base(src) { }
     }
 }

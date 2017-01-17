@@ -33,7 +33,7 @@ namespace LambdicSql.Specialized.SymbolConverters
             var arry = exp as NewArrayExpression;
             if (arry != null) return Arguments(arry.Expressions.Select(e => ConvertTable(decoder, e)).ToArray());
 
-            var table = decoder.Convert(exp);
+            var table = decoder.ConvertToCode(exp);
 
             //sub query.
             var body = GetSubQuery(exp);

@@ -22,7 +22,7 @@ namespace LambdicSql.Specialized.SymbolConverters
         /// <returns></returns>
         public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
-            var args = expression.Arguments.Select(e => converter.Convert(e)).ToArray();
+            var args = expression.Arguments.Select(e => converter.ConvertToCode(e)).ToArray();
             return new AllDisableBinaryExpressionBracketsCode(Func("ALL", args[0]));
         }
     }

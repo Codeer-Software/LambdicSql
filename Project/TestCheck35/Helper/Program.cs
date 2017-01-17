@@ -84,7 +84,7 @@ namespace TestCheck35
                 {
                     com.CommandText = info.Text;
                     com.Connection = cnn;
-                    foreach (var obj in info.Params.Select(e => CreateParameter(com, e.Key, e.Value)).ToArray())
+                    foreach (var obj in info.GetParams().Select(e => CreateParameter(com, e.Key, e.Value)).ToArray())
                     {
                         com.Parameters.Add(obj);
                     }
@@ -122,7 +122,7 @@ namespace TestCheck35
                 {
                     com.CommandText = info.Text;
                     com.Connection = cnn;
-                    foreach (var obj in info.Params.Select(e => CreateParameter(com, e.Key, e.Value)).ToArray())
+                    foreach (var obj in info.GetParams().Select(e => CreateParameter(com, e.Key, e.Value)).ToArray())
                     {
                         com.Parameters.Add(obj);
                     }

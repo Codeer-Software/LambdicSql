@@ -31,7 +31,7 @@ namespace LambdicSql.Specialized.SymbolConverters
             var names = new List<string>();
             foreach (var e in arry.Expressions)
             {
-                var table = converter.Convert(e);
+                var table = converter.ConvertToCode(e);
                 var body = FromConverterAttribute.GetSubQuery(e);
                 names.Add(body);
                 with.Add(Clause(LineSpace(body, "AS"), table));
@@ -41,10 +41,10 @@ namespace LambdicSql.Specialized.SymbolConverters
 
         static Code ConvertRecurciveWith(MethodCallExpression expression, ExpressionConverter converter)
         {
-            var table = converter.Convert(expression.Arguments[0]);
+            var table = converter.ConvertToCode(expression.Arguments[0]);
             var sub = FromConverterAttribute.GetSubQuery(expression.Arguments[0]);
             var with = new VCode() { Indent = 1 };
-            with.Add(Clause(LineSpace(new RecursiveTargetCode(Line(sub, table)), "AS"), converter.Convert(expression.Arguments[1])));
+            with.Add(Clause(LineSpace(new RecursiveTargetCode(Line(sub, table)), "AS"), converter.ConvertToCode(expression.Arguments[1])));
             return new WithEntriedCode(new VCode("WITH", with), new[] { sub });
         }
     }

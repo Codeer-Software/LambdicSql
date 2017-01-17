@@ -1,5 +1,4 @@
 ﻿using LambdicSql.ConverterServices;
-using LambdicSql.ConverterServices.Inside;
 using LambdicSql.ConverterServices.SymbolConverters;
 using LambdicSql.Specialized.SymbolConverters;
 using System;
@@ -8,7 +7,7 @@ namespace LambdicSql
 {
     /// <summary>
     /// SQL Symbols.
-    /// It can only be used within methods of the LambdicSql.Sql class.
+    /// It can only be used within methods of the LambdicSql.Db class.
     /// Use[using static LambdicSql.Keywords;], you can use to write natural SQL.
     /// </summary>
     public static partial class Symbol

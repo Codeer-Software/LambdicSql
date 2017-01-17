@@ -66,7 +66,7 @@ namespace LambdicSql.feat.Dapper
 
             try
             {
-                return DapperWrapper<T>.Query(cnn, info.Text, CreateDynamicParam(info.Params), transaction, buffered, commandTimeout, commandType);
+                return DapperWrapper<T>.Query(cnn, info.Text, CreateDynamicParam(info.GetParams()), transaction, buffered, commandTimeout, commandType);
             }
             catch (Exception e)
             {
@@ -96,7 +96,7 @@ namespace LambdicSql.feat.Dapper
 
             try
             {
-                return DapperWrapper.Execute(cnn, info.Text, CreateDynamicParam(info.Params), transaction, commandTimeout, commandType);
+                return DapperWrapper.Execute(cnn, info.Text, CreateDynamicParam(info.GetParams()), transaction, commandTimeout, commandType);
             }
             catch (Exception e)
             {
@@ -127,7 +127,7 @@ namespace LambdicSql.feat.Dapper
         {
             if (Log == null) return;
             Log(info.Text);
-            foreach (var e in info.Params)
+            foreach (var e in info.GetParams())
             {
                 Log(e.Key + " = " + (e.Value.Value == null ? string.Empty : e.Value.Value.ToString()));
             }

@@ -1,5 +1,4 @@
 using LambdicSql.ConverterServices;
-using LambdicSql.ConverterServices.Inside;
 using LambdicSql.ConverterServices.SymbolConverters;
 using LambdicSql.Specialized.SymbolConverters;
 
@@ -7,7 +6,7 @@ namespace LambdicSql
 {
     /// <summary>
     /// SQL Symbol.
-    /// It can only be used within methods of the LambdicSql.Sql class.
+    /// It can only be used within methods of the LambdicSql.Db class.
     /// Use[using static LambdicSql.Keywords;], you can use to write natural SQL.
     /// </summary>
     public static partial class Symbol
@@ -1206,15 +1205,5 @@ namespace LambdicSql
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [MethodFormatConverter(Format = "DROP DATABASE [!0]")]
         public static ClauseChain<Non> DropDataBase(string name) { throw new InvalitContextException(nameof(CreateDataBase)); }
-
-        //ifはインテリセンスで出てきてほしくないよな・・・
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="condition"></param>
-        /// <returns></returns>
-        public static ClauseChain<Non> If(bool condition) { throw new InvalitContextException(nameof(If)); }
-        //TODO で、DropTableとCreateTableは前に続くものも作る
-        //  IF OBJECT_ID('dbo.Scores', 'U') IS NOT NULL DROP TABLE dbo.Scores;
     }
 }

@@ -20,7 +20,7 @@ namespace LambdicSql.Specialized.SymbolConverters
         /// <returns></returns>
         public override Code Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
-            var condition = converter.Convert(expression.Arguments[expression.SkipMethodChain(0)]);
+            var condition = converter.ConvertToCode(expression.Arguments[expression.SkipMethodChain(0)]);
             if (condition.IsEmpty) return string.Empty;
             return Clause(expression.Method.Name.ToUpper(), condition);
         }

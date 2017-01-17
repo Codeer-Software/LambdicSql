@@ -25,7 +25,7 @@ namespace LambdicSql.ConverterServices
         /// </summary>
         /// <param name="expression">expression.</param>
         /// <returns>object.</returns>
-        public object ToObject(Expression expression)
+        public object ConvertToObject(Expression expression)
         {
             object obj;
             if (!ExpressionToObject.GetExpressionObject(expression, out obj)) throw new NotSupportedException();
@@ -37,7 +37,7 @@ namespace LambdicSql.ConverterServices
         /// </summary>
         /// <param name="obj">object.</param>
         /// <returns>text.</returns>
-        public Code Convert(object obj)
+        public Code ConvertToCode(object obj)
         {
             var exp = obj as Expression;
             if (exp != null) return Convert(exp);
@@ -80,7 +80,7 @@ namespace LambdicSql.ConverterServices
         Code Convert(MemberInitExpression memberInit)
         {
             var value = ExpressionToObject.GetMemberInitObject(memberInit);
-            return Convert(value);
+            return ConvertToCode(value);
         }
 
         Code Convert(ConstantExpression constant)
@@ -90,7 +90,7 @@ namespace LambdicSql.ConverterServices
             if (symbol != null) return symbol.Convert(constant.Value);
 
             //normal object.
-            return Convert(constant.Value);
+            return ConvertToCode(constant.Value);
         }
 
         Code Convert(NewExpression newExp)
@@ -101,14 +101,14 @@ namespace LambdicSql.ConverterServices
 
             //object.
             var value = ExpressionToObject.GetNewObject(newExp);
-            return Convert(value);
+            return ConvertToCode(value);
         }
 
         Code Convert(NewArrayExpression array)
         {
             if (SupportedTypeSpec.IsSupported(array.Type))
             {
-                var obj = SupportedTypeSpec.ConvertArray(array.Type, array.Expressions.Select(e => ToObject(e)));
+                var obj = SupportedTypeSpec.ConvertArray(array.Type, array.Expressions.Select(e => ConvertToObject(e)));
                 return new ParameterCode(obj);
             }
             throw new NotSupportedException();
