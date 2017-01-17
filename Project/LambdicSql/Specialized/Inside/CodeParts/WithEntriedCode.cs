@@ -37,6 +37,6 @@ namespace LambdicSql.Inside.CodeParts
             return _core.ToString(context);
         }
 
-        public ICode Customize(ICodeCustomizer customizer) => new WithEntriedCode(_core.Customize(customizer), _names);
+        public ICode Accept(ICodeCustomizer customizer) => new WithEntriedCode(_core.Accept(customizer), _names);
     }
 }

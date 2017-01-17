@@ -22,6 +22,6 @@ namespace LambdicSql.ConverterServices.Inside.CodeParts
             return target.ToString(context.ChangeTopLevelQuery(false));
         }
 
-        public ICode Customize(ICodeCustomizer customizer) => new SelectQueryCode(_core.Customize(customizer));
+        public ICode Accept(ICodeCustomizer customizer) => new SelectQueryCode(_core.Accept(customizer));
     }
 }

@@ -22,7 +22,6 @@
         /// </summary>
         public string ParameterPrefix { get; set; } = "@";
 
-        //TODO どうしようかな・・・
         /// <summary>
         /// Does a Recursive clause exist?
         /// </summary>

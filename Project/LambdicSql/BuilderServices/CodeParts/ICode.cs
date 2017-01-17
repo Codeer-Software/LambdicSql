@@ -13,6 +13,8 @@
         /// <summary>
         /// Is single line.
         /// </summary>
+        /// <param name="context">Context.</param>
+        /// <returns>Is single line.</returns>
         bool IsSingleLine(BuildingContext context);
 
         /// <summary>
@@ -23,10 +25,10 @@
         string ToString(BuildingContext context);
 
         /// <summary>
-        /// Customize.
+        /// Accept customizer.
         /// </summary>
         /// <param name="customizer">Customizer.</param>
         /// <returns>Customized SqlText.</returns>
-        ICode Customize(ICodeCustomizer customizer);
+        ICode Accept(ICodeCustomizer customizer);
     }
 }

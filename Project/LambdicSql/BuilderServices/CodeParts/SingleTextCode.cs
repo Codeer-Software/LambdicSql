@@ -3,7 +3,7 @@
 namespace LambdicSql.BuilderServices.CodeParts
 {
     /// <summary>
-    /// Single text.
+    /// Single text code.
     /// </summary>
     public class SingleTextCode : ICode
     {
@@ -31,11 +31,6 @@ namespace LambdicSql.BuilderServices.CodeParts
         }
 
         /// <summary>
-        /// Is single line.
-        /// </summary>
-        public bool IsSingleLine(BuildingContext context) => true;
-
-        /// <summary>
         /// Is empty.
         /// </summary>
         public bool IsEmpty => string.IsNullOrEmpty(_text);
@@ -48,10 +43,15 @@ namespace LambdicSql.BuilderServices.CodeParts
         public string ToString(BuildingContext context) => PartsUtils.GetIndent(_indent + context.Indent) + _text;
 
         /// <summary>
-        /// Customize.
+        /// Accept customizer.
         /// </summary>
         /// <param name="customizer">Customizer.</param>
-        /// <returns>Customized SqlText.</returns>
-        public ICode Customize(ICodeCustomizer customizer) => customizer.Custom(this);
+        /// <returns>Destination.</returns>
+        public ICode Accept(ICodeCustomizer customizer) => customizer.Visit(this);
+
+        /// <summary>
+        /// Is single line.
+        /// </summary>
+        public bool IsSingleLine(BuildingContext context) => true;
     }
 }

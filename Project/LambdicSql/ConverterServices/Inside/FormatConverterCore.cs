@@ -141,12 +141,12 @@ namespace LambdicSql.ConverterServices.Inside
                 if (e.Value.IsDirectValue)
                 {
                     var customizer = new CustomizeParameterToObject();
-                    code = code.Select(x => x.Customize(customizer)).ToArray();
+                    code = code.Select(x => x.Accept(customizer)).ToArray();
                 }
                 if (e.Value.IsColumnOnly)
                 {
                     var customizer = new CustomizeColumnOnly();
-                    code = code.Select(x => x.Customize(customizer)).ToArray();
+                    code = code.Select(x => x.Accept(customizer)).ToArray();
                 }
                 array[e.Value.PartsIndex] = code;
             }

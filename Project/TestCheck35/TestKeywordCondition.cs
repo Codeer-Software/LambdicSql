@@ -409,10 +409,10 @@ WHERE
                From(db.tbl_staff).
                Where(Exists(sub)));
 
+            query.Gen(_connection);
+
             var datas = _connection.Query(query).ToList();
             Assert.IsTrue(0 < datas.Count);
-
-            query.Gen(_connection);
 
             AssertEx.AreEqual(query, _connection,
 @"SELECT

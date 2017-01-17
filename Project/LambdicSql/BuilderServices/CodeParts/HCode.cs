@@ -5,11 +5,29 @@ using System.Linq;
 namespace LambdicSql.BuilderServices.CodeParts
 {
     /// <summary>
-    /// Horizontal text.
+    /// Arrange the code horizontally.
     /// </summary>
     public class HCode : ICode
     {
-        List<ICode> _texts = new List<ICode>();
+        List<ICode> _core = new List<ICode>();
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="texts">Horizontal texts.</param>
+        public HCode(params ICode[] texts)
+        {
+            _core.AddRange(texts.Where(e => !e.IsEmpty));
+        }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="texts">Horizontal texts.</param>
+        public HCode(IEnumerable<ICode> texts)
+        {
+            _core.AddRange(texts.Where(e => !e.IsEmpty));
+        }
 
         /// <summary>
         /// Separator.
@@ -32,32 +50,16 @@ namespace LambdicSql.BuilderServices.CodeParts
         public bool EnableChangeLine { get; set; } = true;
 
         /// <summary>
-        /// Is single line.
-        /// </summary>
-        public bool IsSingleLine(BuildingContext context) => !_texts.Any(e => !e.IsSingleLine(context));
-
-        /// <summary>
         /// Is empty.
         /// </summary>
-        public bool IsEmpty => !_texts.Any(e => !e.IsEmpty);
+        public bool IsEmpty => !_core.Any(e => !e.IsEmpty);
 
         /// <summary>
-        /// Constructor.
+        /// Is single line.
         /// </summary>
-        /// <param name="texts">Horizontal texts.</param>
-        public HCode(params ICode[] texts)
-        {
-            _texts.AddRange(texts.Where(e => !e.IsEmpty));
-        }
-
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        /// <param name="texts">Horizontal texts.</param>
-        public HCode(IEnumerable<ICode> texts)
-        {
-            _texts.AddRange(texts.Where(e => !e.IsEmpty));
-        }
+        /// <param name="context">Context.</param>
+        /// <returns>Is single line.</returns>
+        public bool IsSingleLine(BuildingContext context) => !_core.Any(e => !e.IsSingleLine(context));
 
         /// <summary>
         /// To string.
@@ -68,21 +70,22 @@ namespace LambdicSql.BuilderServices.CodeParts
         {
             var firstLineContext = context.ChangeIndent(context.Indent + Indent);
 
-            if (_texts.Count == 0) return string.Empty;
-            if (_texts.Count == 1) return _texts[0].ToString(firstLineContext);
+            if (_core.Count == 0) return string.Empty;
+            if (_core.Count == 1) return _core[0].ToString(firstLineContext);
 
             if (IsSingleLine(context) || !EnableChangeLine)
             {
                 var nonIndent = context.ChangeIndent(0);
-                return _texts[0].ToString(firstLineContext) + Separator
-                    + string.Join(Separator, _texts.Skip(1).Select(e => e.ToString(nonIndent)).ToArray());
+                return _core[0].ToString(firstLineContext) + Separator
+                    + string.Join(Separator, _core.Skip(1).Select(e => e.ToString(nonIndent)).ToArray());
             }
 
-            //if IsFunctional is true, add Indent other than the first line.
+            //if AddIndentNewLine is true, add Indent other than the first line.
             var nextLineContext = AddIndentNewLine ? firstLineContext.ChangeIndent(firstLineContext.Indent + 1): firstLineContext;
+
             var sep = Separator.TrimEnd();
-            return _texts[0].ToString(firstLineContext) + sep + Environment.NewLine +
-                string.Join(sep + Environment.NewLine, _texts.Skip(1).Select(e => e.ToString(nextLineContext).TrimEnd()).ToArray());
+            return _core[0].ToString(firstLineContext) + sep + Environment.NewLine +
+                string.Join(sep + Environment.NewLine, _core.Skip(1).Select(e => e.ToString(nextLineContext).TrimEnd()).ToArray());
         }
         
         /// <summary>
@@ -92,7 +95,7 @@ namespace LambdicSql.BuilderServices.CodeParts
         public void Add(ICode text)
         {
             if (text.IsEmpty) return;
-            _texts.Add(text);
+            _core.Add(text);
         }
 
         /// <summary>
@@ -100,24 +103,27 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// </summary>
         /// <param name="texts">Texts.</param>
         public void AddRange(IEnumerable<ICode> texts)
-            => _texts.AddRange(texts.Where(e => !e.IsEmpty));
+            => _core.AddRange(texts.Where(e => !e.IsEmpty));
 
         /// <summary>
         /// Add text.
         /// </summary>
         /// <param name="texts">Texts.</param>
         public void AddRange(params ICode[] texts)
-            => _texts.AddRange(texts.Where(e => !e.IsEmpty));
+            => _core.AddRange(texts.Where(e => !e.IsEmpty));
 
         /// <summary>
-        /// Customize.
+        /// Accept customizer.
         /// </summary>
         /// <param name="customizer">Customizer.</param>
-        /// <returns>Customized SqlText.</returns>
-        public ICode Customize(ICodeCustomizer customizer)
+        /// <returns>Destination.</returns>
+        public ICode Accept(ICodeCustomizer customizer)
         {
-            var dst = _texts.Select(e => e.Customize(customizer));
-            return CopyProperty(dst.ToArray());
+            var dst = customizer.Visit(this);
+            if (!ReferenceEquals(this, dst)) return dst;
+
+            var dstCore = _core.Select(e => e.Accept(customizer));
+            return CopyProperty(dstCore.ToArray());
         }
 
         HCode CopyProperty(params ICode[] texts)

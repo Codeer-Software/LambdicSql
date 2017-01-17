@@ -29,6 +29,6 @@ namespace LambdicSql.ConverterServices.Inside.CodeParts
 
         public string ToString(BuildingContext context) => PartsUtils.GetIndent(context.Indent) + _front + Info.SqlFullName + _back;
 
-        public ICode Customize(ICodeCustomizer customizer) => customizer.Custom(this);
+        public ICode Accept(ICodeCustomizer customizer) => customizer.Visit(this);
     }
 }

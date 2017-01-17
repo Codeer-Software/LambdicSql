@@ -21,6 +21,6 @@ namespace LambdicSql.Inside.CodeParts
                 new AroundCode(_core, "RECURSIVE ", string.Empty).ToString(context):
                 _core.ToString(context);
 
-        public ICode Customize(ICodeCustomizer customizer) => new RecursiveTargetCode(_core.Customize(customizer));
+        public ICode Accept(ICodeCustomizer customizer) => new RecursiveTargetCode(_core.Accept(customizer));
     }
 }

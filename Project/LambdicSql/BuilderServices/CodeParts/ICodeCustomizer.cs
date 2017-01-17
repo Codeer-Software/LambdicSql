@@ -6,10 +6,10 @@
     public interface ICodeCustomizer
     {
         /// <summary>
-        /// Coustom.
+        /// Visit and customize.
         /// </summary>
         /// <param name="src">Source.</param>
-        /// <returns>Result.</returns>
-        ICode Custom(ICode src);
+        /// <returns>Destination.</returns>
+        ICode Visit(ICode src);
     }
 }

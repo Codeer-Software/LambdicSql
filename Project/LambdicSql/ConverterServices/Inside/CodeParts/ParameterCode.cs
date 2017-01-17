@@ -46,7 +46,7 @@ namespace LambdicSql.ConverterServices.Inside.CodeParts
 
         public string ToString(BuildingContext context) => PartsUtils.GetIndent(context.Indent) + _front + GetDisplayText(context) + _back;
 
-        public ICode Customize(ICodeCustomizer customizer) => customizer.Custom(this);
+        public ICode Accept(ICodeCustomizer customizer) => customizer.Visit(this);
 
         internal ICode ToDisplayValue() => new ParameterCode(Name, MetaId, _param, _front, _back, true);
 

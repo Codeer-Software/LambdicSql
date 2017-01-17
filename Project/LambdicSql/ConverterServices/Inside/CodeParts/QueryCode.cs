@@ -18,6 +18,6 @@ namespace LambdicSql.ConverterServices.Inside.CodeParts
 
         public string ToString(BuildingContext context) => _core.ToString(context.ChangeTopLevelQuery(false));
 
-        public ICode Customize(ICodeCustomizer customizer) => new QueryCode(_core.Customize(customizer));
+        public ICode Accept(ICodeCustomizer customizer) => new QueryCode(_core.Accept(customizer));
     }
 }
