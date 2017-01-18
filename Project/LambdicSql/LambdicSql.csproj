@@ -47,6 +47,7 @@
     <Compile Include="BuilderServices\CodeParts\AroundCode.cs" />
     <Compile Include="ConverterServices\IDisableBinaryExpressionBrackets.cs" />
     <Compile Include="ConverterServices\Inside\FormatConverterCore.cs" />
+    <Compile Include="ConverterServices\Inside\OperatorCode.cs" />
     <Compile Include="ConverterServices\SymbolConverters\MethodFormatConverterAttribute.cs" />
     <Compile Include="ConverterServices\SymbolConverters\NewFormatConverterAttribute.cs" />
     <Compile Include="ConverterServices\SymbolConverters\FormatDirection.cs" />

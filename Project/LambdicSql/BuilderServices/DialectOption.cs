@@ -5,6 +5,8 @@
     /// </summary>
     public class DialectOption
     {
+        string _stringAddOperator = " + ";
+
         /// <summary>
         /// Connection's type fullName.
         /// </summary>
@@ -14,7 +16,17 @@
         /// String addtional operator.
         /// Default is +.
         /// </summary>
-        public string StringAddOperator { get; set; } = "+";
+        public string StringAddOperator
+        {
+            get
+            {
+                return _stringAddOperator;
+            }
+            set
+            {
+                _stringAddOperator = " " + value.Trim() + " ";
+            }
+        }
 
         /// <summary>
         /// Parameter prefix.

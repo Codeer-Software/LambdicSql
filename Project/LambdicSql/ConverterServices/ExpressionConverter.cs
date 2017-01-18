@@ -171,7 +171,7 @@ namespace LambdicSql.ConverterServices
             if (nullCheck != null) return nullCheck;
 
             var nodeType = Convert(binary.Type, left, binary.NodeType, right);
-            return new HCode(AddBinaryExpressionBlankets(left), new AroundCode(nodeType, " ", " "), AddBinaryExpressionBlankets(right));
+            return new HCode(AddBinaryExpressionBlankets(left), nodeType, AddBinaryExpressionBlankets(right));
         }
 
         ICode Convert(MemberExpression member)
@@ -220,9 +220,15 @@ namespace LambdicSql.ConverterServices
 
         ICode Convert(MethodCallExpression method)
         {
+            var chain = GetMethodChains(method);
+            if (chain.Count == 0) return ResolveExpressionObject(method);
+
             //convert symbol.
-            var code = GetMethodChains(method).Select(e => e.GetMethodConverter().Convert(e, this)).ToArray();
-            if (code.Length == 0) return ResolveExpressionObject(method);
+            var code = new ICode[chain.Count];
+            for (int i = 0; i < code.Length; i++)
+            {
+                code[i] = chain[i].GetMethodConverter().Convert(chain[i], this);
+            }
             
             //for ALL function. can't add blankets.
             if (code.Length == 1 && typeof(IDisableBinaryExpressionBrackets).IsAssignableFrom(code[0].GetType()))
@@ -241,28 +247,21 @@ namespace LambdicSql.ConverterServices
         {
             switch (nodeType)
             {
-                case ExpressionType.Equal: return "=".ToCode();
-                case ExpressionType.NotEqual: return "<>".ToCode();
-                case ExpressionType.LessThan: return "<".ToCode();
-                case ExpressionType.LessThanOrEqual: return "<=".ToCode();
-                case ExpressionType.GreaterThan: return ">".ToCode();
-                case ExpressionType.GreaterThanOrEqual: return ">=".ToCode();
-                case ExpressionType.Add:
-                    {
-                        if (type == typeof(string))
-                        {
-                            return new StringAddOperatorCode();
-                        }
-                        return "+".ToCode();
-                    }
-                case ExpressionType.Subtract: return "-".ToCode();
-                case ExpressionType.Multiply: return "*".ToCode();
-                case ExpressionType.Divide: return "/".ToCode();
-                case ExpressionType.Modulo: return "%".ToCode();
-                case ExpressionType.And: return "AND".ToCode();
-                case ExpressionType.AndAlso: return "AND".ToCode();
-                case ExpressionType.Or: return "OR".ToCode();
-                case ExpressionType.OrElse: return "OR".ToCode();
+                case ExpressionType.Equal: return OperatorCode.Equal;
+                case ExpressionType.NotEqual: return OperatorCode.NotEqual;
+                case ExpressionType.LessThan: return OperatorCode.LessThan;
+                case ExpressionType.LessThanOrEqual: return OperatorCode.LessThanOrEqual;
+                case ExpressionType.GreaterThan: return OperatorCode.GreaterThan;
+                case ExpressionType.GreaterThanOrEqual: return OperatorCode.GreaterThanOrEqual;
+                case ExpressionType.Add: return type == typeof(string) ? OperatorCode.AddString : OperatorCode.Add;
+                case ExpressionType.Subtract: return OperatorCode.Subtract;
+                case ExpressionType.Multiply: return OperatorCode.Multiply;
+                case ExpressionType.Divide: return OperatorCode.Divide;
+                case ExpressionType.Modulo: return OperatorCode.Modulo;
+                case ExpressionType.And: return OperatorCode.And;
+                case ExpressionType.AndAlso: return OperatorCode.AndAlso;
+                case ExpressionType.Or: return OperatorCode.Or;
+                case ExpressionType.OrElse: return OperatorCode.OrElse;
             }
             throw new NotImplementedException();
         }
@@ -437,7 +436,7 @@ namespace LambdicSql.ConverterServices
             }
         }
         
-        static IEnumerable<MethodCallExpression> GetMethodChains(MethodCallExpression end)
+        static List<MethodCallExpression> GetMethodChains(MethodCallExpression end)
         {
             var chains = new List<MethodCallExpression>();
             var curent = end;
