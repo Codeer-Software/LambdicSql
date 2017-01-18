@@ -13,7 +13,7 @@ namespace Performance
     {
         static void Main(string[] args)
         {
-            Test1();
+            Test2();
         }
 
         public class SelectedData
@@ -127,8 +127,54 @@ namespace Performance
             Console.ReadKey();
         }
 
+        static void Test3()
+        {
+            Console.ReadKey();
+            Console.WriteLine("Start");
+            var times = new List<double>();
+            var watch = new Stopwatch();
 
-    }
+
+            for (int i = 0; i < 10000; i++)
+            {
+                watch.Start();
+
+                DbX<Data>.Sql(db =>
+
+                    Select(new SelectedData()
+                    {
+                        name = db.tbl_staff.name,
+                        payment_date = db.tbl_remuneration.payment_date,
+                        money = db.tbl_remuneration.money,
+                    }).
+                    From(db.tbl_remuneration).
+                        Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
+                    Where(3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
+
+                watch.Stop();
+                if (i != 0)
+                {
+                    times.Add(watch.Elapsed.TotalMilliseconds);
+                }
+                watch.Reset();
+
+            }
+
+            times = times.Skip(1).ToList();
+            times.Select(e => e.ToString()).ToList().ForEach(e => Console.WriteLine(e));
+            Console.WriteLine(times.Average().ToString());
+            Console.ReadKey();
+        }
+
+        public class DbX<T> where T : class
+        {
+            public static Expression e;
+            public static void Sql<TSelected>(Expression<Func<T, ClauseChain<TSelected>>> expression)
+            {
+                e = expression;
+            }
+        }
+        }
 
     class XXX<TDB>
     {
