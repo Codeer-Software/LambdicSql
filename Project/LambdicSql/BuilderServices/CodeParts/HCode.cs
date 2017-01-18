@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace LambdicSql.BuilderServices.CodeParts
 {
+    //It is a very used class.
+    //Do not use Linq.
+
     /// <summary>
     /// Arrange the code horizontally.
     /// </summary>
@@ -69,46 +72,6 @@ namespace LambdicSql.BuilderServices.CodeParts
         }
 
         /// <summary>
-        /// To string.
-        /// </summary>
-        /// <param name="context">Context.</param>
-        /// <returns>Text.</returns>
-        public string ToString(BuildingContext context)
-        {
-            var firstLineContext = context.ChangeIndent(context.Indent + Indent);
-
-            if (_core.Count == 0) return string.Empty;
-            if (_core.Count == 1) return _core[0].ToString(firstLineContext);
-
-            if (IsSingleLine(context) || !EnableChangeLine)
-            {
-                var before = _core[0].ToString(firstLineContext);
-                var nonIndent = context.ChangeIndent(0);
-                var after = new string[_core.Count - 1];
-                for (int i = 1; i < _core.Count; i++)
-                {
-                    after[i - 1] = _core[i].ToString(nonIndent);
-                }
-                return before + Separator + PartsUtils.Join(Separator, after);
-            }
-
-            {
-                //if AddIndentNewLine is true, add Indent other than the first line.
-                var nextLineContext = AddIndentNewLine ? firstLineContext.ChangeIndent(firstLineContext.Indent + 1) : firstLineContext;
-
-                var before = _core[0].ToString(firstLineContext);
-                var after = new string[_core.Count - 1];
-                for (int i = 1; i < _core.Count; i++)
-                {
-                    after[i - 1] = _core[i].ToString(nextLineContext).TrimEnd();
-                }
-
-                var sep = Separator.TrimEnd();
-                return before + sep + Environment.NewLine + PartsUtils.Join(sep + Environment.NewLine, after);
-            }
-        }
-
-        /// <summary>
         /// Add text.
         /// </summary>
         /// <param name="text">Text.</param>
@@ -164,6 +127,53 @@ namespace LambdicSql.BuilderServices.CodeParts
                 hDst._core.Add(e.Accept(customizer));
             }
             return hDst;
+        }
+
+        /// <summary>
+        /// To string.
+        /// </summary>
+        /// <param name="context">Context.</param>
+        /// <returns>Text.</returns>
+        public string ToString(BuildingContext context)
+        {
+            var firstLineContext = context.ChangeIndent(context.Indent + Indent);
+
+            if (_core.Count == 0) return string.Empty;
+            if (_core.Count == 1) return _core[0].ToString(firstLineContext);
+
+            if (IsSingleLine(context) || !EnableChangeLine)
+            {
+                return BuildSingleLine(context, firstLineContext);
+            }
+            return BuildMultiLine(firstLineContext);
+        }
+
+        string BuildMultiLine(BuildingContext firstLineContext)
+        {
+            //if AddIndentNewLine is true, add Indent other than the first line.
+            var nextLineContext = AddIndentNewLine ? firstLineContext.ChangeIndent(firstLineContext.Indent + 1) : firstLineContext;
+
+            var before = _core[0].ToString(firstLineContext);
+            var after = new string[_core.Count - 1];
+            for (int i = 1; i < _core.Count; i++)
+            {
+                after[i - 1] = _core[i].ToString(nextLineContext).TrimEnd();
+            }
+
+            var sep = Separator.TrimEnd();
+            return before + sep + Environment.NewLine + PartsUtils.Join(sep + Environment.NewLine, after);
+        }
+
+        string BuildSingleLine(BuildingContext context, BuildingContext firstLineContext)
+        {
+            var before = _core[0].ToString(firstLineContext);
+            var nonIndent = context.ChangeIndent(0);
+            var after = new string[_core.Count - 1];
+            for (int i = 1; i < _core.Count; i++)
+            {
+                after[i - 1] = _core[i].ToString(nonIndent);
+            }
+            return before + Separator + PartsUtils.Join(Separator, after);
         }
     }
 }

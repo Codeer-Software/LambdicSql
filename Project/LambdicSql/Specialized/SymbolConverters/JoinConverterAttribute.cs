@@ -12,10 +12,21 @@ namespace LambdicSql.Specialized.SymbolConverters
     /// </summary>
     public class JoinConverterAttribute : MethodConverterAttribute
     {
+        ICode _nameCode;
+        string _name;
+
         /// <summary>
-        /// Clause name.
+        /// Name.
         /// </summary>
-        public string Name { get; set; }
+        public string Name
+        {
+            get { return _name; }
+            set
+            {
+                _name = value;
+                _nameCode = value.ToCode();
+            }
+        }
 
         /// <summary>
         /// Convert expression to code.
@@ -30,7 +41,7 @@ namespace LambdicSql.Specialized.SymbolConverters
             var condition = ((startIndex + 1) < expression.Arguments.Count) ? converter.ConvertToCode(expression.Arguments[startIndex + 1]) : null;
 
             var join = new HCode() { AddIndentNewLine = true, Separator = " ", Indent = 1 };
-            join.Add(Name.ToCode());
+            join.Add(_nameCode);
             join.Add(table);
             if (condition != null)
             {

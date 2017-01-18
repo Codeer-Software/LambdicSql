@@ -3,7 +3,6 @@ using LambdicSql.ConverterServices;
 using LambdicSql.ConverterServices.SymbolConverters;
 using LambdicSql.ConverterServices.Inside;
 using LambdicSql.Inside.CodeParts;
-using System.Linq;
 using System.Linq.Expressions;
 using static LambdicSql.BuilderServices.Inside.PartsFactoryUtils;
 
@@ -31,7 +30,15 @@ namespace LambdicSql.Specialized.SymbolConverters
         {
             //where query, write tables side by side.
             var arry = exp as NewArrayExpression;
-            if (arry != null) return Arguments(arry.Expressions.Select(e => ConvertTable(decoder, e)).ToArray());
+            if (arry != null)
+            {
+                var multiTables = new ICode[arry.Expressions.Count];
+                for (int i = 0; i < multiTables.Length; i++)
+                {
+                    multiTables[i] = ConvertTable(decoder, arry.Expressions[i]);
+                }
+                return Arguments(multiTables);
+            }
 
             var table = decoder.ConvertToCode(exp);
 

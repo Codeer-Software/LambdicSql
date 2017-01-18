@@ -12,6 +12,22 @@ namespace LambdicSql.Specialized.SymbolConverters
     /// </summary>
     public class ConditionClauseConverterAttribute : MethodConverterAttribute
     {
+        ICode _nameCode;
+        string _name;
+
+        /// <summary>
+        /// Name.
+        /// </summary>
+        public string Name
+        {
+            get { return _name; }
+            set
+            {
+                _name = value;
+                _nameCode = value.ToCode();
+            }
+        }
+
         /// <summary>
         /// Convert expression to code.
         /// </summary>
@@ -22,7 +38,7 @@ namespace LambdicSql.Specialized.SymbolConverters
         {
             var condition = converter.ConvertToCode(expression.Arguments[expression.SkipMethodChain(0)]);
             if (condition.IsEmpty) return string.Empty.ToCode();
-            return Clause(expression.Method.Name.ToUpper().ToCode(), condition);
+            return Clause(_nameCode, condition);
         }
     }
 }

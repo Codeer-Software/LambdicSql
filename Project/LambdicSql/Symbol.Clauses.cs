@@ -498,7 +498,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="condition">It is a conditional expression of WHERE.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [ConditionClauseConverter]
+        [ConditionClauseConverter(Name = "WHERE")]
         public static ClauseChain<Non> Where(bool condition) { throw new InvalitContextException(nameof(Where)); }
 
         /// <summary>
@@ -508,7 +508,7 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="condition">It is a conditional expression of WHERE.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [ConditionClauseConverter]
+        [ConditionClauseConverter(Name = "WHERE")]
         public static ClauseChain<TSelected> Where<TSelected>(this ClauseChain<TSelected> before, bool condition) { throw new InvalitContextException(nameof(Where)); }
 
         /// <summary>
@@ -607,7 +607,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="condition">It is a conditional expression of HAVING.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [ConditionClauseConverter]
+        [ConditionClauseConverter(Name = "HAVING")]
         public static ClauseChain<Non> Having(bool condition) { throw new InvalitContextException(nameof(Having)); }
 
         /// <summary>
@@ -617,7 +617,7 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="condition">It is a conditional expression of HAVING.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [ConditionClauseConverter]
+        [ConditionClauseConverter(Name = "HAVING")]
         public static ClauseChain<TSelected> Having<TSelected>(this ClauseChain<TSelected> before, bool condition) { throw new InvalitContextException(nameof(Having)); }
 
         /// <summary>
