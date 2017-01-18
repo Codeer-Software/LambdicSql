@@ -44,7 +44,13 @@ namespace LambdicSql.ConverterServices.Inside
             {
                 var first = new HCode(array.Take(_firstLineElemetCount)) { EnableChangeLine = false };
                 var v = new VCode(first) { Indent = Indent };
-                v.AddRange(1, array.Skip(_firstLineElemetCount));
+
+                var after = new ICode[array.Length - _firstLineElemetCount];
+                for (int i = 0; i < after.Length; i++)
+                {
+                    after[i] = new HCode(array[i + _firstLineElemetCount]) { Indent = 1 };
+                }
+                v.AddRange(after);
                 return v;
             }
             else

@@ -13,7 +13,7 @@ namespace Performance
     {
         static void Main(string[] args)
         {
-            Test();
+            Test2();
         }
 
         public class SelectedData
@@ -39,14 +39,9 @@ namespace Performance
             public Staff tbl_staff { get; set; }
             public Remuneration tbl_remuneration { get; set; }
         }
-        static void Test()
+
+        static void Test1()
         {
-            //いやいや、やっぱり文字列組み合わせがそんなに遅いわけはない。どこがボトルネックか？
-
-            //リストへの投入は結構コストが高い
-            //オブジェクトの生成もただではない
-
-
             Console.ReadKey();
             Console.WriteLine("Start");
             BuildedSql info = null;
@@ -81,6 +76,49 @@ namespace Performance
                 }
                 watch.Reset();
                 
+            }
+
+            times = times.Skip(1).ToList();
+            times.Select(e => e.ToString()).ToList().ForEach(e => Console.WriteLine(e));
+            Console.WriteLine(times.Average().ToString());
+            Console.ReadKey();
+        }
+
+
+        static void Test2()
+        {
+            Console.ReadKey();
+            Console.WriteLine("Start");
+            BuildedSql info = null;
+            var times = new List<double>();
+            var watch = new Stopwatch();
+            
+            var query = Db<Data>.Sql(db =>
+
+                Select(new SelectedData()
+                {
+                    name = db.tbl_staff.name,
+                    payment_date = db.tbl_remuneration.payment_date,
+                    money = db.tbl_remuneration.money,
+                }).
+                From(db.tbl_remuneration).
+                    Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
+                Where(3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
+
+            for (int i = 0; i < 10000; i++)
+            {
+                watch.Start();
+
+
+                info = query.Build(typeof(SqlConnection));
+
+                watch.Stop();
+                if (i != 0)
+                {
+                    times.Add(watch.Elapsed.TotalMilliseconds);
+                }
+                watch.Reset();
+
             }
 
             times = times.Skip(1).ToList();

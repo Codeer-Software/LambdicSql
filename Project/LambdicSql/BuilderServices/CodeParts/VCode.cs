@@ -1,6 +1,6 @@
-﻿using System;
+﻿using LambdicSql.BuilderServices.Inside;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace LambdicSql.BuilderServices.CodeParts
 {
@@ -14,19 +14,19 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="texts">Vertical texts.</param>
-        public VCode(params ICode[] texts)
+        /// <param name="code">code.</param>
+        public VCode(params ICode[] code)
         {
-            _core.AddRange(texts.Where(e => !e.IsEmpty));
+            AddRange(code);
         }
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="texts">Vertical texts.</param>
-        public VCode(IEnumerable<ICode> texts)
+        /// <param name="code">code.</param>
+        public VCode(IEnumerable<ICode> code)
         {
-            _core.AddRange(texts.Where(e => !e.IsEmpty));
+            AddRange(code);
         }
 
         /// <summary>
@@ -42,12 +42,20 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// <summary>
         /// Is empty.
         /// </summary>
-        public bool IsEmpty => !_core.Any(e => !e.IsEmpty);
+        public bool IsEmpty => _core.Count == 0;
 
         /// <summary>
         /// Is single line.
         /// </summary>
-        public bool IsSingleLine(BuildingContext context) => _core.Count <= 1 && !_core.Any(e => !e.IsSingleLine(context));
+        public bool IsSingleLine(BuildingContext context)
+        {
+            switch (_core.Count)
+            {
+                case 0: return true;
+                case 1: return _core[0].IsSingleLine(context);
+                default: return false;
+            }
+        }
 
         /// <summary>
         /// To string.
@@ -57,20 +65,16 @@ namespace LambdicSql.BuilderServices.CodeParts
         public string ToString(BuildingContext context)
         {
             var next = context.ChangeIndent(context.Indent + Indent);
-            return string.Join(Separator + Environment.NewLine, _core.Select(e => e.ToString(next).TrimEnd()).ToArray());
-        }
 
-        /// <summary>
-        /// Add text.
-        /// </summary>
-        /// <param name="text">Text.</param>
-        /// <param name="indent">Indent.</param>
-        public void Add(string text, int indent)
-        {
-            if (string.IsNullOrEmpty(text.Trim())) return;
-            _core.Add(new SingleTextCode(text, indent));
+            var code = new string[_core.Count];
+            for (int i = 0; i < code.Length; i++)
+            {
+                code[i] = _core[i].ToString(next).TrimEnd();
+            }
+            
+            return PartsUtils.Join(Separator + Environment.NewLine, code);
         }
-
+        
         /// <summary>
         /// Add text.
         /// </summary>
@@ -82,36 +86,51 @@ namespace LambdicSql.BuilderServices.CodeParts
         }
 
         /// <summary>
-        /// Add texts.
+        /// Add text.
         /// </summary>
-        /// <param name="indent">Indent.</param>
         /// <param name="texts">Texts.</param>
-        public void AddRange(int indent, IEnumerable<ICode> texts)
-            => _core.AddRange(texts.Where(e => !e.IsEmpty).Select(e => new HCode(e) { Indent = 1 }).Cast<ICode>());
+        public void AddRange(IEnumerable<ICode> texts)
+        {
+            foreach (var e in texts)
+            {
+                if (!e.IsEmpty)
+                {
+                    _core.Add(e);
+                }
+            }
+        }
 
         /// <summary>
-        /// Add texts.
+        /// Add text.
         /// </summary>
-        /// <param name="indent">Indent.</param>
         /// <param name="texts">Texts.</param>
-        public void AddRange(int indent, params ICode[] texts)
-            => _core.AddRange(texts.Where(e => !e.IsEmpty).Select(e => new HCode(e) { Indent = 1 }).Cast<ICode>());
+        public void AddRange(params ICode[] texts)
+        {
+            for (int i = 0; i < texts.Length; i++)
+            {
+                if (!texts[i].IsEmpty)
+                {
+                    _core.Add(texts[i]);
+                }
+            }
+        }
 
         /// <summary>
         /// Accept customizer.
         /// </summary>
         /// <param name="customizer">Customizer.</param>
-        /// <returns>Customized SqlText.</returns>
+        /// <returns>Destination.</returns>
         public ICode Accept(ICodeCustomizer customizer)
         {
             var dst = customizer.Visit(this);
             if (!ReferenceEquals(this, dst)) return dst;
 
-            var dstCore = _core.Select(e => e.Accept(customizer));
-            return CopyProperty(dstCore.ToArray());
+            var hDst = new VCode() { Indent = Indent, Separator = Separator };
+            foreach (var e in _core)
+            {
+                hDst._core.Add(e.Accept(customizer));
+            }
+            return hDst;
         }
-
-        VCode CopyProperty(params ICode[] texts)
-             => new VCode(texts) { Indent = Indent, Separator = Separator };
     }
 }

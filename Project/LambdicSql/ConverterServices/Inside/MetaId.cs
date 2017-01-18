@@ -4,33 +4,30 @@ namespace LambdicSql.ConverterServices.Inside
 {
     class MetaId
     {
-        readonly string _moduleFullyQualifiedName;
+        MemberInfo _member;
         readonly int _memberToken;
-        readonly int _hash;
 
-        public MetaId(MemberInfo member) : this(member.Module.FullyQualifiedName, member.MetadataToken) { }
-
-        public MetaId(string moduleFullyQualifiedName, int memberToken)
+        public MetaId(MemberInfo member)
         {
-            _moduleFullyQualifiedName = moduleFullyQualifiedName;
-            _memberToken = memberToken;
-            _hash = (((long)moduleFullyQualifiedName.GetHashCode() << 32) + memberToken).GetHashCode();
+            _member = member;
+            _memberToken = _member.MetadataToken;
         }
 
         public override bool Equals(object obj)
         {
             var target = obj as MetaId;
             if (target == null) return false;
-            return _memberToken == target._memberToken && _moduleFullyQualifiedName == target._moduleFullyQualifiedName;
+            if (_memberToken != target._memberToken) return false;
+            return _memberToken == target._memberToken && _member.DeclaringType.FullName == target._member.DeclaringType.FullName;
         }
 
-        public override int GetHashCode() => _hash;
+        public override int GetHashCode() => _memberToken;
 
         public static bool operator == (MetaId lhs, MetaId rhs)
         {
             if (ReferenceEquals(lhs, null) && ReferenceEquals(rhs, null)) return true;
             if (ReferenceEquals(lhs, null) || ReferenceEquals(rhs, null)) return false;
-            return lhs._memberToken == rhs._memberToken && lhs._moduleFullyQualifiedName == rhs._moduleFullyQualifiedName;
+            return lhs._memberToken == rhs._memberToken && lhs._member.DeclaringType.FullName == rhs._member.DeclaringType.FullName;
         }
 
         public static bool operator != (MetaId lhs, MetaId rhs) => !(lhs == rhs);

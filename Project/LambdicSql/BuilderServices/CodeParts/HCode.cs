@@ -1,6 +1,6 @@
-﻿using System;
+﻿using LambdicSql.BuilderServices.Inside;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace LambdicSql.BuilderServices.CodeParts
 {
@@ -17,7 +17,7 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// <param name="texts">Horizontal texts.</param>
         public HCode(params ICode[] texts)
         {
-            _core.AddRange(texts.Where(e => !e.IsEmpty));
+            AddRange(texts);
         }
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// <param name="texts">Horizontal texts.</param>
         public HCode(IEnumerable<ICode> texts)
         {
-            _core.AddRange(texts.Where(e => !e.IsEmpty));
+            AddRange(texts);
         }
 
         /// <summary>
@@ -52,14 +52,21 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// <summary>
         /// Is empty.
         /// </summary>
-        public bool IsEmpty => !_core.Any(e => !e.IsEmpty);
+        public bool IsEmpty => _core.Count == 0;
 
         /// <summary>
         /// Is single line.
         /// </summary>
         /// <param name="context">Context.</param>
         /// <returns>Is single line.</returns>
-        public bool IsSingleLine(BuildingContext context) => !_core.Any(e => !e.IsSingleLine(context));
+        public bool IsSingleLine(BuildingContext context)
+        {
+            foreach (var e in _core)
+            {
+                if (!e.IsSingleLine(context)) return false;
+            }
+            return true;
+        }
 
         /// <summary>
         /// To string.
@@ -75,19 +82,32 @@ namespace LambdicSql.BuilderServices.CodeParts
 
             if (IsSingleLine(context) || !EnableChangeLine)
             {
+                var before = _core[0].ToString(firstLineContext);
                 var nonIndent = context.ChangeIndent(0);
-                return _core[0].ToString(firstLineContext) + Separator
-                    + string.Join(Separator, _core.Skip(1).Select(e => e.ToString(nonIndent)).ToArray());
+                var after = new string[_core.Count - 1];
+                for (int i = 1; i < _core.Count; i++)
+                {
+                    after[i - 1] = _core[i].ToString(nonIndent);
+                }
+                return before + Separator + PartsUtils.Join(Separator, after);
             }
 
-            //if AddIndentNewLine is true, add Indent other than the first line.
-            var nextLineContext = AddIndentNewLine ? firstLineContext.ChangeIndent(firstLineContext.Indent + 1): firstLineContext;
+            {
+                //if AddIndentNewLine is true, add Indent other than the first line.
+                var nextLineContext = AddIndentNewLine ? firstLineContext.ChangeIndent(firstLineContext.Indent + 1) : firstLineContext;
 
-            var sep = Separator.TrimEnd();
-            return _core[0].ToString(firstLineContext) + sep + Environment.NewLine +
-                string.Join(sep + Environment.NewLine, _core.Skip(1).Select(e => e.ToString(nextLineContext).TrimEnd()).ToArray());
+                var before = _core[0].ToString(firstLineContext);
+                var after = new string[_core.Count - 1];
+                for (int i = 1; i < _core.Count; i++)
+                {
+                    after[i - 1] = _core[i].ToString(nextLineContext).TrimEnd();
+                }
+
+                var sep = Separator.TrimEnd();
+                return before + sep + Environment.NewLine + PartsUtils.Join(sep + Environment.NewLine, after);
+            }
         }
-        
+
         /// <summary>
         /// Add text.
         /// </summary>
@@ -103,14 +123,30 @@ namespace LambdicSql.BuilderServices.CodeParts
         /// </summary>
         /// <param name="texts">Texts.</param>
         public void AddRange(IEnumerable<ICode> texts)
-            => _core.AddRange(texts.Where(e => !e.IsEmpty));
+        {
+            foreach (var e in texts)
+            {
+                if (!e.IsEmpty)
+                {
+                    _core.Add(e);
+                }
+            }
+        }
 
         /// <summary>
         /// Add text.
         /// </summary>
         /// <param name="texts">Texts.</param>
         public void AddRange(params ICode[] texts)
-            => _core.AddRange(texts.Where(e => !e.IsEmpty));
+        {
+            for (int i = 0; i < texts.Length; i++)
+            {
+                if (!texts[i].IsEmpty)
+                {
+                    _core.Add(texts[i]);
+                }
+            }
+        }
 
         /// <summary>
         /// Accept customizer.
@@ -122,11 +158,12 @@ namespace LambdicSql.BuilderServices.CodeParts
             var dst = customizer.Visit(this);
             if (!ReferenceEquals(this, dst)) return dst;
 
-            var dstCore = _core.Select(e => e.Accept(customizer));
-            return CopyProperty(dstCore.ToArray());
+            var hDst = new HCode { Indent = Indent, AddIndentNewLine = AddIndentNewLine, EnableChangeLine = EnableChangeLine, Separator = Separator };
+            foreach (var e in _core)
+            {
+                hDst._core.Add(e.Accept(customizer));
+            }
+            return hDst;
         }
-
-        HCode CopyProperty(params ICode[] texts)
-             => new HCode(texts) { Indent = Indent, AddIndentNewLine = AddIndentNewLine, EnableChangeLine = EnableChangeLine, Separator = Separator };
     }
 }
