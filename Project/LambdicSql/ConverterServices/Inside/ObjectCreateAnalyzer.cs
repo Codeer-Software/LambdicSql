@@ -51,7 +51,13 @@ namespace LambdicSql.ConverterServices.Inside
             var initExp = exp as MemberInitExpression;
             if (initExp != null)
             {
-                return new ObjectCreateInfo(initExp.Bindings.Cast<MemberAssignment>().Select(e=> new ObjectCreateMemberInfo(e.Member.Name, e.Expression)), exp);
+                var elements = new ObjectCreateMemberInfo[initExp.Bindings.Count];
+                for (int i = 0; i < elements.Length; i++)
+                {
+                    var e = initExp.Bindings[i] as MemberAssignment;
+                    elements[i] = new ObjectCreateMemberInfo(e.Member.Name, e.Expression);
+                }
+                return new ObjectCreateInfo(elements, exp);
             }
 
             var member = exp as MemberExpression;

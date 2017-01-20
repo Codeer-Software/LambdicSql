@@ -13,7 +13,7 @@ namespace Performance
     {
         static void Main(string[] args)
         {
-            Test1();
+            Test1Ex();
         }
 
         public class SelectedData
@@ -84,6 +84,26 @@ namespace Performance
             Console.ReadKey();
         }
 
+        static void Test1Ex()
+        {
+            for (int i = 0; i < 10000; i++)
+            {
+                var query = Db<Data>.Sql(db =>
+
+                    Select(new SelectedData()
+                    {
+                        name = db.tbl_staff.name,
+                        payment_date = db.tbl_remuneration.payment_date,
+                        money = db.tbl_remuneration.money,
+                    }).
+                    From(db.tbl_remuneration).
+                        Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
+                    Where(3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
+
+
+                query.Build(typeof(SqlConnection));
+            }
+        }
 
         static void Test2()
         {

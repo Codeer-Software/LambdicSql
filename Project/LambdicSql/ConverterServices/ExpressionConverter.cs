@@ -269,7 +269,29 @@ namespace LambdicSql.ConverterServices
         ICode AddBinaryExpressionBlankets(ICode src)
             => typeof(IDisableBinaryExpressionBrackets).IsAssignableFrom(src.GetType()) ? src : new AroundCode(src, "(", ")");
 
+        static Dictionary<MetaId, bool> _isSqlExpressionBody = new Dictionary<MetaId, bool>();
+
         ICode TryResolveSqlExpressionBody(MemberExpression member)
+        {
+            var id = new MetaId(member.Member);
+            bool isBody;
+            bool isHit;
+            lock (_isSqlExpressionBody)
+            {
+                isHit = _isSqlExpressionBody.TryGetValue(id, out isBody);
+            }
+            if (isHit && !isBody) return null;
+
+            var code = TryResolveSqlExpressionBodyCore(member);
+
+            if (!isHit)
+            {
+                _isSqlExpressionBody[id] = code != null;
+            }
+            return code;
+        }
+
+        ICode TryResolveSqlExpressionBodyCore(MemberExpression member)
         {
             //get all members.
             var members = new List<MemberExpression>();
