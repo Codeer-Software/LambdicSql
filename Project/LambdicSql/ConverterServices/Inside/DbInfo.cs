@@ -8,9 +8,6 @@ namespace LambdicSql.ConverterServices.Inside
         Dictionary<string, ColumnInfo> _lambdaNameAndColumn = new Dictionary<string, ColumnInfo>();
         Dictionary<string, TableInfo> _lambdaNameAndTable = new Dictionary<string, TableInfo>();
 
-        internal Dictionary<string, ColumnInfo> GetLambdaNameAndColumn() => _lambdaNameAndColumn.ToDictionary(e=>e.Key, e=>e.Value);
-        internal Dictionary<string, TableInfo> GetLambdaNameAndTable() => _lambdaNameAndTable.ToDictionary(e => e.Key, e => e.Value);
-
         internal void Add(ColumnInfo col)
         {
             _lambdaNameAndColumn.Add(col.LambdaFullName, col);
@@ -24,5 +21,11 @@ namespace LambdicSql.ConverterServices.Inside
                 _lambdaNameAndTable.Add(tableLambda, new TableInfo(tableLambda, tableSql));
             }
         }
+
+        internal bool TryGetTable(string name, out TableInfo table)
+            => _lambdaNameAndTable.TryGetValue(name, out table);
+
+        internal bool TryGetColumn(string name, out ColumnInfo col)
+            => _lambdaNameAndColumn.TryGetValue(name, out col);
     }
 }

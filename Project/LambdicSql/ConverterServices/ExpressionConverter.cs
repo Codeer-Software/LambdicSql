@@ -329,12 +329,12 @@ namespace LambdicSql.ConverterServices
         ICode ResolveLambdicElement(string name)
         {
             TableInfo table;
-            if (DbInfo.GetLambdaNameAndTable().TryGetValue(name, out table))
+            if (DbInfo.TryGetTable(name, out table))
             {
                 return new DbTableCode(table);
             }
             ColumnInfo col;
-            if (DbInfo.GetLambdaNameAndColumn().TryGetValue(name, out col))
+            if (DbInfo.TryGetColumn(name, out col))
             {
                 return new DbColumnCode(col);
             }

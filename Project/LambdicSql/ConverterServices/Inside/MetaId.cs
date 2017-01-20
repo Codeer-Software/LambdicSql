@@ -1,15 +1,18 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 
 namespace LambdicSql.ConverterServices.Inside
 {
     class MetaId
     {
-        string _declaringType;
+        MemberInfo _member;
+        Type _declaringType;
         readonly int _memberToken;
 
         public MetaId(MemberInfo member)
         {
-            _declaringType = member.DeclaringType.FullName;
+            _member = member;
+            _declaringType = member.DeclaringType;
             _memberToken = member.MetadataToken;
         }
 
@@ -17,6 +20,7 @@ namespace LambdicSql.ConverterServices.Inside
         {
             var target = obj as MetaId;
             if (target == null) return false;
+            if (ReferenceEquals(_member, target._member)) return true;
             if (_memberToken != target._memberToken) return false;
             return _memberToken == target._memberToken && _declaringType == target._declaringType;
         }

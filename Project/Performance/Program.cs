@@ -13,7 +13,7 @@ namespace Performance
     {
         static void Main(string[] args)
         {
-            Test2();
+            Test1();
         }
 
         public class SelectedData
