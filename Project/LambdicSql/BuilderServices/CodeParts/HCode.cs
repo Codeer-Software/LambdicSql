@@ -1,12 +1,8 @@
-﻿using LambdicSql.BuilderServices.Inside;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace LambdicSql.BuilderServices.CodeParts
 {
-    //It is a very used class.
-    //Do not use Linq.
-
     /// <summary>
     /// Arrange the code horizontally.
     /// </summary>
@@ -153,27 +149,27 @@ namespace LambdicSql.BuilderServices.CodeParts
             //if AddIndentNewLine is true, add Indent other than the first line.
             var nextLineContext = AddIndentNewLine ? firstLineContext.ChangeIndent(firstLineContext.Indent + 1) : firstLineContext;
 
-            var before = _core[0].ToString(firstLineContext);
-            var after = new string[_core.Count - 1];
+            var texts = new string[_core.Count];
+            texts[0] = _core[0].ToString(firstLineContext);
             for (int i = 1; i < _core.Count; i++)
             {
-                after[i - 1] = _core[i].ToString(nextLineContext).TrimEnd();
+                texts[i] = _core[i].ToString(nextLineContext).TrimEnd();
             }
 
             var sep = Separator.TrimEnd();
-            return before + sep + Environment.NewLine + PartsUtils.Join(sep + Environment.NewLine, after);
+            return string.Join(sep + Environment.NewLine, texts);
         }
 
         string BuildSingleLine(BuildingContext context, BuildingContext firstLineContext)
         {
-            var before = _core[0].ToString(firstLineContext);
+            var texts = new string[_core.Count];
+            texts[0] = _core[0].ToString(firstLineContext);
             var nonIndent = context.ChangeIndent(0);
-            var after = new string[_core.Count - 1];
             for (int i = 1; i < _core.Count; i++)
             {
-                after[i - 1] = _core[i].ToString(nonIndent);
+                texts[i] = _core[i].ToString(nonIndent);
             }
-            return before + Separator + PartsUtils.Join(Separator, after);
+            return string.Join(Separator, texts);
         }
     }
 }

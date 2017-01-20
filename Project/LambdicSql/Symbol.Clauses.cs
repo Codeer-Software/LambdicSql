@@ -896,11 +896,10 @@ namespace LambdicSql
         /// <summary>
         /// INSERT INTO clause.
         /// </summary>
-        /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
         /// <param name="values">It is the value to be Inserted.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [MethodFormatConverter(Format = "VALUES([<, >1])", Indent = 0)]
-        public static ClauseChain<TSelected> Values<TSelected>(params object[] values) { throw new InvalitContextException(nameof(Values)); }
+        [MethodFormatConverter(Format = "VALUES([<, >0])", Indent = 0)]
+        public static ClauseChain<Non> Values(params object[] values) { throw new InvalitContextException(nameof(Values)); }
 
         /// <summary>
         /// INSERT INTO clause.

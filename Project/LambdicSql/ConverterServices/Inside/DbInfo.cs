@@ -27,5 +27,13 @@ namespace LambdicSql.ConverterServices.Inside
 
         internal bool TryGetColumn(string name, out ColumnInfo col)
             => _lambdaNameAndColumn.TryGetValue(name, out col);
+
+        internal DbInfo Clone()
+        {
+            var clone = new DbInfo();
+            clone._lambdaNameAndColumn = _lambdaNameAndColumn.ToDictionary(e => e.Key, e => e.Value);
+            clone._lambdaNameAndTable = _lambdaNameAndTable.ToDictionary(e => e.Key, e => e.Value);
+            return clone;
+        }
     }
 }

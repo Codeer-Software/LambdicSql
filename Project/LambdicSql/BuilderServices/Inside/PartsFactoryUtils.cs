@@ -1,5 +1,4 @@
 ﻿using LambdicSql.BuilderServices.CodeParts;
-using System.Linq;
 
 namespace LambdicSql.BuilderServices.Inside
 {
@@ -13,10 +12,15 @@ namespace LambdicSql.BuilderServices.Inside
 
         internal static HCode Func(ICode func, params ICode[] args)
             => Func(func, ", ", args);
-        
+
         internal static HCode Clause(ICode clause, params ICode[] args)
-            => new HCode(new ICode[] { clause }.Concat(args)) { AddIndentNewLine = true, Separator = " " };
-        
+        {
+            var code = new HCode() { AddIndentNewLine = true, Separator = " " };
+            code.Add(clause);
+            code.AddRange(args);
+            return code;
+        }
+
         internal static HCode Line(params ICode[] args)
             => new HCode(args) { EnableChangeLine = false };
 

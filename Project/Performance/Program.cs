@@ -13,7 +13,8 @@ namespace Performance
     {
         static void Main(string[] args)
         {
-            Test1Ex();
+            TestFormat();
+            //Test1Ex();
         }
 
         public class SelectedData
@@ -38,6 +39,62 @@ namespace Performance
         {
             public Staff tbl_staff { get; set; }
             public Remuneration tbl_remuneration { get; set; }
+        }
+
+
+
+        static void TestFormat()
+        {
+            Console.ReadKey();
+            Console.WriteLine("Start");
+            BuildedSql info = null;
+            var times = new List<double>();
+            var watch = new Stopwatch();
+
+            int a = 0;
+            int b = 1;
+
+            for (int i = 0; i < 10000; i++)
+            {
+                watch.Start();
+
+                
+                var query = Db<Data>.Sql(db =>
+
+                    Values(0, a, 2, b)
+                    );
+
+
+                info = query.Build(typeof(SqlConnection));
+
+                watch.Stop();
+                if (i != 0)
+                {
+                    times.Add(watch.Elapsed.TotalMilliseconds);
+                }
+                watch.Reset();
+
+            }
+
+            times = times.Skip(1).ToList();
+            times.Select(e => e.ToString()).ToList().ForEach(e => Console.WriteLine(e));
+            Console.WriteLine(times.Average().ToString());
+            Console.ReadKey();
+        }
+
+        static void TestFormatEx()
+        {
+            int a = 0;
+            int b = 1;
+
+            for (int i = 0; i < 10000; i++)
+            {
+                var query = Db<Data>.Sql(db =>
+                    Values(0, a, 2, b)
+                    );
+
+                query.Build(typeof(SqlConnection));
+            }
         }
 
         static void Test1()

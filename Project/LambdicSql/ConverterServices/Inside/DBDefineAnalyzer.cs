@@ -16,7 +16,7 @@ namespace LambdicSql.ConverterServices.Inside
             {
                 if (_dbInfos.TryGetValue(typeof(T), out db))
                 {
-                    return db;
+                    return db.Clone();
                 }
             }
 

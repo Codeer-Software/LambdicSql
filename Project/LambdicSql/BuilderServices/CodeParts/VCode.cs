@@ -1,5 +1,4 @@
-﻿using LambdicSql.BuilderServices.Inside;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace LambdicSql.BuilderServices.CodeParts
@@ -72,7 +71,7 @@ namespace LambdicSql.BuilderServices.CodeParts
                 code[i] = _core[i].ToString(next).TrimEnd();
             }
             
-            return PartsUtils.Join(Separator + Environment.NewLine, code);
+            return string.Join(Separator + Environment.NewLine, code);
         }
         
         /// <summary>
