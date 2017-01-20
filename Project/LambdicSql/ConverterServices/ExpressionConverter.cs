@@ -43,7 +43,7 @@ namespace LambdicSql.ConverterServices
             var exp = obj as Expression;
             if (exp != null) return Convert(exp);
 
-            var param = obj as DbParam;
+            var param = obj as IDbParam;
             if (param != null) return new ParameterCode(null, null, param);
 
             return new ParameterCode(obj);
@@ -128,7 +128,7 @@ namespace LambdicSql.ConverterServices
                     if (param != null && param.Value != null && !SupportedTypeSpec.IsSupported(param.Value.GetType()))
                     {
                         var casted = ExpressionToObject.ConvertObject(unary.Type, param.Value);
-                        return new ParameterCode(param.Name, param.MetaId, new DbParam() { Value = casted });
+                        return new ParameterCode(param.Name, param.MetaId, new DbParamValueOnly() { Value = casted });
                     }
                     return ret;
 
@@ -384,8 +384,8 @@ namespace LambdicSql.ConverterServices
             var symbol = exp.Type.GetObjectConverter();
             if (symbol != null) return symbol.Convert(obj);
 
-            //DbParam.
-            if (typeof(DbParam).IsAssignableFrom(exp.Type))
+            //IDbParam.
+            if (typeof(IDbParam).IsAssignableFrom(exp.Type))
             {
                 string name = string.Empty;
                 MetaId metaId = null;
@@ -395,7 +395,7 @@ namespace LambdicSql.ConverterServices
                     name = member.Member.Name;
                     metaId = new MetaId(member.Member);
                 }
-                var param = ((DbParam)obj);
+                var param = obj as IDbParam;
                 //use field name.
                 return new ParameterCode(name, metaId, param);
             }
@@ -424,7 +424,7 @@ namespace LambdicSql.ConverterServices
                 }
 
                 //use field name.
-                return new ParameterCode(name, metaId, new DbParam() { Value = obj });
+                return new ParameterCode(name, metaId, new DbParamValueOnly() { Value = obj });
             }
         }
         
@@ -441,5 +441,11 @@ namespace LambdicSql.ConverterServices
             }
             return chains;
         }
+    }
+
+
+    class DbParamValueOnly : IDbParam
+    {
+        public object Value { get; set; }
     }
 }

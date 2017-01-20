@@ -11,24 +11,24 @@ namespace LambdicSql.ConverterServices.Inside.CodeParts
         internal MetaId MetaId { get; private set; }
         internal object Value => _param.Value;
 
-        DbParam _param;
+        IDbParam _param;
         bool _displayValue;
 
         internal ParameterCode(object value)
         {
             Name = null;
             MetaId = null;
-            _param = new DbParam() {Value = value };
+            _param = new DbParamValueOnly() {Value = value };
         }
 
-        internal ParameterCode(string name = null, MetaId metaId = null, DbParam param = null)
+        internal ParameterCode(string name = null, MetaId metaId = null, IDbParam param = null)
         {
             Name = name;
             MetaId = metaId;
             _param = param;
         }
 
-        ParameterCode(string name, MetaId metaId, DbParam param, bool displayValue)
+        ParameterCode(string name, MetaId metaId, IDbParam param, bool displayValue)
         {
             Name = name;
             MetaId = metaId;

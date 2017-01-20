@@ -51,6 +51,8 @@
     <Compile Include="ConverterServices\SymbolConverters\MethodFormatConverterAttribute.cs" />
     <Compile Include="ConverterServices\SymbolConverters\NewFormatConverterAttribute.cs" />
     <Compile Include="ConverterServices\SymbolConverters\FormatDirection.cs" />
+    <Compile Include="ConverterServices\IDbParam.cs" />
+    <Compile Include="MultiplatformCompatibe\DbParamAdapter.cs" />
     <Compile Include="Specialized\Inside\CodeParts\CurrentDateTimeCode.cs" />
     <Compile Include="Specialized\Inside\CodeParts\AllDisableBinaryExpressionBracketsCode.cs" />
     <Compile Include="Specialized\Inside\CodeParts\RecursiveTargetCode.cs" />

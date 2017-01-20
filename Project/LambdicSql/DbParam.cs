@@ -6,7 +6,7 @@ namespace LambdicSql
     /// <summary>
     /// Represents a parameter information.
     /// </summary>
-    public class DbParam
+    public class DbParam : IDbParam
     {
         /// <summary>
         /// Gets or sets the value of the parameter.

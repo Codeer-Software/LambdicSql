@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using LambdicSql.ConverterServices;
+using LambdicSql.MultiplatformCompatibe;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace LambdicSql
@@ -26,10 +28,10 @@ namespace LambdicSql
         /// </summary>
         /// <param name="sqlText">Sql text.</param>
         /// <param name="dbParams">Parameters.</param>
-        internal BuildedSql(string sqlText, Dictionary<string, DbParam> dbParams)
+        internal BuildedSql(string sqlText, Dictionary<string, IDbParam> dbParams)
         {
             Text = sqlText;
-            _dbParams = dbParams;
+            _dbParams = dbParams.Adapt();
         }
 
         /// <summary>
@@ -54,7 +56,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="sqlText">Sql text.</param>
         /// <param name="dbParams">Parameters.</param>
-        internal BuildedSql(string sqlText, Dictionary<string, DbParam> dbParams)
+        internal BuildedSql(string sqlText, Dictionary<string, IDbParam> dbParams)
             : base(sqlText, dbParams) { }
 
         /// <summary>

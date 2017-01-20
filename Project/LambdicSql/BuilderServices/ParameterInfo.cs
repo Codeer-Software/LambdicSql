@@ -1,4 +1,5 @@
-﻿using LambdicSql.ConverterServices.Inside;
+﻿using LambdicSql.ConverterServices;
+using LambdicSql.ConverterServices.Inside;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -12,7 +13,7 @@ namespace LambdicSql.BuilderServices
         class DecodingParameterInfo
         {
             internal MetaId MetadataToken { get; set; }
-            internal DbParam Detail { get; set; }
+            internal IDbParam Detail { get; set; }
         }
 
         int _count;
@@ -29,10 +30,10 @@ namespace LambdicSql.BuilderServices
         /// It's dictionary of name and parameter.
         /// </summary>
         /// <returns>parameters.</returns>
-        public Dictionary<string, DbParam> GetDbParams()
+        public Dictionary<string, IDbParam> GetDbParams()
             => _parameters.ToDictionary(e => e.Key, e => e.Value.Detail);
 
-        internal string Push(object obj, string nameSrc = null, MetaId metadataToken = null, DbParam param = null)
+        internal string Push(object obj, string nameSrc = null, MetaId metadataToken = null, IDbParam param = null)
         {
             if (string.IsNullOrEmpty(nameSrc)) nameSrc = "p_" + _count++;
             else nameSrc = nameSrc.Replace(".", "_");
@@ -50,7 +51,7 @@ namespace LambdicSql.BuilderServices
             }
 
             //register.
-            if (param == null) param = new DbParam();
+            if (param == null) param = new DbParamValueOnly();
             param.Value = obj;
             _parameters.Add(name, new DecodingParameterInfo() { MetadataToken = metadataToken, Detail = param });
 
