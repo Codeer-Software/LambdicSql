@@ -269,29 +269,7 @@ namespace LambdicSql.ConverterServices
         ICode AddBinaryExpressionBlankets(ICode src)
             => typeof(IDisableBinaryExpressionBrackets).IsAssignableFrom(src.GetType()) ? src : new AroundCode(src, "(", ")");
 
-        static Dictionary<MetaId, bool> _isSqlExpressionBody = new Dictionary<MetaId, bool>();
-
         ICode TryResolveSqlExpressionBody(MemberExpression member)
-        {
-            var id = new MetaId(member.Member);
-            bool isBody;
-            bool isHit;
-            lock (_isSqlExpressionBody)
-            {
-                isHit = _isSqlExpressionBody.TryGetValue(id, out isBody);
-            }
-            if (isHit && !isBody) return null;
-
-            var code = TryResolveSqlExpressionBodyCore(member);
-
-            if (!isHit)
-            {
-                _isSqlExpressionBody[id] = code != null;
-            }
-            return code;
-        }
-
-        ICode TryResolveSqlExpressionBodyCore(MemberExpression member)
         {
             //get all members.
             var members = new List<MemberExpression>();
@@ -305,22 +283,14 @@ namespace LambdicSql.ConverterServices
                     member = exp;
                 }
             }
-
-            //check IClauseChain's Body.
-            var method = member.Expression as MethodCallExpression;
-            if (method != null)
-            {
-                if (!typeof(IMethodChain).IsAssignableFrom(method.Type) ||
-                     member.Member.Name != "Body") return null;
-                return Convert(method);
-            }
-
+            
             if (members.Count < 2) return null;
-            members.Reverse();
 
             //check SqlExpression's Body
-            if (!typeof(Sql).IsAssignableFrom(members[0].Type) ||
-                members[1].Member.Name != "Body") return null;
+            if (members[members.Count - 2].Member.Name != "Body") return null;
+            if (!typeof(Sql).IsAssignableFrom(members[members.Count - 1].Type)) return null;
+
+            members.Reverse();
 
             //for example, sub.Body
             if (members.Count == 2) return ResolveExpressionObject(members[0]);
