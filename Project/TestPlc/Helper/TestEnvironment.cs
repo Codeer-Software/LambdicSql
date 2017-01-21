@@ -7,24 +7,9 @@ namespace TestPlc
 {
     static class TestEnvironment
     {
-        internal static string ConnectionString => File.ReadAllText(FindNearFile("db.txt")).Trim();
-
-        static string FindNearFile(string fileName)
-        {
-            var path = typeof(TestEnvironment).Assembly.Location;
-            while (true)
-            {
-                var filePath = Path.Combine(path, fileName);
-                if (File.Exists(filePath))
-                {
-                    return filePath;
-                }
-                path = Path.GetDirectoryName(path);
-            }
-            throw new NotSupportedException();
-        }
+        internal static string SQLiteTest1Path => Path.GetFullPath("../../../SQLiteTest1.db");
 
         internal static SQLiteConnection CreateConnection(TestContext context)
-            => new SQLiteConnection(ConnectionString);
+            => new SQLiteConnection(SQLiteTest1Path);
     }
 }

@@ -25,6 +25,12 @@ namespace LambdicSql
         public Dictionary<string, T> GetParams<T>(Func<IDbParam, T> converter) => _dbParams.ToDictionary(e => e.Key, e => converter(e.Value));
 
         /// <summary>
+        /// Get parameters.
+        /// </summary>
+        /// <returns>Parameters.</returns>
+        public Dictionary<string, object> GetParamValues() => _dbParams.ToDictionary(e => e.Key, e => e.Value.Value);
+
+        /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="sqlText">Sql text.</param>
