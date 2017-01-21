@@ -9,6 +9,7 @@
     <Import_RootNamespace>LambdicSql</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)BuildedSql.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\BuildingContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\CodeParts\AroundCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\CodeParts\HCode.cs" />

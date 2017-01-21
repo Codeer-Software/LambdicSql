@@ -14,6 +14,7 @@ namespace LambdicSql.MultiplatformCompatibe
                 attrs[0] as T :
                 null;
         }
+
         internal static T GetAttribute<T>(this Type type) where T : class
         {
             var attrs = type.GetCustomAttributes(typeof(T), true);

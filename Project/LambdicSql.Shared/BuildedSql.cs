@@ -1,4 +1,4 @@
-﻿using LambdicSql.MultiplatformCompatibe;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,7 +9,7 @@ namespace LambdicSql
     /// </summary>
     public class BuildedSql
     {
-        Dictionary<string, DbParam> _dbParams;
+        Dictionary<string, IDbParam> _dbParams;
 
         /// <summary>
         /// Sql text.
@@ -19,8 +19,10 @@ namespace LambdicSql
         /// <summary>
         /// Get parameters.
         /// </summary>
+        /// <typeparam name="T">Converted type.</typeparam>
+        /// <param name="converter">Converter.</param>
         /// <returns>Parameters.</returns>
-        public Dictionary<string, DbParam> GetParams() => _dbParams.ToDictionary(e => e.Key, e => e.Value);
+        public Dictionary<string, T> GetParams<T>(Func<IDbParam, T> converter) => _dbParams.ToDictionary(e => e.Key, e => converter(e.Value));
 
         /// <summary>
         /// Constructor.
@@ -30,7 +32,7 @@ namespace LambdicSql
         internal BuildedSql(string sqlText, Dictionary<string, IDbParam> dbParams)
         {
             Text = sqlText;
-            _dbParams = dbParams.Adapt();
+            _dbParams = dbParams;
         }
 
         /// <summary>
@@ -42,6 +44,11 @@ namespace LambdicSql
             Text = src.Text;
             _dbParams = src._dbParams;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public BuildedSql() { }
     }
 
     /// <summary>
@@ -50,6 +57,11 @@ namespace LambdicSql
     /// <typeparam name="TSelected">Type of selected at SELECT clause.</typeparam>
     public class BuildedSql<TSelected> : BuildedSql
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        public BuildedSql() { }
+
         /// <summary>
         /// Constructor.
         /// </summary>

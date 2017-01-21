@@ -53,7 +53,7 @@ namespace LambdicSql.ConverterServices.Inside
         internal static NewConverterAttribute GetNewConverter(this NewExpression exp)
             => GetMemberConverter(exp.Constructor, _converterNewAttribute);
 
-        static T GetMemberConverter<T>(MemberInfo member, Dictionary<MetaId, T> cache) where T : class
+        static T GetMemberConverter<T>(MemberInfo member, Dictionary<MetaId, T> cache) where T : Attribute
         {
             var id = new MetaId(member);
             lock (cache)

@@ -1,20 +1,17 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace LambdicSql.ConverterServices.Inside
 {
+    //微妙な速度さだったからなー、memberInfoの比較をそのまま使うでもいいのかもしれん
     class MetaId
     {
         MemberInfo _member;
-        Type _declaringType;
-        readonly int _memberToken;
+        int _hash;
 
         public MetaId(MemberInfo member)
         {
             _member = member;
-            _declaringType = member.DeclaringType;
-            //TODO
-            _memberToken = 0;// member.MetadataToken;
+            _hash = member.GetHashCode();
         }
 
         public override bool Equals(object obj)
@@ -22,17 +19,17 @@ namespace LambdicSql.ConverterServices.Inside
             var target = obj as MetaId;
             if (target == null) return false;
             if (ReferenceEquals(_member, target._member)) return true;
-            if (_memberToken != target._memberToken) return false;
-            return _memberToken == target._memberToken && _declaringType == target._declaringType;
+            return _member.Equals(target._member);
         }
 
-        public override int GetHashCode() => _memberToken;
+        public override int GetHashCode() => _hash;
 
         public static bool operator == (MetaId lhs, MetaId rhs)
         {
             if (ReferenceEquals(lhs, null) && ReferenceEquals(rhs, null)) return true;
             if (ReferenceEquals(lhs, null) || ReferenceEquals(rhs, null)) return false;
-            return lhs._memberToken == rhs._memberToken && lhs._declaringType == rhs._declaringType;
+            if (ReferenceEquals(lhs._member, rhs._member)) return true;
+            return lhs._member.Equals(rhs._member);
         }
 
         public static bool operator != (MetaId lhs, MetaId rhs) => !(lhs == rhs);

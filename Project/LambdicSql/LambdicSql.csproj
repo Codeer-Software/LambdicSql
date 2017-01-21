@@ -44,11 +44,9 @@
     <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BuildedSql.cs" />
+    <Compile Include="MultiplatformCompatibe\BuildedSqlExtensions.cs" />
     <Compile Include="MultiplatformCompatibe\MetaId.cs" />
-    <Compile Include="MultiplatformCompatibe\DbParamAdapter.cs" />
     <Compile Include="MultiplatformCompatibe\ReflectionAdapter.cs" />
-    <Compile Include="SqlBuildExtensions.cs" />
     <Compile Include="feat\Dapper\DapperAdapter.cs" />
     <Compile Include="feat\Dapper\DapperWrapper.cs" />
     <Compile Include="feat\EntityFramework\EFAdapter.cs" />
