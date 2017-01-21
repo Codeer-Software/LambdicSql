@@ -5,6 +5,7 @@ using LambdicSql.ConverterServices.Inside;
 using LambdicSql.Inside.CodeParts;
 using System.Linq.Expressions;
 using static LambdicSql.BuilderServices.Inside.PartsFactoryUtils;
+using LambdicSql.MultiplatformCompatibe;
 
 namespace LambdicSql.Specialized.SymbolConverters
 {
@@ -54,7 +55,7 @@ namespace LambdicSql.Specialized.SymbolConverters
             var member = exp as MemberExpression;
             while (member != null)
             {
-                if (typeof(Sql).IsAssignableFrom(member.Type)) return member.Member.Name;
+                if (typeof(Sql).IsAssignableFromEx(member.Type)) return member.Member.Name;
                 member = member.Expression as MemberExpression;
             }
             return null;

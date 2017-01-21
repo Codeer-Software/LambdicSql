@@ -1,4 +1,4 @@
-﻿namespace LambdicSql.ConverterServices
+﻿namespace LambdicSql
 {
     /// <summary>
     /// Represents a parameter information.

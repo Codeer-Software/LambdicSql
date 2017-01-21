@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 namespace LambdicSql.ConverterServices
 {
+    //TODO .netの普通の例外の書き方ではなくなった
     /// <summary>
     /// It is thrown if the method is called with an illegal context.
     /// </summary>
-    [Serializable]
     public class InvalitContextException : Exception
     {
         /// <summary>
@@ -26,12 +25,5 @@ namespace LambdicSql.ConverterServices
         /// <param name="message">Message.</param>
         /// <param name="innerException">InnerException.</param>
         public InvalitContextException(string message, Exception innerException) : base(message, innerException) { }
-
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        /// <param name="info">Information.</param>
-        /// <param name="context">Context.</param>
-        protected InvalitContextException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 }

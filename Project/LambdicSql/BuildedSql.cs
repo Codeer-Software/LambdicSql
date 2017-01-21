@@ -1,5 +1,4 @@
-﻿using LambdicSql.ConverterServices;
-using LambdicSql.MultiplatformCompatibe;
+﻿using LambdicSql.MultiplatformCompatibe;
 using System.Collections.Generic;
 using System.Linq;
 

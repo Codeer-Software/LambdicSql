@@ -6,6 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using LambdicSql.ConverterServices.Inside.CodeParts;
 using LambdicSql.BuilderServices.Inside;
+using LambdicSql.MultiplatformCompatibe;
 
 namespace LambdicSql.ConverterServices
 {
@@ -157,7 +158,7 @@ namespace LambdicSql.ConverterServices
             var right = Convert(binary.Right);
 
             //sql + sql
-            if (typeof(Sql).IsAssignableFrom(binary.Type) && binary.NodeType == ExpressionType.Add)
+            if (typeof(Sql).IsAssignableFromEx(binary.Type) && binary.NodeType == ExpressionType.Add)
             {
                 return new VCode(left, right);
             }
@@ -231,14 +232,14 @@ namespace LambdicSql.ConverterServices
             }
             
             //for ALL function. can't add blankets.
-            if (code.Length == 1 && typeof(IDisableBinaryExpressionBrackets).IsAssignableFrom(code[0].GetType()))
+            if (code.Length == 1 && typeof(IDisableBinaryExpressionBrackets).IsAssignableFromEx(code[0].GetType()))
             {
                 return code[0];
             }
 
             var core = new VCode(code);
 
-            return (typeof(SelectClauseCode).IsAssignableFrom(code[0].GetType())) ?
+            return (typeof(SelectClauseCode).IsAssignableFromEx(code[0].GetType())) ?
                  (ICode)new SelectQueryCode(core) :
                  new QueryCode(core);
         }
@@ -267,7 +268,7 @@ namespace LambdicSql.ConverterServices
         }
 
         ICode AddBinaryExpressionBlankets(ICode src)
-            => typeof(IDisableBinaryExpressionBrackets).IsAssignableFrom(src.GetType()) ? src : new AroundCode(src, "(", ")");
+            => typeof(IDisableBinaryExpressionBrackets).IsAssignableFromEx(src.GetType()) ? src : new AroundCode(src, "(", ")");
 
         ICode TryResolveSqlExpressionBody(MemberExpression member)
         {
@@ -288,7 +289,7 @@ namespace LambdicSql.ConverterServices
 
             //check SqlExpression's Body
             if (members[members.Count - 2].Member.Name != "Body") return null;
-            if (!typeof(Sql).IsAssignableFrom(members[members.Count - 1].Type)) return null;
+            if (!typeof(Sql).IsAssignableFromEx(members[members.Count - 1].Type)) return null;
 
             members.Reverse();
 
@@ -385,7 +386,7 @@ namespace LambdicSql.ConverterServices
             if (symbol != null) return symbol.Convert(obj);
 
             //IDbParam.
-            if (typeof(IDbParam).IsAssignableFrom(exp.Type))
+            if (typeof(IDbParam).IsAssignableFromEx(exp.Type))
             {
                 string name = string.Empty;
                 MetaId metaId = null;
@@ -406,7 +407,7 @@ namespace LambdicSql.ConverterServices
             if (sqlExp != null)
             {
                 Type type = null;
-                var types = sqlExp.GetType().GetGenericArguments();
+                var types = sqlExp.GetType().GetGenericArgumentsEx();
                 if (0 < types.Length) type = types[0];
                 return sqlExp.Code;
             }
@@ -441,11 +442,5 @@ namespace LambdicSql.ConverterServices
             }
             return chains;
         }
-    }
-
-
-    class DbParamValueOnly : IDbParam
-    {
-        public object Value { get; set; }
     }
 }

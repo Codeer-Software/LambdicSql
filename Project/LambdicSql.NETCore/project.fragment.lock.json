@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "exports": {
+    "LambdicSql.NETStandard/1.0.0": {
+      "type": "project",
+      "framework": ".NETStandard,Version=v1.1",
+      "compile": {
+        "bin/Debug/LambdicSql.NETStandard.dll": {}
+      },
+      "runtime": {
+        "bin/Debug/LambdicSql.NETStandard.dll": {}
+      },
+      "contentFiles": {
+        "bin/Debug/LambdicSql.NETStandard.pdb": {
+          "buildAction": "None",
+          "codeLanguage": "any",
+          "copyToOutput": true
+        }
+      }
+    }
+  }
+}

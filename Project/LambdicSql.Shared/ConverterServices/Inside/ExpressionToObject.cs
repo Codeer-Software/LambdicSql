@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Linq;
 using System.Reflection;
+using LambdicSql.MultiplatformCompatibe;
 
 namespace LambdicSql.ConverterServices.Inside
 {
@@ -353,7 +354,7 @@ namespace LambdicSql.ConverterServices.Inside
                     names.Reverse();
                     if (targt == null)
                     {
-                        target = StaticPropertyOrField(type, names[0]);
+                        target = ReflectionAdapter.StaticPropertyOrField(type, names[0]);
                         names.RemoveAt(0);
                     }
                     if (names.Count == 0)
@@ -363,7 +364,12 @@ namespace LambdicSql.ConverterServices.Inside
                     }
                     else
                     {
-                        names.ForEach(e => target = Expression.PropertyOrField(target, e));
+                        foreach (var e in names)
+                        {
+                            target = Expression.PropertyOrField(target, e);
+                        }
+
+               //         names.ForEach(e => target = Expression.PropertyOrField(target, e));
                         getter = Activator.CreateInstance(typeof(GetterCore<>).MakeGenericType(type), true) as IGetter;
                         getter.Init(Expression.Convert(target, typeof(object)), new[] { param });
                     }
@@ -394,19 +400,6 @@ namespace LambdicSql.ConverterServices.Inside
                 }
             }
             return getter.GetMemberObject(new[] { src });
-        }
-
-        static MemberExpression StaticPropertyOrField(Type type, string propertyOrFieldName)
-        {
-            var flgs = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
-
-            var property = type.GetProperty(propertyOrFieldName, flgs);
-            if (property != null) return Expression.Property(null, property);
-
-            var field = type.GetField(propertyOrFieldName, flgs);
-            if (field != null) return Expression.Field(null, field);
-
-            throw new NotSupportedException();
         }
     }
 }

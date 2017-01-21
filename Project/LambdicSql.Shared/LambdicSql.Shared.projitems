@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>c69db6f7-9921-4351-a163-047d2550003f</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>LambdicSql</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\BuildingContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\CodeParts\AroundCode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\CodeParts\HCode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\CodeParts\ICode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\CodeParts\ICodeCustomizer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\CodeParts\SingleTextCode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\CodeParts\VCode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\CustomizeColumnOnly.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\CustomizeParameterToObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\DialectOption.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\Inside\DialectResolver.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\Inside\PartsFactoryUtils.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\Inside\PartsUtils.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\ParameterInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\ExpressionConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\IDisableBinaryExpressionBrackets.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\IMethodChain.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\CodeParts\DbColumnCode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\CodeParts\DbTableCode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\CodeParts\ParameterCode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\CodeParts\QueryCode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\CodeParts\SelectClauseCode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\CodeParts\SelectQueryCode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\CodeParts\StringAddOperatorCode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\ColumnInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\DBDefineAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\DbInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\DbParamValueOnly.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\ExpressionToObject.CreateGetter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\ExpressionToObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\ExpressionToObject.Getter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\FormatConverterCore.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\ObjectCreateAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\ObjectCreateInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\ObjectCreateMemberInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\TableInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\InvalitContextException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\OperatorCode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SupportedTypeSpec.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolConverters\ClauseStyleConverterAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolConverters\FormatDirection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolConverters\FuncStyleConverterAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolConverters\MemberConverterAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolConverters\MethodConverterAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolConverters\MethodFormatConverterAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolConverters\NewConverterAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolConverters\NewFormatConverterAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolConverters\ObjectConverterAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolConverters\ObjectToStringConverterAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\TowWaySqlSpec.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IDbParam.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Specialized\Inside\CodeParts\AllDisableBinaryExpressionBracketsCode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Specialized\Inside\CodeParts\CurrentDateTimeCode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Specialized\Inside\CodeParts\RecursiveTargetCode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Specialized\Inside\CodeParts\StringFormatCode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Specialized\Inside\CodeParts\SubQueryAndNameCode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Specialized\Inside\CodeParts\WithEntriedCode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Specialized\SymbolConverters\AllConverterAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Specialized\SymbolConverters\ConditionClauseConverterAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Specialized\SymbolConverters\ConditionConverterAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Specialized\SymbolConverters\CurrentDateTimeConverterAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Specialized\SymbolConverters\FromConverterAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Specialized\SymbolConverters\JoinConverterAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Specialized\SymbolConverters\RecursiveConverterAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Specialized\SymbolConverters\SelectConverterAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Specialized\SymbolConverters\ToSqlConverterAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Specialized\SymbolConverters\TwoWaySqlConverterAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Specialized\SymbolConverters\WithConverterAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Sql.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SqlSetOperationsExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Symbol.Clauses.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Symbol.Etc.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Symbol.Funcs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SymbolSub.cs" />
+  </ItemGroup>
+</Project>

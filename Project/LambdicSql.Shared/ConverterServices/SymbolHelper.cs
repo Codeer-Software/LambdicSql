@@ -1,4 +1,5 @@
 ﻿using LambdicSql.ConverterServices.SymbolConverters;
+using LambdicSql.MultiplatformCompatibe;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -37,9 +38,7 @@ namespace LambdicSql.ConverterServices.Inside
                 ObjectConverterAttribute attr;
                 if (_converterObjectAttribute.TryGetValue(type, out attr)) return attr;
 
-                var attrs = type.GetCustomAttributes(typeof(ObjectConverterAttribute), true);
-                if (attrs.Length == 1) attr = attrs[0] as ObjectConverterAttribute;
-                else attr = null;
+                attr = type.GetAttribute<ObjectConverterAttribute>();
                 _converterObjectAttribute.Add(type, attr);
                 return attr;
             }
@@ -62,9 +61,7 @@ namespace LambdicSql.ConverterServices.Inside
                 T attr;
                 if (cache.TryGetValue(id, out attr)) return attr;
 
-                var attrs = member.GetCustomAttributes(typeof(T), true);
-                if (attrs.Length == 1) attr = attrs[0] as T;
-                else attr = null;
+                attr = member.GetAttribute<T>();
                 cache.Add(id, attr);
                 return attr;
             }
@@ -75,7 +72,7 @@ namespace LambdicSql.ConverterServices.Inside
             if (!exp.Method.IsExtension()) return index;
 
             var ps = exp.Method.GetParameters();
-            if (0 < ps.Length && typeof(IMethodChain).IsAssignableFrom(ps[0].ParameterType)) return index + 1;
+            if (0 < ps.Length && typeof(IMethodChain).IsAssignableFromEx(ps[0].ParameterType)) return index + 1;
             else return index;
         }
     }

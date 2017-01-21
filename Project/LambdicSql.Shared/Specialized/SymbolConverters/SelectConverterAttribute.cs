@@ -5,6 +5,7 @@ using LambdicSql.ConverterServices.Inside;
 using LambdicSql.ConverterServices.Inside.CodeParts;
 using static LambdicSql.BuilderServices.Inside.PartsFactoryUtils;
 using System.Linq.Expressions;
+using LambdicSql.MultiplatformCompatibe;
 
 namespace LambdicSql.Specialized.SymbolConverters
 {
@@ -38,7 +39,7 @@ namespace LambdicSql.Specialized.SymbolConverters
             var selectTargets = expression.Arguments[expression.Arguments.Count - 1];
 
             //*
-            if (typeof(IAsterisk).IsAssignableFrom(selectTargets.Type))
+            if (typeof(IAsterisk).IsAssignableFromEx(selectTargets.Type))
             {
                 select.Add("*".ToCode());
                 return new SelectClauseCode(select);

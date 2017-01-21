@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Linq;
 using System;
 using System.Collections.Generic;
+using LambdicSql.MultiplatformCompatibe;
 
 namespace LambdicSql.ConverterServices.Inside
 {
@@ -17,7 +18,7 @@ namespace LambdicSql.ConverterServices.Inside
                 ObjectCreateInfo info;
                 if (_selectedTypeInfo.TryGetValue(type, out info)) return info;
 
-                info = new ObjectCreateInfo(type.GetProperties().Select(e=> new ObjectCreateMemberInfo(e.Name, null)), null);
+                info = new ObjectCreateInfo(type.GetPropertiesEx().Select(e=> new ObjectCreateMemberInfo(e.Name, null)), null);
                 _selectedTypeInfo[type] = info;
                 return info;
             }

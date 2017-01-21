@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
+using LambdicSql.MultiplatformCompatibe;
 
 namespace LambdicSql.ConverterServices.Inside
 {
@@ -39,7 +39,7 @@ namespace LambdicSql.ConverterServices.Inside
         static IEnumerable<ColumnInfo> FindColumns(Type type, IEnumerable<string> lambdicNames, string[] sqlNames)
         {
             //for entity framework.
-            if (type.IsGenericType) type = type.GetGenericArguments()[0];
+            if (type.IsGenericTypeEx()) type = type.GetGenericArgumentsEx()[0];
             
             if (SupportedTypeSpec.IsSupported(type))
             {
@@ -47,43 +47,22 @@ namespace LambdicSql.ConverterServices.Inside
                 var sqlName = string.Join(".", sqlNames.ToArray());
                 return new[] { new ColumnInfo(type, lambdicName, sqlName, sqlNames[sqlNames.Length - 1]) };
             }
-            else if (type.IsClass)
+            else if (type.IsClassEx())
             {
                 var list = new List<ColumnInfo>();
-                foreach (var p in type.GetProperties())
+                foreach (var p in type.GetPropertiesEx())
                 {
                     //for entity framework.
                     if (p.DeclaringType.FullName == "System.Data.Entity.DbContext") continue;
 
                     list.AddRange(FindColumns(p.PropertyType,
                         lambdicNames.Concat(new[] { p.Name }).ToArray(),
-                        sqlNames.Concat(new[] { GetSqlName(p) }).ToArray()));
+                        sqlNames.Concat(new[] { ReflectionAdapter.GetSqlName(p) }).ToArray()));
                 }
                 return list;
             }
             throw new NotSupportedException();
         }
 
-        static string GetSqlName(PropertyInfo p)
-        {
-            var type = p.PropertyType;
-
-            //for entity framework.
-            if (type.IsGenericType) type = type.GetGenericArguments()[0];
-
-            var tableAttr = type.GetCustomAttributes(true).Where(e => e.GetType().FullName == "System.ComponentModel.DataAnnotations.Schema.TableAttribute").FirstOrDefault();
-            if (tableAttr != null)
-            {
-                var name = tableAttr.GetType().GetProperty("Name").GetValue(tableAttr, new object[0]);
-                if (name != null) return name.ToString();
-            }
-            var columnAttr = p.GetCustomAttributes(true).Where(e => e.GetType().FullName == "System.ComponentModel.DataAnnotations.Schema.ColumnAttribute").FirstOrDefault();
-            if (columnAttr != null)
-            {
-                var name = columnAttr.GetType().GetProperty("Name").GetValue(columnAttr, new object[0]);
-                if (name != null) return name.ToString();
-            }
-            return p.Name;
-        }
     }
 }

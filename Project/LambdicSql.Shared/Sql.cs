@@ -31,26 +31,6 @@ namespace LambdicSql
         public static Sql operator + (Sql sql1, Sql sql2)
             => new Sql(new VCode(sql1.Code, sql2.Code));
 
-        /// <summary>
-        /// Build.
-        /// </summary>
-        /// <param name="connectionType">IDbConnection's type.</param>
-        /// <returns>SQL text and parameters.</returns>
-        public BuildedSql Build(Type connectionType)
-            => Build(DialectResolver.CreateCustomizer(connectionType.FullName));
-
-        /// <summary>
-        /// Build.
-        /// </summary>
-        /// <param name="option">Options for converting from C # to SQL string.</param>
-        /// <returns>SQL text and parameters.</returns>
-        public BuildedSql Build(DialectOption option)
-        {
-            var context = new BuildingContext(option);
-            var sqalText = Code.ToString(context);
-            return new BuildedSql(sqalText, context.ParameterInfo.GetDbParams());
-        }
-
         //TODO test.
         /// <summary>
         /// Cast.
@@ -87,24 +67,6 @@ namespace LambdicSql
         /// <returns>Concatenated result.</returns>
         public static Sql<T> operator + (Sql<T> sql1, Sql sql2)
           => new Sql<T>(new VCode(sql1.Code, sql2.Code));
-
-        /// <summary>
-        /// Build.
-        /// This have static information of the type selected in the SELECT clause.
-        /// </summary>
-        /// <param name="connectionType">IDbConnection's type.</param>
-        /// <returns>SQL text and parameters.</returns>
-        public new BuildedSql<T> Build(Type connectionType)
-          => new BuildedSql<T>(base.Build(connectionType));
-
-        /// <summary>
-        /// Sql information.
-        /// This have static information of the type selected in the SELECT clause.
-        /// </summary>
-        /// <param name="option">Options for converting from C # to SQL string.</param>
-        /// <returns>Sql information.</returns>
-        public new BuildedSql<T> Build(DialectOption option)
-          => new BuildedSql<T>(base.Build(option));
 
         internal Sql(ICode code) : base(code) { }
     }
