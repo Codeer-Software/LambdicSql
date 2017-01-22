@@ -359,7 +359,7 @@ namespace LambdicSql.ConverterServices.Inside
                     }
                     if (names.Count == 0)
                     {
-                        getter = Activator.CreateInstance(typeof(GetterCore), true) as IGetter;
+                        getter = ReflectionAdapter.CreateInstance(typeof(GetterCore), true) as IGetter;
                         getter.Init(Expression.Convert(target, typeof(object)), new ParameterExpression[0]);
                     }
                     else
@@ -368,9 +368,7 @@ namespace LambdicSql.ConverterServices.Inside
                         {
                             target = Expression.PropertyOrField(target, e);
                         }
-
-               //         names.ForEach(e => target = Expression.PropertyOrField(target, e));
-                        getter = Activator.CreateInstance(typeof(GetterCore<>).MakeGenericType(type), true) as IGetter;
+                        getter = ReflectionAdapter.CreateInstance(typeof(GetterCore<>).MakeGenericType(type), true) as IGetter;
                         getter.Init(Expression.Convert(target, typeof(object)), new[] { param });
                     }
                     _memberGet.Add(getterName, getter);

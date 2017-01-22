@@ -7,6 +7,9 @@ namespace LambdicSql.MultiplatformCompatibe
 {
     static class ReflectionAdapter
     {
+        internal static object CreateInstance(Type type, bool nonPublic)
+            => Activator.CreateInstance(type, nonPublic);
+
         internal static T GetAttribute<T>(this MemberInfo member) where T : class
         {
             var attrs = member.GetCustomAttributes(typeof(T), true);

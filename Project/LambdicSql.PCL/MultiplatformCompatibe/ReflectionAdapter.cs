@@ -5,9 +5,11 @@ using System.Linq;
 
 namespace LambdicSql.MultiplatformCompatibe
 {
-    //TODO
     static class ReflectionAdapter
     {
+        internal static object CreateInstance(Type type, bool nonPublic)
+            => Activator.CreateInstance(type);
+
         internal static T GetAttribute<T>(this MemberInfo member) where T : Attribute
             => member.GetCustomAttribute<T>();
 
