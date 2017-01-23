@@ -63,6 +63,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\TowWaySqlSpec.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Db.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)feat\PackageIsNotInstalledException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IDbParam.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Specialized\Inside\CodeParts\AllDisableBinaryExpressionBracketsCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Specialized\Inside\CodeParts\CurrentDateTimeCode.cs" />

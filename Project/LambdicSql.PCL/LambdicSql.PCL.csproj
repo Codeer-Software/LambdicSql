@@ -37,7 +37,6 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="feat\PackageIsNotInstalledException.cs" />
     <Compile Include="feat\SQLiteNetPcl\SQLiteNetPclAdapter.cs" />
     <Compile Include="feat\SQLiteNetPcl\SQLiteNetPclWrapper.cs" />
     <Compile Include="MultiplatformCompatibe\BuildedSqlExtensionsPCL.cs" />

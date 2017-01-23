@@ -51,7 +51,6 @@
     <Compile Include="feat\Dapper\DapperWrapper.cs" />
     <Compile Include="feat\EntityFramework\EFAdapter.cs" />
     <Compile Include="feat\EntityFramework\EFWrapper.cs" />
-    <Compile Include="feat\PackageIsNotInstalledException.cs" />
     <Compile Include="DbParam.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

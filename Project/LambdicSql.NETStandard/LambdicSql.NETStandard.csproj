@@ -39,6 +39,12 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DbParam.cs" />
+    <Compile Include="feat\Dapper\DapperAdapter.cs" />
+    <Compile Include="feat\Dapper\DapperWrapper.cs" />
+    <Compile Include="feat\EntityFramework\EFAdapter.cs" />
+    <Compile Include="feat\EntityFramework\EFWrapper.cs" />
+    <Compile Include="MultiplatformCompatibe\BuildedSqlExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
