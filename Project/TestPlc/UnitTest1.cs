@@ -2,7 +2,7 @@
 using static LambdicSql.Symbol;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;
-using System;
+using LambdicSql.feat.SqLiteNetPcl;
 
 namespace TestPlc
 {
@@ -16,7 +16,7 @@ namespace TestPlc
         {
             var x = new { a = 1, b = 2 };
 
-            
+
             int id = 2;
             var sql = Db<DB>.Sql(db =>
 
@@ -28,17 +28,31 @@ namespace TestPlc
 
             using (var con = TestEnvironment.CreateConnection(TestContext))
             {
-
-                var ret = sql.Build(con.GetType());
-                //ret.GetParamValues()
-                var y = new object[] { 2, 4 };
-                var z = ret.GetParamValues();
-                var list = con.Query<Staff>(ret.Text, ret.GetParamValues());
-
-                Debug.Print(ret.Text);
+                SqLiteNetPclAdapter.Log = e => Debug.Print(e);
+                var list = con.Query(sql);
             }
         }
 
-        class GetterCore<T0> { }
+        [TestMethod]
+        public void Test_Delete_All()
+        {
+            var deleteAll = Db<DB>.Sql(db =>
+                Delete().
+                From(db.tbl_data));
+
+            var insert = Db<DB>.Sql(db =>
+                   InsertInto(db.tbl_data, db.tbl_data.id, db.tbl_data.val2).Values(1, "val2"));
+
+
+            using (var con = TestEnvironment.CreateConnection(TestContext))
+            {
+                SqLiteNetPclAdapter.Log = e => Debug.Print(e);
+                var countDel = con.Execute(deleteAll);
+                var countInsert = con.Execute(insert);
+            }
+        }
+
     }
+
+    class GetterCore<T0> { }
 }

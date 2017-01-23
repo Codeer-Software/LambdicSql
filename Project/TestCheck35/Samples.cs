@@ -1478,6 +1478,7 @@ FROM tbl_remuneration
 
         public IEnumerable<T> ExecuteRead<T>(Sql exp)
         {
+        //    Dapper.SqlMapper.Query
             var info = exp.Build(_connection.GetType());
             Debug.Print(info.Text);
             return _connection.Query<T>(exp).ToList();

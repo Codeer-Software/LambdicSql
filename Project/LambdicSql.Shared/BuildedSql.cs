@@ -25,14 +25,6 @@ namespace LambdicSql
         public Dictionary<string, T> GetParams<T>(Func<IDbParam, T> converter) => _dbParams.ToDictionary(e => e.Key, e => converter(e.Value));
 
         /// <summary>
-        /// Get parameter values.
-        /// The values are sorted in the order in which they appear in the SQL statement.
-        /// </summary>
-        /// <returns>Parameters.</returns>
-        public object[] GetParamValues()
-            => _dbParams.Select(e => new { Index = Text.IndexOf(e.Key), Value = e.Value.Value }).OrderBy(e => e.Index).Select(e=>e.Value).ToArray();
-
-        /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="sqlText">Sql text.</param>
