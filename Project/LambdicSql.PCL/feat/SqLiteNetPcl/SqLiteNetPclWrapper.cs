@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace LambdicSql.feat.SqLiteNetPcl
+namespace LambdicSql.feat.SQLiteNetPcl
 {
-    static class SqLiteNetPclWrapper
+    static class SQLiteNetPclWrapper
     {
         internal static object _sync = new object();
         internal delegate int ExecuteDelegate(object cnn, string sql, object[] arguments);
@@ -31,7 +31,7 @@ namespace LambdicSql.feat.SqLiteNetPcl
         }
     }
 
-    static class SqLiteNetPclWrapper<T>
+    static class SQLiteNetPclWrapper<T>
     {
         internal static object _sync = new object();
         internal delegate List<T> QueryDelegate(object cnn, string query, params object[] args);

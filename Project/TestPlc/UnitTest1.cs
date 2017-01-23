@@ -2,7 +2,7 @@
 using static LambdicSql.Symbol;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;
-using LambdicSql.feat.SqLiteNetPcl;
+using LambdicSql.feat.SQLiteNetPcl;
 
 namespace TestPlc
 {
@@ -28,7 +28,7 @@ namespace TestPlc
 
             using (var con = TestEnvironment.CreateConnection(TestContext))
             {
-                SqLiteNetPclAdapter.Log = e => Debug.Print(e);
+                SQLiteNetPclAdapter.Log = e => Debug.Print(e);
                 var list = con.Query(sql);
             }
         }
@@ -46,7 +46,7 @@ namespace TestPlc
 
             using (var con = TestEnvironment.CreateConnection(TestContext))
             {
-                SqLiteNetPclAdapter.Log = e => Debug.Print(e);
+                SQLiteNetPclAdapter.Log = e => Debug.Print(e);
                 var countDel = con.Execute(deleteAll);
                 var countInsert = con.Execute(insert);
             }

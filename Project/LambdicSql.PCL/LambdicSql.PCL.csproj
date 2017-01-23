@@ -38,8 +38,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="feat\PackageIsNotInstalledException.cs" />
-    <Compile Include="feat\SqLiteNetPcl\SqLiteNetPclAdapter.cs" />
-    <Compile Include="feat\SqLiteNetPcl\SqLiteNetPclWrapper.cs" />
+    <Compile Include="feat\SQLiteNetPcl\SQLiteNetPclAdapter.cs" />
+    <Compile Include="feat\SQLiteNetPcl\SQLiteNetPclWrapper.cs" />
     <Compile Include="MultiplatformCompatibe\BuildedSqlExtensionsPCL.cs" />
     <Compile Include="MultiplatformCompatibe\MetaId.cs" />
     <Compile Include="MultiplatformCompatibe\ReflectionAdapter.cs" />

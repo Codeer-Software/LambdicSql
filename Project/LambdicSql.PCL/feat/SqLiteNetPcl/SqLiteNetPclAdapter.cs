@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace LambdicSql.feat.SqLiteNetPcl
+namespace LambdicSql.feat.SQLiteNetPcl
 {
     /// <summary>
     /// Extensions for adjust SQLiteConnection.
     /// </summary>
-    public static class SqLiteNetPclAdapter
+    public static class SQLiteNetPclAdapter
     {
         /// <summary>
         /// Debug Log.
@@ -49,7 +49,7 @@ namespace LambdicSql.feat.SqLiteNetPcl
 
             try
             {
-                return SqLiteNetPclWrapper<T>.GetQuery(cnn)(cnn, info.Text, info.GetParamValues());
+                return SQLiteNetPclWrapper<T>.GetQuery(cnn)(cnn, info.Text, info.GetParamValues());
             }
             catch (Exception e)
             {
@@ -72,7 +72,7 @@ namespace LambdicSql.feat.SqLiteNetPcl
 
             try
             {
-                return SqLiteNetPclWrapper.GetExecute(cnn)(cnn, info.Text, info.GetParamValues());
+                return SQLiteNetPclWrapper.GetExecute(cnn)(cnn, info.Text, info.GetParamValues());
             }
             catch (Exception e)
             {
