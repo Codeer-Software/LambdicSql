@@ -51,7 +51,7 @@ namespace LambdicSql.feat.EntityFramework
         /// <returns>Query result.</returns>
         public static IEnumerable<T> SqlQuery<T>(this Sql query, object dbContext)
         {
-            var cnn = EFWrapper.GetConnection(dbContext);
+            var cnn = EFWrapper.GetGetConnection(dbContext)(dbContext);
             var info = query.Build(cnn.GetType());
 
             //debug.
@@ -64,7 +64,7 @@ namespace LambdicSql.feat.EntityFramework
 
                 try
                 {
-                    return EFWrapper<T>.SqlQuery(dbContext, info.Text, args);
+                    return EFWrapper<T>.GetSqlQuery(dbContext)(dbContext, info.Text, args);
                 }
                 catch (Exception e)
                 {
@@ -81,7 +81,7 @@ namespace LambdicSql.feat.EntityFramework
         /// <returns>Number of rows affected.</returns>
         public static int ExecuteSqlCommand(this Sql query, object dbContext)
         {
-            var cnn = EFWrapper.GetConnection(dbContext);
+            var cnn = EFWrapper.GetGetConnection(dbContext)(dbContext);
             var info = query.Build(cnn.GetType());
 
             //debug.
@@ -95,7 +95,7 @@ namespace LambdicSql.feat.EntityFramework
 
             try
             {
-                return EFWrapper.ExecuteSqlCommand(dbContext, info.Text, args);
+                return EFWrapper.GetExecuteSqlCommand(dbContext)(dbContext, info.Text, args);
             }
             catch (Exception e)
             {

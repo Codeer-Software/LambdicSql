@@ -17,13 +17,7 @@ namespace LambdicSql.feat.Dapper
 
         static DynamicParametersWrapper()
         {
-            Assembly asm = null;
-            try
-            {
-                asm = Assembly.LoadFrom("Dapper.dll");
-            }
-            catch { throw new PackageIsNotInstalledException("Dapper is not installed. Please install dapper of your faverit version."); }
-            if (asm == null) throw new PackageIsNotInstalledException("Dapper is not installed. Please install dapper of your faverit version.");
+            var asm = DapperAdapter.Assembly;
 
             var dynamicParam = asm.GetType("Dapper.DynamicParameters");
             Create = Expression.Lambda<CreateDelegate>(Expression.New(dynamicParam), new ParameterExpression[0]).Compile();
@@ -48,13 +42,7 @@ namespace LambdicSql.feat.Dapper
 
         static DapperWrapper()
         {
-            Assembly asm = null;
-            try
-            {
-                asm = Assembly.LoadFrom("Dapper.dll");
-            }
-            catch { throw new PackageIsNotInstalledException("Dapper is not installed. Please install dapper of your faverit version."); }
-            if (asm == null) throw new PackageIsNotInstalledException("Dapper is not installed. Please install dapper of your faverit version.");
+            var asm = DapperAdapter.Assembly;
 
             var sqlMapper = asm.GetType("Dapper.SqlMapper");
 
@@ -78,13 +66,7 @@ namespace LambdicSql.feat.Dapper
 
         static DapperWrapper()
         {
-            Assembly asm = null;
-            try
-            {
-                asm = Assembly.LoadFrom("Dapper.dll");
-            }
-            catch { throw new PackageIsNotInstalledException("Dapper is not installed. Please install dapper of your faverit version."); }
-            if (asm == null) throw new PackageIsNotInstalledException("Dapper is not installed. Please install dapper of your faverit version.");
+            var asm = DapperAdapter.Assembly;
 
             var sqlMapper = asm.GetType("Dapper.SqlMapper");
 

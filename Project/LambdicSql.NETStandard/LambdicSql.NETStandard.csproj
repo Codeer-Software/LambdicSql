@@ -34,16 +34,21 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>LambdicSql.NETStandard.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
+    <None Include="LambdicSql.NETStandard.snk" />
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DbParam.cs" />
     <Compile Include="feat\Dapper\DapperAdapter.cs" />
     <Compile Include="feat\Dapper\DapperWrapper.cs" />
-    <Compile Include="feat\EntityFramework\EFAdapter.cs" />
-    <Compile Include="feat\EntityFramework\EFWrapper.cs" />
     <Compile Include="MultiplatformCompatibe\BuildedSqlExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -10,6 +10,7 @@ using MySql.Data.MySqlClient;
 using Oracle.ManagedDataAccess.Client;
 using IBM.Data.DB2;
 using System.Text;
+using LambdicSql.feat.Dapper;
 
 namespace Test.Helper
 {
@@ -41,6 +42,8 @@ namespace Test.Helper
 
         internal static IDbConnection CreateConnection(object db)
         {
+            DapperAdapter.Assembly = typeof(Dapper.SqlMapper).Assembly;
+
             var str = "User Id=system; Password=codeer; Data Source=" +
                 "(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))" +
                 "(CONNECT_DATA =(SERVER = DEDICATED)))";

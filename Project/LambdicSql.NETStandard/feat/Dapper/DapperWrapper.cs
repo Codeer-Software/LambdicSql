@@ -17,8 +17,7 @@ namespace LambdicSql.feat.Dapper
 
         static DynamicParametersWrapper()
         {
-            Assembly asm = DapperAdapter.Assembly;
-            if (asm == null) throw new PackageIsNotInstalledException("Please set Dapper's Assembly.\r\nLambdicSql.feat.Dapper.DapperAdapter.Assembly = typeof(Dapper.SqlMapper);");
+            var asm = DapperAdapter.Assembly;
 
             var dynamicParam = asm.GetType("Dapper.DynamicParameters");
             Create = Expression.Lambda<CreateDelegate>(Expression.New(dynamicParam), new ParameterExpression[0]).Compile();
@@ -43,8 +42,7 @@ namespace LambdicSql.feat.Dapper
 
         static DapperWrapper()
         {
-            Assembly asm = DapperAdapter.Assembly;
-            if (asm == null) throw new PackageIsNotInstalledException("Please set Dapper's Assembly.\r\nLambdicSql.feat.Dapper.DapperAdapter.Assembly = typeof(Dapper.SqlMapper);");
+            var asm = DapperAdapter.Assembly;
 
             var sqlMapper = asm.GetType("Dapper.SqlMapper");
 
@@ -68,8 +66,7 @@ namespace LambdicSql.feat.Dapper
 
         static DapperWrapper()
         {
-            Assembly asm = DapperAdapter.Assembly;
-            if (asm == null) throw new PackageIsNotInstalledException("Please set Dapper's Assembly.\r\nLambdicSql.feat.Dapper.DapperAdapter.Assembly = typeof(Dapper.SqlMapper);");
+            var asm = DapperAdapter.Assembly;
 
             var sqlMapper = asm.GetType("Dapper.SqlMapper");
 

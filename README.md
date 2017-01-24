@@ -1,4 +1,4 @@
-﻿LambdicSql_β 0.22.0
+﻿LambdicSql_β 0.25.0
 ======================
 
 ## Features ...
@@ -9,14 +9,22 @@ LambdicSql from NuGet
 
     PM> Install-Package LambdicSql
 
+https://www.nuget.org/packages/LambdicSql/
+
 ## Featuring Dapper
 Generate sql text and parameters by LambdicSql.<br>
 And execut and map to object, recommend using dapper.
 
     PM> Install-Package Dapper
 
-https://www.nuget.org/packages/LambdicSql/
+First you need to put the initialization code.
+```cs
+//full .net
+DapperAdapter.Assembly = typeof(Dapper.SqlMapper).Assembly;
 
+//.net standard
+DapperAdapter.Assembly = typeof(Dapper.SqlMapper).GetTypeInfo().Assembly;
+```
 ## Summary Code.
 Standard code.
 ```cs

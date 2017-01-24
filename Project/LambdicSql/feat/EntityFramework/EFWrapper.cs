@@ -9,63 +9,87 @@ namespace LambdicSql.feat.EntityFramework
 {
     static class EFWrapper
     {
+        internal static object _sync = new object();
+
         internal delegate int ExecuteSqlCommandDelegate(object dbContext, string sql, object[] parameters);
-        internal static ExecuteSqlCommandDelegate ExecuteSqlCommand;
+        static ExecuteSqlCommandDelegate ExecuteSqlCommand;
 
         internal delegate DbConnection GetConnectionDelegate(object dbContext);
-        internal static GetConnectionDelegate GetConnection;
+        static GetConnectionDelegate GetConnection;
 
-        static EFWrapper()
+        internal static ExecuteSqlCommandDelegate GetExecuteSqlCommand(object obj)
         {
-            Assembly asm = null;
-            try
+            lock (_sync)
             {
-                asm = Assembly.LoadFrom("EntityFramework.dll");
+                if (ExecuteSqlCommand != null)
+                {
+                    return ExecuteSqlCommand;
+                }
+
+                var sql = Expression.Parameter(typeof(string), "sql");
+                var paramsArray = Expression.Parameter(typeof(object[]), "paramsArray");
+                var dbContext = Expression.Parameter(typeof(object), "dbContext");
+                var dbContextType = obj.GetType();
+                var database = Expression.PropertyOrField(Expression.Convert(dbContext, dbContextType), "Database");
+
+                ExecuteSqlCommand = Expression.Lambda<ExecuteSqlCommandDelegate>(
+                    Expression.Call(database, "ExecuteSqlCommand", new Type[0], new[] { sql, paramsArray }),
+                    new[] { dbContext, sql, paramsArray }).Compile();
+
+                return ExecuteSqlCommand;
             }
-            catch { throw new PackageIsNotInstalledException("EntityFramework is not installed. Please install EntityFramework of your faverit version."); }
-            if (asm == null) throw new PackageIsNotInstalledException("EntityFramework is not installed. Please install EntityFramework of your faverit version.");
+        }
 
-            var sql = Expression.Parameter(typeof(string), "sql");
-            var paramsArray = Expression.Parameter(typeof(object[]), "paramsArray");
-            var dbContext = Expression.Parameter(typeof(object), "dbContext");
-            var dbContextType = asm.GetType("System.Data.Entity.DbContext");
-            var database = Expression.PropertyOrField(Expression.Convert(dbContext, dbContextType), "Database");
-            var connection = Expression.PropertyOrField(database, "Connection");
+        internal static GetConnectionDelegate GetGetConnection(object obj)
+        {
+            lock (_sync)
+            {
+                if (GetConnection != null)
+                {
+                    return GetConnection;
+                }
 
-            GetConnection = Expression.Lambda<GetConnectionDelegate>(connection, new[] { dbContext }).Compile();
+                var sql = Expression.Parameter(typeof(string), "sql");
+                var dbContext = Expression.Parameter(typeof(object), "dbContext");
+                var dbContextType = obj.GetType();
+                var database = Expression.PropertyOrField(Expression.Convert(dbContext, dbContextType), "Database");
+                var connection = Expression.PropertyOrField(database, "Connection");
 
-            ExecuteSqlCommand = Expression.Lambda<ExecuteSqlCommandDelegate>(
-                Expression.Call(database, "ExecuteSqlCommand", new Type[0], new[] { sql, paramsArray }),
-                new[] { dbContext, sql, paramsArray }).Compile();
+                GetConnection = Expression.Lambda<GetConnectionDelegate>(connection, new[] { dbContext }).Compile();
+
+                return GetConnection;
+            }
         }
     }
 
     static class EFWrapper<T>
     {
+        internal static object _sync = new object();
+
         internal delegate IEnumerable<T> SqlQueryDelegate(object dbContext, string sql, object[] parameters);
-        internal static SqlQueryDelegate SqlQuery;
+        static SqlQueryDelegate SqlQuery;
 
-        static EFWrapper()
+        internal static SqlQueryDelegate GetSqlQuery(object obj)
         {
-            Assembly asm = null;
-            try
+            lock (_sync)
             {
-                asm = Assembly.LoadFrom("EntityFramework.dll");
+                if (SqlQuery != null)
+                {
+                    return SqlQuery;
+                }
+                
+                var dbContextType = obj.GetType();
+                var dbContext = Expression.Parameter(typeof(object), "dbContext");
+                var sql = Expression.Parameter(typeof(string), "sql");
+                var paramsArray = Expression.Parameter(typeof(object[]), "paramsArray");
+                var database = Expression.PropertyOrField(Expression.Convert(dbContext, dbContextType), "Database");
+
+                SqlQuery = Expression.Lambda<SqlQueryDelegate>(
+                    Expression.Call(database, "SqlQuery", new[] { typeof(T) }, new[] { sql, paramsArray }),
+                    new[] { dbContext, sql, paramsArray }).Compile();
+
+                return SqlQuery;
             }
-            catch { throw new PackageIsNotInstalledException("EntityFramework is not installed. Please install EntityFramework of your faverit version."); }
-            if (asm == null) throw new PackageIsNotInstalledException("EntityFramework is not installed. Please install EntityFramework of your faverit version.");
-
-            var dbContextType = asm.GetType("System.Data.Entity.DbContext");
-
-            var dbContext = Expression.Parameter(typeof(object), "dbContext");
-            var sql = Expression.Parameter(typeof(string), "sql");
-            var paramsArray = Expression.Parameter(typeof(object[]), "paramsArray");
-
-            var database = Expression.PropertyOrField(Expression.Convert(dbContext, dbContextType), "Database");
-
-            SqlQuery = Expression.Lambda<SqlQueryDelegate>(
-                Expression.Call(database, "SqlQuery", new[] { typeof(T) }, new[] { sql, paramsArray }), 
-                new[] { dbContext, sql, paramsArray }).Compile();
         }
     }
 }

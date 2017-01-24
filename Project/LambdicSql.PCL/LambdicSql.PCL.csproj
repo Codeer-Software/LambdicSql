@@ -33,8 +33,15 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>LambdicSql.PCL.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
+    <None Include="LambdicSql.PCL.snk" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="feat\SQLiteNetPcl\SQLiteNetPclAdapter.cs" />

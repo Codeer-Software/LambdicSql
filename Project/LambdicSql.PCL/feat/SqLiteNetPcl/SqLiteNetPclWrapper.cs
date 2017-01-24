@@ -7,7 +7,7 @@ namespace LambdicSql.feat.SQLiteNetPcl
     {
         internal static object _sync = new object();
         internal delegate int ExecuteDelegate(object cnn, string sql, object[] arguments);
-        internal static ExecuteDelegate Execute;
+        static ExecuteDelegate Execute;
 
         internal static ExecuteDelegate GetExecute(object obj)
         {

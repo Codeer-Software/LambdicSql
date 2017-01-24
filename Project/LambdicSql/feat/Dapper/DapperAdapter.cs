@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Reflection;
 
 namespace LambdicSql.feat.Dapper
 {
@@ -12,6 +13,37 @@ namespace LambdicSql.feat.Dapper
     /// </summary>
     public static class DapperAdapter
     {
+        static object _sync = new object();
+        static Assembly _assembly;
+
+        /// <summary>
+        /// Dapper's Assembly.
+        /// </summary>
+        public static Assembly Assembly
+        {
+            get
+            {
+                lock (_sync)
+                {
+                    if (_assembly == null)
+                    {
+                        throw new PackageIsNotInstalledException(
+                        "Please set Dapper's Assembly.The following shows the sample.\r\n\r\n" +
+                        "using LambdicSql.feat.Dapper;\r\n" +
+                        "DapperAdapter.Assembly = typeof(Dapper.SqlMapper).Assembly;");
+                    }
+                    return _assembly;
+                }
+            }
+            set
+            {
+                lock (_sync)
+                {
+                    _assembly = value;
+                }
+            }
+        }
+        
         /// <summary>
         /// Debug Log.
         /// </summary>
