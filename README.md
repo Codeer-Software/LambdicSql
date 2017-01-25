@@ -18,7 +18,7 @@ And execut and map to object, recommend using dapper.
     PM> Install-Package Dapper
 
 First you need to put the initialization code.
-```cs
+```csharp
 //full .net
 DapperAdapter.Assembly = typeof(Dapper.SqlMapper).Assembly;
 
@@ -27,7 +27,7 @@ DapperAdapter.Assembly = typeof(Dapper.SqlMapper).GetTypeInfo().Assembly;
 ```
 ## Summary Code.
 Standard code.
-```cs
+```csharp
 using LambdicSql;
 using LambdicSql.feat.Dapper;
 using static LambdicSql.Symbol;
@@ -107,7 +107,7 @@ https://github.com/Codeer-Software/LambdicSql/blob/master/Project/TestCheck35/Sa
 It can be combined parts.
 Query, Sub query, Expression.
 You can write DRY code.
-```cs
+```csharp
 public void TestQueryConcat()
 {
     //make sql.
@@ -152,7 +152,7 @@ ORDER BY
 	tbl_staff.name ASC
 ```
 Build expressions.
-```cs
+```csharp
 public void TestSqlExpression()
 {
     //make sql.
@@ -192,7 +192,7 @@ ORDER BY
 	tbl_staff.name ASC
 ```
 Sub query.
-```cs
+```csharp
 public void TestSubQueryAtFrom()
 {
     //make sql.
@@ -230,7 +230,7 @@ FROM
 ## Support for combination of the text.
 You can insert text to expression.
 And insert expression to text.
-```cs
+```csharp
 //You can use text.
 public void TestFormatText()
 {
@@ -267,7 +267,7 @@ WHERE ((@p_0) < (tbl_remuneration.money)) AND ((tbl_remuneration.money) < (@p_1)
 Do you know 2 way sql?
 It's executable sql text.
 And change by condition and keyword.
-```cs
+```csharp
 //2 way sql
 public void TestFormat2WaySql()
 {
