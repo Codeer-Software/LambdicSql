@@ -42,6 +42,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\ExpressionToObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\ExpressionToObject.Getter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\FormatConverterCore.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\GeneralStyleConverterCore.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\ObjectCreateAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\ObjectCreateInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\ObjectCreateMemberInfo.cs" />

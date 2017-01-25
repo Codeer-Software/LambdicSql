@@ -1,8 +1,7 @@
-﻿using LambdicSql.ConverterServices.Inside;
-using LambdicSql.BuilderServices.CodeParts;
-using System.Linq;
+﻿using LambdicSql.BuilderServices.CodeParts;
 using System.Linq.Expressions;
 using LambdicSql.BuilderServices.Inside;
+using LambdicSql.ConverterServices.Inside;
 
 namespace LambdicSql.ConverterServices.SymbolConverters
 {
@@ -11,6 +10,8 @@ namespace LambdicSql.ConverterServices.SymbolConverters
     /// </summary>
     public class ClauseStyleConverterAttribute : MethodConverterAttribute
     {
+        GeneralStyleConverterCore _core = new GeneralStyleConverterCore();
+
         /// <summary>
         /// Indent.
         /// </summary>
@@ -19,7 +20,7 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         /// <summary>
         /// Name.If it is empty, use the name of the method.
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get { return _core.Name; } set { _core.Name = value; } }
 
         /// <summary>
         /// Convert expression to code.
@@ -29,12 +30,9 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         /// <returns>Parts.</returns>
         public override ICode Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
-            if (string.IsNullOrEmpty(Name)) Name = expression.Method.Name.ToUpper();
-
-            var index = expression.SkipMethodChain(0);
-            var args = expression.Arguments.Skip(index).Select(e => converter.ConvertToCode(e)).ToList();
-            args.Insert(0, Name.ToCode());
-            return new HCode(args) { AddIndentNewLine = true, Separator = " ", Indent = Indent };
+            var args = _core.InitAndConvertArguments(expression, converter);
+            var hArgs = new HCode(args) { Separator = ", " };
+            return new HCode(Name.ToCode(), hArgs) { AddIndentNewLine = true, Separator = " ", Indent = Indent };
         }
     }
 }

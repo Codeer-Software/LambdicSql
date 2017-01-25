@@ -56,7 +56,7 @@ namespace LambdicSql
     /// ORDERBY keyword.
     /// Use it with the OVER function.
     /// </summary>
-    public interface IOrderBy { }
+    public interface IOrderBy : IOverArgument { }
 
     /// <summary>
     /// ORDERBY keyword.
@@ -68,16 +68,21 @@ namespace LambdicSql
     }
 
     /// <summary>
+    /// OVER clause argument.
+    /// </summary>
+    public interface IOverArgument { }
+
+    /// <summary>
     /// PARTITION BY keyword.
     /// Use it with the OVER function.
     /// </summary>
-    public interface IPartitionBy { }
+    public interface IPartitionBy : IOverArgument { }
 
     /// <summary>
     /// ROWS keyword.
     /// Use it with the OVER function.
     /// </summary>
-    public interface IRows { }
+    public interface IRows : IOverArgument { }
 
     /// <summary>
     /// Aggregation predicate.

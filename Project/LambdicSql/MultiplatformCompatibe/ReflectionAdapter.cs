@@ -10,7 +10,7 @@ namespace LambdicSql.MultiplatformCompatibe
         internal static object CreateInstance(Type type, bool nonPublic)
             => Activator.CreateInstance(type, nonPublic);
 
-        internal static T GetAttribute<T>(this MemberInfo member) where T : class
+        internal static T GetAttribute<T>(this MemberInfo member) where T : Attribute
         {
             var attrs = member.GetCustomAttributes(typeof(T), true);
             return attrs.Length == 1 ?
@@ -18,9 +18,17 @@ namespace LambdicSql.MultiplatformCompatibe
                 null;
         }
 
-        internal static T GetAttribute<T>(this Type type) where T : class
+        internal static T GetAttribute<T>(this Type type) where T : Attribute
         {
             var attrs = type.GetCustomAttributes(typeof(T), true);
+            return attrs.Length == 1 ?
+                attrs[0] as T :
+                null;
+        }
+
+        internal static T GetAttribute<T>(this ParameterInfo info) where T : Attribute
+        {
+            var attrs = info.GetCustomAttributes(typeof(T), true);
             return attrs.Length == 1 ?
                 attrs[0] as T :
                 null;

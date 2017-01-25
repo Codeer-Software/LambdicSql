@@ -124,7 +124,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="targets">A string value to concatenate to the other values.</param>
         /// <returns>concatenated result.</returns>
-        [MethodFormatConverter(Format = "CONCAT(|[<, >0])")]
+        [FuncStyleConverter]
         public static string Concat(params string[] targets) { throw new InvalitContextException(nameof(Concat)); }
 
         /// <summary>
@@ -347,7 +347,27 @@ namespace LambdicSql
         /// <param name="columns">Specify column or expression.</param>
         [MethodFormatConverter(Format = "PARTITION BY|[<,>0]", FormatDirection = FormatDirection.Vertical)]
         public static IPartitionBy PartitionBy(params object[] columns) { throw new InvalitContextException(nameof(PartitionBy)); }
-        
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="before"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        [MethodFormatConverter(Format = "OVER(|[< >1])", FormatDirection = FormatDirection.Vertical)]
+        public static T Over<T>(this T before, params IOverArgument[] args) { throw new InvalitContextException(nameof(Over)); }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        [MethodFormatConverter(Format = "OVER(|[< >0])", FormatDirection = FormatDirection.Vertical)]
+        public static T Over<T>(params IOverArgument[] args) { throw new InvalitContextException(nameof(Over)); }
+
+        /*
         /// <summary>
         /// OVER function.
         /// </summary>
@@ -422,5 +442,15 @@ namespace LambdicSql
         /// <returns>It is the result of Window function.</returns>
         [MethodFormatConverter(Format = "OVER(|[1])", FormatDirection = FormatDirection.Vertical)]
         public static T Over<T>(this T before, IRows rows) { throw new InvalitContextException(nameof(Over)); }
+
+        /// <summary>
+        /// OVER function.
+        /// </summary>
+        /// <typeparam name="T">Type represented by expression.</typeparam>
+        /// <param name="before">It is an before expression in the Windwo function.</param>
+        /// <param name="rows">Getting row order.</param>
+        /// <returns>It is the result of Window function.</returns>
+        [MethodFormatConverter(Format = "OVER(|[1])", FormatDirection = FormatDirection.Vertical)]
+        public static T Over<T>(this T before) { throw new InvalitContextException(nameof(Over)); }*/
     }
 }

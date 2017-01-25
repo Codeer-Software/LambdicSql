@@ -10,8 +10,11 @@ namespace LambdicSql.MultiplatformCompatibe
         internal static object CreateInstance(Type type, bool nonPublic)
             => Activator.CreateInstance(type);
 
-        internal static T GetAttribute<T>(this MemberInfo member) where T : Attribute
-            => member.GetCustomAttribute<T>();
+        internal static T GetAttribute<T>(this MemberInfo info) where T : Attribute
+            => info.GetCustomAttribute<T>();
+
+        internal static T GetAttribute<T>(this ParameterInfo info) where T : Attribute
+            => info.GetCustomAttribute<T>();
 
         internal static T GetAttribute<T>(this Type type) where T : Attribute
             => type.GetTypeInfo().GetCustomAttribute<T>();
