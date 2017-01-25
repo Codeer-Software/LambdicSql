@@ -1021,10 +1021,7 @@ namespace LambdicSql
         /// <returns>IS NOT NULL</returns>
         [MethodFormatConverter(Format = "[0] IS NOT NULL|")]
         public static bool IsNotNull(object target) { throw new InvalitContextException(nameof(IsNull)); }
-
-
-        //TODO なかったら作ると、あったら消すを全DBでできるようにしておくか
-
+        
         //TODO test.
         /// <summary>
         /// CREATE TABLE clause.

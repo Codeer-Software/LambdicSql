@@ -2,7 +2,6 @@
 
 namespace LambdicSql.ConverterServices.Inside
 {
-    //TODO #$! の仕様追加 、ToSqlも追加する
     static class TowWaySqlSpec
     {
         internal static string ToStringFormat(string sql)

@@ -2,7 +2,6 @@
 
 namespace LambdicSql.ConverterServices
 {
-    //TODO .netの普通の例外の書き方ではなくなった
     /// <summary>
     /// It is thrown if the method is called with an illegal context.
     /// </summary>

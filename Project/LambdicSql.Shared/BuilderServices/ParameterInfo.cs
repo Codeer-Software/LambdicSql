@@ -51,8 +51,7 @@ namespace LambdicSql.BuilderServices
             }
 
             //register.
-            if (param == null) param = new DbParamValueOnly();
-            param.Value = obj;
+            if (param == null) param = new DbParamValueOnly() { Value = obj };
             _parameters.Add(name, new DecodingParameterInfo() { MetadataToken = metadataToken, Detail = param });
 
             return name;

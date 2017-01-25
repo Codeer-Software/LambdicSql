@@ -8,7 +8,6 @@
         /// <summary>
         /// Gets or sets the value of the parameter.
         /// </summary>
-        object Value { get; set; }
-        //TODO setはよくないな
+        object Value { get; }
     }
 }
