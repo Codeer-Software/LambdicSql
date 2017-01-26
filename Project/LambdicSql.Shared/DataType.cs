@@ -116,7 +116,6 @@ namespace LambdicSql
         [ClauseStyleConverter]
         public static IDataType Bytea() { throw new InvalitContextException(nameof(Bytea)); }
 
-        //TODO CHAR(maxlen CHAR) BYTE enumかな・・・
         /// <summary>
         /// CHAR
         /// </summary>
@@ -351,14 +350,29 @@ namespace LambdicSql
         [ClauseStyleConverter]
         public static IDataType Integer() { throw new InvalitContextException(nameof(Integer)); }
 
-        //TODO interval [ fields ] [ (p) ] fieldはenumにするか
-        //TODO オラクル考慮
         /// <summary>
         /// INTERVAL
         /// </summary>
         /// <returns>INTERVAL</returns>
         [ClauseStyleConverter]
         public static IDataType Interval() { throw new InvalitContextException(nameof(Interval)); }
+
+        /// <summary>
+        /// INTERVAL.
+        /// </summary>
+        /// <param name="p">accuracy.</param>
+        /// <returns>INTERVAL.</returns>
+        [ClauseStyleConverter]
+        public static IDataType Interval(int p) { throw new InvalitContextException(nameof(Interval)); }
+
+        /// <summary>
+        /// INTERVAL.
+        /// </summary>
+        /// <param name="type">type.</param>
+        /// <param name="p">accuracy.</param>
+        /// <returns>INTERVAL.</returns>
+        [MethodFormatConverter(Format = "INTERVAL [0] [1]|")]
+        public static IDataType Interval(IntervalType type, int p) { throw new InvalitContextException(nameof(Interval)); }
 
         /// <summary>
         /// JSON
@@ -676,8 +690,7 @@ namespace LambdicSql
         /// <returns>TIME</returns>
         [FuncStyleConverter]
         public static IDataType Time(int n) { throw new InvalitContextException(nameof(Time)); }
-
-        //TODO オラクルはTIMEZONE
+        
         /// <summary>
         /// TIME WITH TIME ZONE
         /// </summary>
@@ -794,7 +807,6 @@ namespace LambdicSql
         [FuncStyleConverter]
         public static IDataType VarBinary(int n) { throw new InvalitContextException(nameof(VarBinary)); }
 
-        //TODO VARCHAR(maxlen CHAR) BYTE enumかな・・・
         /// <summary>
         /// VARCHAR
         /// </summary>
@@ -810,7 +822,6 @@ namespace LambdicSql
         [FuncStyleConverter]
         public static IDataType VarChar(int n) { throw new InvalitContextException(nameof(VarChar)); }
 
-        //TODO VARCHAR2(maxlen CHAR) BYTE enumかな・・・
         /// <summary>
         /// VARCHAR2
         /// </summary>

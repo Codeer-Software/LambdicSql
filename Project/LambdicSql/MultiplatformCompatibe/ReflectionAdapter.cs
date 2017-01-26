@@ -34,7 +34,17 @@ namespace LambdicSql.MultiplatformCompatibe
                 null;
         }
 
+        internal static T GetAttribute<T>(this FieldInfo info) where T : Attribute
+        {
+            var attrs = info.GetCustomAttributes(typeof(T), true);
+            return attrs.Length == 1 ?
+                attrs[0] as T :
+                null;
+        }
+
         internal static bool IsAssignableFromEx(this Type type, Type target) => type.IsAssignableFrom(target);
+
+        internal static FieldInfo[] GetFieldsEx(this Type type) => type.GetFields();
 
         internal static PropertyInfo[] GetPropertiesEx(this Type type) => type.GetProperties();
 

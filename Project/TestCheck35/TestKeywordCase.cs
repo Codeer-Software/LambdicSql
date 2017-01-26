@@ -379,5 +379,41 @@ FROM tbl_staff",
 FROM tbl_staff",
 1, "x", "z");
         }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Case10()
+        {
+            var caseExp = Db<DB>.Sql(db => Case<string>());
+            var wtExp1 = Db<DB>.Sql(db => When(db.tbl_staff.id == 3).Then("x"));
+            var wtExp12 = Db<DB>.Sql(db => When(db.tbl_staff.id == 4).Then("y"));
+            var elseExp = Db<DB>.Sql(db => Else("z"));
+            var endExp = Db<DB>.Sql(db => End());
+
+            var q = caseExp + wtExp1 + wtExp12 + elseExp + endExp;
+
+            var query = Db<DB>.Sql(db =>
+                Select(new SelectData()
+                {
+                    Type = q
+                }).
+                From(db.tbl_staff));
+
+            DapperAdapter.Log = e => Debug.Print(e);
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	CASE
+		WHEN (tbl_staff.id) = (@p_0)
+		THEN @p_1
+		WHEN (tbl_staff.id) = (@p_2)
+		THEN @p_3
+		ELSE @p_4
+	END AS Type
+FROM tbl_staff",
+ 3, "x", 4, "y", "z");
+        }
+
     }
 }

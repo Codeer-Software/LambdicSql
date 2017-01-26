@@ -311,13 +311,38 @@ namespace LambdicSql
         public static ICaseAfter Case(object target) { throw new InvalitContextException(nameof(Case)); }
 
         /// <summary>
+        /// CASE clause.
+        /// </summary>
+        /// <typeparam name="T">Type represented by CASE expression.</typeparam>
+        /// <returns>It is an object for describing the continuation of the CASE expression.</returns>
+        [ClauseStyleConverter]
+        public static T Case<T>() { throw new InvalitContextException(nameof(Case)); }
+
+        /// <summary>
+        /// CASE clause.
+        /// </summary>
+        /// <typeparam name="T">Type represented by CASE expression.</typeparam>
+        /// <param name="target">It's target of CASE branch.</param>
+        /// <returns>It is an object for describing the continuation of the CASE expression.</returns>
+        [ClauseStyleConverter]
+        public static T Case<T>(object target) { throw new InvalitContextException(nameof(Case)); }
+
+        /// <summary>
         /// WHEN clause.
         /// </summary>
         /// <param name="before">It is an before expression in the CASE clause.</param>
         /// <param name="expression">It is a conditional expression of the WHEN clause.</param>
         /// <returns>It is an object for describing the continuation of the CASE expression.</returns>
-        [ClauseStyleConverter(Indent =1)]
+        [ClauseStyleConverter(Indent = 1)]
         public static IWhenAfter When(this ICaseAfter before, object expression) { throw new InvalitContextException(nameof(When)); }
+
+        /// <summary>
+        /// WHEN clause.
+        /// </summary>
+        /// <param name="expression">It is a conditional expression of the WHEN clause.</param>
+        /// <returns>It is an object for describing the continuation of the CASE expression.</returns>
+        [ClauseStyleConverter(Indent = 1)]
+        public static IWhenAfter When(object expression) { throw new InvalitContextException(nameof(When)); }
 
         /// <summary>
         /// WHEN clause.
@@ -360,6 +385,15 @@ namespace LambdicSql
         public static IElseAfter<T> Else<T>(this IThenAfter<T> before, T result) { throw new InvalitContextException(nameof(Then)); }
 
         /// <summary>
+        /// ELSE clause.
+        /// </summary>
+        /// <typeparam name="T">Type represented by CASE expression.</typeparam>
+        /// <param name="result">It is an item to return to when the ELSE clause is valid.</param>
+        /// <returns>It is an object for describing the continuation of the CASE expression.</returns>
+        [ClauseStyleConverter(Indent = 1)]
+        public static IElseAfter<T> Else<T>(T result) { throw new InvalitContextException(nameof(Then)); }
+
+        /// <summary>
         /// END clause.
         /// </summary>
         /// <typeparam name="T">Type represented by CASE expression.</typeparam>
@@ -376,6 +410,13 @@ namespace LambdicSql
         /// <returns>It is the result of CASE expression.</returns>
         [ClauseStyleConverter]
         public static T End<T>(this IElseAfter<T> before) { throw new InvalitContextException(nameof(End)); }
+        
+        /// <summary>
+        /// END clause.
+        /// </summary>
+        /// <returns>It is the result of CASE expression.</returns>
+        [ClauseStyleConverter]
+        public static Non End() { throw new InvalitContextException(nameof(End)); }
 
         /// <summary>
         /// FROM clause.
@@ -620,7 +661,6 @@ namespace LambdicSql
         [ConditionClauseConverter(Name = "HAVING")]
         public static ClauseChain<TSelected> Having<TSelected>(this ClauseChain<TSelected> before, bool condition) { throw new InvalitContextException(nameof(Having)); }
 
-        //TODO あれ？なんでこれで改行するの？　それが不具合なんじゃない？
         /// <summary>
         /// ORDER BY clause.
         /// </summary>
@@ -856,8 +896,7 @@ namespace LambdicSql
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [ClauseStyleConverter]
         public static ClauseChain<Non> Update(object table) { throw new InvalitContextException(nameof(Update)); }
-
-        //TODO test
+        
         /// <summary>
         /// SET clause.
         /// </summary>
@@ -888,12 +927,19 @@ namespace LambdicSql
         /// INSERT INTO clause.
         /// </summary>
         /// <param name="table">Table for INSERT.</param>
+        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        [ClauseStyleConverter(Name = "INSERT INTO")]
+        public static ClauseChain<Non> InsertInto(object table) { throw new InvalitContextException(nameof(InsertInto)); }
+
+        /// <summary>
+        /// INSERT INTO clause.
+        /// </summary>
+        /// <param name="table">Table for INSERT.</param>
         /// <param name="columns">It is a column that performs INSERT.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [MethodFormatConverter(Format = "INSERT INTO [0](|[#<, >1])")]
         public static ClauseChain<Non> InsertInto(object table, params object[] columns) { throw new InvalitContextException(nameof(InsertInto)); }
 
-        //TODO test
         /// <summary>
         /// INSERT INTO clause.
         /// </summary>
@@ -1023,7 +1069,6 @@ namespace LambdicSql
         [MethodFormatConverter(Format = "[0] IS NOT NULL|")]
         public static bool IsNotNull(object target) { throw new InvalitContextException(nameof(IsNull)); }
         
-        //TODO test.
         /// <summary>
         /// CREATE TABLE clause.
         /// </summary>

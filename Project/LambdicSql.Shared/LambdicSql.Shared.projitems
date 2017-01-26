@@ -59,7 +59,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolConverters\NewConverterAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolConverters\NewFormatConverterAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolConverters\ObjectConverterAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolConverters\ObjectToStringConverterAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolConverters\EnumToStringConverterAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\TowWaySqlSpec.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataType.cs" />

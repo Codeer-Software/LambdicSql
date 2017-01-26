@@ -1,7 +1,5 @@
 ﻿namespace LambdicSql
 {
-    //TODO test 型のない方の結合
-
     /// <summary>
     /// Enhancement of ISqlExpressionBase.
     /// </summary>

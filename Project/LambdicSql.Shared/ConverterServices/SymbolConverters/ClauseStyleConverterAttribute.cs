@@ -1,6 +1,5 @@
 ﻿using LambdicSql.BuilderServices.CodeParts;
 using System.Linq.Expressions;
-using LambdicSql.BuilderServices.Inside;
 using LambdicSql.ConverterServices.Inside;
 
 namespace LambdicSql.ConverterServices.SymbolConverters
@@ -32,7 +31,7 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         {
             var args = _core.InitAndConvertArguments(expression, converter);
             var hArgs = new HCode(args) { Separator = ", " };
-            return new HCode(Name.ToCode(), hArgs) { AddIndentNewLine = true, Separator = " ", Indent = Indent };
+            return new HCode(_core.NameCode, hArgs) { AddIndentNewLine = true, Separator = " ", Indent = Indent };
         }
     }
 }

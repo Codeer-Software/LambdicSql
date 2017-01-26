@@ -51,7 +51,6 @@ namespace LambdicSql
             return new BuildedSql(sqalText, context.ParameterInfo.GetDbParams());
         }
 
-        //TODO test.
         /// <summary>
         /// Cast.
         /// </summary>
