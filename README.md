@@ -155,7 +155,6 @@ public void TestSubQueryAtSelect()
         }).
         From(db.tbl_staff));
         
-
     //Subqueries can also be written separately.
     //Here is the same SQL as above.
     var sub = Db<DB>.Sql(db => 
@@ -303,6 +302,32 @@ WHERE ((@p_1) < (tbl_remuneration.money)) AND ((tbl_remuneration.money) < (@p_2)
 ORDER BY
 	tbl_staff.name ASC
 ```
+
+## Condition utility
+public void TestCondition(bool minCondition, bool maxCondition)
+{
+    //Condition is written only when the first argument is valid.
+    var exp = Db<DB>.Sql(db =>
+        new Condition(minCondition, 3000 < db.tbl_remuneration.money) &&
+        new Condition(maxCondition, db.tbl_remuneration.money < 4000));
+
+    var query = Db<DB>.Sql(db =>
+        Select(Asterisk()).
+        From(db.tbl_remuneration).
+        Where(exp)
+    );
+}
+min max enable.
+```sql
+SELECT *
+FROM tbl_remuneration
+WHERE ((@p_0) < (tbl_remuneration.money)) AND ((tbl_remuneration.money) < (@p_1))
+```
+min, max disable, vanish where clause.
+```sql
+SELECT *
+FROM tbl_remuneration
+```
 ## Support for combination of the text.
 You can insert text to expression.
 And insert expression to text.
@@ -348,7 +373,6 @@ And change by condition and keyword.
 public void TestFormat2WaySql()
 {
     TestFormat2WaySql(true, true, 1000);
-    TestFormat2WaySql(false, false, 4000);
 }
 public void TestFormat2WaySql(bool minCondition, bool maxCondition, decimal bonus)
 {
@@ -376,7 +400,6 @@ JOIN tbl_staff ON tbl_staff.id = tbl_remuneration.staff_id
     var datas = _connection.Query<SelectedData>(sql).ToList();
 }
 ```
-min max enable.
 ```sql
 SELECT
 	tbl_staff.name AS name,
@@ -386,16 +409,6 @@ FROM tbl_remuneration
     JOIN tbl_staff ON tbl_staff.id = tbl_remuneration.staff_id
 WHERE ((@p_0) < (tbl_remuneration.money)) AND ((tbl_remuneration.money) < (@p_1))
 ```
-min, max disable, vanish where clause.
-```sql
-SELECT
-	tbl_staff.name AS name,
-    tbl_remuneration.payment_date AS payment_date,
-	tbl_remuneration.money + @bonus AS money
-FROM tbl_remuneration 
-    JOIN tbl_staff ON tbl_staff.id = tbl_remuneration.staff_id
-```
-
 ## Samples
-Look for how to use from the samples.<br>
-https://github.com/Codeer-Software/LambdicSql/blob/master/Project/TestCheck35/Samples.cs
+Look for how to use from the tests.<br>
+https://github.com/Codeer-Software/LambdicSql/tree/master/Project/TestCheck35
