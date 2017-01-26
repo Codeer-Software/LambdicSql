@@ -304,6 +304,7 @@ ORDER BY
 ```
 
 ## Condition utility
+```csharp
 public void TestCondition(bool minCondition, bool maxCondition)
 {
     //Condition is written only when the first argument is valid.
@@ -317,6 +318,7 @@ public void TestCondition(bool minCondition, bool maxCondition)
         Where(exp)
     );
 }
+```
 min max enable.
 ```sql
 SELECT *
