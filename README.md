@@ -409,6 +409,54 @@ FROM tbl_remuneration
     JOIN tbl_staff ON tbl_staff.id = tbl_remuneration.staff_id
 WHERE ((@p_0) < (tbl_remuneration.money)) AND ((tbl_remuneration.money) < (@p_1))
 ```
+## Add clauses and functions
+If there are missing clauses or functions you can easily add them.
+Definitions are never executed, so you do not need to implement the inside of the method.
+```csharp
+static class MyFuncs
+{
+    [FuncStyleConverter]
+    internal static Cos(double angle) { throw new NotSupportedException(); }
+
+    //The limit clause has already been implemented with LambdicSql, but here we write it as a sample.
+    [ClauseStyleConverter]
+    public static ClauseChain<Non> Limit(object offset, object count) { throw new InvalitContextException(nameof(Limit)); }
+
+    [ClauseStyleConverter]
+    public static ClauseChain<TSelected> Limit<TSelected>(this ClauseChain<TSelected> before, object offset, object count) { throw new InvalitContextException(nameof(Limit)); }
+
+    [MethodFormatConverter(Format = "TABLESAMPLE [0](|[1])")]
+    public static ClauseChain<Non> TableSample(SamplingMethod method, double percentage) { throw new InvalitContextException(nameof(Limit)); }
+
+    [MethodFormatConverter(Format = "TABLESAMPLE [1](|[2])")]
+    public static ClauseChain<TSelected> TableSample<TSelected>(this ClauseChain<TSelected> before, SamplingMethod method, double percentage) { throw new InvalitContextException(nameof(Limit)); } 
+}
+[EnumToStringConverter]
+public enum SamplingMethod
+{
+    //Become capitalized.
+    System,
+
+    //You can also specify the converted character string.
+    [FieldSqlName("BERNOULLI")]
+    Bernoulli
+}
+```
+MethodFormatConverter's rules.
+
+|Symbol|content|
+|:--|:--|
+|&#X7c;|Even if a line break is entered, it remains in the first row up to that position.|
+|[i]|Insert i th argument|
+|[<, >i]| Expands the ith argument. The argument must be an array. In the <>, specify a separator.|
+|[$i]| Insert character string in SQL with direct value without using parameter.|
+|[#i]| When a column is entered Make it a column name without a table name.|
+|[!i]| Special character string. Put the specified character string directly into SQL. Used for db name and constraint name.|
+LambdicSql itself also defines functions and phrases using the mechanism described here, so I think that it will be a sample. Please see samples.
+https://github.com/Codeer-Software/LambdicSql/blob/master/Project/LambdicSql.Shared/Symbol.Clauses.cs
+https://github.com/Codeer-Software/LambdicSql/blob/master/Project/LambdicSql.Shared/Symbol.Etc.cs
+https://github.com/Codeer-Software/LambdicSql/blob/master/Project/LambdicSql.Shared/Symbol.Funcs.cs
+https://github.com/Codeer-Software/LambdicSql/blob/master/Project/LambdicSql.Shared/SymbolSub.cs
 ## Samples
 Look for how to use from the tests.<br>
 https://github.com/Codeer-Software/LambdicSql/tree/master/Project/TestCheck35
