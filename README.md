@@ -10,6 +10,10 @@ LambdicSql from NuGet
     PM> Install-Package LambdicSql
 
 https://www.nuget.org/packages/LambdicSql/
+Supported pratforms are
+-.NETFramework 3.5～
+-PCL
+-.NETStandard 1.2～
 
 ## Featuring Dapper
 Generate sql text and parameters by LambdicSql.<br>
@@ -25,12 +29,21 @@ DapperAdapter.Assembly = typeof(Dapper.SqlMapper).Assembly;
 //.net standard
 DapperAdapter.Assembly = typeof(Dapper.SqlMapper).GetTypeInfo().Assembly;
 ```
+## Featuring sqlite-net-pcl
+For PCL, recommend sqlite-net-pcl.
+
+    PM> Install-Package sqlite-net-pcl
+
 ## Summary Code.
 Standard code.
 ```csharp
 using LambdicSql;
-using LambdicSql.feat.Dapper;
 using static LambdicSql.Symbol;
+
+//for dapper.
+using LambdicSql.feat.Dapper;
+//or for sqlite-net-pcl
+using LambdicSql.feat.SQLiteNetPcl
 
 //tables.
 public class Staff
@@ -77,7 +90,7 @@ public void TestStandard()
     var info = sql.Build(_connection.GetType());
     Debug.Print(info.Text);
 
-    //dapper
+    //dapper or sql-net-pcl.
     var datas = _connection.Query(sql).ToList();
 }
 ```
