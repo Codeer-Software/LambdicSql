@@ -9,11 +9,11 @@ LambdicSql from NuGet
 
     PM> Install-Package LambdicSql
 
-https://www.nuget.org/packages/LambdicSql/
+https://www.nuget.org/packages/LambdicSql/<br>
 Supported pratforms are
--.NETFramework 3.5～
--PCL
--.NETStandard 1.2～
+- .NETFramework 3.5～
+- PCL
+- .NETStandard 1.2～
 
 ## Featuring Dapper
 Generate sql text and parameters by LambdicSql.<br>
