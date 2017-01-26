@@ -132,6 +132,9 @@ ORDER BY
 |SUBSTRING|EXTRACT|DATEPART|CAST|COALESCE|FIRST_VALUE|LAST_VALUE|
 |DENSE_RANK|PERCENT_RANK|CUME_DIST|NTILE|NTH_VALUE|RANK|LAG|
 |ROW_NUMBER|OVER|ROWS|PARTITION BY|
+## Samples
+Look for how to use from the tests.<br>
+https://github.com/Codeer-Software/LambdicSql/tree/master/Project/TestCheck35
 ## Supported database
 |DataBase type|Support|
 |:--|:--|
@@ -468,6 +471,3 @@ https://github.com/Codeer-Software/LambdicSql/blob/master/Project/LambdicSql.Sha
 https://github.com/Codeer-Software/LambdicSql/blob/master/Project/LambdicSql.Shared/Symbol.Etc.cs
 https://github.com/Codeer-Software/LambdicSql/blob/master/Project/LambdicSql.Shared/Symbol.Funcs.cs
 https://github.com/Codeer-Software/LambdicSql/blob/master/Project/LambdicSql.Shared/SymbolSub.cs
-## Samples
-Look for how to use from the tests.<br>
-https://github.com/Codeer-Software/LambdicSql/tree/master/Project/TestCheck35
