@@ -454,7 +454,15 @@ MethodFormatConverter's rules.
 |[$i]| Insert character string in SQL with direct value without using parameter.|
 |[#i]| When a column is entered Make it a column name without a table name.|
 |[!i]| Special character string. Put the specified character string directly into SQL. Used for db name and constraint name.|
-LambdicSql itself also defines functions and phrases using the mechanism described here, so I think that it will be a sample. Please see samples.
+If you want to control more conversion, please create a class that inherits the following attributes.
+|Attribute|content|
+|:--|:--|
+|MethodConverterAttribute|Method|
+|NewConverterAttribute|Constructor|
+|ObjectConverterAttribute|Conversion of objects. Use for Type|
+|MemberConverterAttribute|Field, Property|
+
+LambdicSql itself also defines functions and phrases using the mechanism described here, so I think that it will be a sample. Please see samples.<br>
 https://github.com/Codeer-Software/LambdicSql/blob/master/Project/LambdicSql.Shared/Symbol.Clauses.cs
 https://github.com/Codeer-Software/LambdicSql/blob/master/Project/LambdicSql.Shared/Symbol.Etc.cs
 https://github.com/Codeer-Software/LambdicSql/blob/master/Project/LambdicSql.Shared/Symbol.Funcs.cs
