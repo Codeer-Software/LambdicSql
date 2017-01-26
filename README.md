@@ -82,8 +82,9 @@ public void TestStandard()
         }).
         From(db.tbl_remuneration).
             Join(db.tbl_staff, db.tbl_staff.id == db.tbl_remuneration.staff_id).
-        Where(min < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000)
-        
+        Where(min < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000).
+        OrderBy(Asc(db.tbl_remuneration.money), Desc(db.tbl_staff.name))
+
         );
 
     //to string and params.
@@ -96,12 +97,15 @@ public void TestStandard()
 ```
 ```sql
 SELECT
-	tbl_staff.name AS Name,
-	tbl_remuneration.payment_date AS PaymentDate,
-	tbl_remuneration.money AS Money
+        tbl_staff.name AS Name,
+        tbl_remuneration.payment_date AS PaymentDate,
+        tbl_remuneration.money AS Money
 FROM tbl_remuneration
-	JOIN tbl_staff ON (tbl_staff.id) = (tbl_remuneration.staff_id)
-WHERE ((@min) < (tbl_remuneration.money)) AND ((tbl_remuneration.money) < (@p_1))
+        JOIN tbl_staff ON (tbl_staff.id) = (tbl_remuneration.staff_id)
+WHERE ((@min) < (tbl_remuneration.money)) AND ((tbl_remuneration.money) < (@p_0))
+ORDER BY
+        tbl_remuneration.money ASC,
+        tbl_staff.name DESC
 ```
 ## Supported keywords
 |||||||

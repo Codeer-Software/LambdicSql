@@ -34,9 +34,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestPlc", "TestPlc\TestPlc.csproj", "{B49D78F2-618C-475C-9537-14748D94B3AA}"
 EndProject
 Global
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
-	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		LambdicSql.Shared\LambdicSql.Shared.projitems*{485b4c58-0b70-460b-aa20-b2b24af8f0d2}*SharedItemsImports = 4
 		LambdicSql.Shared\LambdicSql.Shared.projitems*{9079c3c3-839d-4ff1-a774-b7f15de9248d}*SharedItemsImports = 4
