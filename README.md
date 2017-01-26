@@ -2,7 +2,7 @@
 ======================
 
 ## Features ...
-#### LambdicSql's purpose is to generate sql text and parameters from lambda.
+LambdicSql's purpose is to generate sql text and parameters from lambda.
 <img src="https://github.com/Codeer-Software/LambdicSql/blob/master/lambdicSqlImage.png" width="400">
 ## Getting Started
 LambdicSql from NuGet
@@ -90,9 +90,22 @@ FROM tbl_remuneration
 	JOIN tbl_staff ON (tbl_staff.id) = (tbl_remuneration.staff_id)
 WHERE ((@min) < (tbl_remuneration.money)) AND ((tbl_remuneration.money) < (@p_1))
 ```
-Look for how to use from the samples.<br>
-https://github.com/Codeer-Software/LambdicSql/blob/master/Project/TestCheck35/Samples.cs
-
+## Supported keywords
+|||||||
+|:--|:--|:--|:--|:--|:--|
+|SELECT|FROM|WHERE|ORDER BY|HAVING|
+|GROUP BY|GROUP BY ROLLUP|GROUP BY WITH ROLLUP|GROUP BY CUBE|GROUP BY GROUPING SETS|
+|JOIN|LEFT JOIN|RIGHT JOIN|FULL JOIN|CROSS JOIN|
+|CASE|WHEN|THEN|END|
+|LIMIT|OFFSET|OFFSET ROWS|FETCH NEXT ROWS ONLY|TOP|
+|UNION|INTERSECT|EXCEPT|MINUS|
+|UPDATE|SET|INSERT INTO|VALUES|DELETE|
+|LIKE|BETWEEN|IN|EXISTS|
+|ASC|DESC|ALL|DISTINCT|IS NULL|IS NOT NULL|
+|WITH|RECURSIVE|
+|CREATE DATABASE|DROP DATABASE|CREATE TABLE|CREATE TABLE IF NOT EXISTS|DROP TABLE|DROP TABLE IF EXISTS|
+|CONSTRAINT|PRIMARY KEY|FOREIGN KEY|CHECK|UNIQUE|NOT NULL|
+|DEFAULT|REFERENCES|RESTRICT|CASCADE|
 ## Supported database
 |DataBase type|Support|
 |:--|:--|
