@@ -142,7 +142,80 @@ ORDER BY
 |MySQL|○|
 |DB2|○|
 
-## Building query.
+## Sub query.
+```csharp
+public void TestSubQueryAtSelect()
+{
+    var sql = Db<DB>.Sql(db =>
+        Select(new SelectedData
+        {
+            Name = db.tbl_staff.name,
+            Total = Select(Sum(db.tbl_remuneration.money)).
+                        From(db.tbl_remuneration)
+        }).
+        From(db.tbl_staff));
+        
+
+    //Subqueries can also be written separately.
+    //Here is the same SQL as above.
+    var sub = Db<DB>.Sql(db => 
+        Select(Sum(db.tbl_remuneration.money)).
+        From(db.tbl_remuneration)
+        );
+
+    sql = Db<DB>.Sql(db =>
+        Select(new SelectedData
+        {
+            Name = db.tbl_staff.name,
+            Total = sub
+        }).
+        From(db.tbl_staff));
+}
+```
+```sql
+SELECT
+        tbl_staff.name AS Name,
+        (SELECT
+                SUM(tbl_remuneration.money)
+        FROM tbl_remuneration) AS Total
+FROM tbl_staff
+```
+```csharp
+public void TestSubQueryAtFrom()
+{
+    //For the where clause, you need to write the subqueries separately.
+    var sub = Db<DB>.Sql(db => 
+        Select(new 
+        {
+            name_sub = db.tbl_staff.name,
+            PaymentDate = db.tbl_remuneration.payment_date,
+            Money = db.tbl_remuneration.money,
+        }).
+        From(db.tbl_remuneration).
+            Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
+        Where(3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
+    
+    var sql = Db<DB>.Sql(db => 
+        Select(new SelectData
+        {
+            Name = sub.Body.name_sub
+        }).
+        From(sub));
+}
+```
+```sql
+SELECT
+	subQuery.name_sub AS Name
+FROM 
+	(SELECT
+		tbl_staff.name AS name_sub,
+		tbl_remuneration.payment_date AS PaymentDate,
+		tbl_remuneration.money AS Money
+	FROM tbl_remuneration
+		JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)
+	WHERE ((@p_2) < (tbl_remuneration.money)) AND ((tbl_remuneration.money) < (@p_3))) AS subQuery
+```
+## Combining queries.
 It can be combined parts.
 Query, Sub query, Expression.
 You can write DRY code.
@@ -229,42 +302,6 @@ FROM tbl_remuneration
 WHERE ((@p_1) < (tbl_remuneration.money)) AND ((tbl_remuneration.money) < (@p_2))
 ORDER BY
 	tbl_staff.name ASC
-```
-Sub query.
-```csharp
-public void TestSubQueryAtFrom()
-{
-    //make sql.
-    var subQuery = Db<DB>.Sql(db => 
-        Select(new 
-        {
-            name_sub = db.tbl_staff.name,
-            PaymentDate = db.tbl_remuneration.payment_date,
-            Money = db.tbl_remuneration.money,
-        }).
-        From(db.tbl_remuneration).
-            Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
-        Where(3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
-    
-    var sql = Db<DB>.Sql(db => 
-        Select(new SelectData
-        {
-            Name = subQuery.Body.name_sub
-        }).
-        From(subQuery));
-}
-```
-```sql
-SELECT
-	subQuery.name_sub AS Name
-FROM 
-	(SELECT
-		tbl_staff.name AS name_sub,
-		tbl_remuneration.payment_date AS PaymentDate,
-		tbl_remuneration.money AS Money
-	FROM tbl_remuneration
-		JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)
-	WHERE ((@p_2) < (tbl_remuneration.money)) AND ((tbl_remuneration.money) < (@p_3))) AS subQuery
 ```
 ## Support for combination of the text.
 You can insert text to expression.
