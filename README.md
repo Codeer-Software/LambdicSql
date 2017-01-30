@@ -265,7 +265,7 @@ WHERE ((@min) < (tbl_remuneration.money)) AND ((tbl_remuneration.money) < (@p_1)
 ORDER BY
 	tbl_staff.name ASC
 ```
-Build expressions.
+Expressions.
 ```csharp
 public void TestSqlExpression()
 {
