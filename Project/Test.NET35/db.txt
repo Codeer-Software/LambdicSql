@@ -1,0 +1,1 @@
+Data Source=DESKTOP-IBN02LQ;Initial Catalog=LambdicSqlTest;User ID=sa;Password=codeer;

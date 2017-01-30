@@ -96,67 +96,61 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="..\TestCheck35\Helper\DB.cs">
+    <Compile Include="..\Test.NET35\Helper\DB.cs">
       <Link>Helper\DB.cs</Link>
     </Compile>
-    <Compile Include="..\TestCheck35\Helper\HelperForTest.cs">
+    <Compile Include="..\Test.NET35\Helper\HelperForTest.cs">
       <Link>Helper\HelperForTest.cs</Link>
     </Compile>
-    <Compile Include="..\TestCheck35\Samples.cs">
-      <Link>Samples.cs</Link>
-    </Compile>
-    <Compile Include="..\TestCheck35\TestBuilding.cs">
-      <Link>TestBuilding.cs</Link>
-    </Compile>
-    <Compile Include="..\TestCheck35\TestDbDefine.cs">
+    <Compile Include="..\Test.NET35\TestDbDefine.cs">
       <Link>TestDbDefine.cs</Link>
     </Compile>
-    <Compile Include="..\TestCheck35\TestDbParam.cs">
+    <Compile Include="..\Test.NET35\TestDbParam.cs">
       <Link>TestDbParam.cs</Link>
     </Compile>
-    <Compile Include="..\TestCheck35\TestExpression.cs">
+    <Compile Include="..\Test.NET35\TestExpression.cs">
       <Link>TestExpression.cs</Link>
     </Compile>
-    <Compile Include="..\TestCheck35\TestFuncs.cs">
+    <Compile Include="..\Test.NET35\TestFuncs.cs">
       <Link>TestFuncs.cs</Link>
     </Compile>
-    <Compile Include="..\TestCheck35\TestKeywordCase.cs">
+    <Compile Include="..\Test.NET35\TestKeywordCase.cs">
       <Link>TestKeywordCase.cs</Link>
     </Compile>
-    <Compile Include="..\TestCheck35\TestKeywordCondition.cs">
+    <Compile Include="..\Test.NET35\TestKeywordCondition.cs">
       <Link>TestKeywordCondition.cs</Link>
     </Compile>
-    <Compile Include="..\TestCheck35\TestKeywordDataChange.cs">
+    <Compile Include="..\Test.NET35\TestKeywordDataChange.cs">
       <Link>TestKeywordDataChange.cs</Link>
     </Compile>
-    <Compile Include="..\TestCheck35\TestKeywordFrom.cs">
+    <Compile Include="..\Test.NET35\TestKeywordFrom.cs">
       <Link>TestKeywordFrom.cs</Link>
     </Compile>
-    <Compile Include="..\TestCheck35\TestKeywordLimit.cs">
+    <Compile Include="..\Test.NET35\TestKeywordLimit.cs">
       <Link>TestKeywordLimit.cs</Link>
     </Compile>
-    <Compile Include="..\TestCheck35\TestKeywordSelect.cs">
+    <Compile Include="..\Test.NET35\TestKeywordSelect.cs">
       <Link>TestKeywordSelect.cs</Link>
     </Compile>
-    <Compile Include="..\TestCheck35\TestKeywordSetOperator.cs">
+    <Compile Include="..\Test.NET35\TestKeywordSetOperator.cs">
       <Link>TestKeywordSetOperator.cs</Link>
     </Compile>
-    <Compile Include="..\TestCheck35\TestKeywordWhereGroupByHavingOrderBy.cs">
+    <Compile Include="..\Test.NET35\TestKeywordWhereGroupByHavingOrderBy.cs">
       <Link>TestKeywordWhereGroupByHavingOrderBy.cs</Link>
     </Compile>
-    <Compile Include="..\TestCheck35\TestOperator.cs">
+    <Compile Include="..\Test.NET35\TestOperator.cs">
       <Link>TestOperator.cs</Link>
     </Compile>
-    <Compile Include="..\TestCheck35\TestParameterName.cs">
+    <Compile Include="..\Test.NET35\TestParameterName.cs">
       <Link>TestParameterName.cs</Link>
     </Compile>
-    <Compile Include="..\TestCheck35\TestSetOperation.cs">
+    <Compile Include="..\Test.NET35\TestSetOperation.cs">
       <Link>TestSetOperation.cs</Link>
     </Compile>
-    <Compile Include="..\TestCheck35\TestUtils.cs">
+    <Compile Include="..\Test.NET35\TestUtils.cs">
       <Link>TestUtils.cs</Link>
     </Compile>
-    <Compile Include="..\TestCheck35\TestWindow.cs">
+    <Compile Include="..\Test.NET35\TestWindow.cs">
       <Link>TestWindow.cs</Link>
     </Compile>
     <Compile Include="Helper\CodeGenerate.cs" />

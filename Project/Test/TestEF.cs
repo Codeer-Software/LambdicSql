@@ -6,7 +6,6 @@ using static Test.Helper.DBProviderInfo;
 using LambdicSql;
 using LambdicSql.feat.EntityFramework;
 using static LambdicSql.Symbol;
-using TestCheck35;
 using Test.Model;
 using System.Diagnostics;
 
@@ -62,15 +61,6 @@ namespace Test
 	tbl_remuneration.money AS money
 FROM tbl_remuneration
 	JOIN tbl_staff ON (tbl_staff.id) = (tbl_remuneration.staff_id)");
-        }
-
-        void XXX()
-        {
-            //cout → int
-            //avg → double
-
-            var db = new ModelLambdicSqlTestDB();
-            var sum = db.tbl_remuneration.Sum(e => e.money);
         }
     }
 }

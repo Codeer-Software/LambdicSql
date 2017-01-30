@@ -7,7 +7,6 @@ using LambdicSql;
 using LambdicSql.feat.Dapper;
 using static LambdicSql.Symbol;
 using System;
-using TestCheck35;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Test
