@@ -13,7 +13,7 @@ namespace Performance
     {
         static void Main(string[] args)
         {
-            Test1();
+            TestCreateAndBuild();
         }
 
         public class SelectedData
@@ -22,11 +22,13 @@ namespace Performance
             public DateTime payment_date { get; set; }
             public decimal money { get; set; }
         }
+
         public class Staff
         {
             public int id { get; set; }
             public string name { get; set; }
         }
+
         public class Remuneration
         {
             public int id { get; set; }
@@ -34,15 +36,14 @@ namespace Performance
             public DateTime payment_date { get; set; }
             public decimal money { get; set; }
         }
+
         public class Data
         {
             public Staff tbl_staff { get; set; }
             public Remuneration tbl_remuneration { get; set; }
         }
 
-
-
-        static void TestFormat()
+        static void TestFormatAttribute()
         {
             Console.ReadKey();
             Console.WriteLine("Start");
@@ -57,12 +58,9 @@ namespace Performance
             {
                 watch.Start();
 
-                
                 var query = Db<Data>.Sql(db =>
-
                     Values(0, a, 2, b)
                     );
-
 
                 info = query.Build(typeof(SqlConnection));
 
@@ -72,7 +70,6 @@ namespace Performance
                     times.Add(watch.Elapsed.TotalMilliseconds);
                 }
                 watch.Reset();
-
             }
 
             times = times.Skip(1).ToList();
@@ -81,7 +78,7 @@ namespace Performance
             Console.ReadKey();
         }
 
-        static void TestFormatEx()
+        static void TestFormatAttributeForProfiler()
         {
             int a = 0;
             int b = 1;
@@ -96,7 +93,7 @@ namespace Performance
             }
         }
 
-        static void Test1()
+        static void TestCreateAndBuild()
         {
             Console.ReadKey();
             Console.WriteLine("Start");
@@ -104,14 +101,11 @@ namespace Performance
             var times = new List<double>();
             var watch = new Stopwatch();
 
-
             for (int i = 0; i < 10000; i++)
             {
                 watch.Start();
 
-
                 var query = Db<Data>.Sql(db =>
-
                     Select(new SelectedData()
                     {
                         name = db.tbl_staff.name,
@@ -122,7 +116,6 @@ namespace Performance
                         Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
                     Where(3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
 
-
                 info = query.Build(typeof(SqlConnection));
 
                 watch.Stop();
@@ -131,7 +124,6 @@ namespace Performance
                     times.Add(watch.Elapsed.TotalMilliseconds);
                 }
                 watch.Reset();
-                
             }
 
             times = times.Skip(1).ToList();
@@ -140,7 +132,7 @@ namespace Performance
             Console.ReadKey();
         }
 
-        static void Test1Ex()
+        static void TestCreateAndBuildForProfiler()
         {
             for (int i = 0; i < 10000; i++)
             {
@@ -156,19 +148,18 @@ namespace Performance
                         Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
                     Where(3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
 
-
                 query.Build(typeof(SqlConnection));
             }
         }
 
-        static void Test2()
+        static void TestBuild()
         {
             Console.ReadKey();
             Console.WriteLine("Start");
             BuildedSql info = null;
             var times = new List<double>();
             var watch = new Stopwatch();
-            
+
             var query = Db<Data>.Sql(db =>
 
                 Select(new SelectedData()
@@ -185,7 +176,6 @@ namespace Performance
             {
                 watch.Start();
 
-
                 info = query.Build(typeof(SqlConnection));
 
                 watch.Stop();
@@ -194,7 +184,6 @@ namespace Performance
                     times.Add(watch.Elapsed.TotalMilliseconds);
                 }
                 watch.Reset();
-
             }
 
             times = times.Skip(1).ToList();
@@ -203,20 +192,18 @@ namespace Performance
             Console.ReadKey();
         }
 
-        static void Test3()
+        static void TestGenerateExpression()
         {
             Console.ReadKey();
             Console.WriteLine("Start");
             var times = new List<double>();
             var watch = new Stopwatch();
 
-
             for (int i = 0; i < 10000; i++)
             {
                 watch.Start();
 
                 DbX<Data>.Sql(db =>
-
                     Select(new SelectedData()
                     {
                         name = db.tbl_staff.name,
@@ -233,7 +220,6 @@ namespace Performance
                     times.Add(watch.Elapsed.TotalMilliseconds);
                 }
                 watch.Reset();
-
             }
 
             times = times.Skip(1).ToList();
@@ -249,14 +235,6 @@ namespace Performance
             {
                 e = expression;
             }
-        }
-        }
-
-    class XXX<TDB>
-    {
-        public static Expression<Func<TDB, TResult>> Create<TResult>(Expression<Func<TDB, TResult>> expression)
-        {
-            return expression;
         }
     }
 }
