@@ -6,12 +6,12 @@ using System.Reflection;
 namespace LambdicSql.feat.Dapper
 {
     /// <summary>
-    /// Extensions for adjust Dapper.
-    /// In order to use these, it is necessary that arbitrary Dapper is installed. 
+    /// Extensions for adapt Dapper.
+    /// In order to use this class, you need to specify the assembly of Dapper in the Assembly property. 
     /// LambdicSql has no dependency on Dapper from the project compositionally with Dapper. 
     /// That is to avoid inconsistencies between versions. Please install your favorite version of Dapper by yourself.
     /// </summary>
-    public static class DapperAdapter
+    public static partial class DapperAdapter
     {
         static object _sync = new object();
         static Assembly _assembly;
@@ -21,17 +21,16 @@ namespace LambdicSql.feat.Dapper
         /// </summary>
         public static Assembly Assembly
         {
-            internal get
+            get
             {
                 lock (_sync)
                 {
                     if (_assembly == null)
                     {
-                        throw new PackageIsNotInstalledException(
+                        throw new NotInitializedException(
                         "Please set Dapper's Assembly.The following shows the sample.\r\n\r\n" +
                         "using LambdicSql.feat.Dapper;\r\n" +
-                        "using System.Reflection;\r\n" +
-                        "DapperAdapter.Assembly = typeof(Dapper.SqlMapper).GetTypeInfo().Assembly;");
+                        AssemblyInitializeComment);
                     }
                     return _assembly;
                 }
@@ -44,7 +43,7 @@ namespace LambdicSql.feat.Dapper
                 }
             }
         }
-
+        
         /// <summary>
         /// Debug Log.
         /// </summary>
@@ -90,7 +89,10 @@ namespace LambdicSql.feat.Dapper
         public static IEnumerable<T> Query<T>(this IDbConnection cnn, Sql query, IDbTransaction transaction = null, bool buffered = true, int? commandTimeout = default(int?), CommandType? commandType = default(CommandType?))
         {
             var info = query.Build(cnn.GetType());
-            
+
+            //for testing.
+            if (DapperApaptExtensionsForTest.Query != null) return new T[DapperApaptExtensionsForTest.Query(cnn, info)];
+
             //debug.
             Debug(info);
 
@@ -117,7 +119,10 @@ namespace LambdicSql.feat.Dapper
         public static int Execute(this IDbConnection cnn, Sql exp, IDbTransaction transaction = null, int? commandTimeout = default(int?), CommandType? commandType = default(CommandType?))
         {
             var info = exp.Build(cnn.GetType());
-            
+
+            //for testing.
+            if (DapperApaptExtensionsForTest.Execute != null) return DapperApaptExtensionsForTest.Execute(cnn, info);
+
             //debug.
             Debug(info);
 
@@ -160,5 +165,37 @@ namespace LambdicSql.feat.Dapper
             }
             Log(string.Empty);
         }
+    }
+
+    /// <summary>
+    /// For testing.
+    /// </summary>
+    public static class DapperApaptExtensionsForTest
+    {
+        /// <summary>
+        /// For testing.
+        /// </summary>
+        /// <param name="cnn">For testing.</param>
+        /// <param name="info">For testing.</param>
+        /// <returns>For testing.</returns>
+        public delegate int QueryDelegate(IDbConnection cnn, BuildedSql info);
+
+        /// <summary>
+        /// For testing.
+        /// </summary>
+        /// <param name="cnn">For testing.</param>
+        /// <param name="info">For testing.</param>
+        /// <returns>For testing.</returns>
+        public delegate int ExecuteDelegate(IDbConnection cnn, BuildedSql info);
+
+        /// <summary>
+        /// For testing.
+        /// </summary>
+        public static QueryDelegate Query { get; set; }
+
+        /// <summary>
+        /// For testing.
+        /// </summary>
+        public static ExecuteDelegate Execute { get; set; }
     }
 }

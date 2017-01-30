@@ -33,6 +33,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\LambdicSql.NETStandard.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -46,10 +47,7 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DbParam.cs" />
-    <Compile Include="feat\Dapper\DapperAdapter.cs" />
-    <Compile Include="feat\Dapper\DapperWrapper.cs" />
-    <Compile Include="MultiplatformCompatibe\BuildedSqlExtensions.cs" />
+    <Compile Include="feat\Dapper\DapperAdapter.partial.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -58,6 +56,7 @@
       <Name>LambdicSql.PCL</Name>
     </ProjectReference>
   </ItemGroup>
+  <Import Project="..\LambdicSql.System.Data.Shared\LambdicSql.System.Data.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

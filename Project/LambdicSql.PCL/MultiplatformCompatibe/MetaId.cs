@@ -2,7 +2,6 @@
 
 namespace LambdicSql.ConverterServices.Inside
 {
-    //微妙な速度さだったからなー、memberInfoの比較をそのまま使うでもいいのかもしれん
     class MetaId
     {
         MemberInfo _member;

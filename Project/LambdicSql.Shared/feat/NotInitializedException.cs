@@ -3,26 +3,26 @@
 namespace LambdicSql.feat
 {
     /// <summary>
-    /// An exception if the required package is not installed.
+    /// An exception if the required that is not initialized.
     /// </summary>
-    public class PackageIsNotInstalledException : Exception
+    public class NotInitializedException : Exception
     {
         /// <summary>
         /// Constructor.
         /// </summary>
-        public PackageIsNotInstalledException() { }
+        public NotInitializedException() { }
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="message">Message.</param>
-        public PackageIsNotInstalledException(string message) : base(message) { }
+        public NotInitializedException(string message) : base(message) { }
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="message">Message.</param>
         /// <param name="innerException">InnerException.</param>
-        public PackageIsNotInstalledException(string message, Exception innerException) : base(message, innerException) { }
+        public NotInitializedException(string message, Exception innerException) : base(message, innerException) { }
     }
 }

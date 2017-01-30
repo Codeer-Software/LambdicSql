@@ -63,6 +63,5 @@ namespace LambdicSql.ConverterServices.Inside
             }
             throw new NotSupportedException();
         }
-
     }
 }

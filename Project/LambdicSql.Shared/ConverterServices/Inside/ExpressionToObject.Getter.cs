@@ -11,6 +11,7 @@ namespace LambdicSql.ConverterServices.Inside
             public void Init(Expression exp, ParameterExpression[] param) => _func = Expression.Lambda<Func<object>>(exp, param).Compile();
             public object GetMemberObject(object[] arguments) => _func();
         }
+
         class GetterCore<T0> : IGetter
         {
             public delegate object Func(T0 t0);

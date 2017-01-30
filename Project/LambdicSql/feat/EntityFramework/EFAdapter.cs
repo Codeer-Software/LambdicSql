@@ -10,10 +10,7 @@ using System.Linq.Expressions;
 namespace LambdicSql.feat.EntityFramework
 {
     /// <summary>
-    /// Extensions for adjust Entity Framework.
-    /// In order to use these, it is necessary that arbitrary  Entity Framework is installed. 
-    /// LambdicSql has no dependency on  Entity Framework from the project compositionally with  Entity Framework. 
-    /// That is to avoid inconsistencies between versions. Please install your favorite version of  Entity Framework by yourself.
+    /// Extensions for adapt Entity Framework.
     /// </summary>
     public static class EFAdapter
     {

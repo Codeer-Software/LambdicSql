@@ -20,7 +20,7 @@ namespace LambdicSql
             return sql.GetParams(e => e.Value).Select(e => new { Index = tokens.IndexOfCheck(e.Key), Value = e.Value }).OrderBy(e => e.Index).Select(e => e.Value).ToArray();
         }
 
-        public static int IndexOfCheck(this List<string> target, string value)
+        static int IndexOfCheck(this List<string> target, string value)
         {
             var index = target.IndexOf(value);
             if (index == -1) throw new NotSupportedException();

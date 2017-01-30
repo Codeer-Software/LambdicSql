@@ -4,7 +4,7 @@ using LambdicSql.ConverterServices.Inside.CodeParts;
 namespace LambdicSql.BuilderServices
 {
     /// <summary>
-    /// Chane only column name without table name.
+    /// Change only column name without table name.
     /// </summary>
     public class CustomizeColumnOnly : ICodeCustomizer
     {

@@ -44,14 +44,11 @@
     <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MultiplatformCompatibe\BuildedSqlExtensions.cs" />
+    <Compile Include="feat\Dapper\DapperAdapter.partial.cs" />
     <Compile Include="MultiplatformCompatibe\MetaId.cs" />
     <Compile Include="MultiplatformCompatibe\ReflectionAdapter.cs" />
-    <Compile Include="feat\Dapper\DapperAdapter.cs" />
-    <Compile Include="feat\Dapper\DapperWrapper.cs" />
     <Compile Include="feat\EntityFramework\EFAdapter.cs" />
     <Compile Include="feat\EntityFramework\EFWrapper.cs" />
-    <Compile Include="DbParam.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -59,6 +56,7 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="..\LambdicSql.Shared\LambdicSql.Shared.projitems" Label="Shared" />
+  <Import Project="..\LambdicSql.System.Data.Shared\LambdicSql.System.Data.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if $(ConfigurationName) == Release "../../../.nuget/nuget" pack "../../../.nuget/LambdicSql.nuspec"
