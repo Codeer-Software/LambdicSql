@@ -55,7 +55,7 @@ namespace LambdicSql.feat.Dapper
         /// </summary>
         /// <typeparam name="T">Result type.</typeparam>
         /// <param name="cnn">Connection.</param>
-        /// <param name="query">Query expression.</param>
+        /// <param name="sql">Sql.</param>
         /// <param name="transaction">Transactions to be executed at the data source.</param>
         /// <param name="buffered">Is buffered,</param>
         /// <param name="commandTimeout">Command timeout.</param>
@@ -66,16 +66,16 @@ namespace LambdicSql.feat.Dapper
         ///     is created per row, and a direct column-name===member-name mapping is assumed
         ///     (case insensitive).
         /// </returns>
-        public static IEnumerable<T> Query<T>(this IDbConnection cnn, Sql<T> query, IDbTransaction transaction = null, bool buffered = true, int? commandTimeout = default(int?), CommandType? commandType = default(CommandType?))
-            => Query<T>(cnn, (Sql)query, transaction, buffered, commandTimeout, commandType);
- 
+        public static IEnumerable<T> Query<T>(this IDbConnection cnn, Sql<T> sql, IDbTransaction transaction = null, bool buffered = true, int? commandTimeout = default(int?), CommandType? commandType = default(CommandType?))
+            => Query<T>(cnn, (Sql)sql, transaction, buffered, commandTimeout, commandType);
+
         /// <summary>
         /// Executes a query, returning the data typed as per T.
         /// For details, refer to the document of Dapper.
         /// </summary>
         /// <typeparam name="T">Result type.</typeparam>
         /// <param name="cnn">Connection.</param>
-        /// <param name="query">Query expression.</param>
+        /// <param name="sql">Sql.</param>
         /// <param name="transaction">Transactions to be executed at the data source.</param>
         /// <param name="buffered">Is buffered,</param>
         /// <param name="commandTimeout">Command timeout.</param>
@@ -86,19 +86,57 @@ namespace LambdicSql.feat.Dapper
         ///     is created per row, and a direct column-name===member-name mapping is assumed
         ///     (case insensitive).
         /// </returns>
-        public static IEnumerable<T> Query<T>(this IDbConnection cnn, Sql query, IDbTransaction transaction = null, bool buffered = true, int? commandTimeout = default(int?), CommandType? commandType = default(CommandType?))
-        {
-            var info = query.Build(cnn.GetType());
+        public static IEnumerable<T> Query<T>(this IDbConnection cnn, BuildedSql<T> sql, IDbTransaction transaction = null, bool buffered = true, int? commandTimeout = default(int?), CommandType? commandType = default(CommandType?))
+            => Query<T>(cnn, (BuildedSql)sql, transaction, buffered, commandTimeout, commandType);
 
+        /// <summary>
+        /// Executes a query, returning the data typed as per T.
+        /// For details, refer to the document of Dapper.
+        /// </summary>
+        /// <typeparam name="T">Result type.</typeparam>
+        /// <param name="cnn">Connection.</param>
+        /// <param name="sql">Sql.</param>
+        /// <param name="transaction">Transactions to be executed at the data source.</param>
+        /// <param name="buffered">Is buffered,</param>
+        /// <param name="commandTimeout">Command timeout.</param>
+        /// <param name="commandType">Command type.</param>
+        /// <returns>
+        ///     A sequence of data of the supplied type; if a basic type (int, string, etc) is
+        ///     queried then the data from the first column in assumed, otherwise an instance
+        ///     is created per row, and a direct column-name===member-name mapping is assumed
+        ///     (case insensitive).
+        /// </returns>
+        public static IEnumerable<T> Query<T>(this IDbConnection cnn, Sql sql, IDbTransaction transaction = null, bool buffered = true, int? commandTimeout = default(int?), CommandType? commandType = default(CommandType?))
+             => Query<T>(cnn, sql.Build(cnn.GetType()), transaction, buffered, commandTimeout, commandType);
+
+        /// <summary>
+        /// Executes a query, returning the data typed as per T.
+        /// For details, refer to the document of Dapper.
+        /// </summary>
+        /// <typeparam name="T">Result type.</typeparam>
+        /// <param name="cnn">Connection.</param>
+        /// <param name="sql">Sql.</param>
+        /// <param name="transaction">Transactions to be executed at the data source.</param>
+        /// <param name="buffered">Is buffered,</param>
+        /// <param name="commandTimeout">Command timeout.</param>
+        /// <param name="commandType">Command type.</param>
+        /// <returns>
+        ///     A sequence of data of the supplied type; if a basic type (int, string, etc) is
+        ///     queried then the data from the first column in assumed, otherwise an instance
+        ///     is created per row, and a direct column-name===member-name mapping is assumed
+        ///     (case insensitive).
+        /// </returns>
+        public static IEnumerable<T> Query<T>(this IDbConnection cnn, BuildedSql sql, IDbTransaction transaction = null, bool buffered = true, int? commandTimeout = default(int?), CommandType? commandType = default(CommandType?))
+        {
             //for testing.
-            if (DapperApaptExtensionsForTest.Query != null) return new T[DapperApaptExtensionsForTest.Query(cnn, info)];
+            if (DapperApaptExtensionsForTest.Query != null) return new T[DapperApaptExtensionsForTest.Query(cnn, sql)];
 
             //debug.
-            Debug(info);
+            Debug(sql);
 
             try
             {
-                return DapperWrapper<T>.Query(cnn, info.Text, CreateDynamicParam(info.GetParams()), transaction, buffered, commandTimeout, commandType);
+                return DapperWrapper<T>.Query(cnn, sql.Text, CreateDynamicParam(sql.GetParams()), transaction, buffered, commandTimeout, commandType);
             }
             catch (Exception e)
             {
@@ -111,24 +149,35 @@ namespace LambdicSql.feat.Dapper
         /// For details, refer to the document of Dapper.
         /// </summary>
         /// <param name="cnn">Connection.</param>
-        /// <param name="exp">Query expression.</param>
+        /// <param name="sql">Sql.</param>
         /// <param name="transaction">Transactions to be executed at the data source.</param>
         /// <param name="commandTimeout">Command timeout.</param>
         /// <param name="commandType">Command type.</param>
         /// <returns>Number of rows affected.</returns>
-        public static int Execute(this IDbConnection cnn, Sql exp, IDbTransaction transaction = null, int? commandTimeout = default(int?), CommandType? commandType = default(CommandType?))
-        {
-            var info = exp.Build(cnn.GetType());
+        public static int Execute(this IDbConnection cnn, Sql sql, IDbTransaction transaction = null, int? commandTimeout = default(int?), CommandType? commandType = default(CommandType?))
+            => Execute(cnn, sql.Build(cnn.GetType()), transaction, commandTimeout, commandType);
 
+        /// <summary>
+        /// Execute parameterized SQL.
+        /// For details, refer to the document of Dapper.
+        /// </summary>
+        /// <param name="cnn">Connection.</param>
+        /// <param name="sql">Sql.</param>
+        /// <param name="transaction">Transactions to be executed at the data source.</param>
+        /// <param name="commandTimeout">Command timeout.</param>
+        /// <param name="commandType">Command type.</param>
+        /// <returns>Number of rows affected.</returns>
+        public static int Execute(this IDbConnection cnn, BuildedSql sql, IDbTransaction transaction = null, int? commandTimeout = default(int?), CommandType? commandType = default(CommandType?))
+        {
             //for testing.
-            if (DapperApaptExtensionsForTest.Execute != null) return DapperApaptExtensionsForTest.Execute(cnn, info);
+            if (DapperApaptExtensionsForTest.Execute != null) return DapperApaptExtensionsForTest.Execute(cnn, sql);
 
             //debug.
-            Debug(info);
+            Debug(sql);
 
             try
             {
-                return DapperWrapper.Execute(cnn, info.Text, CreateDynamicParam(info.GetParams()), transaction, commandTimeout, commandType);
+                return DapperWrapper.Execute(cnn, sql.Text, CreateDynamicParam(sql.GetParams()), transaction, commandTimeout, commandType);
             }
             catch (Exception e)
             {

@@ -9,6 +9,8 @@ using System.Linq.Expressions;
 
 namespace LambdicSql.feat.EntityFramework
 {
+    //TODO ちょっと変えるかな。Query,Executeの方式に
+    //多少無理があってもい
     /// <summary>
     /// Extensions for adapt Entity Framework.
     /// </summary>
