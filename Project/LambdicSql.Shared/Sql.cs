@@ -3,6 +3,7 @@ using LambdicSql.BuilderServices;
 using LambdicSql.BuilderServices.Inside;
 using LambdicSql.ConverterServices;
 using System;
+using System.Collections.Generic;
 
 namespace LambdicSql
 {
@@ -57,6 +58,14 @@ namespace LambdicSql
         /// <typeparam name="TDst">Destination type.</typeparam>
         /// <returns>Casted result.</returns>
         public Sql<TDst> Cast<TDst>() => new Sql<TDst>(Code);
+
+        /// <summary>
+        /// Change parameters.
+        /// </summary>
+        /// <param name="values">New values.</param>
+        /// <returns>BuildingSql after change.</returns>
+        public Sql ChangeParams(Dictionary<string, object> values)
+            => new Sql(Code.Accept(new CustomizeParameterValue(values)));
     }
 
     /// <summary>
@@ -105,6 +114,14 @@ namespace LambdicSql
         public new BuildedSql<T> Build(DialectOption option)
           => new BuildedSql<T>(base.Build(option));
 
+        /// <summary>
+        /// Change parameters.
+        /// </summary>
+        /// <param name="values">New values.</param>
+        /// <returns>BuildingSql after change.</returns>
+        public new Sql<T> ChangeParams(Dictionary<string, object> values)
+            => new Sql<T>(Code.Accept(new CustomizeParameterValue(values)));
+
         internal Sql(ICode code) : base(code) { }
     }
 
@@ -115,5 +132,13 @@ namespace LambdicSql
     public class SqlRecursiveArguments<TSelected> : Sql<TSelected>
     {
         internal SqlRecursiveArguments(ICode code) : base(code) { }
+
+        /// <summary>
+        /// Change parameters.
+        /// </summary>
+        /// <param name="values">New values.</param>
+        /// <returns>BuildingSql after change.</returns>
+        public new SqlRecursiveArguments<TSelected> ChangeParams(Dictionary<string, object> values)
+            => new SqlRecursiveArguments<TSelected>(Code.Accept(new CustomizeParameterValue(values)));
     }
 }

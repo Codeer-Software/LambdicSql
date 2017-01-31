@@ -46,9 +46,17 @@ namespace LambdicSql
         }
 
         /// <summary>
-        /// 
+        /// Change parameters.
         /// </summary>
-        public BuildedSql() { }
+        /// <param name="values">New values.</param>
+        /// <returns>BuildingSql after change.</returns>
+        public BuildedSql ChangeParams(Dictionary<string, object> values)
+            => new BuildedSql(Text, _dbParams.ToDictionary(e => e.Key, e => 
+            {
+                object val;
+                return values.TryGetValue(e.Key, out val) ?
+                    e.Value.ChangeValue(val) : e.Value;
+            }));
     }
 
     /// <summary>
@@ -57,11 +65,6 @@ namespace LambdicSql
     /// <typeparam name="TSelected">Type of selected at SELECT clause.</typeparam>
     public class BuildedSql<TSelected> : BuildedSql
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        public BuildedSql() { }
-
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -75,5 +78,13 @@ namespace LambdicSql
         /// </summary>
         /// <param name="src">Source.</param>
         internal BuildedSql(BuildedSql src) : base(src) { }
+
+        /// <summary>
+        /// Change parameters.
+        /// </summary>
+        /// <param name="values">New values.</param>
+        /// <returns>BuildingSql after change.</returns>
+        public new BuildedSql<TSelected> ChangeParams(Dictionary<string, object> values)
+            => new BuildedSql<TSelected>(base.ChangeParams(values));
     }
 }

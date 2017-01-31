@@ -35,12 +35,12 @@ namespace Test
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test()
+        public void TestQuery()
         {
             var name = _connection.GetType().Name;
             if (name != "SqlConnection") return;
 
-            var query = Db<ModelLambdicSqlTestDB>.Sql(db =>
+            var sql = Db<ModelLambdicSqlTestDB>.Sql(db =>
                 Select(new SelectData
                 {
                     name = db.tbl_staff.T().name,
@@ -52,15 +52,33 @@ namespace Test
 
             EFAdapter.Log = e => Debug.Print(e);
 
-            var datas = query.SqlQuery(new ModelLambdicSqlTestDB()).ToList();
+            var datas = new ModelLambdicSqlTestDB().Query(sql).ToList();
             Assert.IsTrue(0 < datas.Count);
-            AssertEx.AreEqual(query, _connection,
+            AssertEx.AreEqual(sql, _connection,
  @"SELECT
 	tbl_staff.name AS name,
 	tbl_remuneration.payment_date AS payment_date,
 	tbl_remuneration.money AS money
 FROM tbl_remuneration
 	JOIN tbl_staff ON (tbl_staff.id) = (tbl_remuneration.staff_id)");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void TestExecute()
+        {
+            var name = _connection.GetType().Name;
+            if (name != "SqlConnection") return;
+
+            var sql = Db<ModelLambdicSqlTestDB>.Sql(db =>
+                Delete().
+                From(db.tbl_data)
+            );
+
+            new ModelLambdicSqlTestDB().Execute(sql);
+
+            AssertEx.AreEqual(sql, _connection,
+@"DELETE
+FROM tbl_data");
         }
     }
 }

@@ -48,7 +48,17 @@ namespace LambdicSql
         /// </summary>
         public int? Size { get; set; }
 
-        internal DbParam Clone()=> (DbParam)MemberwiseClone();
+        /// <summary>
+        /// Change Value.
+        /// </summary>
+        /// <param name="value">New Value.</param>
+        /// <returns>IDbParam after change.</returns>
+        public virtual IDbParam ChangeValue(object value)
+        {
+            var clone = (DbParam)MemberwiseClone();
+            clone.Value = value;
+            return clone;
+        }
     }
 
     /// <summary>
@@ -62,5 +72,17 @@ namespace LambdicSql
         /// </summary>
         /// <param name="src">Source.</param>
         public static implicit operator T(DbParam<T> src) { throw new InvalitContextException("new DbParameter<T>"); }
+
+        /// <summary>
+        /// Change Value.
+        /// </summary>
+        /// <param name="value">New Value.</param>
+        /// <returns>IDbParam after change.</returns>
+        public override IDbParam ChangeValue(object value)
+        {
+            var clone = (DbParam<T>)MemberwiseClone();
+            clone.Value = value;
+            return clone;
+        }
     }
 }

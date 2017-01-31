@@ -10,6 +10,7 @@ namespace LambdicSql.ConverterServices.Inside.CodeParts
         internal string Name { get; private set; }
         internal MetaId MetaId { get; private set; }
         internal object Value => _param.Value;
+        internal IDbParam Param => _param;
 
         IDbParam _param;
         bool _displayValue;

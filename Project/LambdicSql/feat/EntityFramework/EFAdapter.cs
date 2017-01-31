@@ -9,8 +9,6 @@ using System.Linq.Expressions;
 
 namespace LambdicSql.feat.EntityFramework
 {
-    //TODO ちょっと変えるかな。Query,Executeの方式に
-    //多少無理があってもい
     /// <summary>
     /// Extensions for adapt Entity Framework.
     /// </summary>
@@ -32,38 +30,77 @@ namespace LambdicSql.feat.EntityFramework
         public static TEntity T<TEntity>(this IQueryable<TEntity> queryable) { throw new InvalitContextException(nameof(T)); }
 
         /// <summary>
-        /// Execute query.
+        /// Executes a query, returning the data typed as per T.
         /// </summary>
-        /// <typeparam name="T">Type of result entity.</typeparam>
-        /// <param name="query">Query.</param>
+        /// <typeparam name="T">Result type.</typeparam>
         /// <param name="dbContext">DbContext object.</param>
-        /// <returns>Query result.</returns>
-        public static IEnumerable<T> SqlQuery<T>(this Sql<T> query, object dbContext)
-            => SqlQuery<T>((Sql)query, dbContext);
+        /// <param name="sql">Sql.</param>
+        /// <returns>
+        ///     A sequence of data of the supplied type; if a basic type (int, string, etc) is
+        ///     queried then the data from the first column in assumed, otherwise an instance
+        ///     is created per row, and a direct column-name===member-name mapping is assumed
+        ///     (case insensitive).
+        /// </returns>
+        public static IEnumerable<T> Query<T>(this IDisposable dbContext, Sql<T> sql)
+            => Query<T>(dbContext, (Sql)sql);
 
         /// <summary>
-        /// Execute query.
+        /// Executes a query, returning the data typed as per T.
         /// </summary>
-        /// <typeparam name="T">Type of result entity.</typeparam>
-        /// <param name="query">Query.</param>
+        /// <typeparam name="T">Result type.</typeparam>
         /// <param name="dbContext">DbContext object.</param>
-        /// <returns>Query result.</returns>
-        public static IEnumerable<T> SqlQuery<T>(this Sql query, object dbContext)
+        /// <param name="sql">Sql.</param>
+        /// <returns>
+        ///     A sequence of data of the supplied type; if a basic type (int, string, etc) is
+        ///     queried then the data from the first column in assumed, otherwise an instance
+        ///     is created per row, and a direct column-name===member-name mapping is assumed
+        ///     (case insensitive).
+        /// </returns>
+        public static IEnumerable<T> Query<T>(this IDisposable dbContext, BuildedSql<T> sql)
+            => Query<T>(dbContext, (BuildedSql)sql);
+
+        /// <summary>
+        /// Executes a query, returning the data typed as per T.
+        /// </summary>
+        /// <typeparam name="T">Result type.</typeparam>
+        /// <param name="dbContext">DbContext object.</param>
+        /// <param name="sql">Sql.</param>
+        /// <returns>
+        ///     A sequence of data of the supplied type; if a basic type (int, string, etc) is
+        ///     queried then the data from the first column in assumed, otherwise an instance
+        ///     is created per row, and a direct column-name===member-name mapping is assumed
+        ///     (case insensitive).
+        /// </returns>
+        public static IEnumerable<T> Query<T>(this IDisposable dbContext, Sql sql)
+            => Query<T>(dbContext, sql.Build(dbContext.GetType()));
+
+        /// <summary>
+        /// Executes a query, returning the data typed as per T.
+        /// </summary>
+        /// <typeparam name="T">Result type.</typeparam>
+        /// <param name="dbContext">DbContext object.</param>
+        /// <param name="sql">Sql.</param>
+        /// <returns>
+        ///     A sequence of data of the supplied type; if a basic type (int, string, etc) is
+        ///     queried then the data from the first column in assumed, otherwise an instance
+        ///     is created per row, and a direct column-name===member-name mapping is assumed
+        ///     (case insensitive).
+        /// </returns>
+        public static IEnumerable<T> Query<T>(this IDisposable dbContext, BuildedSql sql)
         {
             var cnn = EFWrapper.GetGetConnection(dbContext)(dbContext);
-            var info = query.Build(cnn.GetType());
 
             //debug.
-            Debug(info);
+            Debug(sql);
 
             object[] args;
             using (var com = cnn.CreateCommand())
             {
-                args = info.GetParams().Select(e => CreateParameter(com, e.Key, e.Value)).ToArray();
+                args = sql.GetParams().Select(e => CreateParameter(com, e.Key, e.Value)).ToArray();
 
                 try
                 {
-                    return EFWrapper<T>.GetSqlQuery(dbContext)(dbContext, info.Text, args);
+                    return EFWrapper<T>.GetSqlQuery(dbContext)(dbContext, sql.Text, args);
                 }
                 catch (Exception e)
                 {
@@ -73,28 +110,36 @@ namespace LambdicSql.feat.EntityFramework
         }
 
         /// <summary>
-        /// Execute query.
+        /// Execute parameterized SQL.
         /// </summary>
-        /// <param name="query">Query.</param>
         /// <param name="dbContext">DbContext object.</param>
+        /// <param name="sql">Sql.</param>
         /// <returns>Number of rows affected.</returns>
-        public static int ExecuteSqlCommand(this Sql query, object dbContext)
+        public static int Execute(this IDisposable dbContext, Sql sql)
+            => Execute(dbContext, sql.Build(dbContext.GetType()));
+
+        /// <summary>
+        /// Execute parameterized SQL.
+        /// </summary>
+        /// <param name="dbContext">DbContext object.</param>
+        /// <param name="sql">Sql.</param>
+        /// <returns>Number of rows affected.</returns>
+        public static int Execute(this IDisposable dbContext, BuildedSql sql)
         {
             var cnn = EFWrapper.GetGetConnection(dbContext)(dbContext);
-            var info = query.Build(cnn.GetType());
 
             //debug.
-            Debug(info);
+            Debug(sql);
 
             object[] args;
             using (var com = cnn.CreateCommand())
             {
-                args = info.GetParams().Select(e => CreateParameter(com, e.Key, e.Value)).ToArray();
+                args = sql.GetParams().Select(e => CreateParameter(com, e.Key, e.Value)).ToArray();
             }
 
             try
             {
-                return EFWrapper.GetExecuteSqlCommand(dbContext)(dbContext, info.Text, args);
+                return EFWrapper.GetExecuteSqlCommand(dbContext)(dbContext, sql.Text, args);
             }
             catch (Exception e)
             {

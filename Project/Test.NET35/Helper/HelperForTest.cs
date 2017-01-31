@@ -56,6 +56,9 @@ namespace Test
             AreEqual(query, con, expected, args.ToDictionary(e => "@p_" + i++, e => new DbParam { Value = e }));
         }
 
+        public static void AreEqual(BuildedSql info, IDbConnection con, string expected, Params args)
+            => AreEqual(info, con, expected, (Dictionary<string, object>)args);
+
         public static void AreEqual(Sql query, IDbConnection con, string expected, Params args)
             => AreEqual(query, con, expected, (Dictionary<string, object>)args);
 
@@ -65,9 +68,14 @@ namespace Test
         public static void AreEqual(Sql query, IDbConnection con, string expected, Dictionary<string, object> args)
             => AreEqual(query, con, expected, args.ToDictionary(e => e.Key, e => new DbParam { Value = e.Value }));
 
+        public static void AreEqual(BuildedSql info, IDbConnection con, string expected, Dictionary<string, object> args)
+            => AreEqual(info, con, expected, args.ToDictionary(e => e.Key, e => new DbParam { Value = e.Value }));
+
         static void AreEqual(Sql query, IDbConnection con, string expected, Dictionary<string, DbParam> args)
+            => AreEqual(query.Build(con.GetType()), con, expected, args);
+
+        static void AreEqual(BuildedSql info, IDbConnection con, string expected, Dictionary<string, DbParam> args)
         {
-            var info = query.Build(con.GetType());
             if (con.GetType().Name == "OracleConnection")
             {
                 expected = expected.Replace("@", ":");

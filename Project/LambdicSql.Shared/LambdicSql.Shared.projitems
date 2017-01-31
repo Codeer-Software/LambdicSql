@@ -19,6 +19,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\CodeParts\VCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\CustomizeColumnOnly.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\CustomizeParameterToObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\CustomizeParameterValue.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\DialectOption.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\Inside\DialectResolver.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\Inside\PartsFactoryUtils.cs" />

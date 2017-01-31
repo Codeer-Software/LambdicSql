@@ -517,6 +517,46 @@ new Params()
 	tbl_remuneration.money AS Money
 FROM tbl_remuneration");
         }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_ParamChange()
+        {
+            decimal val = 0;
+            var sql = Db<DB>.Sql(db =>
+                Select(new SelectData
+                {
+                    Money = db.tbl_remuneration.money + val,
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT
+	(tbl_remuneration.money) + (@val) AS Money
+FROM tbl_remuneration", new Params { { "@val", (decimal)0 } });
+
+            sql = sql.ChangeParams(new Params { { nameof(val), 3 } });
+
+            datas = _connection.Query(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT
+	(tbl_remuneration.money) + (@val) AS Money
+FROM tbl_remuneration", new Params { { "@val", 3 } });
+
+            if (_connection.GetType().Name == "OracleConnection") return;
+
+            var info = sql.Build(_connection.GetType()).ChangeParams(new Params { { "@val", 10 } });
+
+            datas = _connection.Query(info).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(info, _connection,
+@"SELECT
+	(tbl_remuneration.money) + (@val) AS Money
+FROM tbl_remuneration", new Params { { "@val", 10 } });
+        }
+
         //TODO +演算
 
         //TODO ★足したものが正しくサブクエリの時に括弧がつくか！
