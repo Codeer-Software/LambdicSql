@@ -13,7 +13,7 @@ namespace LambdicSql
     /// Clause chain.
     /// </summary>
     /// <typeparam name="TSelected">Type of selected.</typeparam>
-    public abstract class ClauseChain<TSelected> : IMethodChain
+    public abstract class ClauseChain<TSelected>
     {
         /// <summary>
         /// Implicitly convert to the type represented by Sql.
@@ -358,7 +358,7 @@ namespace LambdicSql
     /// <summary>
     /// Constraint object.
     /// </summary>
-    public interface IConstraint : ITableDefinition, IMethodChain { }
+    public interface IConstraint : ITableDefinition { }
 
     /// <summary>
     /// Column definition.
