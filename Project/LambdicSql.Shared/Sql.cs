@@ -10,7 +10,7 @@ namespace LambdicSql
     /// <summary>
     /// Sql.
     /// </summary>
-    public class Sql
+    public class Sql : SqlExpression
     {
         /// <summary>
         /// Data converted from Expression to a form close to a string representation.
@@ -29,8 +29,15 @@ namespace LambdicSql
         /// <param name="sql1">sql 1.</param>
         /// <param name="sql2">sql 2.</param>
         /// <returns>Concatenated result.</returns>
-        public static Sql operator +(Sql sql1, Sql sql2)
-            => new Sql(new VCode(sql1.Code, sql2.Code));
+        public static Sql operator +(Sql sql1, Sql sql2) => new Sql(new VCode(sql1.Code, sql2.Code));
+
+        /// <summary>
+        /// Addition operator.
+        /// </summary>
+        /// <param name="sql">sql.</param>
+        /// <param name="exp">expression.</param>
+        /// <returns>Concatenated result.</returns>
+        public static Sql operator +(Sql sql, SqlExpression exp) { throw new InvalitContextException("addition operator"); }
 
         /// <summary>
         /// Build.
@@ -93,8 +100,15 @@ namespace LambdicSql
         /// <param name="sql1">sql 1.</param>
         /// <param name="sql2">sql 2.</param>
         /// <returns>Concatenated result.</returns>
-        public static Sql<T> operator +(Sql<T> sql1, Sql sql2)
-          => new Sql<T>(new VCode(sql1.Code, sql2.Code));
+        public static Sql<T> operator +(Sql<T> sql1, Sql sql2) => new Sql<T>(new VCode(sql1.Code, sql2.Code));
+
+        /// <summary>
+        /// Addition operator.
+        /// </summary>
+        /// <param name="sql">sql.</param>
+        /// <param name="exp">expression.</param>
+        /// <returns>Concatenated result.</returns>
+        public static Sql<T> operator +(Sql<T> sql, SqlExpression exp) { throw new InvalitContextException("addition operator"); }
 
         /// <summary>
         /// Build.

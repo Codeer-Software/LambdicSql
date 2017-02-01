@@ -557,6 +557,36 @@ FROM tbl_remuneration", new Params { { "@val", 3 } });
 FROM tbl_remuneration", new Params { { "@val", 10 } });
         }
 
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Add()
+        {
+            var from = Db<DB>.Sql(db => From(db.tbl_remuneration));
+
+             var query = Db<DB>.Sql(db =>
+                Select(new SelectData
+                {
+                    PaymentDate = db.tbl_remuneration.payment_date,
+                    Money = db.tbl_remuneration.money,
+                })
+                +
+                from
+                +
+                Where(0 < db.tbl_remuneration.id)
+             );
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+
+            query.Gen(_connection);
+
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	tbl_remuneration.payment_date AS PaymentDate,
+	tbl_remuneration.money AS Money
+FROM tbl_remuneration
+WHERE (@p_0) < (tbl_remuneration.id)", 0);
+        }
+
         //TODO +演算
 
         //TODO ★足したものが正しくサブクエリの時に括弧がつくか！

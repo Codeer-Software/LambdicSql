@@ -31,7 +31,7 @@ namespace LambdicSql
         /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
         /// <param name="expression">Expression expressing Sql by lambda.</param>
         /// <returns>Sql.</returns>
-        public static Sql<TSelected> Sql<TSelected>(Expression<Func<T, ClauseChain<TSelected>>> expression)
+        public static Sql<TSelected> Sql<TSelected>(Expression<Func<T, Clause<TSelected>>> expression)
         {
             var db = DBDefineAnalyzer.GetDbInfo<T>();
             return new Sql<TSelected>(MakeSynatx(db, expression.Body));
@@ -42,7 +42,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="expression">Expression expressing Sql by lambda.</param>
         /// <returns>Sql.</returns>
-        public static Sql Sql(Expression<Func<T, ClauseChain<Non>>> expression)
+        public static Sql Sql(Expression<Func<T, Clause<Non>>> expression)
         {
             var db = DBDefineAnalyzer.GetDbInfo<T>();
             return new Sql(MakeSynatx(db, expression.Body));

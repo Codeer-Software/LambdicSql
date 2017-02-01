@@ -5,25 +5,6 @@ using LambdicSql.Specialized.SymbolConverters;
 namespace LambdicSql
 {
     /// <summary>
-    /// Class not to express anything.
-    /// </summary>
-    public abstract class Non { }
-
-    /// <summary>
-    /// Clause chain.
-    /// </summary>
-    /// <typeparam name="TSelected">Type of selected.</typeparam>
-    public abstract class ClauseChain<TSelected>
-    {
-        /// <summary>
-        /// Implicitly convert to the type represented by Sql.
-        /// It can only be used within methods of the LambdicSql.Db class.
-        /// </summary>
-        /// <param name="src">Clause chain.</param>
-        public static implicit operator TSelected(ClauseChain<TSelected> src) { throw new InvalitContextException("implicit operator"); }
-    }
-
-    /// <summary>
     /// Data type.
     /// </summary>
     public interface IDataType { }
@@ -53,36 +34,9 @@ namespace LambdicSql
     public interface ISortedBy { }
 
     /// <summary>
-    /// ORDERBY keyword.
-    /// Use it with the OVER function.
-    /// </summary>
-    public interface IOrderBy : IOverArgument { }
-
-    /// <summary>
-    /// ORDERBY keyword.
-    /// Use it with the OVER function.
-    /// </summary>
-    public class OrderBy : ClauseChain<object>, IOrderBy
-    {
-        OrderBy() { }
-    }
-
-    /// <summary>
     /// OVER clause argument.
     /// </summary>
-    public interface IOverArgument { }
-
-    /// <summary>
-    /// PARTITION BY keyword.
-    /// Use it with the OVER function.
-    /// </summary>
-    public interface IPartitionBy : IOverArgument { }
-
-    /// <summary>
-    /// ROWS keyword.
-    /// Use it with the OVER function.
-    /// </summary>
-    public interface IRows : IOverArgument { }
+    public class OverArgument { }
 
     /// <summary>
     /// Aggregation predicate.

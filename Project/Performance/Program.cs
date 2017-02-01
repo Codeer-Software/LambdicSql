@@ -1,4 +1,5 @@
 ﻿using LambdicSql;
+using LambdicSql.ConverterServices;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -231,7 +232,7 @@ namespace Performance
         public class DbX<T> where T : class
         {
             public static Expression e;
-            public static void Sql<TSelected>(Expression<Func<T, ClauseChain<TSelected>>> expression)
+            public static void Sql<TSelected>(Expression<Func<T, Clause<TSelected>>> expression)
             {
                 e = expression;
             }

@@ -15,7 +15,7 @@ namespace Test.PCL
     public static class TestSynatax
     {
         [SymbolForTest]
-        public static ClauseChain<object> Empty() => null;
+        public static Clause<object> Empty() => null;
     }
 
     class SymbolForTestAttribute : MethodConverterAttribute

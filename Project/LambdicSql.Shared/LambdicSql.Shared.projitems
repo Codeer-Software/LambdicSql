@@ -25,6 +25,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\Inside\PartsFactoryUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\Inside\PartsUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\ParameterInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Clause.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\ExpressionConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\IDisableBinaryExpressionBrackets.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\CodeParts\DbColumnCode.cs" />
@@ -48,6 +49,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\ObjectCreateMemberInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\TableInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\InvalitContextException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Non.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\OperatorCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SupportedTypeSpec.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolConverters\ClauseStyleConverterAttribute.cs" />

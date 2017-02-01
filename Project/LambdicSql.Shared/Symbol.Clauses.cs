@@ -18,7 +18,7 @@ namespace LambdicSql
         /// <param name="selected">Specify a new expression to represent the selection.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [SelectConverter]
-        public static ClauseChain<TSelected> Select<TSelected>(TSelected selected) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<TSelected> Select<TSelected>(TSelected selected) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
@@ -29,7 +29,7 @@ namespace LambdicSql
         /// <param name="selected">Specify a new expression to represent the selection.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [SelectConverter]
-        public static ClauseChain<TSelected> Select<TSrcSelected, TSelected>(this ClauseChain<TSrcSelected> before, TSelected selected) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<TSelected> Select<TSrcSelected, TSelected>(this Clause<TSrcSelected> before, TSelected selected) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
@@ -39,7 +39,7 @@ namespace LambdicSql
         /// <param name="selected">Specify a new expression to represent the selection.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [SelectConverter]
-        public static ClauseChain<TSelected> Select<TSelected>(ITop top, TSelected selected) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<TSelected> Select<TSelected>(ITop top, TSelected selected) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
@@ -51,7 +51,7 @@ namespace LambdicSql
         /// <param name="selected">Specify a new expression to represent the selection.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [SelectConverter]
-        public static ClauseChain<TSelected> Select<TSrcSelected, TSelected>(this ClauseChain<TSrcSelected> before, ITop top, TSelected selected) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<TSelected> Select<TSrcSelected, TSelected>(this Clause<TSrcSelected> before, ITop top, TSelected selected) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
@@ -59,7 +59,7 @@ namespace LambdicSql
         /// <param name="asterisk">*</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [SelectConverter]
-        public static ClauseChain<Non> Select(IAsterisk asterisk) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<Non> Select(IAsterisk asterisk) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
@@ -69,7 +69,7 @@ namespace LambdicSql
         /// <param name="asterisk">*</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [SelectConverter]
-        public static ClauseChain<Non> Select<TSrcSelected>(this ClauseChain<TSrcSelected> before, IAsterisk asterisk) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<Non> Select<TSrcSelected>(this Clause<TSrcSelected> before, IAsterisk asterisk) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
@@ -78,7 +78,7 @@ namespace LambdicSql
         /// <param name="asterisk">*</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [SelectConverter]
-        public static ClauseChain<TSelected> Select<TSelected>(IAsterisk<TSelected> asterisk) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<TSelected> Select<TSelected>(IAsterisk<TSelected> asterisk) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
@@ -89,7 +89,7 @@ namespace LambdicSql
         /// <param name="asterisk">*</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [SelectConverter]
-        public static ClauseChain<TSelected> Select<TSrcSelected, TSelected>(this ClauseChain<TSrcSelected> before, IAsterisk<TSelected> asterisk) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<TSelected> Select<TSrcSelected, TSelected>(this Clause<TSrcSelected> before, IAsterisk<TSelected> asterisk) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
@@ -98,7 +98,7 @@ namespace LambdicSql
         /// <param name="asterisk">*</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [SelectConverter]
-        public static ClauseChain<Non> Select(ITop top, IAsterisk asterisk) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<Non> Select(ITop top, IAsterisk asterisk) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
@@ -109,7 +109,7 @@ namespace LambdicSql
         /// <param name="asterisk">*</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [SelectConverter]
-        public static ClauseChain<Non> Select<TSrcSelected>(this ClauseChain<TSrcSelected> before, ITop top, IAsterisk asterisk) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<Non> Select<TSrcSelected>(this Clause<TSrcSelected> before, ITop top, IAsterisk asterisk) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
@@ -119,7 +119,7 @@ namespace LambdicSql
         /// <param name="asterisk">*</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [SelectConverter]
-        public static ClauseChain<TSelected> Select<TSelected>(ITop top, IAsterisk<TSelected> asterisk) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<TSelected> Select<TSelected>(ITop top, IAsterisk<TSelected> asterisk) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
@@ -131,7 +131,7 @@ namespace LambdicSql
         /// <param name="asterisk">*</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [SelectConverter]
-        public static ClauseChain<TSelected> Select<TSrcSelected, TSelected>(this ClauseChain<TSrcSelected> before, ITop top, IAsterisk<TSelected> asterisk) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<TSelected> Select<TSrcSelected, TSelected>(this Clause<TSrcSelected> before, ITop top, IAsterisk<TSelected> asterisk) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
@@ -141,7 +141,7 @@ namespace LambdicSql
         /// <param name="selected">Specify a new expression to represent the selection.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [SelectConverter]
-        public static ClauseChain<TSelected> Select<TSelected>(IAggregatePredicate predicate, TSelected selected) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<TSelected> Select<TSelected>(IAggregatePredicate predicate, TSelected selected) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
@@ -153,7 +153,7 @@ namespace LambdicSql
         /// <param name="selected">Specify a new expression to represent the selection.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [SelectConverter]
-        public static ClauseChain<TSelected> Select<TSrcSelected, TSelected>(this ClauseChain<TSrcSelected> before, IAggregatePredicate predicate, TSelected selected) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<TSelected> Select<TSrcSelected, TSelected>(this Clause<TSrcSelected> before, IAggregatePredicate predicate, TSelected selected) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
@@ -164,7 +164,7 @@ namespace LambdicSql
         /// <param name="selected">Specify a new expression to represent the selection.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [SelectConverter]
-        public static ClauseChain<TSelected> Select<TSelected>(IAggregatePredicate predicate, ITop top, TSelected selected) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<TSelected> Select<TSelected>(IAggregatePredicate predicate, ITop top, TSelected selected) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
@@ -177,7 +177,7 @@ namespace LambdicSql
         /// <param name="selected">Specify a new expression to represent the selection.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [SelectConverter]
-        public static ClauseChain<TSelected> Select<TSrcSelected, TSelected>(this ClauseChain<TSrcSelected> before, IAggregatePredicate predicate, ITop top, TSelected selected) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<TSelected> Select<TSrcSelected, TSelected>(this Clause<TSrcSelected> before, IAggregatePredicate predicate, ITop top, TSelected selected) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
@@ -186,7 +186,7 @@ namespace LambdicSql
         /// <param name="asterisk">*</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [SelectConverter]
-        public static ClauseChain<Non> Select(IAggregatePredicate predicate, IAsterisk asterisk) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<Non> Select(IAggregatePredicate predicate, IAsterisk asterisk) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
@@ -197,7 +197,7 @@ namespace LambdicSql
         /// <param name="asterisk">*</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [SelectConverter]
-        public static ClauseChain<Non> Select<TSrcSelected>(this ClauseChain<TSrcSelected> before, IAggregatePredicate predicate, IAsterisk asterisk) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<Non> Select<TSrcSelected>(this Clause<TSrcSelected> before, IAggregatePredicate predicate, IAsterisk asterisk) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
@@ -207,7 +207,7 @@ namespace LambdicSql
         /// <param name="asterisk">*</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [SelectConverter]
-        public static ClauseChain<TSelected> Select<TSelected>(IAggregatePredicate predicate, IAsterisk<TSelected> asterisk) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<TSelected> Select<TSelected>(IAggregatePredicate predicate, IAsterisk<TSelected> asterisk) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
@@ -219,7 +219,7 @@ namespace LambdicSql
         /// <param name="asterisk">*</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [SelectConverter]
-        public static ClauseChain<TSelected> Select<TSrcSelected, TSelected>(this ClauseChain<TSrcSelected> before, IAggregatePredicate predicate, IAsterisk<TSelected> asterisk) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<TSelected> Select<TSrcSelected, TSelected>(this Clause<TSrcSelected> before, IAggregatePredicate predicate, IAsterisk<TSelected> asterisk) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
@@ -229,7 +229,7 @@ namespace LambdicSql
         /// <param name="asterisk">*</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [SelectConverter]
-        public static ClauseChain<Non> Select(IAggregatePredicate predicate, ITop top, IAsterisk asterisk) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<Non> Select(IAggregatePredicate predicate, ITop top, IAsterisk asterisk) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
@@ -241,7 +241,7 @@ namespace LambdicSql
         /// <param name="asterisk">*</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [SelectConverter]
-        public static ClauseChain<Non> Select<TSrcSelected>(this ClauseChain<TSrcSelected> before, IAggregatePredicate predicate, ITop top, IAsterisk asterisk) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<Non> Select<TSrcSelected>(this Clause<TSrcSelected> before, IAggregatePredicate predicate, ITop top, IAsterisk asterisk) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
@@ -252,7 +252,7 @@ namespace LambdicSql
         /// <param name="asterisk">*</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [SelectConverter]
-        public static ClauseChain<TSelected> Select<TSelected>(IAggregatePredicate predicate, ITop top, IAsterisk<TSelected> asterisk) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<TSelected> Select<TSelected>(IAggregatePredicate predicate, ITop top, IAsterisk<TSelected> asterisk) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
@@ -265,7 +265,7 @@ namespace LambdicSql
         /// <param name="asterisk">*</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [SelectConverter]
-        public static ClauseChain<TSelected> Select<TSrcSelected, TSelected>(this ClauseChain<TSrcSelected> before, IAggregatePredicate predicate, ITop top, IAsterisk<TSelected> asterisk) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<TSelected> Select<TSrcSelected, TSelected>(this Clause<TSrcSelected> before, IAggregatePredicate predicate, ITop top, IAsterisk<TSelected> asterisk) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// Return value of CASE clause.
@@ -424,7 +424,7 @@ namespace LambdicSql
         /// <param name="expressions">Table or subquery.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [FromConverter]
-        public static ClauseChain<Non> From(params object[] expressions) { throw new InvalitContextException(nameof(From)); }
+        public static Clause<Non> From(params object[] expressions) { throw new InvalitContextException(nameof(From)); }
 
         /// <summary>
         /// FROM clause.
@@ -434,7 +434,7 @@ namespace LambdicSql
         /// <param name="tables">Table or subquery.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [FromConverter]
-        public static ClauseChain<TSelected> From<TSelected>(this ClauseChain<TSelected> before, params object[] tables) { throw new InvalitContextException(nameof(From)); }
+        public static Clause<TSelected> From<TSelected>(this Clause<TSelected> before, params object[] tables) { throw new InvalitContextException(nameof(From)); }
 
         /// <summary>
         /// JOIN clause.
@@ -443,7 +443,7 @@ namespace LambdicSql
         /// <param name="condition">It is a condition of JOIN.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [JoinConverter(Name = "JOIN")]
-        public static ClauseChain<Non> Join(object table, bool condition) { throw new InvalitContextException(nameof(Join)); }
+        public static Clause<Non> Join(object table, bool condition) { throw new InvalitContextException(nameof(Join)); }
 
         /// <summary>
         /// JOIN clause.
@@ -454,7 +454,7 @@ namespace LambdicSql
         /// <param name="condition">It is a condition of JOIN.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [JoinConverter(Name = "JOIN")]
-        public static ClauseChain<TSelected> Join<TSelected>(this ClauseChain<TSelected> before, object table, bool condition) { throw new InvalitContextException(nameof(Join)); }
+        public static Clause<TSelected> Join<TSelected>(this Clause<TSelected> before, object table, bool condition) { throw new InvalitContextException(nameof(Join)); }
 
         /// <summary>
         /// JOIN clause.
@@ -463,7 +463,7 @@ namespace LambdicSql
         /// <param name="condition">It is a condition of LEFT JOIN.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [JoinConverter(Name = "LEFT JOIN")]
-        public static ClauseChain<Non> LeftJoin(object table, bool condition) { throw new InvalitContextException(nameof(LeftJoin)); }
+        public static Clause<Non> LeftJoin(object table, bool condition) { throw new InvalitContextException(nameof(LeftJoin)); }
 
         /// <summary>
         /// LEFT JOIN clause.
@@ -474,7 +474,7 @@ namespace LambdicSql
         /// <param name="condition">It is a condition of LEFT JOIN.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [JoinConverter(Name = "LEFT JOIN")]
-        public static ClauseChain<TSelected> LeftJoin<TSelected>(this ClauseChain<TSelected> before, object table, bool condition) { throw new InvalitContextException(nameof(LeftJoin)); }
+        public static Clause<TSelected> LeftJoin<TSelected>(this Clause<TSelected> before, object table, bool condition) { throw new InvalitContextException(nameof(LeftJoin)); }
 
         /// <summary>
         /// RIGHT JOIN clause.
@@ -483,7 +483,7 @@ namespace LambdicSql
         /// <param name="condition">It is a condition of RIGHT JOIN.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [JoinConverter(Name = "RIGHT JOIN")]
-        public static ClauseChain<Non> RightJoin(object table, bool condition) { throw new InvalitContextException(nameof(RightJoin)); }
+        public static Clause<Non> RightJoin(object table, bool condition) { throw new InvalitContextException(nameof(RightJoin)); }
 
         /// <summary>
         /// RIGHT JOIN clause.
@@ -494,7 +494,7 @@ namespace LambdicSql
         /// <param name="condition">It is a condition of RIGHT JOIN.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [JoinConverter(Name = "RIGHT JOIN")]
-        public static ClauseChain<TSelected> RightJoin<TSelected>(this ClauseChain<TSelected> before, object table, bool condition) { throw new InvalitContextException(nameof(RightJoin)); }
+        public static Clause<TSelected> RightJoin<TSelected>(this Clause<TSelected> before, object table, bool condition) { throw new InvalitContextException(nameof(RightJoin)); }
 
         /// <summary>
         /// FULL JOIN clause.
@@ -503,7 +503,7 @@ namespace LambdicSql
         /// <param name="condition">It is a condition of RIGHT JOIN.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [JoinConverter(Name = "FULL JOIN")]
-        public static ClauseChain<Non> FullJoin(object table, bool condition) { throw new InvalitContextException(nameof(FullJoin)); }
+        public static Clause<Non> FullJoin(object table, bool condition) { throw new InvalitContextException(nameof(FullJoin)); }
 
         /// <summary>
         /// FULL JOIN clause.
@@ -514,7 +514,7 @@ namespace LambdicSql
         /// <param name="condition">It is a condition of RIGHT JOIN.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [JoinConverter(Name = "FULL JOIN")]
-        public static ClauseChain<TSelected> FullJoin<TSelected>(this ClauseChain<TSelected> before, object table, bool condition) { throw new InvalitContextException(nameof(FullJoin)); }
+        public static Clause<TSelected> FullJoin<TSelected>(this Clause<TSelected> before, object table, bool condition) { throw new InvalitContextException(nameof(FullJoin)); }
 
         /// <summary>
         /// CROSS JOIN clause.
@@ -522,7 +522,7 @@ namespace LambdicSql
         /// <param name="expression">Table or subquery.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [JoinConverter(Name = "CROSS JOIN")]
-        public static ClauseChain<Non> CrossJoin(object expression) { throw new InvalitContextException(nameof(CrossJoin)); }
+        public static Clause<Non> CrossJoin(object expression) { throw new InvalitContextException(nameof(CrossJoin)); }
 
         /// <summary>
         /// CROSS JOIN clause.
@@ -532,7 +532,7 @@ namespace LambdicSql
         /// <param name="table">Table or subquery.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [JoinConverter(Name = "CROSS JOIN")]
-        public static ClauseChain<TSelected> CrossJoin<TSelected>(this ClauseChain<TSelected> before, object table) { throw new InvalitContextException(nameof(CrossJoin)); }
+        public static Clause<TSelected> CrossJoin<TSelected>(this Clause<TSelected> before, object table) { throw new InvalitContextException(nameof(CrossJoin)); }
 
         /// <summary>
         /// WHERE clause.
@@ -540,7 +540,7 @@ namespace LambdicSql
         /// <param name="condition">It is a conditional expression of WHERE.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [ConditionClauseConverter(Name = "WHERE")]
-        public static ClauseChain<Non> Where(bool condition) { throw new InvalitContextException(nameof(Where)); }
+        public static Clause<Non> Where(bool condition) { throw new InvalitContextException(nameof(Where)); }
 
         /// <summary>
         /// WHERE clause.
@@ -550,7 +550,7 @@ namespace LambdicSql
         /// <param name="condition">It is a conditional expression of WHERE.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [ConditionClauseConverter(Name = "WHERE")]
-        public static ClauseChain<TSelected> Where<TSelected>(this ClauseChain<TSelected> before, bool condition) { throw new InvalitContextException(nameof(Where)); }
+        public static Clause<TSelected> Where<TSelected>(this Clause<TSelected> before, bool condition) { throw new InvalitContextException(nameof(Where)); }
 
         /// <summary>
         /// GROUP BY clause.
@@ -558,7 +558,7 @@ namespace LambdicSql
         /// <param name="columns">Specify the target column of GROUP BY.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [ClauseStyleConverter(Name = "GROUP BY")]
-        public static ClauseChain<Non> GroupBy(params object[] columns) { throw new InvalitContextException(nameof(GroupBy)); }
+        public static Clause<Non> GroupBy(params object[] columns) { throw new InvalitContextException(nameof(GroupBy)); }
 
         /// <summary>
         /// GROUP BY clause.
@@ -568,7 +568,7 @@ namespace LambdicSql
         /// <param name="columns">Specify the target column of GROUP BY.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [ClauseStyleConverter(Name = "GROUP BY")]
-        public static ClauseChain<TSelected> GroupBy<TSelected>(this ClauseChain<TSelected> before, params object[] columns) { throw new InvalitContextException(nameof(GroupBy)); }
+        public static Clause<TSelected> GroupBy<TSelected>(this Clause<TSelected> before, params object[] columns) { throw new InvalitContextException(nameof(GroupBy)); }
 
         /// <summary>
         /// GROUP BY ROLLUP clause.
@@ -576,7 +576,7 @@ namespace LambdicSql
         /// <param name="columns">Specify the target column of GROUP BY.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [FuncStyleConverter(Name = "GROUP BY ROLLUP")]
-        public static ClauseChain<Non> GroupByRollup(params object[] columns) { throw new InvalitContextException(nameof(GroupByRollup)); }
+        public static Clause<Non> GroupByRollup(params object[] columns) { throw new InvalitContextException(nameof(GroupByRollup)); }
 
         /// <summary>
         /// GROUP BY ROLLUP clause.
@@ -586,7 +586,7 @@ namespace LambdicSql
         /// <param name="columns">Specify the target column of GROUP BY.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [FuncStyleConverter(Name = "GROUP BY ROLLUP")]
-        public static ClauseChain<TSelected> GroupByRollup<TSelected>(this ClauseChain<TSelected> before, params object[] columns) { throw new InvalitContextException(nameof(GroupByRollup)); }
+        public static Clause<TSelected> GroupByRollup<TSelected>(this Clause<TSelected> before, params object[] columns) { throw new InvalitContextException(nameof(GroupByRollup)); }
 
         /// <summary>
         /// GROUP BY columns WITH ROLLUP clause.
@@ -595,7 +595,7 @@ namespace LambdicSql
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         /// 
         [MethodFormatConverter(Format = "GROUP BY |[<, >0] WITH ROLLUP")]
-        public static ClauseChain<Non> GroupByWithRollup(params object[] columns) { throw new InvalitContextException(nameof(GroupByRollup)); }
+        public static Clause<Non> GroupByWithRollup(params object[] columns) { throw new InvalitContextException(nameof(GroupByRollup)); }
 
         /// <summary>
         /// GROUP BY columns WITH ROLLUP clause.
@@ -605,7 +605,7 @@ namespace LambdicSql
         /// <param name="columns">Specify the target column of GROUP BY.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [MethodFormatConverter(Format = "GROUP BY |[<, >1] WITH ROLLUP")]
-        public static ClauseChain<TSelected> GroupByWithRollup<TSelected>(this ClauseChain<TSelected> before, params object[] columns) { throw new InvalitContextException(nameof(GroupByRollup)); }
+        public static Clause<TSelected> GroupByWithRollup<TSelected>(this Clause<TSelected> before, params object[] columns) { throw new InvalitContextException(nameof(GroupByRollup)); }
 
         /// <summary>
         /// GROUP BY CUBE clause.
@@ -613,7 +613,7 @@ namespace LambdicSql
         /// <param name="columns">Specify the target column of GROUP BY.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [FuncStyleConverter(Name = "GROUP BY CUBE")]
-        public static ClauseChain<Non> GroupByCube(params object[] columns) { throw new InvalitContextException(nameof(GroupByCube)); }
+        public static Clause<Non> GroupByCube(params object[] columns) { throw new InvalitContextException(nameof(GroupByCube)); }
 
         /// <summary>
         /// GROUP BY CUBE clause.
@@ -623,7 +623,7 @@ namespace LambdicSql
         /// <param name="columns">Specify the target column of GROUP BY.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [FuncStyleConverter(Name = "GROUP BY CUBE")]
-        public static ClauseChain<TSelected> GroupByCube<TSelected>(this ClauseChain<TSelected> before, params object[] columns) { throw new InvalitContextException(nameof(GroupByCube)); }
+        public static Clause<TSelected> GroupByCube<TSelected>(this Clause<TSelected> before, params object[] columns) { throw new InvalitContextException(nameof(GroupByCube)); }
 
         /// <summary>
         /// GROUP BY GROUPING SETS clause.
@@ -631,7 +631,7 @@ namespace LambdicSql
         /// <param name="columns">Specify the target column of GROUP BY.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [FuncStyleConverter(Name = "GROUP BY GROUPING SETS")]
-        public static ClauseChain<Non> GroupByGroupingSets(params object[] columns) { throw new InvalitContextException(nameof(GroupByGroupingSets)); }
+        public static Clause<Non> GroupByGroupingSets(params object[] columns) { throw new InvalitContextException(nameof(GroupByGroupingSets)); }
 
         /// <summary>
         /// GROUP BY GROUPING SETS clause.
@@ -641,7 +641,7 @@ namespace LambdicSql
         /// <param name="columns">Specify the target column of GROUP BY.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [FuncStyleConverter(Name = "GROUP BY GROUPING SETS")]
-        public static ClauseChain<TSelected> GroupByGroupingSets<TSelected>(this ClauseChain<TSelected> before, params object[] columns) { throw new InvalitContextException(nameof(GroupByGroupingSets)); }
+        public static Clause<TSelected> GroupByGroupingSets<TSelected>(this Clause<TSelected> before, params object[] columns) { throw new InvalitContextException(nameof(GroupByGroupingSets)); }
 
         /// <summary>
         /// HAVING clause.
@@ -649,7 +649,7 @@ namespace LambdicSql
         /// <param name="condition">It is a conditional expression of HAVING.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [ConditionClauseConverter(Name = "HAVING")]
-        public static ClauseChain<Non> Having(bool condition) { throw new InvalitContextException(nameof(Having)); }
+        public static Clause<Non> Having(bool condition) { throw new InvalitContextException(nameof(Having)); }
 
         /// <summary>
         /// HAVING clause.
@@ -659,7 +659,7 @@ namespace LambdicSql
         /// <param name="condition">It is a conditional expression of HAVING.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [ConditionClauseConverter(Name = "HAVING")]
-        public static ClauseChain<TSelected> Having<TSelected>(this ClauseChain<TSelected> before, bool condition) { throw new InvalitContextException(nameof(Having)); }
+        public static Clause<TSelected> Having<TSelected>(this Clause<TSelected> before, bool condition) { throw new InvalitContextException(nameof(Having)); }
 
         /// <summary>
         /// ORDER BY clause.
@@ -667,7 +667,7 @@ namespace LambdicSql
         /// <param name="elements">Specify column and sort order. Asc(column) or Desc(column).</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [MethodFormatConverter(Format = "ORDER BY |[<, >0]", FormatDirection = FormatDirection.Vertical)]
-        public static OrderBy OrderBy(params ISortedBy[] elements) { throw new InvalitContextException(nameof(OrderBy)); }
+        public static Clause<OverArgument> OrderBy(params ISortedBy[] elements) { throw new InvalitContextException(nameof(OrderBy)); }
 
         /// <summary>
         /// ORDER BY clause.
@@ -677,7 +677,7 @@ namespace LambdicSql
         /// <param name="elements">Specify column and sort order. Asc(column) or Desc(column).</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [MethodFormatConverter(Format = "ORDER BY |[<, >1]", FormatDirection = FormatDirection.Vertical)]
-        public static ClauseChain<TSelected> OrderBy<TSelected>(this ClauseChain<TSelected> before, params ISortedBy[] elements) { throw new InvalitContextException(nameof(OrderBy)); }
+        public static Clause<TSelected> OrderBy<TSelected>(this Clause<TSelected> before, params ISortedBy[] elements) { throw new InvalitContextException(nameof(OrderBy)); }
 
         /// <summary>
         /// LIMIT clause.
@@ -685,7 +685,7 @@ namespace LambdicSql
         /// <param name="count">Number of rows to acquire.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [ClauseStyleConverter]
-        public static ClauseChain<Non> Limit(object count) { throw new InvalitContextException(nameof(Limit)); }
+        public static Clause<Non> Limit(object count) { throw new InvalitContextException(nameof(Limit)); }
 
         /// <summary>
         /// LIMIT clause.
@@ -695,7 +695,7 @@ namespace LambdicSql
         /// <param name="count">Number of rows to acquire.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [ClauseStyleConverter]
-        public static ClauseChain<TSelected> Limit<TSelected>(this ClauseChain<TSelected> before, object count) { throw new InvalitContextException(nameof(Limit)); }
+        public static Clause<TSelected> Limit<TSelected>(this Clause<TSelected> before, object count) { throw new InvalitContextException(nameof(Limit)); }
 
         /// <summary>
         /// LIMIT clause.
@@ -704,7 +704,7 @@ namespace LambdicSql
         /// <param name="count">Number of rows to acquire.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [ClauseStyleConverter]
-        public static ClauseChain<Non> Limit(object offset, object count) { throw new InvalitContextException(nameof(Limit)); }
+        public static Clause<Non> Limit(object offset, object count) { throw new InvalitContextException(nameof(Limit)); }
 
         /// <summary>
         /// LIMIT clause.
@@ -715,7 +715,7 @@ namespace LambdicSql
         /// <param name="count">Number of rows to acquire.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [ClauseStyleConverter]
-        public static ClauseChain<TSelected> Limit<TSelected>(this ClauseChain<TSelected> before, object offset, object count) { throw new InvalitContextException(nameof(Limit)); }
+        public static Clause<TSelected> Limit<TSelected>(this Clause<TSelected> before, object offset, object count) { throw new InvalitContextException(nameof(Limit)); }
 
         /// <summary>
         /// OFFSET clause.
@@ -723,7 +723,7 @@ namespace LambdicSql
         /// <param name="offset">Start position.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [ClauseStyleConverter]
-        public static ClauseChain<Non> Offset(object offset) { throw new InvalitContextException(nameof(Offset)); }
+        public static Clause<Non> Offset(object offset) { throw new InvalitContextException(nameof(Offset)); }
 
         /// <summary>
         /// OFFSET clause.
@@ -733,7 +733,7 @@ namespace LambdicSql
         /// <param name="offset">Start position.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [ClauseStyleConverter]
-        public static ClauseChain<TSelected> Offset<TSelected>(this ClauseChain<TSelected> before, object offset) { throw new InvalitContextException(nameof(Offset)); }
+        public static Clause<TSelected> Offset<TSelected>(this Clause<TSelected> before, object offset) { throw new InvalitContextException(nameof(Offset)); }
 
         /// <summary>
         /// OFFSET count ROWS clause.
@@ -741,7 +741,7 @@ namespace LambdicSql
         /// <param name="count">Number of rows to acquire.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [MethodFormatConverter(Format = "OFFSET |[0] ROWS")]
-        public static ClauseChain<Non> OffsetRows(object count) { throw new InvalitContextException(nameof(OffsetRows)); }
+        public static Clause<Non> OffsetRows(object count) { throw new InvalitContextException(nameof(OffsetRows)); }
 
         /// <summary>
         /// OFFSET count ROWS clause.
@@ -751,7 +751,7 @@ namespace LambdicSql
         /// <param name="count">Number of rows to acquire.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [MethodFormatConverter(Format = "OFFSET |[1] ROWS")]
-        public static ClauseChain<TSelected> OffsetRows<TSelected>(this ClauseChain<TSelected> before, object count) { throw new InvalitContextException(nameof(OffsetRows)); }
+        public static Clause<TSelected> OffsetRows<TSelected>(this Clause<TSelected> before, object count) { throw new InvalitContextException(nameof(OffsetRows)); }
 
         /// <summary>
         /// FETCH NEXT count ROWS ONLY clause.
@@ -759,7 +759,7 @@ namespace LambdicSql
         /// <param name="count">Number of rows to acquire.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [MethodFormatConverter(Format = "FETCH NEXT |[0] ROWS ONLY")]
-        public static ClauseChain<Non> FetchNextRowsOnly(object count) { throw new InvalitContextException(nameof(FetchNextRowsOnly)); }
+        public static Clause<Non> FetchNextRowsOnly(object count) { throw new InvalitContextException(nameof(FetchNextRowsOnly)); }
 
         /// <summary>
         /// FETCH NEXT count ROWS ONLY clause.
@@ -769,14 +769,14 @@ namespace LambdicSql
         /// <param name="count">Number of rows to acquire.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [MethodFormatConverter(Format = "FETCH NEXT |[1] ROWS ONLY")]
-        public static ClauseChain<TSelected> FetchNextRowsOnly<TSelected>(this ClauseChain<TSelected> before, object count) { throw new InvalitContextException(nameof(FetchNextRowsOnly)); }
+        public static Clause<TSelected> FetchNextRowsOnly<TSelected>(this Clause<TSelected> before, object count) { throw new InvalitContextException(nameof(FetchNextRowsOnly)); }
 
         /// <summary>
         /// UNION clause.
         /// </summary>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [ClauseStyleConverter]
-        public static ClauseChain<Non> Union() { throw new InvalitContextException(nameof(Union)); }
+        public static Clause<Non> Union() { throw new InvalitContextException(nameof(Union)); }
 
         /// <summary>
         /// UNION clause.
@@ -785,7 +785,7 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [ClauseStyleConverter]
-        public static ClauseChain<TSelected> Union<TSelected>(this ClauseChain<TSelected> before) { throw new InvalitContextException(nameof(Union)); }
+        public static Clause<TSelected> Union<TSelected>(this Clause<TSelected> before) { throw new InvalitContextException(nameof(Union)); }
 
         /// <summary>
         /// UNION clause.
@@ -793,7 +793,7 @@ namespace LambdicSql
         /// <param name="all">If isAll is true, add an ALL predicate.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [ClauseStyleConverter]
-        public static ClauseChain<Non> Union(IAggregatePredicateAll all) { throw new InvalitContextException(nameof(Union)); }
+        public static Clause<Non> Union(IAggregatePredicateAll all) { throw new InvalitContextException(nameof(Union)); }
 
         /// <summary>
         /// UNION clause.
@@ -803,14 +803,14 @@ namespace LambdicSql
         /// <param name="all">If isAll is true, add an ALL predicate.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [ClauseStyleConverter]
-        public static ClauseChain<TSelected> Union<TSelected>(this ClauseChain<TSelected> before, IAggregatePredicateAll all) { throw new InvalitContextException(nameof(Union)); }
+        public static Clause<TSelected> Union<TSelected>(this Clause<TSelected> before, IAggregatePredicateAll all) { throw new InvalitContextException(nameof(Union)); }
 
         /// <summary>
         /// INTERSECT clause.
         /// </summary>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [ClauseStyleConverter]
-        public static ClauseChain<Non> Intersect() { throw new InvalitContextException(nameof(Intersect)); }
+        public static Clause<Non> Intersect() { throw new InvalitContextException(nameof(Intersect)); }
 
         /// <summary>
         /// INTERSECT clause.
@@ -819,7 +819,7 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [ClauseStyleConverter]
-        public static ClauseChain<TSelected> Intersect<TSelected>(this ClauseChain<TSelected> before) { throw new InvalitContextException(nameof(Intersect)); }
+        public static Clause<TSelected> Intersect<TSelected>(this Clause<TSelected> before) { throw new InvalitContextException(nameof(Intersect)); }
 
         /// <summary>
         /// INTERSECT clause.
@@ -827,7 +827,7 @@ namespace LambdicSql
         /// <param name="all">If isAll is true, add an ALL predicate.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [ClauseStyleConverter]
-        public static ClauseChain<Non> Intersect(IAggregatePredicateAll all) { throw new InvalitContextException(nameof(Intersect)); }
+        public static Clause<Non> Intersect(IAggregatePredicateAll all) { throw new InvalitContextException(nameof(Intersect)); }
 
         /// <summary>
         /// INTERSECT clause.
@@ -837,14 +837,14 @@ namespace LambdicSql
         /// <param name="all">If isAll is true, add an ALL predicate.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [ClauseStyleConverter]
-        public static ClauseChain<TSelected> Intersect<TSelected>(this ClauseChain<TSelected> before, IAggregatePredicateAll all) { throw new InvalitContextException(nameof(Intersect)); }
+        public static Clause<TSelected> Intersect<TSelected>(this Clause<TSelected> before, IAggregatePredicateAll all) { throw new InvalitContextException(nameof(Intersect)); }
 
         /// <summary>
         /// EXCEPT clause.
         /// </summary>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [ClauseStyleConverter]
-        public static ClauseChain<Non> Except() { throw new InvalitContextException(nameof(Except)); }
+        public static Clause<Non> Except() { throw new InvalitContextException(nameof(Except)); }
 
         /// <summary>
         /// EXCEPT clause.
@@ -853,7 +853,7 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [ClauseStyleConverter]
-        public static ClauseChain<TSelected> Except<TSelected>(this ClauseChain<TSelected> before) { throw new InvalitContextException(nameof(Except)); }
+        public static Clause<TSelected> Except<TSelected>(this Clause<TSelected> before) { throw new InvalitContextException(nameof(Except)); }
 
         /// <summary>
         /// EXCEPT clause.
@@ -861,7 +861,7 @@ namespace LambdicSql
         /// <param name="all">If isAll is true, add an ALL predicate.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [ClauseStyleConverter]
-        public static ClauseChain<Non> Except(IAggregatePredicateAll all) { throw new InvalitContextException(nameof(Except)); }
+        public static Clause<Non> Except(IAggregatePredicateAll all) { throw new InvalitContextException(nameof(Except)); }
 
         /// <summary>
         /// EXCEPT clause.
@@ -871,14 +871,14 @@ namespace LambdicSql
         /// <param name="all">If isAll is true, add an ALL predicate.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [ClauseStyleConverter]
-        public static ClauseChain<TSelected> Except<TSelected>(this ClauseChain<TSelected> before, IAggregatePredicateAll all) { throw new InvalitContextException(nameof(Except)); }
+        public static Clause<TSelected> Except<TSelected>(this Clause<TSelected> before, IAggregatePredicateAll all) { throw new InvalitContextException(nameof(Except)); }
 
         /// <summary>
         /// MINUS clause.
         /// </summary>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [ClauseStyleConverter]
-        public static ClauseChain<Non> Minus() { throw new InvalitContextException(nameof(Minus)); }
+        public static Clause<Non> Minus() { throw new InvalitContextException(nameof(Minus)); }
 
         /// <summary>
         /// MINUS clause.
@@ -887,7 +887,7 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [ClauseStyleConverter]
-        public static ClauseChain<TSelected> Minus<TSelected>(this ClauseChain<TSelected> before) { throw new InvalitContextException(nameof(Minus)); }
+        public static Clause<TSelected> Minus<TSelected>(this Clause<TSelected> before) { throw new InvalitContextException(nameof(Minus)); }
 
         /// <summary>
         /// UPDATE clause.
@@ -895,7 +895,7 @@ namespace LambdicSql
         /// <param name="table">Table for UPDATE.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [ClauseStyleConverter]
-        public static ClauseChain<Non> Update(object table) { throw new InvalitContextException(nameof(Update)); }
+        public static Clause<Non> Update(object table) { throw new InvalitContextException(nameof(Update)); }
         
         /// <summary>
         /// SET clause.
@@ -904,7 +904,7 @@ namespace LambdicSql
         /// <param name="assigns">Assignment in the SET clause.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [MethodFormatConverter(Format = "SET |[<,>0]", FormatDirection = FormatDirection.Vertical)]
-        public static ClauseChain<TSelected> Set<TSelected>(params Assign[] assigns) { throw new InvalitContextException(nameof(Set)); }
+        public static Clause<TSelected> Set<TSelected>(params Assign[] assigns) { throw new InvalitContextException(nameof(Set)); }
 
         /// <summary>
         /// SET clause.
@@ -914,14 +914,14 @@ namespace LambdicSql
         /// <param name="assigns">Assignment in the SET clause.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [MethodFormatConverter(Format = "SET |[<,>1]", FormatDirection = FormatDirection.Vertical)]
-        public static ClauseChain<TSelected> Set<TSelected>(this ClauseChain<TSelected> before, params Assign[] assigns) { throw new InvalitContextException(nameof(Set)); }
+        public static Clause<TSelected> Set<TSelected>(this Clause<TSelected> before, params Assign[] assigns) { throw new InvalitContextException(nameof(Set)); }
 
         /// <summary>
         /// DELETE clause.
         /// </summary>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [ClauseStyleConverter]
-        public static ClauseChain<Non> Delete() { throw new InvalitContextException(nameof(Delete)); }
+        public static Clause<Non> Delete() { throw new InvalitContextException(nameof(Delete)); }
 
         /// <summary>
         /// INSERT INTO clause.
@@ -929,7 +929,7 @@ namespace LambdicSql
         /// <param name="table">Table for INSERT.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [ClauseStyleConverter(Name = "INSERT INTO")]
-        public static ClauseChain<Non> InsertInto(object table) { throw new InvalitContextException(nameof(InsertInto)); }
+        public static Clause<Non> InsertInto(object table) { throw new InvalitContextException(nameof(InsertInto)); }
 
         /// <summary>
         /// INSERT INTO clause.
@@ -938,7 +938,7 @@ namespace LambdicSql
         /// <param name="columns">It is a column that performs INSERT.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [MethodFormatConverter(Format = "INSERT INTO [0](|[#<, >1])")]
-        public static ClauseChain<Non> InsertInto(object table, params object[] columns) { throw new InvalitContextException(nameof(InsertInto)); }
+        public static Clause<Non> InsertInto(object table, params object[] columns) { throw new InvalitContextException(nameof(InsertInto)); }
 
         /// <summary>
         /// INSERT INTO clause.
@@ -946,7 +946,7 @@ namespace LambdicSql
         /// <param name="values">It is the value to be Inserted.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [FuncStyleConverter(Indent = 1)]
-        public static ClauseChain<Non> Values(params object[] values) { throw new InvalitContextException(nameof(Values)); }
+        public static Clause<Non> Values(params object[] values) { throw new InvalitContextException(nameof(Values)); }
 
         /// <summary>
         /// INSERT INTO clause.
@@ -956,7 +956,7 @@ namespace LambdicSql
         /// <param name="values">It is the value to be Inserted.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [FuncStyleConverter(Indent = 1)]
-        public static ClauseChain<TSelected> Values<TSelected>(this ClauseChain<TSelected> before, params object[] values) { throw new InvalitContextException(nameof(Values)); }
+        public static Clause<TSelected> Values<TSelected>(this Clause<TSelected> before, params object[] values) { throw new InvalitContextException(nameof(Values)); }
 
         /// <summary>
         /// LIKE keyword.
@@ -1032,7 +1032,7 @@ namespace LambdicSql
         /// <param name="subQuerys">sub querys.</param>
         /// <returns></returns>
         [WithConverter]
-        public static ClauseChain<Non> With(params Sql[] subQuerys) { throw new InvalitContextException(nameof(With)); }
+        public static Clause<Non> With(params Sql[] subQuerys) { throw new InvalitContextException(nameof(With)); }
 
         /// <summary>
         /// WITH clause.
@@ -1042,7 +1042,7 @@ namespace LambdicSql
         /// <param name="subQuery">sub query.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [WithConverter]
-        public static ClauseChain<T> With<T>(SqlRecursiveArguments<T> args, Sql subQuery) { throw new InvalitContextException(nameof(With)); }
+        public static Clause<T> With<T>(SqlRecursiveArguments<T> args, Sql subQuery) { throw new InvalitContextException(nameof(With)); }
 
         /// <summary>
         /// RECURSIVE clause.
@@ -1074,14 +1074,14 @@ namespace LambdicSql
         /// </summary>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [MethodFormatConverter(Format = "CREATE TABLE [0](|[#$<,>1])", FormatDirection = FormatDirection.Vertical)]
-        public static ClauseChain<Non> CreateTable(object table, params ITableDefinition[] designer) { throw new InvalitContextException(nameof(CreateTable)); }
+        public static Clause<Non> CreateTable(object table, params ITableDefinition[] designer) { throw new InvalitContextException(nameof(CreateTable)); }
 
         /// <summary>
         /// CREATE TABLE clause.
         /// </summary>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [MethodFormatConverter(Format = "CREATE TABLE IF NOT EXISTS [0](|[#$<,>1])", FormatDirection = FormatDirection.Vertical)]
-        public static ClauseChain<Non> CreateTableIfNotExists(object table, params ITableDefinition[] designer) { throw new InvalitContextException(nameof(CreateTable)); }
+        public static Clause<Non> CreateTableIfNotExists(object table, params ITableDefinition[] designer) { throw new InvalitContextException(nameof(CreateTable)); }
         
         /// <summary>
         /// CONSTRAINT clause.
@@ -1089,7 +1089,7 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [ClauseStyleConverter]
-        public static IConstraint Constraint(this ClauseChain<Non> before) { throw new InvalitContextException(nameof(Constraint)); }
+        public static IConstraint Constraint(this Clause<Non> before) { throw new InvalitContextException(nameof(Constraint)); }
 
         /// <summary>
         /// CONSTRAINT clause.
@@ -1197,7 +1197,7 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [ClauseStyleConverter]
-        public static ClauseChain<Non> Restrict(this ClauseChain<Non> before) { throw new InvalitContextException(nameof(Restrict)); }
+        public static Clause<Non> Restrict(this Clause<Non> before) { throw new InvalitContextException(nameof(Restrict)); }
 
         /// <summary>
         /// CASCADE clause.
@@ -1205,7 +1205,7 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [ClauseStyleConverter]
-        public static ClauseChain<Non> Cascade(this ClauseChain<Non> before) { throw new InvalitContextException(nameof(Cascade)); }
+        public static Clause<Non> Cascade(this Clause<Non> before) { throw new InvalitContextException(nameof(Cascade)); }
 
         /// <summary>
         /// CASCADE clause.
@@ -1214,7 +1214,7 @@ namespace LambdicSql
         /// <param name="constraint">Constraint.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [ClauseStyleConverter]
-        public static ClauseChain<Non> Cascade(this ClauseChain<Non> before, IConstraint constraint) { throw new InvalitContextException(nameof(Cascade)); }
+        public static Clause<Non> Cascade(this Clause<Non> before, IConstraint constraint) { throw new InvalitContextException(nameof(Cascade)); }
 
         /// <summary>
         /// DROP TABLE clause.
@@ -1222,7 +1222,7 @@ namespace LambdicSql
         /// <param name="tables">Tables.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [ClauseStyleConverter(Name = "DROP TABLE")]
-        public static ClauseChain<Non> DropTable(params object[] tables) { throw new InvalitContextException(nameof(DropTable)); }
+        public static Clause<Non> DropTable(params object[] tables) { throw new InvalitContextException(nameof(DropTable)); }
 
         /// <summary>
         /// DROP TABLE IF EXISTS clause.
@@ -1230,7 +1230,7 @@ namespace LambdicSql
         /// <param name="tables">Tables.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [ClauseStyleConverter(Name = "DROP TABLE IF EXISTS")]
-        public static ClauseChain<Non> DropTableIfExists(params object[] tables) { throw new InvalitContextException(nameof(DropTable)); }
+        public static Clause<Non> DropTableIfExists(params object[] tables) { throw new InvalitContextException(nameof(DropTable)); }
 
         /// <summary>
         /// DROP DATABASE clause.
@@ -1238,7 +1238,7 @@ namespace LambdicSql
         /// <param name="name">DataBase name.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [MethodFormatConverter(Format = "CREATE DATABASE [!0]")]
-        public static ClauseChain<Non> CreateDataBase(string name) { throw new InvalitContextException(nameof(CreateDataBase)); }
+        public static Clause<Non> CreateDataBase(string name) { throw new InvalitContextException(nameof(CreateDataBase)); }
 
         /// <summary>
         /// DROP DATABASE clause.
@@ -1246,6 +1246,6 @@ namespace LambdicSql
         /// <param name="name">DataBase name.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [MethodFormatConverter(Format = "DROP DATABASE [!0]")]
-        public static ClauseChain<Non> DropDataBase(string name) { throw new InvalitContextException(nameof(CreateDataBase)); }
+        public static Clause<Non> DropDataBase(string name) { throw new InvalitContextException(nameof(CreateDataBase)); }
     }
 }

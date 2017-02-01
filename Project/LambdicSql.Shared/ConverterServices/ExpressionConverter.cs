@@ -158,7 +158,8 @@ namespace LambdicSql.ConverterServices
             var right = Convert(binary.Right);
 
             //sql + sql
-            if (typeof(Sql).IsAssignableFromEx(binary.Type) && binary.NodeType == ExpressionType.Add)
+            //sql + clause
+            if (typeof(SqlExpression).IsAssignableFromEx(binary.Type) && binary.NodeType == ExpressionType.Add)
             {
                 return new VCode(left, right);
             }
