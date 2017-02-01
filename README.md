@@ -1,4 +1,4 @@
-﻿LambdicSql_β 0.27.0
+﻿LambdicSql_β 0.29.0
 ======================
 
 ## Features ...
@@ -74,7 +74,7 @@ public void TestStandard()
     var sql = Db<DB>.Sql(db =>
     
         //lambda.
-        Select(new SelectData1()
+        Select(new SelectData1
         {
             Name = db.tbl_staff.name,
             PaymentDate = db.tbl_remuneration.payment_date,
@@ -226,7 +226,7 @@ public void TestQueryConcat()
 {
     //make sql.
     var select = Db<DB>.Sql(db =>
-        Select(new SelectData1()
+        Select(new SelectData1
         {
             Name = db.tbl_staff.name,
             PaymentDate = db.tbl_remuneration.payment_date,
@@ -275,7 +275,7 @@ public void TestSqlExpression()
     var expWhereMax = Db<DB>.Sql(db => db.tbl_remuneration.money < 4000);
 
     var sql = Db<DB>.Sql(db =>
-       Select(new SelectData1()
+       Select(new SelectData1
        {
            Name = db.tbl_staff.name,
            PaymentDate = db.tbl_remuneration.payment_date,
