@@ -42,6 +42,9 @@ namespace LambdicSql.MultiplatformCompatibe
                 null;
         }
 
+        internal static bool IsClassAndAssignableFromEx(this Type type, Type target)
+            => target.IsClassEx() && type.IsAssignableFromEx(target);
+
         internal static bool IsAssignableFromEx(this Type type, Type target) => type.IsAssignableFrom(target);
 
         internal static FieldInfo[] GetFieldsEx(this Type type) => type.GetFields();

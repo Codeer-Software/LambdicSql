@@ -136,9 +136,6 @@ FROM tbl_remuneration");
         {
             if (_connection.GetType().Name == "SQLiteConnection") return;
             if (_connection.GetType().Name == "MySqlConnection") return;
-            //@@@
-            if (_connection.GetType().Name == "NpgsqlConnection") return;
-            if (_connection.GetType().Name == "OracleConnection") return;
 
             var query = Db<DB>.Sql(db =>
                 Select(new SelectData()

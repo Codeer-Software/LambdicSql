@@ -658,7 +658,42 @@ FROM tbl_staff",
 FROM tbl_remuneration
 WHERE (@p_0) < (tbl_remuneration.id)", 0);
         }
-        //TODO +演算
+
+
+        public class SelectData3
+        {
+            public decimal Val { get; set; }
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_OverAdd()
+        {
+            if (_connection.GetType().Name == "SQLiteConnection") return;
+            if (_connection.GetType().Name == "MySqlConnection") return;
+
+            var query = Db<DB>.Sql(db =>
+                Select(new SelectData3
+                {
+                    Val = Sum(db.tbl_remuneration.money) + 
+                            Over(PartitionBy(db.tbl_remuneration.payment_date),
+                                OrderBy(Asc(db.tbl_remuneration.money)),
+                                Rows(1, 5))
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(query).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(query, _connection,
+@"SELECT
+	SUM(tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+FROM tbl_remuneration");
+        }
 
         //TODO ★足したものが正しくサブクエリの時に括弧がつくか！
 

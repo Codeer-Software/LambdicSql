@@ -361,10 +361,9 @@ namespace LambdicSql
         /// <summary>
         /// 
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="args"></param>
         /// <returns></returns>
         [MethodFormatConverter(Format = "OVER(|[< >0])", FormatDirection = FormatDirection.Vertical)]
-        public static T Over<T>(params OverArgument[] args) { throw new InvalitContextException(nameof(Over)); }
+        public static OverReturnValue Over(params OverArgument[] args) { throw new InvalitContextException(nameof(Over)); }
     }
 }

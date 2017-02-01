@@ -159,11 +159,15 @@ namespace LambdicSql.ConverterServices
 
             //sql + sql
             //sql + clause
-            if (typeof(SqlExpression).IsAssignableFromEx(binary.Type) && binary.NodeType == ExpressionType.Add)
+            if (binary.NodeType == ExpressionType.Add)
             {
-                return new VCode(left, right);
+                if (typeof(SqlExpression).IsClassAndAssignableFromEx(binary.Type) ||
+                    typeof(SqlExpression).IsClassAndAssignableFromEx(binary.Left.Type) ||
+                    typeof(SqlExpression).IsClassAndAssignableFromEx(binary.Right.Type))
+                {
+                    return new VCode(left, right);
+                }
             }
-
             if (left.IsEmpty && right.IsEmpty) return string.Empty.ToCode();
             if (left.IsEmpty) return right;
             if (right.IsEmpty) return left;

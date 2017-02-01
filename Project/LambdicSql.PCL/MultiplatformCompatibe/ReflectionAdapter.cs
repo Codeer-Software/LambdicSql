@@ -21,8 +21,11 @@ namespace LambdicSql.MultiplatformCompatibe
 
         internal static T GetAttribute<T>(this Type type) where T : Attribute
             => type.GetTypeInfo().GetCustomAttribute<T>();
+        
+        internal static bool IsClassAndAssignableFromEx(this Type type, Type target)
+            => target.IsClassEx() && type.IsAssignableFromEx(target);
 
-        internal static bool IsAssignableFromEx(this Type type, Type target) 
+        internal static bool IsAssignableFromEx(this Type type, Type target)
             => type.GetTypeInfo().IsAssignableFrom(target.GetTypeInfo());
 
         internal static FieldInfo[] GetFieldsEx(this Type type) => type.GetTypeInfo().DeclaredFields.ToArray();
