@@ -24,6 +24,14 @@ namespace LambdicSql
         }
 
         /// <summary>
+        /// Empty Constructor.
+        /// </summary>
+        public Sql()
+        {
+            Code = string.Empty.ToCode();
+        }
+
+        /// <summary>
         /// Addition operator.
         /// </summary>
         /// <param name="sql1">sql 1.</param>
@@ -137,6 +145,11 @@ namespace LambdicSql
             => new Sql<T>(Code.Accept(new CustomizeParameterValue(values)));
 
         internal Sql(ICode code) : base(code) { }
+
+        /// <summary>
+        /// Empty Constructor.
+        /// </summary>
+        public Sql() { }
     }
 
     /// <summary>

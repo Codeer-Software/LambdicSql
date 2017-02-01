@@ -268,39 +268,11 @@ namespace LambdicSql
         public static Clause<TSelected> Select<TSrcSelected, TSelected>(this Clause<TSrcSelected> before, IAggregatePredicate predicate, ITop top, IAsterisk<TSelected> asterisk) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
-        /// Return value of CASE clause.
-        /// </summary>
-        public interface ICaseAfter { }
-
-        /// <summary>
-        /// Return value of WHEN clause.
-        /// </summary>
-        public interface IWhenAfter { }
-
-        /// <summary>
-        /// Return value of WHEN clause.
-        /// </summary>
-        /// <typeparam name="T">Type represented by CASE expression.</typeparam>
-        public interface IWhenAfter<T> { }
-
-        /// <summary>
-        /// Return value of THEN clause.
-        /// </summary>
-        /// <typeparam name="T">Type represented by CASE expression.</typeparam>
-        public interface IThenAfter<T> { }
-
-        /// <summary>
-        /// Return value of ELSE clause.
-        /// </summary>
-        /// <typeparam name="T">Type represented by CASE expression.</typeparam>
-        public interface IElseAfter<T> { }
-
-        /// <summary>
         /// CASE clause.
         /// </summary>
         /// <returns>It is an object for describing the continuation of the CASE expression.</returns>
         [ClauseStyleConverter]
-        public static ICaseAfter Case() { throw new InvalitContextException(nameof(Case)); }
+        public static Clause<Non> Case() { throw new InvalitContextException(nameof(Case)); }
 
         /// <summary>
         /// CASE clause.
@@ -308,7 +280,7 @@ namespace LambdicSql
         /// <param name="target">It's target of CASE branch.</param>
         /// <returns>It is an object for describing the continuation of the CASE expression.</returns>
         [ClauseStyleConverter]
-        public static ICaseAfter Case(object target) { throw new InvalitContextException(nameof(Case)); }
+        public static Clause<Non> Case(object target) { throw new InvalitContextException(nameof(Case)); }
 
         /// <summary>
         /// CASE clause.
@@ -316,7 +288,7 @@ namespace LambdicSql
         /// <typeparam name="T">Type represented by CASE expression.</typeparam>
         /// <returns>It is an object for describing the continuation of the CASE expression.</returns>
         [ClauseStyleConverter]
-        public static T Case<T>() { throw new InvalitContextException(nameof(Case)); }
+        public static Clause<T> Case<T>() { throw new InvalitContextException(nameof(Case)); }
 
         /// <summary>
         /// CASE clause.
@@ -325,7 +297,7 @@ namespace LambdicSql
         /// <param name="target">It's target of CASE branch.</param>
         /// <returns>It is an object for describing the continuation of the CASE expression.</returns>
         [ClauseStyleConverter]
-        public static T Case<T>(object target) { throw new InvalitContextException(nameof(Case)); }
+        public static Clause<T> Case<T>(object target) { throw new InvalitContextException(nameof(Case)); }
 
         /// <summary>
         /// WHEN clause.
@@ -334,7 +306,7 @@ namespace LambdicSql
         /// <param name="expression">It is a conditional expression of the WHEN clause.</param>
         /// <returns>It is an object for describing the continuation of the CASE expression.</returns>
         [ClauseStyleConverter(Indent = 1)]
-        public static IWhenAfter When(this ICaseAfter before, object expression) { throw new InvalitContextException(nameof(When)); }
+        public static Clause<Non> When(this Clause<Non> before, object expression) { throw new InvalitContextException(nameof(When)); }
 
         /// <summary>
         /// WHEN clause.
@@ -342,7 +314,7 @@ namespace LambdicSql
         /// <param name="expression">It is a conditional expression of the WHEN clause.</param>
         /// <returns>It is an object for describing the continuation of the CASE expression.</returns>
         [ClauseStyleConverter(Indent = 1)]
-        public static IWhenAfter When(object expression) { throw new InvalitContextException(nameof(When)); }
+        public static Clause<Non> When(object expression) { throw new InvalitContextException(nameof(When)); }
 
         /// <summary>
         /// WHEN clause.
@@ -352,7 +324,7 @@ namespace LambdicSql
         /// <param name="expression">It is a conditional expression of the WHEN clause.</param>
         /// <returns>It is an object for describing the continuation of the CASE expression.</returns>
         [ClauseStyleConverter(Indent = 1)]
-        public static IWhenAfter<T> When<T>(this IThenAfter<T> before, object expression) { throw new InvalitContextException(nameof(When)); }
+        public static Clause<T> When<T>(this Clause<T> before, object expression) { throw new InvalitContextException(nameof(When)); }
 
         /// <summary>
         /// THEN clause.
@@ -362,7 +334,7 @@ namespace LambdicSql
         /// <param name="result">It is an item to return to when the THEN clause is valid.</param>
         /// <returns>It is an object for describing the continuation of the CASE expression.</returns>
         [ClauseStyleConverter(Indent = 1)]
-        public static IThenAfter<T> Then<T>(this IWhenAfter before, T result) { throw new InvalitContextException(nameof(Then)); }
+        public static Clause<T> Then<T>(this Clause<Non> before, T result) { throw new InvalitContextException(nameof(Then)); }
 
         /// <summary>
         /// THEN clause.
@@ -372,7 +344,7 @@ namespace LambdicSql
         /// <param name="result">It is an item to return to when the THEN clause is valid.</param>
         /// <returns>It is an object for describing the continuation of the CASE expression.</returns>
         [ClauseStyleConverter(Indent = 1)]
-        public static IThenAfter<T> Then<T>(this IWhenAfter<T> before, T result) { throw new InvalitContextException(nameof(Then)); }
+        public static Clause<T> Then<T>(this Clause<T> before, T result) { throw new InvalitContextException(nameof(Then)); }
 
         /// <summary>
         /// ELSE clause.
@@ -382,7 +354,7 @@ namespace LambdicSql
         /// <param name="result">It is an item to return to when the ELSE clause is valid.</param>
         /// <returns>It is an object for describing the continuation of the CASE expression.</returns>
         [ClauseStyleConverter(Indent = 1)]
-        public static IElseAfter<T> Else<T>(this IThenAfter<T> before, T result) { throw new InvalitContextException(nameof(Then)); }
+        public static Clause<T> Else<T>(this Clause<T> before, T result) { throw new InvalitContextException(nameof(Then)); }
 
         /// <summary>
         /// ELSE clause.
@@ -391,7 +363,7 @@ namespace LambdicSql
         /// <param name="result">It is an item to return to when the ELSE clause is valid.</param>
         /// <returns>It is an object for describing the continuation of the CASE expression.</returns>
         [ClauseStyleConverter(Indent = 1)]
-        public static IElseAfter<T> Else<T>(T result) { throw new InvalitContextException(nameof(Then)); }
+        public static Clause<T> Else<T>(T result) { throw new InvalitContextException(nameof(Then)); }
 
         /// <summary>
         /// END clause.
@@ -400,23 +372,14 @@ namespace LambdicSql
         /// <param name="before">It is an before expression in the CASE clause.</param>
         /// <returns>It is the result of CASE expression.</returns>
         [ClauseStyleConverter]
-        public static T End<T>(this IThenAfter<T> before) { throw new InvalitContextException(nameof(End)); }
+        public static T End<T>(this Clause<T> before) { throw new InvalitContextException(nameof(End)); }
 
         /// <summary>
         /// END clause.
         /// </summary>
-        /// <typeparam name="T">Type represented by CASE expression.</typeparam>
-        /// <param name="before">It is an before expression in the CASE clause.</param>
         /// <returns>It is the result of CASE expression.</returns>
         [ClauseStyleConverter]
-        public static T End<T>(this IElseAfter<T> before) { throw new InvalitContextException(nameof(End)); }
-        
-        /// <summary>
-        /// END clause.
-        /// </summary>
-        /// <returns>It is the result of CASE expression.</returns>
-        [ClauseStyleConverter]
-        public static Non End() { throw new InvalitContextException(nameof(End)); }
+        public static Clause<object> End() { throw new InvalitContextException(nameof(End)); }
 
         /// <summary>
         /// FROM clause.
