@@ -22,7 +22,7 @@ namespace LambdicSql
         public static Sql<TResult> Sql<TResult>(Expression<Func<T, TResult>> expression)
         {
             var db = DBDefineAnalyzer.GetDbInfo<T>();
-            return new Sql<TResult>(MakeSynatx(db, expression.Body));
+            return new Sql<TResult>(ExpressionConverter.CreateCode(db, expression.Body));
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace LambdicSql
         public static Sql<TSelected> Sql<TSelected>(Expression<Func<T, Clause<TSelected>>> expression)
         {
             var db = DBDefineAnalyzer.GetDbInfo<T>();
-            return new Sql<TSelected>(MakeSynatx(db, expression.Body));
+            return new Sql<TSelected>(ExpressionConverter.CreateCode(db, expression.Body));
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace LambdicSql
         public static Sql Sql(Expression<Func<T, Clause<Non>>> expression)
         {
             var db = DBDefineAnalyzer.GetDbInfo<T>();
-            return new Sql(MakeSynatx(db, expression.Body));
+            return new Sql(ExpressionConverter.CreateCode(db, expression.Body));
         }
 
         /// <summary>
@@ -71,13 +71,7 @@ namespace LambdicSql
         public static SqlRecursiveArguments<TResult> Sql<TResult>(Expression<Func<T, Symbol.RecursiveArguments<TResult>>> expression)
         {
             var db = DBDefineAnalyzer.GetDbInfo<T>();
-            return new SqlRecursiveArguments<TResult>(MakeSynatx(db, expression.Body));
-        }
-
-        static ICode MakeSynatx(DbInfo dbInfo, Expression core)
-        {
-            var converter = new ExpressionConverter(dbInfo);
-            return core == null ? string.Empty.ToCode() : converter.ConvertToCode(core);
+            return new SqlRecursiveArguments<TResult>(ExpressionConverter.CreateCode(db, expression.Body));
         }
     }
 }

@@ -17,9 +17,15 @@ namespace LambdicSql.ConverterServices
     {
         DbInfo DbInfo { get; }
 
-        internal ExpressionConverter(DbInfo info)
+        ExpressionConverter(DbInfo info)
         {
             DbInfo = info;
+        }
+
+        internal static ICode CreateCode(DbInfo dbInfo, Expression core)
+        {
+            var converter = new ExpressionConverter(dbInfo);
+            return core == null ? string.Empty.ToCode() : converter.ConvertToCode(core);
         }
 
         /// <summary>
