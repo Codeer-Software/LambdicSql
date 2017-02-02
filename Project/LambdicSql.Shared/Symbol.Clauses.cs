@@ -340,6 +340,15 @@ namespace LambdicSql
         /// THEN clause.
         /// </summary>
         /// <typeparam name="T">Type represented by CASE expression.</typeparam>
+        /// <param name="result">It is an item to return to when the THEN clause is valid.</param>
+        /// <returns>It is an object for describing the continuation of the CASE expression.</returns>
+        [ClauseStyleConverter(Indent = 1)]
+        public static Clause<T> Then<T>(T result) { throw new InvalitContextException(nameof(Then)); }
+
+        /// <summary>
+        /// THEN clause.
+        /// </summary>
+        /// <typeparam name="T">Type represented by CASE expression.</typeparam>
         /// <param name="before">It is an before expression in the CASE clause.</param>
         /// <param name="result">It is an item to return to when the THEN clause is valid.</param>
         /// <returns>It is an object for describing the continuation of the CASE expression.</returns>
@@ -379,7 +388,7 @@ namespace LambdicSql
         /// </summary>
         /// <returns>It is the result of CASE expression.</returns>
         [ClauseStyleConverter]
-        public static Clause<object> End() { throw new InvalitContextException(nameof(End)); }
+        public static Clause<Non> End() { throw new InvalitContextException(nameof(End)); }
 
         /// <summary>
         /// FROM clause.
@@ -948,20 +957,6 @@ namespace LambdicSql
         /// <returns>Returns TRUE if target is included in the canditates represented by expression.</returns>
         [MethodFormatConverter(Format = "[0] IN(|[<, >1])")]
         public static bool In<T>(T target, params T[] canditates) { throw new InvalitContextException(nameof(In)); }
-
-        /// <summary>
-        /// ALL Keyword
-        /// </summary>
-        /// <returns></returns>
-        [ClauseStyleConverter]
-        public static AggregatePredicateAllElement All() => null;
-
-        /// <summary>
-        /// Distinct Keyword
-        /// </summary>
-        /// <returns></returns>
-        [ClauseStyleConverter]
-        public static AggregatePredicateElement Distinct() { throw new InvalitContextException(nameof(All)); }
 
         /// <summary>
         /// ALL Keyword

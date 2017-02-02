@@ -102,6 +102,34 @@ FROM tbl_staff");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_All()
+        {
+            var sql = Db<DB>.Sql(db =>
+                Select(All(), Asterisk()).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query<Remuneration>(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT ALL *
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Distinct()
+        {
+            var sql = Db<DB>.Sql(db =>
+                Select(Distinct(), Asterisk()).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query<Remuneration>(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT DISTINCT *
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_RowNum()
         {
             if (!_connection.IsTarget(TargetDB.Oracle)) return;

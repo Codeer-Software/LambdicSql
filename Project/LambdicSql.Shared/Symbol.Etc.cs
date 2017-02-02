@@ -58,10 +58,18 @@ namespace LambdicSql
         public static TopElement Top(long count) { throw new InvalitContextException(nameof(Top)); }
 
         /// <summary>
-        /// ROWNUM BETWEEN keyword.
+        /// ALL Keyword
         /// </summary>
+        /// <returns></returns>
         [ClauseStyleConverter]
-        public static object RowNum() { throw new InvalitContextException(nameof(RowNum)); }
+        public static AggregatePredicateAllElement All() => null;
+
+        /// <summary>
+        /// Distinct Keyword
+        /// </summary>
+        /// <returns></returns>
+        [ClauseStyleConverter]
+        public static AggregatePredicateElement Distinct() { throw new InvalitContextException(nameof(All)); }
 
         /// <summary>
         /// CURREN_TDATE function.
@@ -89,5 +97,11 @@ namespace LambdicSql
         /// </summary>
         [MemberConverter]
         public static object Dual { get { throw new InvalitContextException(nameof(Dual)); } }
+
+        /// <summary>
+        /// ROWNUM BETWEEN keyword.
+        /// </summary>
+        [ClauseStyleConverter]
+        public static object RowNum() { throw new InvalitContextException(nameof(RowNum)); }
     }
 }
