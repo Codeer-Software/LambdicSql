@@ -12,6 +12,16 @@ using LambdicSql.BuilderServices.CodeParts;
 
 namespace Test
 {
+    public enum TargetDB
+    {
+        SqlServer,
+        SQLite,
+        Postgre,
+        MySQL,
+        Oracle,
+        DB2
+    }
+
     public static class TestSynatax
     {
         [SymbolForTest]
@@ -25,11 +35,26 @@ namespace Test
 
     public static class TestExtensions
     {
-        public static string Flat(this string text)=> text.Replace(Environment.NewLine, " ").Replace("\t", " ");
+        public static string Flat(this string text) => text.Replace(Environment.NewLine, " ").Replace("\t", " ");
+
+        static Dictionary<TargetDB, string> _targetDb = ((Func<Dictionary<TargetDB, string>>)delegate
+        {
+            var dic = new Dictionary<TargetDB, string>();
+            dic[TargetDB.SqlServer] = "SqlConnection";
+            dic[TargetDB.SQLite] = "SQLiteConnection";
+            dic[TargetDB.Postgre] = "NpgsqlConnection";
+            dic[TargetDB.MySQL] = "MySqlConnection";
+            dic[TargetDB.Oracle] = "OracleConnection";
+            dic[TargetDB.DB2] = "DB2Connection";
+            return dic;
+        })();  
+
+        public static bool IsTarget(this IDbConnection conn, params TargetDB[] targets)
+            => targets.Select(e=>_targetDb[e]).Any(e => e == conn.GetType().Name);
 
         public static void Gen(this Sql query, IDbConnection con)
         {
-            Debug.Print("AssertEx.AreEqual(query, _connection," + 
+            Debug.Print("AssertEx.AreEqual(sql, _connection," + 
                 Environment.NewLine + "@\"" + query.Build(con.GetType()).Text + "\");");
         }
 

@@ -102,22 +102,24 @@ namespace LambdicSql
         /// <summary>
         /// MOD function.
         /// </summary>
-        /// <typeparam name="T">Type represented by target</typeparam>
+        /// <typeparam name="T1">Type represented by target</typeparam>
+        /// <typeparam name="T2">Type represented by div</typeparam>
         /// <param name="target">Numeric expression to divide.</param>
         /// <param name="div">A numeric expression that divides the dividend.</param>
         /// <returns>Surplus.</returns>
         [FuncStyleConverter]
-        public static T Mod<T>(T target, object div) { throw new InvalitContextException(nameof(Mod)); }
+        public static T1 Mod<T1, T2>(T1 target, T2 div) { throw new InvalitContextException(nameof(Mod)); }
 
         /// <summary>
         /// ROUND function.
         /// </summary>
-        /// <typeparam name="T">Type represented by target.</typeparam>
+        /// <typeparam name="T1">Type represented by target.</typeparam>
+        /// <typeparam name="T2">Type represented by digit</typeparam>
         /// <param name="target">Numeric expression to round.</param>
         /// <param name="digit">Is the precision to which it is to be rounded.</param>
         /// <returns>Rounded result.</returns>
         [FuncStyleConverter]
-        public static T Round<T>(T target, object digit) { throw new InvalitContextException(nameof(Round)); }
+        public static T1 Round<T1, T2>(T1 target, T2 digit) { throw new InvalitContextException(nameof(Round)); }
 
         /// <summary>
         /// CONCAT function.

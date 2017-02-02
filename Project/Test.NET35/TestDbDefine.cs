@@ -26,7 +26,7 @@ namespace Test
         [TestCleanup]
         public void TestCleanup() => _connection.Dispose();
 
-        public class SelectData
+        public class SelecteData
         {
             public string name { get; set; }
             public DateTime payment_date { get; set; }
@@ -37,7 +37,7 @@ namespace Test
         public void Test_Normal()
         {
             var query = Db<DB>.Sql(db =>
-                Select(new SelectData
+                Select(new SelecteData
                 {
                     name = db.tbl_staff.name,
                     payment_date = db.tbl_remuneration.payment_date,
@@ -66,7 +66,7 @@ FROM tbl_remuneration
             if (name != "SqlConnection") return;
 
             var query = Db<DBEX>.Sql(db =>
-                Select(new SelectData
+                Select(new SelecteData
                 {
                     name = db.dbo.tbl_staff.name,
                     payment_date = db.dbo.tbl_remuneration.payment_date,
