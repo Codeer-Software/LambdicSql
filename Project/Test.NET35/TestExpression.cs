@@ -622,6 +622,17 @@ WHERE (@p_0) < (tbl_remuneration.id)", 0);
 FROM tbl_staff",
  3, "x", 4, "y", "z");
         }
+        
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_IsEmpty()
+        {
+            var empty1 = new Sql();
+            var empty2 = new Sql<string>();
+            var from = Db<DB>.Sql(db => From(db.tbl_remuneration));
+            Assert.IsTrue(empty1.IsEmpty);
+            Assert.IsTrue(empty2.IsEmpty);
+            Assert.IsFalse(from.IsEmpty);
+        }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Add_Empty()

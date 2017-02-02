@@ -18,6 +18,11 @@ namespace LambdicSql
         /// <returns>text.</returns>
         public ICode Code { get; }
 
+        /// <summary>
+        /// Is empty.
+        /// </summary>
+        public bool IsEmpty => Code.IsEmpty;
+
         internal Sql(ICode code)
         {
             Code = code;
