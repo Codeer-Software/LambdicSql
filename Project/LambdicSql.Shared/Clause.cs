@@ -1,12 +1,9 @@
-﻿namespace LambdicSql.ConverterServices
+﻿using LambdicSql.ConverterServices;
+
+namespace LambdicSql
 {
     /// <summary>
-    /// 
-    /// </summary>
-    public abstract class SqlExpression { }
-
-    /// <summary>
-    /// 
+    /// Clause.
     /// </summary>
     public abstract class Clause : SqlExpression
     {
@@ -20,7 +17,7 @@
     }
 
     /// <summary>
-    /// Clause chain.
+    /// Clause.
     /// </summary>
     /// <typeparam name="TSelected">Type of selected.</typeparam>
     public abstract class Clause<TSelected> : Clause

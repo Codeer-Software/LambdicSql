@@ -28,7 +28,7 @@ namespace LambdicSql
         /// <param name="column">The column or expression that is function target.</param>
         /// <returns>Total.</returns>
         [MethodFormatConverter(Format = "SUM(|[0] [1])")]
-        public static T Sum<T>(IAggregatePredicate aggregatePredicate, T column) { throw new InvalitContextException(nameof(Sum)); }
+        public static T Sum<T>(AggregatePredicateElement aggregatePredicate, T column) { throw new InvalitContextException(nameof(Sum)); }
 
         /// <summary>
         /// COUNT function.
@@ -44,7 +44,7 @@ namespace LambdicSql
         /// <param name="asterisk">*</param>
         /// <returns>Count.</returns>
         [FuncStyleConverter]
-        public static int Count(IAsterisk asterisk) { throw new InvalitContextException(nameof(Count)); }
+        public static int Count(AsteriskElement asterisk) { throw new InvalitContextException(nameof(Count)); }
 
         /// <summary>
         /// COUNT function.
@@ -53,7 +53,7 @@ namespace LambdicSql
         /// <param name="column">The column or expression that is function target.</param>
         /// <returns>Count.</returns>
         [MethodFormatConverter(Format = "COUNT(|[0] [1])")]
-        public static int Count(IAggregatePredicate aggregatePredicate, object column) { throw new InvalitContextException(nameof(Count)); }
+        public static int Count(AggregatePredicateElement aggregatePredicate, object column) { throw new InvalitContextException(nameof(Count)); }
 
         /// <summary>
         /// COUNT function.
@@ -62,7 +62,7 @@ namespace LambdicSql
         /// <param name="asterisk">*</param>
         /// <returns>Count.</returns>
         [MethodFormatConverter(Format = "COUNT(|[0] [1])")]
-        public static int Count(IAggregatePredicate aggregatePredicate, IAsterisk asterisk) { throw new InvalitContextException(nameof(Count)); }
+        public static int Count(AggregatePredicateElement aggregatePredicate, AsteriskElement asterisk) { throw new InvalitContextException(nameof(Count)); }
 
         /// <summary>
         /// AVG function.
@@ -205,7 +205,7 @@ namespace LambdicSql
         /// <param name="destinationType">Type of destination.</param>
         /// <returns>Converted data.</returns>
         [MethodFormatConverter(Format = "CAST(|[0] AS [1])")]
-        public static TDst Cast<TDst>(object target, IDataType destinationType) { throw new InvalitContextException(nameof(Cast)); }
+        public static TDst Cast<TDst>(object target, DataTypeElement destinationType) { throw new InvalitContextException(nameof(Cast)); }
 
         /// <summary>
         /// COALESCE function.

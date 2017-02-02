@@ -25,7 +25,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\Inside\PartsFactoryUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\Inside\PartsUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\ParameterInfo.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Clause.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Clause.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\ExpressionConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\IDisableBinaryExpressionBrackets.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\CodeParts\DbColumnCode.cs" />
@@ -47,11 +47,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\ObjectCreateAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\ObjectCreateInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\ObjectCreateMemberInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\OperatorCode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\SupportedTypeSpec.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\SymbolHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\TableInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\TowWaySqlSpec.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\InvalitContextException.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Non.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\OperatorCode.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SupportedTypeSpec.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolConverters\ClauseStyleConverterAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolConverters\FormatDirection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolConverters\FuncStyleConverterAttribute.cs" />
@@ -62,12 +63,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolConverters\NewFormatConverterAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolConverters\ObjectConverterAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolConverters\EnumToStringConverterAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\TowWaySqlSpec.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Db.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)feat\NotInitializedException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IDbParam.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Non.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Specialized\Inside\CodeParts\AllDisableBinaryExpressionBracketsCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Specialized\Inside\CodeParts\CurrentDateTimeCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Specialized\Inside\CodeParts\RecursiveTargetCode.cs" />
@@ -86,10 +86,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)Specialized\SymbolConverters\TwoWaySqlConverterAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Specialized\SymbolConverters\WithConverterAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sql.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SqlExpression.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SqlSetOperationsExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Symbol.Clauses.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Symbol.Etc.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Symbol.Funcs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SymbolSub.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UtilitySymbolExtensions.cs" />
   </ItemGroup>
 </Project>

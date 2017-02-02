@@ -1,4 +1,4 @@
-﻿namespace LambdicSql.ConverterServices
+﻿namespace LambdicSql
 {
     /// <summary>
     /// Class not to express anything.

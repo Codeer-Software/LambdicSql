@@ -8,31 +8,199 @@ namespace LambdicSql
     /// <summary>
     /// Data type.
     /// </summary>
-    public interface IDataType { }
+    public abstract class DataTypeElement { }
 
     /// <summary>
     /// TOP keyword.
     /// </summary>
-    public interface ITop { }
+    public abstract class TopElement { }
 
     /// <summary>
     /// It's *.
     /// Used in Select clause and Count function.
     /// </summary>
-    public interface IAsterisk { }
+    public abstract class AsteriskElement { }
 
     /// <summary>
     /// It's *.
     /// Used in Select clause and Count function.
     /// </summary>
     /// <typeparam name="T">It represents the type to select when used in the Select clause.</typeparam>
-    public interface IAsterisk<T> : IAsterisk { }
+    public abstract class AsteriskElement<T> : AsteriskElement { }
 
     /// <summary>
     /// It is an object representing the sort order
     /// Implemented classes include Asc and Desc.
     /// </summary>
-    public interface ISortedBy { }
+    public abstract class SortedByElement { }
+
+    /// <summary>
+    /// Aggregation predicate.
+    /// ALL or DISTINCT.
+    /// </summary>
+    public abstract class AggregatePredicateElement { }
+
+    /// <summary>
+    /// Aggregation predicate.
+    /// ALL
+    /// </summary>
+    public abstract class AggregatePredicateAllElement : AggregatePredicateElement { }
+
+    /// <summary>
+    /// Element of DateTime.
+    /// </summary>
+    [EnumToStringConverter]
+    public enum DateTimeElement
+    {
+        /// <summary>
+        /// Year.
+        /// </summary>
+        Year,
+
+        /// <summary>
+        /// Quarter.
+        /// </summary>
+        Quarter,
+
+        /// <summary>
+        /// Month.
+        /// </summary>
+        Month,
+
+        /// <summary>
+        /// Dayofyear.
+        /// </summary>
+        Dayofyear,
+
+        /// <summary>
+        /// Day.
+        /// </summary>
+        Day,
+
+        /// <summary>
+        /// Week.
+        /// </summary>
+        Week,
+
+        /// <summary>
+        /// Weekday.
+        /// </summary>
+        Weekday,
+
+        /// <summary>
+        /// Hour.
+        /// </summary>
+        Hour,
+
+        /// <summary>
+        /// Minute.
+        /// </summary>
+        Minute,
+
+        /// <summary>
+        /// Second.
+        /// </summary>
+        Second,
+
+        /// <summary>
+        /// Millisecond.
+        /// </summary>
+        Millisecond,
+
+        /// <summary>
+        /// Microsecond.
+        /// </summary>
+        Microsecond,
+
+        /// <summary>
+        /// Nanosecond.
+        /// </summary>
+        Nanosecond,
+
+        /// <summary>
+        /// ISO_WEEK.
+        /// </summary>
+        ISO_WEEK,
+    }
+
+    /// <summary>
+    /// Interval Type.
+    /// </summary>
+    [EnumToStringConverter]
+    public enum IntervalType
+    {
+        /// <summary>
+        /// YEAR
+        /// </summary>
+        Year,
+
+        /// <summary>
+        /// MONTH
+        /// </summary>
+        Month,
+
+        /// <summary>
+        /// DAY
+        /// </summary>
+        Day,
+
+        /// <summary>
+        /// HOUR
+        /// </summary>
+        Hour,
+
+        /// <summary>
+        /// MINUTE
+        /// </summary>
+        Minute,
+
+        /// <summary>
+        /// SECOND
+        /// </summary>
+        Second,
+
+        /// <summary>
+        /// YEAR TO MONTH
+        /// </summary>
+        [FieldSqlName("YEAR TO MONTH")]
+        YearToMonth,
+
+        /// <summary>
+        /// DAY TO HOUR
+        /// </summary>
+        [FieldSqlName("DAY TO HOUR")]
+        DayToHour,
+
+        /// <summary>
+        /// DAY TO MINUTE
+        /// </summary>
+        [FieldSqlName("DAY TO MINUTE")]
+        DayToMinute,
+
+        /// <summary>
+        /// DAY TO SECOND
+        /// </summary>
+        [FieldSqlName("DAY TO SECOND")]
+        DayToSecond,
+
+        /// <summary>
+        /// HOUR TO MINUTE
+        /// </summary>
+        [FieldSqlName("HOUR TO MINUTE")]
+        HOURToMinute,
+
+        /// <summary>
+        /// HOUR TO SECOND
+        /// </summary>
+        [FieldSqlName("HOUR TO SECOND")]
+        HOURToSecond,
+
+        /// <summary>
+        /// MINUTE TO SECOND
+        /// </summary>
+        [FieldSqlName("MINUTE TO SECOND")]
+        MinuteToSecond,
+    }
 
     /// <summary>
     /// OVER clause argument.
@@ -254,171 +422,28 @@ namespace LambdicSql
     }
 
     /// <summary>
-    /// Aggregation predicate.
-    /// ALL or DISTINCT.
+    /// Table definition item.
     /// </summary>
-    public interface IAggregatePredicate { }
+    public abstract class TableDefinitionElement { }
 
     /// <summary>
-    /// Aggregation predicate.
-    /// ALL
+    /// Constraint object.
     /// </summary>
-    public interface IAggregatePredicateAll : IAggregatePredicate { }
+    public abstract class ConstraintElement : TableDefinitionElement { }
 
     /// <summary>
-    /// Element of DateTime.
+    /// Column definition.
     /// </summary>
-    [EnumToStringConverter]
-    public enum DateTimeElement
+    public class Column : TableDefinitionElement
     {
         /// <summary>
-        /// Year.
+        /// Constructor.
         /// </summary>
-        Year,
-
-        /// <summary>
-        /// Quarter.
-        /// </summary>
-        Quarter,
-
-        /// <summary>
-        /// Month.
-        /// </summary>
-        Month,
-
-        /// <summary>
-        /// Dayofyear.
-        /// </summary>
-        Dayofyear,
-
-        /// <summary>
-        /// Day.
-        /// </summary>
-        Day,
-
-        /// <summary>
-        /// Week.
-        /// </summary>
-        Week,
-
-        /// <summary>
-        /// Weekday.
-        /// </summary>
-        Weekday,
-
-        /// <summary>
-        /// Hour.
-        /// </summary>
-        Hour,
-
-        /// <summary>
-        /// Minute.
-        /// </summary>
-        Minute,
-
-        /// <summary>
-        /// Second.
-        /// </summary>
-        Second,
-
-        /// <summary>
-        /// Millisecond.
-        /// </summary>
-        Millisecond,
-
-        /// <summary>
-        /// Microsecond.
-        /// </summary>
-        Microsecond,
-
-        /// <summary>
-        /// Nanosecond.
-        /// </summary>
-        Nanosecond,
-
-        /// <summary>
-        /// ISO_WEEK.
-        /// </summary>
-        ISO_WEEK,
-    }
-
-    /// <summary>
-    /// Interval Type.
-    /// </summary>
-    [EnumToStringConverter]
-    public enum IntervalType
-    {
-        /// <summary>
-        /// YEAR
-        /// </summary>
-        Year,
-
-        /// <summary>
-        /// MONTH
-        /// </summary>
-        Month,
-
-        /// <summary>
-        /// DAY
-        /// </summary>
-        Day,
-
-        /// <summary>
-        /// HOUR
-        /// </summary>
-        Hour,
-
-        /// <summary>
-        /// MINUTE
-        /// </summary>
-        Minute,
-
-        /// <summary>
-        /// SECOND
-        /// </summary>
-        Second,
-
-        /// <summary>
-        /// YEAR TO MONTH
-        /// </summary>
-        [FieldSqlName("YEAR TO MONTH")]
-        YearToMonth,
-
-        /// <summary>
-        /// DAY TO HOUR
-        /// </summary>
-        [FieldSqlName("DAY TO HOUR")]
-        DayToHour,
-
-        /// <summary>
-        /// DAY TO MINUTE
-        /// </summary>
-        [FieldSqlName("DAY TO MINUTE")]
-        DayToMinute,
-
-        /// <summary>
-        /// DAY TO SECOND
-        /// </summary>
-        [FieldSqlName("DAY TO SECOND")]
-        DayToSecond,
-
-        /// <summary>
-        /// HOUR TO MINUTE
-        /// </summary>
-        [FieldSqlName("HOUR TO MINUTE")]
-        HOURToMinute,
-
-        /// <summary>
-        /// HOUR TO SECOND
-        /// </summary>
-        [FieldSqlName("HOUR TO SECOND")]
-        HOURToSecond,
-
-        /// <summary>
-        /// MINUTE TO SECOND
-        /// </summary>
-        [FieldSqlName("MINUTE TO SECOND")]
-        MinuteToSecond,
+        /// <param name="column">Column.</param>
+        /// <param name="type">Type.</param>
+        /// <param name="constraints">Constraints.</param>
+        [NewFormatConverter(Format = "[0] [1] [< >2]")]
+        public Column(object column, DataTypeElement type, params ConstraintElement[] constraints) { throw new InvalitContextException("new " + nameof(Column)); }
     }
 
     /// <summary>
@@ -470,77 +495,5 @@ namespace LambdicSql
         /// </summary>
         [MemberConverter(Name = "SYSIBM.SYSDUMMY1")]
         public static object SysDummy1 { get { throw new InvalitContextException(nameof(SysDummy1)); } }
-    }
-
-    /// <summary>
-    /// Utility.
-    /// It can only be used within methods of the LambdicSql.Db class.
-    /// </summary>
-    public static class UtilitySymbolExtensions
-    {
-        /// <summary>
-        /// Put the text in the expression of LamblicSql.
-        /// </summary>
-        /// <param name="text">Text.You can use the same format as System.String's Format method.</param>
-        /// <param name="args">Format arguments.</param>
-        /// <returns>LamblicSql's expression.</returns>
-        [ToSqlConverter]
-        public static object ToSql(this string text, params object[] args) { throw new InvalitContextException(nameof(ToSql)); }
-
-        /// <summary>
-        /// Put the text in the expression of LamblicSql.
-        /// You can use TwoWaySql text format.
-        /// It's ...
-        /// TwoWaySql(@"SELECT money + /*0*/1000/**/ FROM tbl_remuneration WHERE /*1*/tbl_remuneration.money = 100/**/", 1000, tbl_remuneration.staff_id == 10)
-        /// Replace /*no*/.../**/ by arguments.
-        /// </summary>
-        /// <param name="text">Text.</param>
-        /// <param name="args">Format arguments.</param>
-        /// <returns>LamblicSql's expression.</returns>
-        [TwoWaySqlConverter]
-        public static object TwoWaySql(this string text, params object[] args) { throw new InvalitContextException(nameof(ToSql)); }
-
-        /// <summary>
-        /// Embed values directly into SQL without parameterization.
-        /// </summary>
-        /// <typeparam name="T">Type.</typeparam>
-        /// <param name="value">Value.</param>
-        /// <returns>Direct value.</returns>
-        [MethodFormatConverter(Format = "[$0]")]
-        public static T DirectValue<T>(this T value) { throw new InvalitContextException(nameof(DirectValue)); }
-
-        /// <summary>
-        /// Schema and table names are omitted and only columns are used.
-        /// </summary>
-        /// <typeparam name="T">Type.</typeparam>
-        /// <param name="column">Column.</param>
-        /// <returns>Column only.</returns>
-        [MethodFormatConverter(Format ="[#0]")]
-        public static T ColumnOnly<T>(this T column) { throw new InvalitContextException(nameof(ColumnOnly)); }
-    }
-
-    /// <summary>
-    /// Table definition item.
-    /// </summary>
-    public interface ITableDefinition { }
-
-    /// <summary>
-    /// Constraint object.
-    /// </summary>
-    public interface IConstraint : ITableDefinition { }
-
-    /// <summary>
-    /// Column definition.
-    /// </summary>
-    public class Column : ITableDefinition
-    {
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        /// <param name="column">Column.</param>
-        /// <param name="type">Type.</param>
-        /// <param name="constraints">Constraints.</param>
-        [NewFormatConverter(Format ="[0] [1] [< >2]")]
-        public Column(object column, IDataType type, params IConstraint[] constraints) { throw new InvalitContextException("new " + nameof(Column)); }
     }
 }

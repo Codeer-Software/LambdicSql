@@ -34,7 +34,7 @@
         /// <param name="all">ALL predicate.</param>
         /// <param name="sql2">sql 2.</param>
         /// <returns>Concatenated result.</returns>
-        public static Sql<TResult> Union<TResult>(this Sql<TResult> sql1, IAggregatePredicateAll all, Sql sql2)
+        public static Sql<TResult> Union<TResult>(this Sql<TResult> sql1, AggregatePredicateAllElement all, Sql sql2)
             => sql1 + Db<Dummy>.Sql(db => Symbol.Union(Symbol.All())) + sql2;
 
         /// <summary>
@@ -44,7 +44,7 @@
         /// <param name="all">ALL predicate.</param>
         /// <param name="sql2">sql 2.</param>
         /// <returns>Concatenated result.</returns>
-        public static Sql Union(this Sql sql1, IAggregatePredicateAll all, Sql sql2)
+        public static Sql Union(this Sql sql1, AggregatePredicateAllElement all, Sql sql2)
             => sql1 + Db<Dummy>.Sql(db => Symbol.Union(Symbol.All())) + sql2;
 
         /// <summary>
@@ -74,7 +74,7 @@
         /// <param name="all">ALL predicate.</param>
         /// <param name="sql2">sql 2.</param>
         /// <returns>Concatenated result.</returns>
-        public static Sql<TResult> Intersect<TResult>(this Sql<TResult> sql1, IAggregatePredicateAll all, Sql sql2)
+        public static Sql<TResult> Intersect<TResult>(this Sql<TResult> sql1, AggregatePredicateAllElement all, Sql sql2)
             => sql1 + Db<Dummy>.Sql(db => Symbol.Intersect(Symbol.All())) + sql2;
 
         /// <summary>
@@ -84,7 +84,7 @@
         /// <param name="all">ALL predicate.</param>
         /// <param name="sql2">sql 2.</param>
         /// <returns>Concatenated result.</returns>
-        public static Sql Intersect(this Sql sql1, IAggregatePredicateAll all, Sql sql2)
+        public static Sql Intersect(this Sql sql1, AggregatePredicateAllElement all, Sql sql2)
             => sql1 + Db<Dummy>.Sql(db => Symbol.Intersect(Symbol.All())) + sql2;
 
         /// <summary>
@@ -114,7 +114,7 @@
         /// <param name="all">ALL predicate.</param>
         /// <param name="sql2">sql 2.</param>
         /// <returns>Concatenated result.</returns>
-        public static Sql<TResult> Except<TResult>(this Sql<TResult> sql1, IAggregatePredicateAll all, Sql sql2)
+        public static Sql<TResult> Except<TResult>(this Sql<TResult> sql1, AggregatePredicateAllElement all, Sql sql2)
             => sql1 + Db<Dummy>.Sql(db => Symbol.Except(Symbol.All())) + sql2;
 
         /// <summary>
@@ -124,7 +124,7 @@
         /// <param name="all">ALL predicate.</param>
         /// <param name="sql2">sql 2.</param>
         /// <returns>Concatenated result.</returns>
-        public static Sql Except(this Sql sql1, IAggregatePredicateAll all, Sql sql2)
+        public static Sql Except(this Sql sql1, AggregatePredicateAllElement all, Sql sql2)
             => sql1 + Db<Dummy>.Sql(db => Symbol.Except(Symbol.All())) + sql2;
 
         /// <summary>

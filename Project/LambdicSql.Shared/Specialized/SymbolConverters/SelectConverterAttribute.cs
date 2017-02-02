@@ -39,7 +39,7 @@ namespace LambdicSql.Specialized.SymbolConverters
             var selectTargets = expression.Arguments[expression.Arguments.Count - 1];
 
             //*
-            if (typeof(IAsterisk).IsAssignableFromEx(selectTargets.Type))
+            if (typeof(AsteriskElement).IsAssignableFromEx(selectTargets.Type))
             {
                 select.Add("*".ToCode());
                 return new SelectClauseCode(select);

@@ -695,6 +695,56 @@ WHERE (@p_0) < (tbl_remuneration.id)", 0);
 FROM tbl_remuneration");
         }
 
+
+        public class Table1
+        {
+            public int id { get; set; }
+            public int val1 { get; set; }
+            public char[] val2 { get; set; }
+        }
+        public class Table2
+        {
+            public int id { get; set; }
+            public int table1Id { get; set; }
+            public int val1 { get; set; }
+        }
+
+        public class DBForCreateTest
+        {
+            public Table1 table1 { get; set; }
+            public Table2 table2 { get; set; }
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_ConstraintAdd()
+        {
+            try
+            {
+                var sql2 = Db<DBForCreateTest>.Sql(db => DropTable(db.table2));
+                _connection.Execute(sql2);
+            }
+            catch { }
+            try
+            {
+                var sql1 = Db<DBForCreateTest>.Sql(db => DropTable(db.table1));
+                _connection.Execute(sql1);
+            }
+            catch { }
+
+            {
+                var sql = Db<DBForCreateTest>.Sql(db =>
+                    CreateTable(db.table1,
+                        new Column(db.table1.id, DataType.Int(), Default(10), NotNull(), PrimaryKey()),
+                        new Column(db.table1.val1, DataType.Int()),
+                        new Column(db.table1.val2, DataType.Char(10), Default("abc"), NotNull()),
+                        Constraint("xxx") + Check(db.table1.id < 100),
+                        Unique(db.table1.val2)
+                    ));
+                sql.Gen(_connection);
+                _connection.Execute(sql);
+            }
+        }
+
         //TODO ★足したものが正しくサブクエリの時に括弧がつくか！
 
         //TODO ExpressionToObjectがテストされるだけのテストを書くこと

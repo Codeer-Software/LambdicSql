@@ -19,7 +19,7 @@ namespace LambdicSql
         /// <param name="selected">The type you want to obtain with the SELECT clause. Usually you specify a table element.</param>
         /// <returns>*</returns>
         [ClauseStyleConverter(Name = "*")]
-        public static IAsterisk<TSelected> Asterisk<TSelected>(TSelected selected) { throw new InvalitContextException(nameof(Asterisk)); }
+        public static AsteriskElement<TSelected> Asterisk<TSelected>(TSelected selected) { throw new InvalitContextException(nameof(Asterisk)); }
 
         /// <summary>
         /// It's *.
@@ -27,35 +27,35 @@ namespace LambdicSql
         /// <typeparam name="TSelected">Type of selected.</typeparam>
         /// <returns>*</returns>
         [ClauseStyleConverter(Name = "*")]
-        public static IAsterisk<TSelected> Asterisk<TSelected>() { throw new InvalitContextException(nameof(Asterisk)); }
+        public static AsteriskElement<TSelected> Asterisk<TSelected>() { throw new InvalitContextException(nameof(Asterisk)); }
 
         /// <summary>
         /// It's *.
         /// </summary>
         /// <returns>*</returns>
         [ClauseStyleConverter(Name = "*")]
-        public static IAsterisk Asterisk() { throw new InvalitContextException(nameof(Asterisk)); }
+        public static AsteriskElement Asterisk() { throw new InvalitContextException(nameof(Asterisk)); }
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="target">target column.</param>
         [MethodFormatConverter(Format = "[0] ASC")]
-        public static ISortedBy Asc(object target) { throw new InvalitContextException(nameof(Asc)); }
+        public static SortedByElement Asc(object target) { throw new InvalitContextException(nameof(Asc)); }
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="target">target column.</param>
         [MethodFormatConverter(Format = "[0] DESC")]
-        public static ISortedBy Desc(object target) { throw new InvalitContextException(nameof(Desc)); }
+        public static SortedByElement Desc(object target) { throw new InvalitContextException(nameof(Desc)); }
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="count">cout.</param>
         [MethodFormatConverter(Format = "TOP [$0]")]
-        public static ITop Top(long count) { throw new InvalitContextException(nameof(Top)); }
+        public static TopElement Top(long count) { throw new InvalitContextException(nameof(Top)); }
 
         /// <summary>
         /// ROWNUM BETWEEN keyword.
