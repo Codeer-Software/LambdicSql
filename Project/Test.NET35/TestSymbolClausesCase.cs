@@ -1,12 +1,11 @@
 ﻿using System.Data;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Test.Helper;
 using LambdicSql;
 using LambdicSql.feat.Dapper;
 using static LambdicSql.Symbol;
 using static Test.Helper.DBProviderInfo;
-using System.Diagnostics;
+using Test.Helper;
 
 namespace Test
 {
@@ -44,8 +43,6 @@ namespace Test
                             End()
                 }).
                 From(db.tbl_staff));
-
-            DapperAdapter.Log = e => Debug.Print(e);
 
             var datas = _connection.Query(sql).ToList();
             Assert.IsTrue(0 < datas.Count);
@@ -160,9 +157,7 @@ FROM tbl_staff",
                             End()
                 }).
                 From(db.tbl_staff));
-
-            DapperAdapter.Log = e => Debug.Print(e);
-
+            
             var datas = _connection.Query(sql).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(sql, _connection,

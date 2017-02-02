@@ -2,11 +2,11 @@
 using System.Data;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Test.Helper;
 using LambdicSql;
 using LambdicSql.feat.Dapper;
 using static LambdicSql.Symbol;
 using static Test.Helper.DBProviderInfo;
+using Test.Helper;
 
 namespace Test
 {

@@ -4,6 +4,9 @@ using LambdicSql.Specialized.SymbolConverters;
 
 namespace LambdicSql
 {
+    //TODO TSelected->Rename
+    //Comments->Clause chain NG.
+
     /// <summary>
     /// SQL Symbol.
     /// It can only be used within methods of the LambdicSql.Db class.

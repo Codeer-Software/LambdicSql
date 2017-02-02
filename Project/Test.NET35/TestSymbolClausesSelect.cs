@@ -2,13 +2,12 @@
 using System.Data;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Test.Helper;
 using LambdicSql;
 using LambdicSql.feat.Dapper;
-using System.Data.SqlClient;
-using static Test.TestSymbol;
-using static Test.Helper.DBProviderInfo;
 using static LambdicSql.Symbol;
+using static Test.Helper.DBProviderInfo;
+using Test.Helper;
+using static Test.TestSymbol;
 
 namespace Test
 {
@@ -78,7 +77,7 @@ FROM tbl_remuneration");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_top_selected()
         {
-            if (_connection.GetType() != typeof(SqlConnection)) return;
+            if (!_connection.IsTarget(TargetDB.SqlServer)) return;
 
             var sql = Db<DB>.Sql(db =>
                 Select(Top(1), new SelectData
@@ -100,7 +99,7 @@ FROM tbl_remuneration");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_before_top_selected()
         {
-            if (_connection.GetType() != typeof(SqlConnection)) return;
+            if (!_connection.IsTarget(TargetDB.SqlServer)) return;
 
             var sql = Db<DB>.Sql(db =>
                 Empty().

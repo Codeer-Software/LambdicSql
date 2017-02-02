@@ -1,13 +1,13 @@
-﻿using System.Data;
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Data;
 using System.Linq;
-using Test.Helper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using static Test.Helper.DBProviderInfo;
 using LambdicSql;
 using LambdicSql.feat.Dapper;
 using static LambdicSql.Symbol;
-using System;
-using System.ComponentModel.DataAnnotations.Schema;
+using static Test.Helper.DBProviderInfo;
+using Test.Helper;
 
 namespace Test
 {
