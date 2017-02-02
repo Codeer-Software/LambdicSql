@@ -12,7 +12,7 @@ using static LambdicSql.Symbol;
 namespace Test
 {
     [TestClass]
-    public class TestKeywordLimit
+    public class TestSymbolClausesLimit
     {
         public TestContext TestContext { get; set; }
         public IDbConnection _connection;

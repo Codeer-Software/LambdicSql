@@ -10,7 +10,7 @@ using static LambdicSql.Symbol;
 namespace Test
 {
     [TestClass]
-    public class TestKeywordSetOperator
+    public class TestSymbolClausesSetOperator
     {
         public TestContext TestContext { get; set; }
         public IDbConnection _connection;

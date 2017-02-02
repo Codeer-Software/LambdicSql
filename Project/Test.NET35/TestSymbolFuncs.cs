@@ -10,7 +10,7 @@ using static LambdicSql.Symbol;
 namespace Test
 {
     [TestClass]
-    public class TestFuncs
+    public class TestSymbolFuncs
     {
         public TestContext TestContext { get; set; }
         public IDbConnection _connection;
@@ -27,9 +27,12 @@ namespace Test
 
         public class SelectData
         {
+            public decimal Val { get; set; }
             public decimal Val1 { get; set; }
             public decimal Val2 { get; set; }
             public decimal Val3 { get; set; }
+            public double ValDouble { get; set; }
+            public double ValFloat { get; set; }
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -477,6 +480,416 @@ FROM tbl_staff",
 	NVL(tbl_staff.name, @p_0) AS id
 FROM tbl_staff",
 "a");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_First_Value()
+        {
+            if (!_connection.IsTarget(TargetDB.SqlServer, TargetDB.Postgre, TargetDB.DB2, TargetDB.Oracle)) return;
+
+            var sql = Db<DB>.Sql(db =>
+                Select(new SelectData
+                {
+                    Val = First_Value(db.tbl_remuneration.money).
+                            Over(PartitionBy(db.tbl_remuneration.payment_date),
+                                OrderBy(Asc(db.tbl_remuneration.money)),
+                                Rows(1, 5))
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT
+	FIRST_VALUE(tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Last_Value()
+        {
+            if (!_connection.IsTarget(TargetDB.SqlServer, TargetDB.Postgre, TargetDB.DB2, TargetDB.Oracle)) return;
+
+            var sql = Db<DB>.Sql(db =>
+                Select(new SelectData
+                {
+                    Val = Last_Value(db.tbl_remuneration.money).
+                            Over(PartitionBy(db.tbl_remuneration.payment_date),
+                                OrderBy(Asc(db.tbl_remuneration.money)),
+                                Rows(1, 5))
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT
+	LAST_VALUE(tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Rank()
+        {
+            if (!_connection.IsTarget(TargetDB.SqlServer, TargetDB.Postgre, TargetDB.DB2, TargetDB.Oracle)) return;
+
+            var sql = Db<DB>.Sql(db =>
+                Select(new SelectData()
+                {
+                    Val = Rank().
+                            Over(OrderBy(Asc(db.tbl_remuneration.money)))
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT
+	RANK()
+	OVER(
+		ORDER BY
+			tbl_remuneration.money ASC) AS Val
+FROM tbl_remuneration");
+        }
+
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Dense_Rank()
+        {
+            if (!_connection.IsTarget(TargetDB.SqlServer, TargetDB.Postgre, TargetDB.DB2, TargetDB.Oracle)) return;
+
+            var sql = Db<DB>.Sql(db =>
+                Select(new SelectData()
+                {
+                    Val = Dense_Rank().
+                            Over(OrderBy(Asc(db.tbl_remuneration.money)))
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT
+	DENSE_RANK()
+	OVER(
+		ORDER BY
+			tbl_remuneration.money ASC) AS Val
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Percent_Rank()
+        {
+            if (!_connection.IsTarget(TargetDB.SqlServer, TargetDB.Postgre, TargetDB.DB2)) return;
+
+            var sql = Db<DB>.Sql(db =>
+                Select(new SelectData
+                {
+                    ValDouble = Percent_Rank().
+                            Over(OrderBy(Asc(db.tbl_remuneration.money)))
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT
+	PERCENT_RANK()
+	OVER(
+		ORDER BY
+			tbl_remuneration.money ASC) AS ValDouble
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Cume_Dist()
+        {
+            if (!_connection.IsTarget(TargetDB.SqlServer, TargetDB.Postgre, TargetDB.DB2, TargetDB.Oracle)) return;
+
+            var sql = Db<DB>.Sql(db =>
+                Select(new SelectData()
+                {
+                    Val = (decimal)Cume_Dist().
+                            Over(OrderBy(Asc(db.tbl_remuneration.money)))
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT
+	CUME_DIST()
+	OVER(
+		ORDER BY
+			tbl_remuneration.money ASC) AS Val
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Ntile()
+        {
+            if (!_connection.IsTarget(TargetDB.SqlServer, TargetDB.DB2, TargetDB.Oracle)) return;
+
+            var sql = Db<DB>.Sql(db =>
+                Select(new SelectData()
+                {
+                    Val = Ntile(2).
+                            Over(OrderBy(Asc(db.tbl_remuneration.money)))
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT
+	NTILE(@p_0)
+	OVER(
+		ORDER BY
+			tbl_remuneration.money ASC) AS Val
+FROM tbl_remuneration", 2);
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void TestNth_Value()
+        {
+            if (!_connection.IsTarget(TargetDB.Postgre, TargetDB.DB2, TargetDB.Oracle)) return;
+
+            var sql = Db<DB>.Sql(db =>
+                Select(new SelectData()
+                {
+                    Val = Nth_Value(db.tbl_remuneration.money, 2).
+                            Over(OrderBy(Asc(db.tbl_remuneration.money)),
+                                Rows(1, 5))
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT
+	NTH_VALUE(tbl_remuneration.money, @p_0)
+	OVER(
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+FROM tbl_remuneration", 2);
+        }
+        
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Lag_1()
+        {
+            if (!_connection.IsTarget(TargetDB.SqlServer, TargetDB.Postgre, TargetDB.Oracle)) return;
+            var sql = Db<DB>.Sql(db =>
+                Select(new SelectData()
+                {
+                    Val = Lag(3).
+                            Over(OrderBy(Asc(db.tbl_remuneration.money)))
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT
+	LAG(@p_0)
+	OVER(
+		ORDER BY
+			tbl_remuneration.money ASC) AS Val
+FROM tbl_remuneration", 3);
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Lag_2()
+        {
+            if (!_connection.IsTarget(TargetDB.SqlServer, TargetDB.Postgre, TargetDB.Oracle)) return;
+            var sql = Db<DB>.Sql(db =>
+                Select(new SelectData()
+                {
+                    Val = Lag(db.tbl_remuneration.money, 2).
+                            Over(OrderBy(Asc(db.tbl_remuneration.money)))
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT
+	LAG(tbl_remuneration.money, @p_0)
+	OVER(
+		ORDER BY
+			tbl_remuneration.money ASC) AS Val
+FROM tbl_remuneration", 2);
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_RowNumber()
+        {
+            if (!_connection.IsTarget(TargetDB.SqlServer, TargetDB.Postgre, TargetDB.DB2, TargetDB.Oracle)) return;
+
+            var sql = Db<DB>.Sql(db =>
+                Select(new SelectData()
+                {
+                    Val = Row_Number().
+                            Over(OrderBy(Asc(db.tbl_remuneration.money)))
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT
+	ROW_NUMBER()
+	OVER(
+		ORDER BY
+			tbl_remuneration.money ASC) AS Val
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Rows_1()
+        {
+            if (!_connection.IsTarget(TargetDB.SqlServer, TargetDB.Postgre, TargetDB.DB2, TargetDB.Oracle)) return;
+
+            var sql = Db<DB>.Sql(db =>
+                Select(new SelectData()
+                {
+                    Val = Count(db.tbl_remuneration.money).
+                            Over(OrderBy(Asc(db.tbl_remuneration.money)), Rows(1))
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT
+	COUNT(tbl_remuneration.money)
+	OVER(
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS 1 PRECEDING) AS Val
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Rows_2()
+        {
+            if (!_connection.IsTarget(TargetDB.SqlServer, TargetDB.Postgre, TargetDB.DB2, TargetDB.Oracle)) return;
+
+            var sql = Db<DB>.Sql(db =>
+                Select(new SelectData()
+                {
+                    Val = Count(db.tbl_remuneration.money).
+                            Over(OrderBy(Asc(db.tbl_remuneration.money)), Rows(1, 5))
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT
+	COUNT(tbl_remuneration.money)
+	OVER(
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_PartitionBy()
+        {
+            if (!_connection.IsTarget(TargetDB.SqlServer, TargetDB.Postgre, TargetDB.DB2, TargetDB.Oracle)) return;
+
+            var sql = Db<DB>.Sql(db =>
+                Select(new SelectData()
+                {
+                    Val = Count(db.tbl_remuneration.money).
+                            Over(PartitionBy(db.tbl_remuneration.payment_date),
+                                OrderBy(Asc(db.tbl_remuneration.money)))
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT
+	COUNT(tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC) AS Val
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Over_1()
+        {
+            if (!_connection.IsTarget(TargetDB.SqlServer, TargetDB.Postgre, TargetDB.DB2, TargetDB.Oracle)) return;
+
+            var sql = Db<DB>.Sql(db =>
+                Select(new SelectData()
+                {
+                    Val = Count(db.tbl_remuneration.money).
+                            Over(PartitionBy(db.tbl_remuneration.payment_date),
+                                OrderBy(Asc(db.tbl_remuneration.money)),
+                                Rows(1, 5))
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT
+	COUNT(tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Over_2()
+        {
+            if (!_connection.IsTarget(TargetDB.SqlServer, TargetDB.Postgre, TargetDB.DB2, TargetDB.Oracle)) return;
+
+            var sql = Db<DB>.Sql(db =>
+                Select(new SelectData()
+                {
+                    Val = Count(db.tbl_remuneration.money) + 
+                            Over(PartitionBy(db.tbl_remuneration.payment_date),
+                                OrderBy(Asc(db.tbl_remuneration.money)),
+                                Rows(1, 5))
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT
+	COUNT(tbl_remuneration.money)
+	OVER(
+		PARTITION BY
+			tbl_remuneration.payment_date
+		ORDER BY
+			tbl_remuneration.money ASC
+		ROWS BETWEEN 1 PRECEDING AND 5 FOLLOWING) AS Val
+FROM tbl_remuneration");
         }
     }
 }

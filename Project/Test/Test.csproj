@@ -111,32 +111,29 @@
     <Compile Include="..\Test.NET35\TestExpression.cs">
       <Link>TestExpression.cs</Link>
     </Compile>
-    <Compile Include="..\Test.NET35\TestFuncs.cs">
-      <Link>TestFuncs.cs</Link>
+    <Compile Include="..\Test.NET35\TestSymbolClausesCase.cs">
+      <Link>TestSymbolClausesCase.cs</Link>
     </Compile>
-    <Compile Include="..\Test.NET35\TestKeywordCase.cs">
-      <Link>TestKeywordCase.cs</Link>
+    <Compile Include="..\Test.NET35\TestSymbolClausesCondition.cs">
+      <Link>TestSymbolClausesCondition.cs</Link>
     </Compile>
-    <Compile Include="..\Test.NET35\TestKeywordCondition.cs">
-      <Link>TestKeywordCondition.cs</Link>
+    <Compile Include="..\Test.NET35\TestSymbolClausesDataChange.cs">
+      <Link>TestSymbolClausesDataChange.cs</Link>
     </Compile>
-    <Compile Include="..\Test.NET35\TestKeywordDataChange.cs">
-      <Link>TestKeywordDataChange.cs</Link>
+    <Compile Include="..\Test.NET35\TestSymbolClausesFrom.cs">
+      <Link>TestSymbolClausesFrom.cs</Link>
     </Compile>
-    <Compile Include="..\Test.NET35\TestKeywordFrom.cs">
-      <Link>TestKeywordFrom.cs</Link>
+    <Compile Include="..\Test.NET35\TestSymbolClausesLimit.cs">
+      <Link>TestSymbolClausesLimit.cs</Link>
     </Compile>
-    <Compile Include="..\Test.NET35\TestKeywordLimit.cs">
-      <Link>TestKeywordLimit.cs</Link>
+    <Compile Include="..\Test.NET35\TestSymbolClausesSelect.cs">
+      <Link>TestSymbolClausesSelect.cs</Link>
     </Compile>
-    <Compile Include="..\Test.NET35\TestKeywordSelect.cs">
-      <Link>TestKeywordSelect.cs</Link>
+    <Compile Include="..\Test.NET35\TestSymbolClausesSetOperator.cs">
+      <Link>TestSymbolClausesSetOperator.cs</Link>
     </Compile>
-    <Compile Include="..\Test.NET35\TestKeywordSetOperator.cs">
-      <Link>TestKeywordSetOperator.cs</Link>
-    </Compile>
-    <Compile Include="..\Test.NET35\TestKeywordWhereGroupByHavingOrderBy.cs">
-      <Link>TestKeywordWhereGroupByHavingOrderBy.cs</Link>
+    <Compile Include="..\Test.NET35\TestSymbolClausesWhereGroupByHavingOrderBy.cs">
+      <Link>TestSymbolClausesWhereGroupByHavingOrderBy.cs</Link>
     </Compile>
     <Compile Include="..\Test.NET35\TestOperator.cs">
       <Link>TestOperator.cs</Link>
@@ -147,11 +144,14 @@
     <Compile Include="..\Test.NET35\TestSetOperation.cs">
       <Link>TestSetOperation.cs</Link>
     </Compile>
+    <Compile Include="..\Test.NET35\TestSymbolEtc.cs">
+      <Link>TestSymbolEtc.cs</Link>
+    </Compile>
+    <Compile Include="..\Test.NET35\TestSymbolFuncs.cs">
+      <Link>TestSymbolFuncs.cs</Link>
+    </Compile>
     <Compile Include="..\Test.NET35\TestUtils.cs">
       <Link>TestUtils.cs</Link>
-    </Compile>
-    <Compile Include="..\Test.NET35\TestWindow.cs">
-      <Link>TestWindow.cs</Link>
     </Compile>
     <Compile Include="Helper\CodeGenerate.cs" />
     <Compile Include="Helper\DBProviderInfo.cs" />
@@ -168,7 +168,6 @@
     <Compile Include="Model\tbl_remuneration.cs" />
     <Compile Include="Model\tbl_staff.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestSymbolEtc.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LambdicSql\LambdicSql.csproj">

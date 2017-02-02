@@ -13,7 +13,7 @@ using static LambdicSql.Symbol;
 namespace Test
 {
     [TestClass]
-    public class TestKeywordFrom
+    public class TestSymbolClausesFrom
     {
         public TestContext TestContext { get; set; }
         public IDbConnection _connection;

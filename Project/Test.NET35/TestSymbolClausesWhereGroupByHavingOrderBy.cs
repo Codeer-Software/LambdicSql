@@ -10,7 +10,7 @@ using static LambdicSql.Symbol;
 namespace Test
 {
     [TestClass]
-    public class TestKeywordWhereGroupByHavingOrderBy
+    public class TestSymbolClausesWhereGroupByHavingOrderBy
     {
         public TestContext TestContext { get; set; }
         public IDbConnection _connection;

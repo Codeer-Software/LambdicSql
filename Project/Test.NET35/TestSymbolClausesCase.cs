@@ -13,7 +13,7 @@ using System.Diagnostics;
 namespace Test
 {
     [TestClass]
-    public class TestKeywordCase
+    public class TestSymbolClausesCase
     {
         public TestContext TestContext { get; set; }
         public IDbConnection _connection;

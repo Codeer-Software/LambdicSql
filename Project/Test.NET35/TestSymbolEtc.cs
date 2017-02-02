@@ -26,6 +26,99 @@ namespace Test
         public void TestCleanup() => _connection.Dispose();
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Asterisk_1()
+        {
+            var sql = Db<DB>.Sql(db =>
+                Select(Asterisk()).
+                From(db.tbl_staff));
+
+            var datas = _connection.Query<Staff>(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT *
+FROM tbl_staff");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Asterisk_2()
+        {
+            var sql = Db<DB>.Sql(db =>
+                Select(Asterisk(db.tbl_staff)).
+                From(db.tbl_staff));
+
+            var datas = _connection.Query(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT *
+FROM tbl_staff");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Asterisk_3()
+        {
+            var sql = Db<DB>.Sql(db =>
+                Select(Asterisk<Staff>()).
+                From(db.tbl_staff));
+
+            var datas = _connection.Query(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT *
+FROM tbl_staff");
+        }
+        
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Asc_Desc()
+        {
+            var sql = Db<DB>.Sql(db =>
+                Select(Asterisk(db.tbl_staff)).
+                From(db.tbl_staff).
+                OrderBy(Asc(db.tbl_staff.id), Desc(db.tbl_staff.name)));
+
+            var datas = _connection.Query(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT *
+FROM tbl_staff
+ORDER BY
+	tbl_staff.id ASC,
+	tbl_staff.name DESC");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Top()
+        {
+            if (!_connection.IsTarget(TargetDB.SqlServer)) return;
+
+            var sql = Db<DB>.Sql(db =>
+                Select(Top(1), Asterisk(db.tbl_staff)).
+                From(db.tbl_staff));
+
+            var datas = _connection.Query(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT TOP 1 *
+FROM tbl_staff");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_RowNum()
+        {
+            if (!_connection.IsTarget(TargetDB.Oracle)) return;
+
+            var sql = Db<DB>.Sql(db =>
+                 Select(RowNum()).
+                 From(db.tbl_remuneration));
+
+            var datas = _connection.Query(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT
+	ROWNUM
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_CurrentDate_1()
         {
             if (!_connection.IsTarget(TargetDB.Postgre, TargetDB.MySQL)) return;
@@ -175,6 +268,25 @@ FROM DUAL");
 @"SELECT
 	CURRENT TIMESTAMP AS Val
 FROM SYSIBM.SYSDUMMY1");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Dual()
+        {
+            if (!_connection.IsTarget(TargetDB.Oracle)) return;
+
+            var sql = Db<DB>.Sql(db =>
+                Select(new
+                {
+                    Val = Current_Date()
+                }).From(Dual));
+
+            var datas = _connection.Query(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT
+	CURRENT_DATE AS Val
+FROM DUAL");
         }
     }
 }

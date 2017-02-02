@@ -13,7 +13,7 @@ using static Test.TestSynatax;
 namespace Test
 {
     [TestClass]
-    public class TestKeywordSelect
+    public class TestSymbolClausesSelect
     {
         public TestContext TestContext { get; set; }
         public IDbConnection _connection;
