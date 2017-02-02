@@ -22,7 +22,7 @@ namespace Test
         DB2
     }
 
-    public static class TestSynatax
+    public static class TestSymbol
     {
         [SymbolForTest]
         public static Clause<object> Empty() => null;
