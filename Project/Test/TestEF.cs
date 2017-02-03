@@ -37,8 +37,7 @@ namespace Test
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestQuery()
         {
-            var name = _connection.GetType().Name;
-            if (name != "SqlConnection") return;
+            if (!_connection.IsTarget(TargetDB.SqlServer)) return;
 
             var sql = Db<ModelLambdicSqlTestDB>.Sql(db =>
                 Select(new SelectData
@@ -66,8 +65,7 @@ FROM tbl_remuneration
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void TestExecute()
         {
-            var name = _connection.GetType().Name;
-            if (name != "SqlConnection") return;
+            if (!_connection.IsTarget(TargetDB.SqlServer)) return;
 
             var sql = Db<ModelLambdicSqlTestDB>.Sql(db =>
                 Delete().

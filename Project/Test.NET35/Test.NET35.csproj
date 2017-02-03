@@ -43,10 +43,12 @@
     <Compile Include="Helper\AssertHelper.cs" />
     <Compile Include="Helper\DB.cs" />
     <Compile Include="Helper\DBProviderInfo.cs" />
+    <Compile Include="TestSymbolSub.cs" />
     <Compile Include="TestDbDefine.cs" />
     <Compile Include="TestDbParam.cs" />
     <Compile Include="TestExpression.cs" />
     <Compile Include="TestOperator.cs" />
+    <Compile Include="TestSymbolClausesWithRecursive.cs" />
     <Compile Include="TestSymbolFuncs.cs" />
     <Compile Include="TestSymbolClausesCase.cs" />
     <Compile Include="TestSymbolClausesCondition.cs" />
@@ -62,7 +64,7 @@
     <Compile Include="TestParameterName.cs" />
     <Compile Include="Helper\HelperForTest.cs" />
     <Compile Include="TestSymbolEtc.cs" />
-    <Compile Include="TestUtils.cs" />
+    <Compile Include="TestUtilitySymbolExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LambdicSql\LambdicSql.csproj">

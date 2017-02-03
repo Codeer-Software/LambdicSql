@@ -64,7 +64,6 @@ namespace Test
             public string nameY { get; set; }
         }
 
-
         [Table("dbo.tbl_remuneration")]
         public class RemunerationY
         {
@@ -94,7 +93,7 @@ namespace Test
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Normal()
         {
-            var query = Db<DBX>.Sql(db =>
+            var sql = Db<DBX>.Sql(db =>
                 Select(new SelectData
                 {
                     name = db.tbl_staffX.nameX,
@@ -104,9 +103,9 @@ namespace Test
                 From(db.tbl_remunerationX).
                 Join(db.tbl_staffX, db.tbl_staffX.idX == db.tbl_remunerationX.staff_idX));
 
-            var datas = _connection.Query(query).ToList();
+            var datas = _connection.Query(sql).ToList();
             Assert.IsTrue(0 < datas.Count);
-            AssertEx.AreEqual(query, _connection,
+            AssertEx.AreEqual(sql, _connection,
  @"SELECT
 	tbl_staff.name AS name,
 	tbl_remuneration.payment_date AS payment_date,
@@ -118,10 +117,9 @@ FROM tbl_remuneration
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Schema()
         {
-            var name = _connection.GetType().Name;
-            if (name != "SqlConnection") return;
+            if (!_connection.IsTarget(TargetDB.SqlServer)) return;
 
-            var query = Db<DBY>.Sql(db =>
+            var sql = Db<DBY>.Sql(db =>
                 Select(new SelectData
                 {
                     name = db.tbl_staffY.nameY,
@@ -131,9 +129,9 @@ FROM tbl_remuneration
                 From(db.tbl_remunerationY).
                 Join(db.tbl_staffY, db.tbl_staffY.idY == db.tbl_remunerationY.staff_idY));
 
-            var datas = _connection.Query(query).ToList();
+            var datas = _connection.Query(sql).ToList();
             Assert.IsTrue(0 < datas.Count);
-            AssertEx.AreEqual(query, _connection,
+            AssertEx.AreEqual(sql, _connection,
 @"SELECT
 	dbo.tbl_staff.name AS name,
 	dbo.tbl_remuneration.payment_date AS payment_date,

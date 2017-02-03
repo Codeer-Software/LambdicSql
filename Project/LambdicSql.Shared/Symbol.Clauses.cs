@@ -1003,15 +1003,6 @@ namespace LambdicSql
         public static bool IsNotNull(object target) { throw new InvalitContextException(nameof(IsNull)); }
 
         /// <summary>
-        /// Class representing argument of recursive part.
-        /// </summary>
-        /// <typeparam name="T">Type representing argument.</typeparam>
-        public class RecursiveArguments<T>
-        {
-            RecursiveArguments() { }
-        }
-
-        /// <summary>
         /// WITH clause.
         /// </summary>
         /// <param name="subQuerys">sub querys.</param>

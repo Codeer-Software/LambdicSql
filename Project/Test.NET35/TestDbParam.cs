@@ -34,16 +34,16 @@ namespace Test
         public void Test_Param()
         {
             var text = new DbParam<string>() { Value = "xxx" };
-            var query = Db<DB>.Sql(db =>
+            var sql = Db<DB>.Sql(db =>
                 Select(new SelectData
                 {
                     Name = db.tbl_staff.name + text,
                 }).
                 From(db.tbl_staff));
 
-            var datas = _connection.Query(query).ToList();
+            var datas = _connection.Query(sql).ToList();
             Assert.IsTrue(0 < datas.Count);
-            AssertEx.AreEqual(query, _connection,
+            AssertEx.AreEqual(sql, _connection,
 @"SELECT
 	(tbl_staff.name) " + _connection.GetStringAddExp() + @" (@text) AS Name
 FROM tbl_staff",
@@ -53,7 +53,7 @@ FROM tbl_staff",
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Param_Direct()
         {
-            var query = Db<DB>.Sql(db =>
+            var sql = Db<DB>.Sql(db =>
                 Select(new SelectData
                 {
                     Name = db.tbl_staff.name
@@ -61,9 +61,9 @@ FROM tbl_staff",
                 }).
                 From(db.tbl_staff));
 
-            var datas = _connection.Query(query).ToList();
+            var datas = _connection.Query(sql).ToList();
             Assert.IsTrue(0 < datas.Count);
-            AssertEx.AreEqual(query, _connection,
+            AssertEx.AreEqual(sql, _connection,
  @"SELECT
 	(tbl_staff.name) " + _connection.GetStringAddExp() + @" (@p_0) AS Name
 FROM tbl_staff",
@@ -85,7 +85,7 @@ FROM tbl_staff",
                 Size = 30,
             };
 
-            var query = Db<DB>.Sql(db =>
+            var sql = Db<DB>.Sql(db =>
                 Select(new SelectData
                 {
                     Name = db.tbl_staff.name + param,
@@ -93,7 +93,7 @@ FROM tbl_staff",
                 From(db.tbl_staff));
 
             //check parameter only.
-            AssertEx.AreEqual(query, _connection,
+            AssertEx.AreEqual(sql, _connection,
 @"SELECT
 	(tbl_staff.name) " + _connection.GetStringAddExp() + @" (@param) AS Name
 FROM tbl_staff",

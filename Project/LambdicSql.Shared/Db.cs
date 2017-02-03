@@ -1,6 +1,5 @@
 ﻿using LambdicSql.ConverterServices;
 using LambdicSql.ConverterServices.Inside;
-using LambdicSql.BuilderServices.CodeParts;
 using System;
 using System.Linq.Expressions;
 using LambdicSql.BuilderServices.Inside;
@@ -68,7 +67,7 @@ namespace LambdicSql
         /// <typeparam name="TResult">The type represented by expression.</typeparam>
         /// <param name="expression">Expression expressing Sql by lambda.</param>
         /// <returns>Sql.</returns>
-        public static SqlRecursiveArguments<TResult> Sql<TResult>(Expression<Func<T, Symbol.RecursiveArguments<TResult>>> expression)
+        public static SqlRecursiveArguments<TResult> Sql<TResult>(Expression<Func<T, RecursiveArguments<TResult>>> expression)
         {
             var db = DBDefineAnalyzer.GetDbInfo<T>();
             return new SqlRecursiveArguments<TResult>(ExpressionConverter.CreateCode(db, expression.Body));

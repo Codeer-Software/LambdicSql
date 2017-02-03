@@ -36,7 +36,7 @@ namespace Test
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Normal()
         {
-            var query = Db<DB>.Sql(db =>
+            var sql = Db<DB>.Sql(db =>
                 Select(new SelecteData
                 {
                     name = db.tbl_staff.name,
@@ -46,11 +46,9 @@ namespace Test
                 From(db.tbl_remuneration).
                 Join(db.tbl_staff, db.tbl_staff.id == db.tbl_remuneration.staff_id));
 
-            query.Gen(_connection);
-
-            var datas = _connection.Query(query).ToList();
+            var datas = _connection.Query(sql).ToList();
             Assert.IsTrue(0 < datas.Count);
-            AssertEx.AreEqual(query, _connection,
+            AssertEx.AreEqual(sql, _connection,
  @"SELECT
 	tbl_staff.name AS name,
 	tbl_remuneration.payment_date AS payment_date,
@@ -62,10 +60,9 @@ FROM tbl_remuneration
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Schema()
         {
-            var name = _connection.GetType().Name;
-            if (name != "SqlConnection") return;
+            if (!_connection.IsTarget(TargetDB.SqlServer)) return;
 
-            var query = Db<DBSchema>.Sql(db =>
+            var sql = Db<DBSchema>.Sql(db =>
                 Select(new SelecteData
                 {
                     name = db.dbo.tbl_staff.name,
@@ -75,9 +72,9 @@ FROM tbl_remuneration
                 From(db.dbo.tbl_remuneration).
                 Join(db.dbo.tbl_staff, db.dbo.tbl_staff.id == db.dbo.tbl_remuneration.staff_id));
 
-            var datas = _connection.Query(query).ToList();
+            var datas = _connection.Query(sql).ToList();
             Assert.IsTrue(0 < datas.Count);
-            AssertEx.AreEqual(query, _connection,
+            AssertEx.AreEqual(sql, _connection,
 @"SELECT
 	dbo.tbl_staff.name AS name,
 	dbo.tbl_remuneration.payment_date AS payment_date,

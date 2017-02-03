@@ -432,6 +432,15 @@ namespace LambdicSql
     public abstract class ConstraintElement : TableDefinitionElement { }
 
     /// <summary>
+    /// Class representing argument of recursive part.
+    /// </summary>
+    /// <typeparam name="T">Type representing argument.</typeparam>
+    public class RecursiveArguments<T>
+    {
+        RecursiveArguments() { }
+    }
+
+    /// <summary>
     /// Column definition.
     /// </summary>
     public class Column : TableDefinitionElement

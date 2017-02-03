@@ -141,14 +141,20 @@
     <Compile Include="..\Test.NET35\TestParameterName.cs">
       <Link>TestParameterName.cs</Link>
     </Compile>
+    <Compile Include="..\Test.NET35\TestSymbolClausesWithRecursive.cs">
+      <Link>TestSymbolClausesWithRecursive.cs</Link>
+    </Compile>
     <Compile Include="..\Test.NET35\TestSymbolEtc.cs">
       <Link>TestSymbolEtc.cs</Link>
     </Compile>
     <Compile Include="..\Test.NET35\TestSymbolFuncs.cs">
       <Link>TestSymbolFuncs.cs</Link>
     </Compile>
-    <Compile Include="..\Test.NET35\TestUtils.cs">
-      <Link>TestUtils.cs</Link>
+    <Compile Include="..\Test.NET35\TestSymbolSub.cs">
+      <Link>TestSymbolSub.cs</Link>
+    </Compile>
+    <Compile Include="..\Test.NET35\TestUtilitySymbolExtensions.cs">
+      <Link>TestUtilitySymbolExtensions.cs</Link>
     </Compile>
     <Compile Include="Helper\CodeGenerate.cs" />
     <Compile Include="Helper\DBProviderInfo.cs" />
