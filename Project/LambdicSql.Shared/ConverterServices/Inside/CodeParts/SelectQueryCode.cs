@@ -5,20 +5,20 @@ namespace LambdicSql.ConverterServices.Inside.CodeParts
 {
     internal class SelectQueryCode : ICode
     {
-        ICode _core;
+        internal ICode Core { get; private set; }
 
         internal SelectQueryCode(ICode core)
         {
-            _core = core;
+            Core = core;
         }
 
-        public bool IsEmpty => _core.IsEmpty;
+        public bool IsEmpty => Core.IsEmpty;
 
-        public bool IsSingleLine(BuildingContext context) => _core.IsSingleLine(context);
+        public bool IsSingleLine(BuildingContext context) => Core.IsSingleLine(context);
 
         public string ToString(BuildingContext context)
         {
-            var target = context.IsTopLevelQuery ? _core : new AroundCode(_core, "(", ")");
+            var target = context.IsTopLevelQuery ? Core : new AroundCode(Core, "(", ")");
             return target.ToString(context.ChangeTopLevelQuery(false));
         }
         
@@ -26,7 +26,7 @@ namespace LambdicSql.ConverterServices.Inside.CodeParts
         {
             var dst = customizer.Visit(this);
             if (!ReferenceEquals(this, dst)) return dst;
-            return new SelectQueryCode(_core.Accept(customizer));
+            return new SelectQueryCode(Core.Accept(customizer));
         }
     }
 }

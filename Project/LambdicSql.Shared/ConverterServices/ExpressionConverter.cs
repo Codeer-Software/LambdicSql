@@ -28,6 +28,17 @@ namespace LambdicSql.ConverterServices
             return core == null ? string.Empty.ToCode() : converter.ConvertToCode(core);
         }
 
+        internal static ICode AddCode(ICode lhs, ICode rhs)
+        {
+            var selectQueryLeft = lhs as SelectQueryCode;
+            if (selectQueryLeft == null) return new VCode(lhs, rhs);
+
+            var selectQueryRight = rhs as SelectQueryCode;
+            if (selectQueryRight != null) return new SelectQueryCode(new VCode(selectQueryLeft.Core, selectQueryRight.Core));
+
+            return new SelectQueryCode(new VCode(selectQueryLeft.Core, rhs));
+        }
+
         /// <summary>
         /// Convert expression to object.
         /// </summary>
@@ -171,7 +182,7 @@ namespace LambdicSql.ConverterServices
                     typeof(SqlExpression).IsClassAndAssignableFromEx(binary.Left.Type) ||
                     typeof(SqlExpression).IsClassAndAssignableFromEx(binary.Right.Type))
                 {
-                    return new VCode(left, right);
+                    return AddCode(left, right);
                 }
             }
             if (left.IsEmpty && right.IsEmpty) return string.Empty.ToCode();

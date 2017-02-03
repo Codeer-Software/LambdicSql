@@ -4,6 +4,8 @@ using LambdicSql.BuilderServices.Inside;
 using LambdicSql.ConverterServices;
 using System;
 using System.Collections.Generic;
+using LambdicSql.ConverterServices.Inside.CodeParts;
+using LambdicSql.MultiplatformCompatibe;
 
 namespace LambdicSql
 {
@@ -42,7 +44,7 @@ namespace LambdicSql
         /// <param name="sql1">sql 1.</param>
         /// <param name="sql2">sql 2.</param>
         /// <returns>Concatenated result.</returns>
-        public static Sql operator +(Sql sql1, Sql sql2) => new Sql(new VCode(sql1.Code, sql2.Code));
+        public static Sql operator +(Sql sql1, Sql sql2) => new Sql(ExpressionConverter.AddCode(sql1.Code, sql2.Code));
 
         /// <summary>
         /// Addition operator.
@@ -113,7 +115,7 @@ namespace LambdicSql
         /// <param name="sql1">sql 1.</param>
         /// <param name="sql2">sql 2.</param>
         /// <returns>Concatenated result.</returns>
-        public static Sql<T> operator +(Sql<T> sql1, Sql sql2) => new Sql<T>(new VCode(sql1.Code, sql2.Code));
+        public static Sql<T> operator +(Sql<T> sql1, Sql sql2) => new Sql<T>(ExpressionConverter.AddCode(sql1.Code, sql2.Code));
 
         /// <summary>
         /// Addition operator.

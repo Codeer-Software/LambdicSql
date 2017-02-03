@@ -28,14 +28,14 @@ namespace Test
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Union()
         {
-            var query = Db<DB>.Sql(db =>
+            var sql = Db<DB>.Sql(db =>
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff).
                 Union().
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff));
 
-            var datas = _connection.Query(query).ToList();
+            var datas = _connection.Query(sql).ToList();
             Assert.IsTrue(0 < datas.Count);
-            AssertEx.AreEqual(query, _connection,
+            AssertEx.AreEqual(sql, _connection,
 @"SELECT *
 FROM tbl_staff
 UNION
@@ -46,14 +46,14 @@ FROM tbl_staff");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Union_Start()
         {
-            var query = Db<DB>.Sql(db =>
+            var sql = Db<DB>.Sql(db =>
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff)
                 + Union() +
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff));
 
-            var datas = _connection.Query(query).ToList();
+            var datas = _connection.Query(sql).ToList();
             Assert.IsTrue(0 < datas.Count);
-            AssertEx.AreEqual(query, _connection,
+            AssertEx.AreEqual(sql, _connection,
 @"SELECT *
 FROM tbl_staff
 UNION
@@ -64,14 +64,14 @@ FROM tbl_staff");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Union_All()
         {
-            var query = Db<DB>.Sql(db =>
+            var sql = Db<DB>.Sql(db =>
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff).
                 Union(All()).
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff));
 
-            var datas = _connection.Query(query).ToList();
+            var datas = _connection.Query(sql).ToList();
             Assert.IsTrue(0 < datas.Count);
-            AssertEx.AreEqual(query, _connection,
+            AssertEx.AreEqual(sql, _connection,
 @"SELECT *
 FROM tbl_staff
 UNION ALL
@@ -82,14 +82,14 @@ FROM tbl_staff");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Union_All_Start()
         {
-            var query = Db<DB>.Sql(db =>
+            var sql = Db<DB>.Sql(db =>
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff)
                 + Union(All()) +
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff));
 
-            var datas = _connection.Query(query).ToList();
+            var datas = _connection.Query(sql).ToList();
             Assert.IsTrue(0 < datas.Count);
-            AssertEx.AreEqual(query, _connection,
+            AssertEx.AreEqual(sql, _connection,
 @"SELECT *
 FROM tbl_staff
 UNION ALL
@@ -102,14 +102,14 @@ FROM tbl_staff");
         {
             if (!_connection.IsTarget(TargetDB.SqlServer, TargetDB.Oracle, TargetDB.Postgre, TargetDB.SQLite, TargetDB.DB2)) return;
 
-            var query = Db<DB>.Sql(db =>
+            var sql = Db<DB>.Sql(db =>
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff).
                 Intersect().
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff));
 
-            var datas = _connection.Query(query).ToList();
+            var datas = _connection.Query(sql).ToList();
             Assert.IsTrue(0 < datas.Count);
-            AssertEx.AreEqual(query, _connection,
+            AssertEx.AreEqual(sql, _connection,
 @"SELECT *
 FROM tbl_staff
 INTERSECT
@@ -122,14 +122,14 @@ FROM tbl_staff");
         {
             if (!_connection.IsTarget(TargetDB.SqlServer, TargetDB.Oracle, TargetDB.Postgre, TargetDB.SQLite, TargetDB.DB2)) return;
 
-            var query = Db<DB>.Sql(db =>
+            var sql = Db<DB>.Sql(db =>
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff)
                  + Intersect() +
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff));
 
-            var datas = _connection.Query(query).ToList();
+            var datas = _connection.Query(sql).ToList();
             Assert.IsTrue(0 < datas.Count);
-            AssertEx.AreEqual(query, _connection,
+            AssertEx.AreEqual(sql, _connection,
 @"SELECT *
 FROM tbl_staff
 INTERSECT
@@ -142,14 +142,14 @@ FROM tbl_staff");
         {
             if (!_connection.IsTarget(TargetDB.SqlServer, TargetDB.Postgre, TargetDB.SQLite, TargetDB.DB2)) return;
 
-            var query = Db<DB>.Sql(db =>
+            var sql = Db<DB>.Sql(db =>
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff).
                 Except().
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff).Where(db.tbl_staff.id == 1));
 
-            var datas = _connection.Query(query).ToList();
+            var datas = _connection.Query(sql).ToList();
             Assert.IsTrue(0 < datas.Count);
-            AssertEx.AreEqual(query, _connection,
+            AssertEx.AreEqual(sql, _connection,
 @"SELECT *
 FROM tbl_staff
 EXCEPT
@@ -164,14 +164,14 @@ WHERE (tbl_staff.id) = (@p_0)",
         {
             if (!_connection.IsTarget(TargetDB.SqlServer, TargetDB.Postgre, TargetDB.SQLite, TargetDB.DB2)) return;
 
-            var query = Db<DB>.Sql(db =>
+            var sql = Db<DB>.Sql(db =>
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff)
                  + Except() +
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff).Where(db.tbl_staff.id == 1));
 
-            var datas = _connection.Query(query).ToList();
+            var datas = _connection.Query(sql).ToList();
             Assert.IsTrue(0 < datas.Count);
-            AssertEx.AreEqual(query, _connection,
+            AssertEx.AreEqual(sql, _connection,
 @"SELECT *
 FROM tbl_staff
 EXCEPT
@@ -186,14 +186,14 @@ WHERE (tbl_staff.id) = (@p_0)",
         {
             if (!_connection.IsTarget(TargetDB.Postgre, TargetDB.DB2)) return;
 
-            var query = Db<DB>.Sql(db =>
+            var sql = Db<DB>.Sql(db =>
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff).
                 Except(All()).
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff).Where(db.tbl_staff.id == 1));
 
-            var datas = _connection.Query(query).ToList();
+            var datas = _connection.Query(sql).ToList();
             Assert.IsTrue(0 < datas.Count);
-            AssertEx.AreEqual(query, _connection,
+            AssertEx.AreEqual(sql, _connection,
 @"SELECT *
 FROM tbl_staff
 EXCEPT ALL
@@ -208,14 +208,14 @@ WHERE (tbl_staff.id) = (@p_0)",
         {
             if (!_connection.IsTarget(TargetDB.Postgre, TargetDB.DB2)) return;
 
-            var query = Db<DB>.Sql(db =>
+            var sql = Db<DB>.Sql(db =>
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff)
                 + Except(All()) +
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff).Where(db.tbl_staff.id == 1));
 
-            var datas = _connection.Query(query).ToList();
+            var datas = _connection.Query(sql).ToList();
             Assert.IsTrue(0 < datas.Count);
-            AssertEx.AreEqual(query, _connection,
+            AssertEx.AreEqual(sql, _connection,
 @"SELECT *
 FROM tbl_staff
 EXCEPT ALL
@@ -230,14 +230,14 @@ WHERE (tbl_staff.id) = (@p_0)",
         {
             if (!_connection.IsTarget(TargetDB.SqlServer, TargetDB.Oracle, TargetDB.DB2)) return;
 
-            var query = Db<DB>.Sql(db =>
+            var sql = Db<DB>.Sql(db =>
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff).
                 Minus().
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff).Where(db.tbl_staff.id == 1));
 
-            var datas = _connection.Query(query).ToList();
+            var datas = _connection.Query(sql).ToList();
             Assert.IsTrue(0 < datas.Count);
-            AssertEx.AreEqual(query, _connection,
+            AssertEx.AreEqual(sql, _connection,
 @"SELECT *
 FROM tbl_staff
 MINUS
@@ -252,14 +252,14 @@ WHERE (tbl_staff.id) = (@p_0)",
         {
             if (!_connection.IsTarget(TargetDB.SqlServer, TargetDB.Oracle, TargetDB.DB2)) return;
 
-            var query = Db<DB>.Sql(db =>
+            var sql = Db<DB>.Sql(db =>
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff)
                 + Minus() +
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff).Where(db.tbl_staff.id == 1));
 
-            var datas = _connection.Query(query).ToList();
+            var datas = _connection.Query(sql).ToList();
             Assert.IsTrue(0 < datas.Count);
-            AssertEx.AreEqual(query, _connection,
+            AssertEx.AreEqual(sql, _connection,
 @"SELECT *
 FROM tbl_staff
 MINUS
