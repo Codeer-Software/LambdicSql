@@ -87,7 +87,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Specialized\SymbolConverters\WithConverterAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sql.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SqlExpression.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SqlSetOperationsExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Symbol.Clauses.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Symbol.Etc.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Symbol.Funcs.cs" />

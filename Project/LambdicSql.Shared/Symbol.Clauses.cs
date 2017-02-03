@@ -875,11 +875,10 @@ namespace LambdicSql
         /// <summary>
         /// SET clause.
         /// </summary>
-        /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
         /// <param name="assigns">Assignment in the SET clause.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [MethodFormatConverter(Format = "SET |[<,>0]", FormatDirection = FormatDirection.Vertical)]
-        public static Clause<TSelected> Set<TSelected>(params Assign[] assigns) { throw new InvalitContextException(nameof(Set)); }
+        public static Clause<Non> Set(params Assign[] assigns) { throw new InvalitContextException(nameof(Set)); }
 
         /// <summary>
         /// SET clause.
@@ -979,6 +978,22 @@ namespace LambdicSql
         public static bool Exists(object expression) { throw new InvalitContextException(nameof(Exists)); }
 
         /// <summary>
+        /// IS NULL clause.
+        /// </summary>
+        /// <param name="target"></param>
+        /// <returns>IS NULL</returns>
+        [MethodFormatConverter(Format = "[0] IS NULL|")]
+        public static bool IsNull(object target) { throw new InvalitContextException(nameof(IsNull)); }
+
+        /// <summary>
+        /// IS NOT NULL clause.
+        /// </summary>
+        /// <param name="target">target.</param>
+        /// <returns>IS NOT NULL</returns>
+        [MethodFormatConverter(Format = "[0] IS NOT NULL|")]
+        public static bool IsNotNull(object target) { throw new InvalitContextException(nameof(IsNull)); }
+
+        /// <summary>
         /// Class representing argument of recursive part.
         /// </summary>
         /// <typeparam name="T">Type representing argument.</typeparam>
@@ -1014,22 +1029,6 @@ namespace LambdicSql
         [RecursiveConverter]
         public static RecursiveArguments<T> Recursive<T>(T args) { throw new InvalitContextException(nameof(Select)); }
 
-        /// <summary>
-        /// IS NULL clause.
-        /// </summary>
-        /// <param name="target"></param>
-        /// <returns>IS NULL</returns>
-        [MethodFormatConverter(Format = "[0] IS NULL|")]
-        public static bool IsNull(object target) { throw new InvalitContextException(nameof(IsNull)); }
-
-        /// <summary>
-        /// IS NOT NULL clause.
-        /// </summary>
-        /// <param name="target">target.</param>
-        /// <returns>IS NOT NULL</returns>
-        [MethodFormatConverter(Format = "[0] IS NOT NULL|")]
-        public static bool IsNotNull(object target) { throw new InvalitContextException(nameof(IsNull)); }
-        
         /// <summary>
         /// CREATE TABLE clause.
         /// </summary>
@@ -1073,7 +1072,7 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="columns">Columns.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [FuncStyleConverter(Name = "PRIMARY KEY")]
+        [FuncStyleConverter(Name = "PRIMARY KEY", Indent = 1)]
         public static Clause<ConstraintElement> PrimaryKey(this Clause<ConstraintElement> before, params object[] columns) { throw new InvalitContextException(nameof(PrimaryKey)); }
 
         /// <summary>
@@ -1081,7 +1080,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="condition">Condition.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [FuncStyleConverter(Indent = 1)]
+        [FuncStyleConverter]
         public static Clause<ConstraintElement> Check(bool condition) { throw new InvalitContextException(nameof(Check)); }
 
         /// <summary>
@@ -1092,6 +1091,13 @@ namespace LambdicSql
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [FuncStyleConverter(Indent = 1)]
         public static Clause<ConstraintElement> Check(this Clause<ConstraintElement> before, bool condition) { throw new InvalitContextException(nameof(Check)); }
+
+        /// <summary>
+        /// UNIQUE clause.
+        /// </summary>
+        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        [ClauseStyleConverter]
+        public static Clause<ConstraintElement> Unique() { throw new InvalitContextException(nameof(Unique)); }
 
         /// <summary>
         /// UNIQUE clause.
@@ -1107,7 +1113,7 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="columns">Columns.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [FuncStyleConverter]
+        [FuncStyleConverter(Indent = 1)]
         public static Clause<ConstraintElement> Unique(this Clause<ConstraintElement> before, params object[] columns) { throw new InvalitContextException(nameof(Unique)); }
 
         /// <summary>
@@ -1124,7 +1130,7 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="columns">Columns.</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [FuncStyleConverter(Name = "FOREIGN KEY")]
+        [FuncStyleConverter(Name = "FOREIGN KEY", Indent = 1)]
         public static Clause<ConstraintElement> ForeignKey(this Clause<ConstraintElement> before, params object[] columns) { throw new InvalitContextException(nameof(ForeignKey)); }
         
         /// <summary>
@@ -1151,31 +1157,6 @@ namespace LambdicSql
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [MethodFormatConverter(Format = "REFERENCES [1](|[<, >2])", Indent = 1)]
         public static Clause<ConstraintElement> References(this Clause<ConstraintElement> before, object table, params object[] columns) { throw new InvalitContextException(nameof(References)); }
-
-        /// <summary>
-        /// RESTRICT clause.
-        /// </summary>
-        /// <param name="before">It is the previous clause.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [ClauseStyleConverter]
-        public static Clause<Non> Restrict(this Clause<Non> before) { throw new InvalitContextException(nameof(Restrict)); }
-
-        /// <summary>
-        /// CASCADE clause.
-        /// </summary>
-        /// <param name="before">It is the previous clause.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [ClauseStyleConverter]
-        public static Clause<Non> Cascade(this Clause<Non> before) { throw new InvalitContextException(nameof(Cascade)); }
-
-        /// <summary>
-        /// CASCADE clause.
-        /// </summary>
-        /// <param name="before">It is the previous clause.</param>
-        /// <param name="constraint">Constraint.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [ClauseStyleConverter]
-        public static Clause<Non> Cascade(this Clause<Non> before, ConstraintElement constraint) { throw new InvalitContextException(nameof(Cascade)); }
 
         /// <summary>
         /// DROP TABLE clause.

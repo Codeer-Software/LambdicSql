@@ -26,18 +26,17 @@ namespace Test
         public void TestCleanup() => _connection.Dispose();
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_Update_Set1()
+        public void Test_Update_Set()
         {
-            Test_InsertInto_Values1();
+            Test_InsertInto_Values();
 
-            var query = Db<DB>.Sql(db =>
-                Update(db.tbl_data).Set(new Assign(db.tbl_data.val1, 100), new Assign(db.tbl_data.val2, "200")).
+            var sql = Db<DB>.Sql(db =>
+                Update(db.tbl_data).
+                Set(new Assign(db.tbl_data.val1, 100), new Assign(db.tbl_data.val2, "200")).
                 Where(db.tbl_data.id == 1));
 
-            query.Gen(_connection);
-
-            Assert.AreEqual(1, _connection.Execute(query));
-            AssertEx.AreEqual(query, _connection,
+            Assert.AreEqual(1, _connection.Execute(sql));
+            AssertEx.AreEqual(sql, _connection,
 @"UPDATE tbl_data
 SET
 	val1 = @p_0,
@@ -47,19 +46,17 @@ WHERE (tbl_data.id) = (@p_2)",
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_Update_Set2()
+        public void Test_Update_Set_Start()
         {
-            Test_InsertInto_Values1();
+            Test_InsertInto_Values();
 
-            var exp1 = Db<DB>.Sql(db => db.tbl_data);
-            var exp2 = Db<DB>.Sql(db => new Assign(db.tbl_data.val1, 100));
-            var exp3 = Db<DB>.Sql(db => new Assign(db.tbl_data.val2, "200"));
-            var query = Db<DB>.Sql(db =>
-                Update(exp1).Set(exp2.Body, exp3.Body).
+            var sql = Db<DB>.Sql(db =>
+                Update(db.tbl_data) +
+                Set(new Assign(db.tbl_data.val1, 100), new Assign(db.tbl_data.val2, "200")).
                 Where(db.tbl_data.id == 1));
 
-            Assert.AreEqual(1, _connection.Execute(query));
-            AssertEx.AreEqual(query, _connection,
+            Assert.AreEqual(1, _connection.Execute(sql));
+            AssertEx.AreEqual(sql, _connection,
 @"UPDATE tbl_data
 SET
 	val1 = @p_0,
@@ -71,13 +68,13 @@ WHERE (tbl_data.id) = (@p_2)",
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Delete()
         {
-            var query = Db<DB>.Sql(db =>
+            var sql = Db<DB>.Sql(db =>
                 Delete().
                 From(db.tbl_data).
                 Where(db.tbl_data.id == 3));
 
-            _connection.Execute(query);
-            AssertEx.AreEqual(query, _connection,
+            _connection.Execute(sql);
+            AssertEx.AreEqual(sql, _connection,
 @"DELETE
 FROM tbl_data
 WHERE (tbl_data.id) = (@p_0)",
@@ -87,48 +84,43 @@ WHERE (tbl_data.id) = (@p_0)",
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Delete_All()
         {
-            var query = Db<DB>.Sql(db =>
+            var sql = Db<DB>.Sql(db =>
                 Delete().
                 From(db.tbl_data));
 
-            _connection.Execute(query);
-            AssertEx.AreEqual(query, _connection,
+            _connection.Execute(sql);
+            AssertEx.AreEqual(sql, _connection,
 @"DELETE
 FROM tbl_data");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_InsertInto_Values1()
+        public void Test_InsertInto_Values()
         {
             Test_Delete_All();
 
-            var query = Db<DB>.Sql(db =>
-                   InsertInto(db.tbl_data, db.tbl_data.id, db.tbl_data.val2).Values(1, "val2"));
+            var sql = Db<DB>.Sql(db =>
+                   InsertInto(db.tbl_data, db.tbl_data.id, db.tbl_data.val2).
+                   Values(1, "val2"));
 
-            query.Gen(_connection);
-
-            Assert.AreEqual(1, _connection.Execute(query));
-            AssertEx.AreEqual(query, _connection,
+            Assert.AreEqual(1, _connection.Execute(sql));
+            AssertEx.AreEqual(sql, _connection,
 @"INSERT INTO tbl_data(id, val2)
 	VALUES(@p_0, @p_1)",
 1, "val2");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_InsertInto_Values2()
+        public void Test_InsertInto_Values_Start()
         {
             Test_Delete_All();
 
-            var exp1 = Db<DB>.Sql(db => db.tbl_data);
-            var exp2 = Db<DB>.Sql(db => db.tbl_data.id);
-            var exp3 = Db<DB>.Sql(db => db.tbl_data.val2);
-            var exp4 = Db<DB>.Sql(db => 1);
-            var exp5 = Db<DB>.Sql(db => "val2");
-            var query = Db<DB>.Sql(db =>
-                   InsertInto(exp1, exp2, exp3).Values(exp4, exp5));
+            var sql = Db<DB>.Sql(db =>
+                   InsertInto(db.tbl_data, db.tbl_data.id, db.tbl_data.val2) +
+                   Values(1, "val2"));
 
-            Assert.AreEqual(1, _connection.Execute(query));
-            AssertEx.AreEqual(query, _connection,
+            Assert.AreEqual(1, _connection.Execute(sql));
+            AssertEx.AreEqual(sql, _connection,
 @"INSERT INTO tbl_data(id, val2)
 	VALUES(@p_0, @p_1)",
 1, "val2");
@@ -137,9 +129,9 @@ FROM tbl_data");
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_InsertInto_Values_Select()
         {
-            Test_InsertInto_Values1();
-            var query = Db<DB>.Sql(db =>
-                   InsertInto(db.tbl_data, db.tbl_data.id, db.tbl_data.val1, db.tbl_data.val2).
+            Test_InsertInto_Values();
+            var sql = Db<DB>.Sql(db =>
+                   InsertInto(db.tbl_data).
                    Select(new
                    {
                        id = db.tbl_data.id + 10,
@@ -148,9 +140,9 @@ FROM tbl_data");
                    }).
                    From(db.tbl_data));
 
-            Assert.AreEqual(1, _connection.Execute(query));
-            AssertEx.AreEqual(query, _connection,
-@"INSERT INTO tbl_data(id, val1, val2)
+            Assert.AreEqual(1, _connection.Execute(sql));
+            AssertEx.AreEqual(sql, _connection,
+@"INSERT INTO tbl_data
 SELECT
 	(tbl_data.id) + (@p_0) AS id,
 	tbl_data.val1 AS val1,
@@ -158,25 +150,304 @@ SELECT
 FROM tbl_data", 10);
         }
 
-
-
-        public class Table1
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_CreateTable()
         {
-            public int id { get; set; }
-            public int val1 { get; set; }
-            public char[] val2 { get; set; }
+            CleanUpCreateDropTestTable();
+            
+            var sql = Db<DBForCreateTest>.Sql(db =>
+                 CreateTable(db.table1,
+                     new Column(db.table1.id, DataType.Int()),
+                     new Column(db.table1.val1, DataType.Int()),
+                     new Column(db.table1.val2, DataType.Char(10))
+                 ));
+
+            _connection.Execute(sql);
+            AssertEx.AreEqual(sql, _connection,
+@"CREATE TABLE table1(
+	id INT,
+	val1 INT,
+	val2 CHAR(10))");
         }
-        public class Table2
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_CreateTableIfNotExists()
         {
-            public int id { get; set; }
-            public int table1Id { get; set; }
-            public int val1 { get; set; }
+            if (!_connection.IsTarget(TargetDB.Postgre, TargetDB.MySQL, TargetDB.SQLite)) return;
+            CleanUpCreateDropTestTable();
+
+            var sql = Db<DBForCreateTest>.Sql(db =>
+                 CreateTableIfNotExists(db.table1,
+                     new Column(db.table1.id, DataType.Int()),
+                     new Column(db.table1.val1, DataType.Int()),
+                     new Column(db.table1.val2, DataType.Char(10))
+                 ));
+
+            _connection.Execute(sql);
+            AssertEx.AreEqual(sql, _connection,
+@"CREATE TABLE IF NOT EXISTS table1(
+	id INT,
+	val1 INT,
+	val2 CHAR(10))");
         }
 
-        public class DBForCreateTest
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Constraint()
         {
-            public Table1 table1 { get; set; }
-            public Table2 table2 { get; set; }
+            CleanUpCreateDropTestTable();
+
+            var sql = Db<DBForCreateTest>.Sql(db =>
+                 CreateTable(db.table1,
+                     new Column(db.table1.id, DataType.Int()),
+                     Constraint("xxx").Check(db.table1.id < 100)
+                 ));
+
+            _connection.Execute(sql);
+            AssertEx.AreEqual(sql, _connection,
+@"CREATE TABLE table1(
+	id INT,
+	CONSTRAINT xxx
+		CHECK((id) < (100)))");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_PrimaryKey_1()
+        {
+            CleanUpCreateDropTestTable();
+
+            var sql = Db<DBForCreateTest>.Sql(db =>
+                 CreateTable(db.table1,
+                     new Column(db.table1.id, DataType.Int(), NotNull(), PrimaryKey())
+                 ));
+
+            _connection.Execute(sql);
+            AssertEx.AreEqual(sql, _connection,
+@"CREATE TABLE table1(
+	id INT NOT NULL PRIMARY KEY)");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_PrimaryKey_2()
+        {
+            CleanUpCreateDropTestTable();
+
+            var sql = Db<DBForCreateTest>.Sql(db =>
+                 CreateTable(db.table1,
+                     new Column(db.table1.id, DataType.Int(), NotNull()),
+                     PrimaryKey(db.table1.id)
+                 ));
+
+            _connection.Execute(sql);
+            AssertEx.AreEqual(sql, _connection,
+@"CREATE TABLE table1(
+	id INT NOT NULL,
+	PRIMARY KEY(id))");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_PrimaryKey_3()
+        {
+            CleanUpCreateDropTestTable();
+
+            var sql = Db<DBForCreateTest>.Sql(db =>
+                 CreateTable(db.table1,
+                     new Column(db.table1.id, DataType.Int(), NotNull()),
+                     Constraint("xxx").PrimaryKey(db.table1.id)
+                 ));
+
+            _connection.Execute(sql);
+            AssertEx.AreEqual(sql, _connection,
+@"CREATE TABLE table1(
+	id INT NOT NULL,
+	CONSTRAINT xxx
+		PRIMARY KEY(id))");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Check_1()
+        {
+            CleanUpCreateDropTestTable();
+
+            var sql = Db<DBForCreateTest>.Sql(db =>
+                 CreateTable(db.table1,
+                     new Column(db.table1.id, DataType.Int(), Check(db.table1.id < 100))
+                 ));
+
+            _connection.Execute(sql);
+            AssertEx.AreEqual(sql, _connection,
+@"CREATE TABLE table1(
+	id INT CHECK((id) < (100)))");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Check_2()
+        {
+            CleanUpCreateDropTestTable();
+
+            var sql = Db<DBForCreateTest>.Sql(db =>
+                 CreateTable(db.table1,
+                     new Column(db.table1.id, DataType.Int()),
+                     Check(db.table1.id < 100)
+                 ));
+
+            _connection.Execute(sql);
+            AssertEx.AreEqual(sql, _connection,
+@"CREATE TABLE table1(
+	id INT,
+	CHECK((id) < (100)))");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Check_3()
+        {
+            CleanUpCreateDropTestTable();
+
+            var sql = Db<DBForCreateTest>.Sql(db =>
+                 CreateTable(db.table1,
+                     new Column(db.table1.id, DataType.Int()),
+                     Constraint("xxx").Check(db.table1.id < 100)
+                 ));
+
+            _connection.Execute(sql);
+            AssertEx.AreEqual(sql, _connection,
+@"CREATE TABLE table1(
+	id INT,
+	CONSTRAINT xxx
+		CHECK((id) < (100)))");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Unique_1()
+        {
+            CleanUpCreateDropTestTable();
+
+            var sql = Db<DBForCreateTest>.Sql(db =>
+                 CreateTable(db.table1,
+                     new Column(db.table1.id, DataType.Int(), NotNull(), Unique())
+                 ));
+
+            _connection.Execute(sql);
+            AssertEx.AreEqual(sql, _connection,
+@"CREATE TABLE table1(
+	id INT NOT NULL UNIQUE)");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Unique_2()
+        {
+            CleanUpCreateDropTestTable();
+
+            var sql = Db<DBForCreateTest>.Sql(db =>
+                 CreateTable(db.table1,
+                     new Column(db.table1.id, DataType.Int(), NotNull()),
+                     Constraint("xxx").Unique(db.table1.id)
+                 ));
+
+            _connection.Execute(sql);
+            AssertEx.AreEqual(sql, _connection,
+@"CREATE TABLE table1(
+	id INT NOT NULL,
+	CONSTRAINT xxx
+		UNIQUE(id))");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Unique_3()
+        {
+            CleanUpCreateDropTestTable();
+
+            var sql = Db<DBForCreateTest>.Sql(db =>
+                 CreateTable(db.table1,
+                     new Column(db.table1.id, DataType.Int(), NotNull()),
+                     Unique(db.table1.id)
+                 ));
+
+            _connection.Execute(sql);
+            AssertEx.AreEqual(sql, _connection,
+@"CREATE TABLE table1(
+	id INT NOT NULL,
+	UNIQUE(id))");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_ForeignKey_References_1()
+        {
+            CleanUpCreateDropTestTable();
+
+            var tbl1 = Db<DBForCreateTest>.Sql(db =>
+                 CreateTable(db.table1,
+                     new Column(db.table1.id, DataType.Int(), NotNull(), PrimaryKey())
+                 ));
+            _connection.Execute(tbl1);
+
+            var sql = Db<DBForCreateTest>.Sql(db => CreateTable(db.table2,
+                new Column(db.table2.table1Id, DataType.Int()),
+                ForeignKey(db.table2.table1Id).References(db.table1, db.table1.id)
+                ));
+            
+            _connection.Execute(sql);
+            AssertEx.AreEqual(sql, _connection,
+@"CREATE TABLE table2(
+	table1Id INT,
+	FOREIGN KEY(table1Id)
+		REFERENCES table1(id))");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_ForeignKey_References_2()
+        {
+            CleanUpCreateDropTestTable();
+
+            var tbl1 = Db<DBForCreateTest>.Sql(db =>
+                 CreateTable(db.table1,
+                     new Column(db.table1.id, DataType.Int(), NotNull(), PrimaryKey())
+                 ));
+            _connection.Execute(tbl1);
+
+            var sql = Db<DBForCreateTest>.Sql(db => CreateTable(db.table2,
+                new Column(db.table2.table1Id, DataType.Int()),
+                Constraint("xxx").ForeignKey(db.table2.table1Id).References(db.table1, db.table1.id)
+                ));
+
+            _connection.Execute(sql);
+            AssertEx.AreEqual(sql, _connection,
+@"CREATE TABLE table2(
+	table1Id INT,
+	CONSTRAINT xxx
+		FOREIGN KEY(table1Id)
+		REFERENCES table1(id))");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_NotNull()
+        {
+            CleanUpCreateDropTestTable();
+
+            var sql = Db<DBForCreateTest>.Sql(db =>
+                 CreateTable(db.table1,
+                     new Column(db.table1.id, DataType.Int(), NotNull())
+                 ));
+
+            _connection.Execute(sql);
+            AssertEx.AreEqual(sql, _connection,
+@"CREATE TABLE table1(
+	id INT NOT NULL)");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Default()
+        {
+            CleanUpCreateDropTestTable();
+
+            var sql = Db<DBForCreateTest>.Sql(db =>
+                 CreateTable(db.table1,
+                     new Column(db.table1.id, DataType.Int(), Default(3))
+                 ));
+
+            _connection.Execute(sql);
+            AssertEx.AreEqual(sql, _connection,
+@"CREATE TABLE table1(
+	id INT DEFAULT 3)");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -321,5 +592,22 @@ FROM tbl_data", 10);
             var s2 = Db<DB>.Sql(db => "abc");
             var s3 = s1 + (Sql)s2;
         }
+
+        void CleanUpCreateDropTestTable()
+        {
+            try
+            {
+                var sql2 = Db<DBForCreateTest>.Sql(db => DropTable(db.table2));
+                _connection.Execute(sql2);
+            }
+            catch { }
+            try
+            {
+                var sql1 = Db<DBForCreateTest>.Sql(db => DropTable(db.table1));
+                _connection.Execute(sql1);
+            }
+            catch { }
+        }
+
     }
 }

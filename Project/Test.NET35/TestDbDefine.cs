@@ -65,7 +65,7 @@ FROM tbl_remuneration
             var name = _connection.GetType().Name;
             if (name != "SqlConnection") return;
 
-            var query = Db<DBEX>.Sql(db =>
+            var query = Db<DBSchema>.Sql(db =>
                 Select(new SelecteData
                 {
                     name = db.dbo.tbl_staff.name,

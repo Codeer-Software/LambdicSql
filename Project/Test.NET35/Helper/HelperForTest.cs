@@ -15,10 +15,10 @@ namespace Test
     public enum TargetDB
     {
         SqlServer,
-        SQLite,
+        Oracle,
         Postgre,
         MySQL,
-        Oracle,
+        SQLite,
         DB2
     }
 

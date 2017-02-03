@@ -141,9 +141,6 @@
     <Compile Include="..\Test.NET35\TestParameterName.cs">
       <Link>TestParameterName.cs</Link>
     </Compile>
-    <Compile Include="..\Test.NET35\TestSetOperation.cs">
-      <Link>TestSetOperation.cs</Link>
-    </Compile>
     <Compile Include="..\Test.NET35\TestSymbolEtc.cs">
       <Link>TestSymbolEtc.cs</Link>
     </Compile>

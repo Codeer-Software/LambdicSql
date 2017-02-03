@@ -30,8 +30,27 @@ namespace Test
         public Data tbl_data { get; set; }
     }
 
-    public class DBEX
+    public class DBSchema
     {
         public DB dbo { get; set; }
+    }
+
+    public class Table1
+    {
+        public int id { get; set; }
+        public int val1 { get; set; }
+        public char[] val2 { get; set; }
+    }
+    public class Table2
+    {
+        public int id { get; set; }
+        public int table1Id { get; set; }
+        public int val1 { get; set; }
+    }
+
+    public class DBForCreateTest
+    {
+        public Table1 table1 { get; set; }
+        public Table2 table2 { get; set; }
     }
 }

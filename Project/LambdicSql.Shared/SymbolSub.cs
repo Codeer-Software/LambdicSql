@@ -441,6 +441,14 @@ namespace LambdicSql
         /// </summary>
         /// <param name="column">Column.</param>
         /// <param name="type">Type.</param>
+        [NewFormatConverter(Format = "[0] [1]")]
+        public Column(object column, DataTypeElement type) { throw new InvalitContextException("new " + nameof(Column)); }
+        
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="column">Column.</param>
+        /// <param name="type">Type.</param>
         /// <param name="constraints">Constraints.</param>
         [NewFormatConverter(Format = "[0] [1] [< >2]")]
         public Column(object column, DataTypeElement type, params ConstraintElement[] constraints) { throw new InvalitContextException("new " + nameof(Column)); }
