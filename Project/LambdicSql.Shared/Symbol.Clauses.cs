@@ -967,7 +967,16 @@ namespace LambdicSql
         /// <param name="sub">Sub query.</param>
         /// <returns>Sub query's selected value.</returns>
         [AllConverter]
-        public static T All<T>(object sub) { throw new InvalitContextException(nameof(All)); }
+        public static T All<T>(Clause<T> sub) { throw new InvalitContextException(nameof(All)); }
+
+        /// <summary>
+        /// ALL Keyword
+        /// </summary>
+        /// <typeparam name="T">Retunn type.</typeparam>
+        /// <param name="sub">Sub query.</param>
+        /// <returns>Sub query's selected value.</returns>
+        [AllConverter]
+        public static T All<T>(Sql<T> sub) { throw new InvalitContextException(nameof(All)); }
 
         /// <summary>
         /// EXISTS keyword.

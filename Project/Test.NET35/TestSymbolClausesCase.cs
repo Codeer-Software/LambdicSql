@@ -88,7 +88,6 @@ FROM tbl_staff",
 3, "x", 4, "y", "z");
         }
 
-
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Case_When_Then_1()
         {

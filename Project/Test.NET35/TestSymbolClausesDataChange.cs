@@ -451,163 +451,47 @@ FROM tbl_data", 10);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_Drop()
+        public void Test_DropTable()
         {
-            try
-            {
-                var sql2 = Db<DBForCreateTest>.Sql(db => DropTable(db.table2));
-                _connection.Execute(sql2);
-            }
-            catch { }
-            try
-            {
-                var sql1 = Db<DBForCreateTest>.Sql(db => DropTable(db.table1));
-                _connection.Execute(sql1);
-            }
-            catch { }
+            CleanUpCreateDropTestTable();
 
-            {
-                var sql = Db<DBForCreateTest>.Sql(db =>
-                    CreateTable(db.table1,
-                        new Column(db.table1.id, DataType.Int(), Default(10), NotNull(), PrimaryKey()),
-                        new Column(db.table1.val1, DataType.Int()),
-                        new Column(db.table1.val2, DataType.Char(10), Default("abc"), NotNull()),
-                        Constraint("xxx").Check(db.table1.id < 100),
-                        Unique(db.table1.val2)
-                    ));
-                sql.Gen(_connection);
-                _connection.Execute(sql);
+            var create = Db<DBForCreateTest>.Sql(db =>
+                 CreateTable(db.table1,
+                     new Column(db.table1.id, DataType.Int())
+                 ));
+            _connection.Execute(create);
 
-                //TODO LambdicSql的にはちゃんとやってるんだけど、その後の実行がやられている
-                var val = new[] { 'a', 'x' };
-                sql = Db<DBForCreateTest>.Sql(db =>
-                    InsertInto(db.table1, db.table1.id, db.table1.val1, db.table1.val2).
-                    Values(0, 1, val));
-                sql.Gen(_connection);
-                sql = Db<DBForCreateTest>.Sql(db =>
-                    InsertInto(db.table1, db.table1.id, db.table1.val1, db.table1.val2).
-                    Values(0, 1, new[] { 'a', 'x' }));
-                sql.Gen(_connection);
-                //    _connection.Execute(sql);
-
-
-            }
-            {
-                var sql = Db<DBForCreateTest>.Sql(db => CreateTable(db.table2,
-                    new Column(db.table2.id, DataType.Int(), NotNull()),
-                    new Column(db.table2.table1Id, DataType.Int()),
-                    ForeignKey(db.table2.table1Id).References(db.table1, db.table1.id),
-                    PrimaryKey(db.table2.id)
-                    ));
-                sql.Gen(_connection);
-                _connection.Execute(sql);
-            }
-
-            {
-                var sql2 = Db<DBForCreateTest>.Sql(db => DropTable(db.table2));
-                _connection.Execute(sql2);
-                var sql1 = Db<DBForCreateTest>.Sql(db => DropTable(db.table1));
-                _connection.Execute(sql1);
-            }
-
-            //lite, oracle, db2はダメ まとめて消す
-            {
-                //          var sql2 = Db<DBForCreateTest>.Sql(db => DropTable(db.table1, db.table2));
-                //       _connection.Execute(sql2);
-            }
-
-            //.Cascade().Constraint() はオラクルしか使えない
+            var sql = Db<DBForCreateTest>.Sql(db => DropTable(db.table1));
+            _connection.Execute(sql);
+            AssertEx.AreEqual(sql, _connection,
+@"DROP TABLE table1");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void Test_IFExists()
+        public void Test_DropTableIfExists()
         {
-            var name = _connection.GetType().Name;
-            if (name == "SqlConnection") return;
-            if (name == "DB2Connection") return;
-            if (name == "OracleConnection") return;
+            if (!_connection.IsTarget(TargetDB.Postgre, TargetDB.MySQL, TargetDB.SQLite)) return;
 
-            try
-            {
-                var sql2 = Db<DBForCreateTest>.Sql(db => DropTable(db.table2));
-                _connection.Execute(sql2);
-            }
-            catch { }
-            try
-            {
-                var sql1 = Db<DBForCreateTest>.Sql(db => DropTable(db.table1));
-                _connection.Execute(sql1);
-            }
-            catch { }
-
-
-            {
-                var sql = Db<DBForCreateTest>.Sql(db =>
-                    CreateTableIfNotExists(db.table1,
-                        new Column(db.table1.id, DataType.Int(), Default(10), NotNull(), PrimaryKey()),
-                        new Column(db.table1.val1, DataType.Int()),
-                        new Column(db.table1.val2, DataType.Char(10), Default("abc"), NotNull()),
-                        Constraint("xxx").Check(db.table1.id < 100),
-                        Unique(db.table1.val2)
-                    ));
-                sql.Gen(_connection);
-                _connection.Execute(sql);
-            }
-
-            {
-                var sql = Db<DBForCreateTest>.Sql(db => DropTableIfExists(db.table1));
-                _connection.Execute(sql);
-            }
-        }
-
-        public class Selected
-        {
-            public int id { get; set; }
-        }
-
-        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void XXXX()
-        {
-            var sql = Db<DB>.Sql(db =>
-               Select(new Selected
-               {
-                   id = db.tbl_staff.id,
-               }).
-               From(db.tbl_staff).
-               Where(IsNull(db.tbl_staff.name)));
-            sql.Gen(_connection);
-            var datas = _connection.Query(sql).ToList();
-
-            sql = Db<DB>.Sql(db =>
-               Select(new Selected
-               {
-                   id = db.tbl_staff.id,
-               }).
-               From(db.tbl_staff).
-               Where(IsNull(db.tbl_staff.name)));
-            sql.Gen(_connection);
-            datas = _connection.Query(sql).ToList();
-            
-            var s1 = Db<DB>.Sql(db => 1);
-            var s2 = Db<DB>.Sql(db => "abc");
-            var s3 = s1 + (Sql)s2;
+            var sql = Db<DBForCreateTest>.Sql(db => DropTableIfExists(db.table1));
+            _connection.Execute(sql);
+            AssertEx.AreEqual(sql, _connection,
+@"DROP TABLE IF EXISTS table1");
         }
 
         void CleanUpCreateDropTestTable()
         {
             try
             {
-                var sql2 = Db<DBForCreateTest>.Sql(db => DropTable(db.table2));
-                _connection.Execute(sql2);
+                var sql = Db<DBForCreateTest>.Sql(db => DropTable(db.table2));
+                _connection.Execute(sql);
             }
             catch { }
             try
             {
-                var sql1 = Db<DBForCreateTest>.Sql(db => DropTable(db.table1));
-                _connection.Execute(sql1);
+                var sql = Db<DBForCreateTest>.Sql(db => DropTable(db.table1));
+                _connection.Execute(sql);
             }
             catch { }
         }
-
     }
 }
