@@ -477,9 +477,7 @@ FROM tbl_data", 10);
             AssertEx.AreEqual(sql, _connection,
 @"DROP TABLE IF EXISTS table1");
         }
-
-        //TODO あDB
-
+        
         void CleanUpCreateDropTestTable()
         {
             try

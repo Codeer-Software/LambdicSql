@@ -4,225 +4,222 @@ using LambdicSql.Specialized.SymbolConverters;
 
 namespace LambdicSql
 {
-    //TODO TSelected->Rename
-    //Comments->Clause chain NG.
-
     /// <summary>
     /// SQL Symbol.
     /// It can only be used within methods of the LambdicSql.Db class.
-    /// Use[using static LambdicSql.Keywords;], you can use to write natural SQL.
+    /// Use[using static LambdicSql.Symbol;], you can use to write natural SQL.
     /// </summary>
     public static partial class Symbol
     {
         /// <summary>
         /// SELECT clause.
         /// </summary>
-        /// <typeparam name="TSelected">Type of selected.</typeparam>
+        /// <typeparam name="T">Type of selected.</typeparam>
         /// <param name="selected">Specify a new expression to represent the selection.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [SelectConverter]
-        public static Clause<TSelected> Select<TSelected>(TSelected selected) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<T> Select<T>(T selected) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
         /// </summary>
-        /// <typeparam name="TSrcSelected"></typeparam>
-        /// <typeparam name="TSelected">Type of selected.</typeparam>
+        /// <typeparam name="TSrc"></typeparam>
+        /// <typeparam name="T">Type of selected.</typeparam>
         /// <param name="before">It is the previous clause.</param>
         /// <param name="selected">Specify a new expression to represent the selection.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [SelectConverter]
-        public static Clause<TSelected> Select<TSrcSelected, TSelected>(this Clause<TSrcSelected> before, TSelected selected) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<T> Select<TSrc, T>(this Clause<TSrc> before, T selected) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
         /// </summary>
-        /// <typeparam name="TSelected">Type of selected.</typeparam>
+        /// <typeparam name="T">Type of selected.</typeparam>
         /// <param name="top">TOP keyword.</param>
         /// <param name="selected">Specify a new expression to represent the selection.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [SelectConverter]
-        public static Clause<TSelected> Select<TSelected>(TopElement top, TSelected selected) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<T> Select<T>(TopElement top, T selected) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
         /// </summary>
-        /// <typeparam name="TSrcSelected">If there is a Select clause before, it is the type selected there. Normally, the Select clause does not exist before the Select clause, and object is specified.</typeparam>
-        /// <typeparam name="TSelected">Type of selected.</typeparam>
+        /// <typeparam name="TSrc">If there is a Select clause before, it is the type selected there. Normally, the Select clause does not exist before the Select clause, and object is specified.</typeparam>
+        /// <typeparam name="T">Type of selected.</typeparam>
         /// <param name="before">It is the previous clause.</param>
         /// <param name="top">TOP keyword.</param>
         /// <param name="selected">Specify a new expression to represent the selection.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [SelectConverter]
-        public static Clause<TSelected> Select<TSrcSelected, TSelected>(this Clause<TSrcSelected> before, TopElement top, TSelected selected) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<T> Select<TSrc, T>(this Clause<TSrc> before, TopElement top, T selected) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
         /// </summary>
         /// <param name="asterisk">*</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [SelectConverter]
         public static Clause<Non> Select(AsteriskElement asterisk) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
         /// </summary>
-        /// <typeparam name="TSrcSelected">If there is a Select clause before, it is the type selected there. Normally, the Select clause does not exist before the Select clause, and object is specified.</typeparam>
+        /// <typeparam name="TSrc">If there is a Select clause before, it is the type selected there. Normally, the Select clause does not exist before the Select clause, and object is specified.</typeparam>
         /// <param name="before">It is the previous clause.</param>
         /// <param name="asterisk">*</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [SelectConverter]
-        public static Clause<Non> Select<TSrcSelected>(this Clause<TSrcSelected> before, AsteriskElement asterisk) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<Non> Select<TSrc>(this Clause<TSrc> before, AsteriskElement asterisk) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
         /// </summary>
-        /// <typeparam name="TSelected">Type of selected.</typeparam>
+        /// <typeparam name="T">Type of selected.</typeparam>
         /// <param name="asterisk">*</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [SelectConverter]
-        public static Clause<TSelected> Select<TSelected>(AsteriskElement<TSelected> asterisk) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<T> Select<T>(AsteriskElement<T> asterisk) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
         /// </summary>
-        /// <typeparam name="TSrcSelected">If there is a Select clause before, it is the type selected there. Normally, the Select clause does not exist before the Select clause, and object is specified.</typeparam>
-        /// <typeparam name="TSelected">Type of selected.</typeparam>
+        /// <typeparam name="TSrc">If there is a Select clause before, it is the type selected there. Normally, the Select clause does not exist before the Select clause, and object is specified.</typeparam>
+        /// <typeparam name="T">Type of selected.</typeparam>
         /// <param name="before">It is the previous clause.</param>
         /// <param name="asterisk">*</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [SelectConverter]
-        public static Clause<TSelected> Select<TSrcSelected, TSelected>(this Clause<TSrcSelected> before, AsteriskElement<TSelected> asterisk) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<T> Select<TSrc, T>(this Clause<TSrc> before, AsteriskElement<T> asterisk) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
         /// </summary>
         /// <param name="top">TOP keyword.</param>
         /// <param name="asterisk">*</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [SelectConverter]
         public static Clause<Non> Select(TopElement top, AsteriskElement asterisk) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
         /// </summary>
-        /// <typeparam name="TSrcSelected">If there is a Select clause before, it is the type selected there. Normally, the Select clause does not exist before the Select clause, and object is specified.</typeparam>
+        /// <typeparam name="TSrc">If there is a Select clause before, it is the type selected there. Normally, the Select clause does not exist before the Select clause, and object is specified.</typeparam>
         /// <param name="before">It is the previous clause.</param>
         /// <param name="top">TOP keyword.</param>
         /// <param name="asterisk">*</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [SelectConverter]
-        public static Clause<Non> Select<TSrcSelected>(this Clause<TSrcSelected> before, TopElement top, AsteriskElement asterisk) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<Non> Select<TSrc>(this Clause<TSrc> before, TopElement top, AsteriskElement asterisk) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
         /// </summary>
-        /// <typeparam name="TSelected">Type of selected.</typeparam>
+        /// <typeparam name="T">Type of selected.</typeparam>
         /// <param name="top">TOP keyword.</param>
         /// <param name="asterisk">*</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [SelectConverter]
-        public static Clause<TSelected> Select<TSelected>(TopElement top, AsteriskElement<TSelected> asterisk) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<T> Select<T>(TopElement top, AsteriskElement<T> asterisk) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
         /// </summary>
-        /// <typeparam name="TSrcSelected">If there is a Select clause before, it is the type selected there. Normally, the Select clause does not exist before the Select clause, and object is specified.</typeparam>
-        /// <typeparam name="TSelected">Type of selected.</typeparam>
+        /// <typeparam name="TSrc">If there is a Select clause before, it is the type selected there. Normally, the Select clause does not exist before the Select clause, and object is specified.</typeparam>
+        /// <typeparam name="T">Type of selected.</typeparam>
         /// <param name="before">It is the previous clause.</param>
         /// <param name="top">TOP keyword.</param>
         /// <param name="asterisk">*</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [SelectConverter]
-        public static Clause<TSelected> Select<TSrcSelected, TSelected>(this Clause<TSrcSelected> before, TopElement top, AsteriskElement<TSelected> asterisk) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<T> Select<TSrc, T>(this Clause<TSrc> before, TopElement top, AsteriskElement<T> asterisk) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
         /// </summary>
-        /// <typeparam name="TSelected">Type of selected.</typeparam>
+        /// <typeparam name="T">Type of selected.</typeparam>
         /// <param name="predicate">ALL or DISTINCT.</param>
         /// <param name="selected">Specify a new expression to represent the selection.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [SelectConverter]
-        public static Clause<TSelected> Select<TSelected>(AggregatePredicateElement predicate, TSelected selected) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<T> Select<T>(AggregatePredicateElement predicate, T selected) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
         /// </summary>
-        /// <typeparam name="TSrcSelected">If there is a Select clause before, it is the type selected there. Normally, the Select clause does not exist before the Select clause, and object is specified.</typeparam>
-        /// <typeparam name="TSelected">Type of selected.</typeparam>
+        /// <typeparam name="TSrc">If there is a Select clause before, it is the type selected there. Normally, the Select clause does not exist before the Select clause, and object is specified.</typeparam>
+        /// <typeparam name="T">Type of selected.</typeparam>
         /// <param name="before">It is the previous clause.</param>
         /// <param name="predicate">ALL or DISTINCT.</param>
         /// <param name="selected">Specify a new expression to represent the selection.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [SelectConverter]
-        public static Clause<TSelected> Select<TSrcSelected, TSelected>(this Clause<TSrcSelected> before, AggregatePredicateElement predicate, TSelected selected) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<T> Select<TSrc, T>(this Clause<TSrc> before, AggregatePredicateElement predicate, T selected) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
         /// </summary>
-        /// <typeparam name="TSelected">Type of selected.</typeparam>
+        /// <typeparam name="T">Type of selected.</typeparam>
         /// <param name="predicate">ALL or DISTINCT.</param>
         /// <param name="top">TOP keyword.</param>
         /// <param name="selected">Specify a new expression to represent the selection.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [SelectConverter]
-        public static Clause<TSelected> Select<TSelected>(AggregatePredicateElement predicate, TopElement top, TSelected selected) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<T> Select<T>(AggregatePredicateElement predicate, TopElement top, T selected) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
         /// </summary>
-        /// <typeparam name="TSrcSelected">If there is a Select clause before, it is the type selected there. Normally, the Select clause does not exist before the Select clause, and object is specified.</typeparam>
-        /// <typeparam name="TSelected">Type of selected.</typeparam>
+        /// <typeparam name="TSrc">If there is a Select clause before, it is the type selected there. Normally, the Select clause does not exist before the Select clause, and object is specified.</typeparam>
+        /// <typeparam name="T">Type of selected.</typeparam>
         /// <param name="before">It is the previous clause.</param>
         /// <param name="predicate">ALL or DISTINCT.</param>
         /// <param name="top">TOP keyword.</param>
         /// <param name="selected">Specify a new expression to represent the selection.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [SelectConverter]
-        public static Clause<TSelected> Select<TSrcSelected, TSelected>(this Clause<TSrcSelected> before, AggregatePredicateElement predicate, TopElement top, TSelected selected) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<T> Select<TSrc, T>(this Clause<TSrc> before, AggregatePredicateElement predicate, TopElement top, T selected) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
         /// </summary>
         /// <param name="predicate">ALL or DISTINCT.</param>
         /// <param name="asterisk">*</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [SelectConverter]
         public static Clause<Non> Select(AggregatePredicateElement predicate, AsteriskElement asterisk) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
         /// </summary>
-        /// <typeparam name="TSrcSelected">If there is a Select clause before, it is the type selected there. Normally, the Select clause does not exist before the Select clause, and object is specified.</typeparam>
+        /// <typeparam name="TSrc">If there is a Select clause before, it is the type selected there. Normally, the Select clause does not exist before the Select clause, and object is specified.</typeparam>
         /// <param name="before">It is the previous clause.</param>
         /// <param name="predicate">ALL or DISTINCT.</param>
         /// <param name="asterisk">*</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [SelectConverter]
-        public static Clause<Non> Select<TSrcSelected>(this Clause<TSrcSelected> before, AggregatePredicateElement predicate, AsteriskElement asterisk) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<Non> Select<TSrc>(this Clause<TSrc> before, AggregatePredicateElement predicate, AsteriskElement asterisk) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
         /// </summary>
-        /// <typeparam name="TSelected">Type of selected.</typeparam>
+        /// <typeparam name="T">Type of selected.</typeparam>
         /// <param name="predicate">ALL or DISTINCT.</param>
         /// <param name="asterisk">*</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [SelectConverter]
-        public static Clause<TSelected> Select<TSelected>(AggregatePredicateElement predicate, AsteriskElement<TSelected> asterisk) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<T> Select<T>(AggregatePredicateElement predicate, AsteriskElement<T> asterisk) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
         /// </summary>
-        /// <typeparam name="TSrcSelected">If there is a Select clause before, it is the type selected there. Normally, the Select clause does not exist before the Select clause, and object is specified.</typeparam>
-        /// <typeparam name="TSelected">Type of selected.</typeparam>
+        /// <typeparam name="TSrc">If there is a Select clause before, it is the type selected there. Normally, the Select clause does not exist before the Select clause, and object is specified.</typeparam>
+        /// <typeparam name="T">Type of selected.</typeparam>
         /// <param name="before">It is the previous clause.</param>
         /// <param name="predicate">ALL or DISTINCT.</param>
         /// <param name="asterisk">*</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [SelectConverter]
-        public static Clause<TSelected> Select<TSrcSelected, TSelected>(this Clause<TSrcSelected> before, AggregatePredicateElement predicate, AsteriskElement<TSelected> asterisk) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<T> Select<TSrc, T>(this Clause<TSrc> before, AggregatePredicateElement predicate, AsteriskElement<T> asterisk) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
@@ -230,50 +227,50 @@ namespace LambdicSql
         /// <param name="predicate">ALL or DISTINCT.</param>
         /// <param name="top">TOP keyword.</param>
         /// <param name="asterisk">*</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [SelectConverter]
         public static Clause<Non> Select(AggregatePredicateElement predicate, TopElement top, AsteriskElement asterisk) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
         /// </summary>
-        /// <typeparam name="TSrcSelected">If there is a Select clause before, it is the type selected there. Normally, the Select clause does not exist before the Select clause, and object is specified.</typeparam>
+        /// <typeparam name="TSrc">If there is a Select clause before, it is the type selected there. Normally, the Select clause does not exist before the Select clause, and object is specified.</typeparam>
         /// <param name="before">It is the previous clause.</param>
         /// <param name="predicate">ALL or DISTINCT.</param>
         /// <param name="top">TOP keyword.</param>
         /// <param name="asterisk">*</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [SelectConverter]
-        public static Clause<Non> Select<TSrcSelected>(this Clause<TSrcSelected> before, AggregatePredicateElement predicate, TopElement top, AsteriskElement asterisk) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<Non> Select<TSrc>(this Clause<TSrc> before, AggregatePredicateElement predicate, TopElement top, AsteriskElement asterisk) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
         /// </summary>
-        /// <typeparam name="TSelected">Type of selected.</typeparam>
+        /// <typeparam name="T">Type of selected.</typeparam>
         /// <param name="predicate">ALL or DISTINCT.</param>
         /// <param name="top">TOP keyword.</param>
         /// <param name="asterisk">*</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [SelectConverter]
-        public static Clause<TSelected> Select<TSelected>(AggregatePredicateElement predicate, TopElement top, AsteriskElement<TSelected> asterisk) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<T> Select<T>(AggregatePredicateElement predicate, TopElement top, AsteriskElement<T> asterisk) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// SELECT clause.
         /// </summary>
-        /// <typeparam name="TSrcSelected">If there is a Select clause before, it is the type selected there. Normally, the Select clause does not exist before the Select clause, and object is specified.</typeparam>
-        /// <typeparam name="TSelected">Type of selected.</typeparam>
+        /// <typeparam name="TSrc">If there is a Select clause before, it is the type selected there. Normally, the Select clause does not exist before the Select clause, and object is specified.</typeparam>
+        /// <typeparam name="T">Type of selected.</typeparam>
         /// <param name="before">It is the previous clause.</param>
         /// <param name="predicate">ALL or DISTINCT.</param>
         /// <param name="top">TOP keyword.</param>
         /// <param name="asterisk">*</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [SelectConverter]
-        public static Clause<TSelected> Select<TSrcSelected, TSelected>(this Clause<TSrcSelected> before, AggregatePredicateElement predicate, TopElement top, AsteriskElement<TSelected> asterisk) { throw new InvalitContextException(nameof(Select)); }
+        public static Clause<T> Select<TSrc, T>(this Clause<TSrc> before, AggregatePredicateElement predicate, TopElement top, AsteriskElement<T> asterisk) { throw new InvalitContextException(nameof(Select)); }
 
         /// <summary>
         /// CASE clause.
         /// </summary>
-        /// <returns>It is an object for describing the continuation of the CASE expression.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter]
         public static Clause<Non> Case() { throw new InvalitContextException(nameof(Case)); }
 
@@ -281,7 +278,7 @@ namespace LambdicSql
         /// CASE clause.
         /// </summary>
         /// <param name="target">It's target of CASE branch.</param>
-        /// <returns>It is an object for describing the continuation of the CASE expression.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter]
         public static Clause<Non> Case(object target) { throw new InvalitContextException(nameof(Case)); }
 
@@ -289,7 +286,7 @@ namespace LambdicSql
         /// CASE clause.
         /// </summary>
         /// <typeparam name="T">Type represented by CASE expression.</typeparam>
-        /// <returns>It is an object for describing the continuation of the CASE expression.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter]
         public static Clause<T> Case<T>() { throw new InvalitContextException(nameof(Case)); }
 
@@ -298,7 +295,7 @@ namespace LambdicSql
         /// </summary>
         /// <typeparam name="T">Type represented by CASE expression.</typeparam>
         /// <param name="target">It's target of CASE branch.</param>
-        /// <returns>It is an object for describing the continuation of the CASE expression.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter]
         public static Clause<T> Case<T>(object target) { throw new InvalitContextException(nameof(Case)); }
 
@@ -307,7 +304,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="before">It is an before expression in the CASE clause.</param>
         /// <param name="expression">It is a conditional expression of the WHEN clause.</param>
-        /// <returns>It is an object for describing the continuation of the CASE expression.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter(Indent = 1)]
         public static Clause<Non> When(this Clause<Non> before, object expression) { throw new InvalitContextException(nameof(When)); }
 
@@ -315,7 +312,7 @@ namespace LambdicSql
         /// WHEN clause.
         /// </summary>
         /// <param name="expression">It is a conditional expression of the WHEN clause.</param>
-        /// <returns>It is an object for describing the continuation of the CASE expression.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter(Indent = 1)]
         public static Clause<Non> When(object expression) { throw new InvalitContextException(nameof(When)); }
 
@@ -325,7 +322,7 @@ namespace LambdicSql
         /// <typeparam name="T">Type represented by CASE expression.</typeparam>
         /// <param name="before">It is an before expression in the CASE clause.</param>
         /// <param name="expression">It is a conditional expression of the WHEN clause.</param>
-        /// <returns>It is an object for describing the continuation of the CASE expression.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter(Indent = 1)]
         public static Clause<T> When<T>(this Clause<T> before, object expression) { throw new InvalitContextException(nameof(When)); }
 
@@ -335,7 +332,7 @@ namespace LambdicSql
         /// <typeparam name="T">Type represented by CASE expression.</typeparam>
         /// <param name="before">It is an before expression in the CASE clause.</param>
         /// <param name="result">It is an item to return to when the THEN clause is valid.</param>
-        /// <returns>It is an object for describing the continuation of the CASE expression.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter(Indent = 1)]
         public static Clause<T> Then<T>(this Clause<Non> before, T result) { throw new InvalitContextException(nameof(Then)); }
 
@@ -344,7 +341,7 @@ namespace LambdicSql
         /// </summary>
         /// <typeparam name="T">Type represented by CASE expression.</typeparam>
         /// <param name="result">It is an item to return to when the THEN clause is valid.</param>
-        /// <returns>It is an object for describing the continuation of the CASE expression.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter(Indent = 1)]
         public static Clause<T> Then<T>(T result) { throw new InvalitContextException(nameof(Then)); }
 
@@ -354,7 +351,7 @@ namespace LambdicSql
         /// <typeparam name="T">Type represented by CASE expression.</typeparam>
         /// <param name="before">It is an before expression in the CASE clause.</param>
         /// <param name="result">It is an item to return to when the THEN clause is valid.</param>
-        /// <returns>It is an object for describing the continuation of the CASE expression.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter(Indent = 1)]
         public static Clause<T> Then<T>(this Clause<T> before, T result) { throw new InvalitContextException(nameof(Then)); }
 
@@ -364,7 +361,7 @@ namespace LambdicSql
         /// <typeparam name="T">Type represented by CASE expression.</typeparam>
         /// <param name="before">It is an before expression in the CASE clause.</param>
         /// <param name="result">It is an item to return to when the ELSE clause is valid.</param>
-        /// <returns>It is an object for describing the continuation of the CASE expression.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter(Indent = 1)]
         public static Clause<T> Else<T>(this Clause<T> before, T result) { throw new InvalitContextException(nameof(Then)); }
 
@@ -373,7 +370,7 @@ namespace LambdicSql
         /// </summary>
         /// <typeparam name="T">Type represented by CASE expression.</typeparam>
         /// <param name="result">It is an item to return to when the ELSE clause is valid.</param>
-        /// <returns>It is an object for describing the continuation of the CASE expression.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter(Indent = 1)]
         public static Clause<T> Else<T>(T result) { throw new InvalitContextException(nameof(Then)); }
 
@@ -389,7 +386,7 @@ namespace LambdicSql
         /// <summary>
         /// END clause.
         /// </summary>
-        /// <returns>It is the result of CASE expression.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter]
         public static Clause<Non> End() { throw new InvalitContextException(nameof(End)); }
 
@@ -397,177 +394,177 @@ namespace LambdicSql
         /// FROM clause.
         /// </summary>
         /// <param name="expressions">Table or subquery.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [FromConverter]
         public static Clause<Non> From(params object[] expressions) { throw new InvalitContextException(nameof(From)); }
 
         /// <summary>
         /// FROM clause.
         /// </summary>
-        /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
+        /// <typeparam name="T">The type represented by before clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
         /// <param name="tables">Table or subquery.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [FromConverter]
-        public static Clause<TSelected> From<TSelected>(this Clause<TSelected> before, params object[] tables) { throw new InvalitContextException(nameof(From)); }
+        public static Clause<T> From<T>(this Clause<T> before, params object[] tables) { throw new InvalitContextException(nameof(From)); }
 
         /// <summary>
         /// JOIN clause.
         /// </summary>
         /// <param name="table">Table or subquery.</param>
         /// <param name="condition">It is a condition of JOIN.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [JoinConverter(Name = "JOIN")]
         public static Clause<Non> Join(object table, bool condition) { throw new InvalitContextException(nameof(Join)); }
 
         /// <summary>
         /// JOIN clause.
         /// </summary>
-        /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
+        /// <typeparam name="T">The type represented by before clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
         /// <param name="table">Table or subquery.</param>
         /// <param name="condition">It is a condition of JOIN.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [JoinConverter(Name = "JOIN")]
-        public static Clause<TSelected> Join<TSelected>(this Clause<TSelected> before, object table, bool condition) { throw new InvalitContextException(nameof(Join)); }
+        public static Clause<T> Join<T>(this Clause<T> before, object table, bool condition) { throw new InvalitContextException(nameof(Join)); }
 
         /// <summary>
         /// JOIN clause.
         /// </summary>
         /// <param name="table">Table or subquery.</param>
         /// <param name="condition">It is a condition of LEFT JOIN.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [JoinConverter(Name = "LEFT JOIN")]
         public static Clause<Non> LeftJoin(object table, bool condition) { throw new InvalitContextException(nameof(LeftJoin)); }
 
         /// <summary>
         /// LEFT JOIN clause.
         /// </summary>
-        /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
+        /// <typeparam name="T">The type represented by before clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
         /// <param name="table">Table or subquery.</param>
         /// <param name="condition">It is a condition of LEFT JOIN.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [JoinConverter(Name = "LEFT JOIN")]
-        public static Clause<TSelected> LeftJoin<TSelected>(this Clause<TSelected> before, object table, bool condition) { throw new InvalitContextException(nameof(LeftJoin)); }
+        public static Clause<T> LeftJoin<T>(this Clause<T> before, object table, bool condition) { throw new InvalitContextException(nameof(LeftJoin)); }
 
         /// <summary>
         /// RIGHT JOIN clause.
         /// </summary>
         /// <param name="table">Table or subquery.</param>
         /// <param name="condition">It is a condition of RIGHT JOIN.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [JoinConverter(Name = "RIGHT JOIN")]
         public static Clause<Non> RightJoin(object table, bool condition) { throw new InvalitContextException(nameof(RightJoin)); }
 
         /// <summary>
         /// RIGHT JOIN clause.
         /// </summary>
-        /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
+        /// <typeparam name="T">The type represented by before clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
         /// <param name="table">Table or subquery.</param>>
         /// <param name="condition">It is a condition of RIGHT JOIN.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [JoinConverter(Name = "RIGHT JOIN")]
-        public static Clause<TSelected> RightJoin<TSelected>(this Clause<TSelected> before, object table, bool condition) { throw new InvalitContextException(nameof(RightJoin)); }
+        public static Clause<T> RightJoin<T>(this Clause<T> before, object table, bool condition) { throw new InvalitContextException(nameof(RightJoin)); }
 
         /// <summary>
         /// FULL JOIN clause.
         /// </summary>
         /// <param name="table">Table or subquery.</param>
         /// <param name="condition">It is a condition of RIGHT JOIN.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [JoinConverter(Name = "FULL JOIN")]
         public static Clause<Non> FullJoin(object table, bool condition) { throw new InvalitContextException(nameof(FullJoin)); }
 
         /// <summary>
         /// FULL JOIN clause.
         /// </summary>
-        /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
+        /// <typeparam name="T">The type represented by before clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
         /// <param name="table">Table or subquery.</param>>
         /// <param name="condition">It is a condition of RIGHT JOIN.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [JoinConverter(Name = "FULL JOIN")]
-        public static Clause<TSelected> FullJoin<TSelected>(this Clause<TSelected> before, object table, bool condition) { throw new InvalitContextException(nameof(FullJoin)); }
+        public static Clause<T> FullJoin<T>(this Clause<T> before, object table, bool condition) { throw new InvalitContextException(nameof(FullJoin)); }
 
         /// <summary>
         /// CROSS JOIN clause.
         /// </summary>
         /// <param name="expression">Table or subquery.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [JoinConverter(Name = "CROSS JOIN")]
         public static Clause<Non> CrossJoin(object expression) { throw new InvalitContextException(nameof(CrossJoin)); }
 
         /// <summary>
         /// CROSS JOIN clause.
         /// </summary>
-        /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
+        /// <typeparam name="T">The type represented by before clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
         /// <param name="table">Table or subquery.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [JoinConverter(Name = "CROSS JOIN")]
-        public static Clause<TSelected> CrossJoin<TSelected>(this Clause<TSelected> before, object table) { throw new InvalitContextException(nameof(CrossJoin)); }
+        public static Clause<T> CrossJoin<T>(this Clause<T> before, object table) { throw new InvalitContextException(nameof(CrossJoin)); }
 
         /// <summary>
         /// WHERE clause.
         /// </summary>
         /// <param name="condition">It is a conditional expression of WHERE.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [ConditionClauseConverter(Name = "WHERE")]
         public static Clause<Non> Where(bool condition) { throw new InvalitContextException(nameof(Where)); }
 
         /// <summary>
         /// WHERE clause.
         /// </summary>
-        /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
+        /// <typeparam name="T">The type represented by before clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
         /// <param name="condition">It is a conditional expression of WHERE.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [ConditionClauseConverter(Name = "WHERE")]
-        public static Clause<TSelected> Where<TSelected>(this Clause<TSelected> before, bool condition) { throw new InvalitContextException(nameof(Where)); }
+        public static Clause<T> Where<T>(this Clause<T> before, bool condition) { throw new InvalitContextException(nameof(Where)); }
 
         /// <summary>
         /// GROUP BY clause.
         /// </summary>
         /// <param name="columns">Specify the target column of GROUP BY.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter(Name = "GROUP BY")]
         public static Clause<Non> GroupBy(params object[] columns) { throw new InvalitContextException(nameof(GroupBy)); }
 
         /// <summary>
         /// GROUP BY clause.
         /// </summary>
-        /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
+        /// <typeparam name="T">The type represented by before clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
         /// <param name="columns">Specify the target column of GROUP BY.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter(Name = "GROUP BY")]
-        public static Clause<TSelected> GroupBy<TSelected>(this Clause<TSelected> before, params object[] columns) { throw new InvalitContextException(nameof(GroupBy)); }
+        public static Clause<T> GroupBy<T>(this Clause<T> before, params object[] columns) { throw new InvalitContextException(nameof(GroupBy)); }
 
         /// <summary>
         /// GROUP BY ROLLUP clause.
         /// </summary>
         /// <param name="columns">Specify the target column of GROUP BY.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [FuncStyleConverter(Name = "GROUP BY ROLLUP")]
         public static Clause<Non> GroupByRollup(params object[] columns) { throw new InvalitContextException(nameof(GroupByRollup)); }
 
         /// <summary>
         /// GROUP BY ROLLUP clause.
         /// </summary>
-        /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
+        /// <typeparam name="T">The type represented by before clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
         /// <param name="columns">Specify the target column of GROUP BY.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [FuncStyleConverter(Name = "GROUP BY ROLLUP")]
-        public static Clause<TSelected> GroupByRollup<TSelected>(this Clause<TSelected> before, params object[] columns) { throw new InvalitContextException(nameof(GroupByRollup)); }
+        public static Clause<T> GroupByRollup<T>(this Clause<T> before, params object[] columns) { throw new InvalitContextException(nameof(GroupByRollup)); }
 
         /// <summary>
         /// GROUP BY columns WITH ROLLUP clause.
         /// </summary>
         /// <param name="columns">Specify the target column of GROUP BY.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         /// 
         [MethodFormatConverter(Format = "GROUP BY |[<, >0] WITH ROLLUP")]
         public static Clause<Non> GroupByWithRollup(params object[] columns) { throw new InvalitContextException(nameof(GroupByRollup)); }
@@ -575,325 +572,325 @@ namespace LambdicSql
         /// <summary>
         /// GROUP BY columns WITH ROLLUP clause.
         /// </summary>
-        /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
+        /// <typeparam name="T">The type represented by before clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
         /// <param name="columns">Specify the target column of GROUP BY.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [MethodFormatConverter(Format = "GROUP BY |[<, >1] WITH ROLLUP")]
-        public static Clause<TSelected> GroupByWithRollup<TSelected>(this Clause<TSelected> before, params object[] columns) { throw new InvalitContextException(nameof(GroupByRollup)); }
+        public static Clause<T> GroupByWithRollup<T>(this Clause<T> before, params object[] columns) { throw new InvalitContextException(nameof(GroupByRollup)); }
 
         /// <summary>
         /// GROUP BY CUBE clause.
         /// </summary>
         /// <param name="columns">Specify the target column of GROUP BY.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [FuncStyleConverter(Name = "GROUP BY CUBE")]
         public static Clause<Non> GroupByCube(params object[] columns) { throw new InvalitContextException(nameof(GroupByCube)); }
 
         /// <summary>
         /// GROUP BY CUBE clause.
         /// </summary>
-        /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
+        /// <typeparam name="T">The type represented by before clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
         /// <param name="columns">Specify the target column of GROUP BY.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [FuncStyleConverter(Name = "GROUP BY CUBE")]
-        public static Clause<TSelected> GroupByCube<TSelected>(this Clause<TSelected> before, params object[] columns) { throw new InvalitContextException(nameof(GroupByCube)); }
+        public static Clause<T> GroupByCube<T>(this Clause<T> before, params object[] columns) { throw new InvalitContextException(nameof(GroupByCube)); }
 
         /// <summary>
         /// GROUP BY GROUPING SETS clause.
         /// </summary>
         /// <param name="columns">Specify the target column of GROUP BY.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [FuncStyleConverter(Name = "GROUP BY GROUPING SETS")]
         public static Clause<Non> GroupByGroupingSets(params object[] columns) { throw new InvalitContextException(nameof(GroupByGroupingSets)); }
 
         /// <summary>
         /// GROUP BY GROUPING SETS clause.
         /// </summary>
-        /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
+        /// <typeparam name="T">The type represented by before clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
         /// <param name="columns">Specify the target column of GROUP BY.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [FuncStyleConverter(Name = "GROUP BY GROUPING SETS")]
-        public static Clause<TSelected> GroupByGroupingSets<TSelected>(this Clause<TSelected> before, params object[] columns) { throw new InvalitContextException(nameof(GroupByGroupingSets)); }
+        public static Clause<T> GroupByGroupingSets<T>(this Clause<T> before, params object[] columns) { throw new InvalitContextException(nameof(GroupByGroupingSets)); }
 
         /// <summary>
         /// HAVING clause.
         /// </summary>
         /// <param name="condition">It is a conditional expression of HAVING.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [ConditionClauseConverter(Name = "HAVING")]
         public static Clause<Non> Having(bool condition) { throw new InvalitContextException(nameof(Having)); }
 
         /// <summary>
         /// HAVING clause.
         /// </summary>
-        /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
+        /// <typeparam name="T">The type represented by before clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
         /// <param name="condition">It is a conditional expression of HAVING.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [ConditionClauseConverter(Name = "HAVING")]
-        public static Clause<TSelected> Having<TSelected>(this Clause<TSelected> before, bool condition) { throw new InvalitContextException(nameof(Having)); }
+        public static Clause<T> Having<T>(this Clause<T> before, bool condition) { throw new InvalitContextException(nameof(Having)); }
 
         /// <summary>
         /// ORDER BY clause.
         /// </summary>
         /// <param name="elements">Specify column and sort order. Asc(column) or Desc(column).</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [MethodFormatConverter(Format = "ORDER BY |[<, >0]", FormatDirection = FormatDirection.Vertical)]
         public static Clause<OverElement> OrderBy(params OrderByElement[] elements) { throw new InvalitContextException(nameof(OrderBy)); }
 
         /// <summary>
         /// ORDER BY clause.
         /// </summary>
-        /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
+        /// <typeparam name="T">The type represented by before clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
         /// <param name="elements">Specify column and sort order. Asc(column) or Desc(column).</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [MethodFormatConverter(Format = "ORDER BY |[<, >1]", FormatDirection = FormatDirection.Vertical)]
-        public static Clause<TSelected> OrderBy<TSelected>(this Clause<TSelected> before, params OrderByElement[] elements) { throw new InvalitContextException(nameof(OrderBy)); }
+        public static Clause<T> OrderBy<T>(this Clause<T> before, params OrderByElement[] elements) { throw new InvalitContextException(nameof(OrderBy)); }
 
         /// <summary>
         /// LIMIT clause.
         /// </summary>
         /// <param name="count">Number of rows to acquire.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter]
         public static Clause<Non> Limit(object count) { throw new InvalitContextException(nameof(Limit)); }
 
         /// <summary>
         /// LIMIT clause.
         /// </summary>
-        /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
+        /// <typeparam name="T">The type represented by before clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
         /// <param name="count">Number of rows to acquire.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter]
-        public static Clause<TSelected> Limit<TSelected>(this Clause<TSelected> before, object count) { throw new InvalitContextException(nameof(Limit)); }
+        public static Clause<T> Limit<T>(this Clause<T> before, object count) { throw new InvalitContextException(nameof(Limit)); }
 
         /// <summary>
         /// LIMIT clause.
         /// </summary>
         /// <param name="offset">Start position.</param>
         /// <param name="count">Number of rows to acquire.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter]
         public static Clause<Non> Limit(object offset, object count) { throw new InvalitContextException(nameof(Limit)); }
 
         /// <summary>
         /// LIMIT clause.
         /// </summary>
-        /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
+        /// <typeparam name="T">The type represented by before clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
         /// <param name="offset">Start position.</param>
         /// <param name="count">Number of rows to acquire.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter]
-        public static Clause<TSelected> Limit<TSelected>(this Clause<TSelected> before, object offset, object count) { throw new InvalitContextException(nameof(Limit)); }
+        public static Clause<T> Limit<T>(this Clause<T> before, object offset, object count) { throw new InvalitContextException(nameof(Limit)); }
 
         /// <summary>
         /// OFFSET clause.
         /// </summary>
         /// <param name="offset">Start position.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter]
         public static Clause<Non> Offset(object offset) { throw new InvalitContextException(nameof(Offset)); }
 
         /// <summary>
         /// OFFSET clause.
         /// </summary>
-        /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
+        /// <typeparam name="T">The type represented by before clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
         /// <param name="offset">Start position.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter]
-        public static Clause<TSelected> Offset<TSelected>(this Clause<TSelected> before, object offset) { throw new InvalitContextException(nameof(Offset)); }
+        public static Clause<T> Offset<T>(this Clause<T> before, object offset) { throw new InvalitContextException(nameof(Offset)); }
 
         /// <summary>
         /// OFFSET count ROWS clause.
         /// </summary>
         /// <param name="count">Number of rows to acquire.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [MethodFormatConverter(Format = "OFFSET |[0] ROWS")]
         public static Clause<Non> OffsetRows(object count) { throw new InvalitContextException(nameof(OffsetRows)); }
 
         /// <summary>
         /// OFFSET count ROWS clause.
         /// </summary>
-        /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
+        /// <typeparam name="T">The type represented by before clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
         /// <param name="count">Number of rows to acquire.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [MethodFormatConverter(Format = "OFFSET |[1] ROWS")]
-        public static Clause<TSelected> OffsetRows<TSelected>(this Clause<TSelected> before, object count) { throw new InvalitContextException(nameof(OffsetRows)); }
+        public static Clause<T> OffsetRows<T>(this Clause<T> before, object count) { throw new InvalitContextException(nameof(OffsetRows)); }
 
         /// <summary>
         /// FETCH NEXT count ROWS ONLY clause.
         /// </summary>
         /// <param name="count">Number of rows to acquire.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [MethodFormatConverter(Format = "FETCH NEXT |[0] ROWS ONLY")]
         public static Clause<Non> FetchNextRowsOnly(object count) { throw new InvalitContextException(nameof(FetchNextRowsOnly)); }
 
         /// <summary>
         /// FETCH NEXT count ROWS ONLY clause.
         /// </summary>
-        /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
+        /// <typeparam name="T">The type represented by before clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
         /// <param name="count">Number of rows to acquire.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [MethodFormatConverter(Format = "FETCH NEXT |[1] ROWS ONLY")]
-        public static Clause<TSelected> FetchNextRowsOnly<TSelected>(this Clause<TSelected> before, object count) { throw new InvalitContextException(nameof(FetchNextRowsOnly)); }
+        public static Clause<T> FetchNextRowsOnly<T>(this Clause<T> before, object count) { throw new InvalitContextException(nameof(FetchNextRowsOnly)); }
 
         /// <summary>
         /// UNION clause.
         /// </summary>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter]
         public static Clause<Non> Union() { throw new InvalitContextException(nameof(Union)); }
 
         /// <summary>
         /// UNION clause.
         /// </summary>
-        /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
+        /// <typeparam name="T">The type represented by before clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter]
-        public static Clause<TSelected> Union<TSelected>(this Clause<TSelected> before) { throw new InvalitContextException(nameof(Union)); }
+        public static Clause<T> Union<T>(this Clause<T> before) { throw new InvalitContextException(nameof(Union)); }
 
         /// <summary>
         /// UNION clause.
         /// </summary>
         /// <param name="all">If isAll is true, add an ALL predicate.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter]
         public static Clause<Non> Union(AggregatePredicateAllElement all) { throw new InvalitContextException(nameof(Union)); }
 
         /// <summary>
         /// UNION clause.
         /// </summary>
-        /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
+        /// <typeparam name="T">The type represented by before clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
         /// <param name="all">If isAll is true, add an ALL predicate.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter]
-        public static Clause<TSelected> Union<TSelected>(this Clause<TSelected> before, AggregatePredicateAllElement all) { throw new InvalitContextException(nameof(Union)); }
+        public static Clause<T> Union<T>(this Clause<T> before, AggregatePredicateAllElement all) { throw new InvalitContextException(nameof(Union)); }
 
         /// <summary>
         /// INTERSECT clause.
         /// </summary>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter]
         public static Clause<Non> Intersect() { throw new InvalitContextException(nameof(Intersect)); }
 
         /// <summary>
         /// INTERSECT clause.
         /// </summary>
-        /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
+        /// <typeparam name="T">The type represented by before clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter]
-        public static Clause<TSelected> Intersect<TSelected>(this Clause<TSelected> before) { throw new InvalitContextException(nameof(Intersect)); }
+        public static Clause<T> Intersect<T>(this Clause<T> before) { throw new InvalitContextException(nameof(Intersect)); }
 
         /// <summary>
         /// INTERSECT clause.
         /// </summary>
         /// <param name="all">If isAll is true, add an ALL predicate.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter]
         public static Clause<Non> Intersect(AggregatePredicateAllElement all) { throw new InvalitContextException(nameof(Intersect)); }
 
         /// <summary>
         /// INTERSECT clause.
         /// </summary>
-        /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
+        /// <typeparam name="T">The type represented by before clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
         /// <param name="all">If isAll is true, add an ALL predicate.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter]
-        public static Clause<TSelected> Intersect<TSelected>(this Clause<TSelected> before, AggregatePredicateAllElement all) { throw new InvalitContextException(nameof(Intersect)); }
+        public static Clause<T> Intersect<T>(this Clause<T> before, AggregatePredicateAllElement all) { throw new InvalitContextException(nameof(Intersect)); }
 
         /// <summary>
         /// EXCEPT clause.
         /// </summary>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter]
         public static Clause<Non> Except() { throw new InvalitContextException(nameof(Except)); }
 
         /// <summary>
         /// EXCEPT clause.
         /// </summary>
-        /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
+        /// <typeparam name="T">The type represented by before clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter]
-        public static Clause<TSelected> Except<TSelected>(this Clause<TSelected> before) { throw new InvalitContextException(nameof(Except)); }
+        public static Clause<T> Except<T>(this Clause<T> before) { throw new InvalitContextException(nameof(Except)); }
 
         /// <summary>
         /// EXCEPT clause.
         /// </summary>
         /// <param name="all">If isAll is true, add an ALL predicate.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter]
         public static Clause<Non> Except(AggregatePredicateAllElement all) { throw new InvalitContextException(nameof(Except)); }
 
         /// <summary>
         /// EXCEPT clause.
         /// </summary>
-        /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
+        /// <typeparam name="T">The type represented by before clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
         /// <param name="all">If isAll is true, add an ALL predicate.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter]
-        public static Clause<TSelected> Except<TSelected>(this Clause<TSelected> before, AggregatePredicateAllElement all) { throw new InvalitContextException(nameof(Except)); }
+        public static Clause<T> Except<T>(this Clause<T> before, AggregatePredicateAllElement all) { throw new InvalitContextException(nameof(Except)); }
 
         /// <summary>
         /// MINUS clause.
         /// </summary>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter]
         public static Clause<Non> Minus() { throw new InvalitContextException(nameof(Minus)); }
 
         /// <summary>
         /// MINUS clause.
         /// </summary>
-        /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
+        /// <typeparam name="T">The type represented by before clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter]
-        public static Clause<TSelected> Minus<TSelected>(this Clause<TSelected> before) { throw new InvalitContextException(nameof(Minus)); }
+        public static Clause<T> Minus<T>(this Clause<T> before) { throw new InvalitContextException(nameof(Minus)); }
 
         /// <summary>
         /// UPDATE clause.
         /// </summary>
         /// <param name="table">Table for UPDATE.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter]
         public static Clause<Non> Update(object table) { throw new InvalitContextException(nameof(Update)); }
-        
+
         /// <summary>
         /// SET clause.
         /// </summary>
         /// <param name="assigns">Assignment in the SET clause.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [MethodFormatConverter(Format = "SET |[<,>0]", FormatDirection = FormatDirection.Vertical)]
         public static Clause<Non> Set(params Assign[] assigns) { throw new InvalitContextException(nameof(Set)); }
 
         /// <summary>
         /// SET clause.
         /// </summary>
-        /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
+        /// <typeparam name="T">The type represented by before clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
         /// <param name="assigns">Assignment in the SET clause.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [MethodFormatConverter(Format = "SET |[<,>1]", FormatDirection = FormatDirection.Vertical)]
-        public static Clause<TSelected> Set<TSelected>(this Clause<TSelected> before, params Assign[] assigns) { throw new InvalitContextException(nameof(Set)); }
+        public static Clause<T> Set<T>(this Clause<T> before, params Assign[] assigns) { throw new InvalitContextException(nameof(Set)); }
 
         /// <summary>
         /// DELETE clause.
         /// </summary>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter]
         public static Clause<Non> Delete() { throw new InvalitContextException(nameof(Delete)); }
 
@@ -901,7 +898,7 @@ namespace LambdicSql
         /// INSERT INTO clause.
         /// </summary>
         /// <param name="table">Table for INSERT.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter(Name = "INSERT INTO")]
         public static Clause<Non> InsertInto(object table) { throw new InvalitContextException(nameof(InsertInto)); }
 
@@ -910,7 +907,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="table">Table for INSERT.</param>
         /// <param name="columns">It is a column that performs INSERT.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [MethodFormatConverter(Format = "INSERT INTO [0](|[#<, >1])")]
         public static Clause<Non> InsertInto(object table, params object[] columns) { throw new InvalitContextException(nameof(InsertInto)); }
 
@@ -918,19 +915,19 @@ namespace LambdicSql
         /// INSERT INTO clause.
         /// </summary>
         /// <param name="values">It is the value to be Inserted.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [FuncStyleConverter(Indent = 1)]
         public static Clause<Non> Values(params object[] values) { throw new InvalitContextException(nameof(Values)); }
 
         /// <summary>
         /// INSERT INTO clause.
         /// </summary>
-        /// <typeparam name="TSelected">It is the type selected in the SELECT clause.</typeparam>
+        /// <typeparam name="T">The type represented by before clause.</typeparam>
         /// <param name="before">It is the previous clause.</param>
         /// <param name="values">It is the value to be Inserted.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [FuncStyleConverter(Indent = 1)]
-        public static Clause<TSelected> Values<TSelected>(this Clause<TSelected> before, params object[] values) { throw new InvalitContextException(nameof(Values)); }
+        public static Clause<T> Values<T>(this Clause<T> before, params object[] values) { throw new InvalitContextException(nameof(Values)); }
 
         /// <summary>
         /// LIKE keyword.
@@ -1016,7 +1013,7 @@ namespace LambdicSql
         /// <typeparam name="T">Type representing argument of recursive part.</typeparam>
         /// <param name="args">Argument of recursive part.</param>
         /// <param name="subQuery">sub query.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [WithConverter]
         public static Clause<T> With<T>(SqlRecursiveArguments<T> args, Sql subQuery) { throw new InvalitContextException(nameof(With)); }
 
@@ -1032,14 +1029,14 @@ namespace LambdicSql
         /// <summary>
         /// CREATE TABLE clause.
         /// </summary>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [MethodFormatConverter(Format = "CREATE TABLE [0](|[#$<,>1])", FormatDirection = FormatDirection.Vertical)]
         public static Clause<Non> CreateTable(object table, params TableDefinitionElement[] designer) { throw new InvalitContextException(nameof(CreateTable)); }
 
         /// <summary>
         /// CREATE TABLE clause.
         /// </summary>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [MethodFormatConverter(Format = "CREATE TABLE IF NOT EXISTS [0](|[#$<,>1])", FormatDirection = FormatDirection.Vertical)]
         public static Clause<Non> CreateTableIfNotExists(object table, params TableDefinitionElement[] designer) { throw new InvalitContextException(nameof(CreateTable)); }
 
@@ -1047,14 +1044,14 @@ namespace LambdicSql
         /// CONSTRAINT clause.
         /// </summary>
         /// <param name="name">Constraint name.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [MethodFormatConverter(Format = "CONSTRAINT [!0]")]
         public static Clause<ConstraintElement> Constraint(string name) { throw new InvalitContextException(nameof(Constraint)); }
 
         /// <summary>
         /// PRIMARY KEY clause.
         /// </summary>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter(Name = "PRIMARY KEY")]
         public static Clause<ConstraintElement> PrimaryKey() { throw new InvalitContextException(nameof(PrimaryKey)); }
 
@@ -1062,7 +1059,7 @@ namespace LambdicSql
         /// PRIMARY KEY clause.
         /// </summary>
         /// <param name="columns">Columns.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [FuncStyleConverter(Name = "PRIMARY KEY")]
         public static Clause<ConstraintElement> PrimaryKey(params object[] columns) { throw new InvalitContextException(nameof(PrimaryKey)); }
 
@@ -1071,7 +1068,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="before">It is the previous clause.</param>
         /// <param name="columns">Columns.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [FuncStyleConverter(Name = "PRIMARY KEY", Indent = 1)]
         public static Clause<ConstraintElement> PrimaryKey(this Clause<ConstraintElement> before, params object[] columns) { throw new InvalitContextException(nameof(PrimaryKey)); }
 
@@ -1079,7 +1076,7 @@ namespace LambdicSql
         /// CHECK clause.
         /// </summary>
         /// <param name="condition">Condition.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [FuncStyleConverter]
         public static Clause<ConstraintElement> Check(bool condition) { throw new InvalitContextException(nameof(Check)); }
 
@@ -1088,14 +1085,14 @@ namespace LambdicSql
         /// </summary>
         /// <param name="before">It is the previous clause.</param>
         /// <param name="condition">Condition.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [FuncStyleConverter(Indent = 1)]
         public static Clause<ConstraintElement> Check(this Clause<ConstraintElement> before, bool condition) { throw new InvalitContextException(nameof(Check)); }
 
         /// <summary>
         /// UNIQUE clause.
         /// </summary>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter]
         public static Clause<ConstraintElement> Unique() { throw new InvalitContextException(nameof(Unique)); }
 
@@ -1103,7 +1100,7 @@ namespace LambdicSql
         /// UNIQUE clause.
         /// </summary>
         /// <param name="columns">Columns.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [FuncStyleConverter]
         public static Clause<ConstraintElement> Unique(params object[] columns) { throw new InvalitContextException(nameof(Unique)); }
 
@@ -1112,7 +1109,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="before">It is the previous clause.</param>
         /// <param name="columns">Columns.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [FuncStyleConverter(Indent = 1)]
         public static Clause<ConstraintElement> Unique(this Clause<ConstraintElement> before, params object[] columns) { throw new InvalitContextException(nameof(Unique)); }
 
@@ -1120,7 +1117,7 @@ namespace LambdicSql
         /// FOREIGN KEY clause.
         /// </summary>
         /// <param name="columns">Columns.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [FuncStyleConverter(Name = "FOREIGN KEY")]
         public static Clause<ConstraintElement> ForeignKey(params object[] columns) { throw new InvalitContextException(nameof(ForeignKey)); }
 
@@ -1129,14 +1126,14 @@ namespace LambdicSql
         /// </summary>
         /// <param name="before">It is the previous clause.</param>
         /// <param name="columns">Columns.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [FuncStyleConverter(Name = "FOREIGN KEY", Indent = 1)]
         public static Clause<ConstraintElement> ForeignKey(this Clause<ConstraintElement> before, params object[] columns) { throw new InvalitContextException(nameof(ForeignKey)); }
-        
+
         /// <summary>
         /// NOT NULL
         /// </summary>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter(Name = "NOT NULL")]
         public static Clause<ConstraintElement> NotNull() { throw new InvalitContextException(nameof(NotNull)); }
 
@@ -1144,7 +1141,7 @@ namespace LambdicSql
         /// DEFAULT
         /// </summary>
         /// <param name="value">value</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter]
         public static Clause<ConstraintElement> Default(object value) { throw new InvalitContextException(nameof(NotNull)); }
 
@@ -1154,7 +1151,7 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="table">Table.</param>
         /// <param name="columns">Columns.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [MethodFormatConverter(Format = "REFERENCES [1](|[<, >2])", Indent = 1)]
         public static Clause<ConstraintElement> References(this Clause<ConstraintElement> before, object table, params object[] columns) { throw new InvalitContextException(nameof(References)); }
 
@@ -1162,7 +1159,7 @@ namespace LambdicSql
         /// DROP TABLE clause.
         /// </summary>
         /// <param name="tables">Tables.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter(Name = "DROP TABLE")]
         public static Clause<Non> DropTable(params object[] tables) { throw new InvalitContextException(nameof(DropTable)); }
 
@@ -1170,24 +1167,8 @@ namespace LambdicSql
         /// DROP TABLE IF EXISTS clause.
         /// </summary>
         /// <param name="tables">Tables.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        /// <returns>Clause.</returns>
         [ClauseStyleConverter(Name = "DROP TABLE IF EXISTS")]
         public static Clause<Non> DropTableIfExists(params object[] tables) { throw new InvalitContextException(nameof(DropTable)); }
-
-        /// <summary>
-        /// DROP DATABASE clause.
-        /// </summary>
-        /// <param name="name">DataBase name.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [MethodFormatConverter(Format = "CREATE DATABASE [!0]")]
-        public static Clause<Non> CreateDataBase(string name) { throw new InvalitContextException(nameof(CreateDataBase)); }
-
-        /// <summary>
-        /// DROP DATABASE clause.
-        /// </summary>
-        /// <param name="name">DataBase name.</param>
-        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
-        [MethodFormatConverter(Format = "DROP DATABASE [!0]")]
-        public static Clause<Non> DropDataBase(string name) { throw new InvalitContextException(nameof(CreateDataBase)); }
     }
 }

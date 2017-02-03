@@ -37,56 +37,59 @@ namespace LambdicSql
         public static AsteriskElement Asterisk() { throw new InvalitContextException(nameof(Asterisk)); }
 
         /// <summary>
-        /// Constructor.
+        /// ASC Keyword.
         /// </summary>
         /// <param name="target">target column.</param>
+        /// <returns>ASC.</returns>
         [MethodFormatConverter(Format = "[0] ASC")]
         public static OrderByElement Asc(object target) { throw new InvalitContextException(nameof(Asc)); }
 
         /// <summary>
-        /// Constructor.
+        /// DESC Keyword.
         /// </summary>
         /// <param name="target">target column.</param>
+        /// <returns>DESC.</returns>
         [MethodFormatConverter(Format = "[0] DESC")]
         public static OrderByElement Desc(object target) { throw new InvalitContextException(nameof(Desc)); }
 
         /// <summary>
-        /// Constructor.
+        /// TOP Keyword.
         /// </summary>
-        /// <param name="count">cout.</param>
+        /// <param name="count">Count.</param>
+        /// <returns>TOP.</returns>
         [MethodFormatConverter(Format = "TOP [$0]")]
         public static TopElement Top(long count) { throw new InvalitContextException(nameof(Top)); }
 
         /// <summary>
         /// ALL Keyword
         /// </summary>
-        /// <returns></returns>
+        /// <returns>ALL.</returns>
         [ClauseStyleConverter]
-        public static AggregatePredicateAllElement All() => null;
+        public static AggregatePredicateAllElement All() { throw new InvalitContextException(nameof(All)); }
 
         /// <summary>
-        /// Distinct Keyword
+        /// DISTINCT Keyword.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>DISTINCT.</returns>
         [ClauseStyleConverter]
         public static AggregatePredicateElement Distinct() { throw new InvalitContextException(nameof(All)); }
 
         /// <summary>
-        /// CURREN_TDATE function.
+        /// CURREN_TDATE Keyword.
         /// </summary>
         /// <returns>Date of executing SQL.</returns>
         [CurrentDateTimeConverter(Name = "DATE")]
         public static DateTime Current_Date() { throw new InvalitContextException(nameof(Current_Date)); }
 
         /// <summary>
-        /// CURRENT_TIME function.
+        /// CURRENT_TIME Keyword.
         /// </summary>
         /// <returns>Date of executing SQL.</returns>
         [CurrentDateTimeConverter(Name = "TIME")]
         public static TimeSpan Current_Time() { throw new InvalitContextException(nameof(DateTimeOffset)); }
 
         /// <summary>
-        /// CURRENT_TIMESTAMP function.
+        /// CURRENT_TIMESTAMP Keyword.
         /// </summary>
         /// <returns>Date and time of executing SQL.</returns>
         [CurrentDateTimeConverter(Name = "TIMESTAMP")]

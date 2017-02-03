@@ -19,7 +19,7 @@ namespace LambdicSql
     /// <summary>
     /// Clause.
     /// </summary>
-    /// <typeparam name="TSelected">Type of selected.</typeparam>
+    /// <typeparam name="TSelected">The type represented by clause.</typeparam>
     public abstract class Clause<TSelected> : Clause
     {
         /// <summary>
