@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Linq;
-using System.Reflection;
 using LambdicSql.MultiplatformCompatibe;
 
 namespace LambdicSql.ConverterServices.Inside

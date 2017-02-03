@@ -30,6 +30,9 @@ namespace LambdicSql.ConverterServices
 
         internal static ICode AddCode(ICode lhs, ICode rhs)
         {
+            if (lhs.IsEmpty) return rhs;
+            if (rhs.IsEmpty) return lhs;
+
             var selectQueryLeft = lhs as SelectQueryCode;
             var selectQueryRight = rhs as SelectQueryCode;
 

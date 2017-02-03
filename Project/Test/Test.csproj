@@ -102,6 +102,9 @@
     <Compile Include="..\Test.NET35\Helper\HelperForTest.cs">
       <Link>Helper\HelperForTest.cs</Link>
     </Compile>
+    <Compile Include="..\Test.NET35\TestDataType.cs">
+      <Link>TestDataType.cs</Link>
+    </Compile>
     <Compile Include="..\Test.NET35\TestDbDefine.cs">
       <Link>TestDbDefine.cs</Link>
     </Compile>

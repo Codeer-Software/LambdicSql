@@ -287,6 +287,14 @@ namespace LambdicSql
         public static DataTypeElement Enum() { throw new InvalitContextException(nameof(Enum)); }
 
         /// <summary>
+        /// ENUM
+        /// </summary>
+        /// <param name="elements">Elements</param>
+        /// <returns>ENUM</returns>
+        [FuncStyleConverter]
+        public static DataTypeElement Enum(params object[] elements) { throw new InvalitContextException(nameof(Enum)); }
+
+        /// <summary>
         /// FLOAT
         /// </summary>
         /// <returns>FLOAT</returns>
@@ -431,6 +439,14 @@ namespace LambdicSql
         public static DataTypeElement LongVarchar() { throw new InvalitContextException(nameof(LongVarchar)); }
 
         /// <summary>
+        /// LONGVARCHAR
+        /// </summary>
+        /// <param name="n">n</param>
+        /// <returns>LONGVARCHAR</returns>
+        [ClauseStyleConverter]
+        public static DataTypeElement LongVarchar(int n) { throw new InvalitContextException(nameof(LongVarchar)); }
+
+        /// <summary>
         /// LONGVARGRAPHIC
         /// </summary>
         /// <returns>LONGVARGRAPHIC</returns>
@@ -485,6 +501,14 @@ namespace LambdicSql
         /// <returns>NATIVE CHARACTER</returns>
         [ClauseStyleConverter(Name = "NATIVE CHARACTER")]
         public static DataTypeElement NativeCharacter() { throw new InvalitContextException(nameof(NativeCharacter)); }
+
+        /// <summary>
+        /// NATIVE CHARACTER
+        /// </summary>
+        /// <param name="n">n</param>
+        /// <returns>NATIVE CHARACTER</returns>
+        [FuncStyleConverter(Name = "NATIVE CHARACTER")]
+        public static DataTypeElement NativeCharacter(int n) { throw new InvalitContextException(nameof(NativeCharacter)); }
 
         /// <summary>
         /// NCHAR
@@ -571,6 +595,14 @@ namespace LambdicSql
         public static DataTypeElement NVarChar() { throw new InvalitContextException(nameof(NVarChar)); }
 
         /// <summary>
+        /// NVARCHAR
+        /// </summary>
+        /// <param name="n">n</param>
+        /// <returns>NVARCHAR</returns>
+        [FuncStyleConverter]
+        public static DataTypeElement NVarChar(int n) { throw new InvalitContextException(nameof(NVarChar)); }
+
+        /// <summary>
         /// NVARCHAR2
         /// </summary>
         /// <returns>NVARCHAR2</returns>
@@ -640,6 +672,14 @@ namespace LambdicSql
         /// <returns>SET</returns>
         [ClauseStyleConverter]
         public static DataTypeElement Set() { throw new InvalitContextException(nameof(Set)); }
+
+        /// <summary>
+        /// SET
+        /// </summary>
+        /// <param name="elements">Elements</param>
+        /// <returns>SET</returns>
+        [FuncStyleConverter]
+        public static DataTypeElement Set(params object[] elements) { throw new InvalitContextException(nameof(Set)); }
 
         /// <summary>
         /// SMALLDATETIME
@@ -850,6 +890,14 @@ namespace LambdicSql
         /// <returns>VARYING CHARACTER</returns>
         [ClauseStyleConverter(Name = "VARYING CHARACTER")]
         public static DataTypeElement VaryingCharacter() { throw new InvalitContextException(nameof(VaryingCharacter)); }
+
+        /// <summary>
+        /// VARYING CHARACTER
+        /// </summary>
+        /// <param name="n">n</param>
+        /// <returns>VARYING CHARACTER</returns>
+        [FuncStyleConverter(Name = "VARYING CHARACTER")]
+        public static DataTypeElement VaryingCharacter(int n) { throw new InvalitContextException(nameof(VaryingCharacter)); }
 
         /// <summary>
         /// XML

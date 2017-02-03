@@ -41,6 +41,7 @@ namespace Test
         public int val1 { get; set; }
         public char[] val2 { get; set; }
     }
+
     public class Table2
     {
         public int id { get; set; }
@@ -48,9 +49,55 @@ namespace Test
         public int val1 { get; set; }
     }
 
+    public class Table3
+    {
+        public object obj1 { get; set; }
+        public object obj2 { get; set; }
+        public object obj3 { get; set; }
+        public object obj4 { get; set; }
+        public object obj5 { get; set; }
+        public object obj6 { get; set; }
+        public object obj7 { get; set; }
+        public object obj8 { get; set; }
+        public object obj9 { get; set; }
+        public object obj10 { get; set; }
+        public object obj11 { get; set; }
+        public object obj12 { get; set; }
+        public object obj13 { get; set; }
+        public object obj14 { get; set; }
+        public object obj15 { get; set; }
+        public object obj16 { get; set; }
+        public object obj17 { get; set; }
+        public object obj18 { get; set; }
+        public object obj19 { get; set; }
+        public object obj20 { get; set; }
+        public object obj21 { get; set; }
+        public object obj22 { get; set; }
+        public object obj23 { get; set; }
+        public object obj24 { get; set; }
+        public object obj25 { get; set; }
+        public object obj26 { get; set; }
+        public object obj27 { get; set; }
+        public object obj28 { get; set; }
+        public object obj29 { get; set; }
+        public object obj30 { get; set; }
+        public object obj31 { get; set; }
+        public object obj32 { get; set; }
+        public object obj33 { get; set; }
+        public object obj34 { get; set; }
+        public object obj35 { get; set; }
+        public object obj36 { get; set; }
+        public object obj37 { get; set; }
+        public object obj38 { get; set; }
+        public object obj39 { get; set; }
+        public object obj40 { get; set; }
+        public object obj41 { get; set; }
+    }
+
     public class DBForCreateTest
     {
         public Table1 table1 { get; set; }
         public Table2 table2 { get; set; }
+        public Table3 table3 { get; set; }
     }
 }

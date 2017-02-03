@@ -135,7 +135,6 @@ new Params()
             Assert.AreEqual(ret.Text, "@Now");
         }
 
-
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Object_New()
         {
@@ -415,7 +414,7 @@ new Params
                 Select(Asterisk(db.tbl_staff)).
                 From(db.tbl_staff).
                 Where(exp2));
-            
+
             var datas = _connection.Query(sql).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(sql, _connection,
@@ -603,7 +602,7 @@ FROM tbl_staff",
 FROM tbl_remuneration
 WHERE (@p_0) < (tbl_remuneration.id)", 0);
         }
-        
+
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_AdditionalOperator_SubQuery_1()
         {
@@ -629,7 +628,6 @@ WHERE (@p_0) < (tbl_remuneration.id)", 0);
 	FROM tbl_remuneration) AS Money
 FROM tbl_remuneration");
         }
-
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_AdditionalOperator_SubQuery_2()
@@ -679,6 +677,57 @@ FROM tbl_remuneration");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_AdditionalOperator_SubQuery_4()
+        {
+            var empty = new Sql<decimal>();
+            var select = Db<DB>.Sql(db => Select(Sum(db.tbl_remuneration.money)));
+            var where = Db<DB>.Sql(db => From(db.tbl_remuneration));
+            var sub = empty + select + where;
+
+            var sql = Db<DB>.Sql(db =>
+                Select(new SelectData
+                {
+                    Money = sub
+                }).
+                From(db.tbl_remuneration));
+
+            sql.Gen(_connection);
+
+            var datas = _connection.Query(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT
+	(SELECT
+		SUM(tbl_remuneration.money)
+	FROM tbl_remuneration) AS Money
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_AdditionalOperator_SubQuery_5()
+        {
+            var empty = new Sql<decimal>();
+
+            var sql = Db<DB>.Sql(db =>
+                Select(new SelectData
+                {
+                    Money = empty + Select(Sum(db.tbl_remuneration.money)) + From(db.tbl_remuneration)
+                }).
+                From(db.tbl_remuneration));
+
+            sql.Gen(_connection);
+
+            var datas = _connection.Query(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT
+	(SELECT
+		SUM(tbl_remuneration.money)
+	FROM tbl_remuneration) AS Money
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_AdditionalOperator_Union_1()
         {
             var sub1 = Db<DB>.Sql(db =>
@@ -702,7 +751,7 @@ UNION
 SELECT *
 FROM tbl_staff");
         }
-        
+
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_AdditionalOperator_Union_2()
         {
@@ -756,8 +805,6 @@ FROM
 	FROM tbl_staff) sub5");
         }
 
-
-
         public class SelectData3
         {
             public decimal Val { get; set; }
@@ -772,7 +819,7 @@ FROM
             var sql = Db<DB>.Sql(db =>
                 Select(new SelectData3
                 {
-                    Val = Sum(db.tbl_remuneration.money) + 
+                    Val = Sum(db.tbl_remuneration.money) +
                             Over(PartitionBy(db.tbl_remuneration.payment_date),
                                 OrderBy(Asc(db.tbl_remuneration.money)),
                                 Rows(1, 5))
@@ -916,10 +963,35 @@ FROM tbl_remuneration", new Params { { "@val", 3 } });
 FROM tbl_remuneration", new Params { { "@val", 10 } });
         }
 
-        //TODO new 引数あり + 初期化
+        class ConstructorAndInitMember
+        {
+            public int A { get; set; }
+            public int B { get; set; }
+            internal ConstructorAndInitMember(int a)
+            {
+                A = a;
+            }
+            public static implicit operator decimal(ConstructorAndInitMember src) => src.A + src.B;
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_ConstructorAndInitMember()
+        {
+            var sql = Db<DB>.Sql(db =>
+                Select(new SelectData
+                {
+                    Money = new ConstructorAndInitMember(1) { B = 2},
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT
+	@p_0 AS Money
+FROM tbl_remuneration", (decimal)3);
+        }
         //TODO タイプを全種類網羅しておくか・・・
-        //TODO ExpressionToObjectがテストされるだけのテストを書くこと
-        //TODO BinaryExpressionのテスト
     }
 
     public static class TestExpressionEx
