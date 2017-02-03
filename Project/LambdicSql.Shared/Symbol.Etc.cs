@@ -41,14 +41,14 @@ namespace LambdicSql
         /// </summary>
         /// <param name="target">target column.</param>
         [MethodFormatConverter(Format = "[0] ASC")]
-        public static SortedByElement Asc(object target) { throw new InvalitContextException(nameof(Asc)); }
+        public static OrderByElement Asc(object target) { throw new InvalitContextException(nameof(Asc)); }
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="target">target column.</param>
         [MethodFormatConverter(Format = "[0] DESC")]
-        public static SortedByElement Desc(object target) { throw new InvalitContextException(nameof(Desc)); }
+        public static OrderByElement Desc(object target) { throw new InvalitContextException(nameof(Desc)); }
 
         /// <summary>
         /// Constructor.

@@ -642,7 +642,7 @@ namespace LambdicSql
         /// <param name="elements">Specify column and sort order. Asc(column) or Desc(column).</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [MethodFormatConverter(Format = "ORDER BY |[<, >0]", FormatDirection = FormatDirection.Vertical)]
-        public static Clause<OverArgument> OrderBy(params SortedByElement[] elements) { throw new InvalitContextException(nameof(OrderBy)); }
+        public static Clause<OverElement> OrderBy(params OrderByElement[] elements) { throw new InvalitContextException(nameof(OrderBy)); }
 
         /// <summary>
         /// ORDER BY clause.
@@ -652,7 +652,7 @@ namespace LambdicSql
         /// <param name="elements">Specify column and sort order. Asc(column) or Desc(column).</param>
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [MethodFormatConverter(Format = "ORDER BY |[<, >1]", FormatDirection = FormatDirection.Vertical)]
-        public static Clause<TSelected> OrderBy<TSelected>(this Clause<TSelected> before, params SortedByElement[] elements) { throw new InvalitContextException(nameof(OrderBy)); }
+        public static Clause<TSelected> OrderBy<TSelected>(this Clause<TSelected> before, params OrderByElement[] elements) { throw new InvalitContextException(nameof(OrderBy)); }
 
         /// <summary>
         /// LIMIT clause.

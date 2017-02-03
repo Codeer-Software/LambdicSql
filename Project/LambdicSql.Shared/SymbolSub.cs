@@ -32,7 +32,7 @@ namespace LambdicSql
     /// It is an object representing the sort order
     /// Implemented classes include Asc and Desc.
     /// </summary>
-    public abstract class SortedByElement { }
+    public abstract class OrderByElement { }
 
     /// <summary>
     /// Aggregation predicate.
@@ -205,7 +205,7 @@ namespace LambdicSql
     /// <summary>
     /// OVER clause argument.
     /// </summary>
-    public class OverArgument { }
+    public abstract class OverElement { }
 
     /// <summary>
     /// OVER clause result.
@@ -218,7 +218,7 @@ namespace LambdicSql
         /// <param name="value">Value.</param>
         /// <param name="returnValue">Return value.</param>
         /// <returns>Value.</returns>
-        public static object operator +(object value, OverReturnValue returnValue) { throw new InvalitContextException("implicit operator"); }
+        public static object operator +(object value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
 
         /// <summary>
         /// Additional operator.
@@ -226,7 +226,7 @@ namespace LambdicSql
         /// <param name="value">Value.</param>
         /// <param name="returnValue">Return value.</param>
         /// <returns>Value.</returns>
-        public static string operator +(string value, OverReturnValue returnValue) { throw new InvalitContextException("implicit operator"); }
+        public static string operator +(string value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
 
         /// <summary>
         /// Additional operator.
@@ -234,7 +234,7 @@ namespace LambdicSql
         /// <param name="value">Value.</param>
         /// <param name="returnValue">Return value.</param>
         /// <returns>Value.</returns>
-        public static bool operator +(bool value, OverReturnValue returnValue) { throw new InvalitContextException("implicit operator"); }
+        public static bool operator +(bool value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
 
         /// <summary>
         /// Additional operator.
@@ -242,7 +242,7 @@ namespace LambdicSql
         /// <param name="value">Value.</param>
         /// <param name="returnValue">Return value.</param>
         /// <returns>Value.</returns>
-        public static bool? operator +(bool? value, OverReturnValue returnValue) { throw new InvalitContextException("implicit operator"); }
+        public static bool? operator +(bool? value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
 
         /// <summary>
         /// Additional operator.
@@ -250,7 +250,7 @@ namespace LambdicSql
         /// <param name="value">Value.</param>
         /// <param name="returnValue">Return value.</param>
         /// <returns>Value.</returns>
-        public static byte operator +(byte value, OverReturnValue returnValue) { throw new InvalitContextException("implicit operator"); }
+        public static byte operator +(byte value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
 
         /// <summary>
         /// Additional operator.
@@ -258,7 +258,7 @@ namespace LambdicSql
         /// <param name="value">Value.</param>
         /// <param name="returnValue">Return value.</param>
         /// <returns>Value.</returns>
-        public static byte? operator +(byte? value, OverReturnValue returnValue) { throw new InvalitContextException("implicit operator"); }
+        public static byte? operator +(byte? value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
 
         /// <summary>
         /// Additional operator.
@@ -266,7 +266,7 @@ namespace LambdicSql
         /// <param name="value">Value.</param>
         /// <param name="returnValue">Return value.</param>
         /// <returns>Value.</returns>
-        public static short operator +(short value, OverReturnValue returnValue) { throw new InvalitContextException("implicit operator"); }
+        public static short operator +(short value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
 
         /// <summary>
         /// Additional operator.
@@ -274,7 +274,7 @@ namespace LambdicSql
         /// <param name="value">Value.</param>
         /// <param name="returnValue">Return value.</param>
         /// <returns>Value.</returns>
-        public static short? operator +(short? value, OverReturnValue returnValue) { throw new InvalitContextException("implicit operator"); }
+        public static short? operator +(short? value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
 
         /// <summary>
         /// Additional operator.
@@ -282,7 +282,7 @@ namespace LambdicSql
         /// <param name="value">Value.</param>
         /// <param name="returnValue">Return value.</param>
         /// <returns>Value.</returns>
-        public static int operator +(int value, OverReturnValue returnValue) { throw new InvalitContextException("implicit operator"); }
+        public static int operator +(int value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
 
         /// <summary>
         /// Additional operator.
@@ -290,7 +290,7 @@ namespace LambdicSql
         /// <param name="value">Value.</param>
         /// <param name="returnValue">Return value.</param>
         /// <returns>Value.</returns>
-        public static int? operator +(int? value, OverReturnValue returnValue) { throw new InvalitContextException("implicit operator"); }
+        public static int? operator +(int? value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
 
         /// <summary>
         /// Additional operator.
@@ -298,7 +298,7 @@ namespace LambdicSql
         /// <param name="value">Value.</param>
         /// <param name="returnValue">Return value.</param>
         /// <returns>Value.</returns>
-        public static long operator +(long value, OverReturnValue returnValue) { throw new InvalitContextException("implicit operator"); }
+        public static long operator +(long value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
 
         /// <summary>
         /// Additional operator.
@@ -306,7 +306,7 @@ namespace LambdicSql
         /// <param name="value">Value.</param>
         /// <param name="returnValue">Return value.</param>
         /// <returns>Value.</returns>
-        public static long? operator +(long? value, OverReturnValue returnValue) { throw new InvalitContextException("implicit operator"); }
+        public static long? operator +(long? value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
 
         /// <summary>
         /// Additional operator.
@@ -314,7 +314,7 @@ namespace LambdicSql
         /// <param name="value">Value.</param>
         /// <param name="returnValue">Return value.</param>
         /// <returns>Value.</returns>
-        public static float operator +(float value, OverReturnValue returnValue) { throw new InvalitContextException("implicit operator"); }
+        public static float operator +(float value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
 
         /// <summary>
         /// Additional operator.
@@ -322,7 +322,7 @@ namespace LambdicSql
         /// <param name="value">Value.</param>
         /// <param name="returnValue">Return value.</param>
         /// <returns>Value.</returns>
-        public static float? operator +(float? value, OverReturnValue returnValue) { throw new InvalitContextException("implicit operator"); }
+        public static float? operator +(float? value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
 
         /// <summary>
         /// Additional operator.
@@ -330,7 +330,7 @@ namespace LambdicSql
         /// <param name="value">Value.</param>
         /// <param name="returnValue">Return value.</param>
         /// <returns>Value.</returns>
-        public static double operator +(double value, OverReturnValue returnValue) { throw new InvalitContextException("implicit operator"); }
+        public static double operator +(double value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
 
         /// <summary>
         /// Additional operator.
@@ -338,7 +338,7 @@ namespace LambdicSql
         /// <param name="value">Value.</param>
         /// <param name="returnValue">Return value.</param>
         /// <returns>Value.</returns>
-        public static double? operator +(double? value, OverReturnValue returnValue) { throw new InvalitContextException("implicit operator"); }
+        public static double? operator +(double? value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
 
         /// <summary>
         /// Additional operator.
@@ -346,7 +346,7 @@ namespace LambdicSql
         /// <param name="value">Value.</param>
         /// <param name="returnValue">Return value.</param>
         /// <returns>Value.</returns>
-        public static decimal operator +(decimal value, OverReturnValue returnValue) { throw new InvalitContextException("implicit operator"); }
+        public static decimal operator +(decimal value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
 
         /// <summary>
         /// Additional operator.
@@ -354,7 +354,7 @@ namespace LambdicSql
         /// <param name="value">Value.</param>
         /// <param name="returnValue">Return value.</param>
         /// <returns>Value.</returns>
-        public static decimal? operator +(decimal? value, OverReturnValue returnValue) { throw new InvalitContextException("implicit operator"); }
+        public static decimal? operator +(decimal? value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
 
         /// <summary>
         /// Additional operator.
@@ -362,7 +362,7 @@ namespace LambdicSql
         /// <param name="value">Value.</param>
         /// <param name="returnValue">Return value.</param>
         /// <returns>Value.</returns>
-        public static DateTime operator +(DateTime value, OverReturnValue returnValue) { throw new InvalitContextException("implicit operator"); }
+        public static DateTime operator +(DateTime value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
 
         /// <summary>
         /// Additional operator.
@@ -370,7 +370,7 @@ namespace LambdicSql
         /// <param name="value">Value.</param>
         /// <param name="returnValue">Return value.</param>
         /// <returns>Value.</returns>
-        public static DateTime? operator +(DateTime? value, OverReturnValue returnValue) { throw new InvalitContextException("implicit operator"); }
+        public static DateTime? operator +(DateTime? value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
 
         /// <summary>
         /// Additional operator.
@@ -378,7 +378,7 @@ namespace LambdicSql
         /// <param name="value">Value.</param>
         /// <param name="returnValue">Return value.</param>
         /// <returns>Value.</returns>
-        public static DateTimeOffset operator +(DateTimeOffset value, OverReturnValue returnValue) { throw new InvalitContextException("implicit operator"); }
+        public static DateTimeOffset operator +(DateTimeOffset value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
 
         /// <summary>
         /// Additional operator.
@@ -386,7 +386,7 @@ namespace LambdicSql
         /// <param name="value">Value.</param>
         /// <param name="returnValue">Return value.</param>
         /// <returns>Value.</returns>
-        public static DateTimeOffset? operator +(DateTimeOffset? value, OverReturnValue returnValue) { throw new InvalitContextException("implicit operator"); }
+        public static DateTimeOffset? operator +(DateTimeOffset? value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
 
         /// <summary>
         /// Additional operator.
@@ -394,7 +394,7 @@ namespace LambdicSql
         /// <param name="value">Value.</param>
         /// <param name="returnValue">Return value.</param>
         /// <returns>Value.</returns>
-        public static TimeSpan operator +(TimeSpan value, OverReturnValue returnValue) { throw new InvalitContextException("implicit operator"); }
+        public static TimeSpan operator +(TimeSpan value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
 
         /// <summary>
         /// Additional operator.
@@ -402,7 +402,7 @@ namespace LambdicSql
         /// <param name="value">Value.</param>
         /// <param name="returnValue">Return value.</param>
         /// <returns>Value.</returns>
-        public static TimeSpan? operator +(TimeSpan? value, OverReturnValue returnValue) { throw new InvalitContextException("implicit operator"); }
+        public static TimeSpan? operator +(TimeSpan? value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
 
         /// <summary>
         /// Additional operator.
@@ -410,7 +410,7 @@ namespace LambdicSql
         /// <param name="value">Value.</param>
         /// <param name="returnValue">Return value.</param>
         /// <returns>Value.</returns>
-        public static byte[] operator +(byte[] value, OverReturnValue returnValue) { throw new InvalitContextException("implicit operator"); }
+        public static byte[] operator +(byte[] value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
 
         /// <summary>
         /// Additional operator.
@@ -418,7 +418,7 @@ namespace LambdicSql
         /// <param name="value">Value.</param>
         /// <param name="returnValue">Return value.</param>
         /// <returns>Value.</returns>
-        public static char[] operator +(char[] value, OverReturnValue returnValue) { throw new InvalitContextException("implicit operator"); }
+        public static char[] operator +(char[] value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
     }
 
     /// <summary>

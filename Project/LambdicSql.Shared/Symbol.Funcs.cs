@@ -333,7 +333,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="preceding">Preceding row count.</param>
         [MethodFormatConverter(Format = "ROWS [$0] PRECEDING")]
-        public static OverArgument Rows(long preceding) { throw new InvalitContextException(nameof(Rows)); }
+        public static OverElement Rows(long preceding) { throw new InvalitContextException(nameof(Rows)); }
 
         /// <summary>
         /// Constructor.
@@ -341,14 +341,14 @@ namespace LambdicSql
         /// <param name="preceding">Preceding row count.</param>
         /// <param name="following">Following row count.</param>
         [MethodFormatConverter(Format = "ROWS BETWEEN [$0] PRECEDING AND [$1] FOLLOWING")]
-        public static OverArgument Rows(long preceding, long following) { throw new InvalitContextException(nameof(Rows)); }
+        public static OverElement Rows(long preceding, long following) { throw new InvalitContextException(nameof(Rows)); }
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="columns">Specify column or expression.</param>
         [MethodFormatConverter(Format = "PARTITION BY|[<,>0]", FormatDirection = FormatDirection.Vertical)]
-        public static OverArgument PartitionBy(params object[] columns) { throw new InvalitContextException(nameof(PartitionBy)); }
+        public static OverElement PartitionBy(params object[] columns) { throw new InvalitContextException(nameof(PartitionBy)); }
 
         /// <summary>
         /// 
@@ -358,7 +358,7 @@ namespace LambdicSql
         /// <param name="args"></param>
         /// <returns></returns>
         [MethodFormatConverter(Format = "OVER(|[< >1])", FormatDirection = FormatDirection.Vertical)]
-        public static T Over<T>(this T before, params OverArgument[] args) { throw new InvalitContextException(nameof(Over)); }
+        public static T Over<T>(this T before, params OverElement[] args) { throw new InvalitContextException(nameof(Over)); }
 
         /// <summary>
         /// 
@@ -366,6 +366,6 @@ namespace LambdicSql
         /// <param name="args"></param>
         /// <returns></returns>
         [MethodFormatConverter(Format = "OVER(|[< >0])", FormatDirection = FormatDirection.Vertical)]
-        public static OverReturnValue Over(params OverArgument[] args) { throw new InvalitContextException(nameof(Over)); }
+        public static OverReturnValue Over(params OverElement[] args) { throw new InvalitContextException(nameof(Over)); }
     }
 }

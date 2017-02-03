@@ -478,6 +478,8 @@ FROM tbl_data", 10);
 @"DROP TABLE IF EXISTS table1");
         }
 
+        //TODO あDB
+
         void CleanUpCreateDropTestTable()
         {
             try

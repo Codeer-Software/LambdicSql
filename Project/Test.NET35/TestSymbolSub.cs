@@ -30,6 +30,7 @@ namespace Test
             public int Id { get; set; }
         }
 
+
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Condition_1()
         {
