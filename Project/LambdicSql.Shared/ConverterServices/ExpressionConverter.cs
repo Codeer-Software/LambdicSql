@@ -31,12 +31,12 @@ namespace LambdicSql.ConverterServices
         internal static ICode AddCode(ICode lhs, ICode rhs)
         {
             var selectQueryLeft = lhs as SelectQueryCode;
-            if (selectQueryLeft == null) return new VCode(lhs, rhs);
-
             var selectQueryRight = rhs as SelectQueryCode;
-            if (selectQueryRight != null) return new SelectQueryCode(new VCode(selectQueryLeft.Core, selectQueryRight.Core));
 
-            return new SelectQueryCode(new VCode(selectQueryLeft.Core, rhs));
+            if (selectQueryLeft == null && selectQueryRight == null) return new VCode(lhs, rhs);
+            if (selectQueryLeft == null && selectQueryRight != null) return new VCode(lhs, selectQueryRight.Core);
+            if (selectQueryLeft != null && selectQueryRight == null) return new SelectQueryCode(new VCode(selectQueryLeft.Core, rhs));
+            return new SelectQueryCode(new VCode(selectQueryLeft.Core, selectQueryRight.Core));
         }
 
         /// <summary>

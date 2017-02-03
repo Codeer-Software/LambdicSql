@@ -702,9 +702,34 @@ UNION
 SELECT *
 FROM tbl_staff");
         }
-
+        
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_AdditionalOperator_Union_2()
+        {
+            var sub1 = Db<DB>.Sql(db => Select(Asterisk(db.tbl_staff)).From(db.tbl_staff));
+
+            var sub2 = Db<DB>.Sql(db => Union());
+            var sub3 = Db<DB>.Sql(db => Select(Asterisk(db.tbl_staff)));
+
+            var sub4 = sub2 + sub3;
+            var sub5 = sub1 + sub4;
+
+            var sub6 = Db<DB>.Sql(db => From(db.tbl_staff));
+
+            var sql = sub5 + sub6;
+
+            var datas = _connection.Query(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT *
+FROM tbl_staff
+UNION
+SELECT *
+FROM tbl_staff");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_AdditionalOperator_Union_3()
         {
             var sub1 = Db<DB>.Sql(db =>
                 Select(Asterisk(db.tbl_staff)).From(db.tbl_staff).
@@ -730,7 +755,9 @@ FROM
 	SELECT *
 	FROM tbl_staff) sub5");
         }
-        
+
+
+
         public class SelectData3
         {
             public decimal Val { get; set; }
@@ -889,8 +916,9 @@ FROM tbl_remuneration", new Params { { "@val", 3 } });
 FROM tbl_remuneration", new Params { { "@val", 10 } });
         }
 
-        //TODO ExpressionToObjectがテストされるだけのテストを書くこと
         //TODO new 引数あり + 初期化
+        //TODO タイプを全種類網羅しておくか・・・
+        //TODO ExpressionToObjectがテストされるだけのテストを書くこと
         //TODO BinaryExpressionのテスト
     }
 
