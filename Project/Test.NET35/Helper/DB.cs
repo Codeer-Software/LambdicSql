@@ -92,6 +92,15 @@ namespace Test
         public object obj39 { get; set; }
         public object obj40 { get; set; }
         public object obj41 { get; set; }
+        public object obj42 { get; set; }
+        public object obj43 { get; set; }
+        public object obj44 { get; set; }
+        public object obj45 { get; set; }
+        public object obj46 { get; set; }
+        public object obj47 { get; set; }
+        public object obj48 { get; set; }
+        public object obj49 { get; set; }
+        public object obj50 { get; set; }
     }
 
     public class DBForCreateTest

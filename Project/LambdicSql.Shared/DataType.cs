@@ -377,9 +377,17 @@ namespace LambdicSql
         /// INTERVAL.
         /// </summary>
         /// <param name="type">type.</param>
+        /// <returns>INTERVAL.</returns>
+        [ClauseStyleConverter]
+        public static DataTypeElement Interval(IntervalType type) { throw new InvalitContextException(nameof(Interval)); }
+
+        /// <summary>
+        /// INTERVAL.
+        /// </summary>
+        /// <param name="type">type.</param>
         /// <param name="p">accuracy.</param>
         /// <returns>INTERVAL.</returns>
-        [MethodFormatConverter(Format = "INTERVAL [0] [1]|")]
+        [ClauseStyleConverter]
         public static DataTypeElement Interval(IntervalType type, int p) { throw new InvalitContextException(nameof(Interval)); }
 
         /// <summary>
@@ -765,7 +773,7 @@ namespace LambdicSql
         /// TIME STAMP WITH TIME ZONE
         /// </summary>
         /// <returns>TIMESTAMP</returns>
-        [ClauseStyleConverter(Name = "TIME STAMP WITH TIME ZONE")]
+        [ClauseStyleConverter(Name = "TIMESTAMP WITH TIME ZONE")]
         public static DataTypeElement TimeStampWithTimeZone() { throw new InvalitContextException(nameof(TimeStamp)); }
 
         /// <summary>
@@ -773,7 +781,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="n">n</param>
         /// <returns>TIMESTAMP</returns>
-        [MethodFormatConverter(Format = "TIME STAMP([0]) WITH TIME ZONE|")]
+        [MethodFormatConverter(Format = "TIMESTAMP([0]) WITH TIME ZONE|")]
         public static DataTypeElement TimeStampWithTimeZone(int n) { throw new InvalitContextException(nameof(TimeStamp)); }
 
         /// <summary>

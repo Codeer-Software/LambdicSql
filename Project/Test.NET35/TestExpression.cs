@@ -991,7 +991,6 @@ FROM tbl_remuneration", new Params { { "@val", 10 } });
 	@p_0 AS Money
 FROM tbl_remuneration", (decimal)3);
         }
-        //TODO タイプを全種類網羅しておくか・・・
     }
 
     public static class TestExpressionEx

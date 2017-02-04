@@ -110,14 +110,16 @@ namespace Test
                     new Column(db.table3.obj7, DataType.Binary_Double()),
                     new Column(db.table3.obj8, DataType.Date()),
                     new Column(db.table3.obj9, DataType.TimeStamp(1)),
-                //    new Column(db.table3.obj10, DataType.Raw()),
-                //    new Column(db.table3.obj11, DataType.LongRaw()),
+                 // new Column(db.table3.obj10, DataType.Raw()),
+                 // new Column(db.table3.obj11, DataType.LongRaw()),
                     new Column(db.table3.obj12, DataType.BFile()),
                     new Column(db.table3.obj13, DataType.Blob()),
                     new Column(db.table3.obj14, DataType.Long()),
                     new Column(db.table3.obj15, DataType.Clob()),
                     new Column(db.table3.obj16, DataType.NClob()),
-                    new Column(db.table3.obj17, DataType.XmlType())
+                    new Column(db.table3.obj17, DataType.XmlType()),
+                    new Column(db.table3.obj18, DataType.TimeStampWithTimeZone()),
+                    new Column(db.table3.obj19, DataType.TimeStampWithTimeZone(1))
                 ));
 
             _connection.Execute(sql);
@@ -147,14 +149,14 @@ namespace Test
                     new Column(db.table3.obj13, DataType.DoublePrecision()),
                     new Column(db.table3.obj14, DataType.Inet()),
                     new Column(db.table3.obj15, DataType.Integer()),
-                 //   new Column(db.table3.obj16, DataType.Interval(IntervalType.Day, 1)),
+                    new Column(db.table3.obj16, DataType.Interval(IntervalType.Day)),
                     new Column(db.table3.obj17, DataType.Json()),
                     new Column(db.table3.obj18, DataType.JsonB()),
                     new Column(db.table3.obj19, DataType.Line()),
                     new Column(db.table3.obj20, DataType.Lseg()),
                     new Column(db.table3.obj21, DataType.MacAddr()),
                     new Column(db.table3.obj22, DataType.Money()),
-            //        new Column(db.table3.obj23, DataType.Numeric(1, 2)),
+                    new Column(db.table3.obj23, DataType.Numeric()),//(1, 2)
                     new Column(db.table3.obj24, DataType.Path()),
                     new Column(db.table3.obj25, DataType.Pg_Lsn()),
                     new Column(db.table3.obj26, DataType.Point()),
@@ -172,7 +174,11 @@ namespace Test
                     new Column(db.table3.obj38, DataType.TsVector()),
                     new Column(db.table3.obj39, DataType.Txid_Snapshot()),
                     new Column(db.table3.obj40, DataType.Uuid()),
-                    new Column(db.table3.obj41, DataType.Xml())
+                    new Column(db.table3.obj41, DataType.Xml()),
+                    new Column(db.table3.obj42, DataType.TimeWithTimeZone()),
+                    new Column(db.table3.obj43, DataType.TimeWithTimeZone(1)),
+                    new Column(db.table3.obj44, DataType.TimeStampWithTimeZone()),
+                    new Column(db.table3.obj45, DataType.TimeStampWithTimeZone(1))
                 ));
             //time zone
 
@@ -273,25 +279,25 @@ namespace Test
                     new Column(db.table3.obj3, DataType.Blob()),
                     new Column(db.table3.obj4, DataType.Char(1)),
                     new Column(db.table3.obj5, DataType.Clob()),
-           //         new Column(db.table3.obj6, DataType.Currency()),
+                 // new Column(db.table3.obj6, DataType.Currency()),
                     new Column(db.table3.obj7, DataType.Date()),
-            //        new Column(db.table3.obj8, DataType.DateTime()),
+                 // new Column(db.table3.obj8, DataType.DateTime()),
                     new Column(db.table3.obj9, DataType.DbClob()),
                     new Column(db.table3.obj10, DataType.Double()),
                     new Column(db.table3.obj11, DataType.Float()),
                     new Column(db.table3.obj12, DataType.Graphic()),
                     new Column(db.table3.obj13, DataType.Int()),
                     new Column(db.table3.obj14, DataType.Integer()),
-                //    new Column(db.table3.obj15, DataType.LongVarchar(1)),
-               //     new Column(db.table3.obj16, DataType.LongVarGraphic()),
+                 // new Column(db.table3.obj15, DataType.LongVarchar(1)),
+                 // new Column(db.table3.obj16, DataType.LongVarGraphic()),
                     new Column(db.table3.obj17, DataType.Numeric()),
                     new Column(db.table3.obj18, DataType.Real()),
                     new Column(db.table3.obj19, DataType.SmallInt()),
-             //       new Column(db.table3.obj20, DataType.Text()),
+                 // new Column(db.table3.obj20, DataType.Text()),
                     new Column(db.table3.obj21, DataType.Time()),
                     new Column(db.table3.obj22, DataType.TimeStamp()),
                     new Column(db.table3.obj23, DataType.VarChar(1))
-               //     new Column(db.table3.obj24, DataType.VarGraphic())
+                 // new Column(db.table3.obj24, DataType.VarGraphic())
                 ));
 
             _connection.Execute(sql);
