@@ -31,8 +31,7 @@ namespace LambdicSql
         public static Clause<TSelected> operator +(Clause<TSelected> clause, SqlExpression exp) { throw new InvalitContextException("addition operator"); }
         
         /// <summary>
-        /// Implicitly convert to the type represented by Sql.
-        /// It can only be used within methods of the LambdicSql.Db class.
+        /// Implicitly convert to the type represented by Clause.
         /// </summary>
         /// <param name="src">Clause chain.</param>
         public static implicit operator TSelected(Clause<TSelected> src) { throw new InvalitContextException("implicit operator"); }

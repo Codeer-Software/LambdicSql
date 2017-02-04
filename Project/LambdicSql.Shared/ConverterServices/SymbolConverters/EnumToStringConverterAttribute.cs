@@ -9,27 +9,6 @@ namespace LambdicSql.ConverterServices.SymbolConverters
     /// <summary>
     /// SQL symbol converter attribute for keyword.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Field)]
-    public class FieldSqlNameAttribute : Attribute
-    {
-        /// <summary>
-        /// Name
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        public FieldSqlNameAttribute(string name)
-        {
-            Name = name;
-        }
-    }
-    
-    /// <summary>
-    /// SQL symbol converter attribute for keyword.
-    /// </summary>
     [AttributeUsage(AttributeTargets.Enum)]
     public class EnumToStringConverterAttribute : ObjectConverterAttribute
     {

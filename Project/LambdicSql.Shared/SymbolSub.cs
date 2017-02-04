@@ -210,7 +210,7 @@ namespace LambdicSql
     /// <summary>
     /// OVER clause result.
     /// </summary>
-    public class OverReturnValue : SqlExpression
+    public abstract class OverReturnValue : SqlExpression
     {
         /// <summary>
         /// Additional operator.
@@ -435,13 +435,14 @@ namespace LambdicSql
     /// Class representing argument of recursive part.
     /// </summary>
     /// <typeparam name="T">Type representing argument.</typeparam>
-    public class RecursiveArguments<T>
+    public abstract class RecursiveArguments<T>
     {
         RecursiveArguments() { }
     }
 
     /// <summary>
     /// Column definition.
+    /// It can only be used within lambda of the LambdicSql.
     /// </summary>
     public class Column : TableDefinitionElement
     {
@@ -466,6 +467,7 @@ namespace LambdicSql
     /// <summary>
     /// It represents assignment. It is used in the Set clause.
     /// new Assign(db.tbl_staff.name, name) -> tbl_staff.name = "@name"
+    /// It can only be used within lambda of the LambdicSql.
     /// </summary>
     public class Assign
     {
@@ -481,6 +483,7 @@ namespace LambdicSql
     /// <summary>
     /// Condition building helper.
     /// condition is used if enable is valid.
+    /// It can only be used within lambda of the LambdicSql.
     /// </summary>
     public class Condition
     {
@@ -502,11 +505,10 @@ namespace LambdicSql
 
     /// <summary>
     /// SYSIBM keyword.
+    /// It can only be used within lambda of the LambdicSql.
     /// </summary>
-    public class SysIBM
+    public static class SysIBM
     {
-        internal SysIBM() { }
-
         /// <summary>
         /// SYSDUMMY1 keyword.
         /// </summary>

@@ -4,8 +4,6 @@ using LambdicSql.BuilderServices.Inside;
 using LambdicSql.ConverterServices;
 using System;
 using System.Collections.Generic;
-using LambdicSql.ConverterServices.Inside.CodeParts;
-using LambdicSql.MultiplatformCompatibe;
 
 namespace LambdicSql
 {
@@ -48,6 +46,7 @@ namespace LambdicSql
 
         /// <summary>
         /// Addition operator.
+        /// It can only be used within lambda of the LambdicSql.
         /// </summary>
         /// <param name="sql">sql.</param>
         /// <param name="exp">expression.</param>
@@ -57,7 +56,7 @@ namespace LambdicSql
         /// <summary>
         /// Build.
         /// </summary>
-        /// <param name="connectionType">IDbConnection's type.</param>
+        /// <param name="connectionType">Connection's type.</param>
         /// <returns>SQL text and parameters.</returns>
         public BuildedSql Build(Type connectionType)
             => Build(DialectResolver.CreateCustomizer(connectionType.FullName));
@@ -98,13 +97,13 @@ namespace LambdicSql
     {
         /// <summary>
         /// Entity represented by sql.
-        /// It can only be used within methods of the LambdicSql.Db class.
+        /// It can only be used within lambda of the LambdicSql.
         /// </summary>
         public T Body { get { throw new InvalitContextException(nameof(Body)); } }
 
         /// <summary>
         /// Implicitly convert to the type represented by sql.
-        /// It can only be used within methods of the LambdicSql.Db class.
+        /// It can only be used within lambda of the LambdicSql.
         /// </summary>
         /// <param name="src"></param>
         public static implicit operator T(Sql<T> src) { throw new InvalitContextException("implicit operator"); }
@@ -119,6 +118,7 @@ namespace LambdicSql
 
         /// <summary>
         /// Addition operator.
+        /// It can only be used within lambda of the LambdicSql.
         /// </summary>
         /// <param name="sql">sql.</param>
         /// <param name="exp">expression.</param>
@@ -151,12 +151,12 @@ namespace LambdicSql
         public new Sql<T> ChangeParams(Dictionary<string, object> values)
             => new Sql<T>(Code.Accept(new CustomizeParameterValue(values)));
 
-        internal Sql(ICode code) : base(code) { }
-
         /// <summary>
         /// Empty Constructor.
         /// </summary>
         public Sql() { }
+
+        internal Sql(ICode code) : base(code) { }
     }
 
     /// <summary>

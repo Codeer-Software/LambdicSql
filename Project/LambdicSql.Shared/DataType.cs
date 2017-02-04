@@ -5,6 +5,7 @@ namespace LambdicSql
 {
     /// <summary>
     /// Data type.
+    /// It can only be used within lambda of the LambdicSql.
     /// </summary>
     public static class DataType
     {

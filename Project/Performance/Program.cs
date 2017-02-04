@@ -204,7 +204,7 @@ namespace Performance
             {
                 watch.Start();
 
-                DbX<Data>.Sql(db =>
+                DbEmpty<Data>.Sql(db =>
                     Select(new SelectedData()
                     {
                         name = db.tbl_staff.name,
@@ -229,7 +229,7 @@ namespace Performance
             Console.ReadKey();
         }
 
-        public class DbX<T> where T : class
+        public class DbEmpty<T> where T : class
         {
             public static Expression e;
             public static void Sql<TSelected>(Expression<Func<T, Clause<TSelected>>> expression)

@@ -54,6 +54,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\TowWaySqlSpec.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\InvalitContextException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolConverters\ClauseStyleConverterAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolConverters\FieldSqlNameAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolConverters\FormatDirection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolConverters\FuncStyleConverterAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolConverters\MemberConverterAttribute.cs" />

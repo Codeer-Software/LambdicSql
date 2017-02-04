@@ -14,8 +14,6 @@ namespace Test.PCL
         [TestMethod]
         public void TestSelect()
         {
-            var x = new { a = 1, b = 2 };
-
             int id = 2;
             var sql = Db<DB>.Sql(db =>
                 Select(Asterisk(db.tbl_staff)).
@@ -47,8 +45,5 @@ namespace Test.PCL
                 var countInsert = con.Execute(insert);
             }
         }
-
     }
-
-    class GetterCore<T0> { }
 }

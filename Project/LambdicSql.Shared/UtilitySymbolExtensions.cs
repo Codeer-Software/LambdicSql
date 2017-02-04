@@ -22,9 +22,13 @@ namespace LambdicSql
         /// <summary>
         /// Put the text in the expression of LamblicSql.
         /// You can use TwoWaySql text format.
-        /// It's ...
-        /// TwoWaySql(@"SELECT money + /*0*/1000/**/ FROM tbl_remuneration WHERE /*1*/tbl_remuneration.money = 100/**/", 1000, tbl_remuneration.staff_id == 10)
         /// Replace /*no*/.../**/ by arguments.
+        /// It's ...
+        /// <para>TwoWaySql(@"</para>
+        /// <para>SELECT money + /*0*/1000/**/</para>
+        /// <para>FROM tbl_remuneration</para>
+        /// <para>WHERE /*1*/id = 1/**/",</para>
+        /// <para>1000, tbl_remuneration.staff_id == 10)</para>
         /// </summary>
         /// <param name="text">Text.</param>
         /// <param name="args">Format arguments.</param>

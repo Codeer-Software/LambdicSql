@@ -6,7 +6,7 @@ namespace LambdicSql
 {
     /// <summary>
     /// SQL Symbol.
-    /// It can only be used within methods of the LambdicSql.Db class.
+    /// It can only be used within lambda of the LambdicSql.
     /// Use[using static LambdicSql.Symbol;], you can use to write natural SQL.
     /// </summary>
     public static partial class Symbol
