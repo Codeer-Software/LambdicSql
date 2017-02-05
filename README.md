@@ -122,7 +122,7 @@ namespace Sample
             //print.
             Console.WriteLine(info.Text);
             Console.WriteLine("\r\nParams");
-            foreach (var e in info.GetParams()) Console.WriteLine($"{e.Key} = {e.Value}");
+            foreach (var e in info.GetParams()) Console.WriteLine($"{e.Key} = {e.Value.Value}");
 
             //execute query by dapper or sql-net-pcl.
             var datas = cnn.Query(sql).ToList();
