@@ -37,76 +37,99 @@ For PCL, recommend sqlite-net-pcl.
 ## Summary Code.
 Standard code.
 ```csharp
+using System;
+using System.Linq;
+
+//LambdicSql
 using LambdicSql;
 using static LambdicSql.Symbol;
 
-//for dapper.
+//for SqlServer and Dapper.
+//Of course, other connections are OK.
+//OracleConnection, SQLiteConnection, NpgsqlConnection, MySqlConnection, DB2Connection
+using System.Data.SqlClient;
 using LambdicSql.feat.Dapper;
+using Dapper;
+using System.Data;
+
 //or for sqlite-net-pcl
-using LambdicSql.feat.SQLiteNetPcl
+//using LambdicSql.feat.SQLiteNetPcl
 
-//tables.
-public class Staff
+namespace Sample
 {
-    public int id { get; set; }
-    public string name { get; set; }
-}
+    //tables.
+    public class Staff
+    {
+        public int id { get; set; }
+        public string name { get; set; }
+    }
 
-public class Remuneration
-{
-    public int id { get; set; }
-    public int staff_id { get; set; }
-    public DateTime payment_date { get; set; }
-    public decimal money { get; set; }
-}
+    public class Remuneration
+    {
+        public int id { get; set; }
+        public int staff_id { get; set; }
+        public DateTime payment_date { get; set; }
+        public decimal money { get; set; }
+    }
 
-public class DB
-{
-    public Staff tbl_staff { get; set; }
-    public Remuneration tbl_remuneration { get; set; }
-}
+    public class DB
+    {
+        public Staff tbl_staff { get; set; }
+        public Remuneration tbl_remuneration { get; set; }
+    }
 
-public void TestStandard()
-{
-    var min = 3000;
+    public class SelectData
+    {
+        public string Name { get; set; }
+        public DateTime PaymentDate { get; set; }
+        public decimal Money { get; set; }
+    }
 
-    //make sql.
-    var sql = Db<DB>.Sql(db =>
-    
-        //lambda.
-        Select(new SelectData1
+    class Program
+    {
+        static void Main(string[] args)
         {
-            Name = db.tbl_staff.name,
-            PaymentDate = db.tbl_remuneration.payment_date,
-            Money = db.tbl_remuneration.money,
-        }).
-        From(db.tbl_remuneration).
-            Join(db.tbl_staff, db.tbl_staff.id == db.tbl_remuneration.staff_id).
-        Where(min < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000).
-        OrderBy(Asc(db.tbl_remuneration.money), Desc(db.tbl_staff.name))
+            //  using (var cnn = new SqlConnection("your connection string")) Sample(cnn
+            using (var cnn = new SqlConnection()) Sample(cnn);
+        }
 
-        );
+        static void Sample(IDbConnection cnn)
+        { 
+            var min = 3000;
 
-    //to string and params.
-    var info = sql.Build(_connection.GetType());
-    Debug.Print(info.Text);
+            //make sql.
+            var sql = Db<DB>.Sql(db =>
 
-    //dapper or sql-net-pcl.
-    var datas = _connection.Query(sql).ToList();
+                //--------------lambda.----------------------------------------------------
+                Select(new SelectData
+                {
+                    Name = db.tbl_staff.name,
+                    PaymentDate = db.tbl_remuneration.payment_date,
+                    Money = db.tbl_remuneration.money,
+                }).
+                From(db.tbl_remuneration).
+                    Join(db.tbl_staff, db.tbl_staff.id == db.tbl_remuneration.staff_id).
+                Where(min < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000).
+                OrderBy(Asc(db.tbl_remuneration.money), Desc(db.tbl_staff.name))
+                //--------------------------------------------------------------------------
+
+                );
+
+            //to string and params.
+            var info = sql.Build(cnn.GetType());
+
+            //print.
+            Console.WriteLine(info.Text);
+            Console.WriteLine("\r\nParams");
+            foreach (var e in info.GetParams()) Console.WriteLine($"{e.Key} = {e.Value}");
+
+            //execute query by dapper or sql-net-pcl.
+            var datas = cnn.Query(sql).ToList();
+        }
+    }
 }
 ```
-```sql
-SELECT
-        tbl_staff.name AS Name,
-        tbl_remuneration.payment_date AS PaymentDate,
-        tbl_remuneration.money AS Money
-FROM tbl_remuneration
-        JOIN tbl_staff ON (tbl_staff.id) = (tbl_remuneration.staff_id)
-WHERE ((@min) < (tbl_remuneration.money)) AND ((tbl_remuneration.money) < (@p_0))
-ORDER BY
-        tbl_remuneration.money ASC,
-        tbl_staff.name DESC
-```
+<img src="https://github.com/Codeer-Software/LambdicSql/blob/master/SummaryCode.png">
 ## Supported keywords
 |||||||
 |:--|:--|:--|:--|:--|:--|
@@ -134,7 +157,7 @@ ORDER BY
 |ROW_NUMBER|OVER|ROWS|PARTITION BY|
 ## Samples
 Look for how to use from the tests.<br>
-https://github.com/Codeer-Software/LambdicSql/tree/master/Project/TestCheck35
+https://github.com/Codeer-Software/LambdicSql/tree/master/Project/Test.NET35
 ## Supported database
 |DataBase type|Support|
 |:--|:--|
