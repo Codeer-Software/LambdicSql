@@ -35,7 +35,7 @@ For PCL, recommend sqlite-net-pcl.
 
     PM> Install-Package sqlite-net-pcl
 
-## Summary Code.
+## Quick Start.
 Standard code.
 ```csharp
 using System;
