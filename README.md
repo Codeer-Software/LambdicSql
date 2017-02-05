@@ -50,7 +50,6 @@ using static LambdicSql.Symbol;
 //OracleConnection, SQLiteConnection, NpgsqlConnection, MySqlConnection, DB2Connection
 using System.Data.SqlClient;
 using LambdicSql.feat.Dapper;
-using Dapper;
 using System.Data;
 
 //or for sqlite-net-pcl
@@ -90,8 +89,8 @@ namespace Sample
     {
         static void Main(string[] args)
         {
-            //  using (var cnn = new SqlConnection("your connection string")) Sample(cnn
-            using (var cnn = new SqlConnection()) Sample(cnn);
+            DapperAdapter.Assembly = typeof(Dapper.SqlMapper).Assembly;
+            using (var cnn = new SqlConnection("your connection string")) Sample(cnn);
         }
 
         static void Sample(IDbConnection cnn)
