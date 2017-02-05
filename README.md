@@ -100,7 +100,7 @@ namespace Sample
             //make sql.
             var sql = Db<DB>.Sql(db =>
 
-                //--------------lambda.----------------------------------------------------
+                //--------------It is lambda expressing SQL---------------------------------
                 Select(new SelectData
                 {
                     Name = db.tbl_staff.name,
