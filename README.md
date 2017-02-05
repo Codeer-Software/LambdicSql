@@ -275,7 +275,38 @@ public void TestQueryConcat()
     //dapper
     var datas = _connection.Query(sql).ToList();
 }
+```
+```csharp
+public void TestClauseConcat()
+{
+    //make sql.
+    var where = Db<DB>.Sql(db =>
+        Where(3000 < db.tbl_remuneration.money && db.tbl_remuneration.money < 4000));
 
+    //make sql.
+    var sql = Db<DB>.Sql(db =>
+        Select(new SelectData
+        {
+            Name = db.tbl_staff.name,
+            PaymentDate = db.tbl_remuneration.payment_date,
+            Money = db.tbl_remuneration.money,
+        }) + 
+        
+        From(db.tbl_remuneration) +
+            Join(db.tbl_staff, db.tbl_staff.id == db.tbl_remuneration.staff_id) +
+
+        where +    
+
+        OrderBy(Asc(db.tbl_remuneration.money))
+        );
+
+    //to string and params.
+    var info = sql.Build(_connection.GetType());
+    Debug.Print(info.Text);
+
+    //dapper
+    var datas = _connection.Query(sql).ToList();
+}
 ```
 ```sql
 SELECT
