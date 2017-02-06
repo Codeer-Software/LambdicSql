@@ -99,7 +99,8 @@ namespace Sample
         static void Sample(IDbConnection cnn)
         { 
             //can use variable.
-            var min = 3000;
+            var min = 1000;
+            var caseMiddle = 3000;
             string highTypeName = "High";
 
             //make sql.
@@ -118,7 +119,7 @@ namespace Sample
                     //case
                     Type = Case().
                                 When(db.tbl_remuneration.money < 2000).Then("Cheap").
-                                When(db.tbl_remuneration.money < 3000).Then("Middle").
+                                When(db.tbl_remuneration.money < caseMiddle).Then("Middle").
                                 Else(highTypeName).
                             End(),
 
@@ -150,7 +151,7 @@ namespace Sample
     }
 }
 ```
-<img src="https://github.com/Codeer-Software/LambdicSql/blob/master/SummaryCode.png">
+<img src="https://github.com/Codeer-Software/LambdicSql/blob/master/SummaryCode.png"><br>
 ## Supported keywords
 |||||||
 |:--|:--|:--|:--|:--|:--|
