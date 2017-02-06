@@ -92,7 +92,10 @@ namespace Sample
     {
         static void Main(string[] args)
         {
+            //initialize dapper.
             DapperAdapter.Assembly = typeof(Dapper.SqlMapper).Assembly;
+
+            //test.
             using (var cnn = new SqlConnection("your connection string")) Sample(cnn);
         }
 
