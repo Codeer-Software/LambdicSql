@@ -83,6 +83,9 @@ namespace Sample
         public string Name { get; set; }
         public DateTime PaymentDate { get; set; }
         public decimal Money { get; set; }
+        public decimal Total { get; set; }
+        public string Type { get; set; }
+        public int Rank { get; set; }
     }
 
     class Program
@@ -95,17 +98,35 @@ namespace Sample
 
         static void Sample(IDbConnection cnn)
         { 
+            //can use variable.
             var min = 3000;
+            string highTypeName = "High";
 
             //make sql.
             var sql = Db<DB>.Sql(db =>
 
-                //--------------It is lambda expressing SQL---------------------------------
+                //--------------lambda.----------------------------------------------------
                 Select(new SelectData
                 {
                     Name = db.tbl_staff.name,
                     PaymentDate = db.tbl_remuneration.payment_date,
                     Money = db.tbl_remuneration.money,
+
+                    //sub query
+                    Total = Select(Sum(db.tbl_remuneration.money)).From(db.tbl_remuneration),
+
+                    //case
+                    Type = Case().
+                                When(db.tbl_remuneration.money < 2000).Then("Cheap").
+                                When(db.tbl_remuneration.money < 3000).Then("Middle").
+                                Else(highTypeName).
+                            End(),
+
+                    //window
+                    Rank = Rank().
+                           Over(PartitionBy(db.tbl_remuneration.payment_date),
+                                OrderBy(Asc(db.tbl_remuneration.money)),
+                                Rows(1, 5))
                 }).
                 From(db.tbl_remuneration).
                     Join(db.tbl_staff, db.tbl_staff.id == db.tbl_remuneration.staff_id).
