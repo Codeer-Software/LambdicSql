@@ -15,6 +15,7 @@ namespace LambdicSql.Specialized.SymbolConverters
     public class SelectConverterAttribute : MethodConverterAttribute
     {
         static readonly ICode SelectClause = "SELECT".ToCode();
+        static readonly ICode AsClause = "AS".ToCode();
 
         /// <summary>
         /// Convert expression to code.
@@ -82,7 +83,8 @@ namespace LambdicSql.Specialized.SymbolConverters
             if (string.IsNullOrEmpty(element.Name)) return converter.ConvertToCode(element.Expression);
 
             //normal select.
-            return LineSpace(converter.ConvertToCode(element.Expression), "AS".ToCode(), element.Name.ToCode());
+            var exp = converter.ConvertToCode(element.Expression);
+            return exp.IsEmpty ? exp : LineSpace(exp, AsClause, element.Name.ToCode());
         }
     }
 }

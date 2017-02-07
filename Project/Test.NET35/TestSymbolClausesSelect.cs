@@ -501,6 +501,26 @@ FROM tbl_remuneration");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_SubQuery_Empty()
+        {
+            var sub = new Sql<decimal>();
+
+            var sql = Db<DB>.Sql(db =>
+                Select(new SelectData
+                {
+                    PaymentDate = db.tbl_remuneration.payment_date,
+                    Money = sub
+                }).
+                From(db.tbl_remuneration));
+
+            var datas = _connection.Query(sql).ToList();
+            Assert.IsTrue(0 < datas.Count); AssertEx.AreEqual(sql, _connection,
+ @"SELECT
+	tbl_remuneration.payment_date AS PaymentDate
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_Single_1()
         {
             var sql = Db<DB>.Sql(db => Select(db.tbl_staff.id).From(db.tbl_staff));
