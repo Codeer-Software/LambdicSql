@@ -477,7 +477,33 @@ FROM tbl_data", 10);
             AssertEx.AreEqual(sql, _connection,
 @"DROP TABLE IF EXISTS table1");
         }
-        
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_CreateAndDropDataBase()
+        {
+            if (!_connection.IsTarget(TargetDB.SqlServer)) return;
+            CleanUpCreateDropTestDB();
+
+            var create = Db<DBForCreateTest>.Sql(db => CreateDataBase("CreateDropTestDB"));
+            _connection.Execute(create);
+            AssertEx.AreEqual(create, _connection,
+@"CREATE DATABASE CreateDropTestDB");
+
+            var drop = Db<DBForCreateTest>.Sql(db => DropDataBase("CreateDropTestDB"));
+            _connection.Execute(drop);
+            AssertEx.AreEqual(drop, _connection,
+@"DROP DATABASE CreateDropTestDB");
+        }
+
+        void CleanUpCreateDropTestDB()
+        {
+            try
+            {
+                var sql = Db<DBForCreateTest>.Sql(db => DropDataBase("CreateDropTestDB"));
+                _connection.Execute(sql);
+            }
+            catch { }
+        }
         void CleanUpCreateDropTestTable()
         {
             try

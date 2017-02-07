@@ -1169,6 +1169,23 @@ namespace LambdicSql
         /// <param name="tables">Tables.</param>
         /// <returns>Clause.</returns>
         [ClauseStyleConverter(Name = "DROP TABLE IF EXISTS")]
-        public static Clause<Non> DropTableIfExists(params object[] tables) { throw new InvalitContextException(nameof(DropTable)); }
+        public static Clause<Non> DropTableIfExists(params object[] tables) { throw new InvalitContextException(nameof(DropTableIfExists)); }
+
+
+        /// <summary>
+        /// DROP DATABASE clause.
+        /// </summary>
+        /// <param name="name">DataBase name.</param>
+        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        [MethodFormatConverter(Format = "CREATE DATABASE [!0]")]
+        public static Clause<Non> CreateDataBase(string name) { throw new InvalitContextException(nameof(CreateDataBase)); }
+
+        /// <summary>
+        /// DROP DATABASE clause.
+        /// </summary>
+        /// <param name="name">DataBase name.</param>
+        /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
+        [MethodFormatConverter(Format = "DROP DATABASE [!0]")]
+        public static Clause<Non> DropDataBase(string name) { throw new InvalitContextException(nameof(DropDataBase)); }
     }
 }
