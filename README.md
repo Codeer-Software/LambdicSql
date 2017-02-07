@@ -1,4 +1,4 @@
-﻿LambdicSql_β 0.30.0
+﻿LambdicSql_β 0.31.0
 ======================
 
 ## Features ...
