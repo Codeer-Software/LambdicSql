@@ -100,11 +100,11 @@ namespace Sample
         }
 
         static void Sample(IDbConnection cnn)
-        { 
+        {
             //can use variable.
             var min = 1000;
             var caseMiddle = 3000;
-            string highTypeName = "High";
+            string middleTypeName = "Middle";
 
             //make sql.
             var sql = Db<DB>.Sql(db =>
@@ -122,15 +122,14 @@ namespace Sample
                     //case
                     Type = Case().
                                 When(db.tbl_remuneration.money < 2000).Then("Cheap").
-                                When(db.tbl_remuneration.money < caseMiddle).Then("Middle").
-                                Else(highTypeName).
+                                When(db.tbl_remuneration.money < caseMiddle).Then(middleTypeName).
+                                Else("High").
                             End(),
 
                     //window
                     Rank = Rank().
                            Over(PartitionBy(db.tbl_remuneration.payment_date),
-                                OrderBy(Asc(db.tbl_remuneration.money)),
-                                Rows(1, 5))
+                                OrderBy(Asc(db.tbl_remuneration.money)))
                 }).
                 From(db.tbl_remuneration).
                     Join(db.tbl_staff, db.tbl_staff.id == db.tbl_remuneration.staff_id).
