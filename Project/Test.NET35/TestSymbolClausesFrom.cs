@@ -146,6 +146,50 @@ FROM tbl_remuneration
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Join_Vanish()
+        {
+            var tbl_staff = new Sql<Staff>();
+            var sql = Db<DB>.Sql(db =>
+                Select(new SelectData
+                {
+                    PaymentDate = db.tbl_remuneration.payment_date,
+                    Money = db.tbl_remuneration.money,
+                }).
+                From(db.tbl_remuneration).
+                    Join(tbl_staff, db.tbl_remuneration.staff_id == tbl_staff.Body.id));
+
+            var datas = _connection.Query(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT
+	tbl_remuneration.payment_date AS PaymentDate,
+	tbl_remuneration.money AS Money
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Join_Vanish_Start()
+        {
+            var tbl_staff = new Sql<Staff>();
+            var sql = Db<DB>.Sql(db =>
+                Select(new SelectData
+                {
+                    PaymentDate = db.tbl_remuneration.payment_date,
+                    Money = db.tbl_remuneration.money,
+                }).
+                From(db.tbl_remuneration) +
+                    Join(tbl_staff, db.tbl_remuneration.staff_id == tbl_staff.Body.id));
+
+            var datas = _connection.Query(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT
+	tbl_remuneration.payment_date AS PaymentDate,
+	tbl_remuneration.money AS Money
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_LeftJoin()
         {
             var sql = Db<DB>.Sql(db =>

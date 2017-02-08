@@ -30,6 +30,11 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         public string Format { get { return _core.Format; } set { _core.Format = value; } }
 
         /// <summary>
+        /// Vanish, if empty params.
+        /// </summary>
+        public bool VanishIfEmptyParams { get { return _core.VanishIfEmptyParams; } set { _core.VanishIfEmptyParams = value; } }
+
+        /// <summary>
         /// Indent.
         /// </summary>
         public int Indent { get { return _core.Indent; } set { _core.Indent = value; } }

@@ -24,6 +24,7 @@ namespace LambdicSql.Specialized.SymbolConverters
         {
             var startIndex = expression.SkipMethodChain(0);
             var table = ConvertTable(converter, expression.Arguments[startIndex]);
+            if (table.IsEmpty) return string.Empty.ToCode();
             return Clause("FROM".ToCode(), table);
         }
 
@@ -42,6 +43,7 @@ namespace LambdicSql.Specialized.SymbolConverters
             }
 
             var table = decoder.ConvertToCode(exp);
+            if (table.IsEmpty) return string.Empty.ToCode();
 
             //sub query.
             var body = GetSubQuery(exp);

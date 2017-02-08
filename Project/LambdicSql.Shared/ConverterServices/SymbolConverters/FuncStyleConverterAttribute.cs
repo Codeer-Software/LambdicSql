@@ -24,6 +24,11 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         public string Name { get { return _core.Name; } set { _core.Name = value; } }
 
         /// <summary>
+        /// Vanish, if empty params.
+        /// </summary>
+        public bool VanishIfEmptyParams { get { return _core.VanishIfEmptyParams; } set { _core.VanishIfEmptyParams = value; } }
+
+        /// <summary>
         /// Convert expression to code.
         /// </summary>
         /// <param name="expression">Expression.</param>
@@ -32,6 +37,7 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         public override ICode Convert(MethodCallExpression expression, ExpressionConverter converter)
         {
             var args = _core.InitAndConvertArguments(expression, converter);
+            if (args == null) return string.Empty.ToCode();
             var hArgs = new AroundCode(new HCode(args) { Separator = ", " }, "", ")");
             return new HCode(Line(_core.NameCode, "(".ToCode()), hArgs) { AddIndentNewLine = true, Indent = Indent };
         }

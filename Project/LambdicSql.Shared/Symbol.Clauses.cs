@@ -638,7 +638,7 @@ namespace LambdicSql
         /// </summary>
         /// <param name="elements">Specify column and sort order. Asc(column) or Desc(column).</param>
         /// <returns>Clause.</returns>
-        [MethodFormatConverter(Format = "ORDER BY |[<, >0]", FormatDirection = FormatDirection.Vertical)]
+        [MethodFormatConverter(Format = "ORDER BY |[<, >0]", FormatDirection = FormatDirection.Vertical, VanishIfEmptyParams = true)]
         public static Clause<OverElement> OrderBy(params OrderByElement[] elements) { throw new InvalitContextException(nameof(OrderBy)); }
 
         /// <summary>
@@ -648,7 +648,7 @@ namespace LambdicSql
         /// <param name="before">It is the previous clause.</param>
         /// <param name="elements">Specify column and sort order. Asc(column) or Desc(column).</param>
         /// <returns>Clause.</returns>
-        [MethodFormatConverter(Format = "ORDER BY |[<, >1]", FormatDirection = FormatDirection.Vertical)]
+        [MethodFormatConverter(Format = "ORDER BY |[<, >1]", FormatDirection = FormatDirection.Vertical, VanishIfEmptyParams = true)]
         public static Clause<T> OrderBy<T>(this Clause<T> before, params OrderByElement[] elements) { throw new InvalitContextException(nameof(OrderBy)); }
 
         /// <summary>

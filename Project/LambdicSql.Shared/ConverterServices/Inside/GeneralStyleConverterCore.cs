@@ -15,6 +15,7 @@ namespace LambdicSql.ConverterServices.Inside
 
         internal string Name { get; set; }
         internal ICode NameCode { get; set; }
+        internal bool VanishIfEmptyParams { get; set; }
 
         internal IEnumerable<ICode> InitAndConvertArguments(MethodCallExpression expression, ExpressionConverter converter)
         {
@@ -46,7 +47,14 @@ namespace LambdicSql.ConverterServices.Inside
                     var newArrayExp = argExp as NewArrayExpression;
                     if (newArrayExp != null)
                     {
-                        foreach (var e in newArrayExp.Expressions) args.Add(converter.ConvertToCode(e));
+                        bool isEmpty = true;
+                        foreach (var e in newArrayExp.Expressions)
+                        {
+                            var argCode = converter.ConvertToCode(e);
+                            if (isEmpty) isEmpty = argCode.IsEmpty;
+                            args.Add(argCode);
+                        }
+                        if (VanishIfEmptyParams && isEmpty) return null;
                     }
                     else
                     {

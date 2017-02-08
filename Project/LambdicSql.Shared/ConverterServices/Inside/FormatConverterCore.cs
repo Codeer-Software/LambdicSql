@@ -45,9 +45,12 @@ namespace LambdicSql.ConverterServices.Inside
             }
         }
 
+        internal bool VanishIfEmptyParams { get; set; }
+
         public ICode Convert(ReadOnlyCollection<Expression> arguments, ExpressionConverter converter)
         {
             var code = ConvertByFormat(arguments, converter);
+            if (code == null) return string.Empty.ToCode();
             return Layout(code);
         }
 
@@ -71,6 +74,7 @@ namespace LambdicSql.ConverterServices.Inside
                 var code = argumentInfo.IsArrayExpand ?
                     ConvertExpandArrayArgument(converter, argumentInfo, argExp) :
                     new ICode[] { ConvertSingleArgument(converter, argumentInfo, argExp) };
+                if (code == null) return null;
 
                 if (argumentInfo.IsDirectValue)
                 {
@@ -93,34 +97,43 @@ namespace LambdicSql.ConverterServices.Inside
             return SelectMany(allCodes, selectManyCount);
         }
 
-        static ICode[] ConvertExpandArrayArgument(ExpressionConverter converter, ArgumentInfo argumentInfo, Expression argExp)
+        ICode[] ConvertExpandArrayArgument(ExpressionConverter converter, ArgumentInfo argumentInfo, Expression argExp)
         {
             ICode[] code;
             var newArrayExp = argExp as NewArrayExpression;
             if (newArrayExp != null)
             {
+                bool isEmpty = true;
                 code = new ICode[newArrayExp.Expressions.Count];
                 for (int i = 0; i < newArrayExp.Expressions.Count; i++)
                 {
                     code[i] = converter.ConvertToCode(newArrayExp.Expressions[i]);
+                    if (isEmpty) isEmpty = code[i].IsEmpty;
                 }
+                if (VanishIfEmptyParams && isEmpty) return null;
             }
             else
             {
                 var obj = converter.ConvertToObject(argExp);
                 var list = new List<ICode>();
-                foreach (var x in (IEnumerable)obj)
+                foreach (var e in (IEnumerable)obj)
                 {
-                    list.Add(converter.ConvertToCode(x));
+                    list.Add(converter.ConvertToCode(e));
                 }
                 code = list.ToArray();
             }
 
             if (!string.IsNullOrEmpty(argumentInfo.ArrayExpandSeparator))
             {
-                for (int i = 0; i < code.Length - 1; i++)
+                var isEmpty = true;
+                for (int i = code.Length - 1; 0 <= i; i--)
                 {
-                    code[i] = new HCode(code[i], argumentInfo.ArrayExpandSeparator.ToCode()) { EnableChangeLine = false };
+                    var currentIsEmpty = code[i].IsEmpty;
+                    if (!isEmpty && !currentIsEmpty)
+                    {
+                        code[i] = new HCode(code[i], argumentInfo.ArrayExpandSeparator.ToCode()) { EnableChangeLine = false };
+                    }
+                    if (isEmpty) isEmpty = currentIsEmpty;
                 }
             }
 

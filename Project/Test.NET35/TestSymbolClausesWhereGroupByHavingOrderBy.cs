@@ -114,6 +114,73 @@ GROUP BY tbl_remuneration.id, tbl_remuneration.staff_id");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_GroupBy_Element_Valnish_1()
+        {
+            var col = new Sql();
+            var sql = Db<DB>.Sql(db =>
+               Select(new SelectData1
+               {
+                   Count = Count(db.tbl_remuneration.money)
+               }).
+               From(db.tbl_remuneration).
+               GroupBy(col, db.tbl_remuneration.staff_id));
+
+            var datas = _connection.Query(sql).ToList();
+
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT
+	COUNT(tbl_remuneration.money) AS Count
+FROM tbl_remuneration
+GROUP BY tbl_remuneration.staff_id");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_GroupBy_Element_Valnish_2()
+        {
+            var col = new Sql();
+            var sql = Db<DB>.Sql(db =>
+               Select(new SelectData1
+               {
+                   Count = Count(db.tbl_remuneration.money)
+               }).
+               From(db.tbl_remuneration).
+               GroupBy(db.tbl_remuneration.staff_id, col));
+
+            var datas = _connection.Query(sql).ToList();
+
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT
+	COUNT(tbl_remuneration.money) AS Count
+FROM tbl_remuneration
+GROUP BY tbl_remuneration.staff_id");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_GroupBy_Element_Valnish_3()
+        {
+            var col1 = new Sql();
+            var col2 = new Sql();
+            var sql = Db<DB>.Sql(db =>
+               Select(new SelectData1
+               {
+                   Count = Count(db.tbl_remuneration.money)
+               }).
+               From(db.tbl_remuneration).
+               GroupBy(col1, db.tbl_remuneration.staff_id, col2));
+
+            var datas = _connection.Query(sql).ToList();
+
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT
+	COUNT(tbl_remuneration.money) AS Count
+FROM tbl_remuneration
+GROUP BY tbl_remuneration.staff_id");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_GroupBy_Start()
         {
             var sql = Db<DB>.Sql(db =>
@@ -121,7 +188,7 @@ GROUP BY tbl_remuneration.id, tbl_remuneration.staff_id");
                {
                    Count = Count(db.tbl_remuneration.money)
                }).
-               From(db.tbl_remuneration) + 
+               From(db.tbl_remuneration) +
                GroupBy(db.tbl_remuneration.id, db.tbl_remuneration.staff_id));
 
             var datas = _connection.Query(sql).ToList();
@@ -133,7 +200,7 @@ GROUP BY tbl_remuneration.id, tbl_remuneration.staff_id");
 FROM tbl_remuneration
 GROUP BY tbl_remuneration.id, tbl_remuneration.staff_id");
         }
-        
+
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_GroupByRollup()
         {
@@ -166,7 +233,7 @@ GROUP BY ROLLUP(tbl_remuneration.id, tbl_remuneration.staff_id)");
                {
                    Count = Count(db.tbl_remuneration.money)
                }).
-               From(db.tbl_remuneration) + 
+               From(db.tbl_remuneration) +
                GroupByRollup(db.tbl_remuneration.id, db.tbl_remuneration.staff_id));
 
             var datas = _connection.Query(sql).ToList();
@@ -199,7 +266,7 @@ GROUP BY ROLLUP(tbl_remuneration.id, tbl_remuneration.staff_id)");
 FROM tbl_remuneration
 GROUP BY tbl_remuneration.id, tbl_remuneration.staff_id WITH ROLLUP");
         }
-        
+
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_GroupByWithRollup_Start()
         {
@@ -210,7 +277,7 @@ GROUP BY tbl_remuneration.id, tbl_remuneration.staff_id WITH ROLLUP");
                {
                    Count = Count(db.tbl_remuneration.money)
                }).
-               From(db.tbl_remuneration) + 
+               From(db.tbl_remuneration) +
                GroupByWithRollup(db.tbl_remuneration.id, db.tbl_remuneration.staff_id));
 
             var datas = _connection.Query(sql).ToList();
@@ -402,6 +469,117 @@ FROM tbl_remuneration
 ORDER BY
 	tbl_remuneration.money ASC,
 	tbl_remuneration.staff_id DESC");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_OrderBy_Element_Vanish_1()
+        {
+            var desc = new Sql<OrderByElement>();
+            var sql = Db<DB>.Sql(db =>
+                Select(new SelectedData2
+                {
+                    Id = db.tbl_remuneration.staff_id
+                }).
+                From(db.tbl_remuneration).
+                OrderBy(Asc(db.tbl_remuneration.money), desc));
+            
+            var datas = _connection.Query(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT
+	tbl_remuneration.staff_id AS Id
+FROM tbl_remuneration
+ORDER BY
+	tbl_remuneration.money ASC");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_OrderBy_Element_Vanish_2()
+        {
+            var asc = new Sql<OrderByElement>();
+            var sql = Db<DB>.Sql(db =>
+                Select(new SelectedData2
+                {
+                    Id = db.tbl_remuneration.staff_id
+                }).
+                From(db.tbl_remuneration) +
+                OrderBy(asc, Desc(db.tbl_remuneration.staff_id)));
+            
+            var datas = _connection.Query(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT
+	tbl_remuneration.staff_id AS Id
+FROM tbl_remuneration
+ORDER BY
+	tbl_remuneration.staff_id DESC");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_OrderBy_Element_Vanish_3()
+        {
+            var asc1 = new Sql<OrderByElement>();
+            var asc2 = new Sql<OrderByElement>();
+            var sql = Db<DB>.Sql(db =>
+                Select(new SelectedData2
+                {
+                    Id = db.tbl_remuneration.staff_id
+                }).
+                From(db.tbl_remuneration) +
+                OrderBy(asc1, Desc(db.tbl_remuneration.staff_id), asc2));
+
+            sql.Gen(_connection);
+
+            var datas = _connection.Query(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT
+	tbl_remuneration.staff_id AS Id
+FROM tbl_remuneration
+ORDER BY
+	tbl_remuneration.staff_id DESC");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_OrderBy_Vanish()
+        {
+            var asc = new Sql<OrderByElement>();
+            var desc = new Sql<OrderByElement>();
+            var sql = Db<DB>.Sql(db =>
+               Select(new SelectedData2
+               {
+                   Id = db.tbl_remuneration.staff_id
+               }).
+               From(db.tbl_remuneration).
+               OrderBy(asc, desc));
+
+            var datas = _connection.Query(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT
+	tbl_remuneration.staff_id AS Id
+FROM tbl_remuneration");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_OrderBy_Vanish_Start()
+        {
+            var asc = new Sql<OrderByElement>();
+            var desc = new Sql<OrderByElement>();
+            var sql = Db<DB>.Sql(db =>
+               Select(new SelectedData2
+               {
+                   Id = db.tbl_remuneration.staff_id
+               }).
+               From(db.tbl_remuneration) +
+               OrderBy(asc, desc));
+
+            var datas = _connection.Query(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT
+	tbl_remuneration.staff_id AS Id
+FROM tbl_remuneration");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]

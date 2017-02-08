@@ -25,6 +25,11 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         public string Format { get { return _core.Format; } set { _core.Format = value; } }
 
         /// <summary>
+        /// Vanish, if empty params.
+        /// </summary>
+        public bool VanishIfEmptyParams { get { return _core.VanishIfEmptyParams; } set { _core.VanishIfEmptyParams = value; } }
+
+        /// <summary>
         /// Convert expression to code.
         /// </summary>
         /// <param name="expression">Expression.</param>
