@@ -9,7 +9,8 @@ namespace LambdicSql
     /// </summary>
     public class BuildedSql
     {
-        Dictionary<string, IDbParam> _dbParams;
+        //Don't change name.
+        Dictionary<string, IDbParam> DbParams { get; }
 
         /// <summary>
         /// Sql text.
@@ -22,7 +23,7 @@ namespace LambdicSql
         /// <typeparam name="T">Converted type.</typeparam>
         /// <param name="converter">Converter.</param>
         /// <returns>Parameters.</returns>
-        public Dictionary<string, T> GetParams<T>(Func<IDbParam, T> converter) => _dbParams.ToDictionary(e => e.Key, e => converter(e.Value));
+        public Dictionary<string, T> GetParams<T>(Func<IDbParam, T> converter) => DbParams.ToDictionary(e => e.Key, e => converter(e.Value));
 
         /// <summary>
         /// Constructor.
@@ -32,7 +33,7 @@ namespace LambdicSql
         internal BuildedSql(string sqlText, Dictionary<string, IDbParam> dbParams)
         {
             Text = sqlText;
-            _dbParams = dbParams;
+            DbParams = dbParams;
         }
 
         /// <summary>
@@ -42,7 +43,7 @@ namespace LambdicSql
         internal BuildedSql(BuildedSql src)
         {
             Text = src.Text;
-            _dbParams = src._dbParams;
+            DbParams = src.DbParams;
         }
 
         /// <summary>
@@ -51,7 +52,7 @@ namespace LambdicSql
         /// <param name="values">New values.</param>
         /// <returns>BuildingSql after change.</returns>
         public BuildedSql ChangeParams(Dictionary<string, object> values)
-            => new BuildedSql(Text, _dbParams.ToDictionary(e => e.Key, e => 
+            => new BuildedSql(Text, DbParams.ToDictionary(e => e.Key, e => 
             {
                 object val;
                 return values.TryGetValue(e.Key, out val) ?

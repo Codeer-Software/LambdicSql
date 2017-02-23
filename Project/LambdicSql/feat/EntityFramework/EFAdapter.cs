@@ -19,6 +19,10 @@ namespace LambdicSql.feat.EntityFramework
         /// </summary>
         public static Action<string> Log { get; set; }
 
+        //Don't change name.
+        internal static Action<object> BuildedSqlLog { get; set; }
+        internal static Action<object> ResultLog { get; set; }
+
         /// <summary>
         /// Get entity.
         /// It can only be used within methods of the LambdicSql.Db class.
@@ -100,7 +104,9 @@ namespace LambdicSql.feat.EntityFramework
 
                 try
                 {
-                    return EFWrapper<T>.GetSqlQuery(dbContext)(dbContext, sql.Text, args);
+                    var ret = EFWrapper<T>.GetSqlQuery(dbContext)(dbContext, sql.Text, args);
+                    ResultLog?.Invoke(ret);
+                    return ret;
                 }
                 catch (Exception e)
                 {
@@ -139,7 +145,9 @@ namespace LambdicSql.feat.EntityFramework
 
             try
             {
-                return EFWrapper.GetExecuteSqlCommand(dbContext)(dbContext, sql.Text, args);
+                var ret = EFWrapper.GetExecuteSqlCommand(dbContext)(dbContext, sql.Text, args);
+                ResultLog?.Invoke(ret);
+                return ret;
             }
             catch (Exception e)
             {
@@ -175,6 +183,8 @@ namespace LambdicSql.feat.EntityFramework
 
         static void Debug(BuildedSql info)
         {
+            BuildedSqlLog?.Invoke(info);
+
             if (Log == null) return;
             Log(info.Text);
             foreach (var e in info.GetParams())

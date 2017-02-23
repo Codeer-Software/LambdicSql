@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
@@ -43,11 +44,15 @@ namespace LambdicSql.feat.Dapper
                 }
             }
         }
-        
+
         /// <summary>
         /// Debug Log.
         /// </summary>
         public static Action<string> Log { get; set; }
+
+        //Don't change name.
+        internal static Action<object> BuildedSqlLog { get; set; }
+        internal static Action<object> ResultLog { get; set; }
 
         /// <summary>
         /// Executes a query, returning the data typed as per T.
@@ -136,7 +141,9 @@ namespace LambdicSql.feat.Dapper
 
             try
             {
-                return DapperWrapper<T>.Query(cnn, sql.Text, CreateDynamicParam(sql.GetParams()), transaction, buffered, commandTimeout, commandType);
+                var ret = DapperWrapper<T>.Query(cnn, sql.Text, CreateDynamicParam(sql.GetParams()), transaction, buffered, commandTimeout, commandType);
+                ResultLog?.Invoke(ret);
+                return ret;
             }
             catch (Exception e)
             {
@@ -177,7 +184,9 @@ namespace LambdicSql.feat.Dapper
 
             try
             {
-                return DapperWrapper.Execute(cnn, sql.Text, CreateDynamicParam(sql.GetParams()), transaction, commandTimeout, commandType);
+                var ret = DapperWrapper.Execute(cnn, sql.Text, CreateDynamicParam(sql.GetParams()), transaction, commandTimeout, commandType);
+                ResultLog?.Invoke(ret);
+                return ret;
             }
             catch (Exception e)
             {
@@ -206,6 +215,8 @@ namespace LambdicSql.feat.Dapper
 
         static void Debug(BuildedSql info)
         {
+            BuildedSqlLog?.Invoke(info);
+
             if (Log == null) return;
             Log(info.Text);
             foreach (var e in info.GetParams())
