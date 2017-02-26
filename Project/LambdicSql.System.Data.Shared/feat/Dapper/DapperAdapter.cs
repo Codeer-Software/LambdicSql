@@ -133,7 +133,7 @@ namespace LambdicSql.feat.Dapper
         public static IEnumerable<T> Query<T>(this IDbConnection cnn, BuildedSql sql, IDbTransaction transaction = null, bool buffered = true, int? commandTimeout = default(int?), CommandType? commandType = default(CommandType?))
         {
             //for testing.
-            if (DapperApaptExtensionsForTest.Query != null) return new T[DapperApaptExtensionsForTest.Query(cnn, sql)];
+            if (DapperAdapterTestPlugin.Query != null) return new T[DapperAdapterTestPlugin.Query(cnn, sql)];
 
             //debug.
             Debug(sql);
@@ -176,7 +176,7 @@ namespace LambdicSql.feat.Dapper
         public static int Execute(this IDbConnection cnn, BuildedSql sql, IDbTransaction transaction = null, int? commandTimeout = default(int?), CommandType? commandType = default(CommandType?))
         {
             //for testing.
-            if (DapperApaptExtensionsForTest.Execute != null) return DapperApaptExtensionsForTest.Execute(cnn, sql);
+            if (DapperAdapterTestPlugin.Execute != null) return DapperAdapterTestPlugin.Execute(cnn, sql);
 
             //debug.
             Debug(sql);
@@ -225,11 +225,11 @@ namespace LambdicSql.feat.Dapper
             Log(string.Empty);
         }
     }
-
+    
     /// <summary>
     /// For testing.
     /// </summary>
-    public static class DapperApaptExtensionsForTest
+    public static class DapperAdapterTestPlugin
     {
         /// <summary>
         /// For testing.
