@@ -12,8 +12,8 @@ namespace Test
     {
         static void Main(string[] args)
         {
-            DapperApaptExtensionsForTest.Query = QueryForTest;
-            DapperApaptExtensionsForTest.Execute = ExecuteForTest;
+            DapperAdapterTestPlugin.Query = QueryForTest;
+            DapperAdapterTestPlugin.Execute = ExecuteForTest;
 
             foreach (var type in typeof(Program).Assembly.GetTypes().Where(e => e.IsDefined(typeof(TestClassAttribute), false)))
             {
