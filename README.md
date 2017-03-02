@@ -1,5 +1,7 @@
-﻿LambdicSql_β 0.32.0
+﻿LambdicSql_β 0.36.0
 ======================
+## Destructive change at 0.36.0
+We divided the definitions of phrases and functions into DLLs for each DB.
 
 ## Features ...
 LambdicSql is ultimate sql builder.<br>
@@ -160,12 +162,12 @@ namespace Sample
 <img src="https://github.com/Codeer-Software/LambdicSql/blob/master/SummaryCode.png"><br>
 ## Samples
 Look for how to use from the tests.<br>
-https://github.com/Codeer-Software/LambdicSql.SqlServer/tree/master/Project/Test40
-https://github.com/Codeer-Software/LambdicSql.Oracle/tree/master/Project/Test40
-https://github.com/Codeer-Software/LambdicSql.MySql/tree/master/Project/Test40
-https://github.com/Codeer-Software/LambdicSql.Npgsql/tree/master/Project/Test40
-https://github.com/Codeer-Software/LambdicSql.SQLite/tree/master/Project/Test40
-https://github.com/Codeer-Software/LambdicSql.DB2/tree/master/Project/Test40
+https://github.com/Codeer-Software/LambdicSql.SqlServer/tree/master/Project/Test40<br>
+https://github.com/Codeer-Software/LambdicSql.Oracle/tree/master/Project/Test40<br>
+https://github.com/Codeer-Software/LambdicSql.MySql/tree/master/Project/Test40<br>
+https://github.com/Codeer-Software/LambdicSql.Npgsql/tree/master/Project/Test40<br>
+https://github.com/Codeer-Software/LambdicSql.SQLite/tree/master/Project/Test40<br>
+https://github.com/Codeer-Software/LambdicSql.DB2/tree/master/Project/Test45<br>
 
 ## Sub query.
 ```csharp
