@@ -8,7 +8,8 @@ LambdicSql is ultimate sql builder.<br>
 Generate sql text and parameters from lambda. <br>
 <img src="https://github.com/Codeer-Software/LambdicSql/blob/master/lambdicSqlImage.png" width="400">
 ## Getting Started
-LambdicSql from NuGet
+LambdicSql from NuGet.
+Please get something appropriate for the type of DB you are using.
 
     PM> Install-Package LambdicSql.SqlServer
     PM> Install-Package LambdicSql.Oracle
