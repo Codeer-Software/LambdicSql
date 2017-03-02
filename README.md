@@ -8,9 +8,13 @@ Generate sql text and parameters from lambda. <br>
 ## Getting Started
 LambdicSql from NuGet
 
-    PM> Install-Package LambdicSql
+    PM> Install-Package LambdicSql.SqlServer
+    PM> Install-Package LambdicSql.Oracle
+    PM> Install-Package LambdicSql.MySql
+    PM> Install-Package LambdicSql.Npgsql
+    PM> Install-Package LambdicSql.SQLite
+    PM> Install-Package LambdicSql.DB2
 
-https://www.nuget.org/packages/LambdicSql/<br>
 Supported pratforms are
 - .NETFramework 3.5~
 - PCL
@@ -43,14 +47,14 @@ using System.Linq;
 
 //LambdicSql
 using LambdicSql;
-using static LambdicSql.Symbol;
 
 //for SqlServer and Dapper.
 //Of course, other connections are OK.
 //OracleConnection, SQLiteConnection, NpgsqlConnection, MySqlConnection, DB2Connection
-using System.Data.SqlClient;
-using LambdicSql.feat.Dapper;
 using System.Data;
+using System.Data.SqlClient;
+using static LambdicSql.SqlServer.Symbol;
+using LambdicSql.feat.Dapper;
 
 //or for sqlite-net-pcl
 //using LambdicSql.feat.SQLiteNetPcl
@@ -154,43 +158,14 @@ namespace Sample
 }
 ```
 <img src="https://github.com/Codeer-Software/LambdicSql/blob/master/SummaryCode.png"><br>
-## Supported keywords
-|||||||
-|:--|:--|:--|:--|:--|:--|
-|SELECT|FROM|WHERE|ORDER BY|HAVING|
-|GROUP BY|GROUP BY ROLLUP|GROUP BY WITH ROLLUP|GROUP BY CUBE|GROUP BY GROUPING SETS|
-|JOIN|LEFT JOIN|RIGHT JOIN|FULL JOIN|CROSS JOIN|
-|CASE|WHEN|THEN|END|
-|LIMIT|OFFSET|OFFSET ROWS|FETCH NEXT ROWS ONLY|TOP|
-|UNION|INTERSECT|EXCEPT|MINUS|
-|UPDATE|SET|INSERT INTO|VALUES|DELETE|
-|LIKE|BETWEEN|IN|EXISTS|
-|ASC|DESC|ALL|DISTINCT|IS NULL|IS NOT NULL|
-|WITH|RECURSIVE|ROWNUM|*|DUAL|SYSIBM.SYSDUMMY1|
-|CURRENT_DATE|CURRENT_TIME|CURRENT_TIMESTAMP|
-|CREATE DATABASE|DROP DATABASE|CREATE TABLE|CREATE TABLE IF NOT EXISTS|DROP TABLE|DROP TABLE IF EXISTS|
-|CONSTRAINT|PRIMARY KEY|FOREIGN KEY|CHECK|UNIQUE|NOT NULL|
-|DEFAULT|REFERENCES|RESTRICT|CASCADE|
-## Supported functions
-||||||||
-|:--|:--|:--|:--|:--|:--|:--|
-|SUM|COUNT|AVG|MIN|MAX|ABS|MOD|
-|ROUND|CONCAT||LENGH|LEN|LOWER|UPPER|REPLACE|
-|SUBSTRING|EXTRACT|DATEPART|CAST|COALESCE|FIRST_VALUE|LAST_VALUE|
-|DENSE_RANK|PERCENT_RANK|CUME_DIST|NTILE|NTH_VALUE|RANK|LAG|
-|ROW_NUMBER|OVER|ROWS|PARTITION BY|
 ## Samples
 Look for how to use from the tests.<br>
-https://github.com/Codeer-Software/LambdicSql/tree/master/Project/Test.NET35
-## Supported database
-|DataBase type|Support|
-|:--|:--|
-|SQL Server|○|
-|SQLite|○|
-|PostgreSQL|○|
-|Oracle|○|
-|MySQL|○|
-|DB2|○|
+https://github.com/Codeer-Software/LambdicSql.SqlServer/tree/master/Project/Test40
+https://github.com/Codeer-Software/LambdicSql.Oracle/tree/master/Project/Test40
+https://github.com/Codeer-Software/LambdicSql.MySql/tree/master/Project/Test40
+https://github.com/Codeer-Software/LambdicSql.Npgsql/tree/master/Project/Test40
+https://github.com/Codeer-Software/LambdicSql.SQLite/tree/master/Project/Test40
+https://github.com/Codeer-Software/LambdicSql.DB2/tree/master/Project/Test40
 
 ## Sub query.
 ```csharp
