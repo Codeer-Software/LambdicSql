@@ -7,12 +7,12 @@
             switch (connectionTypeFullName)
             {
                 case "Npgsql.NpgsqlConnection":
-                    return new DialectOption() { ConnectionTypeFullName = connectionTypeFullName, StringAddOperator = "||", ExistRecursiveClause = true };
+                    return new DialectOption() { ConnectionTypeFullName = connectionTypeFullName, StringAddOperator = "||" };
                 case "SQLite.SQLiteConnection":
                 case "System.Data.SQLite.SQLiteConnection":
                     return new DialectOption() { ConnectionTypeFullName = connectionTypeFullName, StringAddOperator = "||" };
                 case "IBM.Data.DB2.DB2Connection":
-                    return new DialectOption() { ConnectionTypeFullName = connectionTypeFullName, StringAddOperator = "||", CurrentDateTimeSeparator = " " };
+                    return new DialectOption() { ConnectionTypeFullName = connectionTypeFullName, StringAddOperator = "||" };
                 case "Oracle.ManagedDataAccess.Client.OracleConnection":
                     return new DialectOption() { ConnectionTypeFullName = connectionTypeFullName, StringAddOperator = "||", ParameterPrefix = ":" };
                 default:

@@ -6,10 +6,12 @@ namespace LambdicSql.Inside.CodeParts
     class RecursiveTargetCode : ICode
     {
         ICode _core;
+        bool _existRecursiveClause;
 
-        internal RecursiveTargetCode(ICode core)
+        internal RecursiveTargetCode(ICode core, bool existRecursiveClause)
         {
             _core = core;
+            _existRecursiveClause = existRecursiveClause;
         }
 
         public bool IsEmpty => false;
@@ -17,7 +19,7 @@ namespace LambdicSql.Inside.CodeParts
         public bool IsSingleLine(BuildingContext context) => _core.IsSingleLine(context);
 
         public string ToString(BuildingContext context)
-            => context.DialectOption.ExistRecursiveClause ?
+            => _existRecursiveClause ?
                 new AroundCode(_core, "RECURSIVE ", string.Empty).ToString(context) :
                 _core.ToString(context);
 
@@ -25,7 +27,7 @@ namespace LambdicSql.Inside.CodeParts
         {
             var dst = customizer.Visit(this);
             if (!ReferenceEquals(this, dst)) return dst;
-            return new RecursiveTargetCode(_core.Accept(customizer));
+            return new RecursiveTargetCode(_core.Accept(customizer), _existRecursiveClause);
         }
     }
 }

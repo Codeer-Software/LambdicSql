@@ -96,14 +96,23 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="..\Test.NET35\Helper\DataType.cs">
+      <Link>Helper\DataType.cs</Link>
+    </Compile>
     <Compile Include="..\Test.NET35\Helper\DB.cs">
       <Link>Helper\DB.cs</Link>
     </Compile>
     <Compile Include="..\Test.NET35\Helper\HelperForTest.cs">
       <Link>Helper\HelperForTest.cs</Link>
     </Compile>
-    <Compile Include="..\Test.NET35\TestDataType.cs">
-      <Link>TestDataType.cs</Link>
+    <Compile Include="..\Test.NET35\Helper\Symbol.Clauses.cs">
+      <Link>Helper\Symbol.Clauses.cs</Link>
+    </Compile>
+    <Compile Include="..\Test.NET35\Helper\Symbol.Etc.cs">
+      <Link>Helper\Symbol.Etc.cs</Link>
+    </Compile>
+    <Compile Include="..\Test.NET35\Helper\Symbol.Funcs.cs">
+      <Link>Helper\Symbol.Funcs.cs</Link>
     </Compile>
     <Compile Include="..\Test.NET35\TestDbDefine.cs">
       <Link>TestDbDefine.cs</Link>
@@ -114,44 +123,11 @@
     <Compile Include="..\Test.NET35\TestExpression.cs">
       <Link>TestExpression.cs</Link>
     </Compile>
-    <Compile Include="..\Test.NET35\TestSymbolClausesCase.cs">
-      <Link>TestSymbolClausesCase.cs</Link>
-    </Compile>
-    <Compile Include="..\Test.NET35\TestSymbolClausesCondition.cs">
-      <Link>TestSymbolClausesCondition.cs</Link>
-    </Compile>
-    <Compile Include="..\Test.NET35\TestSymbolClausesDataChange.cs">
-      <Link>TestSymbolClausesDataChange.cs</Link>
-    </Compile>
-    <Compile Include="..\Test.NET35\TestSymbolClausesFrom.cs">
-      <Link>TestSymbolClausesFrom.cs</Link>
-    </Compile>
-    <Compile Include="..\Test.NET35\TestSymbolClausesLimit.cs">
-      <Link>TestSymbolClausesLimit.cs</Link>
-    </Compile>
-    <Compile Include="..\Test.NET35\TestSymbolClausesSelect.cs">
-      <Link>TestSymbolClausesSelect.cs</Link>
-    </Compile>
-    <Compile Include="..\Test.NET35\TestSymbolClausesSetOperator.cs">
-      <Link>TestSymbolClausesSetOperator.cs</Link>
-    </Compile>
-    <Compile Include="..\Test.NET35\TestSymbolClausesWhereGroupByHavingOrderBy.cs">
-      <Link>TestSymbolClausesWhereGroupByHavingOrderBy.cs</Link>
-    </Compile>
     <Compile Include="..\Test.NET35\TestOperator.cs">
       <Link>TestOperator.cs</Link>
     </Compile>
     <Compile Include="..\Test.NET35\TestParameterName.cs">
       <Link>TestParameterName.cs</Link>
-    </Compile>
-    <Compile Include="..\Test.NET35\TestSymbolClausesWithRecursive.cs">
-      <Link>TestSymbolClausesWithRecursive.cs</Link>
-    </Compile>
-    <Compile Include="..\Test.NET35\TestSymbolEtc.cs">
-      <Link>TestSymbolEtc.cs</Link>
-    </Compile>
-    <Compile Include="..\Test.NET35\TestSymbolFuncs.cs">
-      <Link>TestSymbolFuncs.cs</Link>
     </Compile>
     <Compile Include="..\Test.NET35\TestSymbolSub.cs">
       <Link>TestSymbolSub.cs</Link>

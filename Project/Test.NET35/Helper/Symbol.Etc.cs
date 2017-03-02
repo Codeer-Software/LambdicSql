@@ -1,9 +1,8 @@
-﻿using LambdicSql.ConverterServices;
+﻿using LambdicSql;
+using LambdicSql.ConverterServices;
 using LambdicSql.ConverterServices.SymbolConverters;
-using LambdicSql.Specialized.SymbolConverters;
-using System;
 
-namespace LambdicSql
+namespace Test
 {
     /// <summary>
     /// SQL Symbols.
@@ -73,38 +72,6 @@ namespace LambdicSql
         /// <returns>DISTINCT.</returns>
         [ClauseStyleConverter]
         public static AggregatePredicateElement Distinct() { throw new InvalitContextException(nameof(All)); }
-
-        /// <summary>
-        /// CURREN_TDATE Keyword.
-        /// </summary>
-        /// <returns>Date of executing SQL.</returns>
-        [CurrentDateTimeConverter(Name = "DATE")]
-        public static DateTime Current_Date() { throw new InvalitContextException(nameof(Current_Date)); }
-
-        /// <summary>
-        /// CURRENT_TIME Keyword.
-        /// </summary>
-        /// <returns>Date of executing SQL.</returns>
-        [CurrentDateTimeConverter(Name = "TIME")]
-        public static TimeSpan Current_Time() { throw new InvalitContextException(nameof(DateTimeOffset)); }
-
-        /// <summary>
-        /// CURRENT_TIMESTAMP Keyword.
-        /// </summary>
-        /// <returns>Date and time of executing SQL.</returns>
-        [CurrentDateTimeConverter(Name = "TIMESTAMP")]
-        public static DateTime Current_TimeStamp() { throw new InvalitContextException(nameof(Current_TimeStamp)); }
-
-        /// <summary>
-        /// DUAL keyword.
-        /// </summary>
-        [MemberConverter]
-        public static object Dual { get { throw new InvalitContextException(nameof(Dual)); } }
-
-        /// <summary>
-        /// ROWNUM BETWEEN keyword.
-        /// </summary>
-        [ClauseStyleConverter]
-        public static object RowNum() { throw new InvalitContextException(nameof(RowNum)); }
+        
     }
 }

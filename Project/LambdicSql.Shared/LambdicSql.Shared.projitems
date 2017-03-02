@@ -64,13 +64,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolConverters\NewFormatConverterAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolConverters\ObjectConverterAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolConverters\EnumToStringConverterAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DataType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Db.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)feat\NotInitializedException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IDbParam.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Non.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Specialized\Inside\CodeParts\AllDisableBinaryExpressionBracketsCode.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Specialized\Inside\CodeParts\CurrentDateTimeCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Specialized\Inside\CodeParts\RecursiveTargetCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Specialized\Inside\CodeParts\StringFormatCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Specialized\Inside\CodeParts\SubQueryAndNameCode.cs" />
@@ -78,7 +76,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Specialized\SymbolConverters\AllConverterAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Specialized\SymbolConverters\ConditionClauseConverterAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Specialized\SymbolConverters\ConditionConverterAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Specialized\SymbolConverters\CurrentDateTimeConverterAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Specialized\SymbolConverters\FromConverterAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Specialized\SymbolConverters\JoinConverterAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Specialized\SymbolConverters\RecursiveConverterAttribute.cs" />
@@ -88,9 +85,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Specialized\SymbolConverters\WithConverterAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sql.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SqlExpression.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Symbol.Clauses.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Symbol.Etc.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Symbol.Funcs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SymbolSub.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UtilitySymbolExtensions.cs" />
   </ItemGroup>

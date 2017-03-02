@@ -53,6 +53,7 @@ namespace LambdicSql
         /// <returns>Concatenated result.</returns>
         public static Sql operator +(Sql sql, SqlExpression exp) { throw new InvalitContextException("addition operator"); }
 
+        //TODO Make it possible to decide based on the type of defined phrase class.
         /// <summary>
         /// Build.
         /// </summary>

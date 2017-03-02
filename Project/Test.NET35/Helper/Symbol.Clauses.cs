@@ -1,13 +1,28 @@
+using LambdicSql;
 using LambdicSql.ConverterServices;
 using LambdicSql.ConverterServices.SymbolConverters;
 using LambdicSql.Specialized.SymbolConverters;
 
-namespace LambdicSql
-{
+namespace Test
+{   
+    /// <summary>
+    /// TOP keyword.
+    /// </summary>
+    public abstract class TopElement { }
+
+    /// <summary>
+    /// Element of DateTime.
+    /// </summary>
+    [EnumToStringConverter]
+    public enum DateTimeElement
+    {
+        Day,
+    }
+    
     /// <summary>
     /// SQL Symbol.
     /// It can only be used within lambda of the LambdicSql.
-    /// Use[using static LambdicSql.Symbol;], you can use to write natural SQL.
+    /// Use[using static Test.Symbol;], you can use to write natural SQL.
     /// </summary>
     public static partial class Symbol
     {
