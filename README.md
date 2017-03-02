@@ -165,9 +165,9 @@ Look for how to use from the tests.<br>
 https://github.com/Codeer-Software/LambdicSql.SqlServer/tree/master/Project/Test40<br>
 https://github.com/Codeer-Software/LambdicSql.Oracle/tree/master/Project/Test40<br>
 https://github.com/Codeer-Software/LambdicSql.MySql/tree/master/Project/Test40<br>
-https://github.com/Codeer-Software/LambdicSql.Npgsql/tree/master/Project/Test40<br>
+https://github.com/Codeer-Software/LambdicSql.Npgsql/tree/master/Project/Test45<br>
 https://github.com/Codeer-Software/LambdicSql.SQLite/tree/master/Project/Test40<br>
-https://github.com/Codeer-Software/LambdicSql.DB2/tree/master/Project/Test45<br>
+https://github.com/Codeer-Software/LambdicSql.DB2/tree/master/Project/Test40<br>
 
 ## Sub query.
 ```csharp
