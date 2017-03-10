@@ -470,6 +470,34 @@ FROM tbl_remuneration
     JOIN tbl_staff ON tbl_staff.id = tbl_remuneration.staff_id
 WHERE ((@p_0) < (tbl_remuneration.money)) AND ((tbl_remuneration.money) < (@p_1))
 ```
+## Featuring EntityFramewrok
+By using T (), you can use DbContext for use with EntityFramework.
+```csharp
+public partial class EFModel : DbContext
+{
+    public EFModel()
+        : base("your connection string"){}
+
+    public virtual DbSet<tbl_data> tbl_data { get; set; }
+    public virtual DbSet<tbl_remuneration> tbl_remuneration { get; set; }
+    public virtual DbSet<tbl_staff> tbl_staff { get; set; }
+}
+
+public void TestQuery()
+{
+    var sql = Db<ModelLambdicSqlTestDB>.Sql(db =>
+        Select(new SelectData
+        {
+            name = db.tbl_staff.T().name,
+            payment_date = db.tbl_remuneration.T().payment_date,
+            money = db.tbl_remuneration.T().money
+        }).
+        From(db.tbl_remuneration).
+        Join(db.tbl_staff, db.tbl_staff.T().id == db.tbl_remuneration.T().staff_id));
+
+    var datas = new ModelLambdicSqlTestDB().Query(sql).ToList();
+}
+```
 ## Add clauses and functions
 If there are missing clauses or functions you can easily add them.
 Definitions are never executed, so you do not need to implement the inside of the method.
