@@ -483,6 +483,10 @@ public partial class EFModel : DbContext
     public virtual DbSet<tbl_staff> tbl_staff { get; set; }
 }
 
+
+using LambdicSql.feat.EntityFramework;
+...
+
 public void TestQuery()
 {
     var sql = Db<ModelLambdicSqlTestDB>.Sql(db =>
