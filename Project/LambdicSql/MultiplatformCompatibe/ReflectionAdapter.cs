@@ -57,9 +57,9 @@ namespace LambdicSql.MultiplatformCompatibe
 
         internal static bool IsGenericTypeEx(this Type type) => type.IsGenericType;
 
-        internal static string GetSqlName(PropertyInfo p)
+        internal static string GetSqlName(PropertyInfo property)
         {
-            var type = p.PropertyType;
+            var type = property.PropertyType;
 
             //for entity framework.
             if (type.IsGenericType) type = type.GetGenericArguments()[0];
@@ -70,13 +70,13 @@ namespace LambdicSql.MultiplatformCompatibe
                 var name = tableAttr.GetType().GetProperty("Name").GetValue(tableAttr, new object[0]);
                 if (name != null) return name.ToString();
             }
-            var columnAttr = p.GetCustomAttributes(true).Where(e => e.GetType().IsAssignableFromByTypeFullName("System.ComponentModel.DataAnnotations.Schema.ColumnAttribute")).FirstOrDefault();
+            var columnAttr = property.GetCustomAttributes(true).Where(e => e.GetType().IsAssignableFromByTypeFullName("System.ComponentModel.DataAnnotations.Schema.ColumnAttribute")).FirstOrDefault();
             if (columnAttr != null)
             {
                 var name = columnAttr.GetType().GetProperty("Name").GetValue(columnAttr, new object[0]);
                 if (name != null) return name.ToString();
             }
-            return p.Name;
+            return property.Name;
         }
 
         static bool IsAssignableFromByTypeFullName(this Type type, string typeFullName)
