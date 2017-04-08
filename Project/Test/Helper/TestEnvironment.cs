@@ -16,11 +16,13 @@ namespace Test.Helper
 {
     static class TestEnvironment
     {
-        internal static string SqlServerConnectionString => File.ReadAllText(FindNearFile("db.txt")).Trim();
+        internal static string SqlServerConnectionString => File.ReadAllText(FindNearFile("sqlserver.txt")).Trim();
         internal static string EFConnectionString => File.ReadAllText(FindNearFile("ef.txt")).Trim();
-        internal static string PostgresConnectionStringForDBCreate => File.ReadAllText(FindNearFile("postgres.txt")).Trim();
-        internal static string PostgresConnectionString => PostgresConnectionStringForDBCreate + "Database=lambdicsqltest1;";
-        internal static string SQLiteTest1Path => Path.GetFullPath("../../../SQLiteTest1.db");
+        internal static string PostgresConnectionString => File.ReadAllText(FindNearFile("postgres.txt")).Trim();
+        internal static string OracleConnectionString => File.ReadAllText(FindNearFile("oracle.txt")).Trim();
+        internal static string DB2ConnectionString => File.ReadAllText(FindNearFile("db2.txt")).Trim();
+        internal static string SqLiteConnectionString => File.ReadAllText(FindNearFile("sqlite.txt")).Trim();
+        internal static string MySqlConnectionString => File.ReadAllText(FindNearFile("mysql.txt")).Trim();
 
         static string FindNearFile(string fileName)
         {
@@ -44,31 +46,20 @@ namespace Test.Helper
         {
             DapperAdapter.Assembly = typeof(Dapper.SqlMapper).Assembly;
 
-            var str = "User Id=system; Password=codeer; Data Source=" +
-                "(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))" +
-                "(CONNECT_DATA =(SERVER = DEDICATED)))";
-
-
-            StringBuilder sb = new StringBuilder();
-            sb.Append("Server=127.0.0.1:50000;");
-            sb.Append("User Id=db2admin;");
-            sb.Append("Password=codeer;");
-            sb.Append("Database=sample");
-
-
             switch (db.ToString())
             {
                 case "SQLServer": return new SqlConnection(SqlServerConnectionString);
-                case "SQLite": return new SQLiteConnection("Data Source=" + SQLiteTest1Path);
+                case "SQLite": return new SQLiteConnection(SqLiteConnectionString);
                 case "Postgres": return new NpgsqlConnection(PostgresConnectionString);
-                case "MySQL": return new MySqlConnection("Server=localhost;Database=lambdicsqltest;Uid=root;Pwd=codeer");
-                case "Oracle": return new OracleConnection(str);
-                case "DB2": return new DB2Connection(sb.ToString());
+                case "MySQL": return new MySqlConnection(MySqlConnectionString);
+                case "Oracle": return new OracleConnection(OracleConnectionString);
+                case "DB2": return new DB2Connection(DB2ConnectionString);
             }
             throw new NotSupportedException();
         }
     }
 
+    /*
   //  [TestClass]
     public class Initializer
     {
@@ -196,5 +187,5 @@ namespace Test.Helper
                 }
             }
         }
-    }
+    }*/
 }

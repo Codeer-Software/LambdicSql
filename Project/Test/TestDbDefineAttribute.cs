@@ -48,7 +48,7 @@ namespace Test
             [Column("money")]
             public decimal moneyX { get; set; }
         }
-        
+
         public class DBX
         {
             public StaffX tbl_staffX { get; set; }
@@ -82,6 +82,51 @@ namespace Test
             public StaffY tbl_staffY { get; set; }
             public RemunerationY tbl_remunerationY { get; set; }
         }
+
+
+
+        public class TableExAttribute : TableAttribute
+        {
+            public TableExAttribute(string name) : base(name)
+            {
+            }
+        }
+
+        public class ColumnExAttribute : ColumnAttribute
+        {
+            public ColumnExAttribute(string name) : base(name)
+            {
+            }
+        }
+
+        [TableEx("tbl_staff")]
+        public class StaffZ
+        {
+            [ColumnEx("id")]
+            public int idZ { get; set; }
+            [ColumnEx("name")]
+            public string nameZ { get; set; }
+        }
+
+        [TableEx("tbl_remuneration")]
+        public class RemunerationZ
+        {
+            [ColumnEx("id")]
+            public int idZ { get; set; }
+            [ColumnEx("staff_id")]
+            public int staff_idZ { get; set; }
+            [ColumnEx("payment_date")]
+            public DateTime payment_dateZ { get; set; }
+            [ColumnEx("money")]
+            public decimal moneyZ { get; set; }
+        }
+
+        public class DBZ
+        {
+            public StaffZ tbl_staffZ { get; set; }
+            public RemunerationZ tbl_remunerationZ { get; set; }
+        }
+
 
         public class SelectData
         {
@@ -138,6 +183,32 @@ FROM tbl_remuneration
 	dbo.tbl_remuneration.money AS money
 FROM dbo.tbl_remuneration
 	JOIN dbo.tbl_staff ON (dbo.tbl_staff.id) = (dbo.tbl_remuneration.staff_id)");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_AttributeInheritance()
+        {
+            if (!_connection.IsTarget(TargetDB.SqlServer)) return;
+
+            var sql = Db<DBZ>.Sql(db =>
+                Select(new SelectData
+                {
+                    name = db.tbl_staffZ.nameZ,
+                    payment_date = db.tbl_remunerationZ.payment_dateZ,
+                    money = db.tbl_remunerationZ.moneyZ
+                }).
+                From(db.tbl_remunerationZ).
+                Join(db.tbl_staffZ, db.tbl_staffZ.idZ == db.tbl_remunerationZ.staff_idZ));
+
+            var datas = _connection.Query(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+ @"SELECT
+	tbl_staff.name AS name,
+	tbl_remuneration.payment_date AS payment_date,
+	tbl_remuneration.money AS money
+FROM tbl_remuneration
+	JOIN tbl_staff ON (tbl_staff.id) = (tbl_remuneration.staff_id)");
         }
     }
 }

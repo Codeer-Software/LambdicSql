@@ -64,19 +64,32 @@ namespace LambdicSql.MultiplatformCompatibe
             //for entity framework.
             if (type.IsGenericType) type = type.GetGenericArguments()[0];
 
-            var tableAttr = type.GetCustomAttributes(true).Where(e => e.GetType().FullName == "System.ComponentModel.DataAnnotations.Schema.TableAttribute").FirstOrDefault();
+            var tableAttr = type.GetCustomAttributes(true).Where(e => e.GetType().IsAssignableFromByTypeFullName("System.ComponentModel.DataAnnotations.Schema.TableAttribute")).FirstOrDefault();
             if (tableAttr != null)
             {
                 var name = tableAttr.GetType().GetProperty("Name").GetValue(tableAttr, new object[0]);
                 if (name != null) return name.ToString();
             }
-            var columnAttr = p.GetCustomAttributes(true).Where(e => e.GetType().FullName == "System.ComponentModel.DataAnnotations.Schema.ColumnAttribute").FirstOrDefault();
+            var columnAttr = p.GetCustomAttributes(true).Where(e => e.GetType().IsAssignableFromByTypeFullName("System.ComponentModel.DataAnnotations.Schema.ColumnAttribute")).FirstOrDefault();
             if (columnAttr != null)
             {
                 var name = columnAttr.GetType().GetProperty("Name").GetValue(columnAttr, new object[0]);
                 if (name != null) return name.ToString();
             }
             return p.Name;
+        }
+
+        static bool IsAssignableFromByTypeFullName(this Type type, string typeFullName)
+        {
+            while (type != null)
+            {
+                if (type.FullName == typeFullName)
+                {
+                    return true;
+                }
+                type = type.BaseType;
+            }
+            return false;
         }
 
         internal static MemberExpression StaticPropertyOrField(Type type, string propertyOrFieldName)

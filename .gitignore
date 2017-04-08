@@ -257,3 +257,10 @@ Project/TestCheck35/db.txt
 Project/Test/postgres.txt
 Project/Performance/db.txt
 Project/Performance/db2.txt
+Project/ef.txt
+Project/mysql.txt
+Project/oracle.txt
+Project/postgres.txt
+Project/sqlite.txt
+Project/sqlserver.txt
+Project/db2.txt
