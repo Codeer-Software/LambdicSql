@@ -64,7 +64,7 @@ namespace LambdicSql.MultiplatformCompatibe
             return property.Name;
         }
 
-        static bool IsAssignableFromByTypeFullName(this Type type, string typeFullName)
+        internal static bool IsAssignableFromByTypeFullName(this Type type, string typeFullName)
         {
             while (type != null)
             {
