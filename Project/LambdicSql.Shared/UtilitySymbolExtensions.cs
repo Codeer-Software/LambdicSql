@@ -53,5 +53,41 @@ namespace LambdicSql
         /// <returns>Column only.</returns>
         [MethodFormatConverter(Format = "[#0]")]
         public static T ColumnOnly<T>(this T column) { throw new InvalitContextException(nameof(ColumnOnly)); }
+
+        /// <summary>
+        /// operator helper.
+        /// </summary>
+        /// <param name="lhs">lhs.</param>
+        /// <param name="rhs">rhs.</param>
+        /// <returns>bool.</returns>
+        [MethodFormatConverter(Format = "[0] >= [1]")]
+        public static bool GreaterThanOrEqual(this object lhs, object rhs) { throw new InvalitContextException("operator >="); }
+
+        /// <summary>
+        /// operator helper.
+        /// </summary>
+        /// <param name="lhs">lhs.</param>
+        /// <param name="rhs">rhs.</param>
+        /// <returns>bool.</returns>
+        [MethodFormatConverter(Format = "[0] <= [1]")]
+        public static bool LessThanOrEqual(this object lhs, object rhs) { throw new InvalitContextException("operator <="); }
+
+        /// <summary>
+        /// operator helper.
+        /// </summary>
+        /// <param name="lhs">lhs.</param>
+        /// <param name="rhs">rhs.</param>
+        /// <returns>bool.</returns>
+        [MethodFormatConverter(Format = "[0] > [1]")]
+        public static bool GreaterThan(this object lhs, object rhs) { throw new InvalitContextException("operator >"); }
+
+        /// <summary>
+        /// operator helper.
+        /// </summary>
+        /// <param name="lhs">lhs.</param>
+        /// <param name="rhs">rhs.</param>
+        /// <returns>bool.</returns>
+        [MethodFormatConverter(Format = "[0] < [1]")]
+        public static bool LessThan(this object lhs, object rhs) { throw new InvalitContextException("operator <"); }
     }
 }

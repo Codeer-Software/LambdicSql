@@ -181,5 +181,26 @@ FROM tbl_remuneration
     JOIN tbl_staff ON tbl_staff.id = tbl_remuneration.staff_id
 WHERE (3000) < (tbl_remuneration.money)");
         }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_OperatorHelpers()
+        {
+            var sql = Db<DB>.Sql(db =>
+                Select(new Staff
+                {
+                    id = db.tbl_staff.id,
+                    name = db.tbl_staff.name,
+                }).
+                From(db.tbl_staff).
+                Where(
+                    db.tbl_staff.name.GreaterThan("a") &&
+                    db.tbl_staff.name.GreaterThanOrEqual("b") &&
+                    db.tbl_staff.name.LessThan("c") &&
+                    db.tbl_staff.name.LessThanOrEqual("d")
+                    ));
+
+            sql.Gen(_connection);
+            var datas = _connection.Query(sql).ToList();
+        }
     }
 }
