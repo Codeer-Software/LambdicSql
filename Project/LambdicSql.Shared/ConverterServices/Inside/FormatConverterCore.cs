@@ -21,6 +21,7 @@ namespace LambdicSql.ConverterServices.Inside
             internal bool IsDirectValue { get; set; }
             internal bool IsColumnOnly { get; set; }
             internal bool IsDefineName { get; set; }
+            internal bool IsObjectToParameter { get; set; }
         }
 
         string _format;
@@ -88,6 +89,18 @@ namespace LambdicSql.ConverterServices.Inside
                     for (int i = 0; i < code.Length; i++) code[i] = code[i].Accept(customizer);
                 }
 
+                if (argumentInfo.IsDefineName)
+                {
+                    var customizer = new CustomizeParameterToDefineName();
+                    for (int i = 0; i < code.Length; i++) code[i] = code[i].Accept(customizer);
+                }
+
+                if (argumentInfo.IsObjectToParameter)
+                {
+                    var customizer = new CustomizeObjectToParameter();
+                    for (int i = 0; i < code.Length; i++) code[i] = code[i].Accept(customizer);
+                }
+
                 allCodes[argumentInfo.PartsIndex] = code;
 
                 //adjust count.
@@ -147,10 +160,7 @@ namespace LambdicSql.ConverterServices.Inside
 
         static ICode ConvertSingleArgument(ExpressionConverter converter, ArgumentInfo argumentInfo, Expression argExp)
         {
-            var argCore = argumentInfo.IsDefineName ?
-                ((string)converter.ConvertToObject(argExp)).ToCode() :
-                converter.ConvertToCode(argExp);
-
+            var argCore = converter.ConvertToCode(argExp);
             return argumentInfo.Separator == null ?
                      argCore : new HCode(argCore, argumentInfo.Separator) { EnableChangeLine = false };
         }
@@ -248,6 +258,13 @@ namespace LambdicSql.ConverterServices.Inside
             {
                 arg = arg.Replace("#", string.Empty);
                 info.IsColumnOnly = true;
+            }
+            
+            //object to string.
+            if (arg.IndexOf('%') != -1)
+            {
+                arg = arg.Replace("%", string.Empty);
+                info.IsObjectToParameter = true;
             }
 
             if (!int.TryParse(arg.Trim(), out index))

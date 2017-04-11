@@ -1202,5 +1202,8 @@ namespace Test
         /// <returns>Clause chain. You can write SQL statements in succession, of course you can end it.</returns>
         [MethodFormatConverter(Format = "DROP DATABASE [!0]")]
         public static Clause<Non> DropDataBase(string name) { throw new InvalitContextException(nameof(DropDataBase)); }
+
+        [MethodFormatConverter(Format = "Object_Id([%0])")]
+        public static int Object_Id(object name) { return 0; }
     }
 }

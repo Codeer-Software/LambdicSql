@@ -22,7 +22,7 @@ namespace LambdicSql.ConverterServices.Inside.CodeParts
             _param = new DbParamValueOnly() {Value = value };
         }
 
-        internal ParameterCode(string name = null, MetaId metaId = null, IDbParam param = null)
+        internal ParameterCode(string name, MetaId metaId, IDbParam param)
         {
             Name = name;
             MetaId = metaId;

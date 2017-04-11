@@ -9,6 +9,7 @@ using LambdicSql.feat.Dapper;
 using static Test.Symbol;
 using static Test.Helper.DBProviderInfo;
 using Test.Helper;
+using LambdicSql.ConverterServices.SymbolConverters;
 
 namespace Test
 {
@@ -990,6 +991,32 @@ FROM tbl_remuneration", new Params { { "@val", 10 } });
 @"SELECT
 	@p_0 AS Money
 FROM tbl_remuneration", (decimal)3);
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_ObjectToParameter_1()
+        {
+            if (!_connection.IsTarget(TargetDB.SqlServer)) return;
+            var sql = Db<DB>.Sql(db => Select(Object_Id(db.tbl_staff)));
+
+            var datas = _connection.Query(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT
+	Object_Id(@p_0)", "tbl_staff");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_ObjectToParameter_2()
+        {
+            if (!_connection.IsTarget(TargetDB.SqlServer)) return;
+            var sql = Db<DB>.Sql(db => Select(Object_Id("tbl_staff")));
+            
+            var datas = _connection.Query(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT
+	Object_Id(@p_0)", "tbl_staff");
         }
     }
 
