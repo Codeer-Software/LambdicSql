@@ -1005,7 +1005,7 @@ FROM tbl_remuneration", (decimal)3);
 @"SELECT
 	Object_Id(@p_0)", "tbl_staff");
         }
-
+        
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_ObjectToParameter_2()
         {
@@ -1017,6 +1017,21 @@ FROM tbl_remuneration", (decimal)3);
             AssertEx.AreEqual(sql, _connection,
 @"SELECT
 	Object_Id(@p_0)", "tbl_staff");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_ObjectToParameter_3()
+        {
+            if (!_connection.IsTarget(TargetDB.SqlServer)) return;
+            var sql = Db<DBSchema>.Sql(db => Select(Schema_Id(db.dbo)));
+
+            sql.Gen(_connection);
+
+            var datas = _connection.Query(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+ @"SELECT
+	SCHEMA_ID(@p_0)", "dbo");
         }
     }
 

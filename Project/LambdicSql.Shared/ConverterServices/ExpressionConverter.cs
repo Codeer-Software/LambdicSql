@@ -346,6 +346,11 @@ namespace LambdicSql.ConverterServices
 
         ICode ResolveLambdicElement(string name)
         {
+            string schema;
+            if (DbInfo.TryGetSchema(name, out schema))
+            {
+                return new DbSchemaCode(schema);
+            }
             TableInfo table;
             if (DbInfo.TryGetTable(name, out table))
             {

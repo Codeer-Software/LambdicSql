@@ -1205,5 +1205,9 @@ namespace Test
 
         [MethodFormatConverter(Format = "Object_Id([%0])")]
         public static int Object_Id(object name) { return 0; }
+
+        [MethodFormatConverter(Format = "SCHEMA_ID([%0])")]
+        public static int? Schema_Id(object schema) => throw new InvalitContextException(nameof(Schema_Id));
+
     }
 }

@@ -31,6 +31,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\ExpressionConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\IDisableBinaryExpressionBrackets.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\CodeParts\DbColumnCode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\CodeParts\DbSchemaCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\CodeParts\DbTableCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\CodeParts\ParameterCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\CodeParts\QueryCode.cs" />

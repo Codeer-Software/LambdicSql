@@ -15,6 +15,12 @@ namespace LambdicSql.BuilderServices
         /// <returns>Destination.</returns>
         public ICode Visit(ICode src)
         {
+            var schema = src as DbSchemaCode;
+            if (schema != null)
+            {
+                return new ParameterCode(schema.Text);
+            }
+
             var table = src as DbTableCode;
             if (table != null)
             {
