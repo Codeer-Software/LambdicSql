@@ -50,19 +50,20 @@ namespace LambdicSql.Specialized.SymbolConverters
             else if (selectTargets.Type.IsArray)
             {
                 var newArrayExp = selectTargets as NewArrayExpression;
-
-                var array = new ICode[newArrayExp.Expressions.Count];
-                for (int i = 0; i < array.Length; i++)
+                if (newArrayExp != null)
                 {
-                    array[i] = converter.ConvertToCode(newArrayExp.Expressions[i]);
-                }
+                    var array = new ICode[newArrayExp.Expressions.Count];
+                    for (int i = 0; i < array.Length; i++)
+                    {
+                        array[i] = converter.ConvertToCode(newArrayExp.Expressions[i]);
+                    }
 
-                var coreCode = new VCode(select, new VCode(array) { Indent = 1, Separator = "," });
-                return new SelectClauseCode(coreCode);
+                    var coreCode = new VCode(select, new VCode(array) { Indent = 1, Separator = "," });
+                    return new SelectClauseCode(coreCode);
+                }
             }
 
             //new { item = db.tbl.column }
-            else
             {
                 var createInfo = ObjectCreateAnalyzer.MakeSelectInfo(selectTargets);
                 var elements = new ICode[createInfo.Members.Length];

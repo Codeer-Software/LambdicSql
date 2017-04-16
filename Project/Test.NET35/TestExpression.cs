@@ -1033,6 +1033,22 @@ FROM tbl_remuneration", (decimal)3);
  @"SELECT
 	SCHEMA_ID(@p_0)", "dbo");
         }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Array()
+        {
+            if (!_connection.IsTarget(TargetDB.SqlServer)) return;
+
+            var sql = Db<DB>.Sql(db =>
+                Select(AtAtDbts()));
+
+            var datas = _connection.Query(sql).ToList();
+            Assert.IsTrue(0 < datas.Count);
+
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT
+	@@DBTS");
+        }
     }
 
     public static class TestExpressionEx
