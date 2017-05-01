@@ -2,6 +2,7 @@
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace LambdicSql.MultiplatformCompatibe
 {
@@ -28,10 +29,29 @@ namespace LambdicSql.MultiplatformCompatibe
         internal static bool IsAssignableFromEx(this Type type, Type target)
             => type.GetTypeInfo().IsAssignableFrom(target.GetTypeInfo());
 
-        internal static FieldInfo[] GetFieldsEx(this Type type) => type.GetTypeInfo().DeclaredFields.ToArray();
+        internal static FieldInfo[] GetFieldsEx(this Type type)
+        {
+            var list = new List<FieldInfo>();
+            while (type != null)
+            {
+                var info = type.GetTypeInfo();
+                list.AddRange(info.DeclaredFields);
+                type = info.BaseType;
+            }
+            return list.ToArray();
+        }
 
         internal static PropertyInfo[] GetPropertiesEx(this Type type)
-            => type.GetTypeInfo().DeclaredProperties.ToArray();
+        {
+            var list = new List<PropertyInfo>();
+            while (type != null)
+            {
+                var info = type.GetTypeInfo();
+                list.AddRange(info.DeclaredProperties);
+                type = info.BaseType;
+            }
+            return list.ToArray();
+        }
 
         public static Type[] GetGenericArgumentsEx(this Type type)
             => type.GetTypeInfo().GetGenericParameterConstraints();

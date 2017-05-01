@@ -32,7 +32,14 @@ namespace LambdicSql.BuilderServices
         public Dictionary<string, IDbParam> GetDbParams()
             => _parameters.ToDictionary(e => e.Key, e => e.Value.Detail);
 
-        internal string Push(object obj, string nameSrc = null, MetaId metadataToken = null, IDbParam param = null)
+        /// <summary>
+        /// Add an object as a parameter.
+        /// </summary>
+        /// <param name="obj">object.</param>
+        /// <returns>Parameter string.</returns>
+        public string Push(object obj) => Push(obj, null, null, null);
+
+        internal string Push(object obj, string nameSrc, MetaId metadataToken, IDbParam param)
         {
             if (string.IsNullOrEmpty(nameSrc)) nameSrc = "p_" + _count++;
             else nameSrc = nameSrc.Replace(".", "_");
