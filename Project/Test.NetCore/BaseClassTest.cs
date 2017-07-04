@@ -2,7 +2,6 @@ using LambdicSql;
 using LambdicSql.BuilderServices;
 using LambdicSql.ConverterServices;
 using LambdicSql.ConverterServices.SymbolConverters;
-using System.ComponentModel.DataAnnotations;
 using Xunit;
 
 namespace Test.NetCore

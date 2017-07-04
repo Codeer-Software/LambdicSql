@@ -54,7 +54,7 @@ namespace LambdicSql.MultiplatformCompatibe
         }
 
         public static Type[] GetGenericArgumentsEx(this Type type)
-            => type.GetTypeInfo().GetGenericParameterConstraints();
+            => type.GenericTypeArguments;
 
         public static bool IsClassEx(this Type type)
             => type.GetTypeInfo().IsClass;

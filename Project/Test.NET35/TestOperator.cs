@@ -7,6 +7,8 @@ using LambdicSql.feat.Dapper;
 using static Test.Helper.DBProviderInfo;
 using static Test.Symbol;
 using Test.Helper;
+using System;
+using System.Data.SqlClient;
 
 namespace Test
 {
@@ -201,6 +203,5 @@ new Params { { "@a", a }, { "@b", b }, { "@c", c }, { "@d", d } });
  @"SELECT *
 FROM tbl_staff");
         }
-
     }
 }
