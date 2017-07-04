@@ -185,5 +185,22 @@ FROM tbl_remuneration
 WHERE ((((((@a) = (@d)) AND ((@a) <> (@d))) AND ((@a) < (@d))) AND ((@a) <= (@d))) AND ((@a) > (@d))) OR ((@a) >= (@d))",
 new Params { { "@a", a }, { "@b", b }, { "@c", c }, { "@d", d } });
         }
+
+        static Sql<Staff> SelectStaffAll => Db<DB>.Sql(db =>
+                 Select(Asterisk(db.tbl_staff)));
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void SqlAddQuery()
+        {
+            var sql = Db<DB>.Sql(db =>
+            SelectStaffAll +
+            From(db.tbl_staff));
+            
+            Assert.IsTrue(0 < _connection.Query(sql).ToList().Count);
+            AssertEx.AreEqual(sql, _connection,
+ @"SELECT *
+FROM tbl_staff");
+        }
+
     }
 }

@@ -150,7 +150,6 @@
     <Compile Include="Model\tbl_remuneration.cs" />
     <Compile Include="Model\tbl_staff.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestOperator2.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LambdicSql\LambdicSql.csproj">

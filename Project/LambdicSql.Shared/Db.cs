@@ -56,8 +56,12 @@ namespace LambdicSql
         /// <returns>Sql.</returns>
         public static Sql<TSelected> Sql<TSelected>(Expression<Func<T, Sql<TSelected>>> expression)
         {
-            var db = DBDefineAnalyzer.GetDbInfo<T>();
             var core = expression.Body as MemberExpression;
+            if (core == null)
+            {
+                var db = DBDefineAnalyzer.GetDbInfo<T>();
+                return new Sql<TSelected>(ExpressionConverter.CreateCode(db, expression.Body));
+            }
             return new Sql<TSelected>(core.Member.Name.ToCode());
         }
 
