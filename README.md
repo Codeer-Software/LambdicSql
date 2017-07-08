@@ -92,7 +92,7 @@ namespace Sample
         public decimal Money { get; set; }
         public decimal Total { get; set; }
         public string Type { get; set; }
-        public int Rank { get; set; }
+        public long Rank { get; set; }
     }
 
     class Program
