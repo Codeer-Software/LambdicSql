@@ -242,6 +242,29 @@ FROM
 		JOIN tbl_staff ON (tbl_remuneration.staff_id) = (tbl_staff.id)
 	WHERE ((@p_2) < (tbl_remuneration.money)) AND ((tbl_remuneration.money) < (@p_3))) AS subQuery
 ```
+## Self-joines.
+```csharp
+var a = Db<DB>.Sql(db => db.tbl_staff);
+var b = Db<DB>.Sql(db => db.tbl_staff);
+
+var sql = Db<DB>.Sql(db =>
+    Select(new
+    {
+        id = a.Body.id,
+        name = a.Body.name,
+        boss = b.Body.name
+    }).
+    From(a).
+    Join(b, a.Body.bossId == b.Body.id));
+```
+```sql
+SELECT
+        a.id AS id,
+        a.name AS name,
+        b.name AS boss
+FROM tbl_staff a
+        JOIN tbl_staff b ON (a.bossId) = (b.id)
+```
 ## Combining queries.
 It can be combined parts.
 Query, Sub query, Expression.
