@@ -1,13 +1,14 @@
-﻿using System;
+﻿using LambdicSql;
+using LambdicSql.ConverterServices.SymbolConverters;
+using LambdicSql.feat.Dapper;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using LambdicSql;
-using LambdicSql.feat.Dapper;
-using static Test.Symbol;
-using static Test.Helper.DBProviderInfo;
 using Test.Helper;
+using static Test.Helper.DBProviderInfo;
+using static Test.Symbol;
 
 namespace Test
 {
@@ -210,5 +211,70 @@ FROM dbo.tbl_remuneration
 FROM tbl_remuneration
 	JOIN tbl_staff ON (tbl_staff.id) = (tbl_remuneration.staff_id)");
         }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_SysTable()
+        {
+            var sql1 = Db<DB>.Sql(db => Sys.X);
+            AssertEx.AreEqual(sql1, _connection, @"X");
+            var sql2 = Db<DB>.Sql(db => Sys.X.id);
+            AssertEx.AreEqual(sql2, _connection, @"X.id");
+            var sql3 = Db<DB>.Sql(db => Sys.X2);
+            AssertEx.AreEqual(sql3, _connection, @"System");
+            var sql4 = Db<DB>.Sql(db => Sys.X2.id);
+            AssertEx.AreEqual(sql4, _connection, @"System.id");
+
+            var sql = Db<DB>.Sql(db =>
+            Select(sql3.Body.id).From(sql3));
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT
+	sql3.id
+FROM System sql3");
+        }
+
+        SysDefine Sys2 => null;
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_SysTable_2()
+        {
+            var sql1 = Db<DB>.Sql(db => Sys2.X);
+            AssertEx.AreEqual(sql1, _connection, @"X");
+            var sql2 = Db<DB>.Sql(db => Sys2.X.id);
+            AssertEx.AreEqual(sql2, _connection, @"X.id");
+            var sql3 = Db<DB>.Sql(db => Sys2.X2);
+            AssertEx.AreEqual(sql3, _connection, @"System");
+            var sql4 = Db<DB>.Sql(db => Sys2.X2.id);
+            AssertEx.AreEqual(sql4, _connection, @"System.id");
+
+            var sql = Db<DB>.Sql(db =>
+            Select(sql3.Body.id).From(sql3));
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT
+	sql3.id
+FROM System sql3");
+        }
     }
+
+    public class X
+    {
+        public int id { get; set; }
+    }
+
+    public static class Sys
+    {
+        [MemberTableConverter]
+        public static X X { get; set; }
+        [MemberTableConverter(Name = "System")]
+        public static X X2 { get; set; }
+    }
+
+    public class SysDefine
+    {
+        [MemberTableConverter]
+        public X X { get; set; }
+
+        [MemberTableConverter(Name = "System")]
+        public X X2 { get; set; }
+    }
+
 }

@@ -234,10 +234,10 @@ namespace LambdicSql.ConverterServices
             }
 
             //db element.
-            string name;
-            if (TryGetDbDesignParam(member, out name))
+            ICode code;
+            if (TryGetDbDesignParamCode(member, out code))
             {
-                return ResolveLambdicElement(name);
+                return code;
             }
 
             //get value.
@@ -325,18 +325,38 @@ namespace LambdicSql.ConverterServices
             else return string.Join(".", members.Where((e, i) => i != 1).Select(e => e.Member.Name).ToArray()).ToCode();
         }
 
-        static bool TryGetDbDesignParam(MemberExpression member, out string lambdaName)
+        bool TryGetDbDesignParamCode(MemberExpression exp, out ICode code)
         {
-            lambdaName = string.Empty;
+            var member = exp;
+            code = null;
             var names = new List<string>();
             while (member != null)
             {
                 names.Insert(0, member.Member.Name);
+                var table = member.GetMemberTableConverter();
+                if (table != null)
+                {
+                    if (!string.IsNullOrEmpty(table.Name))
+                    {
+                        names[0] = table.Name;
+                    }
+                    var lambdaName = string.Join(".", names.ToArray());
+                    if (names.Count == 1)
+                    {
+                        code = new DbTableCode(new TableInfo(lambdaName, lambdaName));
+                    }
+                    else
+                    {
+                        code = new DbColumnCode(new ColumnInfo(exp.Type, lambdaName, lambdaName, names.Last()));
+                    }
+                    return true;
+                }
                 if (member.Expression is ParameterExpression)
                 {
                     //using ParameterExpression with LambdicSql only when it represents a component of db.
                     //for example, Sql<DB>.Create(db =>
-                    lambdaName = string.Join(".", names.ToArray());
+                    var lambdaName = string.Join(".", names.ToArray());
+                    code = ResolveLambdicElement(lambdaName);
                     return true;
                 }
                 member = member.Expression as MemberExpression;

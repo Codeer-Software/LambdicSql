@@ -61,6 +61,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolConverters\FormatDirection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolConverters\FuncStyleConverterAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolConverters\MemberConverterAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolConverters\MemberTableConverterAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolConverters\MethodConverterAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolConverters\MethodFormatConverterAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolConverters\NewConverterAttribute.cs" />

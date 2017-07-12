@@ -1,4 +1,5 @@
-﻿using LambdicSql.ConverterServices.SymbolConverters;
+﻿using LambdicSql.BuilderServices.CodeParts;
+using LambdicSql.ConverterServices.SymbolConverters;
 using LambdicSql.MultiplatformCompatibe;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ namespace LambdicSql.ConverterServices.Inside
         static Dictionary<MetaId, bool> _isExtension = new Dictionary<MetaId, bool>();
         static Dictionary<MetaId, MethodConverterAttribute> _converterMethodAttribute = new Dictionary<MetaId, MethodConverterAttribute>();
         static Dictionary<MetaId, MemberConverterAttribute> _converterMemberAttribute = new Dictionary<MetaId, MemberConverterAttribute>();
+        static Dictionary<MetaId, MemberTableConverterAttribute> _converterMemberTableAttribute = new Dictionary<MetaId, MemberTableConverterAttribute>();
         static Dictionary<MetaId, NewConverterAttribute> _converterNewAttribute = new Dictionary<MetaId, NewConverterAttribute>();
         static Dictionary<Type, ObjectConverterAttribute> _converterObjectAttribute = new Dictionary<Type, ObjectConverterAttribute>();
         
@@ -49,6 +51,9 @@ namespace LambdicSql.ConverterServices.Inside
         
         internal static MemberConverterAttribute GetMemberConverter(this MemberExpression exp)
             => GetMemberConverter(exp.Member, _converterMemberAttribute);
+
+        internal static MemberTableConverterAttribute GetMemberTableConverter(this MemberExpression exp)
+            => GetMemberConverter(exp.Member, _converterMemberTableAttribute);
 
         internal static NewConverterAttribute GetNewConverter(this NewExpression exp)
             => GetMemberConverter(exp.Constructor, _converterNewAttribute);
