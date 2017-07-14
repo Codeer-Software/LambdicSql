@@ -1,7 +1,5 @@
-﻿LambdicSql_β 0.36.0
+﻿LambdicSql_β 0.46.0
 ======================
-## Destructive change at 0.37.0
-We divided the definitions of phrases and functions into DLLs for each DB.
 
 ## Features ...
 LambdicSql is ultimate sql builder.<br>
