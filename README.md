@@ -447,13 +447,14 @@ FROM tbl_remuneration
 WHERE ((@p_0) < (tbl_remuneration.money)) AND ((tbl_remuneration.money) < (@p_1))
 ```
 ## String interpolation.
+Simple FormattableString Version.
 ```csharp
 public void TestFormatText()
 {
     var city = "London";
     var contactTitle = "Sales Representative";
 
-    var sql = Db<DB>.InterpolateSql<Customers>(db =>
+    var sql = Db<DB>.InterpolateSql<Customers>(
 $@"SELECT *
 FROM Customers
 WHERE City = {city}
@@ -470,9 +471,10 @@ AND ContactTitle = {contactTitle}"
 ```sql
 SELECT *
 FROM Customers
-WHERE City = @city
-    AND ContactTitle = @contactTitle
+WHERE City = @p_0
+    AND ContactTitle = @p_1
 ```
+Expression Version.
 ```csharp
 public void TestFormatText()
 {
