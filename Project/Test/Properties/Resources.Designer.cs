@@ -62,7 +62,7 @@ namespace Test.Properties {
         
         /// <summary>
         ///   CREATE TABLE tbl_data (
-        ///	id INTEGER,
+        ///	id INTEGER NOT NULL,
         ///	val1 INTEGER,
         ///	val2 VARCHAR(50),
         ///	PRIMARY KEY (id)
@@ -77,7 +77,7 @@ namespace Test.Properties {
         
         /// <summary>
         ///   CREATE TABLE tbl_remuneration (
-        ///	id INTEGER,
+        ///	id INTEGER NOT NULL,
         ///	staff_id INTEGER,
         ///	payment_date VARCHAR(50),
         ///	money DECIMAL,
@@ -93,7 +93,7 @@ namespace Test.Properties {
         
         /// <summary>
         ///   CREATE TABLE tbl_staff (
-        ///	id INTEGER,
+        ///	id INTEGER NOT NULL,
         ///	name VARCHAR(50),
         ///	PRIMARY KEY (id)
         ///)

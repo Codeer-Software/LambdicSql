@@ -1,11 +1,11 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("SqlByLambda")]
+[assembly: AssemblyTitle("LambdicSql.NetFramework.3.5")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SqlByLambda")]
+[assembly: AssemblyProduct("LambdicSql.NetFramework.3.5")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -14,6 +14,6 @@ using System.Runtime.InteropServices;
 
 [assembly: Guid("9079c3c3-839d-4ff1-a774-b7f15de9248d")]
 
-[assembly: AssemblyVersion("0.46.0.0")]
-[assembly: AssemblyFileVersion("0.46.0.0")]
+[assembly: AssemblyVersion("0.48.0.0")]
+[assembly: AssemblyFileVersion("0.48.0.0")]
 [assembly: System.CLSCompliant(true)]

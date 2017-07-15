@@ -60,9 +60,9 @@
     <Compile Include="TestUtilitySymbolExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LambdicSql\LambdicSql.csproj">
+    <ProjectReference Include="..\LambdicSql.NetFramework.3.5\LambdicSql.NetFramework.3.5.csproj">
       <Project>{9079c3c3-839d-4ff1-a774-b7f15de9248d}</Project>
-      <Name>LambdicSql</Name>
+      <Name>LambdicSql.NetFramework.3.5</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

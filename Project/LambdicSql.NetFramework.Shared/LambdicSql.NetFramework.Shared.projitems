@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>48244c57-4688-4879-9ce9-36db5b28f684</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>LambdicSql.NetFramework.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)feat\Dapper\DapperAdapter.partial.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)feat\EntityFramework\EFAdapter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)feat\EntityFramework\EFWrapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MultiplatformCompatibe\MetaId.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MultiplatformCompatibe\ReflectionAdapter.cs" />
+  </ItemGroup>
+</Project>

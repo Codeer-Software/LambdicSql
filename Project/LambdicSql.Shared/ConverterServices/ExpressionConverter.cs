@@ -17,7 +17,7 @@ namespace LambdicSql.ConverterServices
     {
         DbInfo DbInfo { get; }
 
-        ExpressionConverter(DbInfo info)
+        internal ExpressionConverter(DbInfo info)
         {
             DbInfo = info;
         }

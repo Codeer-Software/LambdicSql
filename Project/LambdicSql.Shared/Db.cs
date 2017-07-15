@@ -10,7 +10,7 @@ namespace LambdicSql
     /// Holds the database type.
     /// </summary>
     /// <typeparam name="T">DB's type.</typeparam>
-    public class Db<T> where T : class
+    public partial class Db<T> where T : class
     {
         /// <summary>
         /// Create sql.
