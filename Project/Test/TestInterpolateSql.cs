@@ -65,7 +65,6 @@ WHERE ((tbl_staff.name) = (@name)) AND ((tbl_staff.id) < (@maxId))",
  new Params { { "@name", "Emma" }, { "@maxId", 100 } });
         }
 
-
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test3()
         {
@@ -104,6 +103,44 @@ WHERE tbl_staff.name = {name} AND tbl_staff.id < {maxId}");
 FROM tbl_staff
 WHERE tbl_staff.name = @name AND tbl_staff.id < @maxId",
  new Params { { "@name", "Emma" }, { "@maxId", 100 } });
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test5()
+        {
+            var name = "Emma";
+            var maxId = 100;
+            var sql = Db.InterpolateSql<Staff>(
+$@"SELECT *
+FROM tbl_staff
+WHERE tbl_staff.name = {name} AND tbl_staff.id < {maxId}");
+
+            sql.Gen(new SqlConnection());
+            var datas = _connection.Query(sql).ToList();
+            Assert.AreEqual(1, datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT *
+FROM tbl_staff
+WHERE tbl_staff.name = @p_0 AND tbl_staff.id < @p_1", "Emma", 100);
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test6()
+        {
+            var name = "Emma";
+            var maxId = 100;
+            var sql = Db.InterpolateSql(
+$@"SELECT *
+FROM tbl_staff
+WHERE tbl_staff.name = {name} AND tbl_staff.id < {maxId}");
+
+            sql.Gen(new SqlConnection());
+            var datas = _connection.Query<Staff>(sql).ToList();
+            Assert.AreEqual(1, datas.Count);
+            AssertEx.AreEqual(sql, _connection,
+@"SELECT *
+FROM tbl_staff
+WHERE tbl_staff.name = @p_0 AND tbl_staff.id < @p_1", "Emma", 100);
         }
     }
 }
