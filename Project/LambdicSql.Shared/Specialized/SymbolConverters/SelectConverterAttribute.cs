@@ -18,6 +18,11 @@ namespace LambdicSql.Specialized.SymbolConverters
         static readonly ICode AsClause = "AS".ToCode();
 
         /// <summary>
+        /// Set when using names other than Select.
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
         /// Convert expression to code.
         /// </summary>
         /// <param name="expression">Expression.</param>
@@ -28,7 +33,7 @@ namespace LambdicSql.Specialized.SymbolConverters
             //ALL, DISTINCT, TOP
             int expressionIndex = expression.SkipMethodChain(0);
             var selectParts = new ICode[expression.Arguments.Count - expressionIndex];
-            selectParts[0] = SelectClause;
+            selectParts[0] = string.IsNullOrEmpty(Name) ? SelectClause : Name.ToCode();
             for (int i = 0; i < selectParts.Length - 1; i++, expressionIndex++)
             {
                 selectParts[i + 1] = converter.ConvertToCode(expression.Arguments[expressionIndex]);

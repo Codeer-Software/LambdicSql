@@ -124,6 +124,9 @@
     <Compile Include="..\Test.NET35\TestExpression.cs">
       <Link>TestExpression.cs</Link>
     </Compile>
+    <Compile Include="..\Test.NET35\TestMethodFormatConverter.cs">
+      <Link>TestMethodFormatConverter.cs</Link>
+    </Compile>
     <Compile Include="..\Test.NET35\TestOperator.cs">
       <Link>TestOperator.cs</Link>
     </Compile>

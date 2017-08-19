@@ -21,6 +21,8 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         /// <para>[$i] -> It means converting an argument to a direct value.</para>
         /// <para>[#i] -> It specifies that the argument contains a column and that it is converted to only column names without a table name.</para>
         /// <para>[!i] -> Specifies that the argument is a special character and is to be converted with intact characters without ''.</para>
+        /// <para>&amp;left; -> ]</para>
+        /// <para>&amp;right; -> ]</para>
         /// </summary>
         public string Format { get { return _core.Format; } set { _core.Format = value; } }
 

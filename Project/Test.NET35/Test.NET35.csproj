@@ -47,6 +47,7 @@
     <Compile Include="Helper\Symbol.Clauses.cs" />
     <Compile Include="Helper\Symbol.Etc.cs" />
     <Compile Include="Helper\Symbol.Funcs.cs" />
+    <Compile Include="TestMethodFormatConverter.cs" />
     <Compile Include="TestSymbolSub.cs" />
     <Compile Include="TestDbDefine.cs" />
     <Compile Include="TestDbParam.cs" />

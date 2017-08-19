@@ -306,7 +306,7 @@ namespace LambdicSql.ConverterServices.Inside
                 _firstLineElemetCount = _partsSrc.Count + 1;
                 format = format.Replace("|", string.Empty);
             }
-            _partsSrc.Add(format.ToCode());
+            _partsSrc.Add(format.Replace("&left;","[").Replace("&right;", "]").ToCode());
 
             return format;
         }
