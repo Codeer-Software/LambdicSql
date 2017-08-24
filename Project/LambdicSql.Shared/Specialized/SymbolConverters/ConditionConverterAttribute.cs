@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 namespace LambdicSql.Specialized.SymbolConverters
 {
     /// <summary>
-    /// 
+    /// Attributes for converting the Condition utility.
     /// </summary>
     public class ConditionConverterAttribute : NewConverterAttribute
     {

@@ -32,7 +32,6 @@ namespace LambdicSql.BuilderServices
                 return new ParameterCode(col.ColumnName);
             }
             return src;
-
         }
     }
 }

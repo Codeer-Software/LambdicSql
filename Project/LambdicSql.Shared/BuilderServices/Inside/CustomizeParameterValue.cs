@@ -2,7 +2,7 @@
 using LambdicSql.ConverterServices.Inside.CodeParts;
 using System.Collections.Generic;
 
-namespace LambdicSql.BuilderServices
+namespace LambdicSql.BuilderServices.Inside
 {
     class CustomizeParameterValue : ICodeCustomizer
     {

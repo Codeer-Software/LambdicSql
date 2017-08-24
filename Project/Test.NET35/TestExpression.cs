@@ -344,6 +344,9 @@ WHERE (@p_0) = (@p_1)", 1, 1);
                 Select(Asterisk(db.tbl_staff)).
                 From(db.tbl_staff).
                 Where(1 == (int)(IntObjectExplicit1)obj));
+
+            sql.Gen(_connection);
+
             var datas = _connection.Query(sql).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(sql, _connection,

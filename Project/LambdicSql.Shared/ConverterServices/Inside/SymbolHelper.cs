@@ -72,6 +72,7 @@ namespace LambdicSql.ConverterServices.Inside
             }
         }
         
+        //TODO
         internal static int SkipMethodChain(this MethodCallExpression exp, int index)
             => (exp.Method.IsExtension() && 0 < exp.Method.GetParameters().Length) ? index + 1 : index;
     }

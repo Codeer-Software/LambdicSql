@@ -4,14 +4,23 @@ using System.Linq;
 using System;
 using System.Collections.Generic;
 using LambdicSql.MultiplatformCompatibe;
+using LambdicSql.ConverterServices.Inside;
 
-namespace LambdicSql.ConverterServices.Inside
+namespace LambdicSql.ConverterServices
 {
-    static class ObjectCreateAnalyzer
+    /// <summary>
+    /// A class that analyzes the creation part of object. It is used for conversion of Select phrase.
+    /// </summary>
+    public static class ObjectCreateAnalyzer
     {
         static Dictionary<Type, ObjectCreateInfo> _selectedTypeInfo = new Dictionary<Type, ObjectCreateInfo>();
 
-        internal static ObjectCreateInfo MakeSelectInfo(Type type)
+        /// <summary>
+        /// Creation of object generation information.
+        /// </summary>
+        /// <param name="type">type.</param>
+        /// <returns>ObjectCreateInfo.</returns>
+        public static ObjectCreateInfo MakeObjectCreateInfo(Type type)
         {
             lock (_selectedTypeInfo)
             {
@@ -24,7 +33,12 @@ namespace LambdicSql.ConverterServices.Inside
             }
         }
 
-        internal static ObjectCreateInfo MakeSelectInfo(Expression exp)
+        /// <summary>
+        /// Creation of object generation information.
+        /// </summary>
+        /// <param name="exp">expression.</param>
+        /// <returns>ObjectCreateInfo.</returns>
+        public static ObjectCreateInfo MakeObjectCreateInfo(Expression exp)
         {
             var select = new List<ObjectCreateMemberInfo>();
             var newExp = exp as NewExpression;
@@ -72,7 +86,7 @@ namespace LambdicSql.ConverterServices.Inside
                 var prop = member.Member as PropertyInfo;
                 if (prop != null) type = prop.PropertyType;
                 else type = ((FieldInfo)member.Member).FieldType;
-                return MakeSelectInfo(type);
+                return MakeObjectCreateInfo(type);
             }
 
             return new ObjectCreateInfo(new[] { new ObjectCreateMemberInfo(string.Empty, exp )}, exp);

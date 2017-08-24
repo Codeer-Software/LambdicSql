@@ -2,7 +2,7 @@
 using System.Linq.Expressions;
 using LambdicSql.BuilderServices.Inside;
 using LambdicSql.ConverterServices.Inside;
-using static LambdicSql.BuilderServices.Inside.PartsFactoryUtils;
+using static LambdicSql.BuilderServices.Inside.PartsUtils;
 
 namespace LambdicSql.ConverterServices.SymbolConverters
 {

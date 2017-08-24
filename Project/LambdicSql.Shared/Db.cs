@@ -64,17 +64,5 @@ namespace LambdicSql
             }
             return new Sql<TSelected>(core.Member.Name.ToCode());
         }
-
-        /// <summary>
-        /// Create a sql.
-        /// </summary>
-        /// <typeparam name="TResult">The type represented by expression.</typeparam>
-        /// <param name="expression">Expression expressing Sql by lambda.</param>
-        /// <returns>Sql.</returns>
-        public static SqlRecursiveArguments<TResult> Sql<TResult>(Expression<Func<T, RecursiveArguments<TResult>>> expression)
-        {
-            var db = DBDefineAnalyzer.GetDbInfo<T>();
-            return new SqlRecursiveArguments<TResult>(ExpressionConverter.CreateCode(db, expression.Body));
-        }
     }
 }

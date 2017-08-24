@@ -15,16 +15,16 @@
     <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\CodeParts\HCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\CodeParts\ICode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\CodeParts\ICodeCustomizer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\CodeParts\ISelectQueryCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\CodeParts\SingleTextCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\CodeParts\VCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\CustomizeColumnOnly.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\CustomizeObjectToParameter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\CustomizeParameterToDefineName.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\CustomizeParameterToObject.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\CustomizeParameterValue.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\Inside\CustomizeParameterValue.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\DialectOption.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\Inside\DialectResolver.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\Inside\PartsFactoryUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\Inside\PartsUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\ParameterInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Clause.cs" />
@@ -35,8 +35,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\CodeParts\DbTableCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\CodeParts\ParameterCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\CodeParts\QueryCode.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\CodeParts\SelectClauseCode.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\CodeParts\SelectQueryCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\CodeParts\StringAddOperatorCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\ColumnInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\DBDefineAnalyzer.cs" />
@@ -47,9 +45,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\ExpressionToObject.Getter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\FormatConverterCore.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\GeneralStyleConverterCore.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\ObjectCreateAnalyzer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\ObjectCreateInfo.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\ObjectCreateMemberInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\ObjectCreateAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\ObjectCreateInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\ObjectCreateMemberInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\OperatorCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\SupportedTypeSpec.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\SymbolHelper.cs" />
@@ -72,24 +70,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)feat\NotInitializedException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IDbParam.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Non.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Specialized\Inside\CodeParts\AllDisableBinaryExpressionBracketsCode.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Specialized\Inside\CodeParts\RecursiveTargetCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Specialized\Inside\CodeParts\StringFormatCode.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Specialized\Inside\CodeParts\SubQueryAndNameCode.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Specialized\Inside\CodeParts\WithEntriedCode.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Specialized\SymbolConverters\AllConverterAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Specialized\SymbolConverters\ConditionClauseConverterAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Specialized\SymbolConverters\ConditionConverterAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Specialized\SymbolConverters\FromConverterAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Specialized\SymbolConverters\JoinConverterAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Specialized\SymbolConverters\RecursiveConverterAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Specialized\SymbolConverters\SelectConverterAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Specialized\SymbolConverters\ToSqlConverterAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Specialized\SymbolConverters\TwoWaySqlConverterAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Specialized\SymbolConverters\WithConverterAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sql.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SqlExpression.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SymbolSub.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Condition.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UtilitySymbolExtensions.cs" />
   </ItemGroup>
 </Project>

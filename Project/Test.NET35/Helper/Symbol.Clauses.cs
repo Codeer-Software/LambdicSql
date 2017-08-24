@@ -1,7 +1,14 @@
 using LambdicSql;
+using LambdicSql.BuilderServices;
+using LambdicSql.BuilderServices.CodeParts;
 using LambdicSql.ConverterServices;
 using LambdicSql.ConverterServices.SymbolConverters;
 using LambdicSql.Specialized.SymbolConverters;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using static Test.PartsFactoryUtils;
 
 namespace Test
 {   
@@ -1015,33 +1022,6 @@ namespace Test
         public static bool IsNotNull(object target) { throw new InvalitContextException(nameof(IsNull)); }
 
         /// <summary>
-        /// WITH clause.
-        /// </summary>
-        /// <param name="subQuerys">sub querys.</param>
-        /// <returns></returns>
-        [WithConverter]
-        public static Clause<Non> With(params Sql[] subQuerys) { throw new InvalitContextException(nameof(With)); }
-
-        /// <summary>
-        /// WITH clause.
-        /// </summary>
-        /// <typeparam name="T">Type representing argument of recursive part.</typeparam>
-        /// <param name="args">Argument of recursive part.</param>
-        /// <param name="subQuery">sub query.</param>
-        /// <returns>Clause.</returns>
-        [WithConverter]
-        public static Clause<T> With<T>(SqlRecursiveArguments<T> args, Sql subQuery) { throw new InvalitContextException(nameof(With)); }
-
-        /// <summary>
-        /// RECURSIVE clause.
-        /// </summary>
-        /// <typeparam name="T">Type representing argument of recursive part.</typeparam>
-        /// <param name="args">Argument of recursive part.</param>
-        /// <returns>Class representing argument of recursive part.</returns>
-        [RecursiveConverter]
-        public static RecursiveArguments<T> Recursive<T>(T args) { throw new InvalitContextException(nameof(Select)); }
-
-        /// <summary>
         /// CREATE TABLE clause.
         /// </summary>
         /// <returns>Clause.</returns>
@@ -1211,5 +1191,802 @@ namespace Test
         
         [ClauseStyleConverter(Name = "@@DBTS")]
         public static byte[] AtAtDbts() => throw new InvalitContextException(nameof(AtAtDbts));
+    }
+
+
+
+
+    class AllDisableBinaryExpressionBracketsCode : ICode, IDisableBinaryExpressionBrackets
+    {
+        ICode _core;
+
+        internal AllDisableBinaryExpressionBracketsCode(ICode core)
+        {
+            _core = core;
+        }
+
+        public bool IsEmpty => _core.IsEmpty;
+
+        public bool IsSingleLine(BuildingContext context) => _core.IsSingleLine(context);
+
+        public string ToString(BuildingContext context) => _core.ToString(context);
+
+        public ICode Accept(ICodeCustomizer customizer)
+        {
+            var dst = customizer.Visit(this);
+            if (!ReferenceEquals(this, dst)) return dst;
+            return new AllDisableBinaryExpressionBracketsCode(_core.Accept(customizer));
+        }
+    }
+
+
+    class SubQueryAndNameCode : ICode
+    {
+        string _body;
+        ICode _define;
+
+        internal SubQueryAndNameCode(string body, ICode table)
+        {
+            _body = body;
+            _define = new HCode(table, _body.ToCode()) { Separator = " ", EnableChangeLine = false };
+        }
+
+        public bool IsEmpty => false;
+
+        public bool IsSingleLine(BuildingContext context)
+        {
+            object obj;
+            if (!context.UserData.TryGetValue(typeof(WithEntriedCode), out obj)) return _define.IsSingleLine(context);
+
+            var withEntied = (Dictionary<string, bool>)obj;
+            return withEntied.ContainsKey(_body) ? true : _define.IsSingleLine(context);
+        }
+
+        public string ToString(BuildingContext context)
+        {
+            object obj;
+            if (!context.UserData.TryGetValue(typeof(WithEntriedCode), out obj)) return _define.ToString(context);
+
+            var withEntied = (Dictionary<string, bool>)obj;
+            return withEntied.ContainsKey(_body) ?
+                    (PartsUtils.GetIndent(context.Indent) + _body) :
+                    _define.ToString(context);
+        }
+
+        public ICode Accept(ICodeCustomizer customizer) => customizer.Visit(this);
+    }
+
+    class WithEntriedCode : ICode
+    {
+        ICode _core;
+        string[] _names;
+
+        internal WithEntriedCode(ICode core, string[] names)
+        {
+            _core = core;
+            _names = names;
+        }
+
+        public bool IsEmpty => false;
+
+        public bool IsSingleLine(BuildingContext context) => _core.IsSingleLine(context);
+
+        public string ToString(BuildingContext context)
+        {
+            Dictionary<string, bool> withEntied = null;
+            object obj;
+            if (context.UserData.TryGetValue(typeof(WithEntriedCode), out obj))
+            {
+                withEntied = (Dictionary<string, bool>)obj;
+            }
+            else
+            {
+                withEntied = new Dictionary<string, bool>();
+                context.UserData[typeof(WithEntriedCode)] = withEntied;
+            }
+
+            foreach (var e in _names) withEntied[e] = true;
+            return _core.ToString(context);
+        }
+
+        public ICode Accept(ICodeCustomizer customizer)
+        {
+            var dst = customizer.Visit(this);
+            if (!ReferenceEquals(this, dst)) return dst;
+            return new WithEntriedCode(_core.Accept(customizer), _names);
+        }
+    }
+
+    internal class SelectQueryCode : ISelectQueryCode
+    {
+        public ICode Core { get; private set; }
+
+        internal SelectQueryCode(ICode core)
+        {
+            Core = core;
+        }
+
+        public bool IsEmpty => Core.IsEmpty;
+
+        public bool IsSingleLine(BuildingContext context) => Core.IsSingleLine(context);
+
+        public string ToString(BuildingContext context)
+        {
+            var target = context.IsTopLevelQuery ? Core : new AroundCode(Core, "(", ")");
+            return target.ToString(context.ChangeTopLevelQuery(false));
+        }
+
+        public ICode Accept(ICodeCustomizer customizer)
+        {
+            var dst = customizer.Visit(this);
+            if (!ReferenceEquals(this, dst)) return dst;
+            return new SelectQueryCode(Core.Accept(customizer));
+        }
+
+        public ISelectQueryCode Create(ICode core)
+            => new SelectQueryCode(core);
+    }
+
+    class SelectClauseCode : ISelectQueryCode
+    {
+        public ICode Core { get; }
+
+        internal SelectClauseCode(ICode core)
+        {
+            Core = core;
+        }
+
+        public bool IsEmpty => Core.IsEmpty;
+
+        public bool IsSingleLine(BuildingContext context) => Core.IsSingleLine(context);
+
+        public string ToString(BuildingContext context) => Core.ToString(context);
+
+        public ICode Accept(ICodeCustomizer customizer)
+        {
+            var dst = customizer.Visit(this);
+            if (!ReferenceEquals(this, dst)) return dst;
+            return new SelectClauseCode(Core.Accept(customizer));
+        }
+
+        public ISelectQueryCode Create(ICode core)
+            => new SelectQueryCode(core);
+    }
+
+    /// <summary>
+    /// Converter for SELECT clause conversion.
+    /// </summary>
+    public class SelectConverterAttribute : MethodConverterAttribute
+    {
+        static readonly ICode SelectClause = "SELECT".ToCode();
+        static readonly ICode AsClause = "AS".ToCode();
+
+        /// <summary>
+        /// Set when using names other than Select.
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Convert expression to code.
+        /// </summary>
+        /// <param name="expression">Expression.</param>
+        /// <param name="converter">Expression converter.</param>
+        /// <returns>Parts.</returns>
+        public override ICode Convert(MethodCallExpression expression, ExpressionConverter converter)
+        {
+            //ALL, DISTINCT, TOP
+            int expressionIndex = expression.SkipMethodChain(0);
+            var selectParts = new ICode[expression.Arguments.Count - expressionIndex];
+            selectParts[0] = string.IsNullOrEmpty(Name) ? SelectClause : Name.ToCode();
+            for (int i = 0; i < selectParts.Length - 1; i++, expressionIndex++)
+            {
+                selectParts[i + 1] = converter.ConvertToCode(expression.Arguments[expressionIndex]);
+            }
+
+            var select = LineSpace(selectParts);
+
+            //select elemnts.
+            var selectTargets = expression.Arguments[expression.Arguments.Count - 1];
+
+            //*
+            if (typeof(AsteriskElement).IsAssignableFromEx(selectTargets.Type))
+            {
+                select.Add("*".ToCode());
+                return new SelectClauseCode(select);
+            }
+
+            //new []{ a, b, c} recursive.
+            else if (selectTargets.Type.IsArray)
+            {
+                var newArrayExp = selectTargets as NewArrayExpression;
+                if (newArrayExp != null)
+                {
+                    var array = new ICode[newArrayExp.Expressions.Count];
+                    for (int i = 0; i < array.Length; i++)
+                    {
+                        array[i] = converter.ConvertToCode(newArrayExp.Expressions[i]);
+                    }
+
+                    var coreCode = new VCode(select, new VCode(array) { Indent = 1, Separator = "," });
+                    return new SelectClauseCode(coreCode);
+                }
+            }
+
+            //new { item = db.tbl.column }
+            {
+                var createInfo = ObjectCreateAnalyzer.MakeObjectCreateInfo(selectTargets);
+                var elements = new ICode[createInfo.Members.Length];
+                for (int i = 0; i < elements.Length; i++)
+                {
+                    elements[i] = ConvertSelectedElement(converter, createInfo.Members[i]);
+                }
+
+                var coreCode = new VCode(select, new VCode(elements) { Indent = 1, Separator = "," });
+                return new SelectClauseCode(coreCode);
+            }
+        }
+
+        static ICode ConvertSelectedElement(ExpressionConverter converter, ObjectCreateMemberInfo element)
+        {
+            //single select.
+            //for example, COUNT(*).
+            if (string.IsNullOrEmpty(element.Name)) return converter.ConvertToCode(element.Expression);
+
+            //normal select.
+            var exp = converter.ConvertToCode(element.Expression);
+            return exp.IsEmpty ? exp : LineSpace(exp, AsClause, element.Name.ToCode());
+        }
+    }
+
+
+    /// <summary>
+    /// Converter for ALL clause conversion.
+    /// </summary>
+    public class AllConverterAttribute : MethodConverterAttribute
+    {
+        /// <summary>
+        /// Convert expression to code.
+        /// </summary>
+        /// <param name="expression">Expression.</param>
+        /// <param name="converter">Expression converter.</param>
+        /// <returns>Parts.</returns>
+        public override ICode Convert(MethodCallExpression expression, ExpressionConverter converter)
+        {
+            var args = expression.Arguments.Select(e => converter.ConvertToCode(e)).ToArray();
+            return new AllDisableBinaryExpressionBracketsCode(Func("ALL".ToCode(), args[0]));
+        }
+    }
+
+    /// <summary>
+    /// Converter for WHERE and HAVING clause conversion.
+    /// </summary>
+    public class ConditionClauseConverterAttribute : MethodConverterAttribute
+    {
+        ICode _nameCode;
+        string _name;
+
+        /// <summary>
+        /// Name.
+        /// </summary>
+        public string Name
+        {
+            get { return _name; }
+            set
+            {
+                _name = value;
+                _nameCode = value.ToCode();
+            }
+        }
+
+        /// <summary>
+        /// Convert expression to code.
+        /// </summary>
+        /// <param name="expression">Expression.</param>
+        /// <param name="converter">Expression converter.</param>
+        /// <returns>Parts.</returns>
+        public override ICode Convert(MethodCallExpression expression, ExpressionConverter converter)
+        {
+            var condition = converter.ConvertToCode(expression.Arguments[expression.SkipMethodChain(0)]);
+            if (condition.IsEmpty) return string.Empty.ToCode();
+            return Clause(_nameCode, condition);
+        }
+    }
+
+    /// <summary>
+    /// Converter for FROM clause conversion.
+    /// </summary>
+    public class FromConverterAttribute : MethodConverterAttribute
+    {
+        /// <summary>
+        /// Convert expression to code.
+        /// </summary>
+        /// <param name="expression">Expression.</param>
+        /// <param name="converter">Expression converter.</param>
+        /// <returns>Parts.</returns>
+        public override ICode Convert(MethodCallExpression expression, ExpressionConverter converter)
+        {
+            var startIndex = expression.SkipMethodChain(0);
+            var table = ConvertTable(converter, expression.Arguments[startIndex]);
+            if (table.IsEmpty) return string.Empty.ToCode();
+            return Clause("FROM".ToCode(), table);
+        }
+
+        internal static ICode ConvertTable(ExpressionConverter decoder, Expression exp)
+        {
+            //where query, write tables side by side.
+            var arry = exp as NewArrayExpression;
+            if (arry != null)
+            {
+                var multiTables = new ICode[arry.Expressions.Count];
+                for (int i = 0; i < multiTables.Length; i++)
+                {
+                    multiTables[i] = ConvertTable(decoder, arry.Expressions[i]);
+                }
+                return Arguments(multiTables);
+            }
+
+            var table = decoder.ConvertToCode(exp);
+            if (table.IsEmpty) return string.Empty.ToCode();
+
+            //sub query.
+            var body = GetSubQuery(exp);
+            if (body != null) return new SubQueryAndNameCode(body, table);
+
+            return table;
+        }
+
+        internal static string GetSubQuery(Expression exp)
+        {
+            var member = exp as MemberExpression;
+            while (member != null)
+            {
+                if (typeof(Sql).IsAssignableFromEx(member.Type)) return member.Member.Name;
+                member = member.Expression as MemberExpression;
+            }
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Converter for XXX JOIN clause conversion.
+    /// </summary>
+    public class JoinConverterAttribute : MethodConverterAttribute
+    {
+        ICode _nameCode;
+        string _name;
+
+        /// <summary>
+        /// Name.
+        /// </summary>
+        public string Name
+        {
+            get { return _name; }
+            set
+            {
+                _name = value;
+                _nameCode = value.ToCode();
+            }
+        }
+
+        /// <summary>
+        /// Convert expression to code.
+        /// </summary>
+        /// <param name="expression">Expression.</param>
+        /// <param name="converter">Expression converter.</param>
+        /// <returns>Parts.</returns>
+        public override ICode Convert(MethodCallExpression expression, ExpressionConverter converter)
+        {
+            //TODO ‚±‚ê‚¿‚å‚Á‚Æ‚¨‚©‚µ‚¢
+            var startIndex = expression.SkipMethodChain(0);
+            var table = FromConverterAttribute.ConvertTable(converter, expression.Arguments[startIndex]);
+            if (table.IsEmpty) return string.Empty.ToCode();
+
+            var condition = ((startIndex + 1) < expression.Arguments.Count) ? converter.ConvertToCode(expression.Arguments[startIndex + 1]) : null;
+
+            var join = new HCode() { AddIndentNewLine = true, Separator = " ", Indent = 1 };
+            join.Add(_nameCode);
+            join.Add(table);
+            if (condition != null)
+            {
+                join.Add("ON".ToCode());
+                join.Add(condition);
+            }
+            return join;
+        }
+    }
+
+    /// <summary>
+    /// Data type.
+    /// </summary>
+    public abstract class DataTypeElement { }
+
+    /// <summary>
+    /// It's *.
+    /// Used in Select clause and Count function.
+    /// </summary>
+    public abstract class AsteriskElement { }
+
+    /// <summary>
+    /// It's *.
+    /// Used in Select clause and Count function.
+    /// </summary>
+    /// <typeparam name="T">It represents the type to select when used in the Select clause.</typeparam>
+    public abstract class AsteriskElement<T> : AsteriskElement { }
+
+    /// <summary>
+    /// It is an object representing the sort order
+    /// Implemented classes include Asc and Desc.
+    /// </summary>
+    public abstract class OrderByElement { }
+
+    /// <summary>
+    /// Aggregation predicate.
+    /// ALL or DISTINCT.
+    /// </summary>
+    public abstract class AggregatePredicateElement { }
+
+    /// <summary>
+    /// Aggregation predicate.
+    /// ALL
+    /// </summary>
+    public abstract class AggregatePredicateAllElement : AggregatePredicateElement { }
+
+    /// <summary>
+    /// OVER clause argument.
+    /// </summary>
+    public abstract class OverElement { }
+
+    /// <summary>
+    /// OVER clause result.
+    /// </summary>
+    public abstract class OverReturnValue : SqlExpression
+    {
+        /// <summary>
+        /// Additional operator.
+        /// </summary>
+        /// <param name="value">Value.</param>
+        /// <param name="returnValue">Return value.</param>
+        /// <returns>Value.</returns>
+        public static object operator +(object value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
+
+        /// <summary>
+        /// Additional operator.
+        /// </summary>
+        /// <param name="value">Value.</param>
+        /// <param name="returnValue">Return value.</param>
+        /// <returns>Value.</returns>
+        public static string operator +(string value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
+
+        /// <summary>
+        /// Additional operator.
+        /// </summary>
+        /// <param name="value">Value.</param>
+        /// <param name="returnValue">Return value.</param>
+        /// <returns>Value.</returns>
+        public static bool operator +(bool value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
+
+        /// <summary>
+        /// Additional operator.
+        /// </summary>
+        /// <param name="value">Value.</param>
+        /// <param name="returnValue">Return value.</param>
+        /// <returns>Value.</returns>
+        public static bool? operator +(bool? value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
+
+        /// <summary>
+        /// Additional operator.
+        /// </summary>
+        /// <param name="value">Value.</param>
+        /// <param name="returnValue">Return value.</param>
+        /// <returns>Value.</returns>
+        public static byte operator +(byte value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
+
+        /// <summary>
+        /// Additional operator.
+        /// </summary>
+        /// <param name="value">Value.</param>
+        /// <param name="returnValue">Return value.</param>
+        /// <returns>Value.</returns>
+        public static byte? operator +(byte? value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
+
+        /// <summary>
+        /// Additional operator.
+        /// </summary>
+        /// <param name="value">Value.</param>
+        /// <param name="returnValue">Return value.</param>
+        /// <returns>Value.</returns>
+        public static short operator +(short value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
+
+        /// <summary>
+        /// Additional operator.
+        /// </summary>
+        /// <param name="value">Value.</param>
+        /// <param name="returnValue">Return value.</param>
+        /// <returns>Value.</returns>
+        public static short? operator +(short? value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
+
+        /// <summary>
+        /// Additional operator.
+        /// </summary>
+        /// <param name="value">Value.</param>
+        /// <param name="returnValue">Return value.</param>
+        /// <returns>Value.</returns>
+        public static int operator +(int value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
+
+        /// <summary>
+        /// Additional operator.
+        /// </summary>
+        /// <param name="value">Value.</param>
+        /// <param name="returnValue">Return value.</param>
+        /// <returns>Value.</returns>
+        public static int? operator +(int? value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
+
+        /// <summary>
+        /// Additional operator.
+        /// </summary>
+        /// <param name="value">Value.</param>
+        /// <param name="returnValue">Return value.</param>
+        /// <returns>Value.</returns>
+        public static long operator +(long value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
+
+        /// <summary>
+        /// Additional operator.
+        /// </summary>
+        /// <param name="value">Value.</param>
+        /// <param name="returnValue">Return value.</param>
+        /// <returns>Value.</returns>
+        public static long? operator +(long? value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
+
+        /// <summary>
+        /// Additional operator.
+        /// </summary>
+        /// <param name="value">Value.</param>
+        /// <param name="returnValue">Return value.</param>
+        /// <returns>Value.</returns>
+        public static float operator +(float value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
+
+        /// <summary>
+        /// Additional operator.
+        /// </summary>
+        /// <param name="value">Value.</param>
+        /// <param name="returnValue">Return value.</param>
+        /// <returns>Value.</returns>
+        public static float? operator +(float? value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
+
+        /// <summary>
+        /// Additional operator.
+        /// </summary>
+        /// <param name="value">Value.</param>
+        /// <param name="returnValue">Return value.</param>
+        /// <returns>Value.</returns>
+        public static double operator +(double value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
+
+        /// <summary>
+        /// Additional operator.
+        /// </summary>
+        /// <param name="value">Value.</param>
+        /// <param name="returnValue">Return value.</param>
+        /// <returns>Value.</returns>
+        public static double? operator +(double? value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
+
+        /// <summary>
+        /// Additional operator.
+        /// </summary>
+        /// <param name="value">Value.</param>
+        /// <param name="returnValue">Return value.</param>
+        /// <returns>Value.</returns>
+        public static decimal operator +(decimal value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
+
+        /// <summary>
+        /// Additional operator.
+        /// </summary>
+        /// <param name="value">Value.</param>
+        /// <param name="returnValue">Return value.</param>
+        /// <returns>Value.</returns>
+        public static decimal? operator +(decimal? value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
+
+        /// <summary>
+        /// Additional operator.
+        /// </summary>
+        /// <param name="value">Value.</param>
+        /// <param name="returnValue">Return value.</param>
+        /// <returns>Value.</returns>
+        public static DateTime operator +(DateTime value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
+
+        /// <summary>
+        /// Additional operator.
+        /// </summary>
+        /// <param name="value">Value.</param>
+        /// <param name="returnValue">Return value.</param>
+        /// <returns>Value.</returns>
+        public static DateTime? operator +(DateTime? value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
+
+        /// <summary>
+        /// Additional operator.
+        /// </summary>
+        /// <param name="value">Value.</param>
+        /// <param name="returnValue">Return value.</param>
+        /// <returns>Value.</returns>
+        public static DateTimeOffset operator +(DateTimeOffset value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
+
+        /// <summary>
+        /// Additional operator.
+        /// </summary>
+        /// <param name="value">Value.</param>
+        /// <param name="returnValue">Return value.</param>
+        /// <returns>Value.</returns>
+        public static DateTimeOffset? operator +(DateTimeOffset? value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
+
+        /// <summary>
+        /// Additional operator.
+        /// </summary>
+        /// <param name="value">Value.</param>
+        /// <param name="returnValue">Return value.</param>
+        /// <returns>Value.</returns>
+        public static TimeSpan operator +(TimeSpan value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
+
+        /// <summary>
+        /// Additional operator.
+        /// </summary>
+        /// <param name="value">Value.</param>
+        /// <param name="returnValue">Return value.</param>
+        /// <returns>Value.</returns>
+        public static TimeSpan? operator +(TimeSpan? value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
+
+        /// <summary>
+        /// Additional operator.
+        /// </summary>
+        /// <param name="value">Value.</param>
+        /// <param name="returnValue">Return value.</param>
+        /// <returns>Value.</returns>
+        public static byte[] operator +(byte[] value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
+
+        /// <summary>
+        /// Additional operator.
+        /// </summary>
+        /// <param name="value">Value.</param>
+        /// <param name="returnValue">Return value.</param>
+        /// <returns>Value.</returns>
+        public static char[] operator +(char[] value, OverReturnValue returnValue) { throw new InvalitContextException("additional operator"); }
+    }
+
+    /// <summary>
+    /// Data type.
+    /// It can only be used within lambda of the LambdicSql.
+    /// </summary>
+    public static class DataType
+    {
+        /// <summary>
+        /// INT
+        /// </summary>
+        /// <returns>INT</returns>
+        [ClauseStyleConverter]
+        public static DataTypeElement Int() { throw new InvalitContextException(nameof(Int)); }
+
+        /// <summary>
+        /// CHAR
+        /// </summary>
+        /// <param name="n">n</param>
+        /// <returns>CHAR</returns>
+        [FuncStyleConverter]
+        public static DataTypeElement Char(int n) { throw new InvalitContextException(nameof(Char)); }
+    }
+
+    /// <summary>
+    /// Table definition item.
+    /// </summary>
+    public abstract class TableDefinitionElement { }
+
+    /// <summary>
+    /// Constraint object.
+    /// </summary>
+    public abstract class ConstraintElement : TableDefinitionElement { }
+
+    /// <summary>
+    /// Column definition.
+    /// It can only be used within lambda of the LambdicSql.
+    /// </summary>
+    public class Column : TableDefinitionElement
+    {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="column">Column.</param>
+        /// <param name="type">Type.</param>
+        [NewFormatConverter(Format = "[0] [1]")]
+        public Column(object column, DataTypeElement type) { throw new InvalitContextException("new " + nameof(Column)); }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="column">Column.</param>
+        /// <param name="type">Type.</param>
+        /// <param name="constraints">Constraints.</param>
+        [NewFormatConverter(Format = "[0] [1] [< >2]")]
+        public Column(object column, DataTypeElement type, params ConstraintElement[] constraints) { throw new InvalitContextException("new " + nameof(Column)); }
+    }
+
+    /// <summary>
+    /// It represents assignment. It is used in the Set clause.
+    /// new Assign(db.tbl_staff.name, name) -> tbl_staff.name = "@name"
+    /// It can only be used within lambda of the LambdicSql.
+    /// </summary>
+    public class Assign
+    {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="rhs">Rvalue</param>
+        /// <param name="lhs">Lvalue</param>
+        [NewFormatConverter(Format = "[#0] = [1]")]
+        public Assign(object rhs, object lhs) { throw new InvalitContextException("new " + nameof(Assign)); }
+    }
+
+    static class PartsUtils
+    {
+        internal static string GetIndent(int indent)
+        {
+            switch (indent)
+            {
+                case 0: return string.Empty;
+                case 1: return "\t";
+                case 2: return "\t\t";
+                case 3: return "\t\t\t";
+                case 4: return "\t\t\t\t";
+                case 5: return "\t\t\t\t\t";
+                case 6: return "\t\t\t\t\t\t";
+                case 7: return "\t\t\t\t\t\t\t";
+                case 8: return "\t\t\t\t\t\t\t\t";
+                case 9: return "\t\t\t\t\t\t\t\t\t";
+                case 10: return "\t\t\t\t\t\t\t\t\t\t";
+            }
+
+            var array = new char[indent];
+            for (int i = 0; i < indent; i++)
+            {
+                array[i] = '\t';
+            }
+            return new string(array);
+        }
+
+        internal static int SkipMethodChain(this MethodCallExpression exp, int index)
+        {
+            if (exp.Arguments.Count == 0) return index;
+            return typeof(Clause).IsAssignableFromEx(exp.Arguments[0].Type) ? index + 1 : index;
+        }
+    }
+    static class PartsFactoryUtils
+    {
+        internal static HCode Arguments(params ICode[] args)
+            => new HCode(args) { Separator = ", " };
+
+        internal static ICode Blanket(params ICode[] args)
+            => new AroundCode(Arguments(args), "(", ")");
+
+        internal static HCode Func(ICode func, params ICode[] args)
+            => Func(func, ", ", args);
+
+        internal static HCode Clause(ICode clause, params ICode[] args)
+        {
+            var code = new HCode() { AddIndentNewLine = true, Separator = " " };
+            code.Add(clause);
+            code.AddRange(args);
+            return code;
+        }
+
+        internal static HCode Line(params ICode[] args)
+            => new HCode(args) { EnableChangeLine = false };
+
+        internal static HCode LineSpace(params ICode[] args)
+             => new HCode(args) { EnableChangeLine = false, Separator = " " };
+
+        static HCode Func(ICode func, string separator, params ICode[] args)
+        {
+            var hArgs = new AroundCode(new HCode(args) { Separator = separator }, "", ")");
+            return new HCode(Line(func, "(".ToCode()), hArgs) { AddIndentNewLine = true };
+        }
+
+        internal static SingleTextCode ToCode(this string src)
+            => new SingleTextCode(src);
     }
 }

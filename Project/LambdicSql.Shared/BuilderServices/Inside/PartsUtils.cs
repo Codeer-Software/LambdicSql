@@ -1,4 +1,6 @@
-﻿namespace LambdicSql.BuilderServices.Inside
+﻿using LambdicSql.BuilderServices.CodeParts;
+
+namespace LambdicSql.BuilderServices.Inside
 {
     static class PartsUtils
     {
@@ -26,5 +28,11 @@
             }
             return new string(array);
         }
+
+        internal static HCode Line(params ICode[] args)
+            => new HCode(args) { EnableChangeLine = false };
+
+        internal static SingleTextCode ToCode(this string src)
+            => new SingleTextCode(src);
     }
 }

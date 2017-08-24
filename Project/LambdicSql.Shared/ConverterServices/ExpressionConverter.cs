@@ -33,13 +33,13 @@ namespace LambdicSql.ConverterServices
             if (lhs.IsEmpty) return rhs;
             if (rhs.IsEmpty) return lhs;
 
-            var selectQueryLeft = lhs as SelectQueryCode;
-            var selectQueryRight = rhs as SelectQueryCode;
+            var selectQueryLeft = lhs as ISelectQueryCode;
+            var selectQueryRight = rhs as ISelectQueryCode;
 
             if (selectQueryLeft == null && selectQueryRight == null) return new VCode(lhs, rhs);
             if (selectQueryLeft == null && selectQueryRight != null) return new VCode(lhs, selectQueryRight.Core);
-            if (selectQueryLeft != null && selectQueryRight == null) return new SelectQueryCode(new VCode(selectQueryLeft.Core, rhs));
-            return new SelectQueryCode(new VCode(selectQueryLeft.Core, selectQueryRight.Core));
+            if (selectQueryLeft != null && selectQueryRight == null) return selectQueryLeft.Create(new VCode(selectQueryLeft.Core, rhs));
+            return selectQueryLeft.Create(new VCode(selectQueryLeft.Core, selectQueryRight.Core));
         }
 
         /// <summary>
@@ -264,8 +264,9 @@ namespace LambdicSql.ConverterServices
 
             var core = new VCode(code);
 
-            return (typeof(SelectClauseCode).IsAssignableFromEx(code[0].GetType())) ?
-                 (ICode)new SelectQueryCode(core) :
+            var topQuery = code[0] as ISelectQueryCode;
+            return topQuery != null ?
+                 (ICode)topQuery.Create(core) :
                  new QueryCode(core);
         }
         
