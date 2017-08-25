@@ -72,6 +72,8 @@ namespace Test
         /// <returns>DISTINCT.</returns>
         [ClauseStyleConverter]
         public static AggregatePredicateElement Distinct() { throw new InvalitContextException(nameof(All)); }
-        
+
+        [MethodFormatConverter(Format = "INSERTED")]
+        public static T Inserted<T>() => throw new InvalitContextException(nameof(Inserted));
     }
 }

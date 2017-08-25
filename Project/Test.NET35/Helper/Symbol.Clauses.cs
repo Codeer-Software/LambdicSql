@@ -1190,11 +1190,8 @@ namespace Test
         public static int? Schema_Id(object schema) => throw new InvalitContextException(nameof(Schema_Id));
         
         [ClauseStyleConverter(Name = "@@DBTS")]
-        public static byte[] AtAtDbts() => throw new InvalitContextException(nameof(AtAtDbts));
+        public static byte[] AtAtDbts() => throw new InvalitContextException(nameof(AtAtDbts));    
     }
-
-
-
 
     class AllDisableBinaryExpressionBracketsCode : ICode, IDisableBinaryExpressionBrackets
     {

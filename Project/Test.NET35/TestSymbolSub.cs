@@ -147,6 +147,5 @@ GROUP BY tbl_remuneration.staff_id");
 FROM tbl_remuneration
 GROUP BY tbl_remuneration.staff_id");
         }
-
     }
 }

@@ -126,12 +126,15 @@ namespace LambdicSql.ConverterServices
             return ConvertToCode(value);
         }
 
+        //TODO ?
         ICode Convert(NewArrayExpression array)
         {
             if (!SupportedTypeSpec.IsSupported(array.Type))
             {
                 throw new NotSupportedException();
             }
+
+            //TODO delete link.
             var obj = SupportedTypeSpec.ConvertArray(array.Type, array.Expressions.Select(e => ConvertToObject(e)));
             return new ParameterCode(obj);
         }
@@ -229,7 +232,10 @@ namespace LambdicSql.ConverterServices
                         var memberName = tbl.Info.LambdaFullName + "." + member.Member.Name;
                         return ResolveLambdicElement(memberName);
                     }
-                    throw new NotSupportedException();
+                    else
+                    {
+                        return new HCode(ret, new SingleTextCode("." + member.Member.Name));
+                    }
                 }
             }
 

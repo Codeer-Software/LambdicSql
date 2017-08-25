@@ -1052,6 +1052,15 @@ FROM tbl_remuneration", (decimal)3);
 @"SELECT
 	@@DBTS");
         }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void TestConvertedMethodMember()
+        {
+            var sql = Db<DB>.Sql(db =>
+                Inserted<Table2>().id
+            );
+            AssertEx.AreEqual(sql, _connection, @"INSERTED.id");
+        }
     }
 
     public static class TestExpressionEx
