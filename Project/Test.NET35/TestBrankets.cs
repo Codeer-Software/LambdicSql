@@ -37,6 +37,43 @@ namespace Test
         }
 
         [TestMethod]
+        public void TestMinusPlus_1()
+        {
+            int a = 0;
+            int b = 1;
+            var sql = Db<DB>.Sql(db => a + b - a + b);
+            AssertEx.AreEqual(sql, _connection, "@a + @b - @a + @b", new Params { { "@a", 0 }, { "@b", 1 } });
+        }
+
+        [TestMethod]
+        public void TestMinusPlus_2()
+        {
+            int a = 0;
+            int b = 1;
+            var sql = Db<DB>.Sql(db => (a + b) - (a + b));
+            AssertEx.AreEqual(sql, _connection, "@a + @b - (@a + @b)", new Params { { "@a", 0 }, { "@b", 1 } });
+        }
+
+
+        [TestMethod]
+        public void TestMulDiv_1()
+        {
+            int a = 0;
+            int b = 1;
+            var sql = Db<DB>.Sql(db => a * b / a * b);
+            AssertEx.AreEqual(sql, _connection, "@a * @b / @a * @b", new Params { { "@a", 0 }, { "@b", 1 } });
+        }
+
+        [TestMethod]
+        public void TestMulDiv_2()
+        {
+            int a = 0;
+            int b = 1;
+            var sql = Db<DB>.Sql(db => (a * b) / (a * b));
+            AssertEx.AreEqual(sql, _connection, "@a * @b / (@a * @b)", new Params { { "@a", 0 }, { "@b", 1 } });
+        }
+
+        [TestMethod]
         public void TestAndOr_1()
         {
             bool a = true;
