@@ -152,10 +152,7 @@ namespace LambdicSql.ConverterServices
 
         ICode Convert(NewArrayExpression array)
         {
-            if (!SupportedTypeSpec.IsSupported(array.Type))
-            {
-                throw new NotSupportedException();
-            }
+            if (!SupportedTypeSpec.IsSupported(array.Type)) throw new NotSupportedException();
 
             var objs = new object[array.Expressions.Count];
             for (int i = 0; i < objs.Length; i++)
@@ -171,8 +168,7 @@ namespace LambdicSql.ConverterServices
             switch (unary.NodeType)
             {
                 case ExpressionType.Not:
-                    var operand = Convert(unary.Operand);
-                    return NotAddBrankets(operand);
+                    return NotAddBrankets(Convert(unary.Operand));
 
                 case ExpressionType.Convert:
                     var ret = Convert(unary.Operand);
@@ -226,12 +222,11 @@ namespace LambdicSql.ConverterServices
             //for null
             var nullCheck = TryResolveNullCheck(left, binary.NodeType, right);
             if (nullCheck != null) return nullCheck;
-
-            var nodeType = Convert(binary.Type, left, binary.NodeType, right);
+            
             var isAddBlankets = CheckAddingBlanckets(binary, left, right);
             return new BinaryExpressionCode(new HCode(
                 isAddBlankets.Left ? AddBinaryExpressionBlankets(left) : left,
-                nodeType,
+                Convert(binary.Type, left, binary.NodeType, right),
                 isAddBlankets.Right ? AddBinaryExpressionBlankets(right) : right));
         }
 
@@ -340,24 +335,25 @@ namespace LambdicSql.ConverterServices
             {
                 members.Add(exp);
                 exp = exp.Expression as MemberExpression;
-                if (exp != null)
-                {
-                    member = exp;
-                }
+                if (exp != null) member = exp;
             }
             
             if (members.Count < 2) return null;
 
-            //check SqlExpression's Body
-            if (!typeof(Sql).IsAssignableFromEx(members[members.Count - 1].Type)) return null;
-            if (members[members.Count - 2].Member.Name == "Name")
+            members.Reverse();
+
+            //check SqlExpression
+            if (!typeof(Sql).IsAssignableFromEx(members[0].Type)) return null;
+
+            //Name
+            if (members[1].Member.Name == "Name")
             {
                 if (members.Count != 2) return null;
-                return members[members.Count - 1].Member.Name.ToCode();
+                return members[0].Member.Name.ToCode();
             }
-            if (members[members.Count - 2].Member.Name != "Body") return null;
 
-            members.Reverse();
+            //Body
+            if (members[1].Member.Name != "Body") return null;
 
             //for example, sub.Body
             if (members.Count == 2) return ResolveExpressionObject(members[0]);
@@ -391,14 +387,9 @@ namespace LambdicSql.ConverterServices
                         names[0] = table.Name;
                     }
                     var lambdaName = string.Join(".", names.ToArray());
-                    if (names.Count == 1)
-                    {
-                        code = new DbTableCode(new TableInfo(lambdaName, lambdaName));
-                    }
-                    else
-                    {
-                        code = new DbColumnCode(new ColumnInfo(exp.Type, lambdaName, lambdaName, names[names.Count - 1]));
-                    }
+                    code = (names.Count == 1) ?
+                         (ICode)new DbTableCode(new TableInfo(lambdaName, lambdaName)) :
+                         new DbColumnCode(new ColumnInfo(exp.Type, lambdaName, lambdaName, names[names.Count - 1]));
                     return true;
                 }
                 if (member.Expression is ParameterExpression)
@@ -417,20 +408,14 @@ namespace LambdicSql.ConverterServices
         ICode ResolveLambdicElement(string name)
         {
             string schema;
-            if (DbInfo.TryGetSchema(name, out schema))
-            {
-                return new DbSchemaCode(schema);
-            }
+            if (DbInfo.TryGetSchema(name, out schema)) return new DbSchemaCode(schema);
+
             TableInfo table;
-            if (DbInfo.TryGetTable(name, out table))
-            {
-                return new DbTableCode(table);
-            }
+            if (DbInfo.TryGetTable(name, out table)) return new DbTableCode(table);
+
             ColumnInfo col;
-            if (DbInfo.TryGetColumn(name, out col))
-            {
-                return new DbColumnCode(col);
-            }
+            if (DbInfo.TryGetColumn(name, out col)) return new DbColumnCode(col);
+
             return name.ToCode();
         }
 
@@ -475,10 +460,7 @@ namespace LambdicSql.ConverterServices
         ICode ResolveExpressionObject(Expression exp)
         {
             object obj;
-            if (!ExpressionToObject.GetExpressionObject(exp, out obj))
-            {
-                throw new NotSupportedException();
-            }
+            if (!ExpressionToObject.GetExpressionObject(exp, out obj)) throw new NotSupportedException();
 
             //object symbol.
             //for example enum.
