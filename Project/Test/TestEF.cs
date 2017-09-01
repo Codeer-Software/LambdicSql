@@ -59,7 +59,7 @@ namespace Test
 	tbl_remuneration.payment_date AS payment_date,
 	tbl_remuneration.money AS money
 FROM tbl_remuneration
-	JOIN tbl_staff ON (tbl_staff.id) = (tbl_remuneration.staff_id)");
+	JOIN tbl_staff ON tbl_staff.id = tbl_remuneration.staff_id");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]

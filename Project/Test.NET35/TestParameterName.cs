@@ -52,7 +52,7 @@ namespace Test
             AssertEx.AreEqual(query, _connection,
 @"SELECT *
 FROM tbl_staff
-WHERE ((@val1) = (@p_0)) OR ((@val1) = (@p_1))", 
+WHERE (@val1 = @p_0) OR (@val1 = @p_1)", 
 new Params()
 {
     { "@val1", 1 },
@@ -76,7 +76,7 @@ new Params()
             AssertEx.AreEqual(query, _connection,
 @"SELECT *
 FROM tbl_staff
-WHERE ((@val1) = (@p_0)) OR ((@val1_) = (@p_1))",
+WHERE (@val1 = @p_0) OR (@val1_ = @p_1)",
 new Params()
 {
     { "@val1", 1 },
@@ -102,7 +102,7 @@ new Params()
             AssertEx.AreEqual(query, _connection,
 @"SELECT *
 FROM tbl_staff
-WHERE ((@val1) = (@p_0)) OR ((@val1_) = (@p_1))",
+WHERE (@val1 = @p_0) OR @val1_ = @p_1",
 new Params()
 {
     { "@val1", 1 },

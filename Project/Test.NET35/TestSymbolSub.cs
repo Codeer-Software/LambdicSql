@@ -50,7 +50,7 @@ namespace Test
 @"SELECT
 	tbl_staff.name AS name
 FROM tbl_staff
-WHERE ((tbl_staff.id) = (@p_0)) OR (((tbl_staff.id) = (@p_1)) AND ((tbl_staff.id) = (@p_2)))",
+WHERE (tbl_staff.id = @p_0) OR (tbl_staff.id = @p_1) AND (tbl_staff.id = @p_2)",
 1, 2, 4);
         }
 
@@ -97,7 +97,7 @@ FROM tbl_staff");
 	tbl_remuneration.staff_id AS Id
 FROM tbl_remuneration
 GROUP BY tbl_remuneration.staff_id
-HAVING (@p_0) < (SUM(tbl_remuneration.money))",
+HAVING (@p_0 < SUM(tbl_remuneration.money))",
 (decimal)100);
         }
 

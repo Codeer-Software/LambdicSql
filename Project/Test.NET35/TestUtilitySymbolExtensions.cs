@@ -113,7 +113,7 @@ FROM tbl_remuneration
 	tbl_remuneration.money + @p_0 AS money
 FROM tbl_remuneration 
     JOIN tbl_staff ON tbl_staff.id = tbl_remuneration.staff_id
-WHERE (@p_1) < (tbl_remuneration.money)",
+WHERE @p_1 < tbl_remuneration.money",
 100, (decimal)3000);
         }
 
@@ -146,7 +146,7 @@ FROM tbl_remuneration
 	tbl_remuneration.money + @p_0 AS money
 FROM tbl_remuneration 
     JOIN tbl_staff ON tbl_staff.id = tbl_remuneration.staff_id
-WHERE (@p_1) < (tbl_remuneration.money)",
+WHERE @p_1 < tbl_remuneration.money",
 100, (decimal)3000);
         }
 
@@ -179,7 +179,7 @@ FROM tbl_remuneration
 	tbl_remuneration.money AS money
 FROM tbl_remuneration 
     JOIN tbl_staff ON tbl_staff.id = tbl_remuneration.staff_id
-WHERE (3000) < (tbl_remuneration.money)");
+WHERE 3000 < tbl_remuneration.money");
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]

@@ -35,7 +35,7 @@ namespace Test
             var query = Db<DB>.Sql(db => val1 + val2 - val3 / val4 * val5);
 
             AssertEx.AreEqual(query, _connection,
-            @"((@val1) + (@val2)) - (((@val3) / (@val4)) * (@val5))", Zero(5));
+            @"@val1 + @val2 - @val3 / @val4 * @val5", Zero(5));
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -50,7 +50,7 @@ namespace Test
             string val1 = "", val2 = "";
             var query = Db<DB>.Sql(db => val1 + val2);
             AssertEx.AreEqual(query, _connection,
-            @"(@val1) + (@val2)", EmptyString(2));
+            @"@val1 + @val2", EmptyString(2));
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -63,7 +63,7 @@ namespace Test
             string val1 = "", val2 = "";
             var query = Db<DB>.Sql(db => val1 + val2);
             AssertEx.AreEqual(query, _connection,
-            @"(@val1) || (@val2)", EmptyString(2));
+            @"@val1 || @val2", EmptyString(2));
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -75,7 +75,7 @@ namespace Test
                 val3 != val4
                 );
             AssertEx.AreEqual(query, _connection,
-            @"((@val1) = (@val2)) AND ((@val3) <> (@val4))", Zero(4));
+            @"@val1 = @val2 AND @val3 <> @val4", Zero(4));
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -89,7 +89,7 @@ namespace Test
                 val7 >= val8
                 );
             AssertEx.AreEqual(query, _connection,
-            @"((((@val1) < (@val2)) AND ((@val3) <= (@val4))) AND ((@val5) > (@val6))) AND ((@val7) >= (@val8))", Zero(8));
+            @"@val1 < @val2 AND @val3 <= @val4 AND @val5 > @val6 AND @val7 >= @val8", Zero(8));
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -101,7 +101,7 @@ namespace Test
                 val3 == val4 ||
                 val5 == val6);
             AssertEx.AreEqual(query, _connection,
-            @"(((@val1) = (@val2)) AND ((@val3) = (@val4))) OR ((@val5) = (@val6))", Zero(6));
+            @"@val1 = @val2 AND @val3 = @val4 OR @val5 = @val6", Zero(6));
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -110,8 +110,11 @@ namespace Test
             int val1 = 0, val2 = 0, val3 = 0, val4 = 0, val5 = 0, val6 = 0, val7 = 0, val8 = 0, val9 = 0, val10 = 0;
             var query = Db<DB>.Sql(db =>
                ((val1 == val2 && val3 == val4) || (val5 == val6 && val7 == val8)) && (val9 == val10));
+
+            query.Gen(_connection);
+
             AssertEx.AreEqual(query, _connection,
-            @"((((@val1) = (@val2)) AND ((@val3) = (@val4))) OR (((@val5) = (@val6)) AND ((@val7) = (@val8)))) AND ((@val9) = (@val10))", Zero(10));
+            @"(@val1 = @val2 AND @val3 = @val4 OR @val5 = @val6 AND @val7 = @val8) AND @val9 = @val10", Zero(10));
         }
 
         static Dictionary<string, object> Zero(int count) => Enumerable.Range(0, count).ToDictionary(e => "@val" + (e + 1), e => (object)0);
@@ -148,11 +151,11 @@ namespace Test
             Assert.IsTrue(0 < _connection.Query(sql).ToList().Count);
             AssertEx.AreEqual(sql, _connection,
 @"SELECT
-	((@a) + (@a)) - ((((@a) * (@a)) / (@a)) % (@a)) AS IntVal,
-	((@b) + (@b)) + (@b) AS StrVal,
-	((@c) + (@c)) - (((@c) * (@c)) / (@c)) AS DoubleVal
+	@a + @a - @a * @a / @a % @a AS IntVal,
+	@b + @b + @b AS StrVal,
+	@c + @c - @c * @c / @c AS DoubleVal
 FROM tbl_remuneration
-WHERE ((((((@a) = (@d)) AND ((@a) <> (@d))) AND ((@a) < (@d))) AND ((@a) <= (@d))) AND ((@a) > (@d))) OR ((@a) >= (@d))",
+WHERE @a = @d AND @a <> @d AND @a < @d AND @a <= @d AND @a > @d OR @a >= @d",
 new Params { { "@a", a }, { "@b", b }, { "@c", c }, { "@d", d } });
         }
 
@@ -180,11 +183,11 @@ new Params { { "@a", a }, { "@b", b }, { "@c", c }, { "@d", d } });
             Assert.IsTrue(0 < _connection.Query(sql).ToList().Count);
             AssertEx.AreEqual(sql, _connection,
 @"SELECT
-	((@a) + (@a)) - ((@a) * (@a)) AS IntVal,
-	((@b) || (@b)) || (@b) AS StrVal,
-	((@c) + (@c)) - (((@c) * (@c)) / (@c)) AS DoubleVal
+	@a + @a - @a * @a AS IntVal,
+	@b || @b || @b AS StrVal,
+	@c + @c - @c * @c / @c AS DoubleVal
 FROM tbl_remuneration
-WHERE ((((((@a) = (@d)) AND ((@a) <> (@d))) AND ((@a) < (@d))) AND ((@a) <= (@d))) AND ((@a) > (@d))) OR ((@a) >= (@d))",
+WHERE @a = @d AND @a <> @d AND @a < @d AND @a <= @d AND @a > @d OR @a >= @d",
 new Params { { "@a", a }, { "@b", b }, { "@c", c }, { "@d", d } });
         }
 
@@ -197,7 +200,7 @@ new Params { { "@a", a }, { "@b", b }, { "@c", c }, { "@d", d } });
             var sql = Db<DB>.Sql(db =>
             SelectStaffAll +
             From(db.tbl_staff));
-            
+
             Assert.IsTrue(0 < _connection.Query(sql).ToList().Count);
             AssertEx.AreEqual(sql, _connection,
  @"SELECT *

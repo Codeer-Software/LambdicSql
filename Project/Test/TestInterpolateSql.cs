@@ -41,7 +41,7 @@ WHERE {(db.tbl_staff.name == name && db.tbl_staff.id < maxId)}");
             AssertEx.AreEqual(sql, _connection,
  @"SELECT *
 FROM tbl_staff
-WHERE ((tbl_staff.name) = (@name)) AND ((tbl_staff.id) < (@maxId))",
+WHERE tbl_staff.name = @name AND tbl_staff.id < @maxId",
  new Params { { "@name", "Emma" }, { "@maxId", 100 } });
         }
 
@@ -61,7 +61,7 @@ WHERE {(db.tbl_staff.name == name && db.tbl_staff.id < maxId)}");
             AssertEx.AreEqual(sql, _connection,
  @"SELECT *
 FROM tbl_staff
-WHERE ((tbl_staff.name) = (@name)) AND ((tbl_staff.id) < (@maxId))",
+WHERE tbl_staff.name = @name AND tbl_staff.id < @maxId",
  new Params { { "@name", "Emma" }, { "@maxId", 100 } });
         }
 

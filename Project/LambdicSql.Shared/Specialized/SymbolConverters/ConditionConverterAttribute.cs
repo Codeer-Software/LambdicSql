@@ -20,7 +20,7 @@ namespace LambdicSql.Specialized.SymbolConverters
         public override ICode Convert(NewExpression expression, ExpressionConverter converter)
         {
             var obj = converter.ConvertToObject(expression.Arguments[0]);
-            return (bool)obj ? converter.ConvertToCode(expression.Arguments[1]) : string.Empty.ToCode();
+            return (bool)obj ? (ICode)new AroundCode(converter.ConvertToCode(expression.Arguments[1]), "(", ")") : string.Empty.ToCode();
         }
     }
 }

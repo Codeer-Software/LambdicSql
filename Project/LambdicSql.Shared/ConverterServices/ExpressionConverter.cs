@@ -14,6 +14,31 @@ namespace LambdicSql.ConverterServices
     /// </summary>
     public class ExpressionConverter
     {
+        static readonly Dictionary<ExpressionType, int> ExpressionTypeJoinPriority = new Dictionary<ExpressionType, int>
+        {
+            { ExpressionType.Or                  , 0},
+            { ExpressionType.OrElse              , 0},
+            { ExpressionType.And                 , 1},
+            { ExpressionType.AndAlso             , 1},
+            { ExpressionType.LessThan            , 2},
+            { ExpressionType.LessThanOrEqual     , 2},
+            { ExpressionType.GreaterThan         , 3},
+            { ExpressionType.GreaterThanOrEqual  , 3},
+            { ExpressionType.Equal               , 4},
+            { ExpressionType.NotEqual            , 4},
+            { ExpressionType.Add                 , 5},
+            { ExpressionType.Subtract            , 5},
+            { ExpressionType.Multiply            , 6},
+            { ExpressionType.Divide              , 6},
+            { ExpressionType.Modulo              , 6},
+        };
+
+        class AddingBlankets
+        {
+            internal bool Left { get; set; }
+            internal bool Right { get; set; }
+        }
+
         DbInfo DbInfo { get; }
 
         internal ExpressionConverter(DbInfo info)
@@ -146,7 +171,8 @@ namespace LambdicSql.ConverterServices
             switch (unary.NodeType)
             {
                 case ExpressionType.Not:
-                    return new AroundCode(Convert(unary.Operand), "NOT (", ")");
+                    var operand = Convert(unary.Operand);
+                    return NotAddBrankets(operand);
 
                 case ExpressionType.Convert:
                     var ret = Convert(unary.Operand);
@@ -202,7 +228,11 @@ namespace LambdicSql.ConverterServices
             if (nullCheck != null) return nullCheck;
 
             var nodeType = Convert(binary.Type, left, binary.NodeType, right);
-            return new HCode(AddBinaryExpressionBlankets(left), nodeType, AddBinaryExpressionBlankets(right));
+            var isAddBlankets = CheckAddingBlanckets(binary, left, right);
+            return new BinaryExpressionCode(new HCode(
+                isAddBlankets.Left ? AddBinaryExpressionBlankets(left) : left,
+                nodeType,
+                isAddBlankets.Right ? AddBinaryExpressionBlankets(right) : right));
         }
 
         ICode Convert(MemberExpression member)
@@ -300,9 +330,6 @@ namespace LambdicSql.ConverterServices
             }
             throw new NotImplementedException();
         }
-
-        ICode AddBinaryExpressionBlankets(ICode src)
-            => typeof(IDisableBinaryExpressionBrackets).IsAssignableFromEx(src.GetType()) ? src : new AroundCode(src, "(", ")");
 
         ICode TryResolveSqlExpressionBodyOrName(MemberExpression member)
         {
@@ -412,8 +439,8 @@ namespace LambdicSql.ConverterServices
             string ope;
             switch (nodeType)
             {
-                case ExpressionType.Equal: ope = " IS NULL"; break;
-                case ExpressionType.NotEqual: ope = " IS NOT NULL"; break;
+                case ExpressionType.Equal: ope = "IS NULL"; break;
+                case ExpressionType.NotEqual: ope = "IS NOT NULL"; break;
                 default: return null;
             }
 
@@ -439,7 +466,7 @@ namespace LambdicSql.ConverterServices
                         if (bothParam) continue;
                         return null;
                     }
-                    return new AroundCode(targetTexts[i], "(", ")" + ope);
+                    return IsNullAddBrankets(targetTexts[i], ope);
                 }
             }
             return null;
@@ -482,7 +509,7 @@ namespace LambdicSql.ConverterServices
                 Type type = null;
                 var types = sqlExp.GetType().GetGenericArgumentsEx();
                 if (0 < types.Length) type = types[0];
-                return sqlExp.Code;
+                return SqlCode.Create(sqlExp.Code);
             }
 
             //others.
@@ -514,6 +541,32 @@ namespace LambdicSql.ConverterServices
                             null;
             }
             return chains;
+        }
+
+        static AddingBlankets CheckAddingBlanckets(BinaryExpression binary, ICode left, ICode right)
+        {
+            var leftBinary = binary.Left as BinaryExpression;
+            var rightBinary = binary.Right as BinaryExpression;
+            return new AddingBlankets
+            {
+                Left = left is ISqlCode || (leftBinary != null && ExpressionTypeJoinPriority[leftBinary.NodeType] < ExpressionTypeJoinPriority[binary.NodeType]),
+                Right = right is ISqlCode || (rightBinary != null && ExpressionTypeJoinPriority[rightBinary.NodeType] <= ExpressionTypeJoinPriority[binary.NodeType])
+            };
+        }
+
+        static ICode AddBinaryExpressionBlankets(ICode src)
+            => typeof(IDisableBinaryExpressionBrackets).IsAssignableFromEx(src.GetType()) ? src : new AroundCode(src, "(", ")");
+
+        static ICode NotAddBrankets(ICode target)
+        {
+            var addBlankets = target is ISqlCode || target is BinaryExpressionCode;
+            return addBlankets ? (ICode)new AroundCode(target, "NOT (", ")") : new HCode("NOT".ToCode(), target) { Separator = " " };
+        }
+
+        static ICode IsNullAddBrankets(ICode target, string ope)
+        {
+            var addBlankets = target is ISqlCode || target is BinaryExpressionCode;
+            return addBlankets ? (ICode)new AroundCode(target, "(", ") " + ope) : new HCode(target, ope.ToCode()) { Separator = " " };
         }
     }
 }

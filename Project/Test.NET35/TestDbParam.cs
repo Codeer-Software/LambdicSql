@@ -45,7 +45,7 @@ namespace Test
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(sql, _connection,
 @"SELECT
-	(tbl_staff.name) " + _connection.GetStringAddExp() + @" (@text) AS Name
+	tbl_staff.name " + _connection.GetStringAddExp() + @" @text AS Name
 FROM tbl_staff",
  new DbParams() { { "@text", new DbParam() { Value = "xxx" } } });
         }
@@ -65,7 +65,7 @@ FROM tbl_staff",
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(sql, _connection,
  @"SELECT
-	(tbl_staff.name) " + _connection.GetStringAddExp() + @" (@p_0) AS Name
+	tbl_staff.name " + _connection.GetStringAddExp() + @" @p_0 AS Name
 FROM tbl_staff",
  new DbParams() { { "@p_0", new DbParam() { Value = "xxx", DbType = DbType.AnsiStringFixedLength, Size = 10 } } });
         }
@@ -95,7 +95,7 @@ FROM tbl_staff",
             //check parameter only.
             AssertEx.AreEqual(sql, _connection,
 @"SELECT
-	(tbl_staff.name) " + _connection.GetStringAddExp() + @" (@param) AS Name
+	tbl_staff.name " + _connection.GetStringAddExp() + @" @param AS Name
 FROM tbl_staff",
  new DbParams() { { "@param", new DbParam()
  {

@@ -31,12 +31,15 @@
     <Compile Include="$(MSBuildThisFileDirectory)Clause.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\ExpressionConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\IDisableBinaryExpressionBrackets.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\CodeParts\BinaryExpressionCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\CodeParts\DbColumnCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\CodeParts\DbSchemaCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\CodeParts\DbTableCode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\CodeParts\ISqlCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\CodeParts\ParameterCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\CodeParts\QueryCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\CodeParts\StringAddOperatorCode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\CodeParts\TopQuerySqlCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\ColumnInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\DBDefineAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\DbInfo.cs" />
@@ -67,6 +70,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolConverters\NewFormatConverterAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolConverters\ObjectConverterAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolConverters\EnumToStringConverterAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\CodeParts\SqlCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Db.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)feat\NotInitializedException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IDbParam.cs" />

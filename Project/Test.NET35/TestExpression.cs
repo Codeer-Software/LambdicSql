@@ -91,7 +91,7 @@ namespace Test
             AssertEx.AreEqual(sql, _connection,
 @"SELECT *
 FROM tbl_staff
-WHERE (((@field) = (@p_0)) OR ((@Property) = (@p_1))) OR ((@p_2) = (@p_3))",
+WHERE @field = @p_0 OR @Property = @p_1 OR @p_2 = @p_3",
 new Params()
 {
     { "@field", 1 },
@@ -116,7 +116,7 @@ new Params()
             AssertEx.AreEqual(sql, _connection,
 @"SELECT *
 FROM tbl_staff
-WHERE (((@field) = (@p_0)) OR ((@Property) = (@p_1))) OR ((@p_2) = (@p_3))",
+WHERE @field = @p_0 OR @Property = @p_1 OR @p_2 = @p_3",
 new Params()
 {
     { "@field", 1 },
@@ -149,7 +149,7 @@ new Params()
             AssertEx.AreEqual(sql, _connection,
 @"SELECT *
 FROM tbl_staff
-WHERE (@field) = (@p_0)", new Params { { "@field", 1 }, { "@p_0", 1 } });
+WHERE @field = @p_0", new Params { { "@field", 1 }, { "@p_0", 1 } });
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -167,7 +167,7 @@ WHERE (@field) = (@p_0)", new Params { { "@field", 1 }, { "@p_0", 1 } });
             AssertEx.AreEqual(sql, _connection,
 @"SELECT *
 FROM tbl_staff
-WHERE (@field) = (@p_0)", new Params { { "@field", 1 }, { "@p_0", 1 } });
+WHERE @field = @p_0", new Params { { "@field", 1 }, { "@p_0", 1 } });
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -185,7 +185,7 @@ WHERE (@field) = (@p_0)", new Params { { "@field", 1 }, { "@p_0", 1 } });
             AssertEx.AreEqual(sql, _connection,
             @"SELECT *
 FROM tbl_staff
-WHERE (@Property) <> (@p_0)", new Params { { "@Property", 2 }, { "@p_0", 1 } });
+WHERE @Property <> @p_0", new Params { { "@Property", 2 }, { "@p_0", 1 } });
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -203,7 +203,7 @@ WHERE (@Property) <> (@p_0)", new Params { { "@Property", 2 }, { "@p_0", 1 } });
             AssertEx.AreEqual(sql, _connection,
 @"SELECT *
 FROM tbl_staff
-WHERE (@p_0) <> (@p_1)", 3, 1);
+WHERE @p_0 <> @p_1", 3, 1);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -251,7 +251,7 @@ WHERE (@p_0) <> (@p_1)", 3, 1);
             AssertEx.AreEqual(sql, _connection,
 @"SELECT *
 FROM tbl_staff
-WHERE (@val1) = (@val2)", new Params { { "@val1", (long)1 }, { "@val2", 1 } });
+WHERE @val1 = @val2", new Params { { "@val1", (long)1 }, { "@val2", 1 } });
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -267,7 +267,7 @@ WHERE (@val1) = (@val2)", new Params { { "@val1", (long)1 }, { "@val2", 1 } });
             AssertEx.AreEqual(sql, _connection,
 @"SELECT *
 FROM tbl_staff
-WHERE (@p_0) = (@p_1)", 1, 1);
+WHERE @p_0 = @p_1", 1, 1);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -284,7 +284,7 @@ WHERE (@p_0) = (@p_1)", 1, 1);
             AssertEx.AreEqual(sql, _connection,
 @"SELECT *
 FROM tbl_staff
-WHERE (@p_0) = (@obj)", new Params { { "@p_0", 1 }, { "@obj", 1 } });
+WHERE @p_0 = @obj", new Params { { "@p_0", 1 }, { "@obj", 1 } });
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -301,7 +301,7 @@ WHERE (@p_0) = (@obj)", new Params { { "@p_0", 1 }, { "@obj", 1 } });
             AssertEx.AreEqual(sql, _connection,
 @"SELECT *
 FROM tbl_staff
-WHERE (@p_0) = (@obj)", new Params { { "@p_0", 1 }, { "@obj", 1 } });
+WHERE @p_0 = @obj", new Params { { "@p_0", 1 }, { "@obj", 1 } });
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -318,7 +318,7 @@ WHERE (@p_0) = (@obj)", new Params { { "@p_0", 1 }, { "@obj", 1 } });
             AssertEx.AreEqual(sql, _connection,
 @"SELECT *
 FROM tbl_staff
-WHERE (@p_0) = (@obj)", new Params { { "@p_0", 1 }, { "@obj", 1 } });
+WHERE @p_0 = @obj", new Params { { "@p_0", 1 }, { "@obj", 1 } });
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -333,7 +333,7 @@ WHERE (@p_0) = (@obj)", new Params { { "@p_0", 1 }, { "@obj", 1 } });
             AssertEx.AreEqual(sql, _connection,
 @"SELECT *
 FROM tbl_staff
-WHERE (@p_0) = (@p_1)", 1, 1);
+WHERE @p_0 = @p_1", 1, 1);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -352,7 +352,7 @@ WHERE (@p_0) = (@p_1)", 1, 1);
             AssertEx.AreEqual(sql, _connection,
 @"SELECT *
 FROM tbl_staff
-WHERE (@p_0) = (@obj)", new Params { { "@p_0", 1 }, { "@obj", 1 } });
+WHERE @p_0 = @obj", new Params { { "@p_0", 1 }, { "@obj", 1 } });
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -368,7 +368,7 @@ WHERE (@p_0) = (@obj)", new Params { { "@p_0", 1 }, { "@obj", 1 } });
             AssertEx.AreEqual(sql, _connection,
 @"SELECT *
 FROM tbl_staff
-WHERE (@p_0) = (@obj)", new Params { { "@p_0", 1 }, { "@obj", 1 } });
+WHERE @p_0 = @obj", new Params { { "@p_0", 1 }, { "@obj", 1 } });
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -388,7 +388,7 @@ WHERE (@p_0) = (@obj)", new Params { { "@p_0", 1 }, { "@obj", 1 } });
             AssertEx.AreEqual(sql, _connection,
 @"SELECT *
 FROM tbl_staff
-WHERE (@val1) = ((((@val2) + (@p_0)) + (@obj2)) + (@obj1))",
+WHERE @val1 = @val2 + @p_0 + @obj2 + @obj1",
 new Params
 {
     { "@val1", 6 },
@@ -424,7 +424,7 @@ new Params
             AssertEx.AreEqual(sql, _connection,
 @"SELECT *
 FROM tbl_staff
-WHERE ((((@field) = (@p_0)) OR ((@Property) = (@p_1))) OR ((@p_2) = (@p_3))) AND ((@a) = (@p_4))",
+WHERE (@field = @p_0 OR @Property = @p_1 OR @p_2 = @p_3) AND @a = @p_4",
 new Params()
 {
     { "@field", 1 },
@@ -505,7 +505,7 @@ new Params()
 	tbl_remuneration.payment_date AS PaymentDate,
 	tbl_remuneration.money AS Money
 FROM tbl_remuneration
-WHERE (@p_0) < (tbl_remuneration.id)", 0);
+WHERE @p_0 < tbl_remuneration.id", 0);
         }
 
         public class SelectData
@@ -564,9 +564,9 @@ FROM tbl_remuneration");
             AssertEx.AreEqual(sql, _connection,
 @"SELECT
 	CASE
-		WHEN (tbl_staff.id) = (@p_0)
+		WHEN tbl_staff.id = @p_0
 		THEN @p_1
-		WHEN (tbl_staff.id) = (@p_2)
+		WHEN tbl_staff.id = @p_2
 		THEN @p_3
 		ELSE @p_4
 	END AS Type
@@ -604,7 +604,7 @@ FROM tbl_staff",
 	tbl_remuneration.payment_date AS PaymentDate,
 	tbl_remuneration.money AS Money
 FROM tbl_remuneration
-WHERE (@p_0) < (tbl_remuneration.id)", 0);
+WHERE @p_0 < tbl_remuneration.id", 0);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -888,7 +888,7 @@ FROM tbl_remuneration");
 	val1 INT,
 	val2 CHAR(10) DEFAULT 'abc' NOT NULL,
 	CONSTRAINT xxx
-	CHECK((id) < (100)),
+	CHECK(id < 100),
 	UNIQUE(val2))");
         }
 
@@ -914,7 +914,7 @@ FROM tbl_remuneration");
 	a.payment_date AS PaymentDate,
 	a.money AS Money
 FROM tbl_remuneration a
-WHERE (@p_0) < (a.id)", 0);
+WHERE @p_0 < a.id", 0);
         }
 
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
@@ -943,7 +943,7 @@ WHERE (@p_0) < (a.id)", 0);
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(sql, _connection,
 @"SELECT
-	(tbl_remuneration.money) + (@val) AS Money
+	tbl_remuneration.money + @val AS Money
 FROM tbl_remuneration", new Params { { "@val", (decimal)0 } });
 
             sql = sql.ChangeParams(new Params { { nameof(val), 3 } });
@@ -952,7 +952,7 @@ FROM tbl_remuneration", new Params { { "@val", (decimal)0 } });
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(sql, _connection,
 @"SELECT
-	(tbl_remuneration.money) + (@val) AS Money
+	tbl_remuneration.money + @val AS Money
 FROM tbl_remuneration", new Params { { "@val", 3 } });
 
             if (_connection.GetType().Name == "OracleConnection") return;
@@ -963,7 +963,7 @@ FROM tbl_remuneration", new Params { { "@val", 3 } });
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(info, _connection,
 @"SELECT
-	(tbl_remuneration.money) + (@val) AS Money
+	tbl_remuneration.money + @val AS Money
 FROM tbl_remuneration", new Params { { "@val", 10 } });
         }
 
@@ -1068,6 +1068,66 @@ FROM tbl_remuneration", (decimal)3);
             var a = Db<DB>.Sql(db => db.tbl_remuneration);
             var sql = Db<DB>.Sql(db => a.Name);
             AssertEx.AreEqual(sql, _connection, "a");
+        }
+
+        /*
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void XXX()
+        {
+            bool x = false;
+            bool y = false;
+            var a = Db<DB>.Sql(db => x && y);
+            var sql = Db<DB>.Sql(db => a.Body);
+            sql.Gen(_connection);
+            AssertEx.AreEqual(sql, _connection, "a");
+        }*/
+
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void TestBrankets_1()
+        {
+            int a = 0;
+            int b = 1;
+            var sql = Db<DB>.Sql(db => a == b || a == b);
+            AssertEx.AreEqual(sql, _connection, "@a = @b OR @a = @b", new Params { { "@a", 0 }, { "@b", 1 } });
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void TestBrankets_2()
+        {
+            int a = 0;
+            int b = 1;
+            var sql = Db<DB>.Sql(db => !(a == b || a == b));
+            AssertEx.AreEqual(sql, _connection, "NOT (@a = @b OR @a = @b)", new Params { { "@a", 0 }, { "@b", 1 } });
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void TestBrankets_3()
+        {
+            int a = 0;
+            int b = 1;
+            var sql = Db<DB>.Sql(db => !(bool)(object)(a == b || a == b));
+            AssertEx.AreEqual(sql, _connection, "NOT (@a = @b OR @a = @b)", new Params { { "@a", 0 }, { "@b", 1 } });
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void TestBrankets_4()
+        {
+            if (!_connection.IsTarget(TargetDB.SqlServer)) return;
+            string a = "a";
+            string b = "b";
+            string c = null;
+            var sql = Db<DB>.Sql(db => a + b == c);
+            AssertEx.AreEqual(sql, _connection, "(@a + @b) IS NULL", new Params { { "@a", "a" }, { "@b", "b" } });
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void TestBrankets_5()
+        {
+            if (!_connection.IsTarget(TargetDB.SqlServer)) return;
+            string a = "a";
+            var sql = Db<DB>.Sql(db => a == null);
+            AssertEx.AreEqual(sql, _connection, "@a IS NULL", new Params { { "@a", "a" } });
         }
     }
 
