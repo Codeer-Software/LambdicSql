@@ -1,15 +1,6 @@
-﻿using System;
-using System.Data;
-using System.Linq;
-using System.Collections.Generic;
-using System.Data.SqlClient;
+﻿using System.Data.SqlClient;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LambdicSql;
-using LambdicSql.feat.Dapper;
-using static Test.Symbol;
-using static Test.Helper.DBProviderInfo;
-using Test.Helper;
-using LambdicSql.ConverterServices.SymbolConverters;
 
 namespace Test
 {
@@ -17,6 +8,60 @@ namespace Test
     public class TestBrankets
     {
         SqlConnection _connection = new SqlConnection();
+        
+        [TestMethod]
+        public void TestAddMultiply_1()
+        {
+            int a = 0;
+            int b = 1;
+            var sql = Db<DB>.Sql(db => a * b + a * b);
+            AssertEx.AreEqual(sql, _connection, "@a * @b + @a * @b", new Params { { "@a", 0 }, { "@b", 1 } });
+        }
+
+        [TestMethod]
+        public void TestAddMultiply_2()
+        {
+            int a = 0;
+            int b = 1;
+            var sql = Db<DB>.Sql(db => a + b * a + b);
+            AssertEx.AreEqual(sql, _connection, "@a + @b * @a + @b", new Params { { "@a", 0 }, { "@b", 1 } });
+        }
+
+        [TestMethod]
+        public void TestAddMultiply_3()
+        {
+            int a = 0;
+            int b = 1;
+            var sql = Db<DB>.Sql(db => (a + b) * (a + b));
+            AssertEx.AreEqual(sql, _connection, "(@a + @b) * (@a + @b)", new Params { { "@a", 0 }, { "@b", 1 } });
+        }
+
+        [TestMethod]
+        public void TestAndOr_1()
+        {
+            bool a = true;
+            bool b = false;
+            var sql = Db<DB>.Sql(db => a && b || a && b);
+            AssertEx.AreEqual(sql, _connection, "@a AND @b OR @a AND @b", new Params { { "@a", true }, { "@b", false } });
+        }
+
+        [TestMethod]
+        public void TestAndOr_2()
+        {
+            bool a = true;
+            bool b = false;
+            var sql = Db<DB>.Sql(db => a || b && a || b);
+            AssertEx.AreEqual(sql, _connection, "@a OR @b AND @a OR @b", new Params { { "@a", true }, { "@b", false } });
+        }
+
+        [TestMethod]
+        public void TestAndOr_3()
+        {
+            bool a = true;
+            bool b = false;
+            var sql = Db<DB>.Sql(db => (a || b) && (a || b));
+            AssertEx.AreEqual(sql, _connection, "(@a OR @b) AND (@a OR @b)", new Params { { "@a", true }, { "@b", false } });
+        }
 
         [TestMethod]
         public void TestOR()
