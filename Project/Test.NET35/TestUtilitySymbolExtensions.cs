@@ -31,8 +31,8 @@ namespace Test
             var sql = Db<DB>.Sql(db =>
                 Select(new Staff
                 {
-                    id = (int)"tbl_staff.id".ToSql(),
-                    name = (string)"tbl_staff.name".ToSql(),
+                    id = (int)"tbl_staff.id".ToSqlObject(),
+                    name = (string)"tbl_staff.name".ToSqlObject(),
                 }).
                 From(db.tbl_staff));
 
@@ -51,8 +51,8 @@ FROM tbl_staff");
             var sql = Db<DB>.Sql(db =>
                 Select(new Staff
                 {
-                    id = (int)"{0}".ToSql(db.tbl_staff.id),
-                    name = (string)"{0}".ToSql(db.tbl_staff.name),
+                    id = (int)"{0}".ToSqlObject(db.tbl_staff.id),
+                    name = (string)"{0}".ToSqlObject(db.tbl_staff.name),
                 }).
                 From(db.tbl_staff));
 
@@ -73,8 +73,8 @@ FROM tbl_staff");
             var sql = Db<DB>.Sql(db =>
                 Select(new Staff
                 {
-                    id = (int)"{0}".ToSql(exp1),
-                    name = (string)"{0}".ToSql(exp2),
+                    id = (int)"{0}".ToSqlObject(exp1),
+                    name = (string)"{0}".ToSqlObject(exp2),
                 }).
                 From(db.tbl_staff));
 
@@ -201,6 +201,22 @@ WHERE (3000) < (tbl_remuneration.money)");
 
             sql.Gen(_connection);
             var datas = _connection.Query(sql).ToList();
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_VariableName()
+        {
+            int a = 0;
+            var sql = Db<DB>.Sql(db => a.VariableName());
+            AssertEx.AreEqual(sql, _connection, "a");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_SpecialName()
+        {
+            string special = "a";
+            var sql = Db<DB>.Sql(db => special.SpecialName());
+            AssertEx.AreEqual(sql, _connection, "a");
         }
     }
 }

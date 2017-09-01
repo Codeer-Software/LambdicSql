@@ -1,6 +1,5 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
-using System.Linq;
 using System;
 using System.Collections.Generic;
 using LambdicSql.MultiplatformCompatibe;
@@ -27,7 +26,14 @@ namespace LambdicSql.ConverterServices
                 ObjectCreateInfo info;
                 if (_selectedTypeInfo.TryGetValue(type, out info)) return info;
 
-                info = new ObjectCreateInfo(type.GetPropertiesEx().Select(e=> new ObjectCreateMemberInfo(e.Name, null)), null);
+                var properties = type.GetPropertiesEx();
+                var members = new ObjectCreateMemberInfo[properties.Length];
+                for (int i = 0; i < members.Length; i++)
+                {
+                    members[i] = new ObjectCreateMemberInfo(properties[i].Name, null);
+                }
+
+                info = new ObjectCreateInfo(members, null);
                 _selectedTypeInfo[type] = info;
                 return info;
             }
@@ -60,7 +66,7 @@ namespace LambdicSql.ConverterServices
                     }
                     select.Add(new ObjectCreateMemberInfo(name, newExp.Arguments[i]));
                 }
-                return new ObjectCreateInfo(select, exp);
+                return new ObjectCreateInfo(select.ToArray(), exp);
             }
 
             var initExp = exp as MemberInitExpression;

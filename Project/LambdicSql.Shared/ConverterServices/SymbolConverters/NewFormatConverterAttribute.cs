@@ -21,6 +21,7 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         /// <para>[$i] -> It means converting an argument to a direct value.</para>
         /// <para>[#i] -> It specifies that the argument contains a column and that it is converted to only column names without a table name.</para>
         /// <para>[!i] -> Specifies that the argument is a special character and is to be converted with intact characters without ''.</para>
+        /// <para>[*i] -> It use the variable name.</para>
         /// <para>&amp;left; -> ]</para>
         /// <para>&amp;right; -> ]</para>
         /// </summary>
@@ -30,6 +31,17 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         /// Vanish, if empty params.
         /// </summary>
         public bool VanishIfEmptyParams { get { return _core.VanishIfEmptyParams; } set { _core.VanishIfEmptyParams = value; } }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        public NewFormatConverterAttribute() { }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="format">format.</param>
+        public NewFormatConverterAttribute(string format) => Format = format;
 
         /// <summary>
         /// Convert expression to code.

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Linq;
+﻿using System.Linq.Expressions;
 
 namespace LambdicSql.ConverterServices
 {
@@ -25,9 +23,9 @@ namespace LambdicSql.ConverterServices
         /// </summary>
         /// <param name="members">Members.</param>
         /// <param name="expression">Expression became the basis.It is null when made from type information.</param>
-        public ObjectCreateInfo(IEnumerable<ObjectCreateMemberInfo> members, Expression expression)
+        public ObjectCreateInfo(ObjectCreateMemberInfo[] members, Expression expression)
         {
-            Members = members.ToArray();
+            Members = members;
             Expression = expression;
         }
     }

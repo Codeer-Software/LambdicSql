@@ -3,7 +3,7 @@
     /// <summary>
     /// Code with select clause at the beginning. The select clause is special and needs to be distinguished from others.
     /// </summary>
-    public interface ISelectQueryCode : ICode
+    public interface ITopQueryCode : ICode
     {
         /// <summary>
         /// Code.
@@ -15,6 +15,6 @@
         /// </summary>
         /// <param name="core">Code.</param>
         /// <returns>ISelectQueryCode.</returns>
-        ISelectQueryCode Create(ICode core);
+        ITopQueryCode Create(ICode core);
     }
 }

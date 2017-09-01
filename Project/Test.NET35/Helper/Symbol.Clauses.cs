@@ -1294,7 +1294,7 @@ namespace Test
         }
     }
 
-    internal class SelectQueryCode : ISelectQueryCode
+    internal class SelectQueryCode : ITopQueryCode
     {
         public ICode Core { get; private set; }
 
@@ -1320,11 +1320,11 @@ namespace Test
             return new SelectQueryCode(Core.Accept(customizer));
         }
 
-        public ISelectQueryCode Create(ICode core)
+        public ITopQueryCode Create(ICode core)
             => new SelectQueryCode(core);
     }
 
-    class SelectClauseCode : ISelectQueryCode
+    class SelectClauseCode : ITopQueryCode
     {
         public ICode Core { get; }
 
@@ -1346,7 +1346,7 @@ namespace Test
             return new SelectClauseCode(Core.Accept(customizer));
         }
 
-        public ISelectQueryCode Create(ICode core)
+        public ITopQueryCode Create(ICode core)
             => new SelectQueryCode(core);
     }
 

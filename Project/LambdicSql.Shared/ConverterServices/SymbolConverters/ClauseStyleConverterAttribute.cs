@@ -28,6 +28,17 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         public bool VanishIfEmptyParams { get { return _core.VanishIfEmptyParams; } set { _core.VanishIfEmptyParams = value; } }
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        public ClauseStyleConverterAttribute() { }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="name">name.</param>
+        public ClauseStyleConverterAttribute(string name) => Name = name;
+
+        /// <summary>
         /// Convert expression to code.
         /// </summary>
         /// <param name="expression">Expression.</param>

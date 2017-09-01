@@ -984,7 +984,7 @@ FROM tbl_remuneration", new Params { { "@val", 10 } });
             var sql = Db<DB>.Sql(db =>
                 Select(new SelectData
                 {
-                    Money = new ConstructorAndInitMember(1) { B = 2},
+                    Money = new ConstructorAndInitMember(1) { B = 2 },
                 }).
                 From(db.tbl_remuneration));
 
@@ -1008,13 +1008,13 @@ FROM tbl_remuneration", (decimal)3);
 @"SELECT
 	Object_Id(@p_0)", "tbl_staff");
         }
-        
+
         [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
         public void Test_ObjectToParameter_2()
         {
             if (!_connection.IsTarget(TargetDB.SqlServer)) return;
             var sql = Db<DB>.Sql(db => Select(Object_Id("tbl_staff")));
-            
+
             var datas = _connection.Query(sql).ToList();
             Assert.IsTrue(0 < datas.Count);
             AssertEx.AreEqual(sql, _connection,
@@ -1060,6 +1060,14 @@ FROM tbl_remuneration", (decimal)3);
                 Inserted<Table2>().id
             );
             AssertEx.AreEqual(sql, _connection, @"INSERTED.id");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void TestSqlName()
+        {
+            var a = Db<DB>.Sql(db => db.tbl_remuneration);
+            var sql = Db<DB>.Sql(db => a.Name);
+            AssertEx.AreEqual(sql, _connection, "a");
         }
     }
 

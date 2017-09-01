@@ -18,13 +18,26 @@ namespace Test
     public class TestMethodFormatConverter
     {
         [TestMethod]
-        public void Test()
+        public void TestEscape()
         {
             var sql = Db<DB>.Sql(db => Escape(1));
             Assert.AreEqual(sql.Build(typeof(SqlConnection)).Text, "ESCAPE[@p_0]");
         }
 
+        class A { }
+
+        [TestMethod]
+        public void TestVariableName()
+        {
+            Staff starff = null;
+            var sql = Db<DB>.Sql(db => Variable(starff));
+            Assert.AreEqual(sql.Build(typeof(SqlConnection)).Text, "starff");
+        }
+
         [MethodFormatConverter(Format = "ESCAPE&left;[0]&right;")]
         static int Escape(int val) => 0;
+
+        [MethodFormatConverter(Format = "[*0]")]
+        static int Variable(object variable) => 0;
     }
 }

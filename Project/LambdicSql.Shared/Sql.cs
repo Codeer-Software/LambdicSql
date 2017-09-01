@@ -103,6 +103,12 @@ namespace LambdicSql
         public T Body { get { throw new InvalitContextException(nameof(Body)); } }
 
         /// <summary>
+        /// Variable name.
+        /// It can only be used within lambda of the LambdicSql.
+        /// </summary>
+        public string Name => throw new InvalitContextException(nameof(Name));
+
+        /// <summary>
         /// Implicitly convert to the type represented by sql.
         /// It can only be used within lambda of the LambdicSql.
         /// </summary>

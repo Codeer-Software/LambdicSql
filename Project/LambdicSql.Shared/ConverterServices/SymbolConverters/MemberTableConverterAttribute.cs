@@ -12,5 +12,16 @@ namespace LambdicSql.ConverterServices.SymbolConverters
         /// Name.If it is empty, use the name of the member.
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        public MemberTableConverterAttribute() { }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="name">name.</param>
+        public MemberTableConverterAttribute(string name) => Name = name;
     }
 }

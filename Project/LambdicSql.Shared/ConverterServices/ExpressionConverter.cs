@@ -2,7 +2,6 @@
 using LambdicSql.BuilderServices.CodeParts;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using LambdicSql.ConverterServices.Inside.CodeParts;
 using LambdicSql.BuilderServices.Inside;
@@ -33,13 +32,13 @@ namespace LambdicSql.ConverterServices
             if (lhs.IsEmpty) return rhs;
             if (rhs.IsEmpty) return lhs;
 
-            var selectQueryLeft = lhs as ISelectQueryCode;
-            var selectQueryRight = rhs as ISelectQueryCode;
+            var topQueryLeft = lhs as ITopQueryCode;
+            var topQueryRight = rhs as ITopQueryCode;
 
-            if (selectQueryLeft == null && selectQueryRight == null) return new VCode(lhs, rhs);
-            if (selectQueryLeft == null && selectQueryRight != null) return new VCode(lhs, selectQueryRight.Core);
-            if (selectQueryLeft != null && selectQueryRight == null) return selectQueryLeft.Create(new VCode(selectQueryLeft.Core, rhs));
-            return selectQueryLeft.Create(new VCode(selectQueryLeft.Core, selectQueryRight.Core));
+            if (topQueryLeft == null && topQueryRight == null) return new VCode(lhs, rhs);
+            if (topQueryLeft == null && topQueryRight != null) return new VCode(lhs, topQueryRight.Core);
+            if (topQueryLeft != null && topQueryRight == null) return topQueryLeft.Create(new VCode(topQueryLeft.Core, rhs));
+            return topQueryLeft.Create(new VCode(topQueryLeft.Core, topQueryRight.Core));
         }
 
         /// <summary>
@@ -126,7 +125,6 @@ namespace LambdicSql.ConverterServices
             return ConvertToCode(value);
         }
 
-        //TODO ?
         ICode Convert(NewArrayExpression array)
         {
             if (!SupportedTypeSpec.IsSupported(array.Type))
@@ -134,8 +132,12 @@ namespace LambdicSql.ConverterServices
                 throw new NotSupportedException();
             }
 
-            //TODO delete link.
-            var obj = SupportedTypeSpec.ConvertArray(array.Type, array.Expressions.Select(e => ConvertToObject(e)));
+            var objs = new object[array.Expressions.Count];
+            for (int i = 0; i < objs.Length; i++)
+            {
+                objs[i] = ConvertToObject(array.Expressions[i]);
+            }
+            var obj = SupportedTypeSpec.ConvertArray(array.Type, objs);
             return new ParameterCode(obj);
         }
 
@@ -205,9 +207,9 @@ namespace LambdicSql.ConverterServices
 
         ICode Convert(MemberExpression member)
         {
-            //sub.Body
-            var body = TryResolveSqlExpressionBody(member);
-            if (body != null) return body;
+            //sub.Body or sub.Name
+            var bodyOrName = TryResolveSqlExpressionBodyOrName(member);
+            if (bodyOrName != null) return bodyOrName;
 
             //sql symbol.
             var symbolMember = member.GetMemberConverter();
@@ -270,7 +272,7 @@ namespace LambdicSql.ConverterServices
 
             var core = new VCode(code);
 
-            var topQuery = code[0] as ISelectQueryCode;
+            var topQuery = code[0] as ITopQueryCode;
             return topQuery != null ?
                  (ICode)topQuery.Create(core) :
                  new QueryCode(core);
@@ -302,7 +304,7 @@ namespace LambdicSql.ConverterServices
         ICode AddBinaryExpressionBlankets(ICode src)
             => typeof(IDisableBinaryExpressionBrackets).IsAssignableFromEx(src.GetType()) ? src : new AroundCode(src, "(", ")");
 
-        ICode TryResolveSqlExpressionBody(MemberExpression member)
+        ICode TryResolveSqlExpressionBodyOrName(MemberExpression member)
         {
             //get all members.
             var members = new List<MemberExpression>();
@@ -320,8 +322,13 @@ namespace LambdicSql.ConverterServices
             if (members.Count < 2) return null;
 
             //check SqlExpression's Body
-            if (members[members.Count - 2].Member.Name != "Body") return null;
             if (!typeof(Sql).IsAssignableFromEx(members[members.Count - 1].Type)) return null;
+            if (members[members.Count - 2].Member.Name == "Name")
+            {
+                if (members.Count != 2) return null;
+                return members[members.Count - 1].Member.Name.ToCode();
+            }
+            if (members[members.Count - 2].Member.Name != "Body") return null;
 
             members.Reverse();
 
@@ -329,7 +336,16 @@ namespace LambdicSql.ConverterServices
             if (members.Count == 2) return ResolveExpressionObject(members[0]);
 
             //for example, sub.Body.column.
-            else return string.Join(".", members.Where((e, i) => i != 1).Select(e => e.Member.Name).ToArray()).ToCode();
+            else
+            {
+                var names = new string[members.Count - 1];
+                names[0] = members[0].Member.Name;
+                for (int i = 2; i < members.Count; i++)
+                {
+                    names[i - 1] = members[i].Member.Name;
+                }
+                return string.Join(".", names).ToCode();
+            }
         }
 
         bool TryGetDbDesignParamCode(MemberExpression exp, out ICode code)
@@ -354,7 +370,7 @@ namespace LambdicSql.ConverterServices
                     }
                     else
                     {
-                        code = new DbColumnCode(new ColumnInfo(exp.Type, lambdaName, lambdaName, names.Last()));
+                        code = new DbColumnCode(new ColumnInfo(exp.Type, lambdaName, lambdaName, names[names.Count - 1]));
                     }
                     return true;
                 }

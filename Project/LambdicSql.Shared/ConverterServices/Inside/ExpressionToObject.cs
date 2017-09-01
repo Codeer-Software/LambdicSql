@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Linq;
 using LambdicSql.MultiplatformCompatibe;
 
 namespace LambdicSql.ConverterServices.Inside
@@ -141,7 +140,7 @@ namespace LambdicSql.ConverterServices.Inside
                     }
 
                     getter = CreateGetter(new[] { binaryExp.Left.Type, binaryExp.Right.Type });
-                    getter.Init(body, new[] { left, right }.ToArray());
+                    getter.Init(body, new[] { left, right });
                     _memberGet[getterName] = getter;
                 }
             }
@@ -153,7 +152,9 @@ namespace LambdicSql.ConverterServices.Inside
         {
             var args = new List<object>();
             var paramTypes = new List<Type>();
+            var newArgumentTypeNames = new List<string>();
             var prams = new List<ParameterExpression>();
+            var newArgumentParams = new List<ParameterExpression>();
 
             //get new expression info.
             var newExp = memberInit.NewExpression;
@@ -162,7 +163,10 @@ namespace LambdicSql.ConverterServices.Inside
             {
                 var type = newParameteInfos[i].ParameterType;
                 paramTypes.Add(type);
-                prams.Add(Expression.Parameter(type, "p" + i));
+                newArgumentTypeNames.Add(type.FullName);
+                var param = Expression.Parameter(type, "p" + i);
+                prams.Add(param);
+                newArgumentParams.Add(param);
                 object arg;
                 GetExpressionObject(newExp.Arguments[i], out arg);
                 args.Add(arg);
@@ -170,11 +174,17 @@ namespace LambdicSql.ConverterServices.Inside
 
             //add member assignment info.
             int offset = paramTypes.Count;
-            var assignments = memberInit.Bindings.Select(e => ((MemberAssignment)e).Expression).ToArray();
+            var assignments = new Expression[memberInit.Bindings.Count];
+            for (int i = 0; i < assignments.Length; i++)
+            {
+                assignments[i] = ((MemberAssignment)memberInit.Bindings[i]).Expression;
+            }
             var memberAssignments = new List<MemberAssignment>();
+            var assignmentTypeNames = new List<string>();
             for (int i = 0; i < assignments.Length; i++)
             {
                 paramTypes.Add(assignments[i].Type);
+                assignmentTypeNames.Add(assignments[i].Type.FullName);
                 var p = Expression.Parameter(assignments[i].Type, "p" + (offset + i));
                 prams.Add(p);
                 memberAssignments.Add(Expression.Bind(memberInit.Bindings[i].Member, p));
@@ -185,8 +195,8 @@ namespace LambdicSql.ConverterServices.Inside
 
             //name.
             var getterName = memberInit.NewExpression.Type.FullName +
-                "(" + string.Join(",", paramTypes.Take(offset).Select(e => e.FullName).ToArray()) + ")" +
-                "()(" + string.Join(",", paramTypes.Skip(offset).Select(e => e.FullName).ToArray()) + ")";
+                "(" + string.Join(",", newArgumentTypeNames.ToArray()) + ")" +
+                "()(" + string.Join(",", assignmentTypeNames.ToArray()) + ")";
 
             //getter.
             IGetter getter;
@@ -194,7 +204,7 @@ namespace LambdicSql.ConverterServices.Inside
             {
                 if (!_memberGet.TryGetValue(getterName, out getter))
                 {
-                    var body = Expression.Convert(Expression.MemberInit(Expression.New(newExp.Constructor, prams.Take(offset).ToArray()), memberAssignments.ToArray()), typeof(object));
+                    var body = Expression.Convert(Expression.MemberInit(Expression.New(newExp.Constructor, newArgumentParams.ToArray()), memberAssignments.ToArray()), typeof(object));
                     getter = CreateGetter(paramTypes.ToArray());
                     getter.Init(body, prams.ToArray());
                     _memberGet[getterName] = getter;
@@ -206,12 +216,20 @@ namespace LambdicSql.ConverterServices.Inside
         internal static object GetNewObject(NewExpression newExp)
         {
             //arguments.
-            var ps = newExp.Constructor.GetParameters().Select(e => e.ParameterType).ToList();
+            var src = newExp.Constructor.GetParameters();
+            var paramterTypes = new Type[src.Length];
+            var parameterTypeFullNames = new string[src.Length];
+            for (int i = 0; i < src.Length; i++)
+            {
+                paramterTypes[i] = src[i].ParameterType;
+                parameterTypeFullNames[i] = paramterTypes[i].FullName;
+            }
+            
             var psExp = new List<ParameterExpression>();
             var args = new List<object>();
-            for (int i = 0; i < ps.Count; i++)
+            for (int i = 0; i < paramterTypes.Length; i++)
             {
-                psExp.Add(Expression.Parameter(ps[i], "p" + i));
+                psExp.Add(Expression.Parameter(paramterTypes[i], "p" + i));
                 object arg;
                 GetExpressionObject(newExp.Arguments[i], out arg);
                 args.Add(arg);
@@ -219,7 +237,7 @@ namespace LambdicSql.ConverterServices.Inside
             
             //name.
             var getterName = newExp.Type.FullName + 
-                "(" + string.Join(",", ps.Select(e => e.FullName).ToArray()) + ")";
+                "(" + string.Join(",", parameterTypeFullNames) + ")";
 
             //getter.
             IGetter getter;
@@ -228,7 +246,7 @@ namespace LambdicSql.ConverterServices.Inside
                 if (!_memberGet.TryGetValue(getterName, out getter))
                 {
                     var body = Expression.Convert(Expression.New(newExp.Constructor, psExp.ToArray()), typeof(object));
-                    getter = CreateGetter(ps.ToArray());
+                    getter = CreateGetter(paramterTypes);
                     getter.Init(body, psExp.ToArray());
                     _memberGet[getterName] = getter;
                 }
@@ -248,12 +266,20 @@ namespace LambdicSql.ConverterServices.Inside
             GetExpressionObject(method.Object, out instance);
 
             //arguments.
-            var ps = method.Method.GetParameters().Select(e=>e.ParameterType).ToList();
+            var src = method.Method.GetParameters();
+            var paramterTypes = new Type[src.Length];
+            var parameterTypeFullNames = new string[src.Length];
+            for (int i = 0; i < src.Length; i++)
+            {
+                paramterTypes[i] = src[i].ParameterType;
+                parameterTypeFullNames[i] = paramterTypes[i].FullName;
+            }
+
             var psExp = new List<ParameterExpression>();
             var args = new List<object>();
-            for (int i = 0; i < ps.Count; i++)
+            for (int i = 0; i < paramterTypes.Length; i++)
             {
-                psExp.Add(Expression.Parameter(ps[i], "p" + i));
+                psExp.Add(Expression.Parameter(paramterTypes[i], "p" + i));
                 object arg;
                 GetExpressionObject(method.Arguments[i], out arg);
                 args.Add(arg);
@@ -265,7 +291,7 @@ namespace LambdicSql.ConverterServices.Inside
 
             //name.
             var getterName = method.Method.DeclaringType.FullName + "." + method.Method.Name +
-                "(" + string.Join(",", ps.Select(e=>e.FullName).ToArray()) + ")";
+                "(" + string.Join(",", parameterTypeFullNames) + ")";
 
             //getter.
             IGetter getter;
@@ -283,9 +309,17 @@ namespace LambdicSql.ConverterServices.Inside
                         var instanceExp = Expression.Parameter(instance.GetType(), "Instance");
                         body = Expression.Convert(Expression.Call(instanceExp, method.Method, psExp.ToArray()), typeof(object));
                         psExp.Add(instanceExp);
-                        ps.Add(instance.GetType());
+
+                        //paramterTypes.Add(instance.GetType());
+                        var dstParameterTypes = new Type[paramterTypes.Length + 1];
+                        for (int i = 0; i < paramterTypes.Length; i++)
+                        {
+                            dstParameterTypes[i] = paramterTypes[i];
+                        }
+                        dstParameterTypes[dstParameterTypes.Length - 1] = instance.GetType();
+                        paramterTypes = dstParameterTypes;
                     }
-                    getter = CreateGetter(ps.ToArray());
+                    getter = CreateGetter(paramterTypes);
                     getter.Init(body, psExp.ToArray());
                     _memberGet[getterName] = getter;
                 }

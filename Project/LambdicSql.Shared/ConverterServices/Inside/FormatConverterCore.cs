@@ -20,7 +20,8 @@ namespace LambdicSql.ConverterServices.Inside
             internal string ArrayExpandSeparator { get; set; }
             internal bool IsDirectValue { get; set; }
             internal bool IsColumnOnly { get; set; }
-            internal bool IsDefineName { get; set; }
+            internal bool IsSpecialName { get; set; }
+            internal bool IsVariableName { get; set; }
             internal bool IsObjectToParameter { get; set; }
         }
 
@@ -89,9 +90,15 @@ namespace LambdicSql.ConverterServices.Inside
                     for (int i = 0; i < code.Length; i++) code[i] = code[i].Accept(customizer);
                 }
 
-                if (argumentInfo.IsDefineName)
+                if (argumentInfo.IsSpecialName)
                 {
                     var customizer = new CustomizeParameterToDefineName();
+                    for (int i = 0; i < code.Length; i++) code[i] = code[i].Accept(customizer);
+                }
+
+                if (argumentInfo.IsVariableName)
+                {
+                    var customizer = new CustomizeParameterToVariableName();
                     for (int i = 0; i < code.Length; i++) code[i] = code[i].Accept(customizer);
                 }
 
@@ -246,11 +253,18 @@ namespace LambdicSql.ConverterServices.Inside
                 info.IsDirectValue = true;
             }
 
-            //define name.
+            //special name.
             if (arg.IndexOf('!') != -1)
             {
                 arg = arg.Replace("!", string.Empty);
-                info.IsDefineName = true;
+                info.IsSpecialName = true;
+            }
+
+            //variable name.
+            if (arg.IndexOf('*') != -1)
+            {
+                arg = arg.Replace("*", string.Empty);
+                info.IsVariableName = true;
             }
 
             //column only.

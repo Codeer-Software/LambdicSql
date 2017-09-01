@@ -15,13 +15,14 @@
     <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\CodeParts\HCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\CodeParts\ICode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\CodeParts\ICodeCustomizer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\CodeParts\ISelectQueryCode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\CodeParts\ITopQueryCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\CodeParts\SingleTextCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\CodeParts\VCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\CustomizeColumnOnly.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\CustomizeObjectToParameter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\CustomizeParameterToDefineName.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\CustomizeParameterToObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\CustomizeParameterToVariableName.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\Inside\CustomizeParameterValue.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\DialectOption.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BuilderServices\Inside\DialectResolver.cs" />
