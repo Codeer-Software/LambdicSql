@@ -1069,66 +1069,6 @@ FROM tbl_remuneration", (decimal)3);
             var sql = Db<DB>.Sql(db => a.Name);
             AssertEx.AreEqual(sql, _connection, "a");
         }
-
-        /*
-        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void XXX()
-        {
-            bool x = false;
-            bool y = false;
-            var a = Db<DB>.Sql(db => x && y);
-            var sql = Db<DB>.Sql(db => a.Body);
-            sql.Gen(_connection);
-            AssertEx.AreEqual(sql, _connection, "a");
-        }*/
-
-
-        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void TestBrankets_1()
-        {
-            int a = 0;
-            int b = 1;
-            var sql = Db<DB>.Sql(db => a == b || a == b);
-            AssertEx.AreEqual(sql, _connection, "@a = @b OR @a = @b", new Params { { "@a", 0 }, { "@b", 1 } });
-        }
-
-        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void TestBrankets_2()
-        {
-            int a = 0;
-            int b = 1;
-            var sql = Db<DB>.Sql(db => !(a == b || a == b));
-            AssertEx.AreEqual(sql, _connection, "NOT (@a = @b OR @a = @b)", new Params { { "@a", 0 }, { "@b", 1 } });
-        }
-
-        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void TestBrankets_3()
-        {
-            int a = 0;
-            int b = 1;
-            var sql = Db<DB>.Sql(db => !(bool)(object)(a == b || a == b));
-            AssertEx.AreEqual(sql, _connection, "NOT (@a = @b OR @a = @b)", new Params { { "@a", 0 }, { "@b", 1 } });
-        }
-
-        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void TestBrankets_4()
-        {
-            if (!_connection.IsTarget(TargetDB.SqlServer)) return;
-            string a = "a";
-            string b = "b";
-            string c = null;
-            var sql = Db<DB>.Sql(db => a + b == c);
-            AssertEx.AreEqual(sql, _connection, "(@a + @b) IS NULL", new Params { { "@a", "a" }, { "@b", "b" } });
-        }
-
-        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
-        public void TestBrankets_5()
-        {
-            if (!_connection.IsTarget(TargetDB.SqlServer)) return;
-            string a = "a";
-            var sql = Db<DB>.Sql(db => a == null);
-            AssertEx.AreEqual(sql, _connection, "@a IS NULL", new Params { { "@a", "a" } });
-        }
     }
 
     public static class TestExpressionEx

@@ -115,6 +115,9 @@
     <Compile Include="..\Test.NET35\Helper\Symbol.Funcs.cs">
       <Link>Helper\Symbol.Funcs.cs</Link>
     </Compile>
+    <Compile Include="..\Test.NET35\TestBrankets.cs">
+      <Link>TestBrankets.cs</Link>
+    </Compile>
     <Compile Include="..\Test.NET35\TestDbDefine.cs">
       <Link>TestDbDefine.cs</Link>
     </Compile>
