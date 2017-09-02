@@ -288,12 +288,6 @@ namespace LambdicSql.ConverterServices
             {
                 code[i] = chain[i].GetMethodConverter().Convert(chain[i], this);
             }
-            
-            //for ALL function. can't add blankets.
-            if (code.Length == 1 && typeof(IDisableBinaryExpressionBrackets).IsAssignableFromEx(code[0].GetType()))
-            {
-                return code[0];
-            }
 
             var core = new VCode(code);
 
@@ -537,7 +531,7 @@ namespace LambdicSql.ConverterServices
         }
 
         static ICode AddBinaryExpressionBlankets(ICode src)
-            => typeof(IDisableBinaryExpressionBrackets).IsAssignableFromEx(src.GetType()) ? src : new AroundCode(src, "(", ")");
+            => new AroundCode(src, "(", ")");
 
         static ICode NotAddBrankets(ICode target)
         {

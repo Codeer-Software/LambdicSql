@@ -985,7 +985,7 @@ namespace Test
         /// <typeparam name="T">Retunn type.</typeparam>
         /// <param name="sub">Sub query.</param>
         /// <returns>Sub query's selected value.</returns>
-        [AllConverter]
+        [FuncStyleConverter]
         public static T All<T>(Clause<T> sub) { throw new InvalitContextException(nameof(All)); }
 
         /// <summary>
@@ -994,7 +994,7 @@ namespace Test
         /// <typeparam name="T">Retunn type.</typeparam>
         /// <param name="sub">Sub query.</param>
         /// <returns>Sub query's selected value.</returns>
-        [AllConverter]
+        [FuncStyleConverter]
         public static T All<T>(Sql<T> sub) { throw new InvalitContextException(nameof(All)); }
 
         /// <summary>
@@ -1190,32 +1190,17 @@ namespace Test
         public static int? Schema_Id(object schema) => throw new InvalitContextException(nameof(Schema_Id));
         
         [ClauseStyleConverter(Name = "@@DBTS")]
-        public static byte[] AtAtDbts() => throw new InvalitContextException(nameof(AtAtDbts));    
+        public static byte[] AtAtDbts() => throw new InvalitContextException(nameof(AtAtDbts));
+
+        /// <summary>
+        /// Schema and table names are omitted and only columns are used.
+        /// </summary>
+        /// <typeparam name="T">Type.</typeparam>
+        /// <param name="column">Column.</param>
+        /// <returns>Column only.</returns>
+        [MethodFormatConverter(Format = "[0]")]
+        public static T RemoveBrankets<T>(this Sql<T> src) { throw new InvalitContextException(nameof(RemoveBrankets)); }
     }
-
-    class AllDisableBinaryExpressionBracketsCode : ICode, IDisableBinaryExpressionBrackets
-    {
-        ICode _core;
-
-        internal AllDisableBinaryExpressionBracketsCode(ICode core)
-        {
-            _core = core;
-        }
-
-        public bool IsEmpty => _core.IsEmpty;
-
-        public bool IsSingleLine(BuildingContext context) => _core.IsSingleLine(context);
-
-        public string ToString(BuildingContext context) => _core.ToString(context);
-
-        public ICode Accept(ICodeCustomizer customizer)
-        {
-            var dst = customizer.Visit(this);
-            if (!ReferenceEquals(this, dst)) return dst;
-            return new AllDisableBinaryExpressionBracketsCode(_core.Accept(customizer));
-        }
-    }
-
 
     class SubQueryAndNameCode : ICode
     {
@@ -1432,25 +1417,6 @@ namespace Test
             //normal select.
             var exp = converter.ConvertToCode(element.Expression);
             return exp.IsEmpty ? exp : LineSpace(exp, AsClause, element.Name.ToCode());
-        }
-    }
-
-
-    /// <summary>
-    /// Converter for ALL clause conversion.
-    /// </summary>
-    public class AllConverterAttribute : MethodConverterAttribute
-    {
-        /// <summary>
-        /// Convert expression to code.
-        /// </summary>
-        /// <param name="expression">Expression.</param>
-        /// <param name="converter">Expression converter.</param>
-        /// <returns>Parts.</returns>
-        public override ICode Convert(MethodCallExpression expression, ExpressionConverter converter)
-        {
-            var args = expression.Arguments.Select(e => converter.ConvertToCode(e)).ToArray();
-            return new AllDisableBinaryExpressionBracketsCode(Func("ALL".ToCode(), args[0]));
         }
     }
 

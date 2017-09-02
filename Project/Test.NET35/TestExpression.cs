@@ -1069,6 +1069,33 @@ FROM tbl_remuneration", (decimal)3);
             var sql = Db<DB>.Sql(db => a.Name);
             AssertEx.AreEqual(sql, _connection, "a");
         }
+
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void TestAll_1()
+        {
+            var sql = Db<DB>.Sql(db => All(Select(db.tbl_staff.id)) < 3);
+            AssertEx.AreEqual(sql, _connection,
+@"ALL(
+	(SELECT
+		tbl_staff.id))
+ <
+@p_0", 3);
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void TestAll_2()
+        {
+            var all = Db<DB>.Sql(db => All(Select(db.tbl_staff.id)));
+            var sql = Db<DB>.Sql(db => all.RemoveBrankets() < 3);
+            AssertEx.AreEqual(sql, _connection,
+@"ALL(
+	(SELECT
+		tbl_staff.id))
+ <
+@p_0", 3);
+        }
+
     }
 
     public static class TestExpressionEx
