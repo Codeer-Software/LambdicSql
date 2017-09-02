@@ -1096,6 +1096,53 @@ FROM tbl_remuneration", (decimal)3);
 @p_0", 3);
         }
 
+        [MethodFormatConverter(Format = "XXX [0]", VanishIfEmptyParams = true)]
+        public static Clause<Non> XXX(bool condition) => null;
+
+        [MethodFormatConverter(Format = "YYY [<, >0]", VanishIfEmptyParams = true)]
+        public static Clause<OverElement> YYY(params object[] elements) => null;
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Vanish_1()
+        {
+            var empty = new Sql<bool>();
+            var sql = Db<DB>.Sql(db => XXX(empty));
+            AssertEx.AreEqual(sql, _connection, "");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Vanish_2()
+        {
+            var empty = new Sql<bool>();
+            var sql = Db<DB>.Sql(db => YYY(empty));
+            AssertEx.AreEqual(sql, _connection, "");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Vanish_3()
+        {
+            var empty = new Sql<bool>();
+            var sql = Db<DB>.Sql(db => YYY());
+            AssertEx.AreEqual(sql, _connection, "");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Not_Vanish_1()
+        {
+            var val = 1;
+            var condition = Db<DB>.Sql(db => val == 1);
+            var sql = Db<DB>.Sql(db => XXX(condition));
+            AssertEx.AreEqual(sql, _connection, "XXX @val = @p_0", new Params { { "@val", 1 }, { "@p_0", 1} });
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_Not_Vanish_2()
+        {
+            var val = 1;
+            var condition = Db<DB>.Sql(db => val == 1);
+            var sql = Db<DB>.Sql(db => YYY(condition));
+            AssertEx.AreEqual(sql, _connection, "YYY @val = @p_0", new Params { { "@val", 1 }, { "@p_0", 1 } });
+        }
     }
 
     public static class TestExpressionEx

@@ -65,6 +65,7 @@ namespace LambdicSql.ConverterServices.Inside
             }
 
             //intert parameter.
+            bool isEmpty = true;
             int selectManyCount = allCodes.Length;
             foreach (var e in _parameterMappingInfo)
             {
@@ -112,8 +113,16 @@ namespace LambdicSql.ConverterServices.Inside
 
                 //adjust count.
                 selectManyCount = selectManyCount - 1 + code.Length;
-            }
 
+                if (VanishIfEmptyParams && isEmpty)
+                {
+                    for (int i = 0; i < code.Length; i++)
+                    {
+                        if (!code[i].IsEmpty) isEmpty = false;
+                    }
+                }
+            }
+            if (VanishIfEmptyParams && isEmpty) return null;
             return SelectMany(allCodes, selectManyCount);
         }
 
@@ -123,14 +132,11 @@ namespace LambdicSql.ConverterServices.Inside
             var newArrayExp = argExp as NewArrayExpression;
             if (newArrayExp != null)
             {
-                bool isEmpty = true;
                 code = new ICode[newArrayExp.Expressions.Count];
                 for (int i = 0; i < newArrayExp.Expressions.Count; i++)
                 {
                     code[i] = converter.ConvertToCode(newArrayExp.Expressions[i]);
-                    if (isEmpty) isEmpty = code[i].IsEmpty;
                 }
-                if (VanishIfEmptyParams && isEmpty) return null;
             }
             else
             {
