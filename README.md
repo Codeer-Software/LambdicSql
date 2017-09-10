@@ -158,7 +158,7 @@ namespace Sample
     }
 }
 ```
-<img src="https://github.com/Codeer-Software/LambdicSql/SummaryCode.png"><br>
+<img src="https://github.com/Codeer-Software/LambdicSql/blob/master/SummaryCode.png"><br>
 ## Samples
 Look for how to use from the tests.<br>
 https://github.com/Codeer-Software/LambdicSql.SqlServer/tree/master/Project/Test40<br>
