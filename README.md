@@ -423,7 +423,7 @@ public void TestFormatText()
         {
             name = db.tbl_staff.name,
             payment_date = db.tbl_remuneration.payment_date,
-            money = (decimal)"{0} + 1000".ToSql(db.tbl_remuneration.money),
+            money = (decimal)"{0} + 1000".ToSqlObject(db.tbl_remuneration.money),
         }).
         From(db.tbl_remuneration).
             Join(db.tbl_staff, db.tbl_remuneration.staff_id == db.tbl_staff.id).
@@ -631,7 +631,4 @@ If you want to control more conversion, please create a class that inherits the 
 |MemberConverterAttribute|Field, Property|
 
 LambdicSql itself also defines functions and phrases using the mechanism described here, so I think that it will be a sample. Please see samples.<br>
-https://github.com/Codeer-Software/LambdicSql/blob/master/Project/LambdicSql.Shared/Symbol.Clauses.cs
-https://github.com/Codeer-Software/LambdicSql/blob/master/Project/LambdicSql.Shared/Symbol.Etc.cs
-https://github.com/Codeer-Software/LambdicSql/blob/master/Project/LambdicSql.Shared/Symbol.Funcs.cs
-https://github.com/Codeer-Software/LambdicSql/blob/master/Project/LambdicSql.Shared/SymbolSub.cs
+https://github.com/Codeer-Software/LambdicSql.SqlServer/blob/master/Project/LambdicSql.SqlServer.Shared/Symbol.Clauses.DML.Basic.cs
