@@ -40,6 +40,10 @@ For PCL, recommend sqlite-net-pcl.
 
     PM> Install-Package sqlite-net-pcl
 
+## Support tool.
+It is a Visual Stuido Extension.
+You can execute the code written in LambdicSql and get the result.
+https://marketplace.visualstudio.com/items?itemName=ishikawa-tatsuya.LambdicSqlAssistant
 ## Quick Start.
 Standard code.
 ```csharp
