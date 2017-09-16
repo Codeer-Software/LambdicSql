@@ -1,5 +1,6 @@
 ﻿namespace LambdicSql.BuilderServices.Inside
 {
+    //TODO insert by ohter libs.
     static class DialectResolver
     {
         internal static DialectOption CreateCustomizer(string connectionTypeFullName)
