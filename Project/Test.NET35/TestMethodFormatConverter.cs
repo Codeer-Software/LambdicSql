@@ -39,5 +39,24 @@ namespace Test
 
         [MethodFormatConverter(Format = "[*0]")]
         static int Variable(object variable) => 0;
+
+        [MethodFormatConverter(Format = "[0],[0]")]
+        static int SameParameter(object variable) => 0;
+
+        [TestMethod]
+        public void TestSameParameter()
+        {
+            var sql = Db<DB>.Sql(db => SameParameter(db.tbl_staff));
+            Assert.AreEqual(sql.Build(typeof(SqlConnection)).Text, "tbl_staff,tbl_staff");
+        }
+
+        [TestMethod]
+        public void XXX()
+        {
+            var id = 1;
+            var ID = 1;
+            Db<DB>.Sql(db => Where(id == 1 || ID == 2)); // exception
+        }
+
     }
 }

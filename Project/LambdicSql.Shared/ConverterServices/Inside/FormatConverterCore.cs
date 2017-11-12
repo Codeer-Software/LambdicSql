@@ -28,7 +28,7 @@ namespace LambdicSql.ConverterServices.Inside
         string _format;
         int _firstLineElemetCount = -1;
         List<ICode> _partsSrc;
-        Dictionary<int, ArgumentInfo> _parameterMappingInfo;
+        Dictionary<int, List<ArgumentInfo>> _parameterMappingInfo;
 
         internal int Indent { get; set; }
 
@@ -72,53 +72,55 @@ namespace LambdicSql.ConverterServices.Inside
                 if (arguments.Count <= e.Key) throw new NotSupportedException("Invalid format.");
 
                 var argExp = arguments[e.Key];
-                var argumentInfo = e.Value;
-
-                var code = argumentInfo.IsArrayExpand ?
-                    ConvertExpandArrayArgument(converter, argumentInfo, argExp) :
-                    new ICode[] { ConvertSingleArgument(converter, argumentInfo, argExp) };
-                if (code == null) return null;
-
-                if (argumentInfo.IsDirectValue)
+                foreach (var argumentInfo in e.Value)
                 {
-                    var customizer = new CustomizeParameterToObject();
-                    for (int i = 0; i < code.Length; i++) code[i] = code[i].Accept(customizer);
-                }
 
-                if (argumentInfo.IsColumnOnly)
-                {
-                    var customizer = new CustomizeColumnOnly();
-                    for (int i = 0; i < code.Length; i++) code[i] = code[i].Accept(customizer);
-                }
+                    var code = argumentInfo.IsArrayExpand ?
+                        ConvertExpandArrayArgument(converter, argumentInfo, argExp) :
+                        new ICode[] { ConvertSingleArgument(converter, argumentInfo, argExp) };
+                    if (code == null) return null;
 
-                if (argumentInfo.IsSpecialName)
-                {
-                    var customizer = new CustomizeParameterToDefineName();
-                    for (int i = 0; i < code.Length; i++) code[i] = code[i].Accept(customizer);
-                }
-
-                if (argumentInfo.IsVariableName)
-                {
-                    var customizer = new CustomizeParameterToVariableName();
-                    for (int i = 0; i < code.Length; i++) code[i] = code[i].Accept(customizer);
-                }
-
-                if (argumentInfo.IsObjectToParameter)
-                {
-                    var customizer = new CustomizeObjectToParameter();
-                    for (int i = 0; i < code.Length; i++) code[i] = code[i].Accept(customizer);
-                }
-
-                allCodes[argumentInfo.PartsIndex] = code;
-
-                //adjust count.
-                selectManyCount = selectManyCount - 1 + code.Length;
-
-                if (VanishIfEmptyParams && isEmpty)
-                {
-                    for (int i = 0; i < code.Length; i++)
+                    if (argumentInfo.IsDirectValue)
                     {
-                        if (!code[i].IsEmpty) isEmpty = false;
+                        var customizer = new CustomizeParameterToObject();
+                        for (int i = 0; i < code.Length; i++) code[i] = code[i].Accept(customizer);
+                    }
+
+                    if (argumentInfo.IsColumnOnly)
+                    {
+                        var customizer = new CustomizeColumnOnly();
+                        for (int i = 0; i < code.Length; i++) code[i] = code[i].Accept(customizer);
+                    }
+
+                    if (argumentInfo.IsSpecialName)
+                    {
+                        var customizer = new CustomizeParameterToDefineName();
+                        for (int i = 0; i < code.Length; i++) code[i] = code[i].Accept(customizer);
+                    }
+
+                    if (argumentInfo.IsVariableName)
+                    {
+                        var customizer = new CustomizeParameterToVariableName();
+                        for (int i = 0; i < code.Length; i++) code[i] = code[i].Accept(customizer);
+                    }
+
+                    if (argumentInfo.IsObjectToParameter)
+                    {
+                        var customizer = new CustomizeObjectToParameter();
+                        for (int i = 0; i < code.Length; i++) code[i] = code[i].Accept(customizer);
+                    }
+
+                    allCodes[argumentInfo.PartsIndex] = code;
+
+                    //adjust count.
+                    selectManyCount = selectManyCount - 1 + code.Length;
+
+                    if (VanishIfEmptyParams && isEmpty)
+                    {
+                        for (int i = 0; i < code.Length; i++)
+                        {
+                            if (!code[i].IsEmpty) isEmpty = false;
+                        }
                     }
                 }
             }
@@ -209,7 +211,7 @@ namespace LambdicSql.ConverterServices.Inside
             var format = Format;
             _firstLineElemetCount = 0;
             _partsSrc = new List<ICode>();
-            _parameterMappingInfo = new Dictionary<int, ArgumentInfo>();
+            _parameterMappingInfo = new Dictionary<int, List<ArgumentInfo>>();
 
             ArgumentInfo info = null;
             while (true)
@@ -292,7 +294,13 @@ namespace LambdicSql.ConverterServices.Inside
                 throw new NotSupportedException("Invalid format.");
             }
             info.PartsIndex = _partsSrc.Count;
-            _parameterMappingInfo[index] = info;
+
+            if (!_parameterMappingInfo.TryGetValue(index, out var argInfos))
+            {
+                argInfos = new List<ArgumentInfo>();
+                _parameterMappingInfo.Add(index, argInfos);
+            }
+            argInfos.Add(info);
             _partsSrc.Add(null);
             return info;
         }
