@@ -50,7 +50,7 @@ namespace Test
             Assert.AreEqual(sql.Build(typeof(SqlConnection)).Text, "tbl_staff,tbl_staff");
         }
 
-        [TestMethod]
+    //    [TestMethod]
         public void XXX()
         {
             var id = 1;
