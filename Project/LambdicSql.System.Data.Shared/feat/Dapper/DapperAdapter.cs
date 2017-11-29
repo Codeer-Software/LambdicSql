@@ -217,12 +217,15 @@ namespace LambdicSql.feat.Dapper
             BuildedSqlLog?.Invoke(info);
 
             if (Log == null) return;
-            Log(info.Text);
+
+            var list = new List<string>();
+            list.Add(info.Text);
             foreach (var e in info.GetParams())
             {
-                Log(e.Key + " = " + (e.Value.Value == null ? string.Empty : e.Value.Value.ToString()));
+                list.Add(e.Key + " = " + (e.Value.Value == null ? string.Empty : e.Value.Value.ToString()));
             }
-            Log(string.Empty);
+            list.Add(string.Empty);
+            Log(string.Join(Environment.NewLine, list.ToArray()));
         }
     }
     
