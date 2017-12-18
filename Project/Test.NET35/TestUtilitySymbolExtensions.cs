@@ -6,6 +6,7 @@ using LambdicSql.feat.Dapper;
 using static Test.Symbol;
 using static Test.Helper.DBProviderInfo;
 using Test.Helper;
+using System.Data.SqlClient;
 
 namespace Test
 {
@@ -217,6 +218,14 @@ WHERE 3000 < tbl_remuneration.money");
             string special = "a";
             var sql = Db<DB>.Sql(db => special.SpecialName());
             AssertEx.AreEqual(sql, _connection, "a");
+        }
+
+        [TestMethod, DataSource(Operation, Connection, Sheet, Method)]
+        public void Test_SameNoUseManyTime()
+        {
+            var id = 100;
+            var sql = Db<DB>.Sql(db => "select case when id = /*0*/1/**/ then 1 else 2 end from hoge where id >= /*0*/1/**/".TwoWaySql(id));
+            AssertEx.AreEqual(sql, _connection, "select case when id = @id then 1 else 2 end from hoge where id >= @id", new Params { { "@id", 100 } });
         }
     }
 }
