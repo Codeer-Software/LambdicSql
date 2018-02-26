@@ -17,7 +17,7 @@ namespace LambdicSql
             return sql.GetParams(e =>
             {
                 var dbParam = e as DbParam;
-                return dbParam == null ? new DbParam { Value = e.Value } : dbParam;
+                return dbParam ?? new DbParam { Value = e.Value };
             });
         }
     }

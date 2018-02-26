@@ -41,11 +41,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Db.cs" />
+    <Compile Include="StringInterpolator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <Import Project="..\LambdicSql.NetFramework.Shared\LambdicSql.NetFramework.Shared.projitems" Label="Shared" />
-  <Import Project="..\LambdicSql.Shared\LambdicSql.Shared.projitems" Label="Shared" />
-  <Import Project="..\LambdicSql.System.Data.Shared\LambdicSql.System.Data.Shared.projitems" Label="Shared" />
+  <ItemGroup>
+    <ProjectReference Include="..\LambdicSql.NetFramework.3.5\LambdicSql.NetFramework.3.5.csproj">
+      <Project>{9079c3c3-839d-4ff1-a774-b7f15de9248d}</Project>
+      <Name>LambdicSql.NetFramework.3.5</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

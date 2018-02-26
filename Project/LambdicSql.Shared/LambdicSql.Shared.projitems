@@ -73,6 +73,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Db.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)feat\NotInitializedException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IDbParam.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Inside\SqlBuilder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Non.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Specialized\Inside\CodeParts\StringFormatCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Specialized\SymbolConverters\ConditionConverterAttribute.cs" />

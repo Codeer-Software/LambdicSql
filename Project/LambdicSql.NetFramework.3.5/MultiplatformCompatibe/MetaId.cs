@@ -29,8 +29,8 @@ namespace LambdicSql.ConverterServices.Inside
 
         public static bool operator == (MetaId lhs, MetaId rhs)
         {
-            if (ReferenceEquals(lhs, null) && ReferenceEquals(rhs, null)) return true;
-            if (ReferenceEquals(lhs, null) || ReferenceEquals(rhs, null)) return false;
+            if (lhs is null && rhs is null) return true;
+            if (lhs is null || rhs is null) return false;
             return lhs._memberToken == rhs._memberToken && lhs._declaringType == rhs._declaringType;
         }
 

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.13
+VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{9F085001-F527-4CD1-BBBC-46ECA30E1207}"
 EndProject
@@ -27,8 +27,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.NET35", "Test.NET35\Te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.NetCore", "Test.NetCore\Test.NetCore.csproj", "{07A4AC17-2511-48C3-8F42-115F71A30862}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "LambdicSql.NetFramework.Shared", "LambdicSql.NetFramework.Shared\LambdicSql.NetFramework.Shared.shproj", "{48244C57-4688-4879-9CE9-36DB5B28F684}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LambdicSql.NetFramework.3.5", "LambdicSql.NetFramework.3.5\LambdicSql.NetFramework.3.5.csproj", "{9079C3C3-839D-4FF1-A774-B7F15DE9248D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LambdicSql.NetFramework.4.6", "LambdicSql.NetFramework.4.6\LambdicSql.NetFramework.4.6.csproj", "{59E0E08F-28B7-4093-8F44-78932707D8E8}"
@@ -36,13 +34,8 @@ EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		LambdicSql.System.Data.Shared\LambdicSql.System.Data.Shared.projitems*{3a55b636-45b4-475d-9f5d-d91f8a188bb8}*SharedItemsImports = 13
-		LambdicSql.NetFramework.Shared\LambdicSql.NetFramework.Shared.projitems*{48244c57-4688-4879-9ce9-36db5b28f684}*SharedItemsImports = 13
 		LambdicSql.Shared\LambdicSql.Shared.projitems*{485b4c58-0b70-460b-aa20-b2b24af8f0d2}*SharedItemsImports = 4
-		LambdicSql.NetFramework.Shared\LambdicSql.NetFramework.Shared.projitems*{59e0e08f-28b7-4093-8f44-78932707d8e8}*SharedItemsImports = 4
-		LambdicSql.Shared\LambdicSql.Shared.projitems*{59e0e08f-28b7-4093-8f44-78932707d8e8}*SharedItemsImports = 4
-		LambdicSql.System.Data.Shared\LambdicSql.System.Data.Shared.projitems*{59e0e08f-28b7-4093-8f44-78932707d8e8}*SharedItemsImports = 4
 		LambdicSql.System.Data.Shared\LambdicSql.System.Data.Shared.projitems*{5da46552-0c9e-4692-9686-7b6b1bb5e18e}*SharedItemsImports = 4
-		LambdicSql.NetFramework.Shared\LambdicSql.NetFramework.Shared.projitems*{9079c3c3-839d-4ff1-a774-b7f15de9248d}*SharedItemsImports = 4
 		LambdicSql.Shared\LambdicSql.Shared.projitems*{9079c3c3-839d-4ff1-a774-b7f15de9248d}*SharedItemsImports = 4
 		LambdicSql.System.Data.Shared\LambdicSql.System.Data.Shared.projitems*{9079c3c3-839d-4ff1-a774-b7f15de9248d}*SharedItemsImports = 4
 		LambdicSql.Shared\LambdicSql.Shared.projitems*{c69db6f7-9921-4351-a163-047d2550003f}*SharedItemsImports = 13
@@ -152,8 +145,10 @@ Global
 		{3A55B636-45B4-475D-9F5D-D91F8A188BB8} = {E3F92729-0A08-49E3-9132-085C748233E6}
 		{71A68D09-E2E8-44C8-99E9-E890E19DB10B} = {BD0C52EA-4985-4270-ACA0-907E47B6D6E8}
 		{07A4AC17-2511-48C3-8F42-115F71A30862} = {BD0C52EA-4985-4270-ACA0-907E47B6D6E8}
-		{48244C57-4688-4879-9CE9-36DB5B28F684} = {E3F92729-0A08-49E3-9132-085C748233E6}
 		{9079C3C3-839D-4FF1-A774-B7F15DE9248D} = {E3F92729-0A08-49E3-9132-085C748233E6}
 		{59E0E08F-28B7-4093-8F44-78932707D8E8} = {E3F92729-0A08-49E3-9132-085C748233E6}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3FEBD4B0-4918-4A97-88D6-03348ED3B400}
 	EndGlobalSection
 EndGlobal

@@ -30,7 +30,7 @@ namespace Test
         {
             var name = "Emma";
             var maxId = 100;
-            var sql = Db<DB>.InterpolateSql<Staff>(db =>
+            var sql = StringInterpolator<DB>.Sql<Staff>(db =>
 $@"SELECT *
 FROM tbl_staff
 WHERE {(db.tbl_staff.name == name && db.tbl_staff.id < maxId)}");
@@ -50,7 +50,7 @@ WHERE tbl_staff.name = @name AND tbl_staff.id < @maxId",
         {
             var name = "Emma";
             var maxId = 100;
-            var sql = Db<DB>.InterpolateSql(db =>
+            var sql = StringInterpolator<DB>.Sql(db =>
 $@"SELECT *
 FROM tbl_staff
 WHERE {(db.tbl_staff.name == name && db.tbl_staff.id < maxId)}");
@@ -70,7 +70,7 @@ WHERE tbl_staff.name = @name AND tbl_staff.id < @maxId",
         {
             var name = "Emma";
             var maxId = 100;
-            var sql = Db.InterpolateSql<Staff>(() =>
+            var sql = StringInterpolator.Sql<Staff>(() =>
 $@"SELECT *
 FROM tbl_staff
 WHERE tbl_staff.name = {name} AND tbl_staff.id < {maxId}");
@@ -90,7 +90,7 @@ WHERE tbl_staff.name = @name AND tbl_staff.id < @maxId",
         {
             var name = "Emma";
             var maxId = 100;
-            var sql = Db.InterpolateSql(() =>
+            var sql = StringInterpolator.Sql(() =>
 $@"SELECT *
 FROM tbl_staff
 WHERE tbl_staff.name = {name} AND tbl_staff.id < {maxId}");
@@ -110,7 +110,7 @@ WHERE tbl_staff.name = @name AND tbl_staff.id < @maxId",
         {
             var name = "Emma";
             var maxId = 100;
-            var sql = Db.InterpolateSql<Staff>(
+            var sql = StringInterpolator.Sql<Staff>(
 $@"SELECT *
 FROM tbl_staff
 WHERE tbl_staff.name = {name} AND tbl_staff.id < {maxId}");
@@ -129,7 +129,7 @@ WHERE tbl_staff.name = @p_0 AND tbl_staff.id < @p_1", "Emma", 100);
         {
             var name = "Emma";
             var maxId = 100;
-            var sql = Db.InterpolateSql(
+            var sql = StringInterpolator.Sql(
 $@"SELECT *
 FROM tbl_staff
 WHERE tbl_staff.name = {name} AND tbl_staff.id < {maxId}");
