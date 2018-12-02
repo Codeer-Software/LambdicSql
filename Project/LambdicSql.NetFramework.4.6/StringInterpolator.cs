@@ -9,6 +9,10 @@ using System.Linq.Expressions;
 
 namespace LambdicSql
 {
+    /// <summary>
+    /// StringInterpolator.
+    /// </summary>
+    /// <typeparam name="T">DB's type.</typeparam>
     public class StringInterpolator<T> where T : class
     {
         /// <summary>

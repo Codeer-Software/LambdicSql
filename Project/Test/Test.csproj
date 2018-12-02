@@ -28,6 +28,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -189,6 +190,10 @@
     <Content Include="Resources\InsertTableStaff.sql" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\LambdicSql.NetFramework.3.5\LambdicSql.NetFramework.3.5.csproj">
+      <Project>{9079c3c3-839d-4ff1-a774-b7f15de9248d}</Project>
+      <Name>LambdicSql.NetFramework.3.5</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LambdicSql.NetFramework.4.6\LambdicSql.NetFramework.4.6.csproj">
       <Project>{59e0e08f-28b7-4093-8f44-78932707d8e8}</Project>
       <Name>LambdicSql.NetFramework.4.6</Name>
