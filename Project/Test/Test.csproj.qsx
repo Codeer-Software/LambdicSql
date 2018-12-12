@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<Qsx xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <CommonInitializeCode />
+  <DefaultValuesCode>public Oracle.ManagedDataAccess.Client.OracleConnection Con =&gt; 
+  new Oracle.ManagedDataAccess.Client.OracleConnection("User Id=system; Password=orcl; Data Source=(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))(CONNECT_DATA =(SERVICE_NAME = orcl)))");</DefaultValuesCode>
+</Qsx>
