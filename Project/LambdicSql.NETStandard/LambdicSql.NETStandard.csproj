@@ -48,6 +48,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="feat\Dapper\DapperAdapter.partial.cs" />
+    <Compile Include="feat\EntityFramework\EFAdapter.cs" />
+    <Compile Include="feat\EntityFramework\EFWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

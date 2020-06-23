@@ -147,6 +147,7 @@
     <Compile Include="Helper\CodeGenerate.cs" />
     <Compile Include="Helper\DBProviderInfo.cs" />
     <Compile Include="Helper\ReflectionAdapter.cs" />
+    <Compile Include="TestDbDefineCustomizer.cs" />
     <Compile Include="TestInterpolateSql.cs" />
     <Compile Include="TestDbDefineAttribute.cs" />
     <Compile Include="TestEF.cs" />

@@ -71,6 +71,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\SymbolConverters\EnumToStringConverterAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterServices\Inside\CodeParts\SqlCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Db.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DbDefinitionCustomizerDelegate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)feat\NotInitializedException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IDbParam.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Inside\SqlBuilder.cs" />

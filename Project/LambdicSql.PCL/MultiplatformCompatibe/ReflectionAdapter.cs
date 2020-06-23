@@ -62,6 +62,14 @@ namespace LambdicSql.MultiplatformCompatibe
         internal static bool IsGenericTypeEx(this Type type)
             => type.GetTypeInfo().IsGenericType;
 
+        internal static DbDefinitionCustomizerDelegate GetDefineCustomizer(Type t)
+        {
+            if (!t.GetTypeInfo().IsClass) return null;
+            var dbType = typeof(Db<>).MakeGenericType(new[] { t });
+            var info = dbType.GetTypeInfo();
+            return (DbDefinitionCustomizerDelegate)info.GetDeclaredProperty(nameof(Db<Non>.DefinitionCustomizer)).GetValue(null, new object[0]);
+        }
+
         internal static string GetSqlName(PropertyInfo property)
         {
             var type = property.PropertyType;

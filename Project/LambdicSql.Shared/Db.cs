@@ -64,5 +64,10 @@ namespace LambdicSql
             }
             return new Sql<TSelected>(core.Member.Name.ToCode());
         }
+
+        /// <summary>
+        /// This is a method to customize the names of DB tables and columns.
+        /// </summary>
+        public static DbDefinitionCustomizerDelegate DefinitionCustomizer { get; set; }
     }
 }

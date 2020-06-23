@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using LambdicSql.MultiplatformCompatibe;
 
 namespace LambdicSql.ConverterServices.Inside
@@ -8,7 +9,7 @@ namespace LambdicSql.ConverterServices.Inside
     static class DBDefineAnalyzer
     {
         static Dictionary<Type, DbInfo> _dbInfos = new Dictionary<Type, DbInfo>();
-        
+
         internal static DbInfo GetDbInfo<T>()
         {
             DbInfo db;
@@ -40,7 +41,9 @@ namespace LambdicSql.ConverterServices.Inside
         {
             //for entity framework.
             if (type.IsGenericTypeEx()) type = type.GetGenericArgumentsEx()[0];
-            
+
+            var defineCustomizer = ReflectionAdapter.GetDefineCustomizer(type);
+
             if (SupportedTypeSpec.IsSupported(type))
             {
                 var lambdicName = string.Join(".", lambdicNames.ToArray());
@@ -57,11 +60,21 @@ namespace LambdicSql.ConverterServices.Inside
 
                     list.AddRange(FindColumns(p.PropertyType,
                         lambdicNames.Concat(new[] { p.Name }).ToArray(),
-                        sqlNames.Concat(new[] { ReflectionAdapter.GetSqlName(p) }).ToArray()));
+                        sqlNames.Concat(new[] { GetSqlName(defineCustomizer, p) }).ToArray()));
                 }
                 return list;
             }
             throw new NotSupportedException();
+        }
+
+        internal static string GetSqlName(DbDefinitionCustomizerDelegate defineCustomizer, PropertyInfo property)
+        {
+            if (defineCustomizer != null)
+            {
+                var name = defineCustomizer(property);
+                if (!string.IsNullOrEmpty(name)) return name;
+            }
+            return ReflectionAdapter.GetSqlName(property);
         }
     }
 }
