@@ -401,14 +401,14 @@ namespace LambdicSql.ConverterServices
 
         ICode ResolveLambdicElement(string name)
         {
-            string schema;
-            if (DbInfo.TryGetSchema(name, out schema)) return new DbSchemaCode(schema);
+            ColumnInfo col;
+            if (DbInfo.TryGetColumn(name, out col)) return new DbColumnCode(col);
 
             TableInfo table;
             if (DbInfo.TryGetTable(name, out table)) return new DbTableCode(table);
 
-            ColumnInfo col;
-            if (DbInfo.TryGetColumn(name, out col)) return new DbColumnCode(col);
+            string schema;
+            if (DbInfo.TryGetSchema(name, out schema)) return new DbSchemaCode(schema);
 
             return name.ToCode();
         }

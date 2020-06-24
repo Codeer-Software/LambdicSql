@@ -72,10 +72,9 @@ FROM TblStaff";
 
             var txt = sql.Build(new DialectOption()).Text;
             var expected = @"SELECT
-	tbl_staff.Name AS name
+	tbl_staff.name AS name
 FROM tbl_staff";
             Assert.Equal(expected, txt);
         }
-
     }
 }

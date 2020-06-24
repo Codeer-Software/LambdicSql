@@ -10,7 +10,7 @@ namespace LambdicSql.ConverterServices.Inside
     {
         static Dictionary<Type, DbInfo> _dbInfos = new Dictionary<Type, DbInfo>();
 
-        internal static DbInfo GetDbInfo<T>()
+        internal static DbInfo GetDbInfo<T>() where T : class
         {
             DbInfo db;
             lock (_dbInfos)
@@ -23,7 +23,7 @@ namespace LambdicSql.ConverterServices.Inside
 
             var checkRecursive = new List<Type>();
             db = new DbInfo();
-            foreach (var column in FindColumns(typeof(T), new string[0], new string[0], checkRecursive))
+            foreach (var column in FindColumns<T>(typeof(T), new string[0], new string[0], checkRecursive))
             {
                 db.Add(column);
             }
@@ -38,12 +38,12 @@ namespace LambdicSql.ConverterServices.Inside
             return db;
         }
 
-        static IEnumerable<ColumnInfo> FindColumns(Type type, IEnumerable<string> lambdicNames, string[] sqlNames, List<Type> checkRecursive)
+        static IEnumerable<ColumnInfo> FindColumns<T>(Type type, IEnumerable<string> lambdicNames, string[] sqlNames, List<Type> checkRecursive) where T : class
         {
             //for entity framework.
             if (type.IsGenericTypeEx()) type = type.GetGenericArgumentsEx()[0];
 
-            var defineCustomizer = ReflectionAdapter.GetDefineCustomizer(type);
+            var defineCustomizer = Db<T>.DefinitionCustomizer;
 
             if (SupportedTypeSpec.IsSupported(type))
             {
@@ -63,9 +63,9 @@ namespace LambdicSql.ConverterServices.Inside
                     //for entity framework.
                     if (p.DeclaringType.FullName == "System.Data.Entity.DbContext") continue;
 
-                    list.AddRange(FindColumns(p.PropertyType,
+                    list.AddRange(FindColumns<T>(p.PropertyType,
                         lambdicNames.Concat(new[] { p.Name }).ToArray(),
-                        sqlNames.Concat(new[] { GetSqlName(defineCustomizer, p) }).ToArray(), checkRecursive));
+                        sqlNames.Concat(new[] { GetSqlName(defineCustomizer, p) }).ToArray(), new List<Type>(checkRecursive)));
                 }
                 return list;
             }
