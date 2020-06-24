@@ -21,8 +21,9 @@ namespace LambdicSql.ConverterServices.Inside
                 }
             }
 
+            var checkRecursive = new List<Type>();
             db = new DbInfo();
-            foreach (var column in FindColumns(typeof(T), new string[0], new string[0]))
+            foreach (var column in FindColumns(typeof(T), new string[0], new string[0], checkRecursive))
             {
                 db.Add(column);
             }
@@ -37,7 +38,7 @@ namespace LambdicSql.ConverterServices.Inside
             return db;
         }
 
-        static IEnumerable<ColumnInfo> FindColumns(Type type, IEnumerable<string> lambdicNames, string[] sqlNames)
+        static IEnumerable<ColumnInfo> FindColumns(Type type, IEnumerable<string> lambdicNames, string[] sqlNames, List<Type> checkRecursive)
         {
             //for entity framework.
             if (type.IsGenericTypeEx()) type = type.GetGenericArgumentsEx()[0];
@@ -52,6 +53,10 @@ namespace LambdicSql.ConverterServices.Inside
             }
             else if (type.IsClassEx())
             {
+                //check recursive.
+                if (checkRecursive.Contains(type)) return new List<ColumnInfo>();
+                checkRecursive.Add(type);
+
                 var list = new List<ColumnInfo>();
                 foreach (var p in type.GetPropertiesEx())
                 {
@@ -60,11 +65,11 @@ namespace LambdicSql.ConverterServices.Inside
 
                     list.AddRange(FindColumns(p.PropertyType,
                         lambdicNames.Concat(new[] { p.Name }).ToArray(),
-                        sqlNames.Concat(new[] { GetSqlName(defineCustomizer, p) }).ToArray()));
+                        sqlNames.Concat(new[] { GetSqlName(defineCustomizer, p) }).ToArray(), checkRecursive));
                 }
                 return list;
             }
-            throw new NotSupportedException();
+            throw new NotSupportedException(type.FullName);
         }
 
         internal static string GetSqlName(DbDefinitionCustomizerDelegate defineCustomizer, PropertyInfo property)

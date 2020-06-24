@@ -11,6 +11,8 @@ namespace LambdicSql.MultiplatformCompatibe
         internal static object CreateInstance(Type type, bool nonPublic)
             => Activator.CreateInstance(type);
 
+        internal static bool IsClass(this Type type) => type.GetTypeInfo().IsClass;
+
         internal static T GetAttribute<T>(this MemberInfo info) where T : Attribute
             => info.GetCustomAttribute<T>();
 
@@ -67,7 +69,7 @@ namespace LambdicSql.MultiplatformCompatibe
             if (!t.GetTypeInfo().IsClass) return null;
             var dbType = typeof(Db<>).MakeGenericType(new[] { t });
             var info = dbType.GetTypeInfo();
-            return (DbDefinitionCustomizerDelegate)info.GetDeclaredProperty(nameof(Db<Non>.DefinitionCustomizer)).GetValue(null, new object[0]);
+            return (DbDefinitionCustomizerDelegate)dbType.GetRuntimeProperty(nameof(Db<Non>.DefinitionCustomizer)).GetValue(null, new object[0]);
         }
 
         internal static string GetSqlName(PropertyInfo property)

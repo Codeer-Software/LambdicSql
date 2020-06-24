@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LambdicSql.MultiplatformCompatibe;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,6 +11,15 @@ namespace LambdicSql.ConverterServices.Inside
 
         static SupportedTypeSpec()
         {
+            //TODO more types.
+            //for entity framework.
+            _supported.Add(typeof(ushort));
+            _supported.Add(typeof(ushort?));
+            _supported.Add(typeof(uint));
+            _supported.Add(typeof(uint?));
+            _supported.Add(typeof(ulong));
+            _supported.Add(typeof(ulong?));
+
             _supported.Add(typeof(object));
             _supported.Add(typeof(string));
             _supported.Add(typeof(bool));
@@ -42,7 +52,7 @@ namespace LambdicSql.ConverterServices.Inside
         {
             lock (_supported)
             {
-                return _supported.Contains(type);
+                return _supported.Contains(type) || type.IsArray || !ReflectionAdapter.IsClass(type);
             }
         }
 

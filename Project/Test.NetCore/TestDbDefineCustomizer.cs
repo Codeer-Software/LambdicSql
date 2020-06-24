@@ -1,5 +1,6 @@
 ﻿using LambdicSql;
 using LambdicSql.BuilderServices;
+using System;
 using System.Text.RegularExpressions;
 using Xunit;
 using static Test.Symbol;
@@ -14,9 +15,18 @@ namespace Test
             public string Name { get; set; }
         }
 
+        public class Remuneration
+        {
+            public int id { get; set; }
+            public int staff_id { get; set; }
+            public DateTime payment_date { get; set; }
+            public decimal money { get; set; }
+        }
+
         public class DB1
         {
             public Staff TblStaff { get; set; }
+            public Remuneration tbl_remuneration { get; set; }
         }
         public class DB2
         {
