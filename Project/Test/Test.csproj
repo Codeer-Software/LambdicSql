@@ -144,6 +144,7 @@
     <Compile Include="..\Test.NET35\TestUtilitySymbolExtensions.cs">
       <Link>TestUtilitySymbolExtensions.cs</Link>
     </Compile>
+    <Compile Include="TestCondition.cs" />
     <Compile Include="Helper\CodeGenerate.cs" />
     <Compile Include="Helper\DBProviderInfo.cs" />
     <Compile Include="Helper\ReflectionAdapter.cs" />
