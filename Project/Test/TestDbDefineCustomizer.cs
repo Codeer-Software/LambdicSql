@@ -71,7 +71,7 @@ FROM TblStaff";
 
             var txt = sql.Build(typeof(NpgsqlConnection)).Text;
             var expected = @"SELECT
-	tbl_staff.Name AS name
+	tbl_staff.name AS name
 FROM tbl_staff";
             Assert.AreEqual(expected, txt);
         }

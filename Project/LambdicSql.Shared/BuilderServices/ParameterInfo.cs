@@ -50,7 +50,7 @@ namespace LambdicSql.BuilderServices
             if (_parameters.TryGetValue(name, out val))
             {
                 //find same metatoken object.
-                if (metadataToken != null && metadataToken == val.MetadataToken) return name;
+                if (metadataToken != null && metadataToken == val.MetadataToken && Equals(param?.Value, val.Detail?.Value)) return name;
 
                 //make unique name.
                 name = MakeUniqueName(nameSrc);
