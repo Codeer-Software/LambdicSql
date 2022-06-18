@@ -16,14 +16,14 @@ Please get something appropriate for the type of DB you are using.
     PM> Install-Package LambdicSql.SQLite
     PM> Install-Package LambdicSql.DB2
 
-Supported pratforms are
+Supported platforms are
 - .NETFramework 3.5~
 - PCL
 - .NETStandard 1.2~
 
 ## Featuring Dapper
 Generate sql text and parameters by LambdicSql.<br>
-And execut and map to object, recommend using dapper.
+And execute and map to object, recommend using dapper.
 
     PM> Install-Package Dapper
 
@@ -41,7 +41,7 @@ For PCL, recommend sqlite-net-pcl.
     PM> Install-Package sqlite-net-pcl
 
 ## Support tool.
-It is a Visual Stuido Extension.
+It is a Visual Studio Extension.
 You can execute the code written in LambdicSql and get the result.
 https://marketplace.visualstudio.com/items?itemName=ishikawa-tatsuya.LambdicSqlAssistant
 ## Quick Start.
@@ -636,3 +636,4 @@ If you want to control more conversion, please create a class that inherits the 
 
 LambdicSql itself also defines functions and phrases using the mechanism described here, so I think that it will be a sample. Please see samples.<br>
 https://github.com/Codeer-Software/LambdicSql.SqlServer/blob/master/Project/LambdicSql.SqlServer.Shared/Symbol.Clauses.DML.Basic.cs
+
